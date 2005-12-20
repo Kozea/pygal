@@ -120,9 +120,6 @@ class Plot( SVG.Plot ):
 			may be any date that is parseable by ParseDate."""
 		super( self.__class__, self ).add_data( data )
 		
-	def validate_data( self, data ):
-		if len( data['data'] ) % 2 != 0: raise "Expecting an even set of data points for TimeSeries."
-		
 	def process_data( self, data ):
 		pairs = get_pairs( data['data'] )
 		pairs = map( lambda (x,y): (self.parse_date(x),y), pairs )

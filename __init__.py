@@ -151,16 +151,16 @@ instantiate this class directly; see the subclass for options.
 		
 	def add_data( self, conf ):
 		"""This method allows you do add data to the graph object.
-It can be called several times to add more data sets in.
-
->>> data_sales_02 = [12, 45, 21]
->>> graph.add_data({
-...  'data': data_sales_02,
-...  'title': 'Sales 2002'
-... })
+		It can be called several times to add more data sets in.
+		
+		>>> data_sales_02 = [12, 45, 21]
+		>>> graph.add_data({
+		...  'data': data_sales_02,
+		...  'title': 'Sales 2002'
+		... })
 """
-		self.validate_data( data )
-		self.process_data( data )
+		self.validate_data( conf )
+		self.process_data( conf )
 		self.data.append( conf )
 
 	def validate_data( self, data ):
