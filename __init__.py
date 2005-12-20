@@ -14,6 +14,36 @@ def CreateElement( nodeName, attributes={} ):
 	map( lambda a: node.setAttribute( *a ), attributes.items() )
 	return node
 
+def sort_multiple( arrays ):
+	"sort multiple lists (of equal size) using the first list for the sort keys"
+	tuples = zip( *arrays )
+	tuples.sort()
+	return zip( *tuples )
+	
+"""def sort_multiple( arrays, lo=0, hi=None ):
+	if hi is None: hi = len(arrays[0])-1
+	if lo < hi:
+		p = partition( arrays, lo, hi )
+		sort_multiple( arrays, lo, p-1 )
+		sort_multiple( arrays, p+1, hi )
+	return arrays
+		
+def partition( arrays, lo, hi ):
+	"Partition for a quick sort"
+	p = arrays[0][lo]
+	l = lo
+	z = lo+1
+	while z <= hi:
+		if arrays[0][z] < p:
+			l += 1
+			for array in arrays:
+				array[z], array[l] = array[l], array[z]
+		z += 1
+	for array in arrays:
+		array[lo], array[l] = array[l], array[lo]
+	return l
+"""
+
 class Graph( object ):
 	"""=== Base object for generating SVG Graphs
 
@@ -129,6 +159,11 @@ It can be called several times to add more data sets in.
 ...  'title': 'Sales 2002'
 ... })
 """
+		self.validate_data( data )
+		self.process_data( data )
+		self.data.append( conf )
+
+	def validate_data( self, data ):
 		try:
 			assert( isinstance( conf['data'], ( tuple, list ) ) )
 		except TypeError, e:
@@ -136,9 +171,9 @@ It can be called several times to add more data sets in.
 		except AssertionError:
 			if not hasattr( conf['data'], '__iter__' ):
 				raise TypeError, "conf['data'] should be tuple or list or iterable"
-			
-		self.data.append( conf )
-		
+
+	def process_data( data ): pass
+	
 	def clear_data( self ):
 		"""This method removes all data from the object so that you can
 reuse it to create a new graph but with the same config options.
@@ -270,7 +305,7 @@ of the plot area.  Results in border_bottom being set."""
 		if self.show_x_title: bb += self.x_title_font_size + 5
 		self.border_bottom = bb
 		
-	def draw_graph:
+	def draw_graph( self ):
 		transform = 'translate ( %s %s )' % ( self.border_left, self.border_top )
 		self.graph = CreateElement( 'g', { 'transform': transform } )
 		self.root.appendChild( self.graph )
@@ -278,8 +313,8 @@ of the plot area.  Results in border_bottom being set."""
 		self.graph.appendChild( CreateElement( 'rect', {
 			'x': '0',
 			'y': '0',
-			'width': str( self.graph_width )
-			'height': str( self.graph_height )
+			'width': str( self.graph_width ),
+			'height': str( self.graph_height ),
 			'class': 'graphBackground'
 			} ) )
 		
@@ -316,7 +351,6 @@ Centered in the field, should be width/2.  Start, 0."""
 
 	def draw_x_labels( self ):
 		"Draw the X axis labels"
-		stagger = self.x_label_font_size + 5
 		if self.show_x_labels:
 			label_width = self.field_width
 			
@@ -324,445 +358,261 @@ Centered in the field, should be width/2.  Start, 0."""
 			count = len( labels )
 			
 			labels = enumerate( iter( labels ) )
-			start = int( !self.step_include_first_x_label )
+			start = int( not self.step_include_first_x_label )
 			labels = itertools.islice( labels, start, None, self.step_x_labels )
 			map( self.draw_x_label, labels )
 			self.draw_x_guidelines( label_width, count )
 	
-	def draw_x_label( self, label ):
+	def draw_x_label( self, label, label_width ):
 		index, label = label
 		text = CreateElement( 'text', { 'class': 'xAxisLabels' } )
+		text.appendChild( self._doc.createTextNode( label ) )
 		self.graph.appendChild( text )
 		
+		x = index * label_width + self.x_label_offset( label_width )
+		y = self.graph_height + self.x_label_font_size + 3
+		t = 0 - ( self.font_size / 2 )
+		
+		if self.stagger_x_labels and  (index % 2 ):
+			stagger = self.x_label_font_size + 5
+			y += stagger
+			graph_height = self.graph_height
+			path = CreateElement( 'path', {
+				'd': 'M%(x)d %(graph_height)d v%(stagger)d' % vars(),
+				'class': 'staggerGuideLine'
+			} )
+			self.graph.appendChild( path )
+			
+		text.setAttribute( 'x', str( x ) )
+		text.setAttribute( 'y', str( y ) )
+		
+		if self.rotate_x_labels:
+			transform = 'rotate( 90 %d %d ) translate( 0 -%d )' % \
+				( x, y-self.x_label_font_size, x_label_font_size/4 )
+			text.setAttribute( 'transform', transform )
+			text.setAttribute( 'style', 'text-anchor: start' )
+		else:
+			text.setAttribute( 'style', 'text-anchor: middle' )
+			
+	def y_label_offset( self, height ):
+		"""Where in the Y area the label is drawn
+Centered in the field, should be width/2.  Start, 0."""
+		return 0
+	
+	def get_field_width( self ):
+		return float( self.graph_width - font_size*2*right_font ) / \
+			( len( self.get_x_labels() ) - self.right_align )
+	field_width = property( get_field_width )
+	
+	def get_field_height( self ):
+		return float( self.graph_height - self.font_size*2*self.top_font ) / \
+			( len( self.get_y_labels() ) - self.top_align )
+	field_height = property( self.get_field_height )
+
+	def draw_y_labels( self ):
+		"Draw the Y axis labels"
+		if self.show_y_labels:
+			label_height = self.field_height
+			
+			labels = self.get_y_labels()
+			count = len( labels )
+			
+			labels = enumerate( iter( labels ) )
+			start = int( not self.step_include_first_y_label )
+			labels = itertools.islice( labels, start, None, self.step_y_labels )
+			map( self.draw_y_label, labels )
+			self.draw_y_guidelines( label_height, count )
+
+	def get_y_offset( self ):
+		result = self.graph_height + self.y_label_offset( self.label_height )
+		if self.rotate_y_labels: result += self.font_size/1.2
+		return result
+	y_offset = property( get_y_offset )
+	
+	def draw_y_label( self, label ):
+		index, label = label
+		text = CreateElement( 'text', { 'class': 'yAxisLabels' } )
+		text.appendChild( self._doc.createTextNode( label ) )
+		self.graph.appendChild( text )
+		
+		y = self.y_offset - ( self.label_height * index )
+		x = {True: 0, False:-3}[self.rotate_y_labels]
+		
+		if self.stagger_x_labels and  (index % 2 ):
+			stagger = self.y_label_font_size + 5
+			x -= stagger
+			path = CreateElement( 'path', {
+				'd': 'M%(x)d %(y)d v%(stagger)d' % vars(),
+				'class': 'staggerGuideLine'
+			} )
+			self.graph.appendChild( path )
+			
+		text.setAttribute( 'x', str( x ) )
+		text.setAttribute( 'y', str( y ) )
+		
+		if self.rotate_y_labels:
+			transform = 'translate( -%d 0 ) rotate ( 90 %d %d )' % \
+				( self.font_size, x, y )
+			text.setAttribute( 'transform', transform )
+			text.setAttribute( 'style', 'text-anchor: middle' )
+		else:
+			text.setAttribute( 'y', str( y - self.y_label_font_size/2 ) )
+			text.setAttribute( 'style', 'text-anchor: middle' )
+		
+	def draw_x_guidelines( self, label_height, count ):
+		"Draw the X-axis guidelines"
+		# skip the first one
+		for count in range(1,count):
+			start = label_height*count
+			stop = self.graph_height
+			path = CreateElement( 'path', {
+				'd': 'M %(start)s h%(stop)s' % vars(),
+				'class': 'guideLines' } )
+			self.graph.appendChild( path )
+			
+
+	def draw_y_guidelines( self, label_height, count ):
+		"Draw the Y-axis guidelines"
+		for count in range( 1, count ):
+			start = self.graph_height - label_height*count
+			stop = self.graph_width
+			path = CreateElement( 'path', {
+				'd': 'MO %(start)s h%(stop)s' % vars(),
+				'class': 'guideLines' } )
+			self.graph.appendChild( path )
+
+	def draw_titles( self ):
+		"Draws the graph title and subtitle"
+		if self.show_graph_title: draw_graph_title()
+		if self.show_graph_subtitle: draw_graph_subtitle()
+		if self.show_x_title: draw_x_title()
+		if self.show_y_title: draw_y_title()
+
+	def draw_graph_title( self ):
+		text = CreateElement( 'text', {
+			'x': str( self.width / 2 ),
+			'y': str( self.title_font_size ),
+			'class': 'mainTitle' } )
+		text.appendChild( self._doc.createTextNode( self.graph_title ) )
+		self.root.appendChild( text )
+
+	def draw_graph_subtitle( self ):
+		raise NotImplementedError
+	draw_x_title = draw_y_title = draw_graph_subtitle
+
+	def keys( self ):
+		return map( operator.itemgetter( 'title' ), self.data )
+	
+	def draw_legend( self ):
+		if self.key:
+			group = CreateElement( 'g' )
+			root.appendChild( group )
+			
+			for key_count, key_name in enumerate( self.keys() ):
+				y_offset = ( self.KEY_BOX_SIZE * key_count ) + (key_count * 5 )
+				rect = group.CreateElement( 'rect', {
+					'x': '0',
+					'y': str( y_offset ),
+					'width': str( self.KEY_BOX_SIZE ),
+					'height': str( self.KEY_BOX_SIZE ),
+					'class': 'key%s' % key_count + 1,
+				} )
+				group.appendChild( rect )
+				text = group.CreateElement( 'text', {
+					'x': str( self.KEY_BOX_SIZE + 5 ),
+					'y': str( y_offset + self.KEY_BOX_SIZE ),
+					'class': 'keyText' } )
+				text.appendChild( doc.createTextNode( key_name ) )
+				group.appendChild( text )
+			
+			if self.key_position == 'right':
+				x_offset = self.graph_width, self.border_left + 10
+				y_offset = border_top + 20
+			if self.key_position == 'bottom':
+				raise NotImplementedError
+			group.setAttribute( 'transform', 'translate(%(x_offset)d %(y_offset)d)' % vars() )
+			
+	def style( self ):
+		"hard code the styles into the xml if style sheets are not used."
+		if self.no_css:
+			styles = self.parse_css()
+			for node in xpath.Evaluate( '//*[@class]', self.root ):
+				cl = node.getAttribute( 'class' )
+				style = styles[ cl ]
+				if node.hasAttribute( 'style' ):
+					style += node.getAtrtibute( 'style' )
+				node.setAttribute( 'style', style )
+
+	def parse_css( self ):
+		"""Take a .css file (classes only please) and parse it into a dictionary
+		of class/style pairs."""
+		css = self.get_style()
+		result = {}
+		for match in re.finditer( '^(?<names>\.(\w+)(?:\s*,\s*\.\w+)*)\s*\{(?<content>[^}]+)\}' ):
+			names = match.group_dict()['names']
+			# apperantly, we're only interested in class names
+			names = filter( None, re.split( '\s*,?\s*\.' ) )
+			content = match.group_dict()['content']
+			# convert all whitespace to 
+			content = re.sub( '\s+', ' ', content )
+			for name in names:
+				result[name] = ';'.join( result[name], content )
+		return result
+			
+	def add_defs( self, defs ):
+		"Override and place code to add defs here"
+		pass
+	
 	def start_svg( self ):
 		"Base SVG Document Creation"
 		impl = dom.getDOMImplementation()
 		#dt = impl.createDocumentType( 'svg', 'PUBLIC'
 		self._doc = impl.createDocument( None, 'svg', None )
-		self.root = self._doc.getDocumentElement()
+		self.root = self._doc.documentElement()
+		if self.style_sheet:
+			pi = self._doc.createProcessingInstruction( 'xml-stylesheet',
+												  'href="%s" type="text/css"' % self.style_sheet )
+		attributes = {
+			'width': str( self.width ),
+			'height': str( self.height ),
+			'viewBox': '0 0 %s %s' % ( width, height ),
+			'xmlns': 'http://www.w3.org/2000/svg',
+			'xmlns:xlink': 'http://www.w3.org/1999/xlink',
+			'xmlns:a3': 'http://ns.adobe.com/AdobeSVGViewerExtensions/3.0/',
+			'a3:scriptImplementation': 'Adobe' }
+		map( lambda a: self.root.setAttribute( *a ), attributes.items() )
+		self.root.appendChild( self._doc.createComment( ' Created with SVG.Graph ' ) )
+		self.root.appendChild( self._doc.createComment( ' SVG.Graph by Jason R. Coombs ' ) )
+		self.root.appendChild( self._doc.createComment( ' Based on SVG::Graph by Sean E. Russel ' ) )
+		self.root.appendChild( self._doc.createComment( ' Based on Perl SVG:TT:Graph by Leo Lapworth & Stephan Morgan ' ) )
+		self.root.appendChild( self._doc.createComment( ' '+'/'*66 ) )
+
+		defs = self._doc.createElement( 'defs' )
+		self.add_defs( defs )
+		if not self.style_sheet and not self.no_css:
+			self.root.appendChild( self._doc.createComment( ' include default stylesheet if none specified ' ) )
+			style = CreateElement( 'style', { 'type': 'text/css' } )
+			defs.appendChild( style )
+			style.createCDataNode( self.get_style() )
+			
+		self.root.appendChild( self._doc.createComment( 'SVG Background' ) )
+		rect = CreateElement( 'rect', {
+			'width': str( width ),
+			'height': str( height ),
+			'x': '0',
+			'y': '0',
+			'class': 'svgBackground' } )
 		
-ruby = """      
-      # Draws the background, axis, and labels.
-      def draw_graph
-        @graph = @root.add_element( "g", {
-          "transform" => "translate( #@border_left #@border_top )"
-        })
-
-        # Background
-        @graph.add_element( "rect", {
-          "x" => "0",
-          "y" => "0",
-          "width" => @graph_width.to_s,
-          "height" => @graph_height.to_s,
-          "class" => "graphBackground"
-        })
-
-        # Axis
-        @graph.add_element( "path", {
-          "d" => "M 0 0 v#@graph_height",
-          "class" => "axis",
-          "id" => "xAxis"
-        })
-        @graph.add_element( "path", {
-          "d" => "M 0 #@graph_height h#@graph_width",
-          "class" => "axis",
-          "id" => "yAxis"
-        })
-
-        draw_x_labels
-        draw_y_labels
-      end
-
-
-      # Where in the X area the label is drawn
-      # Centered in the field, should be width/2.  Start, 0.
-      def x_label_offset( width )
-        0
-      end
-
-      def make_datapoint_text( x, y, value, style="" )
-        if show_data_values
-          @foreground.add_element( "text", {
-            "x" => x.to_s,
-            "y" => y.to_s,
-            "class" => "dataPointLabel",
-            "style" => "#{style} stroke: #fff; stroke-width: 2;"
-          }).text = value.to_s
-          text = @foreground.add_element( "text", {
-            "x" => x.to_s,
-            "y" => y.to_s,
-            "class" => "dataPointLabel"
-          })
-          text.text = value.to_s
-          text.attributes["style"] = style if style.length > 0
-        end
-      end
-
-
-      # Draws the X axis labels
-      def draw_x_labels
-        stagger = x_label_font_size + 5
-        if show_x_labels
-          label_width = field_width
-
-          count = 0
-          for label in get_x_labels
-            if step_include_first_x_label == true then
-              step = count % step_x_labels
-            else
-              step = (count + 1) % step_x_labels
-            end
-
-            if step == 0 then
-              text = @graph.add_element( "text" )
-              text.attributes["class"] = "xAxisLabels"
-              text.text = label.to_s
-
-              x = count * label_width + x_label_offset( label_width )
-              y = @graph_height + x_label_font_size + 3
-              t = 0 - (font_size / 2)
-
-              if stagger_x_labels and count % 2 == 1
-                y += stagger
-                @graph.add_element( "path", {
-                  "d" => "M#{x} #@graph_height v#{stagger}",
-                  "class" => "staggerGuideLine"
-                })
-              end
-
-              text.attributes["x"] = x.to_s
-              text.attributes["y"] = y.to_s
-              if rotate_x_labels
-                text.attributes["transform"] = 
-                  "rotate( 90 #{x} #{y-x_label_font_size} )"+
-                  " translate( 0 -#{x_label_font_size/4} )"
-                text.attributes["style"] = "text-anchor: start"
-              else
-                text.attributes["style"] = "text-anchor: middle"
-              end
-            end
-
-            draw_x_guidelines( label_width, count ) if show_x_guidelines
-            count += 1
-          end
-        end
-      end
-
-
-      # Where in the Y area the label is drawn
-      # Centered in the field, should be width/2.  Start, 0.
-      def y_label_offset( height )
-        0
-      end
-
-
-      def field_width
-        (@graph_width.to_f - font_size*2*right_font) /
-           (get_x_labels.length - right_align)
-      end
-
-
-      def field_height
-        (@graph_height.to_f - font_size*2*top_font) /
-           (get_y_labels.length - top_align)
-      end
-
-
-      # Draws the Y axis labels
-      def draw_y_labels
-        stagger = y_label_font_size + 5
-        if show_y_labels
-          label_height = field_height
-
-          count = 0
-          y_offset = @graph_height + y_label_offset( label_height )
-          y_offset += font_size/1.2 unless rotate_y_labels
-          for label in get_y_labels
-            y = y_offset - (label_height * count)
-            x = rotate_y_labels ? 0 : -3
-
-            if stagger_y_labels and count % 2 == 1
-              x -= stagger
-              @graph.add_element( "path", {
-                "d" => "M#{x} #{y} h#{stagger}",
-                "class" => "staggerGuideLine"
-              })
-            end
-
-            text = @graph.add_element( "text", {
-              "x" => x.to_s,
-              "y" => y.to_s,
-              "class" => "yAxisLabels"
-            })
-            text.text = label.to_s
-            if rotate_y_labels
-              text.attributes["transform"] = "translate( -#{font_size} 0 ) "+
-                "rotate( 90 #{x} #{y} ) "
-              text.attributes["style"] = "text-anchor: middle"
-            else
-              text.attributes["y"] = (y - (y_label_font_size/2)).to_s
-              text.attributes["style"] = "text-anchor: end"
-            end
-            draw_y_guidelines( label_height, count ) if show_y_guidelines
-            count += 1
-          end
-        end
-      end
-
-
-      # Draws the X axis guidelines
-      def draw_x_guidelines( label_height, count )
-        if count != 0
-          @graph.add_element( "path", {
-            "d" => "M#{label_height*count} 0 v#@graph_height",
-            "class" => "guideLines"
-          })
-        end
-      end
-
-
-      # Draws the Y axis guidelines
-      def draw_y_guidelines( label_height, count )
-        if count != 0
-          @graph.add_element( "path", {
-            "d" => "M0 #{@graph_height-(label_height*count)} h#@graph_width",
-            "class" => "guideLines"
-          })
-        end
-      end
-
-
-      # Draws the graph title and subtitle
-      def draw_titles
-        if show_graph_title
-          @root.add_element( "text", {
-            "x" => (width / 2).to_s,
-            "y" => (title_font_size).to_s,
-            "class" => "mainTitle"
-          }).text = graph_title.to_s
-        end
-
-        if show_graph_subtitle
-          y_subtitle = show_graph_title ? 
-            title_font_size + 10 :
-            subtitle_font_size
-          @root.add_element("text", {
-            "x" => (width / 2).to_s,
-            "y" => (y_subtitle).to_s,
-            "class" => "subTitle"
-          }).text = graph_subtitle.to_s
-        end
-
-        if show_x_title
-          y = @graph_height + @border_top + x_title_font_size
-          if show_x_labels
-            y += x_label_font_size + 5 if stagger_x_labels
-            y += x_label_font_size + 5
-          end
-          x = width / 2
-
-          @root.add_element("text", {
-            "x" => x.to_s,
-            "y" => y.to_s,
-            "class" => "xAxisTitle",
-          }).text = x_title.to_s
-        end
-
-        if show_y_title
-          x = y_title_font_size + (y_title_text_direction==:bt ? 3 : -3)
-          y = height / 2
-
-          text = @root.add_element("text", {
-            "x" => x.to_s,
-            "y" => y.to_s,
-            "class" => "yAxisTitle",
-          })
-          text.text = y_title.to_s
-          if y_title_text_direction == :bt
-            text.attributes["transform"] = "rotate( -90, #{x}, #{y} )"
-          else
-            text.attributes["transform"] = "rotate( 90, #{x}, #{y} )"
-          end
-        end
-      end
-
-      def keys 
-        return @data.collect{ |d| d[:title] }
-      end
-
-      # Draws the legend on the graph
-      def draw_legend
-        if key
-          group = @root.add_element( "g" )
-
-          key_count = 0
-          for key_name in keys
-            y_offset = (KEY_BOX_SIZE * key_count) + (key_count * 5)
-            group.add_element( "rect", {
-              "x" => 0.to_s,
-              "y" => y_offset.to_s,
-              "width" => KEY_BOX_SIZE.to_s,
-              "height" => KEY_BOX_SIZE.to_s,
-              "class" => "key#{key_count+1}"
-            })
-            group.add_element( "text", {
-              "x" => (KEY_BOX_SIZE + 5).to_s,
-              "y" => (y_offset + KEY_BOX_SIZE).to_s,
-              "class" => "keyText"
-            }).text = key_name.to_s
-            key_count += 1
-          end
-
-          case key_position
-          when :right
-            x_offset = @graph_width + @border_left + 10
-            y_offset = @border_top + 20
-          when :bottom
-            x_offset = @border_left + 20
-            y_offset = @border_top + @graph_height + 5
-            if show_x_labels
-              max_x_label_height_px = rotate_x_labels ? 
-                get_x_labels.max{|a,b| 
-                  a.length<=>b.length
-                }.length * x_label_font_size :
-                x_label_font_size
-              y_offset += max_x_label_height_px
-              y_offset += max_x_label_height_px + 5 if stagger_x_labels
-            end
-            y_offset += x_title_font_size + 5 if show_x_title
-          end
-          group.attributes["transform"] = "translate(#{x_offset} #{y_offset})"
-        end
-      end
-
-
-      private
-
-      def sort_multiple( arrys, lo=0, hi=arrys[0].length-1 )
-        if lo < hi
-          p = partition(arrys,lo,hi)
-          sort_multiple(arrys, lo, p-1)
-          sort_multiple(arrys, p+1, hi)
-        end
-        arrys 
-      end
-
-      def partition( arrys, lo, hi )
-        p = arrys[0][lo]
-        l = lo
-        z = lo+1
-        while z <= hi
-          if arrys[0][z] < p
-            l += 1
-            arrys.each { |arry| arry[z], arry[l] = arry[l], arry[z] }
-          end
-          z += 1
-        end
-        arrys.each { |arry| arry[lo], arry[l] = arry[l], arry[lo] }
-        l
-      end
-
-      def style
-        if no_css
-          styles = parse_css
-          @root.elements.each("//*[@class]") { |el|
-            cl = el.attributes["class"]
-            style = styles[cl]
-            style += el.attributes["style"] if el.attributes["style"]
-            el.attributes["style"] = style
-          }
-        end
-      end
-
-      def parse_css
-        css = get_style
-        rv = {}
-        while css =~ /^(\.(\w+)(?:\s*,\s*\.\w+)*)\s*\{/m
-          names_orig = names = $1
-          css = $'
-          css =~ /([^}]+)\}/m
-          content = $1
-          css = $'
-
-          nms = []
-          while names =~ /^\s*,?\s*\.(\w+)/
-            nms << $1
-            names = $'
-          end
-
-          content = content.tr( "\n\t", " ")
-          for name in nms
-            current = rv[name]
-            current = current ? current+"; "+content : content
-            rv[name] = current.strip.squeeze(" ")
-          end
-        end
-        return rv
-      end
-
-
-      # Override and place code to add defs here
-      def add_defs defs
-      end
-
-
-      def start_svg
-        # Base document
-        @doc = Document.new
-        @doc << XMLDecl.new
-        @doc << DocType.new( %q{svg PUBLIC "-//W3C//DTD SVG 1.0//EN" } +
-          %q{"http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd"} )
-        if style_sheet && style_sheet != ''
-          @doc << ProcessingInstruction.new( "xml-stylesheet",
-            %Q{href="#{style_sheet}" type="text/css"} )
-        end
-        @root = @doc.add_element( "svg", {
-          "width" => width.to_s,
-          "height" => height.to_s,
-          "viewBox" => "0 0 #{width} #{height}",
-          "xmlns" => "http://www.w3.org/2000/svg",
-          "xmlns:xlink" => "http://www.w3.org/1999/xlink",
-          "xmlns:a3" => "http://ns.adobe.com/AdobeSVGViewerExtensions/3.0/",
-          "a3:scriptImplementation" => "Adobe"
-        })
-        @root << Comment.new( " "+"\\"*66 )
-        @root << Comment.new( " Created with SVG::Graph " )
-        @root << Comment.new( " SVG::Graph by Sean E. Russell " )
-        @root << Comment.new( " Losely based on SVG::TT::Graph for Perl by"+
-        " Leo Lapworth & Stephan Morgan " )
-        @root << Comment.new( " "+"/"*66 )
-
-        defs = @root.add_element( "defs" )
-        add_defs defs
-        if not(style_sheet && style_sheet != '') and !no_css
-          @root << Comment.new(" include default stylesheet if none specified ")
-          style = defs.add_element( "style", {"type"=>"text/css"} )
-          style << CData.new( get_style )
-        end
-
-        @root << Comment.new( "SVG Background" )
-        @root.add_element( "rect", {
-          "width" => width.to_s,
-          "height" => height.to_s,
-          "x" => "0",
-          "y" => "0",
-          "class" => "svgBackground"
-        })
-      end
-
-
-      def calculate_graph_dimensions
-        calculate_left_margin
-        calculate_right_margin
-        calculate_bottom_margin
-        calculate_top_margin
-        @graph_width = width - @border_left - @border_right
-        @graph_height = height - @border_top - @border_bottom
-      end
-
-      def get_style
-        return <<EOL
-/* Copy from here for external style sheet */
+	def calculate_graph_dimensions( self ):
+		self.calculate_left_margin()
+		self.calculate_right_margin()
+		self.calculate_bottom_margin()
+		self.calculate_top_margin()
+		self.graph_width = self.width - self.border_left - self.border_right
+		self.graph_height = self.height - self.border_top - self.border_bottom
+		
+	def get_style( self ):
+		return """/* Copy from here for external style sheet */
 .svgBackground{
   fill:#ffffff;
 }
@@ -843,7 +693,7 @@ ruby = """
   stroke-width: 0.5px;  
 }
 
-#{get_css}
+%s
 
 .keyText{
   fill: #000000;
@@ -853,10 +703,4 @@ ruby = """
   font-weight: normal;
 }
 /* End copy for external style sheet */
-EOL
-      end
-
-    end
-  end
-end
-"""
+""" % self.get_css()
