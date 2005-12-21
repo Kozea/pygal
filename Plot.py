@@ -5,6 +5,12 @@ from itertools import izip, count
 def get_pairs( i ):
 	i = iter( i )
 	while True:	yield i.next(), i.next()
+	
+def float_range( start = 0, stop = None, step = 1 ):
+	"Much like the built-in function range, but accepts floats"
+	while start < stop:
+		yield start
+		start += step
 
 class Plot( SVG.Graph ):
 	"""=== For creating SVG plots of scalar data
@@ -95,17 +101,39 @@ class Plot( SVG.Graph ):
 	stacked = True
 	
 	top_align = right_align = top_font = right_font = 1
+
 	
+	"""Determines the scaling for the Y axis divisions.
+	
+	  graph.scale_y_divisions = 0.5
+	
+	would cause the graph to attempt to generate labels stepped by 0.5; EG:
+	0, 0.5, 1, 1.5, 2, ..."""
+	scale_y_divisions = None
+	"Make the X axis labels integers"
+	scale_x_integers = False 
+	"Make the Y axis labels integers"
+	scale_y_integers = False
+	"Fill the area under the line"
+	area_fill = False
+	"""Show a small circle on the graph where the line
+	goes from one point to the next."""
+	show_data_points = False
+	"Set the minimum value of the X axis"
+	min_x_value = None
+	"Set the minimum value of the Y axis"
+	min_y_value = None
+
 	@apply
-	def scale_x_divisions( self ):
-		doc = """      # Determines the scaling for the X axis divisions.
+	def scale_x_divisions():
+		doc = """Determines the scaling for the X axis divisions.
 			
 			graph.scale_x_divisions = 2
 			
 			would cause the graph to attempt to generate labels stepped by 2; EG:
 			0,2,4,6,8..."""
 		def fget( self ):
-			return self._scale_x_divisions
+			return getattr( self, '_scale_x_divisions', None )
 		def fset( self, val ):
 			self._scale_x_divisions = val
 		return property(**locals())
@@ -115,18 +143,18 @@ class Plot( SVG.Graph ):
 			raise "Expecting x,y pairs for data points for %s." % self.__class__.__name__
 
 	def process_data( self, data ):
-		pairs = get_pairs( data['data'] )
+		pairs = list( get_pairs( data['data'] ) )
 		pairs.sort()
 		data['data'] = zip( *pairs )
 
 	def calculate_left_margin( self ):
 		super( self.__class__, self ).calculate_left_margin()
-		label_left = len( str( self.get_x_labels()[0] ) ) / 2 * font_size * 0.6
+		label_left = len( str( self.get_x_labels()[0] ) ) / 2 * self.font_size * 0.6
 		self.border_left = max( label_left, self.border_left )
 	
 	def calculate_right_margin( self ):
-		super( self.__class__, self ).calculate_left_margin()
-		label_right = len( str( self.get_x_labels()[-1] ) ) / 2 * font_size * 0.6
+		super( self.__class__, self ).calculate_right_margin()
+		label_right = len( str( self.get_x_labels()[-1] ) ) / 2 * self.font_size * 0.6
 		self.border_right = max( label_right, self.border_right )
 	
 	x_data_index = 0
@@ -136,8 +164,9 @@ class Plot( SVG.Graph ):
 		data_index = getattr( self, '%s_data_index' % axis )
 		max_value = max( map( lambda set: max( set['data'][data_index] ), self.data ) )
 		min_value = min( map( lambda set: min( set['data'][data_index] ), self.data ) )
-		spec_min = getattr( self, 'min_%s_value' )
-		min_value = min( min_value, spec_min )
+		spec_min = getattr( self, 'min_%s_value' % axis )
+		if spec_min is not None:
+			min_value = min( min_value, spec_min )
 		
 		range = max_value - min_value
 		#side_pad = '%s_pad' % side
@@ -151,15 +180,20 @@ class Plot( SVG.Graph ):
 			
 		return min_value, max_value, scale_division
 						
-	def x_range( self ): return data_range( 'x' )
-	def y_range( self ): return data_range( 'y' )
+	def x_range( self ): return self.data_range( 'x' )
+	def y_range( self ): return self.data_range( 'y' )
 	
 	def get_data_values( self, axis ):
 		min_value, max_value, scale_division = self.data_range( axis )
-		return range( *self.data_range( axis ) )
+		return float_range( *self.data_range( axis ) )
 	
-	def get_x_values( self ): return get_data_values( 'x' )
-	def get_y_values( self ): return get_data_values( 'y' )
+	def get_x_values( self ): return self.get_data_values( 'x' )
+	def get_y_values( self ): return self.get_data_values( 'y' )
+
+	def get_x_labels( self ):
+		return map( str, self.get_x_values() )
+	def get_y_labels( self ):
+		return map( str, self.get_y_values() )
 	
 	def field_size( self, axis ):
 		size = { 'x': 'width', 'y': 'height' }[axis]
@@ -189,11 +223,11 @@ class Plot( SVG.Graph ):
 			lpath = self.get_lpath( graph_points )
 			if self.area_fill:
 				graph_height = self.graph_height
-				path = SVG.CreateElement( 'path', {
+				path = self._create_element( 'path', {
 					'd': 'M%(x_start)s %(graph_height)d %(lpath)s V%(graph_height)d Z' % vars(),
 					'class': 'fill%(line)d' % vars() } )
 				self.graph.appendChild( path )
-			path = SVG.CreateElement( 'path', {
+			path = self._create_element( 'path', {
 				'd': 'M%(x_start)d %(y_start)d %(lpath)s' % vars(),
 				'class': 'line%(line)d' % vars() } )
 			self.graph.appendChild( path )
@@ -228,7 +262,7 @@ class Plot( SVG.Graph ):
 			and not self.show_data_values: return
 		for ((dx,dy),(gx,gy)) in izip( data_points, graph_points ):
 			if self.show_data_points:
-				circle = SVG.CreateElement( 'circle', {
+				circle = self._create_element( 'circle', {
 					'cx': str( gx ),
 					'cy': str( gy ),
 					'r': '2.5',

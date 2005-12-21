@@ -1,12 +1,12 @@
 #!/usr/bin/env python
 import SVG
 
-class Plot( SVG.Plot ):
+class Plot( SVG.Plot.Plot ):
 	"""=== For creating SVG plots of scalar temporal data
 		
 		= Synopsis
 		
-		  require 'SVG/Graph/TimeSeriess'
+		  import SVG.TimeSeries
 		
 		  # Data sets are x,y pairs
 		  data1 = ["6/17/72", 11,    "1/11/72", 7,    "4/13/04 17:31", 11, 
@@ -160,3 +160,6 @@ class Plot( SVG.Plot ):
 		while current < stop:
 			yield current
 			current.replace( **{ units: current.getattr( units ) + step } )
+			
+	def parse_date( self, date_string ):
+		return strptime( date_string, '%Y-%m-%dT%H:%M:%S' )

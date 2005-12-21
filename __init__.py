@@ -1,8 +1,9 @@
 #!/usr/bin/env python
 
 __all__ = ( 'Plot', 'TimeSeries' )
-from SVG import *
 from xml.dom import minidom as dom
+from operator import itemgetter
+from itertools import islice
 
 try:
 	import zlib
@@ -10,42 +11,12 @@ try:
 except ImportError:
 	__have_zlib = False
 
-def CreateElement( nodeName, attributes={} ):
-	"Create an XML node and set the attributes from a dict"
-	node = dom.Element( nodeName )
-	map( lambda a: node.setAttribute( *a ), attributes.items() )
-	return node
-
 def sort_multiple( arrays ):
 	"sort multiple lists (of equal size) using the first list for the sort keys"
 	tuples = zip( *arrays )
 	tuples.sort()
 	return zip( *tuples )
 	
-"""def sort_multiple( arrays, lo=0, hi=None ):
-	if hi is None: hi = len(arrays[0])-1
-	if lo < hi:
-		p = partition( arrays, lo, hi )
-		sort_multiple( arrays, lo, p-1 )
-		sort_multiple( arrays, p+1, hi )
-	return arrays
-		
-def partition( arrays, lo, hi ):
-	"Partition for a quick sort"
-	p = arrays[0][lo]
-	l = lo
-	z = lo+1
-	while z <= hi:
-		if arrays[0][z] < p:
-			l += 1
-			for array in arrays:
-				array[z], array[l] = array[l], array[z]
-		z += 1
-	for array in arrays:
-		array[lo], array[l] = array[l], array[lo]
-	return l
-"""
-
 class Graph( object ):
 	"""=== Base object for generating SVG Graphs
 
@@ -140,8 +111,7 @@ Copyright 2005 Sandia National Laboratories
 
 	def __init__( self, config ):
 		"""Initialize the graph object with the graph settings.  You won't
-instantiate this class directly; see the subclass for options.
-"""
+		instantiate this class directly; see the subclass for options."""
 		self.top_align = self.top_font = self.right_align = self.right_font = 0
 		self.load_config()
 		self.load_config( config )
@@ -160,7 +130,7 @@ instantiate this class directly; see the subclass for options.
 		...  'data': data_sales_02,
 		...  'title': 'Sales 2002'
 		... })
-"""
+		"""
 		self.validate_data( conf )
 		self.process_data( conf )
 		self.data.append( conf )
@@ -178,28 +148,26 @@ instantiate this class directly; see the subclass for options.
 	
 	def clear_data( self ):
 		"""This method removes all data from the object so that you can
-reuse it to create a new graph but with the same config options.
-
->>> graph.clear_data()
-"""
+		reuse it to create a new graph but with the same config options.
+		
+		>>> graph.clear_data()"""
 		self.data = []
 		
 	def burn( self ):
-		"""      # This method processes the template with the data and
-config which has been set and returns the resulting SVG.
-
-This method will croak unless at least one data set has
-been added to the graph object.
-
-Ex: graph.burn()
-"""
+		"""This method processes the template with the data and
+		config which has been set and returns the resulting SVG.
+		
+		This method will croak unless at least one data set has
+		been added to the graph object.
+		
+		Ex: graph.burn()"""
 		if not self.data: raise ValueError( "No data available" )
 		
 		if hasattr( self, 'calculations' ): self.calculations()
 		
 		self.start_svg()
 		self.calculate_graph_dimensions()
-		self.foreground = dom.Element( "g" )
+		self.foreground = self._create_element( "g" )
 		self.draw_graph()
 		self.draw_titles()
 		self.draw_legend()
@@ -221,7 +189,7 @@ Ex: graph.burn()
 	
 	def calculate_left_margin( self ):
 		"""Override this (and call super) to change the margin to the left
-of the plot area.  Results in border_left being set."""
+		of the plot area.  Results in border_left being set."""
 		bl = 7
 		# Check for Y labels
 		if self.rotate_y_labels:
@@ -230,23 +198,23 @@ of the plot area.  Results in border_left being set."""
 			label_lengths = map( len, self.get_y_labels() )
 			max_y_label_len = reduce( max, label_lengths )
 			max_y_label_height_px = 0.6 * max_y_label_len * self.y_label_font_size
-		if show_y_labels: bl += max_y_label_height_px
-		if stagger_y_labels: bl += max_y_label_height_px + 10
-		if show_y_title: bl += self.y_title_font_size + 5
+		if self.show_y_labels: bl += max_y_label_height_px
+		if self.stagger_y_labels: bl += max_y_label_height_px + 10
+		if self.show_y_title: bl += self.y_title_font_size + 5
 		self.border_left = bl
 		
 	def max_y_label_width_px( self ):
 		"""Calculates the width of the widest Y label.  This will be the
-character height if the Y labels are rotated."""
+		character height if the Y labels are rotated."""
 		if self.rotate_y_labels:
 			return self.font_size
 		
 	def calculate_right_margin( self ):
 		"""Override this (and call super) to change the margin to the right
-of the plot area.  Results in border_right being set."""
+		of the plot area.  Results in border_right being set."""
 		br = 7
 		if self.key and self.key_position == 'right':
-			max_key_len = max( map( len, self.keys ) )
+			max_key_len = max( map( len, self.keys() ) )
 			br += max_key_len * self.key_font_size * 0.6
 			br += self.KEY_BOX_SIZE
 			br += 10		# Some padding around the box
@@ -254,7 +222,7 @@ of the plot area.  Results in border_right being set."""
 		
 	def calculate_top_margin( self ):
 		"""Override this (and call super) to change the margin to the top
-of the plot area.  Results in border_top being set."""
+		of the plot area.  Results in border_top being set."""
 		self.border_top = 5
 		if self.show_graph_title: self.border_top += self.title_font_size
 		self.border_top += 5
@@ -264,7 +232,7 @@ of the plot area.  Results in border_top being set."""
 		"Adds pop-up point information to a graph."
 		txt_width = len( label ) * self.font_size * 0.6 + 10
 		tx = x + [5,-5](x+txt_width > width)
-		t = dom.Element( 'text' )
+		t = self._create_element( 'text' )
 		anchor = ['start', 'end'][x+txt_width > self.width]
 		style = 'fill: #000; text-anchor: %s;' % anchor
 		id = 'label-%s' % label
@@ -279,7 +247,7 @@ of the plot area.  Results in border_top being set."""
 		self.foreground.appendChild( t )
 		
 		visibility = "document.getElementById(%s).setAttribute('visibility', %%s )" % id
-		t = dom.Element( 'circle' )
+		t = self._create_element( 'circle' )
 		attributes = { 'cx': str( x ),
 					  'cy': str( y ),
 					  'r': 10,
@@ -291,7 +259,7 @@ of the plot area.  Results in border_top being set."""
 
 	def calculate_bottom_margin( self ):
 		"""Override this (and call super) to change the margin to the bottom
-of the plot area.  Results in border_bottom being set."""
+		of the plot area.  Results in border_bottom being set."""
 		bb = 7
 		if self.key and self.key_position == 'bottom':
 			bb += len( self.data ) * ( self.font_size + 5 )
@@ -309,10 +277,10 @@ of the plot area.  Results in border_bottom being set."""
 		
 	def draw_graph( self ):
 		transform = 'translate ( %s %s )' % ( self.border_left, self.border_top )
-		self.graph = CreateElement( 'g', { 'transform': transform } )
+		self.graph = self._create_element( 'g', { 'transform': transform } )
 		self.root.appendChild( self.graph )
 		
-		self.graph.appendChild( CreateElement( 'rect', {
+		self.graph.appendChild( self._create_element( 'rect', {
 			'x': '0',
 			'y': '0',
 			'width': str( self.graph_width ),
@@ -321,12 +289,12 @@ of the plot area.  Results in border_bottom being set."""
 			} ) )
 		
 		#Axis
-		self.graph.appendChild( CreateElement( 'path', {
+		self.graph.appendChild( self._create_element( 'path', {
 			'd': 'M 0 0 v%s' % self.graph_height,
 			'class': 'axis',
 			'id': 'xAxis'
 		} ) )
-		self.graph.appendChild( CreateElement( 'path', {
+		self.graph.appendChild( self._create_element( 'path', {
 			'd': 'M 0 %s h%s' % ( self.graph_height, self.graph_width ),
 			'class': 'axis',
 			'id': 'yAxis'
@@ -337,12 +305,12 @@ of the plot area.  Results in border_bottom being set."""
 	
 	def x_label_offset( self, width ):
 		"""Where in the X area the label is drawn
-Centered in the field, should be width/2.  Start, 0."""
+		Centered in the field, should be width/2.  Start, 0."""
 		return 0
 
 	def make_datapoint_text( self, x, y, value, style='' ):
 		if self.show_data_values:
-			e = CreateElement( 'text', {
+			e = self._create_element( 'text', {
 				'x': str( x ),
 				'y': str( y ),
 				'class': 'dataPointLabel',
@@ -354,20 +322,19 @@ Centered in the field, should be width/2.  Start, 0."""
 	def draw_x_labels( self ):
 		"Draw the X axis labels"
 		if self.show_x_labels:
-			label_width = self.field_width
-			
 			labels = self.get_x_labels()
 			count = len( labels )
 			
 			labels = enumerate( iter( labels ) )
 			start = int( not self.step_include_first_x_label )
-			labels = itertools.islice( labels, start, None, self.step_x_labels )
+			labels = islice( labels, start, None, self.step_x_labels )
 			map( self.draw_x_label, labels )
-			self.draw_x_guidelines( label_width, count )
+			self.draw_x_guidelines( self.field_width, count )
 	
-	def draw_x_label( self, label, label_width ):
+	def draw_x_label( self, label ):
+		label_width = self.field_width
 		index, label = label
-		text = CreateElement( 'text', { 'class': 'xAxisLabels' } )
+		text = self._create_element( 'text', { 'class': 'xAxisLabels' } )
 		text.appendChild( self._doc.createTextNode( label ) )
 		self.graph.appendChild( text )
 		
@@ -379,7 +346,7 @@ Centered in the field, should be width/2.  Start, 0."""
 			stagger = self.x_label_font_size + 5
 			y += stagger
 			graph_height = self.graph_height
-			path = CreateElement( 'path', {
+			path = self._create_element( 'path', {
 				'd': 'M%(x)d %(graph_height)d v%(stagger)d' % vars(),
 				'class': 'staggerGuideLine'
 			} )
@@ -398,7 +365,7 @@ Centered in the field, should be width/2.  Start, 0."""
 			
 	def y_label_offset( self, height ):
 		"""Where in the Y area the label is drawn
-Centered in the field, should be width/2.  Start, 0."""
+		Centered in the field, should be width/2.  Start, 0."""
 		return 0
 	
 	def get_field_width( self ):
@@ -409,13 +376,11 @@ Centered in the field, should be width/2.  Start, 0."""
 	def get_field_height( self ):
 		return float( self.graph_height - self.font_size*2*self.top_font ) / \
 			( len( self.get_y_labels() ) - self.top_align )
-	field_height = property( self.get_field_height )
+	field_height = property( get_field_height )
 
 	def draw_y_labels( self ):
 		"Draw the Y axis labels"
 		if self.show_y_labels:
-			label_height = self.field_height
-			
 			labels = self.get_y_labels()
 			count = len( labels )
 			
@@ -423,7 +388,7 @@ Centered in the field, should be width/2.  Start, 0."""
 			start = int( not self.step_include_first_y_label )
 			labels = itertools.islice( labels, start, None, self.step_y_labels )
 			map( self.draw_y_label, labels )
-			self.draw_y_guidelines( label_height, count )
+			self.draw_y_guidelines( self.field_height, count )
 
 	def get_y_offset( self ):
 		result = self.graph_height + self.y_label_offset( self.label_height )
@@ -432,18 +397,19 @@ Centered in the field, should be width/2.  Start, 0."""
 	y_offset = property( get_y_offset )
 	
 	def draw_y_label( self, label ):
+		label_height = self.field_height
 		index, label = label
-		text = CreateElement( 'text', { 'class': 'yAxisLabels' } )
+		text = self._create_element( 'text', { 'class': 'yAxisLabels' } )
 		text.appendChild( self._doc.createTextNode( label ) )
 		self.graph.appendChild( text )
 		
-		y = self.y_offset - ( self.label_height * index )
+		y = self.y_offset - ( label_height * index )
 		x = {True: 0, False:-3}[self.rotate_y_labels]
 		
 		if self.stagger_x_labels and  (index % 2 ):
 			stagger = self.y_label_font_size + 5
 			x -= stagger
-			path = CreateElement( 'path', {
+			path = self._create_element( 'path', {
 				'd': 'M%(x)d %(y)d v%(stagger)d' % vars(),
 				'class': 'staggerGuideLine'
 			} )
@@ -467,7 +433,7 @@ Centered in the field, should be width/2.  Start, 0."""
 		for count in range(1,count):
 			start = label_height*count
 			stop = self.graph_height
-			path = CreateElement( 'path', {
+			path = self._create_element( 'path', {
 				'd': 'M %(start)s h%(stop)s' % vars(),
 				'class': 'guideLines' } )
 			self.graph.appendChild( path )
@@ -478,7 +444,7 @@ Centered in the field, should be width/2.  Start, 0."""
 		for count in range( 1, count ):
 			start = self.graph_height - label_height*count
 			stop = self.graph_width
-			path = CreateElement( 'path', {
+			path = self._create_element( 'path', {
 				'd': 'MO %(start)s h%(stop)s' % vars(),
 				'class': 'guideLines' } )
 			self.graph.appendChild( path )
@@ -491,7 +457,7 @@ Centered in the field, should be width/2.  Start, 0."""
 		if self.show_y_title: draw_y_title()
 
 	def draw_graph_title( self ):
-		text = CreateElement( 'text', {
+		text = self._create_element( 'text', {
 			'x': str( self.width / 2 ),
 			'y': str( self.title_font_size ),
 			'class': 'mainTitle' } )
@@ -503,16 +469,16 @@ Centered in the field, should be width/2.  Start, 0."""
 	draw_x_title = draw_y_title = draw_graph_subtitle
 
 	def keys( self ):
-		return map( operator.itemgetter( 'title' ), self.data )
+		return map( itemgetter( 'title' ), self.data )
 	
 	def draw_legend( self ):
 		if self.key:
-			group = CreateElement( 'g' )
+			group = self._create_element( 'g' )
 			root.appendChild( group )
 			
 			for key_count, key_name in enumerate( self.keys() ):
 				y_offset = ( self.KEY_BOX_SIZE * key_count ) + (key_count * 5 )
-				rect = group.CreateElement( 'rect', {
+				rect = self._create_element( 'rect', {
 					'x': '0',
 					'y': str( y_offset ),
 					'width': str( self.KEY_BOX_SIZE ),
@@ -520,11 +486,11 @@ Centered in the field, should be width/2.  Start, 0."""
 					'class': 'key%s' % key_count + 1,
 				} )
 				group.appendChild( rect )
-				text = group.CreateElement( 'text', {
+				text = group.self._create_element( 'text', {
 					'x': str( self.KEY_BOX_SIZE + 5 ),
 					'y': str( y_offset + self.KEY_BOX_SIZE ),
 					'class': 'keyText' } )
-				text.appendChild( doc.createTextNode( key_name ) )
+				text.appendChild( self._doc.createTextNode( key_name ) )
 				group.appendChild( text )
 			
 			if self.key_position == 'right':
@@ -570,14 +536,14 @@ Centered in the field, should be width/2.  Start, 0."""
 		impl = dom.getDOMImplementation()
 		#dt = impl.createDocumentType( 'svg', 'PUBLIC'
 		self._doc = impl.createDocument( None, 'svg', None )
-		self.root = self._doc.documentElement()
-		if self.style_sheet:
+		self.root = self._doc.documentElement
+		if hasattr( self, 'style_sheet' ):
 			pi = self._doc.createProcessingInstruction( 'xml-stylesheet',
 												  'href="%s" type="text/css"' % self.style_sheet )
 		attributes = {
 			'width': str( self.width ),
 			'height': str( self.height ),
-			'viewBox': '0 0 %s %s' % ( width, height ),
+			'viewBox': '0 0 %s %s' % ( self.width, self.height ),
 			'xmlns': 'http://www.w3.org/2000/svg',
 			'xmlns:xlink': 'http://www.w3.org/1999/xlink',
 			'xmlns:a3': 'http://ns.adobe.com/AdobeSVGViewerExtensions/3.0/',
@@ -589,18 +555,19 @@ Centered in the field, should be width/2.  Start, 0."""
 		self.root.appendChild( self._doc.createComment( ' Based on Perl SVG:TT:Graph by Leo Lapworth & Stephan Morgan ' ) )
 		self.root.appendChild( self._doc.createComment( ' '+'/'*66 ) )
 
-		defs = self._doc.createElement( 'defs' )
+		defs = self._create_element( 'defs' )
 		self.add_defs( defs )
-		if not self.style_sheet and not self.no_css:
+		if not hasattr( self, 'style_sheet' ) and not self.no_css:
 			self.root.appendChild( self._doc.createComment( ' include default stylesheet if none specified ' ) )
-			style = CreateElement( 'style', { 'type': 'text/css' } )
+			style = self._create_element( 'style', { 'type': 'text/css' } )
 			defs.appendChild( style )
-			style.createCDataNode( self.get_style() )
+			style_data = self._doc.createCDATASection( self.get_style() )
+			style.appendChild( style_data )
 			
 		self.root.appendChild( self._doc.createComment( 'SVG Background' ) )
-		rect = CreateElement( 'rect', {
-			'width': str( width ),
-			'height': str( height ),
+		rect = self._create_element( 'rect', {
+			'width': str( self.width ),
+			'height': str( self.height ),
 			'x': '0',
 			'y': '0',
 			'class': 'svgBackground' } )
@@ -706,3 +673,10 @@ Centered in the field, should be width/2.  Start, 0."""
 }
 /* End copy for external style sheet */
 """ % self.get_css()
+
+	def _create_element( self, nodeName, attributes={} ):
+		"Create an XML node and set the attributes from a dict"
+		node = self._doc.createElement( nodeName )
+		map( lambda a: node.setAttribute( *a ), attributes.items() )
+		return node
+	
