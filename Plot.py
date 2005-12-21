@@ -1,5 +1,10 @@
 #!/usr/bin/env python
 import SVG
+from itertools import izip, count
+
+def get_pairs( i ):
+	i = iter( i )
+	while True:	yield i.next(), i.next()
 
 class Plot( SVG.Graph ):
 	"""=== For creating SVG plots of scalar data
@@ -108,6 +113,315 @@ class Plot( SVG.Graph ):
 	def validate_data( self, data ):
 		if len( data['data'] ) % 2 != 0:
 			raise "Expecting x,y pairs for data points for %s." % self.__class__.__name__
-		
-		
+
+	def process_data( self, data ):
+		pairs = get_pairs( data['data'] )
+		pairs.sort()
+		data['data'] = zip( *pairs )
+
+	def calculate_left_margin( self ):
+		super( self.__class__, self ).calculate_left_margin()
+		label_left = len( str( self.get_x_labels()[0] ) ) / 2 * font_size * 0.6
+		self.border_left = max( label_left, self.border_left )
 	
+	def calculate_right_margin( self ):
+		super( self.__class__, self ).calculate_left_margin()
+		label_right = len( str( self.get_x_labels()[-1] ) ) / 2 * font_size * 0.6
+		self.border_right = max( label_right, self.border_right )
+	
+	x_data_index = 0
+	y_data_index = 1
+	def data_range( self, axis ):
+		side = { 'x': 'right', 'y': 'top' }[axis]
+		data_index = getattr( self, '%s_data_index' % axis )
+		max_value = max( map( lambda set: max( set['data'][data_index] ), self.data ) )
+		min_value = min( map( lambda set: min( set['data'][data_index] ), self.data ) )
+		spec_min = getattr( self, 'min_%s_value' )
+		min_value = min( min_value, spec_min )
+		
+		range = max_value - min_value
+		#side_pad = '%s_pad' % side
+		side_pad = range / 20.0 or 10
+		scale_range = ( max_value + side_pad ) - min_value
+		
+		scale_division = getattr( self, 'scale_%s_divisions' % axis ) or ( scale_range / 10.0 )
+		
+		if getattr( self, 'scale_%s_integers' % axis ):
+			scale_division = scale_division.round() or 1
+			
+		return min_value, max_value, scale_division
+						
+	def x_range( self ): return data_range( 'x' )
+	def y_range( self ): return data_range( 'y' )
+	
+	def get_data_values( self, axis ):
+		min_value, max_value, scale_division = self.data_range( axis )
+		return range( *self.data_range( axis ) )
+	
+	def get_x_values( self ): return get_data_values( 'x' )
+	def get_y_values( self ): return get_data_values( 'y' )
+	
+	def field_size( self, axis ):
+		size = { 'x': 'width', 'y': 'height' }[axis]
+		side = { 'x': 'right', 'y': 'top' }[axis]
+		values = get_data_values( axis )
+		data_index = getattr( self, '%s_data_index' % axis )
+		max_d = max( map( lambda set: max( set['data'][data_index] ), self.data ) )
+		dx = float( max_d - values[-1] ) / ( values[-1] - values[-2] )
+		graph_size = getattr( self, 'graph_%s' % size )
+		side_font = getattr( self, '%s_font' % side )
+		side_align = getattr( self, '%s_align' % side )
+		result = float( graph_size ) - font_size*2*side_font / \
+		   ( len( values ) + dx - side_align )
+		return result
+	
+	def field_width( self ): return field_size( 'x' )
+	def field_height( self ): return field_size( 'y' )
+
+	def draw_data( self ):
+		self.load_transform_parameters()
+		for line, data in izip( count(1), self.data ):
+			x_start, y_start = self.transform_output_coordinates(
+				self.data['data'][self.x_data_index][0],
+				self.data['data'][self.y_data_index][0] )
+			data_points = zip( *data['data'] )
+			graph_points = self.get_graph_points( data_points )
+			lpath = self.get_lpath( graph_points )
+			if self.area_fill:
+				graph_height = self.graph_height
+				path = SVG.CreateElement( 'path', {
+					'd': 'M%(x_start)s %(graph_height)d %(lpath)s V%(graph_height)d Z' % vars(),
+					'class': 'fill%(line)d' % vars() } )
+				self.graph.appendChild( path )
+			path = SVG.CreateElement( 'path', {
+				'd': 'M%(x_start)d %(y_start)d %(lpath)s' % vars(),
+				'class': 'line%(line)d' % vars() } )
+			self.graph.appendChild( path )
+			self.draw_data_points( self, line, data_points, graph_points )
+		del self.__transform_parameters
+
+	def load_transform_parameters( self ):
+		"Cache the parameters necessary to transform x & y coordinates"
+		x_min, x_max, x_div = self.x_range()
+		y_min, y_max, y_div = self.y_range()
+		x_step = ( float( self.graph_width ) - font_size*2 ) / \
+			( x_max - x_min )
+		y_step = ( float( self.graph_height ) - font_size*2 ) / \
+			( y_max - y_min )
+		self.__transform_parameters = dict( vars() )
+		
+	def get_graph_points( self, data_points ):
+		return map( self.transform_output_coordinates, data_points )
+
+	def get_lpath( self, data_points ):
+		points = map( lambda p: "%d %d" % p, points )
+		return 'L' + ' '.join( points )
+	
+	def transform_output_coordinates( self, (x,y) ):
+		vars().update( self.__transform_parameters )
+		x = ( x - x_min ) * x_step
+		y = self.graph_height() - ( y - y_min ) * y_step
+		return x,y
+	
+	def draw_data_points( self, line, data_points, graph_points ):
+		if not self.show_data_points \
+			and not self.show_data_values: return
+		for ((dx,dy),(gx,gy)) in izip( data_points, graph_points ):
+			if self.show_data_points:
+				circle = SVG.CreateElement( 'circle', {
+					'cx': str( gx ),
+					'cy': str( gy ),
+					'r': '2.5',
+					'class': 'dataPoint%(line)s' % vars() } )
+				self.graph.appendChild( circle )
+			if self.show_data_values:
+				self.add_popup( gx, gy, self.format( dx, dy ) )
+			self.make_datapoint_text( gx, gy-6, y )
+	
+	def format( self, x, y ):
+		return '(%0.2f, %0.2f)' % (x,y)
+	
+	def get_css( self ):
+		return """/* default line styles */
+.line1{
+	fill: none;
+	stroke: #ff0000;
+	stroke-width: 1px;	
+}
+.line2{
+	fill: none;
+	stroke: #0000ff;
+	stroke-width: 1px;	
+}
+.line3{
+	fill: none;
+	stroke: #00ff00;
+	stroke-width: 1px;	
+}
+.line4{
+	fill: none;
+	stroke: #ffcc00;
+	stroke-width: 1px;	
+}
+.line5{
+	fill: none;
+	stroke: #00ccff;
+	stroke-width: 1px;	
+}
+.line6{
+	fill: none;
+	stroke: #ff00ff;
+	stroke-width: 1px;	
+}
+.line7{
+	fill: none;
+	stroke: #00ffff;
+	stroke-width: 1px;	
+}
+.line8{
+	fill: none;
+	stroke: #ffff00;
+	stroke-width: 1px;	
+}
+.line9{
+	fill: none;
+	stroke: #ccc6666;
+	stroke-width: 1px;	
+}
+.line10{
+	fill: none;
+	stroke: #663399;
+	stroke-width: 1px;	
+}
+.line11{
+	fill: none;
+	stroke: #339900;
+	stroke-width: 1px;	
+}
+.line12{
+	fill: none;
+	stroke: #9966FF;
+	stroke-width: 1px;	
+}
+/* default fill styles */
+.fill1{
+	fill: #cc0000;
+	fill-opacity: 0.2;
+	stroke: none;
+}
+.fill2{
+	fill: #0000cc;
+	fill-opacity: 0.2;
+	stroke: none;
+}
+.fill3{
+	fill: #00cc00;
+	fill-opacity: 0.2;
+	stroke: none;
+}
+.fill4{
+	fill: #ffcc00;
+	fill-opacity: 0.2;
+	stroke: none;
+}
+.fill5{
+	fill: #00ccff;
+	fill-opacity: 0.2;
+	stroke: none;
+}
+.fill6{
+	fill: #ff00ff;
+	fill-opacity: 0.2;
+	stroke: none;
+}
+.fill7{
+	fill: #00ffff;
+	fill-opacity: 0.2;
+	stroke: none;
+}
+.fill8{
+	fill: #ffff00;
+	fill-opacity: 0.2;
+	stroke: none;
+}
+.fill9{
+	fill: #cc6666;
+	fill-opacity: 0.2;
+	stroke: none;
+}
+.fill10{
+	fill: #663399;
+	fill-opacity: 0.2;
+	stroke: none;
+}
+.fill11{
+	fill: #339900;
+	fill-opacity: 0.2;
+	stroke: none;
+}
+.fill12{
+	fill: #9966FF;
+	fill-opacity: 0.2;
+	stroke: none;
+}
+/* default line styles */
+.key1,.dataPoint1{
+	fill: #ff0000;
+	stroke: none;
+	stroke-width: 1px;	
+}
+.key2,.dataPoint2{
+	fill: #0000ff;
+	stroke: none;
+	stroke-width: 1px;	
+}
+.key3,.dataPoint3{
+	fill: #00ff00;
+	stroke: none;
+	stroke-width: 1px;	
+}
+.key4,.dataPoint4{
+	fill: #ffcc00;
+	stroke: none;
+	stroke-width: 1px;	
+}
+.key5,.dataPoint5{
+	fill: #00ccff;
+	stroke: none;
+	stroke-width: 1px;	
+}
+.key6,.dataPoint6{
+	fill: #ff00ff;
+	stroke: none;
+	stroke-width: 1px;	
+}
+.key7,.dataPoint7{
+	fill: #00ffff;
+	stroke: none;
+	stroke-width: 1px;	
+}
+.key8,.dataPoint8{
+	fill: #ffff00;
+	stroke: none;
+	stroke-width: 1px;	
+}
+.key9,.dataPoint9{
+	fill: #cc6666;
+	stroke: none;
+	stroke-width: 1px;	
+}
+.key10,.dataPoint10{
+	fill: #663399;
+	stroke: none;
+	stroke-width: 1px;	
+}
+.key11,.dataPoint11{
+	fill: #339900;
+	stroke: none;
+	stroke-width: 1px;	
+}
+.key12,.dataPoint12{
+	fill: #9966FF;
+	stroke: none;
+	stroke-width: 1px;	
+}"""

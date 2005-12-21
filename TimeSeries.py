@@ -1,10 +1,6 @@
 #!/usr/bin/env python
 import SVG
 
-def get_pairs( i ):
-	i = iter( i )
-	while True:	yield i.next(), i.next()
-
 class Plot( SVG.Plot ):
 	"""=== For creating SVG plots of scalar temporal data
 		
@@ -121,11 +117,10 @@ class Plot( SVG.Plot ):
 		super( self.__class__, self ).add_data( data )
 		
 	def process_data( self, data ):
-		pairs = get_pairs( data['data'] )
-		pairs = map( lambda (x,y): (self.parse_date(x),y), pairs )
-		pairs.sort()
-		data['data'] = zip( *pairs )
-
+		super( self.__class__, self ).process_data( data )
+		# the date should be in the first element, so parse it out
+		data['data'][0] = map( self.parse_date, data['data'][0] )
+	
 	def get_min_x_value( self ):
 		return self._min_x_value
 	def set_min_x_value( self, date ):

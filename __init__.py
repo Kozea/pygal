@@ -1,5 +1,7 @@
 #!/usr/bin/env python
 
+__all__ = ( 'Plot', 'TimeSeries' )
+from SVG import *
 from xml.dom import minidom as dom
 
 try:
