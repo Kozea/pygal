@@ -67,54 +67,52 @@ Jason R. Coombs <jaraco@jaraco.com>
 
 Copyright 2005 Sandia National Laboratories
 """
-	defaults = {
-		'width':                500,
-		'height':               300,
-		'show_x_guidelines':    False,
-		'show_y_guidelines':    True,
-		'show_data_values':     True,
-		'min_scale_value':      0,
-		'show_x_labels':        True,
-		'stagger_x_labels':     False,
-		'rotate_x_labels':      False,
-		'step_x_labels':        1,
-		'step_include_first_x_label':   True,
-		'show_y_labels':        True,
-		'rotate_y_labels':		False,
-		'stagger_y_labels':		False,
-		'scale_integers':		False,
-		'show_x_title':			False,
-		'x_title':				'X Field names',
-		'show_y_title':			False,
-		'y_title_text_direction':	'bt',
-		'y_title':				'Y Scale',
-		'show_graph_title':		False,
-		'graph_title':			'Graph Title',
-		'show_graph_subtitle':	False,
-		'graph_subtitle':		'Graph Subtitle',
-		'key':					True,
-		'key_position':			'right', # 'bottom' or 'right',
-		
-		'font_size':			12,
-		'title_font_size':		16,
-		'subtitle_font_size':	14,
-		'x_label_font_size':	12,
-		'x_title_font_size':	14,
-		'y_label_font_size':	12,
-		'y_title_font_size':	14,
-		'key_font_size':		10,
-		
-		'no_css':				False,
-		'add_popups':			False,
-		}
-	#__slots__ = tuple( defaults ) + ( '__dict__', '__weakref__' )
+	width=                500
+	height=               300
+	show_x_guidelines=    False
+	show_y_guidelines=    True
+	show_data_values=     True
+	min_scale_value=      0
+	show_x_labels=        True
+	stagger_x_labels=     False
+	rotate_x_labels=      False
+	step_x_labels=        1
+	step_include_first_x_label=   True
+	show_y_labels=        True
+	rotate_y_labels=		False
+	stagger_y_labels=		False
+	step_include_first_y_label= True
+	step_y_labels= 1
+	scale_integers=		False
+	show_x_title=			False
+	x_title=				'X Field names'
+	show_y_title=			False
+	y_title_text_direction=	'bt'
+	y_title=				'Y Scale'
+	show_graph_title=		False
+	graph_title=			'Graph Title'
+	show_graph_subtitle=	False
+	graph_subtitle=		'Graph Subtitle'
+	key=					True
+	key_position=			'right' # 'bottom' or 'right',
+	
+	font_size=			12
+	title_font_size=		16
+	subtitle_font_size=	14
+	x_label_font_size=	12
+	x_title_font_size=	14
+	y_label_font_size=	12
+	y_title_font_size=	14
+	key_font_size=		10
+	
+	no_css=				False
+	add_popups=			False
+
+	top_align = top_font = right_align = right_font = 0
 
 	def __init__( self, config ):
 		"""Initialize the graph object with the graph settings.  You won't
 		instantiate this class directly; see the subclass for options."""
-		self.top_align = self.top_font = self.right_align = self.right_font = 0
-		self.load_config()
-		self.load_config( config )
 		self.clear_data()
 
 	def load_config( self, config = None ):
@@ -172,12 +170,12 @@ Copyright 2005 Sandia National Laboratories
 		self.draw_titles()
 		self.draw_legend()
 		self.draw_data()
-		self.graph.add_element( self.foreground )
+		self.graph.appendChild( self.foreground )
 		self.style()
 		
 		data = self._doc.toprettyxml()
 		
-		if self.compress:
+		if hasattr( self, 'compress' ) and self.compress:
 			if __have_zlib:
 				data = zlib.compress( data )
 			else:
@@ -231,7 +229,7 @@ Copyright 2005 Sandia National Laboratories
 	def add_popup( self, x, y, label ):
 		"Adds pop-up point information to a graph."
 		txt_width = len( label ) * self.font_size * 0.6 + 10
-		tx = x + [5,-5](x+txt_width > width)
+		tx = x + [5,-5][int(x+txt_width > self.width)]
 		t = self._create_element( 'text' )
 		anchor = ['start', 'end'][x+txt_width > self.width]
 		style = 'fill: #000; text-anchor: %s;' % anchor
@@ -329,10 +327,10 @@ Copyright 2005 Sandia National Laboratories
 			start = int( not self.step_include_first_x_label )
 			labels = islice( labels, start, None, self.step_x_labels )
 			map( self.draw_x_label, labels )
-			self.draw_x_guidelines( self.field_width, count )
+			self.draw_x_guidelines( self.field_width(), count )
 	
 	def draw_x_label( self, label ):
-		label_width = self.field_width
+		label_width = self.field_width()
 		index, label = label
 		text = self._create_element( 'text', { 'class': 'xAxisLabels' } )
 		text.appendChild( self._doc.createTextNode( label ) )
@@ -369,7 +367,7 @@ Copyright 2005 Sandia National Laboratories
 		return 0
 	
 	def get_field_width( self ):
-		return float( self.graph_width - font_size*2*right_font ) / \
+		return float( self.graph_width - self.font_size*2*self.right_font ) / \
 			( len( self.get_x_labels() ) - self.right_align )
 	field_width = property( get_field_width )
 	
@@ -386,18 +384,19 @@ Copyright 2005 Sandia National Laboratories
 			
 			labels = enumerate( iter( labels ) )
 			start = int( not self.step_include_first_y_label )
-			labels = itertools.islice( labels, start, None, self.step_y_labels )
+			labels = islice( labels, start, None, self.step_y_labels )
 			map( self.draw_y_label, labels )
-			self.draw_y_guidelines( self.field_height, count )
+			self.draw_y_guidelines( self.field_height(), count )
 
 	def get_y_offset( self ):
-		result = self.graph_height + self.y_label_offset( self.label_height )
+		#result = self.graph_height + self.y_label_offset( label_height )
+		result = self.graph_height + self.y_label_offset( self.field_height() )
 		if self.rotate_y_labels: result += self.font_size/1.2
 		return result
 	y_offset = property( get_y_offset )
 	
 	def draw_y_label( self, label ):
-		label_height = self.field_height
+		label_height = self.field_height()
 		index, label = label
 		text = self._create_element( 'text', { 'class': 'yAxisLabels' } )
 		text.appendChild( self._doc.createTextNode( label ) )
@@ -434,7 +433,7 @@ Copyright 2005 Sandia National Laboratories
 			start = label_height*count
 			stop = self.graph_height
 			path = self._create_element( 'path', {
-				'd': 'M %(start)s h%(stop)s' % vars(),
+				'd': 'M %(start)s 0 v%(stop)s' % vars(),
 				'class': 'guideLines' } )
 			self.graph.appendChild( path )
 			
@@ -474,7 +473,7 @@ Copyright 2005 Sandia National Laboratories
 	def draw_legend( self ):
 		if self.key:
 			group = self._create_element( 'g' )
-			root.appendChild( group )
+			self.root.appendChild( group )
 			
 			for key_count, key_name in enumerate( self.keys() ):
 				y_offset = ( self.KEY_BOX_SIZE * key_count ) + (key_count * 5 )
@@ -483,10 +482,10 @@ Copyright 2005 Sandia National Laboratories
 					'y': str( y_offset ),
 					'width': str( self.KEY_BOX_SIZE ),
 					'height': str( self.KEY_BOX_SIZE ),
-					'class': 'key%s' % key_count + 1,
+					'class': 'key%s' % (key_count + 1),
 				} )
 				group.appendChild( rect )
-				text = group.self._create_element( 'text', {
+				text = self._create_element( 'text', {
 					'x': str( self.KEY_BOX_SIZE + 5 ),
 					'y': str( y_offset + self.KEY_BOX_SIZE ),
 					'class': 'keyText' } )
@@ -494,8 +493,8 @@ Copyright 2005 Sandia National Laboratories
 				group.appendChild( text )
 			
 			if self.key_position == 'right':
-				x_offset = self.graph_width, self.border_left + 10
-				y_offset = border_top + 20
+				x_offset = self.graph_width + self.border_left + 10
+				y_offset = self.border_top + 20
 			if self.key_position == 'bottom':
 				raise NotImplementedError
 			group.setAttribute( 'transform', 'translate(%(x_offset)d %(y_offset)d)' % vars() )
@@ -557,6 +556,7 @@ Copyright 2005 Sandia National Laboratories
 
 		defs = self._create_element( 'defs' )
 		self.add_defs( defs )
+		self.root.appendChild( defs )
 		if not hasattr( self, 'style_sheet' ) and not self.no_css:
 			self.root.appendChild( self._doc.createComment( ' include default stylesheet if none specified ' ) )
 			style = self._create_element( 'style', { 'type': 'text/css' } )
@@ -571,6 +571,7 @@ Copyright 2005 Sandia National Laboratories
 			'x': '0',
 			'y': '0',
 			'class': 'svgBackground' } )
+		self.root.appendChild( rect )
 		
 	def calculate_graph_dimensions( self ):
 		self.calculate_left_margin()

@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 import SVG
-from itertools import izip, count
+from itertools import izip, count, chain
 
 def get_pairs( i ):
 	i = iter( i )
@@ -96,10 +96,6 @@ class Plot( SVG.Graph ):
 	Copyright 2004 Sean E. Russell
 	This software is available under the Ruby license[LICENSE.txt]"""
 
-	show_data_points = True
-	area_fill = True
-	stacked = True
-	
 	top_align = right_align = top_font = right_font = 1
 
 	
@@ -118,11 +114,12 @@ class Plot( SVG.Graph ):
 	area_fill = False
 	"""Show a small circle on the graph where the line
 	goes from one point to the next."""
-	show_data_points = False
+	show_data_points = True
 	"Set the minimum value of the X axis"
 	min_x_value = None
 	"Set the minimum value of the Y axis"
 	min_y_value = None
+	stacked = False
 
 	@apply
 	def scale_x_divisions():
@@ -185,7 +182,7 @@ class Plot( SVG.Graph ):
 	
 	def get_data_values( self, axis ):
 		min_value, max_value, scale_division = self.data_range( axis )
-		return float_range( *self.data_range( axis ) )
+		return tuple( float_range( *self.data_range( axis ) ) )
 	
 	def get_x_values( self ): return self.get_data_values( 'x' )
 	def get_y_values( self ): return self.get_data_values( 'y' )
@@ -198,26 +195,28 @@ class Plot( SVG.Graph ):
 	def field_size( self, axis ):
 		size = { 'x': 'width', 'y': 'height' }[axis]
 		side = { 'x': 'right', 'y': 'top' }[axis]
-		values = get_data_values( axis )
+		values = self.get_data_values( axis )
 		data_index = getattr( self, '%s_data_index' % axis )
-		max_d = max( map( lambda set: max( set['data'][data_index] ), self.data ) )
+		max_d = max( chain( *map( lambda set: set['data'][data_index], self.data ) ) )
 		dx = float( max_d - values[-1] ) / ( values[-1] - values[-2] )
 		graph_size = getattr( self, 'graph_%s' % size )
 		side_font = getattr( self, '%s_font' % side )
 		side_align = getattr( self, '%s_align' % side )
-		result = float( graph_size ) - font_size*2*side_font / \
+		result = ( float( graph_size ) - self.font_size*2*side_font ) / \
 		   ( len( values ) + dx - side_align )
+		for key,val in vars().items(): print key, val
 		return result
 	
-	def field_width( self ): return field_size( 'x' )
-	def field_height( self ): return field_size( 'y' )
+	def field_width( self ): return self.field_size( 'x' )
+	def field_height( self ): return self.field_size( 'y' )
 
 	def draw_data( self ):
 		self.load_transform_parameters()
 		for line, data in izip( count(1), self.data ):
 			x_start, y_start = self.transform_output_coordinates(
-				self.data['data'][self.x_data_index][0],
-				self.data['data'][self.y_data_index][0] )
+				( data['data'][self.x_data_index][0],
+				data['data'][self.y_data_index][0] )
+			)
 			data_points = zip( *data['data'] )
 			graph_points = self.get_graph_points( data_points )
 			lpath = self.get_lpath( graph_points )
@@ -231,30 +230,36 @@ class Plot( SVG.Graph ):
 				'd': 'M%(x_start)d %(y_start)d %(lpath)s' % vars(),
 				'class': 'line%(line)d' % vars() } )
 			self.graph.appendChild( path )
-			self.draw_data_points( self, line, data_points, graph_points )
+			self.draw_data_points( line, data_points, graph_points )
 		del self.__transform_parameters
 
 	def load_transform_parameters( self ):
 		"Cache the parameters necessary to transform x & y coordinates"
 		x_min, x_max, x_div = self.x_range()
 		y_min, y_max, y_div = self.y_range()
-		x_step = ( float( self.graph_width ) - font_size*2 ) / \
+		x_step = ( float( self.graph_width ) - self.font_size*2 ) / \
 			( x_max - x_min )
-		y_step = ( float( self.graph_height ) - font_size*2 ) / \
+		y_step = ( float( self.graph_height ) - self.font_size*2 ) / \
 			( y_max - y_min )
 		self.__transform_parameters = dict( vars() )
+		del self.__transform_parameters['self']
 		
 	def get_graph_points( self, data_points ):
 		return map( self.transform_output_coordinates, data_points )
 
-	def get_lpath( self, data_points ):
+	def get_lpath( self, points ):
 		points = map( lambda p: "%d %d" % p, points )
 		return 'L' + ' '.join( points )
 	
 	def transform_output_coordinates( self, (x,y) ):
-		vars().update( self.__transform_parameters )
+		x_min = self.__transform_parameters['x_min']
+		x_step = self.__transform_parameters['x_step']
+		y_min = self.__transform_parameters['y_min']
+		y_step = self.__transform_parameters['y_step']
+		#locals().update( self.__transform_parameters )
+		#vars().update( self.__transform_parameters )
 		x = ( x - x_min ) * x_step
-		y = self.graph_height() - ( y - y_min ) * y_step
+		y = self.graph_height - ( y - y_min ) * y_step
 		return x,y
 	
 	def draw_data_points( self, line, data_points, graph_points ):
@@ -270,7 +275,7 @@ class Plot( SVG.Graph ):
 				self.graph.appendChild( circle )
 			if self.show_data_values:
 				self.add_popup( gx, gy, self.format( dx, dy ) )
-			self.make_datapoint_text( gx, gy-6, y )
+			self.make_datapoint_text( gx, gy-6, dy )
 	
 	def format( self, x, y ):
 		return '(%0.2f, %0.2f)' % (x,y)
