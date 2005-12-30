@@ -9,7 +9,7 @@ def get_pairs( i ):
 def float_range( start = 0, stop = None, step = 1 ):
 	"Much like the built-in function range, but accepts floats"
 	while start < stop:
-		yield start
+		yield float( start )
 		start += step
 
 class Plot( SVG.Graph ):
@@ -145,12 +145,12 @@ class Plot( SVG.Graph ):
 		data['data'] = zip( *pairs )
 
 	def calculate_left_margin( self ):
-		super( self.__class__, self ).calculate_left_margin()
+		super( Plot, self ).calculate_left_margin()
 		label_left = len( str( self.get_x_labels()[0] ) ) / 2 * self.font_size * 0.6
 		self.border_left = max( label_left, self.border_left )
 	
 	def calculate_right_margin( self ):
-		super( self.__class__, self ).calculate_right_margin()
+		super( Plot, self ).calculate_right_margin()
 		label_right = len( str( self.get_x_labels()[-1] ) ) / 2 * self.font_size * 0.6
 		self.border_right = max( label_right, self.border_right )
 	
@@ -166,6 +166,7 @@ class Plot( SVG.Graph ):
 			min_value = min( min_value, spec_min )
 		
 		range = max_value - min_value
+		
 		#side_pad = '%s_pad' % side
 		side_pad = range / 20.0 or 10
 		scale_range = ( max_value + side_pad ) - min_value
@@ -176,7 +177,7 @@ class Plot( SVG.Graph ):
 			scale_division = scale_division.round() or 1
 			
 		return min_value, max_value, scale_division
-						
+
 	def x_range( self ): return self.data_range( 'x' )
 	def y_range( self ): return self.data_range( 'y' )
 	
@@ -204,7 +205,6 @@ class Plot( SVG.Graph ):
 		side_align = getattr( self, '%s_align' % side )
 		result = ( float( graph_size ) - self.font_size*2*side_font ) / \
 		   ( len( values ) + dx - side_align )
-		for key,val in vars().items(): print key, val
 		return result
 	
 	def field_width( self ): return self.field_size( 'x' )
@@ -223,11 +223,11 @@ class Plot( SVG.Graph ):
 			if self.area_fill:
 				graph_height = self.graph_height
 				path = self._create_element( 'path', {
-					'd': 'M%(x_start)s %(graph_height)d %(lpath)s V%(graph_height)d Z' % vars(),
+					'd': 'M%(x_start)f %(graph_height)f %(lpath)s V%(graph_height)f Z' % vars(),
 					'class': 'fill%(line)d' % vars() } )
 				self.graph.appendChild( path )
 			path = self._create_element( 'path', {
-				'd': 'M%(x_start)d %(y_start)d %(lpath)s' % vars(),
+				'd': 'M%(x_start)f %(y_start)f %(lpath)s' % vars(),
 				'class': 'line%(line)d' % vars() } )
 			self.graph.appendChild( path )
 			self.draw_data_points( line, data_points, graph_points )
@@ -248,7 +248,7 @@ class Plot( SVG.Graph ):
 		return map( self.transform_output_coordinates, data_points )
 
 	def get_lpath( self, points ):
-		points = map( lambda p: "%d %d" % p, points )
+		points = map( lambda p: "%f %f" % p, points )
 		return 'L' + ' '.join( points )
 	
 	def transform_output_coordinates( self, (x,y) ):

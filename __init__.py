@@ -110,14 +110,14 @@ Copyright 2005 Sandia National Laboratories
 
 	top_align = top_font = right_align = right_font = 0
 
-	def __init__( self, config ):
+	def __init__( self, config = {} ):
 		"""Initialize the graph object with the graph settings.  You won't
 		instantiate this class directly; see the subclass for options."""
+		self.load_config( config )
 		self.clear_data()
 
-	def load_config( self, config = None ):
-		if not config: config = self.defaults
-		map( lambda pair: setattr( self, *pair ), config.items() )
+	def load_config( self, config ):
+		self.__dict__.update( config )
 		
 	def add_data( self, conf ):
 		"""This method allows you do add data to the graph object.
@@ -314,7 +314,14 @@ Copyright 2005 Sandia National Laboratories
 				'class': 'dataPointLabel',
 				'style': '%(style)s stroke: #fff; stroke-width: 2;' % vars(),
 			} )
-			e.nodeValue = value
+			e.appendChild( self._doc.createTextNode( str( value ) ) )
+			self.foreground.appendChild( e )
+			e = self._create_element( 'text', {
+				'x': str( x ),
+				'y': str( y ),
+				'class': 'dataPointLabel' } )
+			e.appendChild( self._doc.createTextNode( str( value ) ) )
+			if style: e.setAttribute( 'style', style )
 			self.foreground.appendChild( e )
 
 	def draw_x_labels( self ):
@@ -345,7 +352,7 @@ Copyright 2005 Sandia National Laboratories
 			y += stagger
 			graph_height = self.graph_height
 			path = self._create_element( 'path', {
-				'd': 'M%(x)d %(graph_height)d v%(stagger)d' % vars(),
+				'd': 'M%(x)f %(graph_height)f v%(stagger)d' % vars(),
 				'class': 'staggerGuideLine'
 			} )
 			self.graph.appendChild( path )
@@ -391,7 +398,7 @@ Copyright 2005 Sandia National Laboratories
 	def get_y_offset( self ):
 		#result = self.graph_height + self.y_label_offset( label_height )
 		result = self.graph_height + self.y_label_offset( self.field_height() )
-		if self.rotate_y_labels: result += self.font_size/1.2
+		if not self.rotate_y_labels: result += self.font_size/1.2
 		return result
 	y_offset = property( get_y_offset )
 	
@@ -405,11 +412,11 @@ Copyright 2005 Sandia National Laboratories
 		y = self.y_offset - ( label_height * index )
 		x = {True: 0, False:-3}[self.rotate_y_labels]
 		
-		if self.stagger_x_labels and  (index % 2 ):
+		if self.stagger_y_labels and  (index % 2 ):
 			stagger = self.y_label_font_size + 5
 			x -= stagger
 			path = self._create_element( 'path', {
-				'd': 'M%(x)d %(y)d v%(stagger)d' % vars(),
+				'd': 'M%(x)f %(y)f h%(stagger)d' % vars(),
 				'class': 'staggerGuideLine'
 			} )
 			self.graph.appendChild( path )
@@ -424,10 +431,11 @@ Copyright 2005 Sandia National Laboratories
 			text.setAttribute( 'style', 'text-anchor: middle' )
 		else:
 			text.setAttribute( 'y', str( y - self.y_label_font_size/2 ) )
-			text.setAttribute( 'style', 'text-anchor: middle' )
+			text.setAttribute( 'style', 'text-anchor: end' )
 		
 	def draw_x_guidelines( self, label_height, count ):
 		"Draw the X-axis guidelines"
+		if not self.show_x_guidelines: return
 		# skip the first one
 		for count in range(1,count):
 			start = label_height*count
@@ -440,11 +448,12 @@ Copyright 2005 Sandia National Laboratories
 
 	def draw_y_guidelines( self, label_height, count ):
 		"Draw the Y-axis guidelines"
+		if not self.show_y_guidelines: return
 		for count in range( 1, count ):
 			start = self.graph_height - label_height*count
 			stop = self.graph_width
 			path = self._create_element( 'path', {
-				'd': 'MO %(start)s h%(stop)s' % vars(),
+				'd': 'M 0 %(start)s h%(stop)s' % vars(),
 				'class': 'guideLines' } )
 			self.graph.appendChild( path )
 
@@ -582,7 +591,7 @@ Copyright 2005 Sandia National Laboratories
 		self.graph_height = self.height - self.border_top - self.border_bottom
 		
 	def get_style( self ):
-		return """/* Copy from here for external style sheet */
+		result = """/* Copy from here for external style sheet */
 .svgBackground{
   fill:#ffffff;
 }
@@ -594,14 +603,14 @@ Copyright 2005 Sandia National Laboratories
 .mainTitle{
   text-anchor: middle;
   fill: #000000;
-  font-size: #{title_font_size}px;
+  font-size: %(title_font_size)dpx;
   font-family: "Arial", sans-serif;
   font-weight: normal;
 }
 .subTitle{
   text-anchor: middle;
   fill: #999999;
-  font-size: #{subtitle_font_size}px;
+  font-size: %(subtitle_font_size)dpx;
   font-family: "Arial", sans-serif;
   font-weight: normal;
 }
@@ -620,7 +629,7 @@ Copyright 2005 Sandia National Laboratories
 .xAxisLabels{
   text-anchor: middle;
   fill: #000000;
-  font-size: #{x_label_font_size}px;
+  font-size: %(x_label_font_size)dpx;
   font-family: "Arial", sans-serif;
   font-weight: normal;
 }
@@ -628,7 +637,7 @@ Copyright 2005 Sandia National Laboratories
 .yAxisLabels{
   text-anchor: end;
   fill: #000000;
-  font-size: #{y_label_font_size}px;
+  font-size: %(y_label_font_size)dpx;
   font-family: "Arial", sans-serif;
   font-weight: normal;
 }
@@ -636,7 +645,7 @@ Copyright 2005 Sandia National Laboratories
 .xAxisTitle{
   text-anchor: middle;
   fill: #ff0000;
-  font-size: #{x_title_font_size}px;
+  font-size: %(x_title_font_size)dpx;
   font-family: "Arial", sans-serif;
   font-weight: normal;
 }
@@ -644,7 +653,7 @@ Copyright 2005 Sandia National Laboratories
 .yAxisTitle{
   fill: #ff0000;
   text-anchor: middle;
-  font-size: #{y_title_font_size}px;
+  font-size: %(y_title_font_size)dpx;
   font-family: "Arial", sans-serif;
   font-weight: normal;
 }
@@ -663,21 +672,34 @@ Copyright 2005 Sandia National Laboratories
   stroke-width: 0.5px;  
 }
 
-%s
+%%s
 
 .keyText{
   fill: #000000;
   text-anchor:start;
-  font-size: #{key_font_size}px;
+  font-size: %(key_font_size)dpx;
   font-family: "Arial", sans-serif;
   font-weight: normal;
 }
 /* End copy for external style sheet */
-""" % self.get_css()
+""" % class_dict( self )
+		result = result % self.get_css()
+		return result
 
 	def _create_element( self, nodeName, attributes={} ):
 		"Create an XML node and set the attributes from a dict"
 		node = self._doc.createElement( nodeName )
 		map( lambda a: node.setAttribute( *a ), attributes.items() )
 		return node
-	
+
+class class_dict( object ):
+	"Emulates a dictionary, but retrieves class attributes"
+	def __init__( self, obj ):
+		self.__obj__ = obj
+
+	def __getitem__( self, item ):
+		return getattr( self.__obj__, item )
+
+	def keys( self ):
+		# dir returns a good guess of what attributes might be available
+		return dir( self.__obj__ )

@@ -1,5 +1,12 @@
 #!/usr/bin/env python
 import SVG
+import re
+#requires python date-util from http://labix.org/python-dateutil
+from dateutil.parser import parse
+from dateutil.relativedelta import relativedelta
+from time import mktime
+import datetime
+fromtimestamp = datetime.datetime.fromtimestamp
 
 class Plot( SVG.Plot.Plot ):
 	"""=== For creating SVG plots of scalar temporal data
@@ -98,6 +105,18 @@ class Plot( SVG.Plot.Plot ):
 	__doc_popup_format_ = "The formatting usped for the popups.  See x_label_format"
 	__doc_x_label_format_ = "The format string used to format the X axis labels.  See strftime."
 	
+	timescale_divisions = None
+	__doc_timescale_divisions_ = """Use this to set the spacing between dates on the axis.  The value
+		must be of the form 
+		"\d+ ?(days|weeks|months|years|hours|minutes|seconds)?"
+
+		EG:
+
+		graph.timescale_divisions = "2 weeks"
+
+		will cause the chart to try to divide the X axis up into segments of
+		two week periods."""
+	
 	def add_data( self, data ):
 		"""Add data to the plot.
 			d1 = [ "12:30", 2 ]          # A data set with 1 point: ("12:30",2)
@@ -114,13 +133,14 @@ class Plot( SVG.Plot.Plot ):
 			
 			Note that the data must be in time,value pairs, and that the date format
 			may be any date that is parseable by ParseDate."""
-		super( self.__class__, self ).add_data( data )
+		super( Plot, self ).add_data( data )
 		
 	def process_data( self, data ):
-		super( self.__class__, self ).process_data( data )
+		super( Plot, self ).process_data( data )
 		# the date should be in the first element, so parse it out
 		data['data'][0] = map( self.parse_date, data['data'][0] )
-	
+
+	_min_x_value = SVG.Plot.Plot.min_x_value	
 	def get_min_x_value( self ):
 		return self._min_x_value
 	def set_min_x_value( self, date ):
@@ -128,38 +148,34 @@ class Plot( SVG.Plot.Plot ):
 	min_x_value = property( get_min_x_value, set_min_x_value )
 	
 	def format( self, x, y ):
-		return x.strftime( self.popup_format )
+		return fromtimestamp( x ).strftime( self.popup_format )
 	
 	def get_x_labels( self ):
-		return map( lambda t: t.strftime( self.x_label_format ), self.get_x_values() )
+		return map( lambda t: fromtimestamp( t ).strftime( self.x_label_format ), self.get_x_values() )
 	
 	def get_x_values( self ):
 		result = self.get_x_timescale_division_values()
 		if result: return result
-		return range( *self.x_range() )
+		return SVG.Plot.float_range( *self.x_range() )
 			
 	def get_x_timescale_division_values( self ):
 		if not self.timescale_divisions: return
 		min, max, scale_division = self.x_range()
 		m = re.match( '(?P<amount>\d+) ?(?P<division_units>days|weeks|months|years|hours|minutes|seconds)?', self.timescale_divisions )
 		# copy amount and division_units into the local namespace
-		vars.update( m.groupdict() )
-		division_units = division_units or 'days'
-		amount = int( amount )
+		division_units = m.groupdict()['division_units'] or 'days'
+		amount = int( m.groupdict()['amount'] )
 		if not amount: return
-		if division_units == 'weeks':
-			amount *= 7
-			division_units = 'days'
-		# strip off the plural (s)
-		division_units = division_units[:-1]
-		result = self.get_time_range( min, max, step, units )
+		delta = relativedelta( **{ division_units: amount } )
+		result = self.get_time_range( min, max, delta )
 		return result
 	
-	def get_time_range( self, start, stop, step, units ):
+	def get_time_range( self, start, stop, delta ):
+		start, stop = map( fromtimestamp, (start, stop ) )
 		current = start
 		while current < stop:
-			yield current
-			current.replace( **{ units: current.getattr( units ) + step } )
+			yield mktime( current.timetuple() )
+			current += delta
 			
 	def parse_date( self, date_string ):
-		return strptime( date_string, '%Y-%m-%dT%H:%M:%S' )
+		return mktime( parse( date_string ).timetuple() )
