@@ -119,6 +119,11 @@ class Plot( SVG.Graph ):
 	min_x_value = None
 	"Set the minimum value of the Y axis"
 	min_y_value = None
+	"Set the maximum value of the X axis"
+	max_x_value = None
+	"Set the maximum value of the Y axis"
+	max_y_value = None
+
 	stacked = False
 
 	@apply
@@ -160,6 +165,9 @@ class Plot( SVG.Graph ):
 		side = { 'x': 'right', 'y': 'top' }[axis]
 		data_index = getattr( self, '%s_data_index' % axis )
 		max_value = max( map( lambda set: max( set['data'][data_index] ), self.data ) )
+		spec_max = getattr( self, 'max_%s_value' % axis )
+		if spec_max is not None:
+			max_value = max( max_value, spec_max )
 		min_value = min( map( lambda set: min( set['data'][data_index] ), self.data ) )
 		spec_min = getattr( self, 'min_%s_value' % axis )
 		if spec_min is not None:
