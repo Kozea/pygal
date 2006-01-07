@@ -152,11 +152,11 @@ class Plot( SVG.Plot.Plot ):
 	
 	def get_x_labels( self ):
 		return map( lambda t: fromtimestamp( t ).strftime( self.x_label_format ), self.get_x_values() )
-	
+
 	def get_x_values( self ):
 		result = self.get_x_timescale_division_values()
 		if result: return result
-		return SVG.Plot.float_range( *self.x_range() )
+		return tuple( SVG.Plot.float_range( *self.x_range() ) )
 			
 	def get_x_timescale_division_values( self ):
 		if not self.timescale_divisions: return
@@ -167,13 +167,13 @@ class Plot( SVG.Plot.Plot ):
 		amount = int( m.groupdict()['amount'] )
 		if not amount: return
 		delta = relativedelta( **{ division_units: amount } )
-		result = self.get_time_range( min, max, delta )
+		result = tuple( self.get_time_range( min, max, delta ) )
 		return result
 	
 	def get_time_range( self, start, stop, delta ):
 		start, stop = map( fromtimestamp, (start, stop ) )
 		current = start
-		while current < stop:
+		while current <= stop:
 			yield mktime( current.timetuple() )
 			current += delta
 			

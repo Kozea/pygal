@@ -195,7 +195,7 @@ Copyright 2005 Sandia National Laboratories
 			max_y_label_height_px = self.y_label_font_size
 		else:
 			label_lengths = map( len, self.get_y_labels() )
-			max_y_label_len = reduce( max, label_lengths )
+			max_y_label_len = max( label_lengths )
 			max_y_label_height_px = 0.6 * max_y_label_len * self.y_label_font_size
 		if self.show_y_labels: bl += max_y_label_height_px
 		if self.stagger_y_labels: bl += max_y_label_height_px + 10

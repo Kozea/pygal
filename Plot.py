@@ -158,24 +158,33 @@ class Plot( SVG.Graph ):
 		super( Plot, self ).calculate_right_margin()
 		label_right = len( str( self.get_x_labels()[-1] ) ) / 2 * self.font_size * 0.6
 		self.border_right = max( label_right, self.border_right )
-	
+
+	def data_max( self, axis ):
+		data_index = getattr( self, '%s_data_index' % axis )
+		max_value = max( chain( *map( lambda set: set['data'][data_index], self.data ) ) )
+		# above is same as
+		#max_value = max( map( lambda set: max( set['data'][data_index] ), self.data ) )
+		spec_max = getattr( self, 'max_%s_value' % axis )
+		max_value = max( max_value, spec_max )
+		return max_value
+
+	def data_min( self, axis ):
+		data_index = getattr( self, '%s_data_index' % axis )
+		min_value = min( chain( *map( lambda set: set['data'][data_index], self.data ) ) )
+		spec_min = getattr( self, 'min_%s_value' % axis )
+		if spec_min is not None:
+			min_value = min( min_value, spec_min )
+		return min_value
+		
 	x_data_index = 0
 	y_data_index = 1
 	def data_range( self, axis ):
 		side = { 'x': 'right', 'y': 'top' }[axis]
-		data_index = getattr( self, '%s_data_index' % axis )
-		max_value = max( map( lambda set: max( set['data'][data_index] ), self.data ) )
-		spec_max = getattr( self, 'max_%s_value' % axis )
-		if spec_max is not None:
-			max_value = max( max_value, spec_max )
-		min_value = min( map( lambda set: min( set['data'][data_index] ), self.data ) )
-		spec_min = getattr( self, 'min_%s_value' % axis )
-		if spec_min is not None:
-			min_value = min( min_value, spec_min )
-		
+
+		min_value = self.data_min( axis )
+		max_value = self.data_max( axis )
 		range = max_value - min_value
 		
-		#side_pad = '%s_pad' % side
 		side_pad = range / 20.0 or 10
 		scale_range = ( max_value + side_pad ) - min_value
 		
@@ -204,9 +213,8 @@ class Plot( SVG.Graph ):
 	def field_size( self, axis ):
 		size = { 'x': 'width', 'y': 'height' }[axis]
 		side = { 'x': 'right', 'y': 'top' }[axis]
-		values = self.get_data_values( axis )
-		data_index = getattr( self, '%s_data_index' % axis )
-		max_d = max( chain( *map( lambda set: set['data'][data_index], self.data ) ) )
+		values = getattr( self, 'get_%s_values' % axis )()
+		max_d = self.data_max( axis )
 		dx = float( max_d - values[-1] ) / ( values[-1] - values[-2] )
 		graph_size = getattr( self, 'graph_%s' % size )
 		side_font = getattr( self, '%s_font' % side )
