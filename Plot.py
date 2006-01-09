@@ -228,6 +228,7 @@ class Plot( SVG.Graph ):
 
 	def draw_data( self ):
 		self.load_transform_parameters()
+		self._draw_constant_lines( )
 		for line, data in izip( count(1), self.data ):
 			x_start, y_start = self.transform_output_coordinates(
 				( data['data'][self.x_data_index][0],
@@ -248,6 +249,31 @@ class Plot( SVG.Graph ):
 			self.graph.appendChild( path )
 			self.draw_data_points( line, data_points, graph_points )
 		del self.__transform_parameters
+
+	def add_constant_line( self, value, label = None, style = None ):
+		self.constant_lines = getattr( self, 'constant_lines', [] )
+		self.constant_lines.append( ( value, label, style ) )
+
+	def _draw_constant_lines( self ):
+		if hasattr( self, 'constant_lines' ):
+			map( self.__draw_constant_line, self.constant_lines )
+
+	def __draw_constant_line( self, ( value, label, style ) ):
+		"Draw a constant line on the y-axis with the label"
+		start = self.transform_output_coordinates( ( 0, value ) )[1]
+		stop = self.graph_width
+		path = self._create_element( 'path', {
+			'd': 'M 0 %(start)s h%(stop)s' % vars(),
+			'class': 'constantLine' } )
+		if style:
+			path['style'] = style
+		self.graph.appendChild( path )
+		text = self._create_element( 'text', {
+			'x': str( 2 ),
+			'y': str( start - 2 ),
+			'class': 'constantLine' } )
+		text.appendChild( self._doc.createTextNode( label ) )
+		self.graph.appendChild( text )
 
 	def load_transform_parameters( self ):
 		"Cache the parameters necessary to transform x & y coordinates"
@@ -479,4 +505,11 @@ class Plot( SVG.Graph ):
 	fill: #9966FF;
 	stroke: none;
 	stroke-width: 1px;	
-}"""
+}
+.constantLine{
+  color: navy;
+  stroke: navy;
+  stroke-width: 1px;
+  stroke-dasharray: 9 1 1;
+}
+"""
