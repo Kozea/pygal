@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+# -*- coding: UTF-8 -*-
 
 __all__ = ( 'Plot', 'TimeSeries' )
 
@@ -88,7 +88,7 @@ Copyright 2005 Sandia National Laboratories
 	show_x_title=			False
 	x_title=				'X Field names'
 	show_y_title=			False
-	y_title_text_direction=	'bt'
+	y_title_text_direction=	'bt' # 'bt' for bottom to top; 'tb' for top to bottom
 	y_title=				'Y Scale'
 	show_graph_title=		False
 	graph_title=			'Graph Title'
@@ -460,10 +460,10 @@ Copyright 2005 Sandia National Laboratories
 
 	def draw_titles( self ):
 		"Draws the graph title and subtitle"
-		if self.show_graph_title: draw_graph_title()
-		if self.show_graph_subtitle: draw_graph_subtitle()
-		if self.show_x_title: draw_x_title()
-		if self.show_y_title: draw_y_title()
+		if self.show_graph_title: self.draw_graph_title()
+		if self.show_graph_subtitle: self.draw_graph_subtitle()
+		if self.show_x_title: self.draw_x_title()
+		if self.show_y_title: self.draw_y_title()
 
 	def draw_graph_title( self ):
 		text = self._create_element( 'text', {
@@ -475,7 +475,27 @@ Copyright 2005 Sandia National Laboratories
 
 	def draw_graph_subtitle( self ):
 		raise NotImplementedError
-	draw_x_title = draw_y_title = draw_graph_subtitle
+
+        def draw_x_title( self ):
+                raise NotImplementedError
+
+        def draw_y_title( self ):
+                x = self.y_title_font_size
+                if self.y_title_text_direction=='bt':
+                        x += 3
+                        rotate = -90
+                else:
+                        x -= 3
+                        rotate = 90
+                y = self.height / 2
+                text = self._create_element( 'text', {
+                        'x': str( x ),
+                        'y': str( y ),
+                        'class': 'yAxisTitle',
+                        } )
+                text.appendChild( self._doc.createTextNode( self.y_title ) )
+                text.setAttribute( 'transform', 'rotate( %(rotate)d, %(x)s, %(y)s )' % vars() )
+                self.root.appendChild( text )
 
 	def keys( self ):
 		return map( itemgetter( 'title' ), self.data )

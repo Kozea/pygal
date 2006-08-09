@@ -13,7 +13,7 @@ __svnauthor__ = '$Author:  $'[9:-2]
 __date__ = '$Date:  $'[7:-2]
 
 setup ( name = 'SVGChart',
-		version = '1.0',
+		version = '1.0.1',
 		description = 'Python SVG Charting Support',
 		author = 'Jason R. Coombs',
 		author_email = 'jaraco@sandia.gov',
