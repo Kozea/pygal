@@ -115,6 +115,8 @@ class Plot( SVG.Graph ):
 	"""Show a small circle on the graph where the line
 	goes from one point to the next."""
 	show_data_points = True
+	"Indicate whether the lines should be drawn between points"
+	draw_lines_between_points = True
 	"Set the minimum value of the X axis"
 	min_x_value = None
 	"Set the minimum value of the Y axis"
@@ -228,7 +230,6 @@ class Plot( SVG.Graph ):
 
 	def draw_data( self ):
 		self.load_transform_parameters()
-		self._draw_constant_lines( )
 		for line, data in izip( count(1), self.data ):
 			x_start, y_start = self.transform_output_coordinates(
 				( data['data'][self.x_data_index][0],
@@ -243,11 +244,13 @@ class Plot( SVG.Graph ):
 					'd': 'M%(x_start)f %(graph_height)f %(lpath)s V%(graph_height)f Z' % vars(),
 					'class': 'fill%(line)d' % vars() } )
 				self.graph.appendChild( path )
-			path = self._create_element( 'path', {
-				'd': 'M%(x_start)f %(y_start)f %(lpath)s' % vars(),
-				'class': 'line%(line)d' % vars() } )
-			self.graph.appendChild( path )
+			if self.draw_lines_between_points:
+				path = self._create_element( 'path', {
+					'd': 'M%(x_start)f %(y_start)f %(lpath)s' % vars(),
+					'class': 'line%(line)d' % vars() } )
+				self.graph.appendChild( path )
 			self.draw_data_points( line, data_points, graph_points )
+		self._draw_constant_lines( )
 		del self.__transform_parameters
 
 	def add_constant_line( self, value, label = None, style = None ):
