@@ -724,5 +724,3 @@ class class_dict( object ):
 	def keys( self ):
 		# dir returns a good guess of what attributes might be available
 		return dir( self.__obj__ )
-
-import Plot, TimeSeries	

@@ -1,7 +1,8 @@
 #!/usr/bin/env python
 import SVG
 import re
-#requires python date-util from http://labix.org/python-dateutil
+import pkg_resources
+pkg_resources.require("dateutil>=1.1")
 from dateutil.parser import parse
 from dateutil.relativedelta import relativedelta
 from time import mktime
