@@ -1,3 +1,4 @@
+#!python
 # -*- coding: UTF-8 -*-
 
 __all__ = ( 'Plot', 'TimeSeries' )
@@ -66,7 +67,7 @@ Stephen Morgan for creating the TT template and SVG.
 
 Jason R. Coombs <jaraco@jaraco.com>
 
-Copyright 2005 Sandia National Laboratories
+Copyright © 2008 Jason R. Coombs
 """
 	width=                500
 	height=               300
@@ -78,42 +79,43 @@ Copyright 2005 Sandia National Laboratories
 	stagger_x_labels=     False
 	rotate_x_labels=      False
 	step_x_labels=        1
-	step_include_first_x_label=   True
+	step_include_first_x_label= True
 	show_y_labels=        True
-	rotate_y_labels=		False
-	stagger_y_labels=		False
+	rotate_y_labels=      False
+	stagger_y_labels=     False
 	step_include_first_y_label= True
-	step_y_labels= 1
-	scale_integers=		False
-	show_x_title=			False
-	x_title=				'X Field names'
-	show_y_title=			False
-	y_title_text_direction=	'bt' # 'bt' for bottom to top; 'tb' for top to bottom
-	y_title=				'Y Scale'
-	show_graph_title=		False
-	graph_title=			'Graph Title'
-	show_graph_subtitle=	False
-	graph_subtitle=		'Graph Subtitle'
-	key=					True
-	key_position=			'right' # 'bottom' or 'right',
+	step_y_labels=        1
+	scale_integers=       False
+	show_x_title=         False
+	x_title=              'X Field names'
+	show_y_title=         False
+	y_title_text_direction= 'bt' # 'bt' for bottom to top; 'tb' for top to bottom
+	y_title=              'Y Scale'
+	show_graph_title=     False
+	graph_title=          'Graph Title'
+	show_graph_subtitle=  False
+	graph_subtitle=       'Graph Subtitle'
+	key=                  True
+	key_position=         'right' # 'bottom' or 'right',
 	
-	font_size=			12
-	title_font_size=		16
-	subtitle_font_size=	14
-	x_label_font_size=	12
-	x_title_font_size=	14
-	y_label_font_size=	12
-	y_title_font_size=	14
-	key_font_size=		10
+	font_size=            12
+	title_font_size=      16
+	subtitle_font_size=   14
+	x_label_font_size=    12
+	x_title_font_size=    14
+	y_label_font_size=    12
+	y_title_font_size=    14
+	key_font_size=        10
 	
-	no_css=				False
-	add_popups=			False
+	no_css=               False
+	add_popups=           False
 
 	top_align = top_font = right_align = right_font = 0
 
 	def __init__( self, config = {} ):
-		"""Initialize the graph object with the graph settings.  You won't
-		instantiate this class directly; see the subclass for options."""
+		"""Initialize the graph object with the graph settings."""
+		if self.__class__ is Graph:
+			raise NotImplementedError, "Graph is an abstract base class"
 		self.load_config( config )
 		self.clear_data()
 
@@ -476,26 +478,26 @@ Copyright 2005 Sandia National Laboratories
 	def draw_graph_subtitle( self ):
 		raise NotImplementedError
 
-        def draw_x_title( self ):
-                raise NotImplementedError
+	def draw_x_title( self ):
+			raise NotImplementedError
 
-        def draw_y_title( self ):
-                x = self.y_title_font_size
-                if self.y_title_text_direction=='bt':
-                        x += 3
-                        rotate = -90
-                else:
-                        x -= 3
-                        rotate = 90
-                y = self.height / 2
-                text = self._create_element( 'text', {
-                        'x': str( x ),
-                        'y': str( y ),
-                        'class': 'yAxisTitle',
-                        } )
-                text.appendChild( self._doc.createTextNode( self.y_title ) )
-                text.setAttribute( 'transform', 'rotate( %(rotate)d, %(x)s, %(y)s )' % vars() )
-                self.root.appendChild( text )
+	def draw_y_title( self ):
+			x = self.y_title_font_size
+			if self.y_title_text_direction=='bt':
+					x += 3
+					rotate = -90
+			else:
+					x -= 3
+					rotate = 90
+			y = self.height / 2
+			text = self._create_element( 'text', {
+					'x': str( x ),
+					'y': str( y ),
+					'class': 'yAxisTitle',
+					} )
+			text.appendChild( self._doc.createTextNode( self.y_title ) )
+			text.setAttribute( 'transform', 'rotate( %(rotate)d, %(x)s, %(y)s )' % vars() )
+			self.root.appendChild( text )
 
 	def keys( self ):
 		return map( itemgetter( 'title' ), self.data )
@@ -563,7 +565,6 @@ Copyright 2005 Sandia National Laboratories
 	def start_svg( self ):
 		"Base SVG Document Creation"
 		impl = dom.getDOMImplementation()
-		#dt = impl.createDocumentType( 'svg', 'PUBLIC'
 		self._doc = impl.createDocument( None, 'svg', None )
 		self.root = self._doc.documentElement
 		if hasattr( self, 'style_sheet' ):
