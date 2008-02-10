@@ -28,13 +28,6 @@ SVG Charting library based on the Ruby SVG::Graph
 		"Programming Language :: Python",
 	],
 	entry_points = {
-		#'console_scripts': [
-		#	'cfs_db = cfs.database:interact',
-		#	'cfs_import = cfs.import:do_import',
-		#	'cfs_initialize = cfs.initialize_meta:do_initialize',
-		#	'issue_count_by_topic = cfs.reports:issue_count_by_topic',
-		#	'cfs_add_simulated_data = cfs.simulate:add_data',
-		#	],
 	},
 	)
 
