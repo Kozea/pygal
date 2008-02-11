@@ -136,7 +136,7 @@ Copyright © 2008 Jason R. Coombs
 		self.process_data( conf )
 		self.data.append( conf )
 
-	def validate_data( self, data ):
+	def validate_data( self, conf ):
 		try:
 			assert( isinstance( conf['data'], ( tuple, list ) ) )
 		except TypeError, e:
@@ -145,7 +145,7 @@ Copyright © 2008 Jason R. Coombs
 			if not hasattr( conf['data'], '__iter__' ):
 				raise TypeError, "conf['data'] should be tuple or list or iterable"
 
-	def process_data( data ): pass
+	def process_data( self, data ): pass
 	
 	def clear_data( self ):
 		"""This method removes all data from the object so that you can
@@ -379,12 +379,12 @@ Copyright © 2008 Jason R. Coombs
 	def get_field_width( self ):
 		return float( self.graph_width - self.font_size*2*self.right_font ) / \
 			( len( self.get_x_labels() ) - self.right_align )
-	field_width = property( get_field_width )
+	field_width = get_field_width
 	
 	def get_field_height( self ):
 		return float( self.graph_height - self.font_size*2*self.top_font ) / \
 			( len( self.get_y_labels() ) - self.top_align )
-	field_height = property( get_field_height )
+	field_height = get_field_height
 
 	def draw_y_labels( self ):
 		"Draw the Y axis labels"

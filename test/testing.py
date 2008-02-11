@@ -37,3 +37,13 @@ print g.get_x_labels()
 f = open( r'TimeSeries.py.svg', 'w' )
 f.write( res )
 f.close()
+
+from SVG import Bar
+
+g = Bar.VerticalBar(['foo','bar','baz'])
+
+g.stack = False
+
+g.add_data( { 'data': [ 1, 2, 3 ], 'title': 'series 1' } )
+
+open( r'VerticalBar.svg', 'w' ).write( g.burn() )
