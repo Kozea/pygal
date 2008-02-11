@@ -27,7 +27,7 @@ class Bar( Graph ):
 		# return max( map( lambda set: max( set['data'] ), self.data ) )
 		
 	def data_min( self ):
-		if not self.min_scale_value is None: return self.min_scale_value
+		if not getattr(self, 'min_scale_value') is None: return self.min_scale_value
 		min_value = min( chain( *map( lambda set: set['data'], self.data ) ) )
 		min_value = min( min_value, 0 )
 		return min_value
@@ -205,7 +205,7 @@ class VerticalBar( Bar ):
 	def draw_data( self ):
 		min_value = self.data_min()
 		unit_size = (float(self.graph_height) - self.font_size*2*self.top_font)
-		unit_size /= ( max( self.get_y_labels() ) - min( self.get_y_labels() ) )
+		unit_size /= ( self.data_max() - self.data_min() )
 		
 		bar_gap = 0
 		if self.bar_gap:
@@ -232,11 +232,11 @@ class VerticalBar( Bar ):
 				#    -ve   -ve  value.abs - 0
 				value = dataset['data'][field_count]
 				
-				left = self.get_field_width() * self.field_count
+				left = self.get_field_width() * field_count
 				
 				length = ( abs(value) - max( min_value, 0 ) ) * unit_size
 				# top is 0 if value is negative
-				top = bottom - (( min(value,0) - min_value ) * unit_size )
+				top = bottom - (( max(value,0) - min_value ) * unit_size )
 				if self.stack == 'side':
 					left += self.bar_width * dataset_count
 
@@ -245,7 +245,7 @@ class VerticalBar( Bar ):
 					'y': str(top),
 					'width': str(bar_width),
 					'height': str(length),
-					'class': 'fill%s' % dataset_count+1,
+					'class': 'fill%s' % (dataset_count+1),
 				} )
 				self.graph.appendChild( rect )
 				

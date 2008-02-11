@@ -74,7 +74,7 @@ Copyright © 2008 Jason R. Coombs
 	show_x_guidelines=    False
 	show_y_guidelines=    True
 	show_data_values=     True
-	min_scale_value=      0
+	min_scale_value=      None
 	show_x_labels=        True
 	stagger_x_labels=     False
 	rotate_x_labels=      False
