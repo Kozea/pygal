@@ -187,13 +187,14 @@ class VerticalBar( Bar ):
 		scale_division = self.scale_divisions or ( scale_range / 10.0 )
 		
 		if self.scale_integers:
-			scale_division = scale_division.round() or 1
+			scale_division = round(scale_division) or 1
 			
 		return min_value, max_value, scale_division
 
 	# adapted from Plot
 	def get_data_values( self ):
-		return tuple( float_range( *self.data_range( ) ) )
+		min_value, max_value, scale_division = self.data_range()
+		return tuple( float_range( min_value, max_value + scale_division, scale_division ) )
 	
 	# adapted from Plot
 	def get_y_labels( self ):
@@ -238,7 +239,7 @@ class VerticalBar( Bar ):
 				# top is 0 if value is negative
 				top = bottom - (( max(value,0) - min_value ) * unit_size )
 				if self.stack == 'side':
-					left += self.bar_width * dataset_count
+					left += bar_width * dataset_count
 
 				rect = self._create_element( 'rect', {
 					'x': str(left),

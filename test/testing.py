@@ -28,11 +28,6 @@ g.max_y_value = 200
 g.add_data( { 'data': [ '2005-12-21T00:00:00', 20, '2005-12-22T00:00:00', 21 ], 'title': 'series 1' } )
 
 res = g.burn()
-print g.field_width
-print g.font_size
-print g.right_font
-print g.right_align
-print g.get_x_labels()
 
 f = open( r'TimeSeries.py.svg', 'w' )
 f.write( res )
@@ -40,10 +35,13 @@ f.close()
 
 from SVG import Bar
 
-g = Bar.VerticalBar(['foo','bar','baz'])
+g = Bar.VerticalBar(['Internet', 'TV', 'Newspaper', 'Magazine', 'Radio'])
 
-g.stack = False
+g.stack = 'side'
+g.scale_integers = True
+g.width, g.height = 640,480
 
-g.add_data( { 'data': [ 1, 2, 3 ], 'title': 'series 1' } )
+g.add_data( { 'data': [ -2, 3, 1, 3, 1 ], 'title': 'Female' } )
+g.add_data( { 'data': [ 0, 2, 1, 5, 4 ], 'title': 'Male' } )
 
 open( r'VerticalBar.svg', 'w' ).write( g.burn() )
