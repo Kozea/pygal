@@ -194,7 +194,10 @@ class VerticalBar( Bar ):
 	# adapted from Plot
 	def get_data_values( self ):
 		min_value, max_value, scale_division = self.data_range()
-		return tuple( float_range( min_value, max_value + scale_division, scale_division ) )
+		result = tuple( float_range( min_value, max_value + scale_division, scale_division ) )
+		if self.scale_integers:
+			result = map(int, result)
+		return result
 	
 	# adapted from Plot
 	def get_y_labels( self ):
