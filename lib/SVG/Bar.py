@@ -209,7 +209,7 @@ class VerticalBar( Bar ):
 	def draw_data( self ):
 		min_value = self.data_min()
 		unit_size = (float(self.graph_height) - self.font_size*2*self.top_font)
-		unit_size /= ( self.data_max() - self.data_min() )
+		unit_size /= (max(self.get_data_values()) - min(self.get_data_values()) )
 		
 		bar_gap = 0
 		if self.bar_gap:

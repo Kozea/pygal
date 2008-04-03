@@ -35,13 +35,32 @@ f.close()
 
 from SVG import Bar
 
-g = Bar.VerticalBar(['Internet', 'TV', 'Newspaper', 'Magazine', 'Radio'])
+fields = ['Internet', 'TV', 'Newspaper', 'Magazine', 'Radio']
+
+g = Bar.VerticalBar(fields)
 
 g.stack = 'side'
 g.scale_integers = True
 g.width, g.height = 640,480
+g.graph_title = 'Question 7'
+g.show_graph_title = True
 
 g.add_data( { 'data': [ -2, 3, 1, 3, 1 ], 'title': 'Female' } )
 g.add_data( { 'data': [ 0, 2, 1, 5, 4 ], 'title': 'Male' } )
 
-open( r'VerticalBar.svg', 'w' ).write( g.burn() )
+open(r'VerticalBar.py.svg', 'w').write(g.burn())
+
+g = Bar.VerticalBar(fields)
+options = dict(
+	scale_integers=True,
+	stack='side',
+	width=640,
+	height=480,
+	graph_title='Question 8',
+	show_graph_title=True,
+	no_css=False, )
+g.__dict__.update(options)
+
+g.add_data(dict(data=[2,22,98,143,82], title='intermediate'))
+g.add_data(dict(data=[2,26,106,193,105], title='old'))
+open('VerticalBarLarge.py.svg', 'w').write(g.burn())
