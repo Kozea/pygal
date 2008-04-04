@@ -1,7 +1,7 @@
 #!python
 # -*- coding: UTF-8 -*-
 
-__all__ = ('Plot', 'TimeSeries', 'Bar')
+__all__ = ('Plot', 'TimeSeries', 'Bar', 'Pie')
 
 from xml.dom import minidom as dom
 from operator import itemgetter
