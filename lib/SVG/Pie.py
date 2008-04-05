@@ -3,6 +3,7 @@
 # $Id$
 
 import math
+from operator import add
 import SVG
 
 def robust_add(a,b):
@@ -10,6 +11,8 @@ def robust_add(a,b):
 	if a is None: a = 0
 	if b is None: b = 0
 	return a+b
+
+RADIANS = math.pi/180
 
 class Pie(SVG.Graph):
 	# === Create presentation quality SVG pie graphs easily
@@ -116,21 +119,21 @@ class Pie(SVG.Graph):
 		"""
 		self.data = map(robust_add, self.data, data_descriptor['data'])
 
-	def _add_defs(self, defs):
+	def add_defs(self, defs):
 		"Add svg definitions"
 		gradient = self._create_element(
 			'filter',
 			dict(
 				id='dropshadow',
-				width=1.2,
-				height=1.2,
+				width='1.2',
+				height='1.2',
 				)
 			)
 		defs.appendChild(gradient)
 		blur = self._create_element(
 			'feGaussianBlur',
 			dict(
-				stdDeviation=4,
+				stdDeviation='4',
 				result='blur',
 				)
 			)
@@ -149,18 +152,17 @@ class Pie(SVG.Graph):
 		['']
 
 	def keys(self):
-		total = reduce(operator.add, self.data)
+		total = reduce(add, self.data)
 		percent_scale = 100.0 / total
 		def key(field, value):
-			result = ' [%s]' % value
+			result = [field]
+			result.append('[%s]' % value)
 			if self.show_key_percent:
 				percent = str(round((v/total*100))) + '%'
-				result = ' '.join(result, percent)
-			return result
-		return map(key, zip(self.fields, self.data))
+				result.append(percent)
+			return ' '.join(result)
+		return map(key, self.fields, self.data)
 	
-	RADIANS = math.pi/180
-
 	def draw_data(self):
 		self.graph = self._create_element('g')
 		self.root.appendChild(self.graph)
@@ -203,13 +205,13 @@ class Pie(SVG.Graph):
 			x_end = radius+(math.sin(radians) * radius)
 			y_end = radius-(math.cos(radians) * radius)
 			percent_greater_fifty = int(percent>=50)
-			path = ' '.join(
+			path = ' '.join((
 				"M%(radius)s,%(radius)s",
 				"L%(x_start)s,%(y_start)s",
 				"A%(radius)s,%(radius)s",
 				"0,",
 				"%(percent_greater_fifty)s,1,",
-				"%(x_end)s %(y_end)s Z")
+				"%(x_end)s %(y_end)s Z"))
 			path = path % vars()
 			
 			wedge = self._create_element(
@@ -219,7 +221,7 @@ class Pie(SVG.Graph):
 					'class': 'fill%s' % (index+1),
 					})
 				)
-			foreground.appendChild(wedge)
+			self.foreground.appendChild(wedge)
 			
 			translate = None
 			tx = 0
@@ -232,7 +234,7 @@ class Pie(SVG.Graph):
 					'path',
 					dict(
 						d=path,
-						filter='url(%s)' % self.dropshadow,
+						filter='url(#dropshadow)',
 						style='fill: #ccc; stroke: none',
 					)
 				)
@@ -246,19 +248,19 @@ class Pie(SVG.Graph):
 						style="fill:#fff; stroke:none;",
 					)
 				)
-				medground.appendChild(clear)
+				midground.appendChild(clear)
 			
-			if self.expanded or (expand_greatest and value == max_value):
+			if self.expanded or (self.expand_greatest and value == max_value):
 				tx = (math.sin(radians) * self.expand_gap)
 				ty = -(math.cos(radians) * self.expand_gap)
 				translate = "translate( %(tx)s %(ty)s )" % vars()
 				wedge.setAttribute('transform', translate)
-				clear.setAtrtibute('transform', translate)
+				clear.setAttribute('transform', translate)
 			
 			if self.show_shadow:
 				shadow_tx = self.shadow_offset + tx
 				shadow_ty = self.shadow_offset + ty
-				translate = 'translate( %(shadow_tx)s %(shadow_ty)s )'
+				translate = 'translate( %(shadow_tx)s %(shadow_ty)s )' % vars()
 				shadow.setAttribute('transform', translate)
 			
 			if self.show_data_labels and value != 0:
@@ -268,7 +270,7 @@ class Pie(SVG.Graph):
 				if self.show_actual_values:
 					label.append('[%s]' % value)
 				if self.show_percent:
-					label.append(round(percent)+'%')
+					label.append('%d%%' % round(percent))
 				label = ' '.join(label)
 
 				msr = math.sin(radians)
@@ -280,7 +282,7 @@ class Pie(SVG.Graph):
 				  tx += (msr * self.expand_gap)
 				  ty -= (mcr * self.expand_gap)
 
-				label = self._create_element(
+				label_node = self._create_element(
 					'text',
 					dict({
 						'x':str(tx),
@@ -289,10 +291,10 @@ class Pie(SVG.Graph):
 						'style':'stroke: #fff; stroke-width: 2;',
 					})
 				)
-				label.appendChild(self._doc.createTextNode(label))
-				foreground.appendChild(label)
+				label_node.appendChild(self._doc.createTextNode(label))
+				self.foreground.appendChild(label_node)
 
-				label = self._create_element(
+				label_node = self._create_element(
 					'text',
 					dict({
 						'x':str(tx),
@@ -300,8 +302,8 @@ class Pie(SVG.Graph):
 						'class': 'dataPointLabel',
 					})
 				)
-				label.appendChild(self._doc.createTextNode(label))
-				foreground.appendChild(label)
+				label_node.appendChild(self._doc.createTextNode(label))
+				self.foreground.appendChild(label_node)
 			
 			prev_percent += percent
 

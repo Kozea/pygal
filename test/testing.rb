@@ -75,3 +75,22 @@ g.add_data({:data=>[2,26,106,193,105], :title=>'old'})
 f = File.new('VerticalBarLarge.rb.svg', 'w')
 f.write(g.burn())
 f.close()
+
+require 'SVG/Graph/Pie'
+
+g = SVG::Graph::Pie.new({
+	:width=>640,
+	:height=>480,
+	:fields=>fields,
+	:graph_title=>'Question 7',
+	:expand_greatest=>true,
+	:show_data_labels=>true,
+})
+
+g.add_data({:data=>[-2,3,1,3,1], :title=>'Female'})
+g.add_data({:data=>[0,2,1,5,4], :title=>'Male'})
+
+f = File.new('Pie.rb.svg', 'w')
+f.write(g.burn())
+f.close()
+

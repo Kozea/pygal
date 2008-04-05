@@ -64,3 +64,19 @@ g.__dict__.update(options)
 g.add_data(dict(data=[2,22,98,143,82], title='intermediate'))
 g.add_data(dict(data=[2,26,106,193,105], title='old'))
 open('VerticalBarLarge.py.svg', 'w').write(g.burn())
+
+from SVG import Pie
+g = Pie.Pie({})
+options = dict(
+	width=640,
+	height=480,
+	fields=fields,
+	graph_title='Question 7',
+	expand_greatest = True,
+	show_data_labels = True,
+	)
+g.__dict__.update(options)
+g.add_data( { 'data': [ -2, 3, 1, 3, 1 ], 'title': 'Female' } )
+g.add_data( { 'data': [ 0, 2, 1, 5, 4 ], 'title': 'Male' } )
+
+open('Pie.py.svg', 'w').write(g.burn())
