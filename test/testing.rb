@@ -94,3 +94,21 @@ f = File.new('Pie.rb.svg', 'w')
 f.write(g.burn())
 f.close()
 
+require 'SVG/Graph/Line'
+g = SVG::Graph::Line.new( {
+							:scale_integers=>true,
+							:area_fill=>true,
+							:width=>640,
+							:height=>480,
+							:fields=>fields,
+							:graph_title=>'Question 7',
+							:show_graph_title=>true,
+							:no_css=>false
+})
+
+g.add_data({:data=>[-2,3,1,3,1], :title=>'Female'})
+g.add_data({:data=>[0,2,1,5,4], :title=>'Male'})
+
+f = File.new('Line.rb.svg', 'w')
+f.write(g.burn())
+f.close()

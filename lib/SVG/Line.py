@@ -199,7 +199,7 @@ class Line(SVG.Graph):
 					line_path,
 					area_path,
 					'Z'
-				)
+				))
 				p.setAttribute('d', d)
 				p.setAttribute('class', 'fill%(line_n)s' % vars())
 				self.graph.appendChild(p)
@@ -220,6 +220,7 @@ class Line(SVG.Graph):
 								cy = str(self.graph_height - value*field_height),
 								r = '2.5',
 								)
+							)
 						circle.setAttribute('class', 'dataPoint%(line_n)s' % vars())
 						self.graph.appendChild(circle)
 					self.make_datapoint_text(
