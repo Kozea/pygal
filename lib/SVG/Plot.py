@@ -2,17 +2,17 @@
 import SVG
 from itertools import izip, count, chain
 
-def get_pairs( i ):
-	i = iter( i )
+def get_pairs(i):
+	i = iter(i)
 	while True:	yield i.next(), i.next()
 	
-def float_range( start = 0, stop = None, step = 1 ):
+def float_range(start = 0, stop = None, step = 1):
 	"Much like the built-in function range, but accepts floats"
 	while start < stop:
-		yield float( start )
+		yield float(start)
 		start += step
 
-class Plot( SVG.Graph ):
+class Plot(SVG.Graph):
 	"""=== For creating SVG plots of scalar data
 	
 	= Synopsis
@@ -26,11 +26,11 @@ class Plot( SVG.Graph ):
 	  projection = [
 		6, 11,    0, 5,   18, 7,   1, 11,   13, 9,   1, 2,   19, 0,   3, 13,
 		7, 9 
-	  ]
+	 ]
 	  actual = [
 		0, 18,    8, 15,    9, 4,   18, 14,   10, 2,   11, 6,  14, 12,   
 		15, 6,   4, 17,   2, 12
-	  ]
+	 ]
 	  
 	  graph = SVG::Graph::Plot.new({
 	   :height => 500,
@@ -38,17 +38,17 @@ class Plot( SVG.Graph ):
 		:key => true,
 		:scale_x_integers => true,
 		:scale_y_integerrs => true,
-	  })
+	 })
 	  
 	  graph.add_data({
 	   :data => projection
 		 :title => 'Projected',
-	  })
+	 })
 	
 	  graph.add_data({
 	   :data => actual,
 		 :title => 'Actual',
-	  })
+	 })
 	  
 	  print graph.burn()
 	
@@ -77,8 +77,8 @@ class Plot( SVG.Graph ):
 	
 	Unlike the other types of charts, data sets must contain x,y pairs:
 	
-	  [ 1, 2 ]    # A data set with 1 point: (1,2)
-	  [ 1,2, 5,6] # A data set with 2 points: (1,2) and (5,6)  
+	  [1, 2]    # A data set with 1 point: (1,2)
+	  [1,2, 5,6] # A data set with 2 points: (1,2) and (5,6)  
 	
 	= See also
 	
@@ -136,196 +136,196 @@ class Plot( SVG.Graph ):
 			
 			would cause the graph to attempt to generate labels stepped by 2; EG:
 			0,2,4,6,8..."""
-		def fget( self ):
-			return getattr( self, '_scale_x_divisions', None )
-		def fset( self, val ):
+		def fget(self):
+			return getattr(self, '_scale_x_divisions', None)
+		def fset(self, val):
 			self._scale_x_divisions = val
 		return property(**locals())
 
-	def validate_data( self, data ):
-		if len( data['data'] ) % 2 != 0:
+	def validate_data(self, data):
+		if len(data['data']) % 2 != 0:
 			raise "Expecting x,y pairs for data points for %s." % self.__class__.__name__
 
-	def process_data( self, data ):
-		pairs = list( get_pairs( data['data'] ) )
+	def process_data(self, data):
+		pairs = list(get_pairs(data['data']))
 		pairs.sort()
-		data['data'] = zip( *pairs )
+		data['data'] = zip(*pairs)
 
-	def calculate_left_margin( self ):
-		super( Plot, self ).calculate_left_margin()
-		label_left = len( str( self.get_x_labels()[0] ) ) / 2 * self.font_size * 0.6
-		self.border_left = max( label_left, self.border_left )
+	def calculate_left_margin(self):
+		super(Plot, self).calculate_left_margin()
+		label_left = len(str(self.get_x_labels()[0])) / 2 * self.font_size * 0.6
+		self.border_left = max(label_left, self.border_left)
 	
-	def calculate_right_margin( self ):
-		super( Plot, self ).calculate_right_margin()
-		label_right = len( str( self.get_x_labels()[-1] ) ) / 2 * self.font_size * 0.6
-		self.border_right = max( label_right, self.border_right )
+	def calculate_right_margin(self):
+		super(Plot, self).calculate_right_margin()
+		label_right = len(str(self.get_x_labels()[-1])) / 2 * self.font_size * 0.6
+		self.border_right = max(label_right, self.border_right)
 
-	def data_max( self, axis ):
-		data_index = getattr( self, '%s_data_index' % axis )
-		max_value = max( chain( *map( lambda set: set['data'][data_index], self.data ) ) )
+	def data_max(self, axis):
+		data_index = getattr(self, '%s_data_index' % axis)
+		max_value = max(chain(*map(lambda set: set['data'][data_index], self.data)))
 		# above is same as
-		#max_value = max( map( lambda set: max( set['data'][data_index] ), self.data ) )
-		spec_max = getattr( self, 'max_%s_value' % axis )
-		max_value = max( max_value, spec_max )
+		#max_value = max(map(lambda set: max(set['data'][data_index]), self.data))
+		spec_max = getattr(self, 'max_%s_value' % axis)
+		max_value = max(max_value, spec_max)
 		return max_value
 
-	def data_min( self, axis ):
-		data_index = getattr( self, '%s_data_index' % axis )
-		min_value = min( chain( *map( lambda set: set['data'][data_index], self.data ) ) )
-		spec_min = getattr( self, 'min_%s_value' % axis )
+	def data_min(self, axis):
+		data_index = getattr(self, '%s_data_index' % axis)
+		min_value = min(chain(*map(lambda set: set['data'][data_index], self.data)))
+		spec_min = getattr(self, 'min_%s_value' % axis)
 		if spec_min is not None:
-			min_value = min( min_value, spec_min )
+			min_value = min(min_value, spec_min)
 		return min_value
 		
 	x_data_index = 0
 	y_data_index = 1
-	def data_range( self, axis ):
-		side = { 'x': 'right', 'y': 'top' }[axis]
+	def data_range(self, axis):
+		side = {'x': 'right', 'y': 'top'}[axis]
 
-		min_value = self.data_min( axis )
-		max_value = self.data_max( axis )
+		min_value = self.data_min(axis)
+		max_value = self.data_max(axis)
 		range = max_value - min_value
 		
 		side_pad = range / 20.0 or 10
-		scale_range = ( max_value + side_pad ) - min_value
+		scale_range = (max_value + side_pad) - min_value
 		
-		scale_division = getattr( self, 'scale_%s_divisions' % axis ) or ( scale_range / 10.0 )
+		scale_division = getattr(self, 'scale_%s_divisions' % axis) or (scale_range / 10.0)
 		
-		if getattr( self, 'scale_%s_integers' % axis ):
+		if getattr(self, 'scale_%s_integers' % axis):
 			scale_division = scale_division.round() or 1
 			
 		return min_value, max_value, scale_division
 
-	def x_range( self ): return self.data_range( 'x' )
-	def y_range( self ): return self.data_range( 'y' )
+	def x_range(self): return self.data_range('x')
+	def y_range(self): return self.data_range('y')
 	
-	def get_data_values( self, axis ):
-		min_value, max_value, scale_division = self.data_range( axis )
-		return tuple( float_range( *self.data_range( axis ) ) )
+	def get_data_values(self, axis):
+		min_value, max_value, scale_division = self.data_range(axis)
+		return tuple(float_range(*self.data_range(axis)))
 	
-	def get_x_values( self ): return self.get_data_values( 'x' )
-	def get_y_values( self ): return self.get_data_values( 'y' )
+	def get_x_values(self): return self.get_data_values('x')
+	def get_y_values(self): return self.get_data_values('y')
 
-	def get_x_labels( self ):
-		return map( str, self.get_x_values() )
-	def get_y_labels( self ):
-		return map( str, self.get_y_values() )
+	def get_x_labels(self):
+		return map(str, self.get_x_values())
+	def get_y_labels(self):
+		return map(str, self.get_y_values())
 	
-	def field_size( self, axis ):
-		size = { 'x': 'width', 'y': 'height' }[axis]
-		side = { 'x': 'right', 'y': 'top' }[axis]
-		values = getattr( self, 'get_%s_values' % axis )()
-		max_d = self.data_max( axis )
-		dx = float( max_d - values[-1] ) / ( values[-1] - values[-2] )
-		graph_size = getattr( self, 'graph_%s' % size )
-		side_font = getattr( self, '%s_font' % side )
-		side_align = getattr( self, '%s_align' % side )
-		result = ( float( graph_size ) - self.font_size*2*side_font ) / \
-		   ( len( values ) + dx - side_align )
+	def field_size(self, axis):
+		size = {'x': 'width', 'y': 'height'}[axis]
+		side = {'x': 'right', 'y': 'top'}[axis]
+		values = getattr(self, 'get_%s_values' % axis)()
+		max_d = self.data_max(axis)
+		dx = float(max_d - values[-1]) / (values[-1] - values[-2])
+		graph_size = getattr(self, 'graph_%s' % size)
+		side_font = getattr(self, '%s_font' % side)
+		side_align = getattr(self, '%s_align' % side)
+		result = (float(graph_size) - self.font_size*2*side_font) / \
+		   (len(values) + dx - side_align)
 		return result
 	
-	def field_width( self ): return self.field_size( 'x' )
-	def field_height( self ): return self.field_size( 'y' )
+	def field_width(self): return self.field_size('x')
+	def field_height(self): return self.field_size('y')
 
-	def draw_data( self ):
+	def draw_data(self):
 		self.load_transform_parameters()
-		for line, data in izip( count(1), self.data ):
+		for line, data in izip(count(1), self.data):
 			x_start, y_start = self.transform_output_coordinates(
-				( data['data'][self.x_data_index][0],
-				data['data'][self.y_data_index][0] )
+				(data['data'][self.x_data_index][0],
+				data['data'][self.y_data_index][0])
 			)
-			data_points = zip( *data['data'] )
-			graph_points = self.get_graph_points( data_points )
-			lpath = self.get_lpath( graph_points )
+			data_points = zip(*data['data'])
+			graph_points = self.get_graph_points(data_points)
+			lpath = self.get_lpath(graph_points)
 			if self.area_fill:
 				graph_height = self.graph_height
-				path = self._create_element( 'path', {
+				path = self._create_element('path', {
 					'd': 'M%(x_start)f %(graph_height)f %(lpath)s V%(graph_height)f Z' % vars(),
-					'class': 'fill%(line)d' % vars() } )
-				self.graph.appendChild( path )
+					'class': 'fill%(line)d' % vars()})
+				self.graph.appendChild(path)
 			if self.draw_lines_between_points:
-				path = self._create_element( 'path', {
+				path = self._create_element('path', {
 					'd': 'M%(x_start)f %(y_start)f %(lpath)s' % vars(),
-					'class': 'line%(line)d' % vars() } )
-				self.graph.appendChild( path )
-			self.draw_data_points( line, data_points, graph_points )
-		self._draw_constant_lines( )
+					'class': 'line%(line)d' % vars()})
+				self.graph.appendChild(path)
+			self.draw_data_points(line, data_points, graph_points)
+		self._draw_constant_lines()
 		del self.__transform_parameters
 
-	def add_constant_line( self, value, label = None, style = None ):
-		self.constant_lines = getattr( self, 'constant_lines', [] )
-		self.constant_lines.append( ( value, label, style ) )
+	def add_constant_line(self, value, label = None, style = None):
+		self.constant_lines = getattr(self, 'constant_lines', [])
+		self.constant_lines.append((value, label, style))
 
-	def _draw_constant_lines( self ):
-		if hasattr( self, 'constant_lines' ):
-			map( self.__draw_constant_line, self.constant_lines )
+	def _draw_constant_lines(self):
+		if hasattr(self, 'constant_lines'):
+			map(self.__draw_constant_line, self.constant_lines)
 
-	def __draw_constant_line( self, ( value, label, style ) ):
+	def __draw_constant_line(self, (value, label, style)):
 		"Draw a constant line on the y-axis with the label"
-		start = self.transform_output_coordinates( ( 0, value ) )[1]
+		start = self.transform_output_coordinates((0, value))[1]
 		stop = self.graph_width
-		path = self._create_element( 'path', {
+		path = self._create_element('path', {
 			'd': 'M 0 %(start)s h%(stop)s' % vars(),
-			'class': 'constantLine' } )
+			'class': 'constantLine'})
 		if style:
 			path['style'] = style
-		self.graph.appendChild( path )
-		text = self._create_element( 'text', {
-			'x': str( 2 ),
-			'y': str( start - 2 ),
-			'class': 'constantLine' } )
-		text.appendChild( self._doc.createTextNode( label ) )
-		self.graph.appendChild( text )
+		self.graph.appendChild(path)
+		text = self._create_element('text', {
+			'x': str(2),
+			'y': str(start - 2),
+			'class': 'constantLine'})
+		text.appendChild(self._doc.createTextNode(label))
+		self.graph.appendChild(text)
 
-	def load_transform_parameters( self ):
+	def load_transform_parameters(self):
 		"Cache the parameters necessary to transform x & y coordinates"
 		x_min, x_max, x_div = self.x_range()
 		y_min, y_max, y_div = self.y_range()
-		x_step = ( float( self.graph_width ) - self.font_size*2 ) / \
-			( x_max - x_min )
-		y_step = ( float( self.graph_height ) - self.font_size*2 ) / \
-			( y_max - y_min )
-		self.__transform_parameters = dict( vars() )
+		x_step = (float(self.graph_width) - self.font_size*2) / \
+			(x_max - x_min)
+		y_step = (float(self.graph_height) - self.font_size*2) / \
+			(y_max - y_min)
+		self.__transform_parameters = dict(vars())
 		del self.__transform_parameters['self']
 		
-	def get_graph_points( self, data_points ):
-		return map( self.transform_output_coordinates, data_points )
+	def get_graph_points(self, data_points):
+		return map(self.transform_output_coordinates, data_points)
 
-	def get_lpath( self, points ):
-		points = map( lambda p: "%f %f" % p, points )
-		return 'L' + ' '.join( points )
+	def get_lpath(self, points):
+		points = map(lambda p: "%f %f" % p, points)
+		return 'L' + ' '.join(points)
 	
-	def transform_output_coordinates( self, (x,y) ):
+	def transform_output_coordinates(self, (x,y)):
 		x_min = self.__transform_parameters['x_min']
 		x_step = self.__transform_parameters['x_step']
 		y_min = self.__transform_parameters['y_min']
 		y_step = self.__transform_parameters['y_step']
-		#locals().update( self.__transform_parameters )
-		#vars().update( self.__transform_parameters )
-		x = ( x - x_min ) * x_step
-		y = self.graph_height - ( y - y_min ) * y_step
+		#locals().update(self.__transform_parameters)
+		#vars().update(self.__transform_parameters)
+		x = (x - x_min) * x_step
+		y = self.graph_height - (y - y_min) * y_step
 		return x,y
 	
-	def draw_data_points( self, line, data_points, graph_points ):
+	def draw_data_points(self, line, data_points, graph_points):
 		if not self.show_data_points \
 			and not self.show_data_values: return
-		for ((dx,dy),(gx,gy)) in izip( data_points, graph_points ):
+		for ((dx,dy),(gx,gy)) in izip(data_points, graph_points):
 			if self.show_data_points:
-				circle = self._create_element( 'circle', {
-					'cx': str( gx ),
-					'cy': str( gy ),
+				circle = self._create_element('circle', {
+					'cx': str(gx),
+					'cy': str(gy),
 					'r': '2.5',
-					'class': 'dataPoint%(line)s' % vars() } )
-				self.graph.appendChild( circle )
+					'class': 'dataPoint%(line)s' % vars()})
+				self.graph.appendChild(circle)
 			if self.show_data_values:
-				self.add_popup( gx, gy, self.format( dx, dy ) )
-			self.make_datapoint_text( gx, gy-6, dy )
+				self.add_popup(gx, gy, self.format(dx, dy))
+			self.make_datapoint_text(gx, gy-6, dy)
 	
-	def format( self, x, y ):
+	def format(self, x, y):
 		return '(%0.2f, %0.2f)' % (x,y)
 	
-	def get_css( self ):
+	def get_css(self):
 		return """/* default line styles */
 .line1{
 	fill: none;

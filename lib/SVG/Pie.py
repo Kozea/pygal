@@ -28,12 +28,12 @@ class Pie(SVG.Graph):
 	#   	:height => 500,
 	# 	  :width  => 300,
 	# 	  :fields => fields,
-	#   })
+	#  })
 	#   
 	#   graph.add_data({
 	#   	:data => data_sales_02,
 	# 	  :title => 'Sales 2002',
-	#   })
+	#  })
 	#   
 	#   print "Content-type: image/svg+xml\r\n\r\n"
 	#   print graph.burn();
@@ -182,7 +182,7 @@ class Pie(SVG.Graph):
 		xoff = (self.width - diameter) / 2
 		yoff = (self.height - self.border_bottom - diameter)
 		yoff -= 10 * int(self.show_shadow)
-		transform = 'translate( %(xoff)s %(yoff)s )' % vars()
+		transform = 'translate(%(xoff)s %(yoff)s)' % vars()
 		self.graph.setAttribute('transform', transform)
 
 		wedge_text_pad = 5
@@ -253,14 +253,14 @@ class Pie(SVG.Graph):
 			if self.expanded or (self.expand_greatest and value == max_value):
 				tx = (math.sin(radians) * self.expand_gap)
 				ty = -(math.cos(radians) * self.expand_gap)
-				translate = "translate( %(tx)s %(ty)s )" % vars()
+				translate = "translate(%(tx)s %(ty)s)" % vars()
 				wedge.setAttribute('transform', translate)
 				clear.setAttribute('transform', translate)
 			
 			if self.show_shadow:
 				shadow_tx = self.shadow_offset + tx
 				shadow_ty = self.shadow_offset + ty
-				translate = 'translate( %(shadow_tx)s %(shadow_ty)s )' % vars()
+				translate = 'translate(%(shadow_tx)s %(shadow_ty)s)' % vars()
 				shadow.setAttribute('transform', translate)
 			
 			if self.show_data_labels and value != 0:

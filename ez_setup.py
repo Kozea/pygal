@@ -57,7 +57,7 @@ def _validate_md5(egg_name, data):
             print >>sys.stderr, (
                 "md5 validation of %s failed!  (Possible download problem?)"
                 % egg_name
-            )
+           )
             sys.exit(2)
     return data
 
@@ -83,7 +83,7 @@ def use_setuptools(
             print >>sys.stderr, (
             "You have an obsolete version of setuptools installed.  Please\n"
             "remove it from your system entirely before rerunning this script."
-            )
+           )
             sys.exit(2)
     except ImportError:
         egg = download_setuptools(version, download_base, to_dir, download_delay)
@@ -100,7 +100,7 @@ def use_setuptools(
             "The required version of setuptools (>=%s) is not available, and\n"
             "can't be installed while this script is running. Please install\n"
             " a more recent version first.\n\n(Currently using %r)"
-        ) % (version, e.args[0])
+       ) % (version, e.args[0])
         sys.exit(2)
 
 def download_setuptools(
@@ -138,7 +138,7 @@ I will start the download in %d seconds.
 and place it in this directory before rerunning this script.)
 ---------------------------------------------------------------------------""",
                     version, download_base, delay, url
-                ); from time import sleep; sleep(delay)
+               ); from time import sleep; sleep(delay)
             log.warn("Downloading %s", url)
             src = urllib2.urlopen(url)
             # Read/write all in one block, so we don't create a corrupt file

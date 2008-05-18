@@ -2,9 +2,9 @@
 from SVG import Graph
 from itertools import chain
 
-__all__ = ( 'VerticalBar', 'HorizontalBar' )
+__all__ = ('VerticalBar', 'HorizontalBar')
 
-class Bar( Graph ):
+class Bar(Graph):
 	"A superclass for bar-style graphs.  Do not instantiate directly."
 
 	# gap between bars
@@ -17,49 +17,49 @@ class Bar( Graph ):
 	
 	scale_divisions = None
 
-	def __init__( self, fields, *args, **kargs ):
+	def __init__(self, fields, *args, **kargs):
 		self.fields = fields
-		super( Bar, self ).__init__( *args, **kargs )
+		super(Bar, self).__init__(*args, **kargs)
 
 	# adapted from Plot
-	def get_data_values( self ):
+	def get_data_values(self):
 		min_value, max_value, scale_division = self.data_range()
-		result = tuple( float_range( min_value, max_value + scale_division, scale_division ) )
+		result = tuple(float_range(min_value, max_value + scale_division, scale_division))
 		if self.scale_integers:
 			result = map(int, result)
 		return result
 	
 	# adapted from plot (very much like calling data_range('y'))
-	def data_range( self ):
-		min_value = self.data_min( )
-		max_value = self.data_max( )
+	def data_range(self):
+		min_value = self.data_min()
+		max_value = self.data_max()
 		range = max_value - min_value
 
 		data_pad = range / 20.0 or 10
-		scale_range = ( max_value + data_pad ) - min_value
+		scale_range = (max_value + data_pad) - min_value
 		
-		scale_division = self.scale_divisions or ( scale_range / 10.0 )
+		scale_division = self.scale_divisions or (scale_range / 10.0)
 		
 		if self.scale_integers:
 			scale_division = round(scale_division) or 1
 			
 		return min_value, max_value, scale_division
 
-	def get_field_labels( self ):
+	def get_field_labels(self):
 		return self.fields
 
-	def get_data_labels( self ):
-		return map( str, self.get_data_values() )
+	def get_data_labels(self):
+		return map(str, self.get_data_values())
 
-	def data_max( self ):
-		return max( chain( *map( lambda set: set['data'], self.data ) ) )
+	def data_max(self):
+		return max(chain(*map(lambda set: set['data'], self.data)))
 		# above is same as
-		# return max( map( lambda set: max( set['data'] ), self.data ) )
+		# return max(map(lambda set: max(set['data']), self.data))
 		
-	def data_min( self ):
+	def data_min(self):
 		if not getattr(self, 'min_scale_value') is None: return self.min_scale_value
-		min_value = min( chain( *map( lambda set: set['data'], self.data ) ) )
-		min_value = min( min_value, 0 )
+		min_value = min(chain(*map(lambda set: set['data'], self.data)))
+		min_value = min(min_value, 0)
 		return min_value
 
 	def get_bar_gap(self, field_size):
@@ -71,7 +71,7 @@ class Bar( Graph ):
 		bar_gap = int(self.bar_gap) * bar_gap
 		return bar_gap
 
-	def get_css( self ):
+	def get_css(self):
 		return """\
 /* default fill styles for multiple datasets (probably only use a single dataset on this graph though) */
 .key1,.fill1{
@@ -148,14 +148,14 @@ class Bar( Graph ):
 }
 """
 
-def float_range( start = 0, stop = None, step = 1 ):
+def float_range(start = 0, stop = None, step = 1):
 	"Much like the built-in function range, but accepts floats"
 	while start < stop:
-		yield float( start )
+		yield float(start)
 		start += step
 
 
-class VerticalBar( Bar ):
+class VerticalBar(Bar):
 	"""    # === Create presentation quality SVG bar graphs easily
     #
     # = Synopsis
@@ -169,12 +169,12 @@ class VerticalBar( Bar ):
     #     :height => 500,
     #     :width => 300,
     #     :fields => fields
-    #   )
+    #  )
     #
     #   graph.add_data(
     #     :data => data_sales_02,
     #     :title => 'Sales 2002'
-    #   )
+    #  )
     #
     #   print "Content-type: image/svg+xml\r\n\r\n"
     #   print graph.burn
@@ -210,34 +210,34 @@ class VerticalBar( Bar ):
 """
 	top_align = top_font = 1
 
-	def get_x_labels( self ):
+	def get_x_labels(self):
 		return self.get_field_labels()
 
-	def get_y_labels( self ):
+	def get_y_labels(self):
 		return self.get_data_labels()
 
-	def x_label_offset( self, width ):
+	def x_label_offset(self, width):
 		return width / 2.0
 
-	def draw_data( self ):
+	def draw_data(self):
 		min_value = self.data_min()
 		unit_size = (float(self.graph_height) - self.font_size*2*self.top_font)
-		unit_size /= (max(self.get_data_values()) - min(self.get_data_values()) )
+		unit_size /= (max(self.get_data_values()) - min(self.get_data_values()))
 
 		bar_gap = self.get_bar_gap(self.get_field_width())		
 
 		bar_width = self.get_field_width() - bar_gap
 		if self.stack == 'side':
-			bar_width /= len( self.data )
+			bar_width /= len(self.data)
 		
-		x_mod = ( self.graph_width - bar_gap )/2
+		x_mod = (self.graph_width - bar_gap)/2
 		if self.stack == 'side':
 			x_mod -= bar_width/2
 
 		bottom = self.graph_height
 		
-		for field_count, field in enumerate( self.fields ):
-			for dataset_count, dataset in enumerate( self.data ):
+		for field_count, field in enumerate(self.fields):
+			for dataset_count, dataset in enumerate(self.data):
 				# cases (assume 0 = +ve):
 				#   value  min  length
 				#    +ve   +ve  value - min
@@ -247,22 +247,22 @@ class VerticalBar( Bar ):
 				
 				left = self.get_field_width() * field_count
 				
-				length = ( abs(value) - max( min_value, 0 ) ) * unit_size
+				length = (abs(value) - max(min_value, 0)) * unit_size
 				# top is 0 if value is negative
-				top = bottom - (( max(value,0) - min_value ) * unit_size )
+				top = bottom - ((max(value,0) - min_value) * unit_size)
 				if self.stack == 'side':
 					left += bar_width * dataset_count
 
-				rect = self._create_element( 'rect', {
+				rect = self._create_element('rect', {
 					'x': str(left),
 					'y': str(top),
 					'width': str(bar_width),
 					'height': str(length),
 					'class': 'fill%s' % (dataset_count+1),
-				} )
-				self.graph.appendChild( rect )
+				})
+				self.graph.appendChild(rect)
 				
-				self.make_datapoint_text( left + bar_width/2.0, top-6, value )
+				self.make_datapoint_text(left + bar_width/2.0, top-6, value)
 
 class HorizontalBar(Bar):
 	rotate_y_labels = True
