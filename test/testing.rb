@@ -58,6 +58,26 @@ f = File.new('VerticalBar.rb.svg', 'w')
 f.write(g.burn())
 f.close()
 
+require 'SVG/Graph/BarHorizontal'
+
+g = SVG::Graph::BarHorizontal.new( {
+							:scale_integers=>true,
+							:stack=>:side,
+							:width=>640,
+							:height=>480,
+							:fields=>fields,
+							:graph_title=>'Question 7',
+							:show_graph_title=>true,
+							:no_css=>false
+})
+
+g.add_data({:data=>[-2,3,1,3,1], :title=>'Female'})
+g.add_data({:data=>[0,2,1,5,4], :title=>'Male'})
+
+f = File.new('HorizontalBar.rb.svg', 'w')
+f.write(g.burn())
+f.close()
+
 g = SVG::Graph::Bar.new({
 	:scale_integers=>true,
 	:stack=>:side,

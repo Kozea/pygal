@@ -50,6 +50,19 @@ g.add_data( { 'data': [ 0, 2, 1, 5, 4 ], 'title': 'Male' } )
 
 open(r'VerticalBar.py.svg', 'w').write(g.burn())
 
+g = Bar.HorizontalBar(fields)
+
+g.stack = 'side'
+g.scale_integers = True
+g.width, g.height = 640,480
+g.graph_title = 'Question 7'
+g.show_graph_title = True
+
+g.add_data( { 'data': [ -2, 3, 1, 3, 1 ], 'title': 'Female' } )
+g.add_data( { 'data': [ 0, 2, 1, 5, 4 ], 'title': 'Male' } )
+
+open(r'HorizontalBar.py.svg', 'w').write(g.burn())
+
 g = Bar.VerticalBar(fields)
 options = dict(
 	scale_integers=True,
