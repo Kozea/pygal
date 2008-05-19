@@ -193,7 +193,7 @@ class Plot(SVG.Graph):
 		scale_division = getattr(self, 'scale_%s_divisions' % axis) or (scale_range / 10.0)
 		
 		if getattr(self, 'scale_%s_integers' % axis):
-			scale_division = scale_division.round() or 1
+			scale_division = round(scale_division) or 1
 			
 		return min_value, max_value, scale_division
 
