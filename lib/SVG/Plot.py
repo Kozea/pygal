@@ -2,16 +2,12 @@
 import SVG
 from itertools import izip, count, chain
 
+from util import float_range
+
 def get_pairs(i):
 	i = iter(i)
 	while True:	yield i.next(), i.next()
 	
-def float_range(start = 0, stop = None, step = 1):
-	"Much like the built-in function range, but accepts floats"
-	while start < stop:
-		yield float(start)
-		start += step
-
 class Plot(SVG.Graph):
 	"""=== For creating SVG plots of scalar data
 	

@@ -93,3 +93,41 @@ g.add_data({'data': [-2, 3, 1, 3, 1], 'title': 'Female'})
 g.add_data({'data': [0, 2, 1, 5, 4], 'title': 'Male'})
 
 open('Pie.py.svg', 'w').write(g.burn())
+
+from SVG import Schedule
+
+title = "Billy's Schedule"
+data1 = [
+  "History 107", "5/19/04", "6/30/04",
+  "Algebra 011", "6/2/04", "8/11/04",
+  "Psychology 101", "6/28/04", "8/9/04",
+  "Acting 105", "7/7/04", "8/16/04"
+  ]
+
+g = Schedule.Schedule(dict(
+	width = 640,
+	height = 480,
+	graph_title = title,
+	show_graph_title = True,
+	key = False,
+	scale_x_integers = True,
+	scale_y_integers = True,
+	show_data_labels = True,
+	show_y_guidelines = False,
+	show_x_guidelines = True,
+	show_x_title = True,
+	x_title = "Time",
+	show_y_title = False,
+	rotate_x_labels = True,
+	rotate_y_labels = False,
+	x_label_format = "%m/%d",
+	timescale_divisions = "1 week",
+	add_popups = True,
+	popup_format = "%m/%d/%y",
+	area_fill = True,
+	min_y_value = 0,
+	))
+
+g.add_data(dict(data=data1, title="Data"))
+
+f = open('Schedule.py.svg', 'w').write(g.burn())
