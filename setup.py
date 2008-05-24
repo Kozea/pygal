@@ -15,7 +15,7 @@ setup(name = "svg-chart",
 	packages = find_packages('lib'),
 	package_dir = {'':'lib'},
 	install_requires=[
-		'python-dateutil>=1.1',
+		'python-dateutil>=1.4',
 	],
 	license = "MIT",
 	long_description = """\
