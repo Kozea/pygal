@@ -29,5 +29,10 @@ SVG Charting library based on the Ruby SVG::Graph
 	],
 	entry_points = {
 	},
+	tests_require=[
+		'nose>=0.10',
+	],
+	test_suite = "nose.collector",
+	
 	)
 

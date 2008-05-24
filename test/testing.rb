@@ -143,6 +143,10 @@ data1 = [
   "Psychology 101", "6/28/04", "8/9/04",
   "Acting 105", "7/7/04", "8/16/04"
   ]
+title2 = "Another Schedule"
+data2 = [
+	"Just one period", "5/19/04", "6/30/04"
+]
 
 g = SVG::Graph::Schedule.new( {
   :width => 640,
@@ -173,6 +177,10 @@ g.add_data(
   :data => data1,
   :title => "Data"
   )
+g.add_data(
+	:data => data2,
+	:title => title2
+)
 
 f = File.new('Schedule.rb.svg', 'w')
 f.write(g.burn())

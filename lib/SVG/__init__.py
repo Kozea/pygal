@@ -365,7 +365,7 @@ Copyright © 2008 Jason R. Coombs
 		
 		if self.rotate_x_labels:
 			transform = 'rotate(90 %d %d) translate(0 -%d)' % \
-				(x, y-self.x_label_font_size, x_label_font_size/4)
+				(x, y-self.x_label_font_size, self.x_label_font_size/4)
 			text.setAttribute('transform', transform)
 			text.setAttribute('style', 'text-anchor: start')
 		else:
@@ -479,25 +479,25 @@ Copyright © 2008 Jason R. Coombs
 		raise NotImplementedError
 
 	def draw_x_title(self):
-			raise NotImplementedError
+		raise NotImplementedError
 
 	def draw_y_title(self):
-			x = self.y_title_font_size
-			if self.y_title_text_direction=='bt':
-					x += 3
-					rotate = -90
-			else:
-					x -= 3
-					rotate = 90
-			y = self.height / 2
-			text = self._create_element('text', {
-					'x': str(x),
-					'y': str(y),
-					'class': 'yAxisTitle',
-					})
-			text.appendChild(self._doc.createTextNode(self.y_title))
-			text.setAttribute('transform', 'rotate(%(rotate)d, %(x)s, %(y)s)' % vars())
-			self.root.appendChild(text)
+		x = self.y_title_font_size
+		if self.y_title_text_direction=='bt':
+				x += 3
+				rotate = -90
+		else:
+				x -= 3
+				rotate = 90
+		y = self.height / 2
+		text = self._create_element('text', {
+				'x': str(x),
+				'y': str(y),
+				'class': 'yAxisTitle',
+				})
+		text.appendChild(self._doc.createTextNode(self.y_title))
+		text.setAttribute('transform', 'rotate(%(rotate)d, %(x)s, %(y)s)' % vars())
+		self.root.appendChild(text)
 
 	def keys(self):
 		return map(itemgetter('title'), self.data)
