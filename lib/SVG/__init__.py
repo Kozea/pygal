@@ -126,11 +126,11 @@ Copyright © 2008 Jason R. Coombs
 		"""This method allows you do add data to the graph object.
 		It can be called several times to add more data sets in.
 		
-		>>> data_sales_02 = [12, 45, 21]
-		>>> graph.add_data({
+		>>> data_sales_02 = [12, 45, 21] # doctest: +SKIP
+		>>> graph.add_data({ # doctest: +SKIP
 		...  'data': data_sales_02,
 		...  'title': 'Sales 2002'
-		...})
+		... }) # doctest: +SKIP
 		"""
 		self.validate_data(conf)
 		self.process_data(conf)
@@ -151,7 +151,8 @@ Copyright © 2008 Jason R. Coombs
 		"""This method removes all data from the object so that you can
 		reuse it to create a new graph but with the same config options.
 		
-		>>> graph.clear_data()"""
+		>>> graph.clear_data() # doctest: +SKIP
+		"""
 		self.data = []
 		
 	def burn(self):
@@ -476,10 +477,31 @@ Copyright © 2008 Jason R. Coombs
 		self.root.appendChild(text)
 
 	def draw_graph_subtitle(self):
-		raise NotImplementedError
+		y_subtitle_options = [subtitle_font_size, title_font_size+10]
+		y_subtitle = y_subtitle_options[self.show_graph_title]
+		text = self._create_element('text', {
+			'x': str(self.width/2),
+			'y': str(y_subtitle),
+			'class': 'subTitle',
+			})
+		text.appendChild(self._doc.createTextNode(self.graph_title))
+		self.root.appendChild(text)
 
 	def draw_x_title(self):
-		raise NotImplementedError
+		y = self.graph_height + self.border_top + self.x_title_font_size
+		if self.show_x_labels:
+			y_size = self.x_label_font_size+5
+			if self.stagger_x_labels: y_size*=2
+			y += y_size
+		x = self.width / 2
+		
+		text = self._create_element('text', {
+			'x': str(x),
+			'y': str(y),
+			'class': 'xAxisTitle',
+			})
+		text.appendChild(self._doc.createTextNode(self.x_title))
+		self.root.appendChild(text)
 
 	def draw_y_title(self):
 		x = self.y_title_font_size
@@ -528,8 +550,24 @@ Copyright © 2008 Jason R. Coombs
 				x_offset = self.graph_width + self.border_left + 10
 				y_offset = self.border_top + 20
 			if self.key_position == 'bottom':
-				raise NotImplementedError
+				x_offset, y_offset = self.calculate_offsets_bottom()
 			group.setAttribute('transform', 'translate(%(x_offset)d %(y_offset)d)' % vars())
+
+	def calculate_offsets_bottom(self):
+		x_offset = self.border_left + 20
+		y_offset = self.border_top + self.graph_height + 5
+		if self.show_x_labels:
+			max_x_label_height_px = x_label_font_size
+			if self.rotate_x_labels:
+				longest_label_length = max(map(len, self.get_x_labels()))
+				# note: I think 0.6 is the ratio of width to height of characters
+				max_x_label_height_px *= longest_label_length * 0.6
+			y_offset += max_x_label_height_px
+			if self.stagger_x_labels:
+				y_offset += max_x_label_height_px + 5
+		if self.show_x_title:
+			y_offset += x_title_font_size + 5
+		return x_offset, y_offset
 			
 	def style(self):
 		"hard code the styles into the xml if style sheets are not used."

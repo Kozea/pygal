@@ -3,7 +3,7 @@
 # $Id$
 
 from operator import itemgetter, add
-from itools import flatten
+from util import flatten
 
 import SVG
 from Plot import float_range

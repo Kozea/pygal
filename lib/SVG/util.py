@@ -110,3 +110,53 @@ class TimeScale(object):
 	def __mul__(self, delta):
 		scale = divide_timedelta(delta, self.range)
 		return scale*self.width
+
+# the following three functions were copied from jaraco.util.iter_
+
+# todo, factor out caching capability
+class iterable_test(dict):
+	"Test objects for iterability, caching the result by type"
+	def __init__(self, ignore_classes=(basestring,)):
+		"""ignore_classes must include basestring, because if a string
+		is iterable, so is a single character, and the routine runs
+		into an infinite recursion"""
+		assert basestring in ignore_classes, 'basestring must be in ignore_classes'
+		self.ignore_classes = ignore_classes
+
+	def __getitem__(self, candidate):
+		return dict.get(self, type(candidate)) or self._test(candidate)
+			
+	def _test(self, candidate):
+		try:
+			if isinstance(candidate, self.ignore_classes):
+				raise TypeError
+			iter(candidate)
+			result = True
+		except TypeError:
+			result = False
+		self[type(candidate)] = result
+		return result
+
+def iflatten(subject, test=None):
+	if test is None:
+		test = iterable_test()
+	if not test[subject]:
+		yield subject
+	else:
+		for elem in subject:
+			for subelem in iflatten(elem, test):
+				yield subelem
+				
+def flatten(subject, test=None):
+	"""flatten an iterable with possible nested iterables.
+	Adapted from
+	http://mail.python.org/pipermail/python-list/2003-November/233971.html
+	>>> flatten(['a','b',['c','d',['e','f'],'g'],'h']) == ['a','b','c','d','e','f','g','h']
+	True
+
+	Note this will normally ignore string types as iterables.
+	>>> flatten(['ab', 'c'])
+	['ab', 'c']
+	"""
+	return list(iflatten(subject, test))
+
