@@ -6,6 +6,7 @@ __all__ = ('Plot', 'TimeSeries', 'Bar', 'Pie', 'Schedule')
 from xml.dom import minidom as dom
 from operator import itemgetter
 from itertools import islice
+from cssutils import css, stylesheets
 
 try:
 	import zlib
@@ -651,6 +652,12 @@ Copyright © 2008 Jason R. Coombs
 		self.graph_height = self.height - self.border_top - self.border_bottom
 		
 	def get_style(self):
+		sheet = css.CSSStyleSheet()
+		master_bg_style = css.CSSStyleDeclaration()
+		master_bg_style.setProperty('fill', '#ffffff')
+		rule = css.CSSStyleRule(selectorText=u'.svgBackground', style=master_bg_style)
+		sheet.insertRule(rule)
+		result = sheet.cssText
 		result = """/* Copy from here for external style sheet */
 .svgBackground{
   fill:#ffffff;
