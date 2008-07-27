@@ -6,7 +6,7 @@ from ez_setup import use_setuptools
 use_setuptools()
 from setuptools import setup, find_packages
 
-setup(name = "svg.chart",
+setup(name = "svg.charts",
 	version = "2.0",
 	description = "Python SVG Charting Library",
 	author = "Jason R. Coombs",
@@ -16,7 +16,7 @@ setup(name = "svg.chart",
 	package_dir = {'':'lib'},
 	install_requires=[
 		'python-dateutil>=1.4',
-		'cssutils>=0.9.4',
+		'cssutils>=0.9.5',
 	],
 	license = "MIT",
 	long_description = """\
