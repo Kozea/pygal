@@ -566,7 +566,7 @@ class Graph(object):
 				cl = node.getAttribute('class')
 				style = styles[cl]
 				if node.hasAttribute('style'):
-					style += node.getAtrtibute('style')
+					style += node.getAttribute('style')
 				node.setAttribute('style', style)
 
 	def parse_css(self):
