@@ -4,7 +4,7 @@
 
 import math
 from operator import add
-from svg.charts import Graph
+from svg.charts.graph import Graph
 
 def robust_add(a,b):
 	"Add numbers a and b, treating None as 0"

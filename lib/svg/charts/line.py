@@ -5,8 +5,8 @@
 from operator import itemgetter, add
 from util import flatten
 
-from svg.charts import Graph
-from Plot import float_range
+from svg.charts.graph import Graph
+from util import float_range
 
 class Line(Graph):
 	"""     === Create presentation quality SVG line graphs easily

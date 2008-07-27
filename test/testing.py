@@ -1,5 +1,5 @@
 import sys, os
-from svg.charts.Plot import Plot
+from svg.charts.plot import Plot
 g = Plot({
     'min_x_value': 0,
     'min_y_value': 0,
@@ -16,9 +16,9 @@ f = open(r'Plot.py.svg', 'w')
 f.write(res)
 f.close()
 
-from svg.charts import TimeSeries
+from svg.charts import time_series
 
-g = TimeSeries.Plot({})
+g = time_series.Plot({})
 
 g.timescale_divisions = '4 hours'
 g.stagger_x_labels = True
@@ -33,11 +33,11 @@ f = open(r'TimeSeries.py.svg', 'w')
 f.write(res)
 f.close()
 
-from svg.charts import Bar
+from svg.charts import bar
 
 fields = ['Internet', 'TV', 'Newspaper', 'Magazine', 'Radio']
 
-g = Bar.VerticalBar(fields)
+g = bar.VerticalBar(fields)
 
 g.stack = 'side'
 g.scale_integers = True
@@ -50,7 +50,7 @@ g.add_data({'data': [0, 2, 1, 5, 4], 'title': 'Male'})
 
 open(r'VerticalBar.py.svg', 'w').write(g.burn())
 
-g = Bar.HorizontalBar(fields)
+g = bar.HorizontalBar(fields)
 
 g.stack = 'side'
 g.scale_integers = True
@@ -63,7 +63,7 @@ g.add_data({'data': [0, 2, 1, 5, 4], 'title': 'Male'})
 
 open(r'HorizontalBar.py.svg', 'w').write(g.burn())
 
-g = Bar.VerticalBar(fields)
+g = bar.VerticalBar(fields)
 options = dict(
 	scale_integers=True,
 	stack='side',
@@ -78,8 +78,8 @@ g.add_data(dict(data=[2,22,98,143,82], title='intermediate'))
 g.add_data(dict(data=[2,26,106,193,105], title='old'))
 open('VerticalBarLarge.py.svg', 'w').write(g.burn())
 
-from svg.charts import Pie
-g = Pie.Pie({})
+from svg.charts import pie
+g = pie.Pie({})
 options = dict(
 	width=640,
 	height=480,
@@ -94,7 +94,7 @@ g.add_data({'data': [0, 2, 1, 5, 4], 'title': 'Male'})
 
 open('Pie.py.svg', 'w').write(g.burn())
 
-from svg.charts import Schedule
+from svg.charts import schedule
 
 title = "Billy's Schedule"
 data1 = [
@@ -104,7 +104,7 @@ data1 = [
   "Acting 105", "7/7/04", "8/16/04"
   ]
 
-g = Schedule.Schedule(dict(
+g = schedule.Schedule(dict(
 	width = 640,
 	height = 480,
 	graph_title = title,

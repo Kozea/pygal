@@ -1,5 +1,5 @@
 #!python
-from svg.charts import Graph
+from svg.charts.graph import Graph
 from itertools import chain
 
 __all__ = ('VerticalBar', 'HorizontalBar')

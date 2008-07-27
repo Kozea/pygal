@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-from svg.charts import Graph
+from svg.charts.graph import Graph
 from itertools import izip, count, chain
 
 from util import float_range
