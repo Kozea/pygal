@@ -1,6 +1,6 @@
 import sys, os
-from SVG import Plot
-g = Plot.Plot({
+from svg.charts.Plot import Plot
+g = Plot({
     'min_x_value': 0,
     'min_y_value': 0,
     'area_fill': True,
@@ -16,7 +16,7 @@ f = open(r'Plot.py.svg', 'w')
 f.write(res)
 f.close()
 
-from SVG import TimeSeries
+from svg.charts import TimeSeries
 
 g = TimeSeries.Plot({})
 
@@ -33,7 +33,7 @@ f = open(r'TimeSeries.py.svg', 'w')
 f.write(res)
 f.close()
 
-from SVG import Bar
+from svg.charts import Bar
 
 fields = ['Internet', 'TV', 'Newspaper', 'Magazine', 'Radio']
 
@@ -78,7 +78,7 @@ g.add_data(dict(data=[2,22,98,143,82], title='intermediate'))
 g.add_data(dict(data=[2,26,106,193,105], title='old'))
 open('VerticalBarLarge.py.svg', 'w').write(g.burn())
 
-from SVG import Pie
+from svg.charts import Pie
 g = Pie.Pie({})
 options = dict(
 	width=640,
@@ -94,7 +94,7 @@ g.add_data({'data': [0, 2, 1, 5, 4], 'title': 'Male'})
 
 open('Pie.py.svg', 'w').write(g.burn())
 
-from SVG import Schedule
+from svg.charts import Schedule
 
 title = "Billy's Schedule"
 data1 = [

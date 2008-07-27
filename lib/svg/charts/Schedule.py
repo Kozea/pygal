@@ -4,7 +4,7 @@ import re
 from dateutil.parser import parse
 from dateutil.relativedelta import relativedelta
 
-from SVG import Graph
+from svg.charts import Graph
 from util import grouper, date_range, divide_timedelta_float, TimeScale
 
 __all__ = ('Schedule')

@@ -4,7 +4,7 @@
 
 import math
 from operator import add
-import SVG
+from svg.charts import Graph
 
 def robust_add(a,b):
 	"Add numbers a and b, treating None as 0"
@@ -14,7 +14,7 @@ def robust_add(a,b):
 
 RADIANS = math.pi/180
 
-class Pie(SVG.Graph):
+class Pie(Graph):
 	# === Create presentation quality SVG pie graphs easily
 	# 
 	# == Synopsis

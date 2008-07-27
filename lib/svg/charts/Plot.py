@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-import SVG
+from svg.charts import Graph
 from itertools import izip, count, chain
 
 from util import float_range
@@ -8,7 +8,7 @@ def get_pairs(i):
 	i = iter(i)
 	while True:	yield i.next(), i.next()
 	
-class Plot(SVG.Graph):
+class Plot(Graph):
 	"""=== For creating SVG plots of scalar data
 	
 	= Synopsis

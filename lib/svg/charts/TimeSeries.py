@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-import SVG
+import svg.charts
 import re
 import pkg_resources
 pkg_resources.require("python-dateutil>=1.1")
@@ -9,7 +9,7 @@ from time import mktime
 import datetime
 fromtimestamp = datetime.datetime.fromtimestamp
 
-class Plot(SVG.Plot.Plot):
+class Plot(svg.charts.Plot.Plot):
 	"""=== For creating SVG plots of scalar temporal data
 		
 		= Synopsis
@@ -141,7 +141,7 @@ class Plot(SVG.Plot.Plot):
 		# the date should be in the first element, so parse it out
 		data['data'][0] = map(self.parse_date, data['data'][0])
 
-	_min_x_value = SVG.Plot.Plot.min_x_value	
+	_min_x_value = svg.charts.Plot.Plot.min_x_value	
 	def get_min_x_value(self):
 		return self._min_x_value
 	def set_min_x_value(self, date):
@@ -157,7 +157,7 @@ class Plot(SVG.Plot.Plot):
 	def get_x_values(self):
 		result = self.get_x_timescale_division_values()
 		if result: return result
-		return tuple(SVG.Plot.float_range(*self.x_range()))
+		return tuple(svg.charts.Plot.float_range(*self.x_range()))
 			
 	def get_x_timescale_division_values(self):
 		if not self.timescale_divisions: return

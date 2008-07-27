@@ -5,10 +5,10 @@
 from operator import itemgetter, add
 from util import flatten
 
-import SVG
+from svg.charts import Graph
 from Plot import float_range
 
-class Line(SVG.Graph):
+class Line(Graph):
 	"""     === Create presentation quality SVG line graphs easily
      
      = Synopsis
