@@ -643,6 +643,7 @@ class Graph(object):
 		self.graph_height = self.height - self.border_top - self.border_bottom
 		
 	def get_style(self):
+		cssutils.log.setLevel(99) # disable log messages
 		css_stream = pkg_resources.resource_stream('svg.charts', 'graph.css')
 		css_string = css_stream.read()
 		sheet = cssutils.parseString(css_string).cssText
