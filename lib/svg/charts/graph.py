@@ -96,7 +96,7 @@ class Graph(object):
 	y_title_font_size=    14
 	key_font_size=        10
 	
-	no_css=               False
+	css_inline=               False
 	add_popups=           False
 
 	top_align = top_font = right_align = right_font = 0
@@ -107,6 +107,7 @@ class Graph(object):
 			raise NotImplementedError, "Graph is an abstract base class"
 		self.load_config(config)
 		self.clear_data()
+		self.style = {}
 
 	def load_config(self, config):
 		self.__dict__.update(config)
@@ -164,7 +165,7 @@ class Graph(object):
 		self.draw_legend()
 		self.draw_data()
 		self.graph.appendChild(self.foreground)
-		self.style()
+		self.render_inline_styles()
 		
 		data = self._doc.toprettyxml()
 		
@@ -558,9 +559,9 @@ class Graph(object):
 			y_offset += x_title_font_size + 5
 		return x_offset, y_offset
 			
-	def style(self):
-		"hard code the styles into the xml if style sheets are not used."
-		if self.no_css:
+	def render_inline_styles(self):
+		"Hard-code the styles into the SVG XML if style sheets are not used."
+		if self.css_inline:
 			styles = self.parse_css()
 			for node in xpath.Evaluate('//*[@class]', self.root):
 				cl = node.getAttribute('class')
@@ -594,9 +595,9 @@ class Graph(object):
 		impl = dom.getDOMImplementation()
 		self._doc = impl.createDocument(None, 'svg', None)
 		self.root = self._doc.documentElement
-		if hasattr(self, 'style_sheet'):
+		if hasattr(self, 'style_sheet_href'):
 			pi = self._doc.createProcessingInstruction('xml-stylesheet',
-												  'href="%s" type="text/css"' % self.style_sheet)
+												  'href="%s" type="text/css"' % self.style_sheet_href)
 		attributes = {
 			'width': str(self.width),
 			'height': str(self.height),
@@ -615,7 +616,8 @@ class Graph(object):
 		defs = self._create_element('defs')
 		self.add_defs(defs)
 		self.root.appendChild(defs)
-		if not hasattr(self, 'style_sheet') and not self.no_css:
+		
+		if not hasattr(self, 'style_sheet_href') and not self.css_inline:
 			self.root.appendChild(self._doc.createComment(' include default stylesheet if none specified '))
 			style = self._create_element('style', {'type': 'text/css'})
 			defs.appendChild(style)
