@@ -16,7 +16,8 @@ setup(name = "svg.charts",
 	package_dir = {'':'lib'},
 	install_requires=[
 		'python-dateutil>=1.4',
-		'cssutils==0.9.5',
+		'cssutils>=0.9.5.1',
+		# TODO: consider lxml
 	],
 	license = "MIT",
 	long_description = """\

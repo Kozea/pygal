@@ -4,7 +4,8 @@
 from xml.dom import minidom as dom
 from operator import itemgetter
 from itertools import islice
-from cssutils import css, stylesheets
+import cssutils
+import pkg_resources
 
 try:
 	import zlib
@@ -642,105 +643,11 @@ class Graph(object):
 		self.graph_height = self.height - self.border_top - self.border_bottom
 		
 	def get_style(self):
-		sheet = css.CSSStyleSheet()
-		master_bg_style = css.CSSStyleDeclaration()
-		master_bg_style.setProperty('fill', '#ffffff')
-		rule = css.CSSStyleRule(selectorText=u'.svgBackground', style=master_bg_style)
-		sheet.insertRule(rule)
-		result = sheet.cssText
-		result = """/* Copy from here for external style sheet */
-.svgBackground{
-  fill:#ffffff;
-}
-.graphBackground{
-  fill:#f0f0f0;
-}
-
-/* graphs titles */
-.mainTitle{
-  text-anchor: middle;
-  fill: #000000;
-  font-size: %(title_font_size)dpx;
-  font-family: "Arial", sans-serif;
-  font-weight: normal;
-}
-.subTitle{
-  text-anchor: middle;
-  fill: #999999;
-  font-size: %(subtitle_font_size)dpx;
-  font-family: "Arial", sans-serif;
-  font-weight: normal;
-}
-
-.axis{
-  stroke: #000000;
-  stroke-width: 1px;
-}
-
-.guideLines{
-  stroke: #666666;
-  stroke-width: 1px;
-  stroke-dasharray: 5 5;
-}
-
-.xAxisLabels{
-  text-anchor: middle;
-  fill: #000000;
-  font-size: %(x_label_font_size)dpx;
-  font-family: "Arial", sans-serif;
-  font-weight: normal;
-}
-
-.yAxisLabels{
-  text-anchor: end;
-  fill: #000000;
-  font-size: %(y_label_font_size)dpx;
-  font-family: "Arial", sans-serif;
-  font-weight: normal;
-}
-
-.xAxisTitle{
-  text-anchor: middle;
-  fill: #ff0000;
-  font-size: %(x_title_font_size)dpx;
-  font-family: "Arial", sans-serif;
-  font-weight: normal;
-}
-
-.yAxisTitle{
-  fill: #ff0000;
-  text-anchor: middle;
-  font-size: %(y_title_font_size)dpx;
-  font-family: "Arial", sans-serif;
-  font-weight: normal;
-}
-
-.dataPointLabel{
-  fill: #000000;
-  text-anchor:middle;
-  font-size: 10px;
-  font-family: "Arial", sans-serif;
-  font-weight: normal;
-}
-
-.staggerGuideLine{
-  fill: none;
-  stroke: #000000;
-  stroke-width: 0.5px;  
-}
-
-%%s
-
-.keyText{
-  fill: #000000;
-  text-anchor:start;
-  font-size: %(key_font_size)dpx;
-  font-family: "Arial", sans-serif;
-  font-weight: normal;
-}
-/* End copy for external style sheet */
-""" % class_dict(self)
-		result = result % self.get_css()
+		css_stream = pkg_resources.resource_stream('svg.charts', 'graph.css')
+		css_string = css_stream.read()
+		sheet = cssutils.parseString(css_string).cssText
+		sheet = sheet % class_dict(self)
+		result = '\n'.join((sheet, self.get_css()))
 		return result
 
 	def _create_element(self, nodeName, attributes={}):

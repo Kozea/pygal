@@ -23,7 +23,7 @@ g = time_series.Plot({})
 g.timescale_divisions = '4 hours'
 g.stagger_x_labels = True
 g.x_label_format = '%d-%b %H:%M'
-g.max_y_value = 200
+#g.max_y_value = 200
 
 g.add_data({'data': ['2005-12-21T00:00:00', 20, '2005-12-22T00:00:00', 21], 'title': 'series 1'})
 
