@@ -89,6 +89,8 @@ class Line(Graph):
 
 	#override some defaults
 	top_align = top_font = right_align = right_font = True
+	
+	css_file = 'plot.css'
 
 	def max_value(self):
 		data = map(itemgetter('data'), self.data)
