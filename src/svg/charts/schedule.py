@@ -115,6 +115,8 @@ class Schedule(Graph):
 	scale_x_integers = False
 	bar_gap = True
 
+	css_file = 'bar.css'
+
 	def add_data(self, data):
 		"""
 		Add data to the plot.
