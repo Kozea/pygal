@@ -651,6 +651,16 @@ class Graph(object):
 		result = '\n'.join((sheet, self.get_css()))
 		return result
 
+	def get_css(self):
+		css_stream = pkg_resources.resource_stream('svg.charts', self.css_file)
+		css_string = css_stream.read()
+		sheet = cssutils.parseString(css_string).cssText
+		return sheet
+
+	@property
+	def css_file(self):
+		return self.__class__.__name__.lower() + '.css'
+
 	def _create_element(self, nodeName, attributes={}):
 		"Create an XML node and set the attributes from a dict"
 		node = self._doc.createElement(nodeName)

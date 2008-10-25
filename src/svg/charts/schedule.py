@@ -242,84 +242,8 @@ class Schedule(Graph):
 				'class': 'fill%s' % (count+1), # TODO: doublecheck that +1 is correct (that's what's in the Ruby code)
 			})
 			self.graph.appendChild(rect)
-			
-	def get_css(self):
-		return """\
-/* default fill styles for multiple datasets (probably only use a single dataset on this graph though) */
-.key1,.fill1{
-	fill: #ff0000;
-	fill-opacity: 0.5;
-	stroke: none;
-	stroke-width: 0.5px;	
-}
-.key2,.fill2{
-	fill: #0000ff;
-	fill-opacity: 0.5;
-	stroke: none;
-	stroke-width: 1px;	
-}
-.key3,.fill3{
-	fill: #00ff00;
-	fill-opacity: 0.5;
-	stroke: none;
-	stroke-width: 1px;	
-}
-.key4,.fill4{
-	fill: #ffcc00;
-	fill-opacity: 0.5;
-	stroke: none;
-	stroke-width: 1px;	
-}
-.key5,.fill5{
-	fill: #00ccff;
-	fill-opacity: 0.5;
-	stroke: none;
-	stroke-width: 1px;	
-}
-.key6,.fill6{
-	fill: #ff00ff;
-	fill-opacity: 0.5;
-	stroke: none;
-	stroke-width: 1px;	
-}
-.key7,.fill7{
-	fill: #00ffff;
-	fill-opacity: 0.5;
-	stroke: none;
-	stroke-width: 1px;	
-}
-.key8,.fill8{
-	fill: #ffff00;
-	fill-opacity: 0.5;
-	stroke: none;
-	stroke-width: 1px;	
-}
-.key9,.fill9{
-	fill: #cc6666;
-	fill-opacity: 0.5;
-	stroke: none;
-	stroke-width: 1px;	
-}
-.key10,.fill10{
-	fill: #663399;
-	fill-opacity: 0.5;
-	stroke: none;
-	stroke-width: 1px;	
-}
-.key11,.fill11{
-	fill: #339900;
-	fill-opacity: 0.5;
-	stroke: none;
-	stroke-width: 1px;	
-}
-.key12,.fill12{
-	fill: #9966FF;
-	fill-opacity: 0.5;
-	stroke: none;
-	stroke-width: 1px;	
-}
-"""
 
+			
 	def _x_range(self):
 		# ruby version uses teh last data supplied
 		last = -1

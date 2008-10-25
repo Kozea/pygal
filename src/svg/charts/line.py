@@ -230,11 +230,3 @@ class Line(Graph):
 						)
 
 			prev_sum = list(cum_sum)		
-
-
-	def get_css(self):
-		cssutils.log.setLevel(99) # disable log messages
-		css_stream = pkg_resources.resource_stream('svg.charts', 'line.css')
-		css_string = css_stream.read()
-		sheet = cssutils.parseString(css_string).cssText
-		return sheet

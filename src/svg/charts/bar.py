@@ -17,6 +17,8 @@ class Bar(Graph):
 	
 	scale_divisions = None
 
+	css_file = 'bar.css'
+
 	def __init__(self, fields, *args, **kargs):
 		self.fields = fields
 		super(Bar, self).__init__(*args, **kargs)
@@ -70,83 +72,6 @@ class Bar(Graph):
 		# the following zero's out the gap if bar_gap is False
 		bar_gap = int(self.bar_gap) * bar_gap
 		return bar_gap
-
-	def get_css(self):
-		return """\
-/* default fill styles for multiple datasets (probably only use a single dataset on this graph though) */
-.key1,.fill1{
-	fill: #ff0000;
-	fill-opacity: 0.5;
-	stroke: none;
-	stroke-width: 0.5px;	
-}
-.key2,.fill2{
-	fill: #0000ff;
-	fill-opacity: 0.5;
-	stroke: none;
-	stroke-width: 1px;	
-}
-.key3,.fill3{
-	fill: #00ff00;
-	fill-opacity: 0.5;
-	stroke: none;
-	stroke-width: 1px;	
-}
-.key4,.fill4{
-	fill: #ffcc00;
-	fill-opacity: 0.5;
-	stroke: none;
-	stroke-width: 1px;	
-}
-.key5,.fill5{
-	fill: #00ccff;
-	fill-opacity: 0.5;
-	stroke: none;
-	stroke-width: 1px;	
-}
-.key6,.fill6{
-	fill: #ff00ff;
-	fill-opacity: 0.5;
-	stroke: none;
-	stroke-width: 1px;	
-}
-.key7,.fill7{
-	fill: #00ffff;
-	fill-opacity: 0.5;
-	stroke: none;
-	stroke-width: 1px;	
-}
-.key8,.fill8{
-	fill: #ffff00;
-	fill-opacity: 0.5;
-	stroke: none;
-	stroke-width: 1px;	
-}
-.key9,.fill9{
-	fill: #cc6666;
-	fill-opacity: 0.5;
-	stroke: none;
-	stroke-width: 1px;	
-}
-.key10,.fill10{
-	fill: #663399;
-	fill-opacity: 0.5;
-	stroke: none;
-	stroke-width: 1px;	
-}
-.key11,.fill11{
-	fill: #339900;
-	fill-opacity: 0.5;
-	stroke: none;
-	stroke-width: 1px;	
-}
-.key12,.fill12{
-	fill: #9966FF;
-	fill-opacity: 0.5;
-	stroke: none;
-	stroke-width: 1px;	
-}
-"""
 
 def float_range(start = 0, stop = None, step = 1):
 	"Much like the built-in function range, but accepts floats"
