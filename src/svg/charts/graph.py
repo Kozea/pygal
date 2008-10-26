@@ -635,24 +635,24 @@ class Graph(object):
 		self.calculate_top_margin()
 		self.graph_width = self.width - self.border_left - self.border_right
 		self.graph_height = self.height - self.border_top - self.border_bottom
-		
-	def get_stylesheet(self):
-		cssutils.log.setLevel(99) # disable log messages
-		css_stream = pkg_resources.resource_stream('svg.charts', 'graph.css')
+
+	@staticmethod
+	def load_resource_stylesheet(name):
+		css_stream = pkg_resources.resource_stream('svg.charts', name)
 		css_string = css_stream.read()
 		sheet = cssutils.parseString(css_string)
+		return sheet
+
+	def get_stylesheet(self):
+		cssutils.log.setLevel(99) # disable log messages
+		sheet = self.load_resource_stylesheet('graph.css')
+		child_sheet = self.load_resource_stylesheet(self.css_file)
+		map(sheet.add, child_sheet)
 		return sheet
 		
 	def get_style(self):
 		sheet = self.get_stylesheet().cssText
 		sheet = sheet % class_dict(self)
-		result = '\n'.join((sheet, self.get_css()))
-		return result
-
-	def get_css(self):
-		css_stream = pkg_resources.resource_stream('svg.charts', self.css_file)
-		css_string = css_stream.read()
-		sheet = cssutils.parseString(css_string).cssText
 		return sheet
 
 	@property
