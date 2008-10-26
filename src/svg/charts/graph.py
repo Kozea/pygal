@@ -574,19 +574,13 @@ class Graph(object):
 	def parse_css(self):
 		"""Take a .css file (classes only please) and parse it into a dictionary
 		of class/style pairs."""
-		css = self.get_style()
-		result = {}
-		for match in re.finditer('^(?<names>\.(\w+)(?:\s*,\s*\.\w+)*)\s*\{(?<content>[^}]+)\}'):
-			names = match.group_dict()['names']
-			# apperantly, we're only interested in class names
-			names = filter(None, re.split('\s*,?\s*\.'))
-			content = match.group_dict()['content']
-			# convert all whitespace to 
-			content = re.sub('\s+', ' ', content)
-			for name in names:
-				result[name] = ';'.join(result[name], content)
+		# todo: save the prefs for use later
+		#orig_prefs = cssutils.ser.prefs
+		cssutils.ser.prefs.useMinified()
+		get_pair = lambda r: (r.selectorText, r.style.cssText)
+		result = dict(map(get_pair, self.get_stylesheet()))
 		return result
-			
+
 	def add_defs(self, defs):
 		"Override and place code to add defs here"
 		pass
@@ -642,11 +636,15 @@ class Graph(object):
 		self.graph_width = self.width - self.border_left - self.border_right
 		self.graph_height = self.height - self.border_top - self.border_bottom
 		
-	def get_style(self):
+	def get_stylesheet(self):
 		cssutils.log.setLevel(99) # disable log messages
 		css_stream = pkg_resources.resource_stream('svg.charts', 'graph.css')
 		css_string = css_stream.read()
-		sheet = cssutils.parseString(css_string).cssText
+		sheet = cssutils.parseString(css_string)
+		return sheet
+		
+	def get_style(self):
+		sheet = self.get_stylesheet().cssText
 		sheet = sheet % class_dict(self)
 		result = '\n'.join((sheet, self.get_css()))
 		return result
