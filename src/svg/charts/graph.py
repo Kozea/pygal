@@ -637,23 +637,24 @@ class Graph(object):
 		self.graph_height = self.height - self.border_top - self.border_bottom
 
 	@staticmethod
-	def load_resource_stylesheet(name):
+	def load_resource_stylesheet(name, subs=dict()):
 		css_stream = pkg_resources.resource_stream('svg.charts', name)
 		css_string = css_stream.read()
+		css_string = css_string % subs
 		sheet = cssutils.parseString(css_string)
 		return sheet
 
 	def get_stylesheet(self):
-		cssutils.log.setLevel(99) # disable log messages
-		sheet = self.load_resource_stylesheet('graph.css')
-		child_sheet = self.load_resource_stylesheet(self.css_file)
+		cssutils.log.setLevel(30) # disable INFO log messages
+		# allow css to include class variables:
+		class_vars = class_dict(self)
+		sheet = self.load_resource_stylesheet('graph.css', class_vars)
+		child_sheet = self.load_resource_stylesheet(self.css_file, class_vars)
 		map(sheet.add, child_sheet)
 		return sheet
 		
 	def get_style(self):
-		sheet = self.get_stylesheet().cssText
-		sheet = sheet % class_dict(self)
-		return sheet
+		return self.get_stylesheet().cssText
 
 	@property
 	def css_file(self):

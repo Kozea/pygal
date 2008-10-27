@@ -5,7 +5,7 @@ $Id$
 .dataPointLabel{
 	fill: #000000;
 	text-anchor:middle;
-	font-size: #{datapoint_font_size}px;
+	font-size: %(datapoint_font_size)spx;
 	font-family: "Arial", sans-serif;
 	font-weight: normal;
 }
