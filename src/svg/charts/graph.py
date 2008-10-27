@@ -616,7 +616,7 @@ class Graph(object):
 			self.root.appendChild(self._doc.createComment(' include default stylesheet if none specified '))
 			style = self._create_element('style', {'type': 'text/css'})
 			defs.appendChild(style)
-			style_data = self._doc.createCDATASection(self.get_style())
+			style_data = self._doc.createCDATASection(self.get_stylesheet().cssText)
 			style.appendChild(style_data)
 			
 		self.root.appendChild(self._doc.createComment('SVG Background'))
@@ -653,6 +653,7 @@ class Graph(object):
 		map(sheet.add, child_sheet)
 		return sheet
 		
+	#deprecated
 	def get_style(self):
 		return self.get_stylesheet().cssText
 

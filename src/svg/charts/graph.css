@@ -1,3 +1,9 @@
+/*
+$Id$
+
+Base styles for svg.charts.Graph
+*/
+
 .svgBackground{
   fill:#ffffff;
 }
