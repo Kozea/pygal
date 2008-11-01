@@ -4,6 +4,7 @@
 
 import math
 from operator import add
+from lxml import etree
 from svg.charts.graph import Graph
 
 def robust_add(a,b):
@@ -121,23 +122,19 @@ class Pie(Graph):
 
 	def add_defs(self, defs):
 		"Add svg definitions"
-		gradient = self._create_element(
+		etree.SubElement(
+			defs,
 			'filter',
-			dict(
-				id='dropshadow',
-				width='1.2',
-				height='1.2',
-				)
+			id='dropshadow',
+			width='1.2',
+			height='1.2',
 			)
-		defs.appendChild(gradient)
-		blur = self._create_element(
+		etree.SubElement(
+			defs,
 			'feGaussianBlur',
-			dict(
-				stdDeviation='4',
-				result='blur',
-				)
+			stdDeviation='4',
+			result='blur',
 			)
-		gradient.appendChild(blur)
 
 	def draw_graph(self):
 		"Here we don't need the graph (consider refactoring)"
@@ -149,7 +146,7 @@ class Pie(Graph):
 
 	def get_x_labels(self):
 		"Okay.  I'll refactor after this"
-		['']
+		return ['']
 
 	def keys(self):
 		total = reduce(add, self.data)
@@ -164,12 +161,10 @@ class Pie(Graph):
 		return map(key, self.fields, self.data)
 	
 	def draw_data(self):
-		self.graph = self._create_element('g')
-		self.root.appendChild(self.graph)
-		background = self._create_element('g')
-		self.graph.appendChild(background)
-		midground = self._create_element('g')
-		self.graph.appendChild(midground)
+		self.graph = etree.SubElement(self.root, 'g')
+		background = etree.SubElement(self.graph, 'g')
+		# midground is somewhere between the background and the foreground
+		midground = etree.SubElement(self.graph, 'g')
 		
 		is_expanded = (self.expanded or self.expand_greatest)
 		diameter = min(self.graph_width, self.graph_height)
@@ -183,7 +178,7 @@ class Pie(Graph):
 		yoff = (self.height - self.border_bottom - diameter)
 		yoff -= 10 * int(self.show_shadow)
 		transform = 'translate(%(xoff)s %(yoff)s)' % vars()
-		self.graph.setAttribute('transform', transform)
+		self.graph.set('transform', transform)
 
 		wedge_text_pad = 5
 		wedge_text_pad = 20 * int(self.show_percent) * int(self.show_data_labels)
@@ -214,14 +209,14 @@ class Pie(Graph):
 				"%(x_end)s %(y_end)s Z"))
 			path = path % vars()
 			
-			wedge = self._create_element(
+			wedge = etree.SubElement(
+				self.foreground,
 				'path',
-				dict({
+				{
 					'd': path,
 					'class': 'fill%s' % (index+1),
-					})
+				}
 				)
-			self.foreground.appendChild(wedge)
 			
 			translate = None
 			tx = 0
@@ -230,38 +225,35 @@ class Pie(Graph):
 			radians = half_percent * rad_mult
 			
 			if self.show_shadow:
-				shadow = self._create_element(
+				shadow = etree.SubElement(
+					background,
 					'path',
-					dict(
-						d=path,
-						filter='url(#dropshadow)',
-						style='fill: #ccc; stroke: none',
-					)
+					d=path,
+					filter='url(#dropshadow)',
+					style='fill: #ccc; stroke: none',
 				)
-				background.appendChild(shadow)
-				clear = self._create_element(
+				clear = etree.SubElement(
+					midground,
 					'path',
-					dict(
-						d=path,
-						# note, this probably only works when the background
-						#  is also #fff
-						style="fill:#fff; stroke:none;",
-					)
+					d=path,
+					# note, this probably only works when the background
+					#  is also #fff
+					# consider getting the style from the stylesheet
+					style="fill:#fff; stroke:none;",
 				)
-				midground.appendChild(clear)
 			
 			if self.expanded or (self.expand_greatest and value == max_value):
 				tx = (math.sin(radians) * self.expand_gap)
 				ty = -(math.cos(radians) * self.expand_gap)
 				translate = "translate(%(tx)s %(ty)s)" % vars()
-				wedge.setAttribute('transform', translate)
-				clear.setAttribute('transform', translate)
+				wedge.set('transform', translate)
+				clear.set('transform', translate)
 			
 			if self.show_shadow:
 				shadow_tx = self.shadow_offset + tx
 				shadow_ty = self.shadow_offset + ty
 				translate = 'translate(%(shadow_tx)s %(shadow_ty)s)' % vars()
-				shadow.setAttribute('transform', translate)
+				shadow.set('transform', translate)
 			
 			if self.show_data_labels and value != 0:
 				label = []
@@ -282,28 +274,28 @@ class Pie(Graph):
 				  tx += (msr * self.expand_gap)
 				  ty -= (mcr * self.expand_gap)
 
-				label_node = self._create_element(
+				label_node = etree.SubElement(
+					self.foreground,
 					'text',
-					dict({
+					{
 						'x':str(tx),
 						'y':str(ty),
 						'class':'dataPointLabel',
 						'style':'stroke: #fff; stroke-width: 2;',
-					})
+					}
 				)
-				label_node.appendChild(self._doc.createTextNode(label))
-				self.foreground.appendChild(label_node)
+				label_node.text = label
 
-				label_node = self._create_element(
+				label_node = etree.SubElement(
+					self.foreground,
 					'text',
-					dict({
+					{
 						'x':str(tx),
 						'y':str(ty),
 						'class': 'dataPointLabel',
-					})
+					}
 				)
-				label_node.appendChild(self._doc.createTextNode(label))
-				self.foreground.appendChild(label_node)
+				label_node.text = label
 			
 			prev_percent += percent
 

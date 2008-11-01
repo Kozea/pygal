@@ -1,6 +1,7 @@
 #!python
-from svg.charts.graph import Graph
 from itertools import chain
+from lxml import etree
+from svg.charts.graph import Graph
 
 __all__ = ('VerticalBar', 'HorizontalBar')
 
@@ -178,14 +179,13 @@ class VerticalBar(Bar):
 				if self.stack == 'side':
 					left += bar_width * dataset_count
 
-				rect = self._create_element('rect', {
+				rect = etree.SubElement(self.graph, 'rect', {
 					'x': str(left),
 					'y': str(top),
 					'width': str(bar_width),
 					'height': str(length),
 					'class': 'fill%s' % (dataset_count+1),
 				})
-				self.graph.appendChild(rect)
 				
 				self.make_datapoint_text(left + bar_width/2.0, top-6, value)
 
@@ -236,14 +236,13 @@ class HorizontalBar(Bar):
 				# left is 0 if value is negative
 				left = (abs(min_value) + min(value, 0)) * unit_size
 
-				rect = self._create_element('rect', {
+				rect = etree.SubElement(self.graph, 'rect', {
 					'x': str(left),
 					'y': str(top),
 					'width': str(length),
 					'height': str(bar_height),
 					'class': 'fill%s' % (dataset_count+1),
 				})
-				self.graph.appendChild(rect)
 				
 				self.make_datapoint_text(left+length+5, top+y_mod, value,
 										 "text-anchor: start; ")

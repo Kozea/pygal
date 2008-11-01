@@ -3,6 +3,7 @@ import re
 
 from dateutil.parser import parse
 from dateutil.relativedelta import relativedelta
+from lxml import etree
 
 from svg.charts.graph import Graph
 from util import grouper, date_range, divide_timedelta_float, TimeScale
@@ -236,14 +237,13 @@ class Schedule(Graph):
 			bar_width = scale*(x_end-x_start)
 			bar_start = scale*(x_start-x_min)
 			
-			rect = self._create_element('rect', {
+			etree.SubElement(self.graph, 'rect', {
 				'x': str(bar_start),
 				'y': str(y),
 				'width': str(bar_width),
 				'height': str(subbar_height),
-				'class': 'fill%s' % (count+1), # TODO: doublecheck that +1 is correct (that's what's in the Ruby code)
+				'class': 'fill%s' % (count+1),
 			})
-			self.graph.appendChild(rect)
 
 			
 	def _x_range(self):

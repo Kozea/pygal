@@ -1,6 +1,8 @@
 #!/usr/bin/env python
-from svg.charts.graph import Graph
 from itertools import izip, count, chain
+from lxml import etree
+
+from svg.charts.graph import Graph
 
 from util import float_range
 
@@ -236,15 +238,13 @@ class Plot(Graph):
 			lpath = self.get_lpath(graph_points)
 			if self.area_fill:
 				graph_height = self.graph_height
-				path = self._create_element('path', {
+				path = etree.SubElement(self.graph, 'path', {
 					'd': 'M%(x_start)f %(graph_height)f %(lpath)s V%(graph_height)f Z' % vars(),
 					'class': 'fill%(line)d' % vars()})
-				self.graph.appendChild(path)
 			if self.draw_lines_between_points:
-				path = self._create_element('path', {
+				path = etree.SubElement(self.graph, 'path', {
 					'd': 'M%(x_start)f %(y_start)f %(lpath)s' % vars(),
 					'class': 'line%(line)d' % vars()})
-				self.graph.appendChild(path)
 			self.draw_data_points(line, data_points, graph_points)
 		self._draw_constant_lines()
 		del self.__transform_parameters
@@ -261,18 +261,16 @@ class Plot(Graph):
 		"Draw a constant line on the y-axis with the label"
 		start = self.transform_output_coordinates((0, value))[1]
 		stop = self.graph_width
-		path = self._create_element('path', {
+		path = etree.SubElement(self.graph, 'path', {
 			'd': 'M 0 %(start)s h%(stop)s' % vars(),
 			'class': 'constantLine'})
 		if style:
-			path['style'] = style
-		self.graph.appendChild(path)
-		text = self._create_element('text', {
+			path.set('style', style)
+		text = etree.SubElement(self.graph, 'text', {
 			'x': str(2),
 			'y': str(start - 2),
 			'class': 'constantLine'})
-		text.appendChild(self._doc.createTextNode(label))
-		self.graph.appendChild(text)
+		text.text = label
 
 	def load_transform_parameters(self):
 		"Cache the parameters necessary to transform x & y coordinates"
@@ -308,12 +306,11 @@ class Plot(Graph):
 			and not self.show_data_values: return
 		for ((dx,dy),(gx,gy)) in izip(data_points, graph_points):
 			if self.show_data_points:
-				circle = self._create_element('circle', {
+				etree.SubElement(self.graph, 'circle', {
 					'cx': str(gx),
 					'cy': str(gy),
 					'r': '2.5',
 					'class': 'dataPoint%(line)s' % vars()})
-				self.graph.appendChild(circle)
 			if self.show_data_values:
 				self.add_popup(gx, gy, self.format(dx, dy))
 			self.make_datapoint_text(gx, gy-6, dy)

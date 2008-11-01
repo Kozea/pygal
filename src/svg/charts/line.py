@@ -3,10 +3,10 @@
 # $Id$
 
 from operator import itemgetter, add
-from util import flatten
+from lxml import etree
 
+from util import flatten, float_range
 from svg.charts.graph import Graph
-from util import float_range
 
 class Line(Graph):
 	"""     === Create presentation quality SVG line graphs easily
@@ -193,7 +193,6 @@ class Line(Graph):
 					area_path = "V#@graph_height"
 					origin = coord_format(get_coords(0,0))
 
-				p = self._create_element('path')
 				d = ' '.join((
 					'M',
 					origin,
@@ -202,29 +201,28 @@ class Line(Graph):
 					area_path,
 					'Z'
 				))
-				p.setAttribute('d', d)
-				p.setAttribute('class', 'fill%(line_n)s' % vars())
-				self.graph.appendChild(p)
+				etree.SubElement(self.graph, 'path', {
+					'class': 'fill%(line_n)s' % vars(),
+					'd': d,
+					})
 
 			# now draw the line itself
-			p = self._create_element('path')
-			p.setAttribute('d', 'M0 '+self.graph_height+' L'+line_path)
-			p.setAttribute('class', 'line%(line_n)s' % vars())
-			self.graph.appendChild(p)
+			etree.SubElement(self.graph, 'path', {
+				'd': 'M0 '+self.graph_height+' L'+line_path,
+				'class': 'line%(line_n)s' % vars(),
+				})
 			
 			if self.show_data_points or self.show_data_values:
 				for i, value in enumerate(cum_sum):
 					if self.show_data_points:
-						circle = self._create_element(
+						circle = etree.SubElement(
+							self.graph,
 							'circle',
-							dict(
-								cx = str(field_width*i),
-								cy = str(self.graph_height - value*field_height),
-								r = '2.5',
-								)
+							{'class': 'dataPoint%(line_n)s' % vars()},
+							cx = str(field_width*i),
+							cy = str(self.graph_height - value*field_height),
+							r = '2.5',
 							)
-						circle.setAttribute('class', 'dataPoint%(line_n)s' % vars())
-						self.graph.appendChild(circle)
 					self.make_datapoint_text(
 						field_width*i,
 						self.graph_height - value*field_height - 6,
