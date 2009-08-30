@@ -1,3 +1,30 @@
+``svg.charts`` - Package for generating SVG Charts in Python
+============================================================
+
+.. contents::
+
+Status and License
+------------------
+
+``svg.charts`` is a port of the SVG::Graph Ruby package by Sean E. Russel.
+
+``jaraco.nxt`` is written by Jason R. Coombs.  It is licensed under an
+`MIT-style permissive license
+<https://svn.jaraco.com/jaraco/python/svg.charts/docs/license.txt>`_.
+
+You can install it with ``easy_install svg.charts``, or from the
+`subversion repository
+<https://svn.jaraco.com/jaraco/python/svg.charts#egg=svg.charts-dev>`_ with
+``easy_install svg.charts==dev``.
+
+Getting Started
+---------------
+
+``svg.charts`` has some examples (taken directly from the reference implementation)
+in `tests/testing.py <https://svn.jaraco.com/jaraco/python/svg.charts/tests/testing.py`.
+These examples show sample usage of the various chart types. They should provide a
+good starting point for learning the usage of the library.
+
 Upgrade Notes
 -------------
 
@@ -13,6 +40,29 @@ becomes
 from svg.charts.bar import VerticalBar
 VerticalBar(...)
 
---- Still to do ---
+More To-Dos
+-----------
 
 -  Implement javascript-based animation (See JellyGraph for a Silverlight example of what simple animation can do for a charting library).
+
+Changes
+-------
+
+2.0
+~~~~~
+
+* First major divergence from the Ruby reference implementation
+* Now implemented as a namespace package (svg.charts instead of svg_charts)
+* Changed XML processor to lxml
+* Enabled extensible css support using cssutils, greatly reducing static CSS
+* Renamed modules and methods to be more consistent with PEP-8 naming convention
+
+1.2
+~~~
+
+* Bug fixes
+
+1.1
+~~~
+
+* First public release

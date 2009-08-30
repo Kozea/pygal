@@ -2,32 +2,30 @@
 
 # $Id$
 
-from ez_setup import use_setuptools
-use_setuptools()
 from setuptools import setup, find_packages
 
 setup(name = "svg.charts",
 	version = "2.0",
 	description = "Python SVG Charting Library",
+	long_description = open('readme.txt').read().strip(),
 	author = "Jason R. Coombs",
 	author_email = "jaraco@jaraco.com",
 	url = "http://py-svg.sourceforge.net",
-	packages = find_packages('src'),
-	package_dir = {'':'src'},
+	packages = find_packages(exclude=['tests', 'docs']),
+	zip_safe=True,
+	namespace_packages=['svg'],
 	install_requires=[
 		'python-dateutil>=1.4',
 		'cssutils>=0.9.5.1',
 		'lxml>=2.0',
 	],
 	license = "MIT",
-	long_description = """\
-SVG Charting library based on the Ruby SVG::Graph
-
-""",
 	classifiers = [
-		"Development Status :: 4 - Beta",
+		"Development Status :: 5 - Production/Stable",
 		"Intended Audience :: Developers",
+		"Intended Audience :: Science/Research",
 		"Programming Language :: Python",
+		"License :: OSI Approved :: MIT License",
 	],
 	entry_points = {
 	},
