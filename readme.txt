@@ -10,18 +10,18 @@ Status and License
 
 ``jaraco.nxt`` is written by Jason R. Coombs.  It is licensed under an
 `MIT-style permissive license
-<https://svn.jaraco.com/jaraco/python/svg.charts/docs/license.txt>`_.
+<https://py-svg.svn.sourceforge.net/svnroot/py-svg/trunk/docs/license.txt>`_.
 
 You can install it with ``easy_install svg.charts``, or from the
 `subversion repository
-<https://svn.jaraco.com/jaraco/python/svg.charts#egg=svg.charts-dev>`_ with
+<https://py-svg.svn.sourceforge.net/svnroot/py-svg/trunk#egg=svg.charts-dev>`_ with
 ``easy_install svg.charts==dev``.
 
 Getting Started
 ---------------
 
 ``svg.charts`` has some examples (taken directly from the reference implementation)
-in `tests/testing.py <https://svn.jaraco.com/jaraco/python/svg.charts/tests/testing.py`.
+in `tests/testing.py <https://py-svg.svn.sourceforge.net/svnroot/py-svg/trunk/tests/testing.py`.
 These examples show sample usage of the various chart types. They should provide a
 good starting point for learning the usage of the library.
 
