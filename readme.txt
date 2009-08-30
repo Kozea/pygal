@@ -8,7 +8,9 @@ Status and License
 
 ``svg.charts`` is a port of the SVG::Graph Ruby package by Sean E. Russel.
 
-``jaraco.nxt`` is written by Jason R. Coombs.  It is licensed under an
+``svg.charts`` supercedes ``svg_charts`` 1.1 and 1.2.
+
+``svg.charts`` is written by Jason R. Coombs.  It is licensed under an
 `MIT-style permissive license
 <https://py-svg.svn.sourceforge.net/svnroot/py-svg/trunk/docs/license.txt>`_.
 
