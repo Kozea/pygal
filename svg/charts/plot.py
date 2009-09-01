@@ -142,7 +142,7 @@ class Plot(Graph):
 
 	def validate_data(self, data):
 		if len(data['data']) % 2 != 0:
-			raise "Expecting x,y pairs for data points for %s." % self.__class__.__name__
+			raise ValueError("Expecting x,y pairs for data points for %s." % self.__class__.__name__)
 
 	def process_data(self, data):
 		pairs = list(get_pairs(data['data']))
