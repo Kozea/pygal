@@ -14,6 +14,7 @@ setup(name = "svg.charts",
 	packages = find_packages(exclude=['tests', 'docs']),
 	zip_safe=True,
 	namespace_packages=['svg'],
+	include_package_data = True,
 	install_requires=[
 		'python-dateutil>=1.4',
 		'cssutils>=0.9.5.1',
