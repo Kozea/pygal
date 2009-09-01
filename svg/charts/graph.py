@@ -8,6 +8,8 @@ import pkg_resources
 
 from lxml import etree
 
+from svg.charts import css # causes the profile to be loaded
+
 try:
 	import zlib
 except ImportError:
