@@ -45,7 +45,7 @@ default line styles
 }
 .line9{
 	fill: none;
-	stroke: #ccc6666;
+	stroke: #cc6666;
 	stroke-width: 1px;	
 }
 .line10{
@@ -189,5 +189,5 @@ default line styles
   color: navy;
   stroke: navy;
   stroke-width: 1px;
-  stroke-dasharray: 9 1 1;
+  stroke-dasharray: 9,1,1;
 }
