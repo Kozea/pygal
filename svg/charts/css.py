@@ -4,7 +4,8 @@ SVG = 'SVG 1.1' # http://www.w3.org/TR/SVG11/styling.html
 
 macros = {
 	'paint': 'none|currentColor|{color}',
-	# spec actually says length, but our length macro requires units, so use positivenum
+	'unitidentifier': 'em|ex|px|pt|pc|cm|mm|in|%',
+	'length': '{positivenum}({unitidentifier})?',
 	'dasharray': '{positivenum}(\s*,\s*{positivenum})*',
 	}
 properties = {
