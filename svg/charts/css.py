@@ -2,12 +2,11 @@ import cssutils
 
 SVG = 'SVG 1.1' # http://www.w3.org/TR/SVG11/styling.html
 
-macros = cssutils.profile._MACROS.copy()
-macros.update({
+macros = {
 	'paint': 'none|currentColor|{color}',
 	# spec actually says length, but our length macro requires units, so use positivenum
 	'dasharray': '{positivenum}(\s*,\s*{positivenum})*',
-	})
+	}
 properties = {
 	'stroke': '{paint}',
 	'fill': '{paint}',
