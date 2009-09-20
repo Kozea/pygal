@@ -50,6 +50,17 @@ More To-Dos
 Changes
 -------
 
+2.0.2
+~~~~~
+
+* Updated cssutils dependency to 0.9.6 (currently in beta) to require the CSS profiles support.
+* Completed an SVG CSS profile according to the SVG 1.1 spec.
+
+2.0.1
+~~~~~
+
+* Added preliminary SVG CSS profile, suitable for stock CSS properties.
+
 2.0
 ~~~~~
 
