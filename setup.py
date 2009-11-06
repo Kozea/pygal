@@ -7,7 +7,7 @@ from setuptools import setup, find_packages
 setup(name = "svg.charts",
 	version = "2.0.3",
 	description = "Python SVG Charting Library",
-	long_description = open('readme.txt').read().strip(),
+	long_description = open('README.txt').read().strip(),
 	author = "Jason R. Coombs",
 	author_email = "jaraco@jaraco.com",
 	url = "http://py-svg.sourceforge.net",
