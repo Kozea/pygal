@@ -215,7 +215,8 @@ class Plot(Graph):
 		side = {'x': 'right', 'y': 'top'}[axis]
 		values = getattr(self, 'get_%s_values' % axis)()
 		max_d = self.data_max(axis)
-		dx = float(max_d - values[-1]) / (values[-1] - values[-2])
+		dx = len(values) > 1 and float(max_d - values[-1]) / \
+			(values[-1] - values[-2]) or max_d
 		graph_size = getattr(self, 'graph_%s' % size)
 		side_font = getattr(self, '%s_font' % side)
 		side_align = getattr(self, '%s_align' % side)

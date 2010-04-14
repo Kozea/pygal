@@ -50,6 +50,17 @@ More To-Dos
 Changes
 -------
 
+2.0.3
+~~~~~
+
+* Fix IndexError in ``svg.charts.plot.Plot.field_size`` when there are
+  only two values returned by float_range (in the case there are only
+  two different 'y' values in the data) and scale_y_integers == True.
+  Credit to `Jean Schurger <http://schurger.org/>`_ for the patch.
+* Fixed problem in setup.py installing on Unix OS (case sensitivity of 
+  readme.txt). Credit to Luke Miller and Jean Schurger for supplying
+  a patch for this issue.
+
 2.0.2
 ~~~~~
 
