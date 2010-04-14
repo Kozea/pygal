@@ -30,6 +30,8 @@ good starting point for learning the usage of the library.
 An example of using ``svg.charts`` in a `CherryPy
 <http://www.cherrypy.org/>`_ web app can be found in `jaraco.site.charts
 <https://svn.jaraco.com/jaraco/python/jaraco.site/trunk/jaraco/site/charts.py>`_.
+If the site is working, you can see the `rendered output here
+<http://www.jaraco.com/charts/plot>`_.
 
 Upgrade Notes
 -------------
@@ -52,6 +54,13 @@ More To-Dos
 -  Documentation! This package desperately needs some high-level,
    tutorial-style how-tos, and not just links to example code.
 -  Implement javascript-based animation (See JellyGraph for a Silverlight example of what simple animation can do for a charting library).
+
+Reporting Bugs and Getting Help
+-------------------------------
+
+This project is `hosted at sourceforge
+<https://sourceforge.net/projects/py-svg/>`_. Please use that site for
+reporting bugs and requesting help. Patches are also welcome.
 
 Changes
 -------
