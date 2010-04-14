@@ -23,10 +23,11 @@ setup(name = "svg.charts",
 	license = "MIT",
 	classifiers = [
 		"Development Status :: 5 - Production/Stable",
-		"Intended Audience :: Developers",
-		"Intended Audience :: Science/Research",
+		"Intended Audience :: by End-User Class :: Developers",
+		"Intended Audience :: by Industry or Sector :: Science/Research",
 		"Programming Language :: Python",
 		"License :: OSI Approved :: MIT License",
+		"Topic :: Multimedia :: Graphics :: Presentation",
 	],
 	entry_points = {
 	},
