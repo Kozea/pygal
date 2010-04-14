@@ -27,6 +27,10 @@ in `tests/testing.py <https://py-svg.svn.sourceforge.net/svnroot/py-svg/trunk/te
 These examples show sample usage of the various chart types. They should provide a
 good starting point for learning the usage of the library.
 
+An example of using ``svg.charts`` in a `CherryPy
+<http://www.cherrypy.org/>`_ web app can be found in `jaraco.site.charts
+<https://svn.jaraco.com/python/jaraco/jaraco.site/jaraco/site/charts.py>`_.
+
 Upgrade Notes
 -------------
 
