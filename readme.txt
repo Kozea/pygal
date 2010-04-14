@@ -49,10 +49,18 @@ VerticalBar(...)
 More To-Dos
 -----------
 
+-  Documentation! This package desperately needs some high-level,
+   tutorial-style how-tos, and not just links to example code.
 -  Implement javascript-based animation (See JellyGraph for a Silverlight example of what simple animation can do for a charting library).
 
 Changes
 -------
+
+2.0.4
+~~~~~
+
+* A small attempt to improve the documentation - added links to examples
+  that already exist.
 
 2.0.3
 ~~~~~
