@@ -29,7 +29,7 @@ good starting point for learning the usage of the library.
 
 An example of using ``svg.charts`` in a `CherryPy
 <http://www.cherrypy.org/>`_ web app can be found in `jaraco.site.charts
-<https://svn.jaraco.com/python/jaraco/jaraco.site/jaraco/site/charts.py>`_.
+<https://svn.jaraco.com/jaraco/python/jaraco.site/trunk/jaraco/site/charts.py>`_.
 
 Upgrade Notes
 -------------
