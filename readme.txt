@@ -23,7 +23,7 @@ Getting Started
 ---------------
 
 ``svg.charts`` has some examples (taken directly from the reference implementation)
-in `tests/testing.py <https://py-svg.svn.sourceforge.net/svnroot/py-svg/trunk/tests/testing.py`.
+in `tests/testing.py <https://py-svg.svn.sourceforge.net/svnroot/py-svg/trunk/tests/testing.py`_.
 These examples show sample usage of the various chart types. They should provide a
 good starting point for learning the usage of the library.
 
