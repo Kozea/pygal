@@ -23,43 +23,22 @@ def sort_multiple(arrays):
 
 class Graph(object):
 	"""
-	=== Base object for generating SVG Graphs
+	Base object for generating SVG Graphs
+	
+	Synopsis
 
-	== Synopsis
+		This class is only used as a superclass of specialized charts.  Do not
+		attempt to use this class directly, unless creating a new chart type.
 
-	This class is only used as a superclass of specialized charts.  Do not
-	attempt to use this class directly, unless creating a new chart type.
+		For examples of how to subclass this class, see the existing specific
+		subclasses, such as svn.charts.Pie.
 
-	For examples of how to subclass this class, see the existing specific
-	subclasses, such as svn.charts.Pie.
-
-	== Description
-
-	This package should be used as a base for creating SVG graphs.
-
-	== Acknowledgements
-
-	Sean E. Russel for creating the SVG::Graph Ruby package from which this
-	Python port is derived.
-
-	Leo Lapworth for creating the SVG::TT::Graph package which the Ruby
-	port is based on.
-
-	Stephen Morgan for creating the TT template and SVG.
-
-	== See
-
-	* svn.charts.bar
+	* svg.charts.bar
 	* svg.charts.line
 	* svg.charts.pie
 	* svg.charts.plot
 	* svg.charts.time_series
 
-	== Author
-
-	Jason R. Coombs <jaraco@jaraco.com>
-
-	Copyright © 2008 Jason R. Coombs
 	"""
 	width=                500
 	height=               300
@@ -118,8 +97,9 @@ class Graph(object):
 		self.__dict__.update(config)
 		
 	def add_data(self, conf):
-		"""This method allows you do add data to the graph object.
-		It can be called several times to add more data sets in.
+		"""
+		Add data to the graph object. May be called several times to add
+		additional data sets.
 		
 		>>> data_sales_02 = [12, 45, 21] # doctest: +SKIP
 		>>> graph.add_data({ # doctest: +SKIP
@@ -143,7 +123,8 @@ class Graph(object):
 	def process_data(self, data): pass
 	
 	def clear_data(self):
-		"""This method removes all data from the object so that you can
+		"""
+		This method removes all data from the object so that you can
 		reuse it to create a new graph but with the same config options.
 		
 		>>> graph.clear_data() # doctest: +SKIP
@@ -152,13 +133,11 @@ class Graph(object):
 		
 	def burn(self):
 		"""
-		This method processes the template with the data and
-		config which has been set and returns the resulting SVG.
+		Process the template with the data and
+		config which has been set and return the resulting SVG.
 		
-		This method will croak unless at least one data set has
+		Raises ValueError when no data set has
 		been added to the graph object.
-		
-		Ex: graph.burn()
 		"""
 		if not self.data: raise ValueError("No data available")
 		
@@ -190,8 +169,10 @@ class Graph(object):
 	KEY_BOX_SIZE = 12
 	
 	def calculate_left_margin(self):
-		"""Override this (and call super) to change the margin to the left
-		of the plot area.  Results in border_left being set."""
+		"""
+		Calculates the margin to the left of the plot area, setting
+		border_left.
+		"""
 		bl = 7
 		# Check for Y labels
 		if self.rotate_y_labels:
@@ -206,14 +187,18 @@ class Graph(object):
 		self.border_left = bl
 		
 	def max_y_label_width_px(self):
-		"""Calculates the width of the widest Y label.  This will be the
-		character height if the Y labels are rotated."""
+		"""
+		Calculate the width of the widest Y label.  This will be the
+		character height if the Y labels are rotated.
+		"""
 		if self.rotate_y_labels:
 			return self.font_size
 		
 	def calculate_right_margin(self):
-		"""Override this (and call super) to change the margin to the right
-		of the plot area.  Results in border_right being set."""
+		"""
+		Calculate the margin in pixels to the right of the plot area,
+		setting border_right.
+		"""
 		br = 7
 		if self.key and self.key_position == 'right':
 			max_key_len = max(map(len, self.keys()))
@@ -223,15 +208,19 @@ class Graph(object):
 		self.border_right = br
 		
 	def calculate_top_margin(self):
-		"""Override this (and call super) to change the margin to the top
-		of the plot area.  Results in border_top being set."""
+		"""
+		Calculate the margin in pixels above the plot area, setting
+		border_top.
+		"""
 		self.border_top = 5
 		if self.show_graph_title: self.border_top += self.title_font_size
 		self.border_top += 5
 		if self.show_graph_subtitle: self.border_top += self.subtitle_font_size
 		
 	def add_popup(self, x, y, label):
-		"Adds pop-up point information to a graph."
+		"""
+		Add pop-up information to a point on the graph.
+		"""
 		txt_width = len(label) * self.font_size * 0.6 + 10
 		tx = x + [5,-5][int(x+txt_width > self.width)]
 		anchor = ['start', 'end'][x+txt_width > self.width]
@@ -259,8 +248,10 @@ class Graph(object):
 			})
 
 	def calculate_bottom_margin(self):
-		"""Override this (and call super) to change the margin to the bottom
-		of the plot area.  Results in border_bottom being set."""
+		"""
+		Calculate the margin in pixels below the plot area, setting
+		border_bottom.
+		"""
 		bb = 7
 		if self.key and self.key_position == 'bottom':
 			bb += len(self.data) * (self.font_size + 5)
@@ -277,6 +268,11 @@ class Graph(object):
 		self.border_bottom = bb
 		
 	def draw_graph(self):
+		"""
+		The central logic for drawing the graph.
+
+		Sets self.graph (the 'g' element in the SVG root)
+		"""
 		transform = 'translate (%s %s)' % (self.border_left, self.border_top)
 		self.graph = etree.SubElement(self.root, 'g', transform=transform)
 		
@@ -304,28 +300,35 @@ class Graph(object):
 		self.draw_y_labels()
 	
 	def x_label_offset(self, width):
-		"""Where in the X area the label is drawn
-		Centered in the field, should be width/2.  Start, 0."""
+		"""
+		Return an offset for drawing the x label. Currently returns 0.
+		"""
+		# consider width/2 for centering the labels
 		return 0
 
-	def make_datapoint_text(self, x, y, value, style=''):
-		if self.show_data_values:
-			# first lay down the text in a wide white stroke to
-			#  differentiate it from the background
-			e = etree.SubElement(self.foreground, 'text', {
-				'x': str(x),
-				'y': str(y),
-				'class': 'dataPointLabel',
-				'style': '%(style)s stroke: #fff; stroke-width: 2;' % vars(),
-			})
-			e.text = str(value)
-			# then lay down the text in the specified style
-			e = etree.SubElement(self.foreground, 'text', {
-				'x': str(x),
-				'y': str(y),
-				'class': 'dataPointLabel'})
-			e.text = str(value)
-			if style: e.set('style', style)
+	def make_datapoint_text(self, x, y, value, style=None):
+		"""
+		Add text for a datapoint
+		"""
+		if not self.show_data_values:
+			# do nothing
+			return
+		# first lay down the text in a wide white stroke to
+		#  differentiate it from the background
+		e = etree.SubElement(self.foreground, 'text', {
+			'x': str(x),
+			'y': str(y),
+			'class': 'dataPointLabel',
+			'style': '%(style)s stroke: #fff; stroke-width: 2;' % vars(),
+		})
+		e.text = str(value)
+		# then lay down the text in the specified style
+		e = etree.SubElement(self.foreground, 'text', {
+			'x': str(x),
+			'y': str(y),
+			'class': 'dataPointLabel'})
+		e.text = str(value)
+		if style: e.set('style', style)
 
 	def draw_x_labels(self):
 		"Draw the X axis labels"
@@ -370,8 +373,10 @@ class Graph(object):
 			text.set('style', 'text-anchor: middle')
 			
 	def y_label_offset(self, height):
-		"""Where in the Y area the label is drawn
-		Centered in the field, should be width/2.  Start, 0."""
+		"""
+		Return an offset for drawing the y label. Currently returns 0.
+		"""
+		# Consider height/2 to center within the field.
 		return 0
 	
 	def get_field_width(self):
@@ -386,18 +391,20 @@ class Graph(object):
 
 	def draw_y_labels(self):
 		"Draw the Y axis labels"
-		if self.show_y_labels:
-			labels = self.get_y_labels()
-			count = len(labels)
-			
-			labels = enumerate(iter(labels))
-			start = int(not self.step_include_first_y_label)
-			labels = islice(labels, start, None, self.step_y_labels)
-			map(self.draw_y_label, labels)
-			self.draw_y_guidelines(self.field_height(), count)
+		if not self.show_y_labels:
+			# do nothing
+			return
+
+		labels = self.get_y_labels()
+		count = len(labels)
+		
+		labels = enumerate(iter(labels))
+		start = int(not self.step_include_first_y_label)
+		labels = islice(labels, start, None, self.step_y_labels)
+		map(self.draw_y_label, labels)
+		self.draw_y_guidelines(self.field_height(), count)
 
 	def get_y_offset(self):
-		#result = self.graph_height + self.y_label_offset(label_height)
 		result = self.graph_height + self.y_label_offset(self.field_height())
 		if not self.rotate_y_labels: result += self.font_size/1.2
 		return result
@@ -513,30 +520,33 @@ class Graph(object):
 		return map(itemgetter('title'), self.data)
 	
 	def draw_legend(self):
-		if self.key:
-			group = etree.SubElement(self.root, 'g')
-			
-			for key_count, key_name in enumerate(self.keys()):
-				y_offset = (self.KEY_BOX_SIZE * key_count) + (key_count * 5)
-				etree.SubElement(group, 'rect', {
-					'x': '0',
-					'y': str(y_offset),
-					'width': str(self.KEY_BOX_SIZE),
-					'height': str(self.KEY_BOX_SIZE),
-					'class': 'key%s' % (key_count + 1),
-				})
-				text = etree.SubElement(group, 'text', {
-					'x': str(self.KEY_BOX_SIZE + 5),
-					'y': str(y_offset + self.KEY_BOX_SIZE),
-					'class': 'keyText'})
-				text.text = key_name
-			
-			if self.key_position == 'right':
-				x_offset = self.graph_width + self.border_left + 10
-				y_offset = self.border_top + 20
-			if self.key_position == 'bottom':
-				x_offset, y_offset = self.calculate_offsets_bottom()
-			group.set('transform', 'translate(%(x_offset)d %(y_offset)d)' % vars())
+		if not self.key:
+			# do nothing
+			return
+
+		group = etree.SubElement(self.root, 'g')
+		
+		for key_count, key_name in enumerate(self.keys()):
+			y_offset = (self.KEY_BOX_SIZE * key_count) + (key_count * 5)
+			etree.SubElement(group, 'rect', {
+				'x': '0',
+				'y': str(y_offset),
+				'width': str(self.KEY_BOX_SIZE),
+				'height': str(self.KEY_BOX_SIZE),
+				'class': 'key%s' % (key_count + 1),
+			})
+			text = etree.SubElement(group, 'text', {
+				'x': str(self.KEY_BOX_SIZE + 5),
+				'y': str(y_offset + self.KEY_BOX_SIZE),
+				'class': 'keyText'})
+			text.text = key_name
+		
+		if self.key_position == 'right':
+			x_offset = self.graph_width + self.border_left + 10
+			y_offset = self.border_top + 20
+		if self.key_position == 'bottom':
+			x_offset, y_offset = self.calculate_offsets_bottom()
+		group.set('transform', 'translate(%(x_offset)d %(y_offset)d)' % vars())
 
 	def calculate_offsets_bottom(self):
 		x_offset = self.border_left + 20
@@ -556,18 +566,23 @@ class Graph(object):
 			
 	def render_inline_styles(self):
 		"Hard-code the styles into the SVG XML if style sheets are not used."
-		if self.css_inline:
-			styles = self.parse_css()
-			for node in xpath.Evaluate('//*[@class]', self.root):
-				cl = node.getAttribute('class')
-				style = styles[cl]
-				if node.hasAttribute('style'):
-					style += node.getAttribute('style')
-				node.setAttribute('style', style)
+		if not self.css_inline:
+			# do nothing
+			return
+
+		styles = self.parse_css()
+		for node in xpath.Evaluate('//*[@class]', self.root):
+			cl = node.getAttribute('class')
+			style = styles[cl]
+			if node.hasAttribute('style'):
+				style += node.getAttribute('style')
+			node.setAttribute('style', style)
 
 	def parse_css(self):
-		"""Take a .css file (classes only please) and parse it into a dictionary
-		of class/style pairs."""
+		"""
+		Take a .css file (classes only please) and parse it into a dictionary
+		of class/style pairs.
+		"""
 		# todo: save the prefs for use later
 		#orig_prefs = cssutils.ser.prefs
 		cssutils.ser.prefs.useMinified()
@@ -576,8 +591,9 @@ class Graph(object):
 		return result
 
 	def add_defs(self, defs):
-		"Override and place code to add defs here"
-		pass
+		"""
+		Override and place code to add defs here. TODO: what are defs?
+		"""
 	
 	def start_svg(self):
 		"Base SVG Document Creation"

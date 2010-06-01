@@ -6,7 +6,8 @@
 Status and License
 ------------------
 
-``svg.charts`` is a port of the SVG::Graph Ruby package by Sean E. Russel.
+``svg.charts`` is a pure-python library for generating charts and graphs
+in SVG, originally based on the SVG::Graph Ruby package by Sean E. Russel.
 
 ``svg.charts`` supercedes ``svg_charts`` 1.1 and 1.2.
 
@@ -18,6 +19,21 @@ You can install it with ``easy_install svg.charts``, or from the
 `subversion repository
 <https://py-svg.svn.sourceforge.net/svnroot/py-svg/trunk#egg=svg.charts-dev>`_ with
 ``easy_install svg.charts==dev``.
+
+Acknowledgements
+----------------
+
+``svg.charts`` depends heavily on lxml and cssutils. Thanks to the
+contributors of those projects for stable, performant, standards-based
+packages.
+
+Sean E. Russel for creating the SVG::Graph Ruby package from which this
+Python port was originally derived.
+
+Leo Lapworth for creating the SVG::TT::Graph package which the Ruby
+port was based on.
+
+Stephen Morgan for creating the TT template and SVG.
 
 Getting Started
 ---------------
