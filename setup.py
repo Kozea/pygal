@@ -2,16 +2,17 @@
 
 # $Id$
 
-from setuptools import setup, find_packages
+from setuptools import find_packages
 
-setup(name = "svg.charts",
+setup_params = dict(
+	name = "svg.charts",
 	version = "2.0.5",
 	description = "Python SVG Charting Library",
 	long_description = open('README.txt').read().strip(),
 	author = "Jason R. Coombs",
 	author_email = "jaraco@jaraco.com",
 	url = "http://py-svg.sourceforge.net",
-	packages = find_packages(exclude=['tests', 'docs']),
+	packages = find_packages(),
 	zip_safe=True,
 	namespace_packages=['svg'],
 	include_package_data = True,
@@ -38,3 +39,6 @@ setup(name = "svg.charts",
 	
 	)
 
+if __name__ == '__main__':
+	from setuptools import setup
+	setup(**setup_params)
