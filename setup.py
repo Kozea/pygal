@@ -5,6 +5,13 @@
 import os
 from setuptools import find_packages
 
+from distutils.cmd import Command
+
+class DisabledTestCommand(Command):
+	user_options = []
+	def __init__(self, dist):
+		raise RuntimeError("test command not supported on svg.charts. Use setup.py nosetests instead")
+
 _this_dir = os.path.dirname(__file__)
 _long_description = open(os.path.join(_this_dir, 'README.txt')).read().strip()
 
@@ -35,11 +42,14 @@ setup_params = dict(
 	],
 	entry_points = {
 	},
-	tests_require=[
-		'nose>=0.10',
+	# Don't use setup.py test - nose doesn't support it
+	# see http://code.google.com/p/python-nose/issues/detail?id=219
+	cmdclass=dict(
+		test=DisabledTestCommand,
+	),
+	setup_requires=[
+		'nose>=0.11',
 	],
-	test_suite = "nose.collector",
-	
 	)
 
 if __name__ == '__main__':
