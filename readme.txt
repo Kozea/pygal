@@ -81,6 +81,12 @@ reporting bugs and requesting help. Patches are also welcome.
 Changes
 -------
 
+2.0.5
+~~~~~
+
+* Altered the way CSS files are loaded, so they can be more easily
+  customized by subclasses (and less dependent on the class names).
+
 2.0.4
 ~~~~~
 
