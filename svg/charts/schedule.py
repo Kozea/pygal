@@ -116,7 +116,7 @@ class Schedule(Graph):
 	scale_x_integers = False
 	bar_gap = True
 
-	css_file = 'bar.css'
+	stylesheet_names = Graph.stylesheet_names + ['bar.css']
 
 	def add_data(self, data):
 		"""

@@ -18,7 +18,7 @@ class Bar(Graph):
 	
 	scale_divisions = None
 
-	css_file = 'bar.css'
+	stylesheet_names = Graph.stylesheet_names + ['bar.css']
 
 	def __init__(self, fields, *args, **kargs):
 		self.fields = fields

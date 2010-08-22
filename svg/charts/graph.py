@@ -3,12 +3,13 @@
 
 from operator import itemgetter
 from itertools import islice
-import cssutils
 import pkg_resources
+import functools
 
+import cssutils
 from lxml import etree
 
-from svg.charts import css # causes the profile to be loaded
+from svg.charts import css # causes the SVG profile to be loaded
 
 try:
 	import zlib
@@ -84,6 +85,8 @@ class Graph(object):
 	top_align = top_font = right_align = right_font = 0
 	
 	compress = False
+	
+	stylesheet_names = ['graph.css']
 
 	def __init__(self, config = {}):
 		"""Initialize the graph object with the graph settings."""
@@ -660,22 +663,21 @@ class Graph(object):
 		sheet = cssutils.parseString(css_string)
 		return sheet
 
+	def get_stylesheet_resources(self):
+		"Get the stylesheets for this instance"
+		# allow css to include class variables
+		class_vars = class_dict(self)
+		loader = functools.partial(self.load_resource_stylesheet,
+			subs=class_vars)
+		sheets = map(loader, self.stylesheet_names)
+		return sheets
+
 	def get_stylesheet(self):
 		cssutils.log.setLevel(30) # disable INFO log messages
-		# allow css to include class variables:
-		class_vars = class_dict(self)
-		sheet = self.load_resource_stylesheet('graph.css', class_vars)
-		child_sheet = self.load_resource_stylesheet(self.css_file, class_vars)
-		map(sheet.add, child_sheet)
-		return sheet
-		
-	#deprecated
-	def get_style(self):
-		return self.get_stylesheet().cssText
-
-	@property
-	def css_file(self):
-		return self.__class__.__name__.lower() + '.css'
+		def merge_sheets(s1, s2):
+			map(s1.add, s2)
+			return s1
+		return reduce(merge_sheets, self.get_stylesheet_resources())
 
 class class_dict(object):
 	"Emulates a dictionary, but retrieves class attributes"

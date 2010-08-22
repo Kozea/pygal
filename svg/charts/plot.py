@@ -126,6 +126,8 @@ class Plot(Graph):
 
 	stacked = False
 
+	stylesheet_names = Graph.stylesheet_names + ['plot.css']
+
 	@apply
 	def scale_x_divisions():
 		doc = """Determines the scaling for the X axis divisions.
