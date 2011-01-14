@@ -13,7 +13,7 @@ class DisabledTestCommand(Command):
 		raise RuntimeError("test command not supported on svg.charts. Use setup.py nosetests instead")
 
 _this_dir = os.path.dirname(__file__)
-_long_description = open(os.path.join(_this_dir, 'README.txt')).read().strip()
+_long_description = open('readme.txt').read().strip()
 
 setup_params = dict(
 	name = "svg.charts",
