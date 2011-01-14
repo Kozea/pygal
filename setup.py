@@ -17,7 +17,7 @@ _long_description = open('readme.txt').read().strip()
 
 setup_params = dict(
 	name = "svg.charts",
-	version = "2.0.5",
+	version = "2.0.6",
 	description = "Python SVG Charting Library",
 	long_description = _long_description,
 	author = "Jason R. Coombs",
