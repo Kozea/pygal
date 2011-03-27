@@ -81,6 +81,13 @@ reporting bugs and requesting help. Patches are also welcome.
 Changes
 -------
 
+2.0.6
+~~~~~
+
+* Fixed bug where x axis labels would not be rendered properly if the
+  largest value was the same as the largest visible x value on the
+  chart.
+
 2.0.5
 ~~~~~
 
