@@ -47,10 +47,7 @@ setup_params = dict(
 	cmdclass=dict(
 		test=DisabledTestCommand,
 	),
-	setup_requires=[
-		'nose>=0.11',
-	],
-	)
+)
 
 if __name__ == '__main__':
 	from setuptools import setup
