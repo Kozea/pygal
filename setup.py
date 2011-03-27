@@ -3,6 +3,7 @@
 # $Id$
 
 import os
+import sys
 from setuptools import find_packages
 
 from distutils.cmd import Command
@@ -14,6 +15,11 @@ class DisabledTestCommand(Command):
 
 _this_dir = os.path.dirname(__file__)
 _long_description = open('readme.txt').read().strip()
+
+# it seems that dateutil 2.0 only works under Python 3
+dateutil_req = (
+	['python-dateutil>=1.4,<2.0dev'] if sys.version < (3,0)
+	else ['python-dateutil>=2.0'] )
 
 setup_params = dict(
 	name = "svg.charts",
@@ -28,10 +34,9 @@ setup_params = dict(
 	namespace_packages=['svg'],
 	include_package_data = True,
 	install_requires=[
-		'python-dateutil>=1.4',
 		'cssutils>=0.9.6b3',
 		'lxml>=2.0',
-	],
+	] + dateutil_req,
 	license = "MIT",
 	classifiers = [
 		"Development Status :: 5 - Production/Stable",
