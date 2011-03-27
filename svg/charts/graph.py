@@ -238,8 +238,7 @@ class Graph(object):
 			'id': id
 			})
 
-		# Note, prior to the etree conversion, this circle element was never
-		#  added to anything (now it's added to the foreground)
+		# add the circle element to the foreground
 		visibility = "document.getElementById(%s).setAttribute('visibility', %%s)" % id
 		t = etree.SubElement(self.foreground, 'circle', {
 			'cx': str(x),
