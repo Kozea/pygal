@@ -43,7 +43,7 @@ def generate_samples():
 	yield 'HorizontalBar', SampleBar.horizontal()
 	yield 'VerticalBarLarge', SampleBar.vertical_large()
 	yield 'Pie', sample_Pie()
-
+	yield 'Schedule', sample_Schedule()
 
 class SampleBar:
 	fields = ['Internet', 'TV', 'Newspaper', 'Magazine', 'Radio']
