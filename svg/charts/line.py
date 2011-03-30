@@ -74,8 +74,8 @@ class Line(Graph):
 		if self.scale_integers:
 		  scale_division = min(1, round(scale_division))
 		
-		#maxvalue = maxvalue%scale_division == 0 ? 
-		#  maxvalue : maxvalue + scale_division
+		if max_value % scale_division == 0: 
+			max_value += scale_division
 		labels = tuple(float_range(min_value, max_value, scale_division))
 		return labels
 
