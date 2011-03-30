@@ -184,7 +184,6 @@ class Schedule(Graph):
 		conf['data'] = reordered_triples
 
 	def parse_date(self, date_string):
-		print 'attempting to parse %s as date' % date_string
 		return parse(date_string)
 	
 	def set_min_x_value(self, value):
