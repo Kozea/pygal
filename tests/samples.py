@@ -9,6 +9,7 @@ from svg.charts import bar
 from svg.charts import time_series
 from svg.charts import pie
 from svg.charts import schedule
+from svg.charts import line
 
 def sample_Plot():
 	g = Plot({
@@ -44,6 +45,7 @@ def generate_samples():
 	yield 'VerticalBarLarge', SampleBar.vertical_large()
 	yield 'Pie', sample_Pie()
 	yield 'Schedule', sample_Schedule()
+	yield 'Line', sample_Line()
 
 class SampleBar:
 	fields = ['Internet', 'TV', 'Newspaper', 'Magazine', 'Radio']
@@ -95,6 +97,23 @@ class SampleBar:
 		g.add_data(dict(data=[2,22,98,143,82], title='intermediate'))
 		g.add_data(dict(data=[2,26,106,193,105], title='old'))
 		return g
+
+def sample_Line():
+	g = line.Line()
+	options = dict(
+		scale_integers = True,
+		area_fill = True,
+		width = 640,
+		height = 480,
+		fields = SampleBar.fields,
+		graph_title = 'Question 7',
+		show_graph_title = True,
+		no_css = False,
+	)
+	g.__dict__.update(options)
+	g.add_data({'data': [-2, 3, 1, 3, 1], 'title': 'Female'})
+	g.add_data({'data': [0, 2, 1, 5, 4], 'title': 'Male'})
+	return g
 
 def sample_Pie():
 	g = pie.Pie({})
