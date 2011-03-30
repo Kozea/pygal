@@ -16,58 +16,34 @@ def robust_add(a,b):
 RADIANS = math.pi/180
 
 class Pie(Graph):
-	# === Create presentation quality SVG pie graphs easily
-	# 
-	# == Synopsis
-	# 
-	#   require 'SVG/Graph/Pie'
-	# 
-	#   fields = %w(Jan Feb Mar)
-	#   data_sales_02 = [12, 45, 21]
-	#   
-	#   graph = SVG::Graph::Pie.new({
-	#   	:height => 500,
-	# 	  :width  => 300,
-	# 	  :fields => fields,
-	#  })
-	#   
-	#   graph.add_data({
-	#   	:data => data_sales_02,
-	# 	  :title => 'Sales 2002',
-	#  })
-	#   
-	#   print "Content-type: image/svg+xml\r\n\r\n"
-	#   print graph.burn();
-	# 
-	# == Description
-	# 
-	# This object aims to allow you to easily create high quality
-	# SVG pie graphs. You can either use the default style sheet
-	# or supply your own. Either way there are many options which can
-	# be configured to give you control over how the graph is
-	# generated - with or without a key, display percent on pie chart,
-	# title, subtitle etc.
-	#
-	# = Examples
-	# 
-	# http://www.germane-software/repositories/public/SVG/test/single.rb
-	# 
-	# == See also
-	#
-	# * SVG::Graph::Graph
-	# * SVG::Graph::BarHorizontal
-	# * SVG::Graph::Bar
-	# * SVG::Graph::Line
-	# * SVG::Graph::Plot
-	# * SVG::Graph::TimeSeries
-	#
-	# == Author
-	#
-	# Sean E. Russell <serATgermaneHYPHENsoftwareDOTcom>
-	#
-	# Copyright 2004 Sean E. Russell
-	# This software is available under the Ruby license[LICENSE.txt]
-	#
+	"""
+	A presentation-quality SVG pie graph
+	
+	Synopsis
+	========
+	
+	from svg.charts.pie import Pie
+	fields = ['Jan', 'Feb', 'Mar']
+	
+	data_sales_02 = [12, 45, 21]
+	
+	graph = Pie(dict(
+		height = 500,
+		width = 300,
+		fields = fields))
+	graph.add_data({'data': data_sales_02, 'title': 'Sales 2002'})
+	print "Content-type" image/svg+xml\r\n\r\n'
+	print graph.burn()
+	
+	Description
+	===========
+	This object aims to allow you to easily create high quality
+	SVG pie graphs. You can either use the default style sheet
+	or supply your own. Either way there are many options which can
+	be configured to give you control over how the graph is
+	generated - with or without a key, display percent on pie chart,
+	title, subtitle etc.
+	"""
 
 	"if true, displays a drop shadow for the chart"
 	show_shadow	= True
