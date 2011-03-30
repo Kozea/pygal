@@ -1,3 +1,7 @@
+"""
+Samples of the various charts. Run this script to generate the reference
+samples.
+"""
 import sys, os
 
 from svg.charts.plot import Plot
