@@ -1,7 +1,3 @@
-#!python
-
-# $Id$
-
 import math
 from operator import add
 from lxml import etree
@@ -75,6 +71,8 @@ class Pie(Graph):
 
 	"The font size of the data point labels"
 	datapoint_font_size = 12
+
+	stylesheet_names = Graph.stylesheet_names + ['pie.css']
 
 	def add_data(self, data_descriptor):
 		"""

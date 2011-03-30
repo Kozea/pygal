@@ -16,8 +16,7 @@ in SVG, originally based on the SVG::Graph Ruby package by Sean E. Russel.
 <https://py-svg.svn.sourceforge.net/svnroot/py-svg/trunk/docs/license.txt>`_.
 
 You can install it with ``easy_install svg.charts``, or from the
-`subversion repository
-<https://py-svg.svn.sourceforge.net/svnroot/py-svg/trunk#egg=svg.charts-dev>`_ with
+`mercurial repository source <http://py-svg.hg.sourceforge.net:8000/hgroot/py-svg/py-svg#egg=svg.charts-dev>`_ with
 ``easy_install svg.charts==dev``.
 
 Acknowledgements
@@ -80,6 +79,13 @@ reporting bugs and requesting help. Patches are also welcome.
 
 Changes
 -------
+
+2.0.7
+~~~~~
+
+* Fixed bug in rendering of Pie Chart styles.
+* Improved testing framework. Now samples are at least generated as part
+  of the test suite.
 
 2.0.6
 ~~~~~
