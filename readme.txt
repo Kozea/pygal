@@ -86,6 +86,7 @@ Changes
 * Fixed bug in rendering of Pie Chart styles.
 * Improved testing framework. Now samples are at least generated as part
   of the test suite.
+* Fixed bug in javascript when label ids had spaces. See #3139197.
 
 2.0.6
 ~~~~~
