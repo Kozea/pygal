@@ -107,7 +107,7 @@ class Line(Graph):
 
 		coord_format = lambda c: '%(x)s %(y)s' % c
 		
-		for line_n, data in reversed(list(enumerate(self.data))):
+		for line_n, data in reversed(list(enumerate(self.data, 1))):
 			apath = ''
 			
 			if not self.stacked: cum_sum = [-min_value]*len(self.fields)
