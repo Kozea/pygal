@@ -1,3 +1,4 @@
 syntax:glob
 dist
 build
+tests/*.svg
