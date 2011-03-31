@@ -91,7 +91,7 @@ class Graph(object):
 	def __init__(self, config = {}):
 		"""Initialize the graph object with the graph settings."""
 		if self.__class__ is Graph:
-			raise NotImplementedError, "Graph is an abstract base class"
+			raise NotImplementedError("Graph is an abstract base class")
 		self.load_config(config)
 		self.clear_data()
 		self.style = {}

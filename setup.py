@@ -13,12 +13,17 @@ class DisabledTestCommand(Command):
 	def __init__(self, dist):
 		raise RuntimeError("test command not supported on svg.charts. Use setup.py nosetests instead")
 
+try:
+	from distutils.command.build_py import build_py_2to3 as build_py
+except ImportError:
+	from distutils.command.build_py import build_py
+
 _this_dir = os.path.dirname(__file__)
 _long_description = open('readme.txt').read().strip()
 
 # it seems that dateutil 2.0 only works under Python 3
 dateutil_req = (
-	['python-dateutil>=1.4,<2.0dev'] if sys.version < (3,0)
+	['python-dateutil>=1.4,<2.0dev'] if sys.version_info < (3,0)
 	else ['python-dateutil>=2.0'] )
 
 setup_params = dict(
@@ -51,6 +56,7 @@ setup_params = dict(
 	# see http://code.google.com/p/python-nose/issues/detail?id=219
 	cmdclass=dict(
 		test=DisabledTestCommand,
+		build_py=build_py,
 	),
 )
 

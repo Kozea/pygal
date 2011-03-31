@@ -262,8 +262,9 @@ class Plot(Graph):
 		if hasattr(self, 'constant_lines'):
 			map(self.__draw_constant_line, self.constant_lines)
 
-	def __draw_constant_line(self, (value, label, style)):
+	def __draw_constant_line(self, value_label_style):
 		"Draw a constant line on the y-axis with the label"
+		value, label, style = value_label_style
 		start = self.transform_output_coordinates((0, value))[1]
 		stop = self.graph_width
 		path = etree.SubElement(self.graph, 'path', {
