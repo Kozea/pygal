@@ -23,7 +23,7 @@ dateutil_req = (
 
 setup_params = dict(
 	name = "svg.charts",
-	version = "2.0.7",
+	use_hg_version=True,
 	description = "Python SVG Charting Library",
 	long_description = _long_description,
 	author = "Jason R. Coombs",
