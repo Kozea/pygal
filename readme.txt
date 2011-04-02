@@ -87,6 +87,9 @@ Changes
 * Improved testing framework. Now samples are at least generated as part
   of the test suite.
 * Fixed bug in javascript when label ids had spaces. See #3139197.
+* Fixed build issue where package data wasn't included due to 2to3
+  technique. Now using distribute technique and installation on Python
+  3 requires distribute.
 
 2.0.6
 ~~~~~
