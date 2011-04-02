@@ -58,6 +58,9 @@ setup_params = dict(
 		test=DisabledTestCommand,
 		build_py=build_py,
 	),
+	setup_requires=[
+		'hgtools',
+	],
 )
 
 if __name__ == '__main__':
