@@ -1,15 +1,21 @@
 #!/usr/bin/env python
+import sys
 from itertools import izip, count, chain
 from lxml import etree
 
 from svg.charts.graph import Graph
 
-from util import float_range
+from .util import float_range
 
 def get_pairs(i):
 	i = iter(i)
 	while True:	yield i.next(), i.next()
-	
+
+# I'm not sure how this is more beautiful than ugly.
+if sys.version >= '3':
+	def apply(func):
+		return func()
+
 class Plot(Graph):
 	"""=== For creating SVG plots of scalar data
 	

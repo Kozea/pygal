@@ -8,7 +8,7 @@ from dateutil.relativedelta import relativedelta
 from time import mktime
 import datetime
 fromtimestamp = datetime.datetime.fromtimestamp
-from util import float_range
+from .util import float_range
 
 class Plot(svg.charts.plot.Plot):
 	"""=== For creating SVG plots of scalar temporal data
