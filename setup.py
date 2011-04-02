@@ -13,11 +13,6 @@ class DisabledTestCommand(Command):
 	def __init__(self, dist):
 		raise RuntimeError("test command not supported on svg.charts. Use setup.py nosetests instead")
 
-try:
-	from distutils.command.build_py import build_py_2to3 as build_py
-except ImportError:
-	from distutils.command.build_py import build_py
-
 _this_dir = os.path.dirname(__file__)
 _long_description = open('readme.txt').read().strip()
 
@@ -56,11 +51,11 @@ setup_params = dict(
 	# see http://code.google.com/p/python-nose/issues/detail?id=219
 	cmdclass=dict(
 		test=DisabledTestCommand,
-		build_py=build_py,
 	),
 	setup_requires=[
 		'hgtools',
 	],
+	use_2to3 = True,
 )
 
 if __name__ == '__main__':
