@@ -1,6 +1,6 @@
 #!python
 
-from itertools import chain, repeat, izip
+import itertools
 import datetime
 
 # from itertools recipes (python documentation)
@@ -9,7 +9,7 @@ def grouper(n, iterable, padvalue=None):
 	>>> tuple(grouper(3, 'abcdefg', 'x'))
 	(('a', 'b', 'c'), ('d', 'e', 'f'), ('g', 'x', 'x'))
 	"""
-	return izip(*[chain(iterable, repeat(padvalue, n-1))]*n)
+	return itertools.izip(*[itertools.chain(iterable, itertools.repeat(padvalue, n-1))]*n)
 
 def reverse_mapping(mapping):
 	"""
