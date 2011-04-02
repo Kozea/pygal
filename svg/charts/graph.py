@@ -657,7 +657,7 @@ class Graph(object):
 	@staticmethod
 	def load_resource_stylesheet(name, subs=dict()):
 		css_stream = pkg_resources.resource_stream('svg.charts', name)
-		css_string = css_stream.read()
+		css_string = css_stream.read().decode('utf-8')
 		css_string = css_string % subs
 		sheet = cssutils.parseString(css_string)
 		return sheet
