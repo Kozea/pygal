@@ -50,7 +50,7 @@ copyright = u'2010, Jason R. Coombs'
 # built documents.
 #
 # The short X.Y version.
-version = setup_params['version']
+version = setup_params.get('version', 'unknown')
 # The full version, including alpha/beta/rc tags.
 release = version
 

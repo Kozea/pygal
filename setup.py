@@ -1,7 +1,5 @@
 #!python
 
-# $Id$
-
 import os
 import sys
 from setuptools import find_packages
@@ -14,7 +12,8 @@ class DisabledTestCommand(Command):
 		raise RuntimeError("test command not supported on svg.charts. Use setup.py nosetests instead")
 
 _this_dir = os.path.dirname(__file__)
-_long_description = open('readme.txt').read().strip()
+_readme = os.path.join(_this_dir, 'readme.txt')
+_long_description = open(_readme).read().strip()
 
 # it seems that dateutil 2.0 only works under Python 3
 dateutil_req = (
