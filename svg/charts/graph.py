@@ -1,6 +1,12 @@
 #!python
 # -*- coding: UTF-8 -*-
 
+"""
+svg.charts.graph
+
+The base module for `svg.charts` classes.
+"""
+
 from operator import itemgetter
 from itertools import islice
 import pkg_resources
