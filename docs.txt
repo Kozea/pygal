@@ -1,0 +1,3 @@
+to generate docs:
+
+generate-modules svg -d docs -s rst -f
