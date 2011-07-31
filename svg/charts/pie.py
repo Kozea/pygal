@@ -1,5 +1,5 @@
 import math
-from operator import add
+import itertools
 from lxml import etree
 from svg.charts.graph import Graph
 
@@ -14,15 +14,15 @@ RADIANS = math.pi/180
 class Pie(Graph):
 	"""
 	A presentation-quality SVG pie graph
-	
+
 	Synopsis
 	========
-	
+
 	from svg.charts.pie import Pie
 	fields = ['Jan', 'Feb', 'Mar']
-	
+
 	data_sales_02 = [12, 45, 21]
-	
+
 	graph = Pie(dict(
 		height = 500,
 		width = 300,
@@ -30,7 +30,7 @@ class Pie(Graph):
 	graph.add_data({'data': data_sales_02, 'title': 'Sales 2002'})
 	print "Content-type" image/svg+xml\r\n\r\n'
 	print graph.burn()
-	
+
 	Description
 	===========
 	This object aims to allow you to easily create high quality
@@ -44,14 +44,14 @@ class Pie(Graph):
 	"if true, displays a drop shadow for the chart"
 	show_shadow	= True
 	"Sets the offset of the shadow from the pie chart"
-	shadow_offset = 10 
+	shadow_offset = 10
 
 	show_data_labels = False
-	"If true, display the actual field values in the data labels"	
+	"If true, display the actual field values in the data labels"
 	show_actual_values = False
 	"If true, display the percentage value of each pie wedge in the data labels"
 	show_percent = True
-	
+
 	"If true, display the labels in the key"
 	show_key_data_labels = True
 	"If true, display the actual value of the field in the key"
@@ -59,13 +59,13 @@ class Pie(Graph):
 	"If true, display the percentage value of the wedges in the key"
 	show_key_percent = False
 
-	"If true, explode the pie (put space between the wedges)"	
+	"If true, explode the pie (put space between the wedges)"
 	expanded = False
 	"If true, expand the largest pie wedge"
 	expand_greatest	= False
 	"The amount of space between expanded wedges"
 	expand_gap = 10
-	
+
 	show_x_labels = False
 	show_y_labels = False
 
@@ -77,22 +77,38 @@ class Pie(Graph):
 	def add_data(self, data_descriptor):
 		"""
 		Add a data set to the graph
-		
+
 		>>> graph.add_data({data:[1,2,3,4]}) # doctest: +SKIP
-		
+
 		Note that a 'title' key is ignored.
-		
+
 		Multiple calls to add_data will sum the elements, and the pie will
 		display the aggregated data.  e.g.
-		
+
 		>>> graph.add_data({data:[1,2,3,4]}) # doctest: +SKIP
 		>>> graph.add_data({data:[2,3,5,7]}) # doctest: +SKIP
-		
+
 		is the same as:
-		
-		graph.add_data({data:[3,5,8,11]}) # doctest: +SKIP
+
+		>>> graph.add_data({data:[3,5,8,11]}) # doctest: +SKIP
+
+		If data is added of with differing lengths, the corresponding
+		values will be assumed to be zero.
+
+		>>> graph.add_data({data:[1,2,3,4]}) # doctest: +SKIP
+		>>> graph.add_data({data:[5,7]}) # doctest: +SKIP
+
+		is the same as:
+
+		>>> graph.add_data({data:[5,7]}) # doctest: +SKIP
+		>>> graph.add_data({data:[1,2,3,4]}) # doctest: +SKIP
+
+		and
+
+		>>> graph.add_data({data:[6,9,3,4]}) # doctest: +SKIP
 		"""
-		self.data = map(robust_add, self.data, data_descriptor['data'])
+		pairs = itertools.izip_longest(self.data, data_descriptor['data'])
+		self.data = list(itertools.starmap(robust_add, pairs))
 
 	def add_defs(self, defs):
 		"Add svg definitions"
@@ -123,7 +139,7 @@ class Pie(Graph):
 		return ['']
 
 	def keys(self):
-		total = reduce(add, self.data)
+		total = sum(self.data)
 		percent_scale = 100.0 / total
 		def key(field, value):
 			result = [field]
@@ -133,13 +149,13 @@ class Pie(Graph):
 				result.append(percent)
 			return ' '.join(result)
 		return map(key, self.fields, self.data)
-	
+
 	def draw_data(self):
 		self.graph = etree.SubElement(self.root, 'g')
 		background = etree.SubElement(self.graph, 'g')
 		# midground is somewhere between the background and the foreground
 		midground = etree.SubElement(self.graph, 'g')
-		
+
 		is_expanded = (self.expanded or self.expand_greatest)
 		diameter = min(self.graph_width, self.graph_height)
 		# the following assumes int(True)==1 and int(False)==0
@@ -157,7 +173,7 @@ class Pie(Graph):
 		wedge_text_pad = 5
 		wedge_text_pad = 20 * int(self.show_percent) * int(self.show_data_labels)
 
-		total = reduce(add, self.data)
+		total = sum(self.data)
 		max_value = max(self.data)
 
 		percent_scale = 100.0 / total
@@ -166,7 +182,7 @@ class Pie(Graph):
 		rad_mult = 3.6 * RADIANS
 		for index, (field, value) in enumerate(zip(self.fields, self.data)):
 			percent = percent_scale * value
-			
+
 			radians = prev_percent * rad_mult
 			x_start = radius+(math.sin(radians) * radius)
 			y_start = radius-(math.cos(radians) * radius)
@@ -182,7 +198,7 @@ class Pie(Graph):
 				"%(percent_greater_fifty)s,1,",
 				"%(x_end)s %(y_end)s Z"))
 			path = path % vars()
-			
+
 			wedge = etree.SubElement(
 				self.foreground,
 				'path',
@@ -191,13 +207,13 @@ class Pie(Graph):
 					'class': 'fill%s' % (index+1),
 				}
 				)
-			
+
 			translate = None
 			tx = 0
 			ty = 0
 			half_percent = prev_percent + percent / 2
 			radians = half_percent * rad_mult
-			
+
 			if self.show_shadow:
 				shadow = etree.SubElement(
 					background,
@@ -215,20 +231,20 @@ class Pie(Graph):
 					# consider getting the style from the stylesheet
 					style="fill:#fff; stroke:none;",
 				)
-			
+
 			if self.expanded or (self.expand_greatest and value == max_value):
 				tx = (math.sin(radians) * self.expand_gap)
 				ty = -(math.cos(radians) * self.expand_gap)
 				translate = "translate(%(tx)s %(ty)s)" % vars()
 				wedge.set('transform', translate)
 				clear.set('transform', translate)
-			
+
 			if self.show_shadow:
 				shadow_tx = self.shadow_offset + tx
 				shadow_ty = self.shadow_offset + ty
 				translate = 'translate(%(shadow_tx)s %(shadow_ty)s)' % vars()
 				shadow.set('transform', translate)
-			
+
 			if self.show_data_labels and value != 0:
 				label = []
 				if self.show_key_data_labels:
@@ -243,7 +259,7 @@ class Pie(Graph):
 				mcr = math.cos(radians)
 				tx = radius + (msr * radius)
 				ty = radius -(mcr * radius)
-				
+
 				if self.expanded or (self.expand_greatest and value == max_value):
 				  tx += (msr * self.expand_gap)
 				  ty -= (mcr * self.expand_gap)
@@ -270,7 +286,7 @@ class Pie(Graph):
 					}
 				)
 				label_node.text = label
-			
+
 			prev_percent += percent
 
 	def round(self, val, to):
