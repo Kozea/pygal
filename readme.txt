@@ -1,3 +1,5 @@
+.. -*- restructuredtext -*-
+
 ``svg.charts`` - Package for generating SVG Charts in Python
 ============================================================
 
@@ -13,10 +15,10 @@ in SVG, originally based on the SVG::Graph Ruby package by Sean E. Russel.
 
 ``svg.charts`` is written by Jason R. Coombs.  It is licensed under an
 `MIT-style permissive license
-<https://py-svg.svn.sourceforge.net/svnroot/py-svg/trunk/docs/license.txt>`_.
+<http://svg-charts.hg.sourceforge.net/hgweb/svg-charts/py-svg/raw-file/tip/docs/license.txt>`_.
 
 You can install it with ``easy_install svg.charts``, or from the
-`mercurial repository source <http://py-svg.hg.sourceforge.net:8000/hgroot/py-svg/py-svg#egg=svg.charts-dev>`_ with
+`mercurial repository source <http://svg-charts.hg.sourceforge.net:8000/hgroot/svg-charts/svg-charts#egg=svg.charts-dev>`_ with
 ``easy_install svg.charts==dev``.
 
 Acknowledgements
@@ -38,13 +40,13 @@ Getting Started
 ---------------
 
 ``svg.charts`` has some examples (taken directly from the reference implementation)
-in `tests/testing.py <https://py-svg.svn.sourceforge.net/svnroot/py-svg/trunk/tests/testing.py>`_.
+in `tests/samples.py <http://svg-charts.hg.sourceforge.net/hgweb/svg-charts/py-svg/raw-file/tip/tests/samples.py>`_.
 These examples show sample usage of the various chart types. They should provide a
 good starting point for learning the usage of the library.
 
 An example of using ``svg.charts`` in a `CherryPy
 <http://www.cherrypy.org/>`_ web app can be found in `jaraco.site.charts
-<https://svn.jaraco.com/jaraco/python/jaraco.site/trunk/jaraco/site/charts.py>`_.
+<https://bitbucket.org/jaraco/jaraco.site/src/tip/jaraco/site/charts.py>`_.
 If the site is working, you can see the `rendered output here
 <http://www.jaraco.com/charts/plot>`_.
 
@@ -74,11 +76,17 @@ Reporting Bugs and Getting Help
 -------------------------------
 
 This project is `hosted at sourceforge
-<https://sourceforge.net/projects/py-svg/>`_. Please use that site for
+<https://sourceforge.net/projects/svg-charts/>`_. Please use that site for
 reporting bugs and requesting help. Patches are also welcome.
 
 Changes
 -------
+
+2.0.8
+~~~~~
+
+* Updated to latest cssutils with Python 3 support. Thanks Christof!
+* Fixed a few remaining issues with Python 3 compatibility.
 
 2.0.7
 ~~~~~
@@ -117,7 +125,7 @@ Changes
   only two values returned by float_range (in the case there are only
   two different 'y' values in the data) and scale_y_integers == True.
   Credit to `Jean Schurger <http://schurger.org/>`_ for the patch.
-* Fixed problem in setup.py installing on Unix OS (case sensitivity of 
+* Fixed problem in setup.py installing on Unix OS (case sensitivity of
   readme.txt). Credit to Luke Miller and Jean Schurger for supplying
   a patch for this issue.
 
