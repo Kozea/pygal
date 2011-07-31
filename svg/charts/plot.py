@@ -1,4 +1,7 @@
-#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
+"plot.py"
+
 import sys
 from itertools import izip, count, chain
 from lxml import etree
@@ -18,24 +21,24 @@ if sys.version >= '3':
 
 class Plot(Graph):
 	"""=== For creating SVG plots of scalar data
-	
+
 	= Synopsis
-	
+
 	  require 'SVG/Graph/Plot'
-	
+
 	  # Data sets are x,y pairs
 	  # Note that multiple data sets can differ in length, and that the
 	  # data in the datasets needn't be in order; they will be ordered
 	  # by the plot along the X-axis.
 	  projection = [
 		6, 11,    0, 5,   18, 7,   1, 11,   13, 9,   1, 2,   19, 0,   3, 13,
-		7, 9 
+		7, 9
 	 ]
 	  actual = [
-		0, 18,    8, 15,    9, 4,   18, 14,   10, 2,   11, 6,  14, 12,   
+		0, 18,    8, 15,    9, 4,   18, 14,   10, 2,   11, 6,  14, 12,
 		15, 6,   4, 17,   2, 12
 	 ]
-	  
+
 	  graph = SVG::Graph::Plot.new({
 	   :height => 500,
 		   :width => 300,
@@ -43,75 +46,75 @@ class Plot(Graph):
 		:scale_x_integers => true,
 		:scale_y_integerrs => true,
 	 })
-	  
+
 	  graph.add_data({
 	   :data => projection
 		 :title => 'Projected',
 	 })
-	
+
 	  graph.add_data({
 	   :data => actual,
 		 :title => 'Actual',
 	 })
-	  
+
 	  print graph.burn()
-	
+
 	= Description
-	
+
 	Produces a graph of scalar data.
-	
+
 	This object aims to allow you to easily create high quality
 	SVG[http://www.w3c.org/tr/svg] scalar plots. You can either use the
 	default style sheet or supply your own. Either way there are many options
 	which can be configured to give you control over how the graph is
 	generated - with or without a key, data elements at each point, title,
 	subtitle etc.
-	
+
 	= Examples
-	
+
 	http://www.germane-software/repositories/public/SVG/test/plot.rb
-	
+
 	= Notes
-	
+
 	The default stylesheet handles upto 10 data sets, if you
 	use more you must create your own stylesheet and add the
 	additional settings for the extra data sets. You will know
 	if you go over 10 data sets as they will have no style and
 	be in black.
-	
+
 	Unlike the other types of charts, data sets must contain x,y pairs:
-	
+
 	  [1, 2]    # A data set with 1 point: (1,2)
-	  [1,2, 5,6] # A data set with 2 points: (1,2) and (5,6)  
-	
+	  [1,2, 5,6] # A data set with 2 points: (1,2) and (5,6)
+
 	= See also
-	
+
 	* SVG::Graph::Graph
 	* SVG::Graph::BarHorizontal
 	* SVG::Graph::Bar
 	* SVG::Graph::Line
 	* SVG::Graph::Pie
 	* SVG::Graph::TimeSeries
-	
+
 	== Author
-	
+
 	Sean E. Russell <serATgermaneHYPHENsoftwareDOTcom>
-	
+
 	Copyright 2004 Sean E. Russell
 	This software is available under the Ruby license[LICENSE.txt]"""
 
 	top_align = right_align = top_font = right_font = 1
 
-	
+
 	"""Determines the scaling for the Y axis divisions.
-	
+
 	  graph.scale_y_divisions = 0.5
-	
+
 	would cause the graph to attempt to generate labels stepped by 0.5; EG:
 	0, 0.5, 1, 1.5, 2, ..."""
 	scale_y_divisions = None
 	"Make the X axis labels integers"
-	scale_x_integers = False 
+	scale_x_integers = False
 	"Make the Y axis labels integers"
 	scale_y_integers = False
 	"Fill the area under the line"
@@ -137,9 +140,9 @@ class Plot(Graph):
 	@apply
 	def scale_x_divisions():
 		doc = """Determines the scaling for the X axis divisions.
-			
+
 			graph.scale_x_divisions = 2
-			
+
 			would cause the graph to attempt to generate labels stepped by 2; EG:
 			0,2,4,6,8..."""
 		def fget(self):
@@ -161,7 +164,7 @@ class Plot(Graph):
 		super(Plot, self).calculate_left_margin()
 		label_left = len(str(self.get_x_labels()[0])) / 2 * self.font_size * 0.6
 		self.border_left = max(label_left, self.border_left)
-	
+
 	def calculate_right_margin(self):
 		super(Plot, self).calculate_right_margin()
 		label_right = len(str(self.get_x_labels()[-1])) / 2 * self.font_size * 0.6
@@ -173,6 +176,8 @@ class Plot(Graph):
 		# above is same as
 		#max_value = max(map(lambda set: max(set['data'][data_index]), self.data))
 		spec_max = getattr(self, 'max_%s_value' % axis)
+		# Python 3 doesn't allow comparing None to int, so use -∞
+		if spec_max is None: spec_max = float('-Inf')
 		max_value = max(max_value, spec_max)
 		return max_value
 
@@ -183,7 +188,7 @@ class Plot(Graph):
 		if spec_min is not None:
 			min_value = min(min_value, spec_min)
 		return min_value
-		
+
 	x_data_index = 0
 	y_data_index = 1
 	def data_range(self, axis):
@@ -192,24 +197,24 @@ class Plot(Graph):
 		min_value = self.data_min(axis)
 		max_value = self.data_max(axis)
 		range = max_value - min_value
-		
+
 		side_pad = range / 20.0 or 10
 		scale_range = (max_value + side_pad) - min_value
-		
+
 		scale_division = getattr(self, 'scale_%s_divisions' % axis) or (scale_range / 10.0)
-		
+
 		if getattr(self, 'scale_%s_integers' % axis):
 			scale_division = round(scale_division) or 1
-			
+
 		return min_value, max_value, scale_division
 
 	def x_range(self): return self.data_range('x')
 	def y_range(self): return self.data_range('y')
-	
+
 	def get_data_values(self, axis):
 		min_value, max_value, scale_division = self.data_range(axis)
 		return tuple(float_range(*self.data_range(axis)))
-	
+
 	def get_x_values(self): return self.get_data_values('x')
 	def get_y_values(self): return self.get_data_values('y')
 
@@ -217,7 +222,7 @@ class Plot(Graph):
 		return map(str, self.get_x_values())
 	def get_y_labels(self):
 		return map(str, self.get_y_values())
-	
+
 	def field_size(self, axis):
 		size = {'x': 'width', 'y': 'height'}[axis]
 		side = {'x': 'right', 'y': 'top'}[axis]
@@ -233,7 +238,7 @@ class Plot(Graph):
 		result = (float(graph_size) - self.font_size*2*side_font) / \
 		   (len(values) + dx - side_align)
 		return result
-	
+
 	def field_width(self): return self.field_size('x')
 	def field_height(self): return self.field_size('y')
 
@@ -294,14 +299,14 @@ class Plot(Graph):
 			(y_max - y_min)
 		self.__transform_parameters = dict(vars())
 		del self.__transform_parameters['self']
-		
+
 	def get_graph_points(self, data_points):
 		return map(self.transform_output_coordinates, data_points)
 
 	def get_lpath(self, points):
 		points = map(lambda p: "%f %f" % p, points)
 		return 'L' + ' '.join(points)
-	
+
 	def transform_output_coordinates(self, (x,y)):
 		x_min = self.__transform_parameters['x_min']
 		x_step = self.__transform_parameters['x_step']
@@ -312,7 +317,7 @@ class Plot(Graph):
 		x = (x - x_min) * x_step
 		y = self.graph_height - (y - y_min) * y_step
 		return x,y
-	
+
 	def draw_data_points(self, line, data_points, graph_points):
 		if not self.show_data_points \
 			and not self.show_data_values: return
@@ -326,6 +331,6 @@ class Plot(Graph):
 			if self.show_data_values:
 				self.add_popup(gx, gy, self.format(dx, dy))
 			self.make_datapoint_text(gx, gy-6, dy)
-	
+
 	def format(self, x, y):
 		return '(%0.2f, %0.2f)' % (x,y)

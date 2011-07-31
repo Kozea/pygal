@@ -33,7 +33,7 @@ setup_params = dict(
 	namespace_packages=['svg'],
 	include_package_data = True,
 	install_requires=[
-		'cssutils>=0.9.6b3',
+		'cssutils>=0.9.8a3',
 		'lxml>=2.0',
 	] + dateutil_req,
 	license = "MIT",
