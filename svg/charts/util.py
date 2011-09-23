@@ -2,14 +2,18 @@
 
 import itertools
 import datetime
-
 # from itertools recipes (python documentation)
+
+
 def grouper(n, iterable, padvalue=None):
     """
     >>> tuple(grouper(3, 'abcdefg', 'x'))
     (('a', 'b', 'c'), ('d', 'e', 'f'), ('g', 'x', 'x'))
     """
-    return itertools.izip(*[itertools.chain(iterable, itertools.repeat(padvalue, n-1))]*n)
+    return itertools.izip(
+        *[itertools.chain(iterable,
+                          itertools.repeat(padvalue, n - 1))] * n)
+
 
 def reverse_mapping(mapping):
     """
@@ -21,6 +25,7 @@ def reverse_mapping(mapping):
     keys, values = zip(*mapping.items())
     return dict(zip(values, keys))
 
+
 def flatten_mapping(mapping):
     """
     For every key that has an __iter__ method, assign the values
@@ -30,6 +35,7 @@ def flatten_mapping(mapping):
     """
     return dict(flatten_items(mapping.items()))
 
+
 def flatten_items(items):
     for keys, value in items:
         if hasattr(keys, '__iter__'):
@@ -37,6 +43,7 @@ def flatten_items(items):
                 yield (key, value)
         else:
             yield (keys, value)
+
 
 def float_range(start=0, stop=None, step=1):
     """
@@ -49,6 +56,7 @@ def float_range(start=0, stop=None, step=1):
         yield start
         start += step
 
+
 def date_range(start=None, stop=None, step=None):
     """
     Much like the built-in function range, but works with dates
@@ -60,11 +68,14 @@ def date_range(start=None, stop=None, step=None):
     >>> datetime.datetime(2005,12,25) in my_range
     False
     """
-    if step is None: step = datetime.timedelta(days=1)
-    if start is None: start = datetime.datetime.now()
+    if step is None:
+        step = datetime.timedelta(days=1)
+    if start is None:
+        start = datetime.datetime.now()
     while start < stop:
         yield start
         start += step
+
 
 # copied from jaraco.datetools
 def divide_timedelta_float(td, divisor):
@@ -80,13 +91,15 @@ def divide_timedelta_float(td, divisor):
     """
     # td is comprised of days, seconds, microseconds
     dsm = [getattr(td, attr) for attr in ('days', 'seconds', 'microseconds')]
-    dsm = map(lambda elem: elem/divisor, dsm)
+    dsm = map(lambda elem: elem / divisor, dsm)
     return datetime.timedelta(*dsm)
 
+
 def get_timedelta_total_microseconds(td):
-    seconds = td.days*86400 + td.seconds
-    microseconds = td.microseconds + seconds*(10**6)
+    seconds = td.days * 86400 + td.seconds
+    microseconds = td.microseconds + seconds * (10 ** 6)
     return microseconds
+
 
 def divide_timedelta(td1, td2):
     """
@@ -96,10 +109,11 @@ def divide_timedelta(td1, td2):
     >>> divide_timedelta(one_hour, one_day) == 1/24.0
     True
     """
-    
+
     td1_total = float(get_timedelta_total_microseconds(td1))
     td2_total = float(get_timedelta_total_microseconds(td2))
-    return td1_total/td2_total
+    return td1_total / td2_total
+
 
 class TimeScale(object):
     "Describes a scale factor based on time instead of a scalar"
@@ -109,10 +123,10 @@ class TimeScale(object):
 
     def __mul__(self, delta):
         scale = divide_timedelta(delta, self.range)
-        return scale*self.width
+        return scale * self.width
+
 
 # the following three functions were copied from jaraco.util.iter_
-
 # todo, factor out caching capability
 class iterable_test(dict):
     "Test objects for iterability, caching the result by type"
@@ -120,12 +134,13 @@ class iterable_test(dict):
         """ignore_classes must include basestring, because if a string
         is iterable, so is a single character, and the routine runs
         into an infinite recursion"""
-        assert basestring in ignore_classes, 'basestring must be in ignore_classes'
+        assert (basestring in ignore_classes,
+                'basestring must be in ignore_classes')
         self.ignore_classes = ignore_classes
 
     def __getitem__(self, candidate):
         return dict.get(self, type(candidate)) or self._test(candidate)
-            
+
     def _test(self, candidate):
         try:
             if isinstance(candidate, self.ignore_classes):
@@ -137,6 +152,7 @@ class iterable_test(dict):
         self[type(candidate)] = result
         return result
 
+
 def iflatten(subject, test=None):
     if test is None:
         test = iterable_test()
@@ -146,7 +162,8 @@ def iflatten(subject, test=None):
         for elem in subject:
             for subelem in iflatten(elem, test):
                 yield subelem
-                
+
+
 def flatten(subject, test=None):
     """flatten an iterable with possible nested iterables.
     Adapted from
@@ -159,4 +176,3 @@ def flatten(subject, test=None):
     ['ab', 'c']
     """
     return list(iflatten(subject, test))
-

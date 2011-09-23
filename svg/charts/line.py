@@ -8,6 +8,7 @@ from lxml import etree
 from util import flatten, float_range
 from svg.charts.graph import Graph
 
+
 class Line(Graph):
     """Line Graph"""
 
@@ -20,12 +21,12 @@ class Line(Graph):
     stacked = False
     "Fill in the area under the plot"
     area_fill = False
-    
+
     scale_divisions = None
 
     #override some defaults
     top_align = top_font = right_align = right_font = True
-    
+
     stylesheet_names = Graph.stylesheet_names + ['plot.css']
 
     def max_value(self):
@@ -42,12 +43,13 @@ class Line(Graph):
             data = self.get_cumulative_data()
         return min(flatten(data))
 
-    def get_cumulative_data():
+    def get_cumulative_data(self):
         """Get the data as it will be charted.  The first set will be
         the actual first data set.  The second will be the sum of the
         first and the second, etc."""
         sets = map(itemgetter('data'), self.data)
-        if not sets: return
+        if not sets:
+            return
         sum = sets.pop(0)
         yield sum
         while sets:
@@ -68,13 +70,13 @@ class Line(Graph):
         range = max_value - min_value
         top_pad = (range / 20.0) or 10
         scale_range = (max_value + top_pad) - min_value
-        
+
         scale_division = self.scale_divisions or (scale_range / 10.0)
-        
+
         if self.scale_integers:
-          scale_division = min(1, round(scale_division))
-        
-        if max_value % scale_division == 0: 
+            scale_division = min(1, round(scale_division))
+
+        if max_value % scale_division == 0:
             max_value += scale_division
         labels = tuple(float_range(min_value, max_value, scale_division))
         return labels
@@ -82,36 +84,39 @@ class Line(Graph):
     def get_y_labels(self):
         return map(str, self.get_y_label_values())
 
-    def calc_coords(self, field, value, width = None, height = None):
-        if width is None: width = self.field_width
-        if height is None: height = self.field_height
+    def calc_coords(self, field, value, width=None, height=None):
+        if width is None:
+            width = self.field_width
+        if height is None:
+            height = self.field_height
         coords = dict(
-            x = width * field,
-            y = self.graph_height - value * height,
+            x=width * field,
+            y=self.graph_height - value * height,
             )
         return coords
 
     def draw_data(self):
         min_value = self.min_value()
-        field_height = self.graph_height - self.font_size*2*self.top_font
+        field_height = self.graph_height - self.font_size * 2 * self.top_font
 
         y_label_values = self.get_y_label_values()
         y_label_span = max(y_label_values) - min(y_label_values)
         field_height /= float(y_label_span)
-        
+
         field_width = self.field_width()
         #line = len(self.data)
-        
-        prev_sum = [0]*len(self.fields)
-        cum_sum = [-min_value]*len(self.fields)
+
+        prev_sum = [0] * len(self.fields)
+        cum_sum = [-min_value] * len(self.fields)
 
         coord_format = lambda c: '%(x)s %(y)s' % c
-        
+
         for line_n, data in reversed(list(enumerate(self.data, 1))):
             apath = ''
-            
-            if not self.stacked: cum_sum = [-min_value]*len(self.fields)
-        
+
+            if not self.stacked:
+                cum_sum = [-min_value] * len(self.fields)
+
             cum_sum = map(add, cum_sum, data['data'])
             get_coords = lambda (i, val): self.calc_coords(i,
                                                          val,
@@ -132,7 +137,7 @@ class Line(Graph):
                     origin = paths[-1]
                 else:
                     area_path = "V%(graph_height)s" % vars(self)
-                    origin = coord_format(get_coords((0,0)))
+                    origin = coord_format(get_coords((0, 0)))
 
                 d = ' '.join((
                     'M',
@@ -152,7 +157,7 @@ class Line(Graph):
                 'd': 'M0 %s L%s' % (self.graph_height, line_path),
                 'class': 'line%(line_n)s' % vars(),
                 })
-            
+
             if self.show_data_points or self.show_data_values:
                 for i, value in enumerate(cum_sum):
                     if self.show_data_points:
@@ -160,13 +165,13 @@ class Line(Graph):
                             self.graph,
                             'circle',
                             {'class': 'dataPoint%(line_n)s' % vars()},
-                            cx = str(field_width*i),
-                            cy = str(self.graph_height - value*field_height),
-                            r = '2.5',
+                            cx=str(field_width * i),
+                            cy=str(self.graph_height - value * field_height),
+                            r='2.5',
                             )
                     self.make_datapoint_text(
-                        field_width*i,
-                        self.graph_height - value*field_height - 6,
+                        field_width * i,
+                        self.graph_height - value * field_height - 6,
                         value + min_value
                         )
 

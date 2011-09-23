@@ -10,14 +10,17 @@ from svg.charts.graph import Graph
 
 from .util import float_range
 
+
 def get_pairs(i):
     i = iter(i)
-    while True:    yield i.next(), i.next()
+    while True:
+        yield i.next(), i.next()
 
 # I'm not sure how this is more beautiful than ugly.
 if sys.version >= '3':
     def apply(func):
         return func()
+
 
 class Plot(Graph):
     """=== For creating SVG plots of scalar data
@@ -105,7 +108,6 @@ class Plot(Graph):
 
     top_align = right_align = top_font = right_font = 1
 
-
     """Determines the scaling for the Y axis divisions.
 
       graph.scale_y_divisions = 0.5
@@ -143,17 +145,22 @@ class Plot(Graph):
 
             graph.scale_x_divisions = 2
 
-            would cause the graph to attempt to generate labels stepped by 2; EG:
+            would cause the graph to attempt
+            to generate labels stepped by 2; EG:
             0,2,4,6,8..."""
+
         def fget(self):
             return getattr(self, '_scale_x_divisions', None)
+
         def fset(self, val):
             self._scale_x_divisions = val
         return property(**locals())
 
     def validate_data(self, data):
         if len(data['data']) % 2 != 0:
-            raise ValueError("Expecting x,y pairs for data points for %s." % self.__class__.__name__)
+            raise ValueError(
+                "Expecting x,y pairs for data points for %s." %
+                self.__class__.__name__)
 
     def process_data(self, data):
         pairs = list(get_pairs(data['data']))
@@ -162,28 +169,34 @@ class Plot(Graph):
 
     def calculate_left_margin(self):
         super(Plot, self).calculate_left_margin()
-        label_left = len(str(self.get_x_labels()[0])) / 2 * self.font_size * 0.6
+        label_left = len(str(
+            self.get_x_labels()[0])) / 2 * self.font_size * 0.6
         self.border_left = max(label_left, self.border_left)
 
     def calculate_right_margin(self):
         super(Plot, self).calculate_right_margin()
-        label_right = len(str(self.get_x_labels()[-1])) / 2 * self.font_size * 0.6
+        label_right = len(str(
+            self.get_x_labels()[-1])) / 2 * self.font_size * 0.6
         self.border_right = max(label_right, self.border_right)
 
     def data_max(self, axis):
         data_index = getattr(self, '%s_data_index' % axis)
-        max_value = max(chain(*map(lambda set: set['data'][data_index], self.data)))
+        max_value = max(chain(
+            *map(lambda set: set['data'][data_index], self.data)))
         # above is same as
-        #max_value = max(map(lambda set: max(set['data'][data_index]), self.data))
+        #max_value = max(map(lambda set:
+        #     max(set['data'][data_index]), self.data))
         spec_max = getattr(self, 'max_%s_value' % axis)
         # Python 3 doesn't allow comparing None to int, so use -∞
-        if spec_max is None: spec_max = float('-Inf')
+        if spec_max is None:
+            spec_max = float('-Inf')
         max_value = max(max_value, spec_max)
         return max_value
 
     def data_min(self, axis):
         data_index = getattr(self, '%s_data_index' % axis)
-        min_value = min(chain(*map(lambda set: set['data'][data_index], self.data)))
+        min_value = min(chain(
+            *map(lambda set: set['data'][data_index], self.data)))
         spec_min = getattr(self, 'min_%s_value' % axis)
         if spec_min is not None:
             min_value = min(min_value, spec_min)
@@ -191,6 +204,7 @@ class Plot(Graph):
 
     x_data_index = 0
     y_data_index = 1
+
     def data_range(self, axis):
         side = {'x': 'right', 'y': 'top'}[axis]
 
@@ -201,25 +215,33 @@ class Plot(Graph):
         side_pad = range / 20.0 or 10
         scale_range = (max_value + side_pad) - min_value
 
-        scale_division = getattr(self, 'scale_%s_divisions' % axis) or (scale_range / 10.0)
+        scale_division = getattr(
+            self, 'scale_%s_divisions' % axis) or (scale_range / 10.0)
 
         if getattr(self, 'scale_%s_integers' % axis):
             scale_division = round(scale_division) or 1
 
         return min_value, max_value, scale_division
 
-    def x_range(self): return self.data_range('x')
-    def y_range(self): return self.data_range('y')
+    def x_range(self):
+        return self.data_range('x')
+
+    def y_range(self):
+        return self.data_range('y')
 
     def get_data_values(self, axis):
         min_value, max_value, scale_division = self.data_range(axis)
         return tuple(float_range(*self.data_range(axis)))
 
-    def get_x_values(self): return self.get_data_values('x')
-    def get_y_values(self): return self.get_data_values('y')
+    def get_x_values(self):
+        return self.get_data_values('x')
+
+    def get_y_values(self):
+        return self.get_data_values('y')
 
     def get_x_labels(self):
         return map(str, self.get_x_values())
+
     def get_y_labels(self):
         return map(str, self.get_y_values())
 
@@ -235,12 +257,15 @@ class Plot(Graph):
         graph_size = getattr(self, 'graph_%s' % size)
         side_font = getattr(self, '%s_font' % side)
         side_align = getattr(self, '%s_align' % side)
-        result = (float(graph_size) - self.font_size*2*side_font) / \
-           (len(values) + dx - side_align)
+        result = ((float(graph_size) - self.font_size * 2 * side_font) /
+                  (len(values) + dx - side_align))
         return result
 
-    def field_width(self): return self.field_size('x')
-    def field_height(self): return self.field_size('y')
+    def field_width(self):
+        return self.field_size('x')
+
+    def field_height(self):
+        return self.field_size('y')
 
     def draw_data(self):
         self.load_transform_parameters()
@@ -255,7 +280,8 @@ class Plot(Graph):
             if self.area_fill:
                 graph_height = self.graph_height
                 path = etree.SubElement(self.graph, 'path', {
-                    'd': 'M%(x_start)f %(graph_height)f %(lpath)s V%(graph_height)f Z' % vars(),
+                    'd': 'M%(x_start)f %(graph_height)f'
+                    ' %(lpath)s V%(graph_height)f Z' % vars(),
                     'class': 'fill%(line)d' % vars()})
             if self.draw_lines_between_points:
                 path = etree.SubElement(self.graph, 'path', {
@@ -265,7 +291,7 @@ class Plot(Graph):
         self._draw_constant_lines()
         del self.__transform_parameters
 
-    def add_constant_line(self, value, label = None, style = None):
+    def add_constant_line(self, value, label=None, style=None):
         self.constant_lines = getattr(self, 'constant_lines', [])
         self.constant_lines.append((value, label, style))
 
@@ -293,10 +319,10 @@ class Plot(Graph):
         "Cache the parameters necessary to transform x & y coordinates"
         x_min, x_max, x_div = self.x_range()
         y_min, y_max, y_div = self.y_range()
-        x_step = (float(self.graph_width) - self.font_size*2) / \
-            (x_max - x_min)
-        y_step = (float(self.graph_height) - self.font_size*2) / \
-            (y_max - y_min)
+        x_step = ((float(self.graph_width) - self.font_size * 2) /
+                  (x_max - x_min))
+        y_step = ((float(self.graph_height) - self.font_size * 2) /
+                  (y_max - y_min))
         self.__transform_parameters = dict(vars())
         del self.__transform_parameters['self']
 
@@ -307,7 +333,7 @@ class Plot(Graph):
         points = map(lambda p: "%f %f" % p, points)
         return 'L' + ' '.join(points)
 
-    def transform_output_coordinates(self, (x,y)):
+    def transform_output_coordinates(self, (x, y)):
         x_min = self.__transform_parameters['x_min']
         x_step = self.__transform_parameters['x_step']
         y_min = self.__transform_parameters['y_min']
@@ -316,12 +342,13 @@ class Plot(Graph):
         #vars().update(self.__transform_parameters)
         x = (x - x_min) * x_step
         y = self.graph_height - (y - y_min) * y_step
-        return x,y
+        return x, y
 
     def draw_data_points(self, line, data_points, graph_points):
-        if not self.show_data_points \
-            and not self.show_data_values: return
-        for ((dx,dy),(gx,gy)) in izip(data_points, graph_points):
+        if not self.show_data_points and not self.show_data_values:
+            return
+
+        for ((dx, dy), (gx, gy)) in izip(data_points, graph_points):
             if self.show_data_points:
                 etree.SubElement(self.graph, 'circle', {
                     'cx': str(gx),
@@ -330,7 +357,7 @@ class Plot(Graph):
                     'class': 'dataPoint%(line)s' % vars()})
             if self.show_data_values:
                 self.add_popup(gx, gy, self.format(dx, dy))
-            self.make_datapoint_text(gx, gy-6, dy)
+            self.make_datapoint_text(gx, gy - 6, dy)
 
     def format(self, x, y):
-        return '(%0.2f, %0.2f)' % (x,y)
+        return '(%0.2f, %0.2f)' % (x, y)

@@ -3,13 +3,17 @@ import itertools
 from lxml import etree
 from svg.charts.graph import Graph
 
-def robust_add(a,b):
-    "Add numbers a and b, treating None as 0"
-    if a is None: a = 0
-    if b is None: b = 0
-    return a+b
 
-RADIANS = math.pi/180
+def robust_add(a, b):
+    "Add numbers a and b, treating None as 0"
+    if a is None:
+        a = 0
+    if b is None:
+        b = 0
+    return a + b
+
+RADIANS = math.pi / 180
+
 
 class Pie(Graph):
     """
@@ -42,14 +46,16 @@ class Pie(Graph):
     """
 
     "if true, displays a drop shadow for the chart"
-    show_shadow    = True
+    show_shadow = True
     "Sets the offset of the shadow from the pie chart"
     shadow_offset = 10
 
     show_data_labels = False
     "If true, display the actual field values in the data labels"
     show_actual_values = False
-    "If true, display the percentage value of each pie wedge in the data labels"
+
+    ("If true, display the percentage value of"
+     "each pie wedge in the data labels")
     show_percent = True
 
     "If true, display the labels in the key"
@@ -62,7 +68,7 @@ class Pie(Graph):
     "If true, explode the pie (put space between the wedges)"
     expanded = False
     "If true, expand the largest pie wedge"
-    expand_greatest    = False
+    expand_greatest = False
     "The amount of space between expanded wedges"
     expand_gap = 10
 
@@ -141,11 +147,12 @@ class Pie(Graph):
     def keys(self):
         total = sum(self.data)
         percent_scale = 100.0 / total
+
         def key(field, value):
             result = [field]
             result.append('[%s]' % value)
             if self.show_key_percent:
-                percent = str(round((v/total*100))) + '%'
+                percent = str(round((value / total * 100))) + '%'
                 result.append(percent)
             return ' '.join(result)
         return map(key, self.fields, self.data)
@@ -171,7 +178,8 @@ class Pie(Graph):
         self.graph.set('transform', transform)
 
         wedge_text_pad = 5
-        wedge_text_pad = 20 * int(self.show_percent) * int(self.show_data_labels)
+        wedge_text_pad = (20 * int(self.show_percent) *
+                          int(self.show_data_labels))
 
         total = sum(self.data)
         max_value = max(self.data)
@@ -184,12 +192,12 @@ class Pie(Graph):
             percent = percent_scale * value
 
             radians = prev_percent * rad_mult
-            x_start = radius+(math.sin(radians) * radius)
-            y_start = radius-(math.cos(radians) * radius)
-            radians = (prev_percent+percent) * rad_mult
-            x_end = radius+(math.sin(radians) * radius)
-            y_end = radius-(math.cos(radians) * radius)
-            percent_greater_fifty = int(percent>=50)
+            x_start = radius + (math.sin(radians) * radius)
+            y_start = radius - (math.cos(radians) * radius)
+            radians = (prev_percent + percent) * rad_mult
+            x_end = radius + (math.sin(radians) * radius)
+            y_end = radius - (math.cos(radians) * radius)
+            percent_greater_fifty = int(percent >= 50)
             path = ' '.join((
                 "M%(radius)s,%(radius)s",
                 "L%(x_start)s,%(y_start)s",
@@ -204,7 +212,7 @@ class Pie(Graph):
                 'path',
                 {
                     'd': path,
-                    'class': 'fill%s' % (index+1),
+                    'class': 'fill%s' % (index + 1),
                 }
                 )
 
@@ -258,20 +266,21 @@ class Pie(Graph):
                 msr = math.sin(radians)
                 mcr = math.cos(radians)
                 tx = radius + (msr * radius)
-                ty = radius -(mcr * radius)
+                ty = radius - (mcr * radius)
 
-                if self.expanded or (self.expand_greatest and value == max_value):
-                  tx += (msr * self.expand_gap)
-                  ty -= (mcr * self.expand_gap)
+                if self.expanded or (
+                    self.expand_greatest and value == max_value):
+                    tx += (msr * self.expand_gap)
+                    ty -= (mcr * self.expand_gap)
 
                 label_node = etree.SubElement(
                     self.foreground,
                     'text',
                     {
-                        'x':str(tx),
-                        'y':str(ty),
-                        'class':'dataPointLabel',
-                        'style':'stroke: #fff; stroke-width: 2;',
+                        'x': str(tx),
+                        'y': str(ty),
+                        'class': 'dataPointLabel',
+                        'style': 'stroke: #fff; stroke-width: 2;'
                     }
                 )
                 label_node.text = label
@@ -280,8 +289,8 @@ class Pie(Graph):
                     self.foreground,
                     'text',
                     {
-                        'x':str(tx),
-                        'y':str(ty),
+                        'x': str(tx),
+                        'y': str(ty),
                         'class': 'dataPointLabel',
                     }
                 )
@@ -290,4 +299,4 @@ class Pie(Graph):
             prev_percent += percent
 
     def round(self, val, to):
-        return round(val,to)
+        return round(val, to)
