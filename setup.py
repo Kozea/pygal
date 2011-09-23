@@ -26,7 +26,6 @@ dateutil_req = (
 
 setup_params = dict(
     name="pygal",
-    use_hg_version=True,
     description="Python svg graph abstract layer",
     long_description=_long_description,
     author="Jason R. Coombs, Kozea",
@@ -34,7 +33,6 @@ setup_params = dict(
     url="https://github.com/Kozea/pygal",
     packages=find_packages(),
     zip_safe=True,
-    namespace_packages=['pygal'],
     include_package_data=True,
     install_requires=[
         'cssutils>=0.9.8a3',

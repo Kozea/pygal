@@ -13,8 +13,8 @@ import pkg_resources
 import functools
 
 import cssutils
+
 from lxml import etree
-from xml import xpath
 
 from pygal import css  # causes the SVG profile to be loaded
 
@@ -612,13 +612,13 @@ class Graph(object):
             # do nothing
             return
 
-        styles = self.parse_css()
-        for node in xpath.Evaluate('//*[@class]', self.root):
-            cl = node.getAttribute('class')
-            style = styles[cl]
-            if node.hasAttribute('style'):
-                style += node.getAttribute('style')
-            node.setAttribute('style', style)
+        # styles = self.parse_css()
+        # for node in xpath.Evaluate('//*[@class]', self.root):
+        #     cl = node.getAttribute('class')
+        #     style = styles[cl]
+        #     if node.hasAttribute('style'):
+        #         style += node.getAttribute('style')
+        #     node.setAttribute('style', style)
 
     def parse_css(self):
         """
