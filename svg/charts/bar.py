@@ -1,7 +1,7 @@
 #!python
 from itertools import chain
 from lxml import etree
-from svg.charts.graph import Graph
+from pygal.graph import Graph
 
 __all__ = ('VerticalBar', 'HorizontalBar')
 

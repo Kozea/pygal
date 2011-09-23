@@ -11,7 +11,7 @@ class PlotTester(unittest.TestCase):
 
         Credit to Jean for the test code as well.
         """
-        from svg.charts.plot import Plot
+        from pygal.plot import Plot
         g = Plot(dict(scale_y_integers=True))
         g.add_data(dict(data=[1, 0, 2, 1], title='foo'))
         res = g.burn()

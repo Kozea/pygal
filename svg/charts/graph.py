@@ -2,9 +2,9 @@
 # -*- coding: utf-8 -*-
 
 """
-svg.charts.graph
+pygal.graph
 
-The base module for `svg.charts` classes.
+The base module for `pygal` classes.
 """
 
 from operator import itemgetter
@@ -16,7 +16,7 @@ import cssutils
 from lxml import etree
 from xml import xpath
 
-from svg.charts import css  # causes the SVG profile to be loaded
+from pygal import css  # causes the SVG profile to be loaded
 
 try:
     import zlib
@@ -44,11 +44,11 @@ class Graph(object):
         For examples of how to subclass this class, see the existing specific
         subclasses, such as svn.charts.Pie.
 
-    * svg.charts.bar
-    * svg.charts.line
-    * svg.charts.pie
-    * svg.charts.plot
-    * svg.charts.time_series
+    * pygal.bar
+    * pygal.line
+    * pygal.pie
+    * pygal.plot
+    * pygal.time_series
 
     """
     width = 500
@@ -698,7 +698,7 @@ class Graph(object):
 
     @staticmethod
     def load_resource_stylesheet(name, subs=dict()):
-        css_stream = pkg_resources.resource_stream('svg.charts', name)
+        css_stream = pkg_resources.resource_stream('pygal', name)
         css_string = css_stream.read().decode('utf-8')
         css_string = css_string % subs
         sheet = cssutils.parseString(css_string)

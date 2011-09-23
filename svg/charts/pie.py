@@ -1,7 +1,7 @@
 import math
 import itertools
 from lxml import etree
-from svg.charts.graph import Graph
+from pygal.graph import Graph
 
 
 def robust_add(a, b):
@@ -22,7 +22,7 @@ class Pie(Graph):
     Synopsis
     ========
 
-    from svg.charts.pie import Pie
+    from pygal.pie import Pie
     fields = ['Jan', 'Feb', 'Mar']
 
     data_sales_02 = [12, 45, 21]

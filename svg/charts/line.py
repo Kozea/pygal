@@ -6,7 +6,7 @@ from operator import itemgetter, add
 from lxml import etree
 
 from util import flatten, float_range
-from svg.charts.graph import Graph
+from pygal.graph import Graph
 
 
 class Line(Graph):

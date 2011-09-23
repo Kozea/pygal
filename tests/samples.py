@@ -5,12 +5,12 @@ samples.
 import os
 import sys
 
-from svg.charts.plot import Plot
-from svg.charts import bar
-from svg.charts import time_series
-from svg.charts import pie
-from svg.charts import schedule
-from svg.charts import line
+from pygal.plot import Plot
+from pygal import bar
+from pygal import time_series
+from pygal import pie
+from pygal import schedule
+from pygal import line
 
 
 def sample_Plot():

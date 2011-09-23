@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-import svg.charts.plot
+import pygal.plot
 import re
 import pkg_resources
 pkg_resources.require("python-dateutil>=1.1")
@@ -11,7 +11,7 @@ fromtimestamp = datetime.datetime.fromtimestamp
 from .util import float_range
 
 
-class Plot(svg.charts.plot.Plot):
+class Plot(pygal.plot.Plot):
     """=== For creating SVG plots of scalar temporal data
 
         = Synopsis
@@ -149,7 +149,7 @@ class Plot(svg.charts.plot.Plot):
         # the date should be in the first element, so parse it out
         data['data'][0] = map(self.parse_date, data['data'][0])
 
-    _min_x_value = svg.charts.plot.Plot.min_x_value
+    _min_x_value = pygal.plot.Plot.min_x_value
 
     def get_min_x_value(self):
         return self._min_x_value

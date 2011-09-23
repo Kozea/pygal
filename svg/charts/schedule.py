@@ -5,7 +5,7 @@ from dateutil.parser import parse
 from dateutil.relativedelta import relativedelta
 from lxml import etree
 
-from svg.charts.graph import Graph
+from pygal.graph import Graph
 from util import grouper, date_range, divide_timedelta_float, TimeScale
 
 __all__ = ('Schedule')

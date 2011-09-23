@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# svg.charts documentation build configuration file, created by
+# pygal documentation build configuration file, created by
 # sphinx-quickstart on Tue May 11 10:51:55 2010.
 #
 # This file is execfile()d with the current directory set to its containing dir
@@ -180,7 +180,7 @@ htmlhelp_basename = 'svgchartsdoc'
 # Grouping the document tree into LaTeX files. List of tuples
 # (source start file, target name, title, author, documentclass [howto/manual])
 latex_documents = [
-  ('index', 'svgcharts.tex', u'svg.charts Documentation',
+  ('index', 'svgcharts.tex', u'pygal Documentation',
    setup_params['author'], 'manual'),
 ]
 

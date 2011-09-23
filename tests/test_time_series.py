@@ -1,4 +1,4 @@
-from svg.charts import time_series
+from pygal import time_series
 
 
 def test_field_width():

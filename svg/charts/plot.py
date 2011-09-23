@@ -6,7 +6,7 @@ import sys
 from itertools import izip, count, chain
 from lxml import etree
 
-from svg.charts.graph import Graph
+from pygal.graph import Graph
 
 from .util import float_range
 

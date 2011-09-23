@@ -12,7 +12,7 @@ class DisabledTestCommand(Command):
 
     def __init__(self, dist):
         raise RuntimeError(
-            "test command not supported on svg.charts."
+            "test command not supported on pygal."
             " Use setup.py nosetests instead")
 
 _this_dir = os.path.dirname(__file__)
@@ -25,16 +25,16 @@ dateutil_req = (
     else ['python-dateutil>=2.0'])
 
 setup_params = dict(
-    name="svg.charts",
+    name="pygal",
     use_hg_version=True,
-    description="Python SVG Charting Library",
+    description="Python svg graph abstract layer",
     long_description=_long_description,
-    author="Jason R. Coombs",
-    author_email="jaraco@jaraco.com",
-    url="http://svg-charts.sourceforge.net",
+    author="Jason R. Coombs, Kozea",
+    author_email="jaraco@jaraco.com, gayoub@kozea.fr",
+    url="https://github.com/Kozea/pygal",
     packages=find_packages(),
     zip_safe=True,
-    namespace_packages=['svg'],
+    namespace_packages=['pygal'],
     include_package_data=True,
     install_requires=[
         'cssutils>=0.9.8a3',
@@ -57,9 +57,6 @@ setup_params = dict(
     cmdclass=dict(
         test=DisabledTestCommand,
     ),
-    setup_requires=[
-        'hgtools',
-    ],
     use_2to3=True,
 )
 
