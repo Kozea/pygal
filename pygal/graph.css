@@ -8,7 +8,7 @@ Base styles for pygal.Graph
   fill:#ffffff;
 }
 .graphBackground{
-  fill:#f0f0f0;
+  fill:#ffffff;
 }
 
 /* graphs titles */
@@ -33,7 +33,7 @@ Base styles for pygal.Graph
 }
 
 .guideLines{
-  stroke: #666666;
+  stroke: #eee;
   stroke-width: 1px;
   stroke-dasharray: 5,5;
 }
@@ -44,6 +44,7 @@ Base styles for pygal.Graph
   font-size: %(x_label_font_size)dpx;
   font-family: "Arial", sans-serif;
   font-weight: normal;
+  transform: rotate(45deg);
 }
 
 .yAxisLabels{
@@ -71,17 +72,21 @@ Base styles for pygal.Graph
 }
 
 .dataPointLabel{
-  fill: #000000;
+  fill: transparent;
   text-anchor:middle;
   font-size: 10px;
   font-family: "Arial", sans-serif;
   font-weight: normal;
 }
 
+.dataPointLabel:hover{
+  fill: #000000;
+}
+
 .staggerGuideLine{
   fill: none;
   stroke: #000000;
-  stroke-width: 0.5px;  
+  stroke-width: 0.5px;
 }
 
 .keyText{

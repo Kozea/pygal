@@ -2,12 +2,12 @@ require 'SVG/Graph/Graph'
 require 'SVG/Graph/Plot'
 
 g = SVG::Graph::Plot.new( {
-	:min_x_value=>0,
-	:min_y_value=>0,
-	:area_fill=> true,
-	:stagger_x_labels=>true,
-	:stagger_y_labels=>true,
-	:show_x_guidelines=>true,
+    :min_x_value=>0,
+    :min_y_value=>0,
+    :area_fill=> true,
+    :stagger_x_labels=>true,
+    :stagger_y_labels=>true,
+    :show_x_guidelines=>true,
 })
 
 g.add_data( { :data=>[ 1, 25, 2, 30, 3, 45 ], :title=>'series 1' } )
@@ -23,11 +23,11 @@ f.close()
 require 'SVG/Graph/TimeSeries'
 
 g = SVG::Graph::TimeSeries.new( {
-								   :timescale_divisions => '4 hours',
-								   :stagger_x_labels => true,
-								   :x_label_format => '%d-%b %H:%M',
-								   :max_y_value => 200,
-							   } )
+                                   :timescale_divisions => '4 hours',
+                                   :stagger_x_labels => true,
+                                   :x_label_format => '%d-%b %H:%M',
+                                   :max_y_value => 200,
+                               } )
 g.add_data( { :data=> [ '2005-12-21T00:00:00', 20, '2005-12-22T00:00:00', 21 ], :title=> 'series 1' } )
 
 res = g.burn()
@@ -41,14 +41,14 @@ require 'SVG/Graph/Bar'
 fields = ['Internet', 'TV', 'Newspaper', 'Magazine', 'Radio']
 
 g = SVG::Graph::Bar.new( {
-							:scale_integers=>true,
-							:stack=>:side,
-							:width=>640,
-							:height=>480,
-							:fields=>fields,
-							:graph_title=>'Question 7',
-							:show_graph_title=>true,
-							:no_css=>false
+                            :scale_integers=>true,
+                            :stack=>:side,
+                            :width=>640,
+                            :height=>480,
+                            :fields=>fields,
+                            :graph_title=>'Question 7',
+                            :show_graph_title=>true,
+                            :no_css=>false
 })
 
 g.add_data({:data=>[-2,3,1,3,1], :title=>'Female'})
@@ -61,14 +61,14 @@ f.close()
 require 'SVG/Graph/BarHorizontal'
 
 g = SVG::Graph::BarHorizontal.new( {
-							:scale_integers=>true,
-							:stack=>:side,
-							:width=>640,
-							:height=>480,
-							:fields=>fields,
-							:graph_title=>'Question 7',
-							:show_graph_title=>true,
-							:no_css=>false
+                            :scale_integers=>true,
+                            :stack=>:side,
+                            :width=>640,
+                            :height=>480,
+                            :fields=>fields,
+                            :graph_title=>'Question 7',
+                            :show_graph_title=>true,
+                            :no_css=>false
 })
 
 g.add_data({:data=>[-2,3,1,3,1], :title=>'Female'})
@@ -79,14 +79,14 @@ f.write(g.burn())
 f.close()
 
 g = SVG::Graph::Bar.new({
-	:scale_integers=>true,
-	:stack=>:side,
-	:width=>640,
-	:height=>480,
-	:fields=>fields,
-	:graph_title=>'Question 8',
-	:show_graph_title=>true,
-	:no_css=>false,
+    :scale_integers=>true,
+    :stack=>:side,
+    :width=>640,
+    :height=>480,
+    :fields=>fields,
+    :graph_title=>'Question 8',
+    :show_graph_title=>true,
+    :no_css=>false,
 })
 
 g.add_data({:data=>[2,22,98,143,82], :title=>'intermediate'})
@@ -99,12 +99,12 @@ f.close()
 require 'SVG/Graph/Pie'
 
 g = SVG::Graph::Pie.new({
-	:width=>640,
-	:height=>480,
-	:fields=>fields,
-	:graph_title=>'Question 7',
-	:expand_greatest=>true,
-	:show_data_labels=>true,
+    :width=>640,
+    :height=>480,
+    :fields=>fields,
+    :graph_title=>'Question 7',
+    :expand_greatest=>true,
+    :show_data_labels=>true,
 })
 
 g.add_data({:data=>[-2,3,1,3,1], :title=>'Female'})
@@ -116,14 +116,14 @@ f.close()
 
 require 'SVG/Graph/Line'
 g = SVG::Graph::Line.new( {
-							:scale_integers=>true,
-							:area_fill=>true,
-							:width=>640,
-							:height=>480,
-							:fields=>fields,
-							:graph_title=>'Question 7',
-							:show_graph_title=>true,
-							:no_css=>false
+                            :scale_integers=>true,
+                            :area_fill=>true,
+                            :width=>640,
+                            :height=>480,
+                            :fields=>fields,
+                            :graph_title=>'Question 7',
+                            :show_graph_title=>true,
+                            :no_css=>false
 })
 
 g.add_data({:data=>[-2,3,1,3,1], :title=>'Female'})
@@ -145,7 +145,7 @@ data1 = [
   ]
 title2 = "Another Schedule"
 data2 = [
-	"Just one period", "5/19/04", "6/30/04"
+    "Just one period", "5/19/04", "6/30/04"
 ]
 
 g = SVG::Graph::Schedule.new( {
@@ -178,8 +178,8 @@ g.add_data(
   :title => "Data"
   )
 g.add_data(
-	:data => data2,
-	:title => title2
+    :data => data2,
+    :title => title2
 )
 
 f = File.new('Schedule.rb.svg', 'w')
