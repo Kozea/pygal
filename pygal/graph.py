@@ -51,8 +51,8 @@ class Graph(object):
     * pygal.time_series
 
     """
-    width = 500
-    height = 300
+    width = 1000
+    height = 500
     show_x_guidelines = False
     show_y_guidelines = True
     show_data_values = True
@@ -575,7 +575,7 @@ class Graph(object):
                 'y': str(y_offset),
                 'width': str(self.KEY_BOX_SIZE),
                 'height': str(self.KEY_BOX_SIZE),
-                'class': 'key%s' % (key_count + 1),
+                'class': 'key key%s' % (key_count + 1),
             })
             text = etree.SubElement(group, 'text', {
                 'x': str(self.KEY_BOX_SIZE + 5),
@@ -644,14 +644,14 @@ class Graph(object):
         NSMAP = {
             None: SVG_NAMESPACE,
             'xlink': 'http://www.w3.org/1999/xlink',
-            'a3': 'http://ns.adobe.com/AdobeSVGViewerExtensions/3.0/',
+            # 'a3': 'http://ns.adobe.com/AdobeSVGViewerExtensions/3.0/',
             }
         self.root = etree.Element(SVG + "svg", attrib={
             'width': str(self.width),
             'height': str(self.height),
-            'viewBox': '0 0 %s %s' % (self.width, self.height),
-            '{http://ns.adobe.com/AdobeSVGViewerExtensions/3.0/}'
-            'scriptImplementation': 'Adobe',
+            'viewBox': '0 0 100% 100%',
+            # '{http://ns.adobe.com/AdobeSVGViewerExtensions/3.0/}'
+            # 'scriptImplementation': 'Adobe',
             }, nsmap=NSMAP)
         if hasattr(self, 'style_sheet_href'):
             pi = etree.ProcessingInstruction(
@@ -661,12 +661,9 @@ class Graph(object):
             self.root.addprevious(pi)
 
         comment_strings = (
-            ' Created with SVG.Graph ',
-            ' SVG.Graph by Jason R. Coombs ',
-            ' Based on SVG::Graph by Sean E. Russel ',
-            ' Based on Perl SVG:TT:Graph by Leo Lapworth & Stephan Morgan ',
-            ' ' + '/' * 66,
-            )
+            u'Generatel with pygal ©Kozea 2011',
+            ' Based upon SVG.Graph by Jason R. Coombs ',
+        )
         map(self.root.append, map(etree.Comment, comment_strings))
 
         defs = etree.SubElement(self.root, 'defs')

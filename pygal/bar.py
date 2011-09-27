@@ -190,7 +190,7 @@ class VerticalBar(Bar):
                     'y': str(top),
                     'width': str(bar_width),
                     'height': str(length),
-                    'class': 'fill%s' % (dataset_count + 1),
+                    'class': 'fill fill%s' % (dataset_count + 1),
                 })
 
                 self.make_datapoint_text(
