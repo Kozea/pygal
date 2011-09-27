@@ -72,15 +72,10 @@ Base styles for pygal.Graph
 }
 
 .dataPointLabel{
-  fill: transparent;
   text-anchor:middle;
   font-size: 10px;
   font-family: "Arial", sans-serif;
   font-weight: normal;
-}
-
-.dataPointLabel:hover{
-  fill: #000000;
 }
 
 .staggerGuideLine{

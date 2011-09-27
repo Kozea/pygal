@@ -185,7 +185,9 @@ class VerticalBar(Bar):
                 if self.stack == 'side':
                     left += bar_width * dataset_count
 
-                rect = etree.SubElement(self.graph, 'rect', {
+                rect_group = etree.SubElement(self.graph, "g",
+                                              {'class': 'bar'})
+                etree.SubElement(rect_group, 'rect', {
                     'x': str(left),
                     'y': str(top),
                     'width': str(bar_width),
@@ -194,7 +196,7 @@ class VerticalBar(Bar):
                 })
 
                 self.make_datapoint_text(
-                    left + bar_width / 2.0, top - 6, value)
+                    rect_group, left + bar_width / 2.0, top - 6, value)
 
 
 class HorizontalBar(Bar):
@@ -249,7 +251,7 @@ class HorizontalBar(Bar):
                     'y': str(top),
                     'width': str(length),
                     'height': str(bar_height),
-                    'class': 'fill%s' % (dataset_count + 1),
+                    'class': 'fill fill%s' % (dataset_count + 1),
                 })
 
                 self.make_datapoint_text(

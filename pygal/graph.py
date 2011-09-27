@@ -337,24 +337,14 @@ class Graph(object):
         # consider width/2 for centering the labels
         return 0
 
-    def make_datapoint_text(self, x, y, value, style=None):
+    def make_datapoint_text(self, group, x, y, value, style=None):
         """
         Add text for a datapoint
         """
         if not self.show_data_values:
-            # do nothing
             return
-        # first lay down the text in a wide white stroke to
-        #  differentiate it from the background
-        e = etree.SubElement(self.foreground, 'text', {
-            'x': str(x),
-            'y': str(y),
-            'class': 'dataPointLabel',
-            'style': '%(style)s stroke: #fff; stroke-width: 2;' % vars(),
-        })
-        e.text = str(value)
-        # then lay down the text in the specified style
-        e = etree.SubElement(self.foreground, 'text', {
+
+        e = etree.SubElement(group, 'text', {
             'x': str(x),
             'y': str(y),
             'class': 'dataPointLabel'})
