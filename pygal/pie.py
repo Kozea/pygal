@@ -1,6 +1,6 @@
 import math
 import itertools
-from lxml import etree
+from pygal.util import node
 from pygal.graph import Graph
 
 
@@ -118,14 +118,14 @@ class Pie(Graph):
 
     def add_defs(self, defs):
         "Add svg definitions"
-        etree.SubElement(
+        node(
             defs,
             'filter',
             id='dropshadow',
             width='1.2',
             height='1.2',
             )
-        etree.SubElement(
+        node(
             defs,
             'feGaussianBlur',
             stdDeviation='4',
@@ -158,10 +158,10 @@ class Pie(Graph):
         return map(key, self.fields, self.data)
 
     def draw_data(self):
-        self.graph = etree.SubElement(self.root, 'g')
-        background = etree.SubElement(self.graph, 'g')
+        self.graph = node(self.root, 'g')
+        background = node(self.graph, 'g')
         # midground is somewhere between the background and the foreground
-        midground = etree.SubElement(self.graph, 'g')
+        midground = node(self.graph, 'g')
 
         is_expanded = (self.expanded or self.expand_greatest)
         diameter = min(self.graph_width, self.graph_height)
@@ -174,7 +174,7 @@ class Pie(Graph):
         xoff = (self.width - diameter) / 2
         yoff = (self.height - self.border_bottom - diameter)
         yoff -= 10 * int(self.show_shadow)
-        transform = 'translate(%(xoff)s %(yoff)s)' % vars()
+        transform = 'translate(%s %s)' % (xoff, yoff)
         self.graph.set('transform', transform)
 
         wedge_text_pad = 5
@@ -198,23 +198,16 @@ class Pie(Graph):
             x_end = radius + (math.sin(radians) * radius)
             y_end = radius - (math.cos(radians) * radius)
             percent_greater_fifty = int(percent >= 50)
-            path = ' '.join((
-                "M%(radius)s,%(radius)s",
-                "L%(x_start)s,%(y_start)s",
-                "A%(radius)s,%(radius)s",
-                "0,",
-                "%(percent_greater_fifty)s,1,",
-                "%(x_end)s %(y_end)s Z"))
-            path = path % vars()
+            path = "M%s,%s L%s,%s A%s,%s 0, %s, 1, %s %s Z" % (
+                radius, radius, x_start, y_start, radius, radius,
+                percent_greater_fifty, x_end, y_end)
 
-            wedge = etree.SubElement(
+            wedge = node(
                 self.foreground,
-                'path',
-                {
+                'path', {
                     'd': path,
-                    'class': 'fill%s' % (index + 1),
-                }
-                )
+                    'class': 'fill%s' % (index + 1)}
+            )
 
             translate = None
             tx = 0
@@ -223,14 +216,14 @@ class Pie(Graph):
             radians = half_percent * rad_mult
 
             if self.show_shadow:
-                shadow = etree.SubElement(
+                shadow = node(
                     background,
                     'path',
                     d=path,
                     filter='url(#dropshadow)',
                     style='fill: #ccc; stroke: none',
                 )
-                clear = etree.SubElement(
+                clear = node(
                     midground,
                     'path',
                     d=path,
@@ -243,14 +236,14 @@ class Pie(Graph):
             if self.expanded or (self.expand_greatest and value == max_value):
                 tx = (math.sin(radians) * self.expand_gap)
                 ty = -(math.cos(radians) * self.expand_gap)
-                translate = "translate(%(tx)s %(ty)s)" % vars()
+                translate = "translate(%s %s)" % (tx, ty)
                 wedge.set('transform', translate)
                 clear.set('transform', translate)
 
             if self.show_shadow:
                 shadow_tx = self.shadow_offset + tx
                 shadow_ty = self.shadow_offset + ty
-                translate = 'translate(%(shadow_tx)s %(shadow_ty)s)' % vars()
+                translate = 'translate(%s %s)' % (shadow_tx, shadow_ty)
                 shadow.set('transform', translate)
 
             if self.show_data_labels and value != 0:
@@ -273,24 +266,24 @@ class Pie(Graph):
                     tx += (msr * self.expand_gap)
                     ty -= (mcr * self.expand_gap)
 
-                label_node = etree.SubElement(
+                label_node = node(
                     self.foreground,
                     'text',
                     {
-                        'x': str(tx),
-                        'y': str(ty),
+                        'x': tx,
+                        'y': ty,
                         'class': 'dataPointLabel',
                         'style': 'stroke: #fff; stroke-width: 2;'
                     }
                 )
                 label_node.text = label
 
-                label_node = etree.SubElement(
+                label_node = node(
                     self.foreground,
                     'text',
                     {
-                        'x': str(tx),
-                        'y': str(ty),
+                        'x': tx,
+                        'y': ty,
                         'class': 'dataPointLabel',
                     }
                 )

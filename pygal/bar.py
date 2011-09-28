@@ -1,7 +1,8 @@
-#!python
+# -*- coding: utf-8 -*-
 from itertools import chain
 from lxml import etree
 from pygal.graph import Graph
+from pygal.util import node
 
 __all__ = ('VerticalBar', 'HorizontalBar')
 
@@ -15,7 +16,7 @@ class Bar(Graph):
     # overlap - overlap bars with transparent colors
     # top - stack bars on top of one another
     # side - stack bars side-by-side
-    stack = 'overlap'
+    stack = 'side'
 
     scale_divisions = None
 
@@ -86,58 +87,7 @@ def float_range(start=0, stop=None, step=1):
 
 
 class VerticalBar(Bar):
-    """    # === Create presentation quality SVG bar graphs easily
-    #
-    # = Synopsis
-    #
-    #   require 'SVG/Graph/Bar'
-    #
-    #   fields = %w(Jan Feb Mar);
-    #   data_sales_02 = [12, 45, 21]
-    #
-    #   graph = SVG::Graph::Bar.new(
-    #     :height => 500,
-    #     :width => 300,
-    #     :fields => fields
-    #  )
-    #
-    #   graph.add_data(
-    #     :data => data_sales_02,
-    #     :title => 'Sales 2002'
-    #  )
-    #
-    #   print "Content-type: image/svg+xml\r\n\r\n"
-    #   print graph.burn
-    #
-    # = Description
-    #
-    # This object aims to allow you to easily create high quality
-    # SVG[http://www.w3c.org/tr/svg bar graphs. You can either use the default
-    # style sheet or supply your own. Either way there are many options which
-    # can be configured to give you control over how the graph is generated -
-    # with or without a key, data elements at each point, title, subtitle etc.
-    #
-    # = Notes
-    #
-    # The default stylesheet handles upto 12 data sets, if you
-    # use more you must create your own stylesheet and add the
-    # additional settings for the extra data sets. You will know
-    # if you go over 12 data sets as they will have no style and
-    # be in black.
-    #
-    # = Examples
-    #
-    # * http://germane-software.com/repositories/public/SVG/test/test.rb
-    #
-    # = See also
-    #
-    # * SVG::Graph::Graph
-    # * SVG::Graph::BarHorizontal
-    # * SVG::Graph::Line
-    # * SVG::Graph::Pie
-    # * SVG::Graph::Plot
-    # * SVG::Graph::TimeSeries
-"""
+    """ Vertical bar graph """
     top_align = top_font = 1
 
     def get_x_labels(self):
@@ -185,13 +135,13 @@ class VerticalBar(Bar):
                 if self.stack == 'side':
                     left += bar_width * dataset_count
 
-                rect_group = etree.SubElement(self.graph, "g",
+                rect_group = node(self.graph, "g",
                                               {'class': 'bar'})
-                etree.SubElement(rect_group, 'rect', {
-                    'x': str(left),
-                    'y': str(top),
-                    'width': str(bar_width),
-                    'height': str(length),
+                node(rect_group, 'rect', {
+                    'x': left,
+                    'y': top,
+                    'width': bar_width,
+                    'height': length,
                     'class': 'fill fill%s' % (dataset_count + 1),
                 })
 
@@ -200,6 +150,7 @@ class VerticalBar(Bar):
 
 
 class HorizontalBar(Bar):
+    """ Horizontal bar graph """
     rotate_y_labels = True
     show_x_guidelines = True
     show_y_guidelines = False
@@ -246,11 +197,11 @@ class HorizontalBar(Bar):
                 # left is 0 if value is negative
                 left = (abs(min_value) + min(value, 0)) * unit_size
 
-                rect = etree.SubElement(self.graph, 'rect', {
-                    'x': str(left),
-                    'y': str(top),
-                    'width': str(length),
-                    'height': str(bar_height),
+                node(self.graph, 'rect', {
+                    'x': left,
+                    'y': top,
+                    'width': length,
+                    'height': bar_height,
                     'class': 'fill fill%s' % (dataset_count + 1),
                 })
 

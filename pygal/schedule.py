@@ -1,115 +1,36 @@
-#!python
+# -*- coding: utf-8 -*-
 import re
 
 from dateutil.parser import parse
 from dateutil.relativedelta import relativedelta
 from lxml import etree
 
+from pygal.util import (node, grouper, date_range,
+                        divide_timedelta_float, TimeScale)
 from pygal.graph import Graph
-from util import grouper, date_range, divide_timedelta_float, TimeScale
 
 __all__ = ('Schedule')
 
 
 class Schedule(Graph):
     """
-        # === For creating SVG plots of scalar temporal data
-
-    = Synopsis
-
-      require 'SVG/Graph/Schedule'
-
-      # Data sets are label, start, end tripples.
-      data1 = [
-        "Housesitting", "6/17/04", "6/19/04",
-        "Summer Session", "6/15/04", "8/15/04",
-      ]
-
-      graph = SVG::Graph::Schedule.new( {
-        :width => 640,
-        :height => 480,
-        :graph_title => title,
-        :show_graph_title => true,
-        :no_css => true,
-        :scale_x_integers => true,
-        :scale_y_integers => true,
-        :min_x_value => 0,
-        :min_y_value => 0,
-        :show_data_labels => true,
-        :show_x_guidelines => true,
-        :show_x_title => true,
-        :x_title => "Time",
-        :stagger_x_labels => true,
-        :stagger_y_labels => true,
-        :x_label_format => "%m/%d/%y",
-      })
-
-      graph.add_data({
-       :data => data1,
-         :title => 'Data',
-      })
-
-      print graph.burn()
-
-    = Description
-
-    Produces a graph of temporal scalar data.
-
-    = Examples
-
-    http://www.germane-software/repositories/public/SVG/test/schedule.rb
-
-    = Notes
-
-    The default stylesheet handles upto 10 data sets, if you
-    use more you must create your own stylesheet and add the
-    additional settings for the extra data sets. You will know
-    if you go over 10 data sets as they will have no style and
-    be in black.
-
-    Note that multiple data sets within the same chart can differ in
-    length, and that the data in the datasets needn't be in order;
-    they will be ordered by the plot along the X-axis.
-
-    The dates must be parseable by ParseDate, but otherwise can be
-    any order of magnitude (seconds within the hour, or years)
-
-    = See also
-
-    * SVG::Graph::Graph
-    * SVG::Graph::BarHorizontal
-    * SVG::Graph::Bar
-    * SVG::Graph::Line
-    * SVG::Graph::Pie
-    * SVG::Graph::Plot
-    * SVG::Graph::TimeSeries
-
-    == Author
-
-    Sean E. Russell <serATgermaneHYPHENsoftwareDOTcom>
-
-    Copyright 2004 Sean E. Russell
-    This software is available under the Ruby license[LICENSE.txt]
-
+    Graph of temporal scalar data.
     """
 
-    "The format string to be used to format the X axis labels"
+    # The format string to be used to format the X axis labels
     x_label_format = '%Y-%m-%d %H:%M:%S'
 
-    """
-    Use this to set the spacing between dates on the axis.  The value
-    must be of the form
-    "\d+ ?((year|month|week|day|hour|minute|second)s?)?"
-
-    e.g.
-
-        graph.timescale_divisions = '2 weeks'
-        graph.timescale_divisions = '1 month'
-        graph.timescale_divisions = '3600 seconds'  # easier would be '1 hour'
-    """
+    # Use this to set the spacing between dates on the axis.  The value
+    # must be of the form
+    # "\d+ ?((year|month|week|day|hour|minute|second)s?)?"
+    # e.g.
+    #     graph.timescale_divisions = '2 weeks'
+    #     graph.timescale_divisions = '1 month'
+    #     graph.timescale_divisions = '3600 seconds'
+    #                       easier would be '1 hour'
     timescale_divisions = None
 
-    "The formatting used for the popups.  See x_label_format"
+    # The formatting used for the popups.  See x_label_format
     popup_format = '%Y-%m-%d %H:%M:%S'
 
     _min_x_value = None
@@ -122,23 +43,6 @@ class Schedule(Graph):
     def add_data(self, data):
         """
         Add data to the plot.
-
-          # A data set with 1 point: Lunch from 12:30 to 14:00
-          d1 = [ "Lunch", "12:30", "14:00" ]
-          # A data set with 2 points: "Cats" runs from 5/11/03 to 7/15/04, and
-          #                           "Henry V" runs from 6/12/03 to 8/20/03
-          d2 = [ "Cats", "5/11/03", "7/15/04",
-                 "Henry V", "6/12/03", "8/20/03" ]
-
-          graph.add_data(
-            :data => d1,
-            :title => 'Meetings'
-          )
-          graph.add_data(
-            :data => d2,
-            :title => 'Plays'
-          )
-
         Note that the data must be in time,value pairs,
         and that the date format
         may be any date that is parseable by ParseDate.
@@ -220,7 +124,6 @@ class Schedule(Graph):
 
         subbar_height = self.get_field_height() - bar_gap
 
-        y_mod = (subbar_height / 2) + (self.font_size / 2)
         x_min, x_max, div = self._x_range()
         x_range = x_max - x_min
         width = (float(self.graph_width) - self.font_size * 2)
@@ -238,11 +141,11 @@ class Schedule(Graph):
             bar_width = scale * (x_end - x_start)
             bar_start = scale * (x_start - x_min)
 
-            etree.SubElement(self.graph, 'rect', {
-                'x': str(bar_start),
-                'y': str(y),
-                'width': str(bar_width),
-                'height': str(subbar_height),
+            node(self.graph, 'rect', {
+                'x': bar_start,
+                'y': y,
+                'width': bar_width,
+                'height': subbar_height,
                 'class': 'fill%s' % (count + 1),
             })
 

@@ -6,9 +6,8 @@ import sys
 from itertools import izip, count, chain
 from lxml import etree
 
+from pygal.util import node, float_range
 from pygal.graph import Graph
-
-from .util import float_range
 
 
 def get_pairs(i):
@@ -23,116 +22,33 @@ if sys.version >= '3':
 
 
 class Plot(Graph):
-    """=== For creating SVG plots of scalar data
-
-    = Synopsis
-
-      require 'SVG/Graph/Plot'
-
-      # Data sets are x,y pairs
-      # Note that multiple data sets can differ in length, and that the
-      # data in the datasets needn't be in order; they will be ordered
-      # by the plot along the X-axis.
-      projection = [
-        6, 11,    0, 5,   18, 7,   1, 11,   13, 9,   1, 2,   19, 0,   3, 13,
-        7, 9
-     ]
-      actual = [
-        0, 18,    8, 15,    9, 4,   18, 14,   10, 2,   11, 6,  14, 12,
-        15, 6,   4, 17,   2, 12
-     ]
-
-      graph = SVG::Graph::Plot.new({
-       :height => 500,
-           :width => 300,
-        :key => true,
-        :scale_x_integers => true,
-        :scale_y_integerrs => true,
-     })
-
-      graph.add_data({
-       :data => projection
-         :title => 'Projected',
-     })
-
-      graph.add_data({
-       :data => actual,
-         :title => 'Actual',
-     })
-
-      print graph.burn()
-
-    = Description
-
-    Produces a graph of scalar data.
-
-    This object aims to allow you to easily create high quality
-    SVG[http://www.w3c.org/tr/svg] scalar plots. You can either use the
-    default style sheet or supply your own. Either way there are many options
-    which can be configured to give you control over how the graph is
-    generated - with or without a key, data elements at each point, title,
-    subtitle etc.
-
-    = Examples
-
-    http://www.germane-software/repositories/public/SVG/test/plot.rb
-
-    = Notes
-
-    The default stylesheet handles upto 10 data sets, if you
-    use more you must create your own stylesheet and add the
-    additional settings for the extra data sets. You will know
-    if you go over 10 data sets as they will have no style and
-    be in black.
-
-    Unlike the other types of charts, data sets must contain x,y pairs:
-
-      [1, 2]    # A data set with 1 point: (1,2)
-      [1,2, 5,6] # A data set with 2 points: (1,2) and (5,6)
-
-    = See also
-
-    * SVG::Graph::Graph
-    * SVG::Graph::BarHorizontal
-    * SVG::Graph::Bar
-    * SVG::Graph::Line
-    * SVG::Graph::Pie
-    * SVG::Graph::TimeSeries
-
-    == Author
-
-    Sean E. Russell <serATgermaneHYPHENsoftwareDOTcom>
-
-    Copyright 2004 Sean E. Russell
-    This software is available under the Ruby license[LICENSE.txt]"""
+    """Graph of scalar data."""
 
     top_align = right_align = top_font = right_font = 1
 
-    """Determines the scaling for the Y axis divisions.
-
-      graph.scale_y_divisions = 0.5
-
-    would cause the graph to attempt to generate labels stepped by 0.5; EG:
-    0, 0.5, 1, 1.5, 2, ..."""
+    # Determines the scaling for the Y axis divisions.
+    # graph.scale_y_divisions = 0.5
+    # would cause the graph to attempt to generate labels stepped by 0.5; EG:
+    # 0, 0.5, 1, 1.5, 2, ...
     scale_y_divisions = None
-    "Make the X axis labels integers"
+    # Make the X axis labels integers
     scale_x_integers = False
-    "Make the Y axis labels integers"
+    # Make the Y axis labels integers
     scale_y_integers = False
-    "Fill the area under the line"
+    # Fill the area under the line
     area_fill = False
-    """Show a small circle on the graph where the line
-    goes from one point to the next."""
+    # Show a small circle on the graph where the line
+    # goes from one point to the next.
     show_data_points = True
-    "Indicate whether the lines should be drawn between points"
+    # Indicate whether the lines should be drawn between points
     draw_lines_between_points = True
-    "Set the minimum value of the X axis"
+    # Set the minimum value of the X axis
     min_x_value = None
-    "Set the minimum value of the Y axis"
+    # Set the minimum value of the Y axis
     min_y_value = None
-    "Set the maximum value of the X axis"
+    # Set the maximum value of the X axis
     max_x_value = None
-    "Set the maximum value of the Y axis"
+    # Set the maximum value of the Y axis
     max_y_value = None
 
     stacked = False
@@ -141,13 +57,12 @@ class Plot(Graph):
 
     @apply
     def scale_x_divisions():
-        doc = """Determines the scaling for the X axis divisions.
+        """Determines the scaling for the X axis divisions.
 
-            graph.scale_x_divisions = 2
-
-            would cause the graph to attempt
-            to generate labels stepped by 2; EG:
-            0,2,4,6,8..."""
+        graph.scale_x_divisions = 2
+        would cause the graph to attempt
+        to generate labels stepped by 2; EG:
+        0,2,4,6,8..."""
 
         def fget(self):
             return getattr(self, '_scale_x_divisions', None)
@@ -279,14 +194,14 @@ class Plot(Graph):
             lpath = self.get_lpath(graph_points)
             if self.area_fill:
                 graph_height = self.graph_height
-                path = etree.SubElement(self.graph, 'path', {
-                    'd': 'M%(x_start)f %(graph_height)f'
-                    ' %(lpath)s V%(graph_height)f Z' % vars(),
-                    'class': 'fill%(line)d' % vars()})
+                node(self.graph, 'path', {
+                    'd': 'M%f %f %s V%f Z' % (
+                        x_start, graph_height, lpath, graph_height),
+                    'class': 'fill%d' % line})
             if self.draw_lines_between_points:
-                path = etree.SubElement(self.graph, 'path', {
-                    'd': 'M%(x_start)f %(y_start)f %(lpath)s' % vars(),
-                    'class': 'line%(line)d' % vars()})
+                node(self.graph, 'path', {
+                    'd': 'M%f %f %s' % (x_start, y_start, lpath),
+                    'class': 'line%d' % line})
             self.draw_data_points(line, data_points, graph_points)
         self._draw_constant_lines()
         del self.__transform_parameters
@@ -304,14 +219,14 @@ class Plot(Graph):
         value, label, style = value_label_style
         start = self.transform_output_coordinates((0, value))[1]
         stop = self.graph_width
-        path = etree.SubElement(self.graph, 'path', {
-            'd': 'M 0 %(start)s h%(stop)s' % vars(),
+        path = node(self.graph, 'path', {
+            'd': 'M 0 %s h%s' % (start, stop),
             'class': 'constantLine'})
         if style:
             path.set('style', style)
-        text = etree.SubElement(self.graph, 'text', {
-            'x': str(2),
-            'y': str(start - 2),
+        text = node(self.graph, 'text', {
+            'x': 2,
+            'y': start - 2,
             'class': 'constantLine'})
         text.text = label
 
@@ -338,8 +253,6 @@ class Plot(Graph):
         x_step = self.__transform_parameters['x_step']
         y_min = self.__transform_parameters['y_min']
         y_step = self.__transform_parameters['y_step']
-        #locals().update(self.__transform_parameters)
-        #vars().update(self.__transform_parameters)
         x = (x - x_min) * x_step
         y = self.graph_height - (y - y_min) * y_step
         return x, y
@@ -350,11 +263,11 @@ class Plot(Graph):
 
         for ((dx, dy), (gx, gy)) in izip(data_points, graph_points):
             if self.show_data_points:
-                etree.SubElement(self.graph, 'circle', {
-                    'cx': str(gx),
-                    'cy': str(gy),
+                node(self.graph, 'circle', {
+                    'cx': gx,
+                    'cy': gy,
                     'r': '2.5',
-                    'class': 'dataPoint%(line)s' % vars()})
+                    'class': 'dataPoint%s' % line})
             if self.show_data_values:
                 self.add_popup(gx, gy, self.format(dx, dy))
             self.make_datapoint_text(gx, gy - 6, dy)

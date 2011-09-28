@@ -1,8 +1,16 @@
-#!python
-
+# -*- coding: utf-8 -*-
+from lxml import etree
 import itertools
 import datetime
-# from itertools recipes (python documentation)
+
+
+def node(parent, tag, params={}, **extras):
+    """Make a etree node"""
+    for key, value in params.items():
+        if not isinstance(value, basestring):
+            params[key] = str(value)
+
+    return etree.SubElement(parent, tag, params, **extras)
 
 
 def grouper(n, iterable, padvalue=None):

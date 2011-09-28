@@ -1,11 +1,7 @@
-#!python
-
-# $Id$
-
+# -*- coding: utf-8 -*-
 from operator import itemgetter, add
-from lxml import etree
 
-from util import flatten, float_range
+from pygal.util import node, flatten, float_range
 from pygal.graph import Graph
 
 
@@ -136,7 +132,7 @@ class Line(Graph):
                     area_path = ' '.join(paths)
                     origin = paths[-1]
                 else:
-                    area_path = "V%(graph_height)s" % vars(self)
+                    area_path = "V%s" % self.graph_height
                     origin = coord_format(get_coords((0, 0)))
 
                 d = ' '.join((
@@ -147,32 +143,31 @@ class Line(Graph):
                     area_path,
                     'Z'
                 ))
-                etree.SubElement(self.graph, 'path', {
-                    'class': 'fill%(line_n)s' % vars(),
+                node(self.graph, 'path', {
+                    'class': 'fill%s' % line_n,
                     'd': d,
-                    })
+                })
 
             # now draw the line itself
-            etree.SubElement(self.graph, 'path', {
+            node(self.graph, 'path', {
                 'd': 'M0 %s L%s' % (self.graph_height, line_path),
-                'class': 'line%(line_n)s' % vars(),
+                'class': 'line%s' % line_n,
                 })
 
             if self.show_data_points or self.show_data_values:
                 for i, value in enumerate(cum_sum):
                     if self.show_data_points:
-                        circle = etree.SubElement(
+                        node(
                             self.graph,
                             'circle',
-                            {'class': 'dataPoint%(line_n)s' % vars()},
+                            {'class': 'dataPoint%s' % line_n},
                             cx=str(field_width * i),
                             cy=str(self.graph_height - value * field_height),
                             r='2.5',
-                            )
+                        )
                     self.make_datapoint_text(
                         field_width * i,
                         self.graph_height - value * field_height - 6,
                         value + min_value
-                        )
-
+                    )
             prev_sum = list(cum_sum)

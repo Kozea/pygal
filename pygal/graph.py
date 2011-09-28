@@ -1,4 +1,3 @@
-#!python
 # -*- coding: utf-8 -*-
 
 """
@@ -9,19 +8,13 @@ The base module for `pygal` classes.
 
 from operator import itemgetter
 from itertools import islice
-import pkg_resources
-import functools
 import os
 
 from lxml import etree
+from pygal.util import node
 from pygal.util.boundary import (calculate_right_margin, calculate_left_margin,
                                  calculate_bottom_margin, calculate_top_margin,
                                  calculate_offsets_bottom)
-
-try:
-    import zlib
-except ImportError:
-    zlib = None
 
 
 def sort_multiple(arrays):
@@ -36,13 +29,11 @@ class Graph(object):
     """
     Base object for generating SVG Graphs
 
-    Synopsis
-
         This class is only used as a superclass of specialized charts.  Do not
-        attempt to use this class directly, unless creating a new chart type.
+    attempt to use this class directly, unless creating a new chart type.
 
         For examples of how to subclass this class, see the existing specific
-        subclasses, such as svn.charts.Pie.
+    subclasses, such as svn.charts.Pie.
 
     * pygal.bar
     * pygal.line
@@ -169,18 +160,11 @@ class Graph(object):
         self.draw_data()
         self.graph.append(self.foreground)
 
-        return self._burn_compressed()
-
-    def _burn_compressed(self):
-        if self.compress and not zlib:
-            self.root.addprevious(
-                etree.Comment('Python zlib not available for SVGZ'))
-
         data = etree.tostring(
             self.root, pretty_print=True,
             xml_declaration=True, encoding='utf-8')
-
-        if self.compress and zlib:
+        if self.compress:
+            import zlib
             data = zlib.compress(data)
 
         return data
@@ -193,36 +177,6 @@ class Graph(object):
         if self.rotate_y_labels:
             return self.font_size
 
-    def add_popup(self, x, y, label):
-        """
-        Add pop-up information to a point on the graph.
-        """
-        txt_width = len(label) * self.font_size * 0.6 + 10
-        tx = x + [5, -5][int(x + txt_width > self.width)]
-        anchor = ['start', 'end'][x + txt_width > self.width]
-        style = 'fill: #000; text-anchor: %s;' % anchor
-        id = 'label-%s' % label
-        t = etree.SubElement(self.foreground, 'text', {
-            'x': str(tx),
-            'y': str(y - self.font_size),
-            'visibility': 'hidden',
-            'style': style,
-            'text': label,
-            'id': id
-            })
-
-        # add the circle element to the foreground
-        visibility = ("document.getElementById('%s')."
-                      "setAttribute('visibility', %%s)" % id)
-        t = etree.SubElement(self.foreground, 'circle', {
-            'cx': str(x),
-            'cy': str(y),
-            'r': str(10),
-            'style': 'opacity: 0;',
-            'onmouseover': visibility % 'visible',
-            'onmouseout': visibility % 'hidden',
-            })
-
     def draw_graph(self):
         """
         The central logic for drawing the graph.
@@ -230,23 +184,23 @@ class Graph(object):
         Sets self.graph (the 'g' element in the SVG root)
         """
         transform = 'translate (%s %s)' % (self.border_left, self.border_top)
-        self.graph = etree.SubElement(self.root, 'g', transform=transform)
+        self.graph = node(self.root, 'g', transform=transform)
 
-        etree.SubElement(self.graph, 'rect', {
-            'x': '0',
-            'y': '0',
-            'width': str(self.graph_width),
-            'height': str(self.graph_height),
+        node(self.graph, 'rect', {
+            'x': 0,
+            'y': 0,
+            'width': self.graph_width,
+            'height': self.graph_height,
             'class': 'graphBackground'
             })
 
         #Axis
-        etree.SubElement(self.graph, 'path', {
+        node(self.graph, 'path', {
             'd': 'M 0 0 v%s' % self.graph_height,
             'class': 'axis',
             'id': 'xAxis'
         })
-        etree.SubElement(self.graph, 'path', {
+        node(self.graph, 'path', {
             'd': 'M 0 %s h%s' % (self.graph_height, self.graph_width),
             'class': 'axis',
             'id': 'yAxis'
@@ -255,13 +209,6 @@ class Graph(object):
         self.draw_x_labels()
         self.draw_y_labels()
 
-    def x_label_offset(self, width):
-        """
-        Return an offset for drawing the x label. Currently returns 0.
-        """
-        # consider width/2 for centering the labels
-        return 0
-
     def make_datapoint_text(self, group, x, y, value, style=None):
         """
         Add text for a datapoint
@@ -269,9 +216,9 @@ class Graph(object):
         if not self.show_data_values:
             return
 
-        e = etree.SubElement(group, 'text', {
-            'x': str(x),
-            'y': str(y),
+        e = node(group, 'text', {
+            'x': x,
+            'y': y,
             'class': 'dataPointLabel'})
         e.text = str(value)
         if style:
@@ -292,19 +239,18 @@ class Graph(object):
     def draw_x_label(self, label):
         label_width = self.field_width()
         index, label = label
-        text = etree.SubElement(self.graph, 'text', {'class': 'xAxisLabels'})
+        text = node(self.graph, 'text', {'class': 'xAxisLabels'})
         text.text = label
 
-        x = index * label_width + self.x_label_offset(label_width)
+        x = index * label_width
         y = self.graph_height + self.x_label_font_size + 3
-        t = 0 - (self.font_size / 2)
 
         if self.stagger_x_labels and (index % 2):
             stagger = self.x_label_font_size + 5
             y += stagger
             graph_height = self.graph_height
-            path = etree.SubElement(self.graph, 'path', {
-                'd': 'M%(x)f %(graph_height)f v%(stagger)d' % vars(),
+            node(self.graph, 'path', {
+                'd': 'M%f %f v%d' % (x, graph_height, stagger),
                 'class': 'staggerGuideLine'
             })
 
@@ -341,7 +287,6 @@ class Graph(object):
     def draw_y_labels(self):
         "Draw the Y axis labels"
         if not self.show_y_labels:
-            # do nothing
             return
 
         labels = self.get_y_labels()
@@ -363,7 +308,7 @@ class Graph(object):
     def draw_y_label(self, label):
         label_height = self.field_height()
         index, label = label
-        text = etree.SubElement(self.graph, 'text', {'class': 'yAxisLabels'})
+        text = node(self.graph, 'text', {'class': 'yAxisLabels'})
         text.text = label
 
         y = self.y_offset - (label_height * index)
@@ -372,8 +317,8 @@ class Graph(object):
         if self.stagger_y_labels and  (index % 2):
             stagger = self.y_label_font_size + 5
             x -= stagger
-            path = etree.SubElement(self.graph, 'path', {
-                'd': 'M%(x)f %(y)f h%(stagger)d' % vars(),
+            path = node(self.graph, 'path', {
+                'd': 'M%f %f h%d' % (x, y, stagger),
                 'class': 'staggerGuideLine'
             })
 
@@ -397,8 +342,8 @@ class Graph(object):
         for count in range(1, count):
             start = label_height * count
             stop = self.graph_height
-            path = etree.SubElement(self.graph, 'path', {
-                'd': 'M %(start)s 0 v%(stop)s' % vars(),
+            node(self.graph, 'path', {
+                'd': 'M %s 0 v%s' % (start, stop),
                 'class': 'guideLines'})
 
     def draw_y_guidelines(self, label_height, count):
@@ -408,8 +353,8 @@ class Graph(object):
         for count in range(1, count):
             start = self.graph_height - label_height * count
             stop = self.graph_width
-            path = etree.SubElement(self.graph, 'path', {
-                'd': 'M 0 %(start)s h%(stop)s' % vars(),
+            node(self.graph, 'path', {
+                'd': 'M 0 %s h%s' % (start, stop),
                 'class': 'guideLines'})
 
     def draw_titles(self):
@@ -424,9 +369,9 @@ class Graph(object):
             self.draw_y_title()
 
     def draw_graph_title(self):
-        text = etree.SubElement(self.root, 'text', {
-            'x': str(self.width / 2),
-            'y': str(self.title_font_size),
+        text = node(self.root, 'text', {
+            'x': self.width / 2,
+            'y': self.title_font_size,
             'class': 'mainTitle'})
         text.text = self.graph_title
 
@@ -434,9 +379,9 @@ class Graph(object):
         y_subtitle_options = [self.subtitle_font_size,
                               self.title_font_size + 10]
         y_subtitle = y_subtitle_options[self.show_graph_title]
-        text = etree.SubElement(self.root, 'text', {
-            'x': str(self.width / 2),
-            'y': str(y_subtitle),
+        text = node(self.root, 'text', {
+            'x': self.width / 2,
+            'y': y_subtitle,
             'class': 'subTitle',
             })
         text.text = self.graph_title
@@ -450,9 +395,9 @@ class Graph(object):
             y += y_size
         x = self.width / 2
 
-        text = etree.SubElement(self.root, 'text', {
-            'x': str(x),
-            'y': str(y),
+        text = node(self.root, 'text', {
+            'x': x,
+            'y': y,
             'class': 'xAxisTitle',
             })
         text.text = self.x_title
@@ -466,36 +411,35 @@ class Graph(object):
                 x -= 3
                 rotate = 90
         y = self.height / 2
-        text = etree.SubElement(self.root, 'text', {
-                'x': str(x),
-                'y': str(y),
-                'class': 'yAxisTitle',
-                })
+        text = node(self.root, 'text', {
+            'x': x,
+            'y': y,
+            'class': 'yAxisTitle',
+        })
         text.text = self.y_title
-        text.set('transform', 'rotate(%(rotate)d, %(x)s, %(y)s)' % vars())
+        text.set('transform', 'rotate(%d, %s, %s)' % (rotate, x, y))
 
     def keys(self):
         return map(itemgetter('title'), self.data)
 
     def draw_legend(self):
         if not self.key:
-            # do nothing
             return
 
-        group = etree.SubElement(self.root, 'g')
+        group = node(self.root, 'g')
 
         for key_count, key_name in enumerate(self.keys()):
             y_offset = (self.key_box_size * key_count) + (key_count * 5)
-            etree.SubElement(group, 'rect', {
-                'x': '0',
-                'y': str(y_offset),
-                'width': str(self.key_box_size),
-                'height': str(self.key_box_size),
+            node(group, 'rect', {
+                'x': 0,
+                'y': y_offset,
+                'width': self.key_box_size,
+                'height': self.key_box_size,
                 'class': 'key key%s' % (key_count + 1),
             })
-            text = etree.SubElement(group, 'text', {
-                'x': str(self.key_box_size + 5),
-                'y': str(y_offset + self.key_box_size),
+            text = node(group, 'text', {
+                'x': self.key_box_size + 5,
+                'y': y_offset + self.key_box_size,
                 'class': 'keyText'})
             text.text = key_name
 
@@ -504,7 +448,7 @@ class Graph(object):
             y_offset = self.border_top + 20
         if self.key_position == 'bottom':
             x_offset, y_offset = calculate_offsets_bottom(self)
-        group.set('transform', 'translate(%(x_offset)d %(y_offset)d)' % vars())
+        group.set('transform', 'translate(%d %d)' % (x_offset, y_offset))
 
     def add_defs(self, defs):
         """
@@ -513,20 +457,14 @@ class Graph(object):
 
     def start_svg(self):
         "Base SVG Document Creation"
-        SVG_NAMESPACE = 'http://www.w3.org/2000/svg'
-        SVG = '{%s}' % SVG_NAMESPACE
-        NSMAP = {
-            None: SVG_NAMESPACE,
+        svg_ns = 'http://www.w3.org/2000/svg'
+        nsmap = {
+            None: svg_ns,
             'xlink': 'http://www.w3.org/1999/xlink',
-            # 'a3': 'http://ns.adobe.com/AdobeSVGViewerExtensions/3.0/',
             }
-        self.root = etree.Element(SVG + "svg", attrib={
-            # 'width': str(self.width),
-            # 'height': str(self.height),
+        self.root = etree.Element("{%s}svg" % svg_ns, attrib={
             'viewBox': '0 0 100% 100%',
-            # '{http://ns.adobe.com/AdobeSVGViewerExtensions/3.0/}'
-            # 'scriptImplementation': 'Adobe',
-            }, nsmap=NSMAP)
+            }, nsmap=nsmap)
 
         if hasattr(self, 'style_sheet_href'):
             pi = etree.ProcessingInstruction(
@@ -541,13 +479,13 @@ class Graph(object):
         )
         map(self.root.append, map(etree.Comment, comment_strings))
 
-        defs = etree.SubElement(self.root, 'defs')
+        defs = node(self.root, 'defs')
         self.add_defs(defs)
 
         if not hasattr(self, 'style_sheet_href'):
             self.root.append(etree.Comment(
                 ' include default stylesheet if none specified '))
-            style = etree.SubElement(defs, 'style', type='text/css')
+            style = node(defs, 'style', type='text/css')
             style.text = ''
             opts = dict(Graph.__dict__)
             opts.update(self.__dict__)
@@ -558,11 +496,11 @@ class Graph(object):
                     style.text += f.read() % opts
 
         self.root.append(etree.Comment('SVG Background'))
-        rect = etree.SubElement(self.root, 'rect', {
-            'width': str(self.width),
-            'height': str(self.height),
-            'x': '0',
-            'y': '0',
+        node(self.root, 'rect', {
+            'width': self.width,
+            'height': self.height,
+            'x': 0,
+            'y': 0,
             'class': 'svgBackground'})
 
     def calculate_graph_dimensions(self):
