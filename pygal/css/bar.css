@@ -1,3 +1,5 @@
+/* Base styles for pygal bar */
+
 .bar .dataPointLabel {
     fill-opacity: 0;
     -webkit-transition: 250ms;

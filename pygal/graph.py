@@ -11,14 +11,12 @@ from operator import itemgetter
 from itertools import islice
 import pkg_resources
 import functools
-
-import cssutils
+import os
 
 from lxml import etree
 from pygal.util.boundary import (calculate_right_margin, calculate_left_margin,
                                  calculate_bottom_margin, calculate_top_margin,
                                  calculate_offsets_bottom)
-from pygal import css  # causes the SVG profile to be loaded
 
 try:
     import zlib
@@ -97,10 +95,8 @@ class Graph(object):
     add_popups = False
 
     top_align = top_font = right_align = right_font = 0
-
-    compress = False
-
     stylesheet_names = ['graph.css']
+    compress = False
 
     def __init__(self, config={}):
         """Initialize the graph object with the graph settings."""
@@ -108,7 +104,6 @@ class Graph(object):
             raise NotImplementedError("Graph is an abstract base class")
         self.load_config(config)
         self.clear_data()
-        self.style = {}
 
     def load_config(self, config):
         self.__dict__.update(config)
@@ -511,18 +506,6 @@ class Graph(object):
             x_offset, y_offset = calculate_offsets_bottom(self)
         group.set('transform', 'translate(%(x_offset)d %(y_offset)d)' % vars())
 
-    def parse_css(self):
-        """
-        Take a .css file (classes only please) and parse it into a dictionary
-        of class/style pairs.
-        """
-        # todo: save the prefs for use later
-        #orig_prefs = cssutils.ser.prefs
-        cssutils.ser.prefs.useMinified()
-        get_pair = lambda r: (r.selectorText, r.style.cssText)
-        result = dict(map(get_pair, self.get_stylesheet()))
-        return result
-
     def add_defs(self, defs):
         """
         Override and place code to add defs here. TODO: what are defs?
@@ -544,6 +527,7 @@ class Graph(object):
             # '{http://ns.adobe.com/AdobeSVGViewerExtensions/3.0/}'
             # 'scriptImplementation': 'Adobe',
             }, nsmap=NSMAP)
+
         if hasattr(self, 'style_sheet_href'):
             pi = etree.ProcessingInstruction(
                 'xml-stylesheet',
@@ -564,9 +548,14 @@ class Graph(object):
             self.root.append(etree.Comment(
                 ' include default stylesheet if none specified '))
             style = etree.SubElement(defs, 'style', type='text/css')
-            # TODO: the text was previously escaped in a CDATA declaration...
-            # how  to do that with etree?
-            style.text = self.get_stylesheet().cssText
+            style.text = ''
+            opts = dict(Graph.__dict__)
+            opts.update(self.__dict__)
+            for stylesheet in self.stylesheet_names:
+                with open(
+                    os.path.join(os.path.dirname(__file__), 'css',
+                                 stylesheet)) as f:
+                    style.text += f.read() % opts
 
         self.root.append(etree.Comment('SVG Background'))
         rect = etree.SubElement(self.root, 'rect', {
@@ -584,41 +573,3 @@ class Graph(object):
 
         self.graph_width = self.width - self.border_left - self.border_right
         self.graph_height = self.height - self.border_top - self.border_bottom
-
-    @staticmethod
-    def load_resource_stylesheet(name, subs=dict()):
-        css_stream = pkg_resources.resource_stream('pygal', name)
-        css_string = css_stream.read().decode('utf-8')
-        css_string = css_string % subs
-        sheet = cssutils.parseString(css_string)
-        return sheet
-
-    def get_stylesheet_resources(self):
-        "Get the stylesheets for this instance"
-        # allow css to include class variables
-        class_vars = class_dict(self)
-        loader = functools.partial(self.load_resource_stylesheet,
-            subs=class_vars)
-        sheets = map(loader, self.stylesheet_names)
-        return sheets
-
-    def get_stylesheet(self):
-        cssutils.log.setLevel(30)  # disable INFO log messages
-
-        def merge_sheets(s1, s2):
-            map(s1.add, s2)
-            return s1
-        return reduce(merge_sheets, self.get_stylesheet_resources())
-
-
-class class_dict(object):
-    "Emulates a dictionary, but retrieves class attributes"
-    def __init__(self, obj):
-        self.__obj__ = obj
-
-    def __getitem__(self, item):
-        return getattr(self.__obj__, item)
-
-    def keys(self):
-        # dir returns a good guess of what attributes might be available
-        return dir(self.__obj__)
