@@ -35,8 +35,7 @@ def create_app():
     def rotation_svg(angle):
         return generate_vbar(
             title="Rotation %d" % angle,
-            x_label_rotation=angle,
-            key_position='bottom')
+            x_label_rotation=angle)
 
     @app.route("/rotation")
     def rotation():

@@ -11,25 +11,19 @@ from operator import itemgetter
 from itertools import islice
 import pkg_resources
 import functools
-import math
+
 import cssutils
 
 from lxml import etree
-
+from pygal.util.boundary import (calculate_right_margin, calculate_left_margin,
+                                 calculate_bottom_margin, calculate_top_margin,
+                                 calculate_offsets_bottom)
 from pygal import css  # causes the SVG profile to be loaded
 
 try:
     import zlib
 except ImportError:
     zlib = None
-
-
-def cos(angle):
-    return math.cos(angle * math.pi / 180)
-
-
-def sin(angle):
-    return math.sin(angle * math.pi / 180)
 
 
 def sort_multiple(arrays):
@@ -98,6 +92,7 @@ class Graph(object):
     y_label_font_size = 12
     y_title_font_size = 14
     key_font_size = 10
+    key_box_size = 10
 
     add_popups = False
 
@@ -195,36 +190,6 @@ class Graph(object):
 
         return data
 
-    KEY_BOX_SIZE = 12
-
-    def calculate_left_margin(self):
-        """
-        Calculates the margin to the left of the plot area, setting
-        border_left.
-        """
-        bl = 7
-        # Check for Y labels
-        if self.rotate_y_labels:
-            max_y_label_height_px = self.y_label_font_size
-        else:
-            label_lengths = map(len, self.get_y_labels())
-            max_y_label_len = max(label_lengths)
-            max_y_label_height_px = (0.6 * max_y_label_len *
-                                     self.y_label_font_size)
-        if self.show_y_labels:
-            bl += max_y_label_height_px
-        if self.stagger_y_labels:
-            bl += max_y_label_height_px + 10
-        if self.show_y_title:
-            bl += self.y_title_font_size + 5
-        if self.x_label_rotation:
-            label_lengths = map(len, self.get_x_labels())
-            max_x_label_len = reduce(max, label_lengths)
-            max_x_label_height_px = self.x_label_font_size
-            max_x_label_height_px *= max_x_label_len * 0.6
-            bl += max_x_label_height_px * cos(self.x_label_rotation)
-        self.border_left = bl
-
     def max_y_label_width_px(self):
         """
         Calculate the width of the widest Y label.  This will be the
@@ -232,31 +197,6 @@ class Graph(object):
         """
         if self.rotate_y_labels:
             return self.font_size
-
-    def calculate_right_margin(self):
-        """
-        Calculate the margin in pixels to the right of the plot area,
-        setting border_right.
-        """
-        br = 7
-        if self.key and self.key_position == 'right':
-            max_key_len = max(map(len, self.keys()))
-            br += max_key_len * self.key_font_size * 0.6
-            br += self.KEY_BOX_SIZE
-            br += 10        # Some padding around the box
-        self.border_right = br
-
-    def calculate_top_margin(self):
-        """
-        Calculate the margin in pixels above the plot area, setting
-        border_top.
-        """
-        self.border_top = 5
-        if self.show_graph_title:
-            self.border_top += self.title_font_size
-        self.border_top += 5
-        if self.show_graph_subtitle:
-            self.border_top += self.subtitle_font_size
 
     def add_popup(self, x, y, label):
         """
@@ -287,29 +227,6 @@ class Graph(object):
             'onmouseover': visibility % 'visible',
             'onmouseout': visibility % 'hidden',
             })
-
-    def calculate_bottom_margin(self):
-        """
-        Calculate the margin in pixels below the plot area, setting
-        border_bottom.
-        """
-        bb = 7
-        if self.key and self.key_position == 'bottom':
-            bb += len(self.data) * (self.font_size + 5)
-            bb += 10
-        if self.show_x_labels:
-            max_x_label_height_px = self.x_label_font_size
-            if self.x_label_rotation:
-                label_lengths = map(len, self.get_x_labels())
-                max_x_label_len = reduce(max, label_lengths)
-                max_x_label_height_px *= max_x_label_len * 0.8
-                max_x_label_height_px *= sin(self.x_label_rotation)
-            bb += max_x_label_height_px
-            if self.stagger_x_labels:
-                bb += max_x_label_height_px + 10
-        if self.show_x_title:
-            bb += self.x_title_font_size + 5
-        self.border_bottom = bb
 
     def draw_graph(self):
         """
@@ -573,17 +490,17 @@ class Graph(object):
         group = etree.SubElement(self.root, 'g')
 
         for key_count, key_name in enumerate(self.keys()):
-            y_offset = (self.KEY_BOX_SIZE * key_count) + (key_count * 5)
+            y_offset = (self.key_box_size * key_count) + (key_count * 5)
             etree.SubElement(group, 'rect', {
                 'x': '0',
                 'y': str(y_offset),
-                'width': str(self.KEY_BOX_SIZE),
-                'height': str(self.KEY_BOX_SIZE),
+                'width': str(self.key_box_size),
+                'height': str(self.key_box_size),
                 'class': 'key key%s' % (key_count + 1),
             })
             text = etree.SubElement(group, 'text', {
-                'x': str(self.KEY_BOX_SIZE + 5),
-                'y': str(y_offset + self.KEY_BOX_SIZE),
+                'x': str(self.key_box_size + 5),
+                'y': str(y_offset + self.key_box_size),
                 'class': 'keyText'})
             text.text = key_name
 
@@ -591,24 +508,8 @@ class Graph(object):
             x_offset = self.graph_width + self.border_left + 10
             y_offset = self.border_top + 20
         if self.key_position == 'bottom':
-            x_offset, y_offset = self.calculate_offsets_bottom()
+            x_offset, y_offset = calculate_offsets_bottom(self)
         group.set('transform', 'translate(%(x_offset)d %(y_offset)d)' % vars())
-
-    def calculate_offsets_bottom(self):
-        x_offset = self.border_left + 20
-        y_offset = self.border_top + self.graph_height + 5
-        if self.show_x_labels:
-            max_x_label_height_px = self.x_label_font_size
-            if self.x_label_rotation:
-                longest_label_length = max(map(len, self.get_x_labels()))
-                max_x_label_height_px *= longest_label_length
-                max_x_label_height_px *= sin(self.x_label_rotation)
-            y_offset += max_x_label_height_px
-            if self.stagger_x_labels:
-                y_offset += max_x_label_height_px + 5
-        if self.show_x_title:
-            y_offset += self.x_title_font_size + 5
-        return x_offset, y_offset
 
     def parse_css(self):
         """
@@ -676,10 +577,11 @@ class Graph(object):
             'class': 'svgBackground'})
 
     def calculate_graph_dimensions(self):
-        self.calculate_left_margin()
-        self.calculate_right_margin()
-        self.calculate_bottom_margin()
-        self.calculate_top_margin()
+        self.border_right = calculate_right_margin(self)
+        self.border_top = calculate_top_margin(self)
+        self.border_left = calculate_left_margin(self)
+        self.border_bottom = calculate_bottom_margin(self)
+
         self.graph_width = self.width - self.border_left - self.border_right
         self.graph_height = self.height - self.border_top - self.border_bottom
 

@@ -4,6 +4,9 @@ $Id$
 Base styles for pygal.Graph
 */
 
+* {
+  font-family: monospace;
+}
 .svgBackground{
   fill:#ffffff;
 }
@@ -16,14 +19,12 @@ Base styles for pygal.Graph
   text-anchor: middle;
   fill: #000000;
   font-size: %(title_font_size)dpx;
-  font-family: "Arial", sans-serif;
   font-weight: normal;
 }
 .subTitle{
   text-anchor: middle;
   fill: #999999;
   font-size: %(subtitle_font_size)dpx;
-  font-family: "Arial", sans-serif;
   font-weight: normal;
 }
 
@@ -42,7 +43,6 @@ Base styles for pygal.Graph
   text-anchor: middle;
   fill: #000000;
   font-size: %(x_label_font_size)dpx;
-  font-family: "Arial", sans-serif;
   font-weight: normal;
 }
 
@@ -50,7 +50,6 @@ Base styles for pygal.Graph
   text-anchor: end;
   fill: #000000;
   font-size: %(y_label_font_size)dpx;
-  font-family: "Arial", sans-serif;
   font-weight: normal;
 }
 
@@ -58,7 +57,6 @@ Base styles for pygal.Graph
   text-anchor: middle;
   fill: #ff0000;
   font-size: %(x_title_font_size)dpx;
-  font-family: "Arial", sans-serif;
   font-weight: normal;
 }
 
@@ -66,14 +64,12 @@ Base styles for pygal.Graph
   fill: #ff0000;
   text-anchor: middle;
   font-size: %(y_title_font_size)dpx;
-  font-family: "Arial", sans-serif;
   font-weight: normal;
 }
 
 .dataPointLabel{
   text-anchor:middle;
   font-size: 10px;
-  font-family: "Arial", sans-serif;
   font-weight: normal;
 }
 
@@ -87,6 +83,5 @@ Base styles for pygal.Graph
   fill: #000000;
   text-anchor:start;
   font-size: %(key_font_size)dpx;
-  font-family: "Arial", sans-serif;
   font-weight: normal;
 }
