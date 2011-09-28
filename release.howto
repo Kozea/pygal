@@ -1,6 +1,0 @@
-How to make a release:
-
-- Run release-package (from jaraco.util) in the current directory. This uploads to pypi.
-- upload released packages to sourceforge (can we automate this)?
-- announce release on python-announce-list@python.org
-- bump the version in setup.py and commit
