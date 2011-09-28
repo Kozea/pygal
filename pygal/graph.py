@@ -99,7 +99,6 @@ class Graph(object):
     y_title_font_size = 14
     key_font_size = 10
 
-    css_inline = False
     add_popups = False
 
     top_align = top_font = right_align = right_font = 0
@@ -179,7 +178,6 @@ class Graph(object):
         self.draw_legend()
         self.draw_data()
         self.graph.append(self.foreground)
-        self.render_inline_styles()
 
         return self._burn_compressed()
 
@@ -612,20 +610,6 @@ class Graph(object):
             y_offset += self.x_title_font_size + 5
         return x_offset, y_offset
 
-    def render_inline_styles(self):
-        "Hard-code the styles into the SVG XML if style sheets are not used."
-        if not self.css_inline:
-            # do nothing
-            return
-
-        # styles = self.parse_css()
-        # for node in xpath.Evaluate('//*[@class]', self.root):
-        #     cl = node.getAttribute('class')
-        #     style = styles[cl]
-        #     if node.hasAttribute('style'):
-        #         style += node.getAttribute('style')
-        #     node.setAttribute('style', style)
-
     def parse_css(self):
         """
         Take a .css file (classes only please) and parse it into a dictionary
@@ -653,8 +637,8 @@ class Graph(object):
             # 'a3': 'http://ns.adobe.com/AdobeSVGViewerExtensions/3.0/',
             }
         self.root = etree.Element(SVG + "svg", attrib={
-            'width': str(self.width),
-            'height': str(self.height),
+            # 'width': str(self.width),
+            # 'height': str(self.height),
             'viewBox': '0 0 100% 100%',
             # '{http://ns.adobe.com/AdobeSVGViewerExtensions/3.0/}'
             # 'scriptImplementation': 'Adobe',
@@ -675,7 +659,7 @@ class Graph(object):
         defs = etree.SubElement(self.root, 'defs')
         self.add_defs(defs)
 
-        if not hasattr(self, 'style_sheet_href') and not self.css_inline:
+        if not hasattr(self, 'style_sheet_href'):
             self.root.append(etree.Comment(
                 ' include default stylesheet if none specified '))
             style = etree.SubElement(defs, 'style', type='text/css')

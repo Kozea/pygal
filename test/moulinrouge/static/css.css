@@ -1,0 +1,11 @@
+html, body, section, figure {
+  margin: 0;
+  padding: 0;
+}
+
+embed {
+  width: 375px;
+  height: 245px;
+  float: left;
+  border: 1px solid #ccc;
+}
