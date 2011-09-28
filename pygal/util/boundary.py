@@ -55,7 +55,7 @@ def calculate_bottom_margin(graph):
             max_x_label_len = reduce(max, label_lengths)
             max_x_label_height_px *= max_x_label_len * 0.6
             max_x_label_height_px *= sin(graph.x_label_rotation)
-        bb += max_x_label_height_px
+        bb += max_x_label_height_px + graph.y_label_font_size
         if graph.stagger_x_labels:
             bb += max_x_label_height_px + 10
     if graph.show_x_title:
@@ -84,11 +84,9 @@ def calculate_left_margin(graph):
     if graph.show_y_title:
         bl += graph.y_title_font_size + 5
     if graph.x_label_rotation:
-        label_lengths = map(len, graph.get_x_labels())
-        max_x_label_len = reduce(max, label_lengths)
-        max_x_label_height_px = graph.x_label_font_size
-        max_x_label_height_px *= max_x_label_len * 0.6
-        bl += max_x_label_height_px * cos(graph.x_label_rotation)
+        first_x_label_width = (
+            graph.x_label_font_size * len(graph.get_x_labels()[0]) * 0.6)
+        bl = max(bl, first_x_label_width * cos(graph.x_label_rotation))
     return bl
 
 

@@ -34,13 +34,14 @@ def create_app():
     @app.route("/rotation[<int:angle>].svg")
     def rotation_svg(angle):
         return generate_vbar(
-            title="Rotation %d" % angle,
+            show_graph_title=True,
+            graph_title="Rotation %d" % angle,
             x_label_rotation=angle)
 
     @app.route("/rotation")
     def rotation():
         svgs = [url_for('rotation_svg', angle=angle)
-                for angle in range(0, 180, 10)]
+                for angle in range(0, 91, 5)]
         return render_template('svgs.jinja2', svgs=svgs)
 
     return app
