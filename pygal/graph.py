@@ -219,6 +219,12 @@ class Graph(object):
             bl += max_y_label_height_px + 10
         if self.show_y_title:
             bl += self.y_title_font_size + 5
+        if self.x_label_rotation:
+            label_lengths = map(len, self.get_x_labels())
+            max_x_label_len = reduce(max, label_lengths)
+            max_x_label_height_px = self.x_label_font_size
+            max_x_label_height_px *= max_x_label_len * 0.6
+            bl += max_x_label_height_px * cos(self.x_label_rotation)
         self.border_left = bl
 
     def max_y_label_width_px(self):
@@ -298,7 +304,8 @@ class Graph(object):
             if self.x_label_rotation:
                 label_lengths = map(len, self.get_x_labels())
                 max_x_label_len = reduce(max, label_lengths)
-                max_x_label_height_px *= 0.6 * max_x_label_len
+                max_x_label_height_px *= max_x_label_len * 0.8
+                max_x_label_height_px *= sin(self.x_label_rotation)
             bb += max_x_label_height_px
             if self.stagger_x_labels:
                 bb += max_x_label_height_px + 10
