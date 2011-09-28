@@ -11,7 +11,7 @@ from operator import itemgetter
 from itertools import islice
 import pkg_resources
 import functools
-
+import math
 import cssutils
 
 from lxml import etree
@@ -22,6 +22,14 @@ try:
     import zlib
 except ImportError:
     zlib = None
+
+
+def cos(angle):
+    return math.cos(angle * math.pi / 180)
+
+
+def sin(angle):
+    return math.sin(angle * math.pi / 180)
 
 
 def sort_multiple(arrays):
@@ -59,7 +67,7 @@ class Graph(object):
     min_scale_value = None
     show_x_labels = True
     stagger_x_labels = False
-    rotate_x_labels = False
+    x_label_rotation = 0
     step_x_labels = 1
     step_include_first_x_label = True
     show_y_labels = True
@@ -287,7 +295,7 @@ class Graph(object):
             bb += 10
         if self.show_x_labels:
             max_x_label_height_px = self.x_label_font_size
-            if self.rotate_x_labels:
+            if self.x_label_rotation:
                 label_lengths = map(len, self.get_x_labels())
                 max_x_label_len = reduce(max, label_lengths)
                 max_x_label_height_px *= 0.6 * max_x_label_len
@@ -374,7 +382,7 @@ class Graph(object):
         y = self.graph_height + self.x_label_font_size + 3
         t = 0 - (self.font_size / 2)
 
-        if self.stagger_x_labels and  (index % 2):
+        if self.stagger_x_labels and (index % 2):
             stagger = self.x_label_font_size + 5
             y += stagger
             graph_height = self.graph_height
@@ -386,11 +394,12 @@ class Graph(object):
         text.set('x', str(x))
         text.set('y', str(y))
 
-        if self.rotate_x_labels:
-            transform = 'rotate(90 %d %d) translate(0 -%d)' % \
-                (x, y - self.x_label_font_size, self.x_label_font_size / 4)
+        if self.x_label_rotation:
+            transform = 'rotate(%d %d %d) translate(0 -%d)' % \
+                (-self.x_label_rotation, x, y - self.x_label_font_size,
+                 self.x_label_font_size / 4)
             text.set('transform', transform)
-            text.set('style', 'text-anchor: start')
+            text.set('style', 'text-anchor: end')
         else:
             text.set('style', 'text-anchor: middle')
 
@@ -585,10 +594,10 @@ class Graph(object):
         y_offset = self.border_top + self.graph_height + 5
         if self.show_x_labels:
             max_x_label_height_px = self.x_label_font_size
-            if self.rotate_x_labels:
+            if self.x_label_rotation:
                 longest_label_length = max(map(len, self.get_x_labels()))
-                # I think 0.6 is the ratio of width to height of characters
-                max_x_label_height_px *= longest_label_length * 0.6
+                max_x_label_height_px *= longest_label_length
+                max_x_label_height_px *= sin(self.x_label_rotation)
             y_offset += max_x_label_height_px
             if self.stagger_x_labels:
                 y_offset += max_x_label_height_px + 5
@@ -651,8 +660,8 @@ class Graph(object):
             self.root.addprevious(pi)
 
         comment_strings = (
-            u'Generatel with pygal ©Kozea 2011',
-            ' Based upon SVG.Graph by Jason R. Coombs ',
+            u'Generated with pygal ©Kozea 2011',
+            'Based upon SVG.Graph by Jason R. Coombs',
         )
         map(self.root.append, map(etree.Comment, comment_strings))
 

@@ -2,6 +2,7 @@
     fill-opacity: 0;
     -webkit-transition: 250ms;
 }
+
 .bar:hover .dataPointLabel {
     fill-opacity: 0.9;
     fill: #000000;
@@ -14,54 +15,54 @@
     -webkit-transition: 250ms;
 }
 
-.fill:hover{
+.fill:hover {
     fill-opacity: 0.25;
 }
 
-.key1,.fill1{
+.key1, .fill1 {
     fill: #ff0000;
 }
 
-.key2,.fill2{
+.key2, .fill2 {
     fill: #0000ff;
 }
 
-.key3,.fill3{
+.key3, .fill3 {
     fill: #00ff00;
 }
 
-.key4,.fill4{
+.key4, .fill4 {
     fill: #ffcc00;
 }
 
-.key5,.fill5{
+.key5, .fill5 {
     fill: #00ccff;
 }
 
-.key6,.fill6{
+.key6, .fill6 {
     fill: #ff00ff;
 }
 
-.key7,.fill7{
+.key7, .fill7 {
     fill: #00ffff;
 }
 
-.key8,.fill8{
+.key8, .fill8 {
     fill: #ffff00;
 }
 
-.key9,.fill9{
+.key9, .fill9 {
     fill: #cc6666;
 }
 
-.key10,.fill10{
+.key10, .fill10 {
     fill: #663399;
 }
 
-.key11,.fill11{
+.key11, .fill11 {
     fill: #339900;
 }
 
-.key12,.fill12{
+.key12, .fill12 {
     fill: #9966FF;
 }

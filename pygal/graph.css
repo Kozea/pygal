@@ -44,7 +44,6 @@ Base styles for pygal.Graph
   font-size: %(x_label_font_size)dpx;
   font-family: "Arial", sans-serif;
   font-weight: normal;
-  transform: rotate(45deg);
 }
 
 .yAxisLabels{
