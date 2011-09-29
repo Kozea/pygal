@@ -116,9 +116,9 @@ class VerticalBar(Bar):
         node(shadow, 'stop',
              {'offset': 0, 'stop-color': '#aaa', 'stop-opacity': 0.7})
         node(shadow, 'stop',
-             {'offset': '2%', 'stop-color': '#fff', 'stop-opacity': 0})
+             {'offset': '1%', 'stop-color': '#fff', 'stop-opacity': 1})
         node(shadow, 'stop',
-             {'offset': '98%', 'stop-color': '#fff', 'stop-opacity': 0})
+             {'offset': '99%', 'stop-color': '#fff', 'stop-opacity': 1})
         node(shadow, 'stop',
              {'offset': '100%', 'stop-color': '#aaa', 'stop-opacity': .7})
 

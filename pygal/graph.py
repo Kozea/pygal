@@ -117,7 +117,7 @@ class Graph(object):
     def validate_data(self, conf):
         try:
             assert(isinstance(conf['data'], (tuple, list)))
-        except TypeError, e:
+        except TypeError:
             raise TypeError(
                 "conf should be dictionary with 'data' and other items")
         except AssertionError:
@@ -185,8 +185,8 @@ class Graph(object):
         """
         transform = 'translate (%s %s)' % (self.border_left, self.border_top)
         self.graph = node(self.root, 'g', transform=transform)
-
-        node(self.graph, 'rect', {
+        self.back = node(self.graph, 'g', {'class': 'back'})
+        node(self.back, 'rect', {
             'x': 0,
             'y': 0,
             'width': self.graph_width,
@@ -195,12 +195,12 @@ class Graph(object):
             })
 
         #Axis
-        node(self.graph, 'path', {
+        node(self.back, 'path', {
             'd': 'M 0 0 v%s' % self.graph_height,
             'class': 'axis',
             'id': 'xAxis'
         })
-        node(self.graph, 'path', {
+        node(self.back, 'path', {
             'd': 'M 0 %s h%s' % (self.graph_height, self.graph_width),
             'class': 'axis',
             'id': 'yAxis'
@@ -227,6 +227,7 @@ class Graph(object):
     def draw_x_labels(self):
         "Draw the X axis labels"
         if self.show_x_labels:
+            self.xlabels = node(self.graph, 'g', {'class': 'xLabels'})
             labels = self.get_x_labels()
             count = len(labels)
 
@@ -239,7 +240,7 @@ class Graph(object):
     def draw_x_label(self, label):
         label_width = self.field_width()
         index, label = label
-        text = node(self.graph, 'text', {'class': 'xAxisLabels'})
+        text = node(self.xlabels, 'text', {'class': 'xAxisLabels'})
         text.text = label
 
         x = index * label_width + self.x_label_offset(label_width)
@@ -249,7 +250,7 @@ class Graph(object):
             stagger = self.x_label_font_size + 5
             y += stagger
             graph_height = self.graph_height
-            node(self.graph, 'path', {
+            node(self.xlabels, 'path', {
                 'd': 'M%f %f v%d' % (x, graph_height, stagger),
                 'class': 'staggerGuideLine'
             })
@@ -288,7 +289,7 @@ class Graph(object):
         "Draw the Y axis labels"
         if not self.show_y_labels:
             return
-
+        self.ylabels = node(self.graph, 'g', {'class': 'yLabels'})
         labels = self.get_y_labels()
         count = len(labels)
 
@@ -308,7 +309,7 @@ class Graph(object):
     def draw_y_label(self, label):
         label_height = self.field_height()
         index, label = label
-        text = node(self.graph, 'text', {'class': 'yAxisLabels'})
+        text = node(self.ylabels, 'text', {'class': 'yAxisLabels'})
         text.text = label
 
         y = self.y_offset - (label_height * index)
@@ -317,7 +318,7 @@ class Graph(object):
         if self.stagger_y_labels and  (index % 2):
             stagger = self.y_label_font_size + 5
             x -= stagger
-            path = node(self.graph, 'path', {
+            node(self.ylabels, 'path', {
                 'd': 'M%f %f h%d' % (x, y, stagger),
                 'class': 'staggerGuideLine'
             })
@@ -338,11 +339,12 @@ class Graph(object):
         "Draw the X-axis guidelines"
         if not self.show_x_guidelines:
             return
+        self.xguidelines = node(self.graph, 'g', {'class': 'xGuideLines'})
         # skip the first one
         for count in range(1, count):
             start = label_height * count
             stop = self.graph_height
-            node(self.graph, 'path', {
+            node(self.xguidelines, 'path', {
                 'd': 'M %s 0 v%s' % (start, stop),
                 'class': 'guideLines'})
 
@@ -350,10 +352,11 @@ class Graph(object):
         "Draw the Y-axis guidelines"
         if not self.show_y_guidelines:
             return
+        self.yguidelines = node(self.graph, 'g', {'class': 'yGuideLines'})
         for count in range(1, count):
             start = self.graph_height - label_height * count
             stop = self.graph_width
-            node(self.graph, 'path', {
+            node(self.yguidelines, 'path', {
                 'd': 'M 0 %s h%s' % (start, stop),
                 'class': 'guideLines'})
 

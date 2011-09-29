@@ -7,7 +7,7 @@
   fill:#ffffff;
 }
 .graphBackground{
-  fill:#ffffff;
+  fill: #e8eef6;
 }
 
 /* graphs titles */
@@ -30,7 +30,7 @@
 }
 
 .guideLines{
-  stroke: #eee;
+  stroke: #fff;
   stroke-width: 1px;
   stroke-dasharray: 5,5;
 }

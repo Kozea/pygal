@@ -11,22 +11,23 @@
 }
 
 .upGradientLight {
-  stop-opacity: 0.4;
+  stop-opacity: 0.6;
 }
 
 .downGradientLight {
-  stop-opacity: 0.7;
+  stop-opacity: 0.9;
 }
 
 .key, .fill {
     fill-opacity: 0.9;
-    stroke: url(#shadow);
+    stroke: #fff;
     stroke-width: 2px;
     -webkit-transition: 250ms;
 }
 
 .fill:hover {
-    fill-opacity: 0.5;
+    stroke: #ddd;
+    fill-opacity: 0.7;
 }
 
 .key1, .fill1 {
@@ -79,19 +80,19 @@
 
 
 .light1 {
-  stop-color: #ff0000;
+  stop-color: #2a4269;
 }
 
 .light2 {
-  stop-color: #0000ff;
+  stop-color: #38588e;
 }
 
 .light3 {
-  stop-color: #00ff00;
+  stop-color: #476fb2;
 }
 
 .light4 {
-  stop-color: #ffcc00;
+  stop-color: #698bc3;
 }
 
 .light5 {
