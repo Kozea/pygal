@@ -242,7 +242,7 @@ class Graph(object):
         text = node(self.graph, 'text', {'class': 'xAxisLabels'})
         text.text = label
 
-        x = index * label_width
+        x = index * label_width + self.x_label_offset(label_width)
         y = self.graph_height + self.x_label_font_size + 3
 
         if self.stagger_x_labels and (index % 2):

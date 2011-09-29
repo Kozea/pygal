@@ -1,7 +1,7 @@
 /* Base styles for pygal graphs */
 
 * {
-  font-family: monospace;
+  font-family: helvetica;
 }
 .svgBackground{
   fill:#ffffff;
@@ -36,6 +36,7 @@
 }
 
 .xAxisLabels{
+  font-family: monospace;
   text-anchor: middle;
   fill: #000000;
   font-size: %(x_label_font_size)dpx;
@@ -43,6 +44,7 @@
 }
 
 .yAxisLabels{
+  font-family: monospace;
   text-anchor: end;
   fill: #000000;
   font-size: %(y_label_font_size)dpx;

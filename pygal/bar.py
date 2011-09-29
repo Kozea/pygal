@@ -90,6 +90,38 @@ class VerticalBar(Bar):
     """ Vertical bar graph """
     top_align = top_font = 1
 
+    def add_defs(self, defs):
+        """
+        Override and place code to add defs here. TODO: what are defs?
+        """
+        for id in range(12):
+            idn = 'light%d' % (id + 1)
+            light = node(defs, 'linearGradient', {
+                'id': idn,
+                'x1': 0,
+                'x2': '50%',
+                'y1': 0,
+                'y2': '100%'})
+            node(light, 'stop',
+                 {'class': 'upGradientLight %s' % idn, 'offset': 0})
+            node(light, 'stop',
+                 {'class': 'downGradientLight %s' % idn, 'offset': '100%'})
+
+        shadow = node(defs, 'linearGradient', {
+            'id': 'shadow',
+            'x1': 0,
+            'x2': '100%',
+            'y1': 0,
+            'y2': 0})
+        node(shadow, 'stop',
+             {'offset': 0, 'stop-color': '#aaa', 'stop-opacity': 0.7})
+        node(shadow, 'stop',
+             {'offset': '2%', 'stop-color': '#fff', 'stop-opacity': 0})
+        node(shadow, 'stop',
+             {'offset': '98%', 'stop-color': '#fff', 'stop-opacity': 0})
+        node(shadow, 'stop',
+             {'offset': '100%', 'stop-color': '#aaa', 'stop-opacity': .7})
+
     def get_x_labels(self):
         return self.get_field_labels()
 
