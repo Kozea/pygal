@@ -8,6 +8,7 @@ The base module for `pygal` classes.
 
 from operator import itemgetter
 from itertools import islice
+from logging import getLogger
 import os
 
 from lxml import etree
@@ -15,6 +16,8 @@ from pygal.util import node
 from pygal.util.boundary import (calculate_right_margin, calculate_left_margin,
                                  calculate_bottom_margin, calculate_top_margin,
                                  calculate_offsets_bottom)
+
+log = getLogger('pygal')
 
 
 def sort_multiple(arrays):
@@ -145,6 +148,9 @@ class Graph(object):
         Raises ValueError when no data set has
         been added to the graph object.
         """
+
+        log.info("Burning %s graph" % self.__class__.__name__)
+
         if not self.data:
             raise ValueError("No data available")
 
@@ -154,10 +160,12 @@ class Graph(object):
         self.start_svg()
         self.calculate_graph_dimensions()
         self.foreground = etree.Element("g")
+
         self.draw_graph()
         self.draw_titles()
         self.draw_legend()
         self.draw_data()
+
         self.graph.append(self.foreground)
 
         data = etree.tostring(
@@ -195,12 +203,12 @@ class Graph(object):
             })
 
         #Axis
-        node(self.back, 'path', {
+        node(self.foreground, 'path', {
             'd': 'M 0 0 v%s' % self.graph_height,
             'class': 'axis',
             'id': 'xAxis'
         })
-        node(self.back, 'path', {
+        node(self.foreground, 'path', {
             'd': 'M 0 %s h%s' % (self.graph_height, self.graph_width),
             'class': 'axis',
             'id': 'yAxis'
@@ -224,18 +232,23 @@ class Graph(object):
         if style:
             e.set('style', style)
 
+    def x_label_offset(self, width):
+        return 0
+
     def draw_x_labels(self):
         "Draw the X axis labels"
-        if self.show_x_labels:
-            self.xlabels = node(self.graph, 'g', {'class': 'xLabels'})
-            labels = self.get_x_labels()
-            count = len(labels)
+        if not self.show_x_labels:
+            return
 
-            labels = enumerate(iter(labels))
-            start = int(not self.step_include_first_x_label)
-            labels = islice(labels, start, None, self.step_x_labels)
-            map(self.draw_x_label, labels)
-            self.draw_x_guidelines(self.field_width(), count)
+        log.debug("Drawing x labels")
+        self.xlabels = node(self.graph, 'g', {'class': 'xLabels'})
+        labels = self.get_x_labels()
+        count = len(labels)
+        labels = enumerate(iter(labels))
+        start = int(not self.step_include_first_x_label)
+        labels = islice(labels, start, None, self.step_x_labels)
+        map(self.draw_x_label, labels)
+        self.draw_x_guidelines(self.field_width(), count)
 
     def draw_x_label(self, label):
         label_width = self.field_width()
@@ -289,6 +302,8 @@ class Graph(object):
         "Draw the Y axis labels"
         if not self.show_y_labels:
             return
+        log.debug("Drawing y labels")
+
         self.ylabels = node(self.graph, 'g', {'class': 'yLabels'})
         labels = self.get_y_labels()
         count = len(labels)
@@ -339,6 +354,7 @@ class Graph(object):
         "Draw the X-axis guidelines"
         if not self.show_x_guidelines:
             return
+        log.debug("Drawing x guidelines")
         self.xguidelines = node(self.graph, 'g', {'class': 'xGuideLines'})
         # skip the first one
         for count in range(1, count):
@@ -352,6 +368,7 @@ class Graph(object):
         "Draw the Y-axis guidelines"
         if not self.show_y_guidelines:
             return
+        log.debug("Drawing y guidelines")
         self.yguidelines = node(self.graph, 'g', {'class': 'yGuideLines'})
         for count in range(1, count):
             start = self.graph_height - label_height * count
@@ -362,6 +379,7 @@ class Graph(object):
 
     def draw_titles(self):
         "Draws the graph title and subtitle"
+        log.debug("Drawing titles")
         if self.show_graph_title:
             self.draw_graph_title()
         if self.show_graph_subtitle:
@@ -390,6 +408,7 @@ class Graph(object):
         text.text = self.graph_title
 
     def draw_x_title(self):
+        log.debug("Drawing x title")
         y = self.graph_height + self.border_top + self.x_title_font_size
         if self.show_x_labels:
             y_size = self.x_label_font_size + 5
@@ -406,6 +425,7 @@ class Graph(object):
         text.text = self.x_title
 
     def draw_y_title(self):
+        log.debug("Drawing y title")
         x = self.y_title_font_size
         if self.y_title_text_direction == 'bt':
                 x += 3
@@ -428,6 +448,7 @@ class Graph(object):
     def draw_legend(self):
         if not self.key:
             return
+        log.debug("Drawing legend")
 
         group = node(self.root, 'g')
 
@@ -457,9 +478,37 @@ class Graph(object):
         """
         Override and place code to add defs here. TODO: what are defs?
         """
+        for id in range(12):
+            idn = 'light%d' % (id + 1)
+            light = node(defs, 'linearGradient', {
+                'id': idn,
+                'x1': 0,
+                'x2': '50%',
+                'y1': 0,
+                'y2': '100%'})
+            node(light, 'stop',
+                 {'class': 'upGradientLight %s' % idn, 'offset': 0})
+            node(light, 'stop',
+                 {'class': 'downGradientLight %s' % idn, 'offset': '100%'})
+
+        shadow = node(defs, 'linearGradient', {
+            'id': 'shadow',
+            'x1': 0,
+            'x2': '100%',
+            'y1': 0,
+            'y2': 0})
+        node(shadow, 'stop',
+             {'offset': 0, 'stop-color': '#aaa', 'stop-opacity': 0.7})
+        node(shadow, 'stop',
+             {'offset': '1%', 'stop-color': '#fff', 'stop-opacity': 1})
+        node(shadow, 'stop',
+             {'offset': '99%', 'stop-color': '#fff', 'stop-opacity': 1})
+        node(shadow, 'stop',
+             {'offset': '100%', 'stop-color': '#aaa', 'stop-opacity': .7})
 
     def start_svg(self):
         "Base SVG Document Creation"
+        log.debug("Creating root node")
         svg_ns = 'http://www.w3.org/2000/svg'
         nsmap = {
             None: svg_ns,
@@ -490,8 +539,9 @@ class Graph(object):
                 ' include default stylesheet if none specified '))
             style = node(defs, 'style', type='text/css')
             style.text = ''
-            opts = dict(Graph.__dict__)
-            opts.update(self.__dict__)
+            opts = self.__dict__.copy()
+            opts.update(Graph.__dict__)
+            opts.update(self.__class__.__dict__)
             for stylesheet in self.stylesheet_names:
                 with open(
                     os.path.join(os.path.dirname(__file__), 'css',
@@ -507,6 +557,7 @@ class Graph(object):
             'class': 'svgBackground'})
 
     def calculate_graph_dimensions(self):
+        log.debug("Computing sizes")
         self.border_right = calculate_right_margin(self)
         self.border_top = calculate_top_margin(self)
         self.border_left = calculate_left_margin(self)

@@ -3,7 +3,22 @@ from flask import Flask, Response, render_template, url_for
 from log_colorizer import make_colored_stream_handler
 from logging import getLogger, INFO, WARN, DEBUG
 from moulinrouge.data import labels, series
-from pygal.bar import VerticalBar
+from pygal.bar import VerticalBar, HorizontalBar
+from pygal.pie import Pie
+import string
+import random
+
+
+def random_label():
+    chars = string.letters + string.digits + u' àéèçêâäëï'
+    return ''.join(
+            [random.choice(chars)
+             for i in range(
+                     random.randrange(4, 30))])
+
+
+def random_value():
+    return random.randrange(0, 15, 1)
 
 
 def generate_vbar(**opts):
@@ -25,11 +40,45 @@ def create_app():
     getLogger('werkzeug').addHandler(handler)
     getLogger('werkzeug').setLevel(INFO)
     getLogger('pygal').addHandler(handler)
-    getLogger('pygal').setLevel(INFO)
+    getLogger('pygal').setLevel(DEBUG)
 
     @app.route("/")
     def index():
         return render_template('index.jinja2')
+
+    @app.route("/all-<type>.svg")
+    def all_svg(type):
+        width, height = 800, 600
+        series = random.randrange(1, 10)
+        data = random.randrange(1, 10)
+
+        labels = [random_label() for i in range(data)]
+
+        if type == 'vbar':
+            g = VerticalBar(labels)
+        elif type == 'hbar':
+            g = HorizontalBar(labels)
+        elif type == 'pie':
+            series = 1
+            g = Pie({'fields': labels})
+
+        g.width, g.height = width, height
+
+        for i in range(series):
+            values = [random_value() for i in range(data)]
+            g.add_data({'data': values, 'title': random_label()})
+
+        return Response(g.burn(), mimetype='image/svg+xml')
+
+    @app.route("/all")
+    def all():
+        width, height = 800, 600
+        svgs = [url_for('all_svg', type=type) for type in
+                ('vbar', 'hbar', 'pie')]
+        return render_template('svgs.jinja2',
+                               svgs=svgs,
+                               width=width,
+                               height=height)
 
     @app.route("/rotation[<int:angle>].svg")
     def rotation_svg(angle):
@@ -40,8 +89,12 @@ def create_app():
 
     @app.route("/rotation")
     def rotation():
+        width, height = 375, 245
         svgs = [url_for('rotation_svg', angle=angle)
                 for angle in range(0, 91, 5)]
-        return render_template('svgs.jinja2', svgs=svgs)
+        return render_template('svgs.jinja2',
+                               svgs=svgs,
+                               width=width,
+                               height=height)
 
     return app

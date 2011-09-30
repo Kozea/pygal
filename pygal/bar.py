@@ -90,38 +90,6 @@ class VerticalBar(Bar):
     """ Vertical bar graph """
     top_align = top_font = 1
 
-    def add_defs(self, defs):
-        """
-        Override and place code to add defs here. TODO: what are defs?
-        """
-        for id in range(12):
-            idn = 'light%d' % (id + 1)
-            light = node(defs, 'linearGradient', {
-                'id': idn,
-                'x1': 0,
-                'x2': '50%',
-                'y1': 0,
-                'y2': '100%'})
-            node(light, 'stop',
-                 {'class': 'upGradientLight %s' % idn, 'offset': 0})
-            node(light, 'stop',
-                 {'class': 'downGradientLight %s' % idn, 'offset': '100%'})
-
-        shadow = node(defs, 'linearGradient', {
-            'id': 'shadow',
-            'x1': 0,
-            'x2': '100%',
-            'y1': 0,
-            'y2': 0})
-        node(shadow, 'stop',
-             {'offset': 0, 'stop-color': '#aaa', 'stop-opacity': 0.7})
-        node(shadow, 'stop',
-             {'offset': '1%', 'stop-color': '#fff', 'stop-opacity': 1})
-        node(shadow, 'stop',
-             {'offset': '99%', 'stop-color': '#fff', 'stop-opacity': 1})
-        node(shadow, 'stop',
-             {'offset': '100%', 'stop-color': '#aaa', 'stop-opacity': .7})
-
     def get_x_labels(self):
         return self.get_field_labels()
 
@@ -168,7 +136,7 @@ class VerticalBar(Bar):
                     left += bar_width * dataset_count
 
                 rect_group = node(self.graph, "g",
-                                              {'class': 'bar'})
+                                              {'class': 'bar vbar'})
                 node(rect_group, 'rect', {
                     'x': left,
                     'y': top,
@@ -229,7 +197,9 @@ class HorizontalBar(Bar):
                 # left is 0 if value is negative
                 left = (abs(min_value) + min(value, 0)) * unit_size
 
-                node(self.graph, 'rect', {
+                rect_group = node(self.graph, "g",
+                                              {'class': 'bar hbar'})
+                node(rect_group, 'rect', {
                     'x': left,
                     'y': top,
                     'width': length,
@@ -237,6 +207,6 @@ class HorizontalBar(Bar):
                     'class': 'fill fill%s' % (dataset_count + 1),
                 })
 
-                self.make_datapoint_text(
+                self.make_datapoint_text(rect_group,
                     left + length + 5, top + y_mod, value,
                     "text-anchor: start; ")

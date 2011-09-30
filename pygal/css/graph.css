@@ -83,3 +83,114 @@
   font-size: %(key_font_size)dpx;
   font-weight: normal;
 }
+
+
+
+.key, .fill {
+    fill-opacity: 0.9;
+    stroke: #fff;
+    stroke-width: 2px;
+    -webkit-transition: 250ms;
+}
+
+.fill:hover {
+    stroke: #ddd;
+    fill-opacity: 0.7;
+}
+
+.key1, .fill1 {
+    fill: url(#light1);
+}
+
+.key2, .fill2 {
+    fill: url(#light2);
+}
+
+.key3, .fill3 {
+    fill: url(#light3);
+}
+
+.key4, .fill4 {
+    fill: url(#light4);
+}
+
+.key5, .fill5 {
+    fill: url(#light5);
+}
+
+.key6, .fill6 {
+    fill: url(#light6);
+}
+
+.key7, .fill7 {
+    fill: url(#light7);
+}
+
+.key8, .fill8 {
+    fill: url(#light8);
+}
+
+.key9, .fill9 {
+    fill: url(#light9);
+}
+
+.key10, .fill10 {
+    fill: url(#light10);
+}
+
+.key11, .fill11 {
+    fill: url(#light11);
+}
+
+.key12, .fill12 {
+    fill: url(#light12);
+}
+
+
+.light1 {
+  stop-color: #2a4269;
+}
+
+.light2 {
+  stop-color: #38588e;
+}
+
+.light3 {
+  stop-color: #476fb2;
+}
+
+.light4 {
+  stop-color: #698bc3;
+}
+
+.light5 {
+  stop-color: #00ccff;
+}
+
+.light6 {
+  stop-color: #ff00ff;
+}
+
+.light7 {
+  stop-color: #00ffff;
+}
+
+.light8 {
+  stop-color: #ffff00;
+}
+
+.light9 {
+  stop-color: #cc6666;
+}
+
+.light10 {
+  stop-color: #663399;
+}
+
+.light11 {
+  stop-color: #339900;
+}
+
+.light12 {
+  stop-color: #9966FF;
+}

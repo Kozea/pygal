@@ -4,8 +4,6 @@ html, body, section, figure {
 }
 
 embed {
-  width: 375px;
-  height: 245px;
   float: left;
   border: 1px solid #ccc;
 }

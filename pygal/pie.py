@@ -46,11 +46,11 @@ class Pie(Graph):
     """
 
     "if true, displays a drop shadow for the chart"
-    show_shadow = True
+    show_shadow = False
     "Sets the offset of the shadow from the pie chart"
     shadow_offset = 10
 
-    show_data_labels = False
+    show_data_labels = True
     "If true, display the actual field values in the data labels"
     show_actual_values = False
 
@@ -116,21 +116,21 @@ class Pie(Graph):
         pairs = itertools.izip_longest(self.data, data_descriptor['data'])
         self.data = list(itertools.starmap(robust_add, pairs))
 
-    def add_defs(self, defs):
-        "Add svg definitions"
-        node(
-            defs,
-            'filter',
-            id='dropshadow',
-            width='1.2',
-            height='1.2',
-            )
-        node(
-            defs,
-            'feGaussianBlur',
-            stdDeviation='4',
-            result='blur',
-            )
+    # def add_defs(self, defs):
+    #     "Add svg definitions"
+    #     node(
+    #         defs,
+    #         'filter',
+    #         id='dropshadow',
+    #         width='1.2',
+    #         height='1.2',
+    #         )
+    #     node(
+    #         defs,
+    #         'feGaussianBlur',
+    #         stdDeviation='4',
+    #         result='blur',
+    #         )
 
     def draw_graph(self):
         "Here we don't need the graph (consider refactoring)"
@@ -146,7 +146,6 @@ class Pie(Graph):
 
     def keys(self):
         total = sum(self.data)
-        percent_scale = 100.0 / total
 
         def key(field, value):
             result = [field]
@@ -177,10 +176,6 @@ class Pie(Graph):
         transform = 'translate(%s %s)' % (xoff, yoff)
         self.graph.set('transform', transform)
 
-        wedge_text_pad = 5
-        wedge_text_pad = (20 * int(self.show_percent) *
-                          int(self.show_data_labels))
-
         total = sum(self.data)
         max_value = max(self.data)
 
@@ -202,11 +197,13 @@ class Pie(Graph):
                 radius, radius, x_start, y_start, radius, radius,
                 percent_greater_fifty, x_end, y_end)
 
+            wedge_group = node(self.foreground, "g",
+                               {'class': 'pie'})
             wedge = node(
-                self.foreground,
+                wedge_group,
                 'path', {
                     'd': path,
-                    'class': 'fill%s' % (index + 1)}
+                    'class': 'fill fill%s' % (index + 1)}
             )
 
             translate = None
@@ -267,19 +264,7 @@ class Pie(Graph):
                     ty -= (mcr * self.expand_gap)
 
                 label_node = node(
-                    self.foreground,
-                    'text',
-                    {
-                        'x': tx,
-                        'y': ty,
-                        'class': 'dataPointLabel',
-                        'style': 'stroke: #fff; stroke-width: 2;'
-                    }
-                )
-                label_node.text = label
-
-                label_node = node(
-                    self.foreground,
+                    wedge_group,
                     'text',
                     {
                         'x': tx,
