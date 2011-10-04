@@ -4,10 +4,11 @@
   font-family: helvetica;
 }
 .svgBackground{
-  fill:#ffffff;
+  fill: transparent;
 }
 .graphBackground{
   fill: #e8eef6;
+  fill-opacity: 0.7;
 }
 
 /* graphs titles */

@@ -22,9 +22,6 @@ def random_value():
 
 
 def generate_vbar(**opts):
-    opts.setdefault('width', 375)
-    opts.setdefault('height', 245)
-
     g = VerticalBar(labels, opts)
     for serie, values in series.items():
         g.add_data({'data': values, 'title': serie})
@@ -48,7 +45,6 @@ def create_app():
 
     @app.route("/all-<type>.svg")
     def all_svg(type):
-        width, height = 800, 600
         series = random.randrange(1, 10)
         data = random.randrange(1, 10)
 
@@ -61,8 +57,6 @@ def create_app():
         elif type == 'pie':
             series = 1
             g = Pie({'fields': labels})
-
-        g.width, g.height = width, height
 
         for i in range(series):
             values = [random_value() for i in range(data)]

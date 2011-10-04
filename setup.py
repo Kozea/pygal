@@ -15,19 +15,10 @@ class DisabledTestCommand(Command):
             "test command not supported on pygal."
             " Use setup.py nosetests instead")
 
-_this_dir = os.path.dirname(__file__)
-_readme = os.path.join(_this_dir, 'readme.txt')
-_long_description = open(_readme).read().strip()
-
-# it seems that dateutil 2.0 only works under Python 3
-dateutil_req = (
-    ['python-dateutil>=1.4,<2.0dev'] if sys.version_info < (3, 0)
-    else ['python-dateutil>=2.0'])
 
 setup_params = dict(
     name="pygal",
     description="Python svg graph abstract layer",
-    long_description=_long_description,
     author="Jason R. Coombs, Kozea",
     author_email="jaraco@jaraco.com, gayoub@kozea.fr",
     url="https://github.com/Kozea/pygal",
@@ -35,9 +26,8 @@ setup_params = dict(
     zip_safe=True,
     include_package_data=True,
     install_requires=[
-        'cssutils>=0.9.8a3',
         'lxml>=2.0',
-    ] + dateutil_req,
+    ],
     license="MIT",
     classifiers=[
         "Development Status :: 5 - Production/Stable",

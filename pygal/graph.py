@@ -45,8 +45,8 @@ class Graph(object):
     * pygal.time_series
 
     """
-    width = 1000
-    height = 500
+    ratio = .7
+    width = 600
     show_x_guidelines = False
     show_y_guidelines = True
     show_data_values = True
@@ -98,6 +98,10 @@ class Graph(object):
             raise NotImplementedError("Graph is an abstract base class")
         self.load_config(config)
         self.clear_data()
+
+    @property
+    def height(self):
+        return int(self.width * self.ratio)
 
     def load_config(self, config):
         self.__dict__.update(config)
@@ -515,7 +519,7 @@ class Graph(object):
             'xlink': 'http://www.w3.org/1999/xlink',
             }
         self.root = etree.Element("{%s}svg" % svg_ns, attrib={
-            'viewBox': '0 0 100% 100%',
+            'viewBox': '0 0 %d %d' % (self.width, self.height)
             }, nsmap=nsmap)
 
         if hasattr(self, 'style_sheet_href'):
