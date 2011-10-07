@@ -4,8 +4,9 @@ import itertools
 import datetime
 
 
-def node(parent, tag, params={}, **extras):
+def node(parent, tag, params=None, **extras):
     """Make a etree node"""
+    params = params or {}
     for key, value in params.items():
         if not isinstance(value, basestring):
             params[key] = str(value)
