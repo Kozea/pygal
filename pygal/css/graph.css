@@ -4,7 +4,7 @@
   font-family: helvetica;
 }
 .svgBackground{
-  fill: transparent;
+  fill: #fff;
 }
 .graphBackground{
   fill: #e8eef6;
@@ -153,11 +153,11 @@
 }
 
 .light2 {
-  stop-color: #38588e;
+  stop-color: #476fb2;
 }
 
 .light3 {
-  stop-color: #476fb2;
+  stop-color: #38588e;
 }
 
 .light4 {

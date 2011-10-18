@@ -292,14 +292,19 @@ class Graph(object):
         return 0
 
     def get_field_width(self):
-        return (float(
-            self.graph_width - self.font_size * 2 * self.right_font) /
-                (len(self.get_x_labels()) - self.right_align))
+        divisor = (len(self.get_x_labels()) - self.right_align)
+        if divisor == 0:
+            return 0
+        return float(
+            self.graph_width - self.font_size * 2 * self.right_font) / divisor
     field_width = get_field_width
 
     def get_field_height(self):
-        return (float(self.graph_height - self.font_size * 2 * self.top_font) /
-                (len(self.get_y_labels()) - self.top_align))
+        divisor = (len(self.get_y_labels()) - self.top_align)
+        if divisor == 0:
+            return 0
+        return float(
+            self.graph_height - self.font_size * 2 * self.top_font) / divisor
     field_height = get_field_height
 
     def draw_y_labels(self):

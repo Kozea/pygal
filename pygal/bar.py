@@ -58,15 +58,16 @@ class Bar(Graph):
         return map(str, self.get_data_values())
 
     def data_max(self):
-        return max(chain(*map(lambda set: set['data'], self.data)))
+        return max(
+            list(chain(*map(lambda set: set['data'], self.data))) + [0])
         # above is same as
         # return max(map(lambda set: max(set['data']), self.data))
 
     def data_min(self):
         if not getattr(self, 'min_scale_value') is None:
             return self.min_scale_value
-        min_value = min(chain(*map(lambda set: set['data'], self.data)))
-        min_value = min(min_value, 0)
+        min_value = min(list(
+            chain(*map(lambda set: set['data'], self.data))) + [0])
         return min_value
 
     def get_bar_gap(self, field_size):
@@ -103,8 +104,12 @@ class VerticalBar(Bar):
         min_value = self.data_min()
         unit_size = (
             float(self.graph_height) - self.font_size * 2 * self.top_font)
-        unit_size /= (
+        divisor = (
             max(self.get_data_values()) - min(self.get_data_values()))
+        if divisor == 0:
+            unit_size = 0
+        else:
+            unit_size /= divisor
 
         bar_gap = self.get_bar_gap(self.get_field_width())
 
