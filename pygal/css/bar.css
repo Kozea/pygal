@@ -1,19 +1,2 @@
 /* Base styles for pygal bar */
 
-.bar .dataPointLabel {
-    fill-opacity: 0;
-    -webkit-transition: 250ms;
-}
-
-.bar:hover .dataPointLabel {
-    fill-opacity: 0.9;
-    fill: #000000;
-}
-
-.upGradientLight {
-  stop-opacity: 0.6;
-}
-
-.downGradientLight {
-  stop-opacity: 0.9;
-}

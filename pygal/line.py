@@ -70,11 +70,13 @@ class Line(Graph):
         scale_division = self.scale_divisions or (scale_range / 10.0)
 
         if self.scale_integers:
-            scale_division = min(1, round(scale_division))
+            scale_division = round(scale_division) or 1
 
         if max_value % scale_division == 0:
             max_value += scale_division
         labels = tuple(float_range(min_value, max_value, scale_division))
+        if self.scale_integers:
+            labels = map(int, labels)
         return labels
 
     def get_y_labels(self):
@@ -97,7 +99,8 @@ class Line(Graph):
 
         y_label_values = self.get_y_label_values()
         y_label_span = max(y_label_values) - min(y_label_values)
-        field_height /= float(y_label_span)
+        if y_label_span != 0:
+                field_height /= float(y_label_span)
 
         field_width = self.field_width()
         #line = len(self.data)
@@ -144,28 +147,31 @@ class Line(Graph):
                     'Z'
                 ))
                 node(self.graph, 'path', {
-                    'class': 'fill%s' % line_n,
+                    'class': 'fill fill%s' % line_n,
                     'd': d,
                 })
 
             # now draw the line itself
             node(self.graph, 'path', {
                 'd': 'M0 %s L%s' % (self.graph_height, line_path),
-                'class': 'line%s' % line_n,
+                'class': 'line line%s' % line_n,
                 })
 
             if self.show_data_points or self.show_data_values:
                 for i, value in enumerate(cum_sum):
+                    group = node(self.graph, "g",
+                                 {'class': 'lines'})
                     if self.show_data_points:
                         node(
-                            self.graph,
+                            group,
                             'circle',
-                            {'class': 'dataPoint%s' % line_n},
+                            {'class': 'dot dot%s' % line_n},
                             cx=str(field_width * i),
                             cy=str(self.graph_height - value * field_height),
                             r='2.5',
                         )
                     self.make_datapoint_text(
+                        group,
                         field_width * i,
                         self.graph_height - value * field_height - 6,
                         value + min_value

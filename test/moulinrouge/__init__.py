@@ -4,6 +4,7 @@ from log_colorizer import make_colored_stream_handler
 from logging import getLogger, INFO, WARN, DEBUG
 from moulinrouge.data import labels, series
 from pygal.bar import VerticalBar, HorizontalBar
+from pygal.line import Line
 from pygal.pie import Pie
 import string
 import random
@@ -57,6 +58,8 @@ def create_app():
         elif type == 'pie':
             series = 1
             g = Pie({'fields': labels})
+        elif type == 'line':
+            g = Line({'fields': labels})
 
         for i in range(series):
             values = [random_value() for i in range(data)]
@@ -68,7 +71,7 @@ def create_app():
     def all():
         width, height = 800, 600
         svgs = [url_for('all_svg', type=type) for type in
-                ('vbar', 'hbar', 'pie')]
+                ('vbar', 'hbar', 'line', 'pie')]
         return render_template('svgs.jinja2',
                                svgs=svgs,
                                width=width,

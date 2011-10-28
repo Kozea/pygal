@@ -86,6 +86,23 @@
 }
 
 
+.bar .dataPointLabel, .lines .dataPointLabel {
+    fill-opacity: 0;
+    -webkit-transition: 250ms;
+}
+
+.bar:hover .dataPointLabel, .lines:hover .dataPointLabel {
+    fill-opacity: 0.9;
+    fill: #000000;
+}
+
+.upGradientLight {
+  stop-opacity: 0.6;
+}
+
+.downGradientLight {
+  stop-opacity: 0.9;
+}
 
 .key, .fill {
     fill-opacity: 0.9;
@@ -99,52 +116,110 @@
     fill-opacity: 0.7;
 }
 
-.key1, .fill1 {
+.key1, .fill1, .dot1 {
     fill: url(#light1);
 }
 
-.key2, .fill2 {
+.key2, .fill2, .dot2 {
     fill: url(#light2);
 }
 
-.key3, .fill3 {
+.key3, .fill3, .dot3 {
     fill: url(#light3);
 }
 
-.key4, .fill4 {
+.key4, .fill4, .dot4 {
     fill: url(#light4);
 }
 
-.key5, .fill5 {
+.key5, .fill5, .dot5 {
     fill: url(#light5);
 }
 
-.key6, .fill6 {
+.key6, .fill6, .dot6 {
     fill: url(#light6);
 }
 
-.key7, .fill7 {
+.key7, .fill7, .dot7 {
     fill: url(#light7);
 }
 
-.key8, .fill8 {
+.key8, .fill8, .dot8 {
     fill: url(#light8);
 }
 
-.key9, .fill9 {
+.key9, .fill9, .dot9 {
     fill: url(#light9);
 }
 
-.key10, .fill10 {
+.key10, .fill10, .dot10 {
     fill: url(#light10);
 }
 
-.key11, .fill11 {
+.key11, .fill11, .dot11 {
     fill: url(#light11);
 }
 
-.key12, .fill12 {
+.key12, .fill12, .dot12 {
     fill: url(#light12);
+}
+
+.line {
+  fill: none;
+  stroke-width: 1.5px;
+  -webkit-transition: 250ms;
+}
+
+.line:hover {
+  stroke-width: 3px;
+}
+
+.key1, .line1 {
+    stroke: url(#light1);
+}
+
+.key2, .line2 {
+    stroke: url(#light2);
+}
+
+.key3, .line3 {
+    stroke: url(#light3);
+}
+
+.key4, .line4 {
+    stroke: url(#light4);
+}
+
+.key5, .line5 {
+    stroke: url(#light5);
+}
+
+.key6, .line6 {
+    stroke: url(#light6);
+}
+
+.key7, .line7 {
+    stroke: url(#light7);
+}
+
+.key8, .line8 {
+    stroke: url(#light8);
+}
+
+.key9, .line9 {
+    stroke: url(#light9);
+}
+
+.key10, .line10 {
+    stroke: url(#light10);
+}
+
+.key11, .line11 {
+    stroke: url(#light11);
+}
+
+.key12, .line12 {
+    stroke: url(#light12);
 }
 
 
