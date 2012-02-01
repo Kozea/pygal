@@ -69,7 +69,7 @@ def create_app():
 
     @app.route("/all")
     def all():
-        width, height = 800, 600
+        width, height = 600, 400
         svgs = [url_for('all_svg', type=type) for type in
                 ('vbar', 'hbar', 'line', 'pie')]
         return render_template('svgs.jinja2',

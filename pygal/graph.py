@@ -85,12 +85,16 @@ class Graph(object):
     y_title_font_size = 14
     key_font_size = 10
     key_box_size = 10
-
     add_popups = False
 
     top_align = top_font = right_align = right_font = 0
     stylesheet_names = ['graph.css']
     compress = False
+    colors = [
+        "#2a4269", "#476fb2", "#38588e", "#698bc3",
+        "#69c38b", "#588e38", "#47b26f", "#42692a",
+        "#1a3259", "#375fa2", "#28487e", "#597bb3",
+        "#59b37b", "#487e28", "#37a25f", "#32591a"]
 
     def __init__(self, config={}):
         """Initialize the graph object with the graph settings."""
@@ -468,7 +472,7 @@ class Graph(object):
                 'y': y_offset,
                 'width': self.key_box_size,
                 'height': self.key_box_size,
-                'class': 'key key%s' % (key_count + 1),
+                'class': 'key key%s' % key_count,
             })
             text = node(group, 'text', {
                 'x': self.key_box_size + 5,
@@ -487,8 +491,8 @@ class Graph(object):
         """
         Override and place code to add defs here. TODO: what are defs?
         """
-        for id in range(12):
-            idn = 'light%d' % (id + 1)
+        for id in range(len(self.colors)):
+            idn = 'line-color-%d' % id
             light = node(defs, 'linearGradient', {
                 'id': idn,
                 'x1': 0,
@@ -556,6 +560,25 @@ class Graph(object):
                     os.path.join(os.path.dirname(__file__), 'css',
                                  stylesheet)) as f:
                     style.text += f.read() % opts
+            for n, color in enumerate(self.colors):
+                style.text += (
+"""
+.key%d, .fill%d, .dot%d {
+    fill: url(#line-color-%d);
+}
+.key%d, .line%d {
+    stroke: url(#line-color-%d);
+}
+
+.line-color-%d {
+  stop-color: %s;
+}
+
+""" % (n, n, n, n, n, n, n, n, color))
+
+        if hasattr(self, 'stylesheet_file'):
+            with open(self.stylesheet_file) as f:
+                style.text += f.read() % opts
 
         self.root.append(etree.Comment('SVG Background'))
         node(self.root, 'rect', {

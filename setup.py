@@ -28,6 +28,7 @@ setup_params = dict(
     install_requires=[
         'lxml>=2.0',
     ],
+    package_data={'pygal': ['css/*']},
     license="MIT",
     classifiers=[
         "Development Status :: 5 - Production/Stable",

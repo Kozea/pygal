@@ -3,7 +3,7 @@ html, body, section, figure {
   padding: 0;
 }
 
-embed {
+figure {
   float: left;
   border: 1px solid #ccc;
 }

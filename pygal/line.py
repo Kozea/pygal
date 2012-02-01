@@ -20,7 +20,7 @@ class Line(Graph):
 
     scale_divisions = None
 
-    #override some defaults
+    # override some defaults
     top_align = top_font = right_align = right_font = True
 
     stylesheet_names = Graph.stylesheet_names + ['plot.css']
@@ -66,7 +66,6 @@ class Line(Graph):
         range = max_value - min_value
         top_pad = (range / 20.0) or 10
         scale_range = (max_value + top_pad) - min_value
-
         scale_division = self.scale_divisions or (scale_range / 10.0)
 
         if self.scale_integers:
@@ -111,16 +110,12 @@ class Line(Graph):
         coord_format = lambda c: '%(x)s %(y)s' % c
 
         for line_n, data in reversed(list(enumerate(self.data, 1))):
-            apath = ''
-
             if not self.stacked:
                 cum_sum = [-min_value] * len(self.fields)
 
             cum_sum = map(add, cum_sum, data['data'])
-            get_coords = lambda (i, val): self.calc_coords(i,
-                                                         val,
-                                                         field_width,
-                                                         field_height)
+            get_coords = lambda (i, val): self.calc_coords(
+                i, val, field_width, field_height)
             coords = map(get_coords, enumerate(cum_sum))
             paths = map(coord_format, coords)
             line_path = ' '.join(paths)
@@ -147,25 +142,27 @@ class Line(Graph):
                     'Z'
                 ))
                 node(self.graph, 'path', {
-                    'class': 'fill fill%s' % line_n,
+                    'class': 'fill fill%s' % (line_n - 1),
                     'd': d,
                 })
 
             # now draw the line itself
             node(self.graph, 'path', {
                 'd': 'M0 %s L%s' % (self.graph_height, line_path),
-                'class': 'line line%s' % line_n,
+                'class': 'line line%s' % (line_n - 1),
                 })
 
             if self.show_data_points or self.show_data_values:
+                holder = node(self.graph, "g",
+                             {'class': 'lines-holder'})
                 for i, value in enumerate(cum_sum):
-                    group = node(self.graph, "g",
+                    group = node(holder, "g",
                                  {'class': 'lines'})
                     if self.show_data_points:
                         node(
                             group,
                             'circle',
-                            {'class': 'dot dot%s' % line_n},
+                            {'class': 'dot dot%s' % (line_n - 1)},
                             cx=str(field_width * i),
                             cy=str(self.graph_height - value * field_height),
                             r='2.5',
