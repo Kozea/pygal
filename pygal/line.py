@@ -17,9 +17,15 @@ class Line(BaseGraph):
             Serie(title, values))
 
     def draw(self):
-        self.svg.graph()
+        min_value = min((val
+                         for serie in self.series
+                         for val in serie.values))
+        max_value = max((val
+                         for serie in self.series
+                         for val in serie.values))
+        self.svg.graph(min_value, max_value)
         for serie in self.series:
-            n_values = len(serie.values)
+            n_values = len(serie.values) - 1
             x_spacing = self.width / n_values
             self.svg.line([
                 (i * x_spacing, v)

@@ -35,15 +35,18 @@ class Svg(object):
     def format_coords(self, xy):
         return '%f %f' % xy
 
-    def graph(self):
-        self.graph = self.node(id='graph')
+    def graph(self, min_value, max_value):
+        self.graph = self.node(
+            id='graph',
+            transform="scale(1, %d) translate(0, %d)" % (
+                self.height / (max_value - min_value), -min_value))
         self.node(self.graph, 'rect', id='graph_background',
                   x=0, y=0, width=self.width, height=self.height)
 
     def line(self, values, origin=None):
         origin = self.format_coords(origin or values[0])
         values = ' '.join(map(self.format_coords, values))
-        self.node(self.graph, 'path',
+        self.node(self.graph, 'path', style="stroke: blue",
                   d='M%s L%s' % (origin, values))
 
     def render(self):
