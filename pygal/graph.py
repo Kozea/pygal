@@ -202,6 +202,7 @@ class Graph(object):
         transform = 'translate (%s %s)' % (self.border_left, self.border_top)
         self.graph = node(self.root, 'g', transform=transform)
         self.back = node(self.graph, 'g', {'class': 'back'})
+        axis = node(self.foreground, 'g', {'class': 'axis'})
         node(self.back, 'rect', {
             'x': 0,
             'y': 0,
@@ -211,12 +212,12 @@ class Graph(object):
             })
 
         #Axis
-        node(self.foreground, 'path', {
+        node(axis, 'path', {
             'd': 'M 0 0 v%s' % self.graph_height,
             'class': 'axis',
             'id': 'xAxis'
         })
-        node(self.foreground, 'path', {
+        node(axis, 'path', {
             'd': 'M 0 %s h%s' % (self.graph_height, self.graph_width),
             'class': 'axis',
             'id': 'yAxis'

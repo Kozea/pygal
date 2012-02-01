@@ -94,4 +94,26 @@ def create_app():
                                width=width,
                                height=height)
 
+    @app.route("/bigline.svg")
+    def big_line_svg():
+        g = Line({'fields': ['a', 'b', 'c', 'd']})
+        g.width = 1500
+        g.area_fill = True
+        g.scale_divisions = 50
+        # values = [120, 50, 42, 100]
+        # g.add_data({'data': values, 'title': '1'})
+        values = [11, 50, 133, 2]
+        g.add_data({'data': values, 'title': '2'})
+
+        return Response(g.burn(), mimetype='image/svg+xml')
+
+    @app.route("/bigline")
+    def big_line():
+        width, height = 900, 800
+        svgs = [url_for('big_line_svg')]
+        return render_template('svgs.jinja2',
+                               svgs=svgs,
+                               width=width,
+                               height=height)
+
     return app

@@ -86,12 +86,12 @@
 }
 
 
-.bar .dataPointLabel, .lines .dataPointLabel {
+.bar .dataPointLabel, .dot .dataPointLabel {
     fill-opacity: 0;
     -webkit-transition: 250ms;
 }
 
-.bar:hover .dataPointLabel, .lines:hover .dataPointLabel {
+.bar:hover .dataPointLabel, .dot:hover .dataPointLabel {
     fill-opacity: 0.9;
     fill: #000000;
 }

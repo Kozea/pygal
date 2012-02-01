@@ -60,16 +60,18 @@ class Line(Graph):
         label_left = len(self.fields[0]) / 2 * self.font_size * 0.6
         self.border_left = max(label_left, self.border_left)
 
+    # TODO: cache this
     def get_y_label_values(self):
         max_value = self.max_value()
         min_value = self.min_value()
         range = max_value - min_value
-        top_pad = (range / 20.0) or 10
-        scale_range = (max_value + top_pad) - min_value
-        scale_division = self.scale_divisions or (scale_range / 10.0)
+
+        scale_division = self.scale_divisions or (.105 * range)
 
         if self.scale_integers:
-            scale_division = round(scale_division) or 1
+            scale_division = round(scale_division)
+
+        scale_division = scale_division or 1  # prevent / 0
 
         if max_value % scale_division == 0:
             max_value += scale_division
@@ -93,23 +95,24 @@ class Line(Graph):
         return coords
 
     def draw_data(self):
-        min_value = self.min_value()
-        field_height = self.graph_height - self.font_size * 2 * self.top_font
+        if len(self.data) == 0:
+            return
 
+        min_value = self.min_value()
+
+        field_height = self.graph_height - self.font_size * 2 * self.top_font
         y_label_values = self.get_y_label_values()
         y_label_span = max(y_label_values) - min(y_label_values)
-        if y_label_span != 0:
-                field_height /= float(y_label_span)
 
+        field_height /= float(y_label_span) or 1
         field_width = self.field_width()
-        #line = len(self.data)
 
         prev_sum = [0] * len(self.fields)
         cum_sum = [-min_value] * len(self.fields)
 
         coord_format = lambda c: '%(x)s %(y)s' % c
-
-        for line_n, data in reversed(list(enumerate(self.data, 1))):
+        lines = node(self.graph, "g", {'class': 'lines'})
+        for line_n, data in reversed(list(enumerate(self.data))):
             if not self.stacked:
                 cum_sum = [-min_value] * len(self.fields)
 
@@ -119,6 +122,7 @@ class Line(Graph):
             coords = map(get_coords, enumerate(cum_sum))
             paths = map(coord_format, coords)
             line_path = ' '.join(paths)
+            linegroup = node(lines, "g", {'class': 'linegroup%d' % line_n})
 
             if self.area_fill:
                 # to draw the area, we'll use the line above, followed by
@@ -133,42 +137,34 @@ class Line(Graph):
                     area_path = "V%s" % self.graph_height
                     origin = coord_format(get_coords((0, 0)))
 
-                d = ' '.join((
-                    'M',
-                    origin,
-                    'L',
-                    line_path,
-                    area_path,
-                    'Z'
-                ))
-                node(self.graph, 'path', {
-                    'class': 'fill fill%s' % (line_n - 1),
-                    'd': d,
+                node(linegroup, 'path', {
+                    'class': 'fill fill%s' % line_n,
+                    'd': ' '.join(
+                        ('M', origin, 'L', line_path, area_path, 'Z')),
                 })
 
             # now draw the line itself
-            node(self.graph, 'path', {
-                'd': 'M0 %s L%s' % (self.graph_height, line_path),
-                'class': 'line line%s' % (line_n - 1),
+            node(linegroup, 'path', {
+                'd': 'M%s L%s' % (paths[0], line_path),
+                'class': 'line line%s' % line_n,
                 })
-
+            dots = node(linegroup, "g",
+                        {'class': 'dots'})
             if self.show_data_points or self.show_data_values:
-                holder = node(self.graph, "g",
-                             {'class': 'lines-holder'})
                 for i, value in enumerate(cum_sum):
-                    group = node(holder, "g",
-                                 {'class': 'lines'})
+                    dot = node(dots, "g",
+                                 {'class': 'dot'})
                     if self.show_data_points:
                         node(
-                            group,
+                            dot,
                             'circle',
-                            {'class': 'dot dot%s' % (line_n - 1)},
+                            {'class': 'dot%s' % line_n},
                             cx=str(field_width * i),
                             cy=str(self.graph_height - value * field_height),
-                            r='2.5',
+                            r='5',
                         )
                     self.make_datapoint_text(
-                        group,
+                        dot,
                         field_width * i,
                         self.graph_height - value * field_height - 6,
                         value + min_value
