@@ -1,0 +1,64 @@
+.graph > .background {
+  fill: black;
+}
+
+.plot > .background {
+  fill: #111;
+}
+
+.axis text {
+  fill: #777;
+  font-size: 12px;
+  font-family: sans;
+}
+
+.axis.x text {
+  text-anchor: middle;
+  alignment-baseline: baseline;
+}
+
+.axis.y text {
+  text-anchor: end;
+  alignment-baseline: middle;
+}
+
+.axis .line {
+  stroke: #ccc;
+}
+
+.axis .guide.line {
+  stroke: #555;
+  stroke-dasharray: 5,5;
+}
+
+.series .dots .dot text {
+  font-size: 10px;
+  text-anchor: middle;
+  alignment-baseline: baseline;
+  stroke: none;
+  fill: none;
+}
+
+.series .dots .dot:hover text {
+  fill: #ccc;
+}
+
+.series .line {
+  fill: none;
+  stroke-width: 1.5px;
+}
+
+.series .line:hover {
+  fill: none;
+  stroke-width: 3px;
+}
+
+.serie-0 {
+  stroke: blue;
+  fill: blue;
+}
+
+.serie-1 {
+  stroke: red;
+  fill: red;
+}
