@@ -112,6 +112,11 @@ class Svg(object):
                   ).text = title
             self.node(legend, 'text', x=15, y=i * 15).text = title
 
+    def title(self, margin, title):
+        self.node(self.graph, 'text', class_='title',
+                  x=margin.left + self.view.width / 2,
+                  y=10).text = title
+
     def serie(self, serie):
         return self.node(
             self.plot, class_='series serie-%d color-%d' % (serie, serie))

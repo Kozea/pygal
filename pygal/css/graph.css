@@ -10,6 +10,12 @@
   fill: #777;
 }
 
+.title {
+  fill: #eee;
+  text-anchor: middle;
+  alignment-baseline: baseline;
+}
+
 .legend text {
   font-size: 12px;
   font-family: sans;  

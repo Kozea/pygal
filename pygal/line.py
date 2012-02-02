@@ -12,7 +12,7 @@ class Line(BaseGraph):
         self.svg = Svg(width, height)
         self.label_font_size = 12
         self.series = []
-        self.x_labels = None
+        self.x_labels = self.title = None
 
     def add(self, title, values):
         self.series.append(
@@ -43,7 +43,7 @@ class Line(BaseGraph):
         self.validate()
 
         vals = [val for serie in self.series for val in serie.values]
-        margin = Margin(*(4 * [20]))
+        margin = Margin(*(4 * [10]))
         ymin, ymax = min(vals), max(vals)
         x_labels = self.x_labels
         y_labels = self.y_labels(ymin, ymax)
@@ -51,7 +51,9 @@ class Line(BaseGraph):
         margin.left += 10 + max(
             map(len, [l.label for l in y_labels])) * 0.6 * self.label_font_size
         margin.bottom += 10 + self.label_font_size
-        margin.right += 40 + max(map(len, series_labels))
+        margin.right += 20 + max(
+            map(len, series_labels)) * 0.6 * self.label_font_size
+        margin.top += 10 + self.label_font_size
 
         # Actual drawing
         self.svg.set_view(margin, ymin, ymax)
@@ -59,6 +61,7 @@ class Line(BaseGraph):
         self.svg.x_axis(x_labels)
         self.svg.y_axis(y_labels)
         self.svg.legend(margin, series_labels)
+        self.svg.title(margin, self.title)
         for serie_index, serie in enumerate(self.series):
             serie_node = self.svg.serie(serie_index)
             self.svg.line(serie_node, [
