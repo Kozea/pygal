@@ -47,16 +47,18 @@ class Line(BaseGraph):
         ymin, ymax = min(vals), max(vals)
         x_labels = self.x_labels
         y_labels = self.y_labels(ymin, ymax)
+        series_labels = [serie.title for serie in self.series]
         margin.left += 10 + max(
             map(len, [l.label for l in y_labels])) * 0.6 * self.label_font_size
         margin.bottom += 10 + self.label_font_size
+        margin.right += 40 + max(map(len, series_labels))
 
         # Actual drawing
-
         self.svg.set_view(margin, ymin, ymax)
         self.svg.graph(margin)
         self.svg.x_axis(x_labels)
         self.svg.y_axis(y_labels)
+        self.svg.legend(margin, series_labels)
         for serie_index, serie in enumerate(self.series):
             serie_node = self.svg.serie(serie_index)
             self.svg.line(serie_node, [

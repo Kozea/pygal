@@ -6,8 +6,21 @@
   fill: #111;
 }
 
-.axis text {
+.graph {
   fill: #777;
+}
+
+.legend text {
+  font-size: 12px;
+  font-family: sans;  
+  alignment-baseline: hanging;
+}
+
+.legend rect {
+  stroke: #555;
+}
+
+.axis text {
   font-size: 12px;
   font-family: sans;
 }
@@ -31,6 +44,23 @@
   stroke-dasharray: 5,5;
 }
 
+.axis.x .guide.line {
+  stroke: none;
+}
+
+.axis .guides:hover .guide.line {
+  stroke: #aaa;
+}
+
+.axis .guides:hover text {
+  fill: #aaa;
+}
+
+.series .dots .dot circle {
+  stroke-width: 9px;
+  stroke: transparent;
+}
+
 .series .dots .dot text {
   font-size: 10px;
   text-anchor: middle;
@@ -45,20 +75,90 @@
 
 .series .line {
   fill: none;
-  stroke-width: 1.5px;
+  stroke-width: 1px;
 }
 
 .series .line:hover {
   fill: none;
-  stroke-width: 3px;
+  stroke-width: 2px;
 }
 
-.serie-0 {
-  stroke: blue;
-  fill: blue;
+.color-0 {
+  stroke: #ff5995;
+  fill: #ff5995;
 }
 
-.serie-1 {
-  stroke: red;
-  fill: red;
+.color-1 {
+  stroke: #b6e354;
+  fill: #b6e354;
+}
+
+.color-2 {
+  stroke: #feed6c;
+  fill: #feed6c;
+}
+
+.color-3 {
+  stroke: #8cedff;
+  fill: #8cedff;
+}
+
+.color-4 {
+  stroke: #9e6ffe;
+  fill: #9e6ffe;
+}
+
+.color-5 {
+  stroke: #899ca1;
+  fill: #899ca1;
+}
+
+.color-6 {
+  stroke: #f8f8f2;
+  fill: #f8f8f2;
+}
+
+.color-7 {
+  stroke: #808384;
+  fill: #808384;
+}
+
+.color-8 {
+  stroke: #bf4646;
+  fill: #bf4646;
+}
+
+.color-9 {
+  stroke: #516083;
+  fill: #516083;
+}
+
+.color-10 {
+  stroke: #f92672;
+  fill: #f92672;
+}
+
+.color-11 {
+  stroke: #82b414;
+  fill: #82b414;
+}
+
+.color-12 {
+  stroke: #fd971f;
+  fill: #fd971f;
+}
+
+.color-13 {
+  stroke: #56c2d6;
+  fill: #56c2d6;
+}
+
+.color-14 {
+  stroke: #8c54fe;
+  fill: #8c54fe;
+}
+
+.color-15 {
+  stroke: #465457;
+  fill: #465457;
 }

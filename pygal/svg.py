@@ -75,8 +75,14 @@ class Svg(object):
                   d='M%f %f v%f' % (0, 0, self.view.height),
                   class_='line')
         for label in labels:
+            guides = self.node(axis, class_='guides')
             x = self.view.x(label.pos)
-            text = self.node(axis, 'text', x=x, y=self.view.height + 5)
+            if x != 0:
+                self.node(guides, 'path',
+                          d='M%f %f v%f' % (x, 0, self.view.height),
+                          class_='guide line')
+
+            text = self.node(guides, 'text', x=x, y=self.view.height + 5)
             text.text = label.label
 
     def y_axis(self, labels):
@@ -86,16 +92,29 @@ class Svg(object):
                   d='M%f %f h%f' % (0, self.view.height, self.view.width),
                   class_='line')
         for label in labels:
+            guides = self.node(axis, class_='guides')
             y = self.view.y(label.pos)
             if y != self.view.height:
-                self.node(axis, 'path',
+                self.node(guides, 'path',
                           d='M%f %f h%f' % (0, y, self.view.width),
                           class_='guide line')
-            text = self.node(axis, 'text', x=-5, y=y)
+            text = self.node(guides, 'text', x=-5, y=y)
             text.text = label.label
 
+    def legend(self, margin, titles):
+        legend = self.node(
+            self.graph, class_='legend',
+            transform='translate(%d, %d)' % (
+                margin.left + self.view.width + 10, margin.top + 10))
+        for i, title in enumerate(titles):
+            self.node(legend, 'rect', x=0, y=i * 15,
+                      width=8, height=8, class_="color-%d" % i,
+                  ).text = title
+            self.node(legend, 'text', x=15, y=i * 15).text = title
+
     def serie(self, serie):
-        return self.node(self.plot, class_='series serie-%d' % serie)
+        return self.node(
+            self.plot, class_='series serie-%d color-%d' % (serie, serie))
 
     def line(self, serie, values, origin=None):
         view_values = map(self.view, values)
