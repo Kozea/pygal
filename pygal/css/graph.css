@@ -1,3 +1,9 @@
+svg * {
+  -webkit-transition: 250ms;
+  -moz-transition: 250ms;
+  transition: 250ms;
+}
+
 .graph > .background {
   fill: black;
 }
@@ -7,7 +13,7 @@
 }
 
 .graph {
-  fill: #777;
+  fill: #999;
 }
 
 .title {
@@ -51,14 +57,16 @@
 }
 
 .axis.x .guide.line {
-  stroke: none;
+  opacity: 0;
 }
 
 .axis .guides:hover .guide.line {
   stroke: #aaa;
+  opacity: 1;
 }
 
 .axis .guides:hover text {
+  opacity: 1;
   fill: #aaa;
 }
 
@@ -68,15 +76,16 @@
 }
 
 .series .dots .dot text {
+  opacity: 0;
   font-size: 10px;
   text-anchor: middle;
   alignment-baseline: baseline;
   stroke: none;
-  fill: none;
+  fill: #ccc;
 }
 
 .series .dots .dot:hover text {
-  fill: #ccc;
+  opacity: 1;
 }
 
 .series .line {
