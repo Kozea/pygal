@@ -8,10 +8,11 @@ class Svg(object):
     """Svg object"""
     ns = 'http://www.w3.org/2000/svg'
 
-    def __init__(self, width, height, base_css=None):
+    def __init__(self, width, height, base_css=None, style=None):
         self.width = width
         self.height = height
         self.margin = ()
+        self.style = style or DefaultStyle
         self.root = etree.Element(
             "{%s}svg" % self.ns,
             attrib={
@@ -40,7 +41,7 @@ class Svg(object):
                 .replace(' }}', '\x00')
                 .replace('}', '}}')
                 .replace('\x00', '}')
-                .format(style=DefaultStyle))
+                .format(style=self.style))
 
     def node(self, parent=None, tag='g', attrib=None, **extras):
         if parent is None:

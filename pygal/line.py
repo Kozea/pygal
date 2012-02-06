@@ -6,12 +6,14 @@ from pygal.base import BaseGraph
 class Line(BaseGraph):
     """Line graph"""
 
-    def __init__(self, width, height, scale_int=False):
+    def __init__(self, width, height, precision=5,
+               format='g', style=None):
         self.width = width
         self.height = height
-        self.svg = Svg(width, height)
+        self.svg = Svg(width, height, style=style)
         self.label_font_size = 12
-        self.scale_int = scale_int
+        self.format = format
+        self.precision = precision
         self.series = []
         self.x_labels = self.y_labels = self.title = None
 
@@ -24,8 +26,9 @@ class Line(BaseGraph):
         label = ymin
         labels = []
         while label < ymax:
-            lbl = int(label) if self.scale_int else label
-            labels.append(Label(str(lbl), lbl))
+            labels.append(
+                Label(('{:.%d%s}' % (
+                    self.precision, self.format)).format(label), label))
             label += step
         return labels
 

@@ -28,3 +28,12 @@ class Style(object):
         return '\n'.join(map(color, enumerate(self._colors)))
 
 DefaultStyle = Style()
+LightStyle = Style(
+    background='transparent',
+    plot_background='rgba(0, 0, 255, 0.1)',
+    foreground='rgba(0, 0, 0, 0.7)',
+    foreground_light='rgba(0, 0, 0, 0.9)',
+    foreground_dark='rgba(0, 0, 0, 0.5)',
+    colors=('#242424', '#9f6767', '#92ac68',
+            '#d0d293', '#9aacc3', '#bb77a4',
+            '#77bbb5', '#777777'))
