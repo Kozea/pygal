@@ -45,14 +45,14 @@ class Bar(BaseGraph):
 
     def draw(self):
         self.validate()
-        x_step = len(self.series[0].values) + 1
-        x_pos = [x / float(x_step) for x in range(x_step)
+        x_step = len(self.series[0].values)
+        x_pos = [x / float(x_step) for x in range(x_step + 1)
         ] if x_step > 1 else [0, 1]  # Center if only one value
         x_ranges = zip(x_pos, x_pos[1:])
 
         vals = [val for serie in self.series for val in serie.values]
         margin = Margin(*(4 * [10]))
-        ymin, ymax = min(vals), max(vals)
+        ymin, ymax = 0, max(vals)
         if self.x_labels:
             x_labels = [Label(label, sum(x_ranges[i]) / 2)
                          for i, label in enumerate(self.x_labels)]
@@ -77,5 +77,5 @@ class Bar(BaseGraph):
         for serie_index, serie in enumerate(self.series):
             serie_node = self.svg.serie(serie_index)
             self.svg.bar(serie_node, [
-                ((x_ranges[i][0], v), (x_ranges[i][1], v))
+                tuple((x_ranges[i][j], v) for j in range(2))
                 for i, v in enumerate(serie.values)])

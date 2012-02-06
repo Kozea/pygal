@@ -98,4 +98,13 @@ svg * {
   stroke-width: 2px;
 }
 
+.series .rect {
+  opacity: .8;
+}
+
+.series .rect:hover {
+  opacity: 1;
+}
+
+
 {{ style.colors }}

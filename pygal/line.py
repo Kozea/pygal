@@ -37,18 +37,19 @@ class Line(BaseGraph):
         return labels
 
     def validate(self):
-        assert len(self.series)
         if self.x_labels:
             assert len(self.series[0].values) == len(self.x_labels)
         for serie in self.series:
             assert len(self.series[0].values) == len(serie.values)
 
     def draw(self):
+        vals = [val for serie in self.series for val in serie.values]
+        if not vals:
+            return
         self.validate()
         x_step = len(self.series[0].values)
         x_pos = [x / float(x_step - 1) for x in range(x_step)
         ] if x_step != 1 else [.5]  # Center if only one value
-        vals = [val for serie in self.series for val in serie.values]
         margin = Margin(*(4 * [10]))
         ymin, ymax = min(vals), max(vals)
         if self.x_labels:

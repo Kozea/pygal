@@ -18,3 +18,14 @@ def test_one_dot():
     line.add('one dot', [12])
     line.x_labels = ['one']
     line.render()
+
+
+def test_no_dot():
+    line = Line(800, 600)
+    line.add('no dot', [])
+    line.render()
+
+
+def test_no_dot_at_all():
+    line = Line(800, 600)
+    line.render()

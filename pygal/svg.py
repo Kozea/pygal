@@ -148,17 +148,24 @@ class Svg(object):
                   d='M%s L%s' % (origin, svg_values), class_='line')
 
     def bar(self, serie, values, origin=None):
-        view_values = map(lambda x: (self.view(x[0]), self.view(x[1])), values)
+        """Draw a bar graph for a serie"""
+        # value here is a list of tuple range of tuple coord
 
+        def view(rng):
+            """Project range"""
+            return (self.view(rng[0]), self.view(rng[1]))
+
+        view_values = map(view, values)
         for i, ((x, y), (X, Y)) in enumerate(view_values):
+            # x and y are left range coords and X, Y right ones
             width = X - x
             padding = .1 * width
             width = width - 2 * padding
             self.node(serie, 'rect',
-                      width=width,
-                      height=self.view.y(0) - y,
                       x=x + padding,
                       y=y,
+                      width=width,
+                      height=self.view.y(0) - y,
                       class_='rect')
 
     def render(self):
