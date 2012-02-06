@@ -12,7 +12,13 @@ class View(object):
     def __init__(self, width, height, xmin, xmax, ymin, ymax):
         self.width = width
         self.height = height
-        self.box = Box(xmin, ymin, xmax - xmin, ymax - ymin)
+        xrng = (xmax - xmin) or 1
+        yrng = (ymax - ymin) or 1
+        if xrng == 1:
+            xmin -= .5
+        if yrng == 1:
+            ymin -= .5
+        self.box = Box(xmin, ymin, xrng, yrng)
 
     def x(self, x):
         return self.width * (x - self.box.x) / float(self.box.width)
@@ -23,6 +29,4 @@ class View(object):
 
     def __call__(self, xy):
         x, y = xy
-        return (
-            self.x(x),
-            self.y(y))
+        return (self.x(x), self.y(y))

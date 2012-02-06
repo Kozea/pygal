@@ -21,14 +21,18 @@ class Line(BaseGraph):
         self.series.append(
             Serie(title, values))
 
+    def _label(self, label):
+        return Label(('{:.%d%s}' % (
+            self.precision, self.format)).format(label), label)
+
     def _y_labels(self, ymin, ymax):
         step = (ymax - ymin) / 20.
+        if not step:
+            return [self._label(ymin)]
         label = ymin
         labels = []
-        while label < ymax:
-            labels.append(
-                Label(('{:.%d%s}' % (
-                    self.precision, self.format)).format(label), label))
+        while label <= ymax:
+            labels.append(self._label(label))
             label += step
         return labels
 
@@ -42,7 +46,8 @@ class Line(BaseGraph):
     def draw(self):
         self.validate()
         x_step = len(self.series[0].values)
-        x_pos = [x / float(x_step - 1) for x in range(x_step)]
+        x_pos = [x / float(x_step - 1) for x in range(x_step)
+        ] if x_step != 1 else [0]  # Center if only one value
         vals = [val for serie in self.series for val in serie.values]
         margin = Margin(*(4 * [10]))
         ymin, ymax = min(vals), max(vals)
