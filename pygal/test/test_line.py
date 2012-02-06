@@ -17,4 +17,4 @@ def test_one_dot():
     line = Line(800, 600)
     line.add('one dot', [12])
     line.x_labels = ['one']
-    line._in_browser()
+    line.render()

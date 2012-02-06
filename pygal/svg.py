@@ -147,6 +147,20 @@ class Svg(object):
         self.node(serie, 'path',
                   d='M%s L%s' % (origin, svg_values), class_='line')
 
+    def bar(self, serie, values, origin=None):
+        view_values = map(lambda x: (self.view(x[0]), self.view(x[1])), values)
+
+        for i, ((x, y), (X, Y)) in enumerate(view_values):
+            width = X - x
+            padding = .1 * width
+            width = width - 2 * padding
+            self.node(serie, 'rect',
+                      width=width,
+                      height=self.view.y(0) - y,
+                      x=x + padding,
+                      y=y,
+                      class_='rect')
+
     def render(self):
         return etree.tostring(
             self.root, pretty_print=True,
