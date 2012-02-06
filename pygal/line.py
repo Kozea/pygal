@@ -47,7 +47,7 @@ class Line(BaseGraph):
         self.validate()
         x_step = len(self.series[0].values)
         x_pos = [x / float(x_step - 1) for x in range(x_step)
-        ] if x_step != 1 else [0]  # Center if only one value
+        ] if x_step != 1 else [.5]  # Center if only one value
         vals = [val for serie in self.series for val in serie.values]
         margin = Margin(*(4 * [10]))
         ymin, ymax = min(vals), max(vals)
