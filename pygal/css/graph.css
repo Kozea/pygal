@@ -5,19 +5,19 @@ svg * {
 }
 
 .graph > .background {
-  fill: black;
+  fill: {{ style.background }};
 }
 
 .plot > .background {
-  fill: #111;
+  fill: {{ style.plot_background }};
 }
 
 .graph {
-  fill: #999;
+  fill: {{ style.foreground }};
 }
 
 .title {
-  fill: #eee;
+  fill: {{ style.foreground_light }};
   text-anchor: middle;
   alignment-baseline: baseline;
 }
@@ -29,7 +29,7 @@ svg * {
 }
 
 .legend rect {
-  stroke: #555;
+  stroke: {{ style.foreground_dark }};
 }
 
 .axis text {
@@ -48,11 +48,11 @@ svg * {
 }
 
 .axis .line {
-  stroke: #ccc;
+  stroke: {{ style.foreground_light }};
 }
 
 .axis .guide.line {
-  stroke: #555;
+  stroke: {{ style.foreground_dark }};
   stroke-dasharray: 5,5;
 }
 
@@ -61,13 +61,13 @@ svg * {
 }
 
 .axis .guides:hover .guide.line {
-  stroke: #aaa;
+  stroke: {{ style.foreground_light }};
   opacity: 1;
 }
 
 .axis .guides:hover text {
   opacity: 1;
-  fill: #aaa;
+  fill: {{ style.foreground_light }};
 }
 
 .series .dots .dot circle {
@@ -81,7 +81,7 @@ svg * {
   text-anchor: middle;
   alignment-baseline: baseline;
   stroke: none;
-  fill: #ccc;
+  fill: {{ style.foreground_light }};
 }
 
 .series .dots .dot:hover text {
@@ -98,82 +98,4 @@ svg * {
   stroke-width: 2px;
 }
 
-.color-0 {
-  stroke: #ff5995;
-  fill: #ff5995;
-}
-
-.color-1 {
-  stroke: #b6e354;
-  fill: #b6e354;
-}
-
-.color-2 {
-  stroke: #feed6c;
-  fill: #feed6c;
-}
-
-.color-3 {
-  stroke: #8cedff;
-  fill: #8cedff;
-}
-
-.color-4 {
-  stroke: #9e6ffe;
-  fill: #9e6ffe;
-}
-
-.color-5 {
-  stroke: #899ca1;
-  fill: #899ca1;
-}
-
-.color-6 {
-  stroke: #f8f8f2;
-  fill: #f8f8f2;
-}
-
-.color-7 {
-  stroke: #808384;
-  fill: #808384;
-}
-
-.color-8 {
-  stroke: #bf4646;
-  fill: #bf4646;
-}
-
-.color-9 {
-  stroke: #516083;
-  fill: #516083;
-}
-
-.color-10 {
-  stroke: #f92672;
-  fill: #f92672;
-}
-
-.color-11 {
-  stroke: #82b414;
-  fill: #82b414;
-}
-
-.color-12 {
-  stroke: #fd971f;
-  fill: #fd971f;
-}
-
-.color-13 {
-  stroke: #56c2d6;
-  fill: #56c2d6;
-}
-
-.color-14 {
-  stroke: #8c54fe;
-  fill: #8c54fe;
-}
-
-.color-15 {
-  stroke: #465457;
-  fill: #465457;
-}
+{{ style.colors }}

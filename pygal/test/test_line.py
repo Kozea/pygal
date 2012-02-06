@@ -1,3 +1,4 @@
+from pygal import Serie, Margin, Label
 from pygal.line import Line
 from math import cos, sin
 
@@ -8,5 +9,6 @@ def test_simple_line():
     line.add('test2', [sin(x / 10.) for x in range(-30, 30, 5)])
     line.add('test3', [cos(x / 10.) - sin(x / 10.) for x in range(-30, 30, 5)])
     line.x_labels = map(str, range(-30, 30, 5))
+    # line.y_labels = [Label(str(lbl / 100.), lbl / 100.) for lbl in range(20)]
     line.title = "cos sin and cos - sin"
     line._in_browser()

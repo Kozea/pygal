@@ -13,13 +13,13 @@ class Line(BaseGraph):
         self.label_font_size = 12
         self.scale_int = scale_int
         self.series = []
-        self.x_labels = self.title = None
+        self.x_labels = self.y_labels = self.title = None
 
     def add(self, title, values):
         self.series.append(
             Serie(title, values))
 
-    def y_labels(self, ymin, ymax):
+    def _y_labels(self, ymin, ymax):
         step = (ymax - ymin) / 20.
         label = ymin
         labels = []
@@ -46,7 +46,7 @@ class Line(BaseGraph):
         if self.x_labels:
             x_labels = [Label(label, x_pos[i])
                          for i, label in enumerate(self.x_labels)]
-        y_labels = self.y_labels(ymin, ymax)
+        y_labels = self.y_labels or self._y_labels(ymin, ymax)
         series_labels = [serie.title for serie in self.series]
         margin.left += 10 + max(
             map(len, [l.label for l in y_labels])) * 0.6 * self.label_font_size

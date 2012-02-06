@@ -1,6 +1,7 @@
 import os
 from lxml import etree
 from pygal.view import View
+from pygal.style import DefaultStyle
 
 
 class Svg(object):
@@ -30,7 +31,16 @@ class Svg(object):
     def add_style(self, css):
         style = self.node(self.defs, 'style', type='text/css')
         with open(css) as f:
-            style.text = f.read()
+            style.text = (
+                f.read()
+                # Lol
+                .replace('{{ ', '\x00')
+                .replace('{', '{{')
+                .replace('\x00', '{')
+                .replace(' }}', '\x00')
+                .replace('}', '}}')
+                .replace('\x00', '}')
+                .format(style=DefaultStyle))
 
     def node(self, parent=None, tag='g', attrib=None, **extras):
         if parent is None:

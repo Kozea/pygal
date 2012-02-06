@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/zsh
 while inotifywait -e modify **/*.py >> ~/.log/inotifywait.log 2>&1; do
     py.test pygal/test
 done
