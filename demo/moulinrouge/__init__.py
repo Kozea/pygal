@@ -9,6 +9,7 @@ from pygal.bar import Bar
 from pygal.config import Config
 from pygal.style import styles
 # from pygal.pie import Pie
+import math
 import string
 import random
 
@@ -21,8 +22,8 @@ def random_label():
                      random.randrange(4, 30))])
 
 
-def random_value():
-    return random.randrange(0, 15, 1)
+def random_value(min=0, max=15):
+    return random.randrange(min, max, 1)
 
 
 # def generate_vbar(**opts):
@@ -50,11 +51,15 @@ def create_app():
     @app.route("/all-<type>-<style>.svg")
     def all_svg(type, style):
         data = random.randrange(1, 10)
+        order = random.randrange(1, 10)
+        max = 10 ** order
+        min = 10 ** random.randrange(0, order)
         config = Config()
         config.width = 600
         config.height = 400
         config.style = styles[style]
         config.x_labels = [random_label() for i in range(data)]
+        config.title = "%d - %d" % (min, max)
         if type == 'bar':
             g = Bar(config)
         # elif type == 'hbar':
@@ -68,7 +73,7 @@ def create_app():
             return
 
         for i in range(random.randrange(1, 10)):
-            values = [random_value() for i in range(data)]
+            values = [random_value(min, max) for i in range(data)]
             g.add(random_label(), values)
 
         return Response(g.render(), mimetype='image/svg+xml')

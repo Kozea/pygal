@@ -3,6 +3,7 @@ from math import floor
 
 
 def round_to_int(number, precision):
+    precision = int(precision)
     rounded = (int(number) + precision / 2) / precision * precision
     return rounded
 

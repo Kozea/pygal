@@ -1,7 +1,8 @@
-from pygal import Serie, Label, Margin
+from pygal import Serie, Margin
 from pygal.util import round_to_scale
 from pygal.svg import Svg
 from pygal.config import Config
+import math
 
 
 class BaseGraph(object):
@@ -19,14 +20,19 @@ class BaseGraph(object):
         return object.__getattribute__(self, attr)
 
     def _y_pos(self, ymin, ymax):
-        step = (ymax - ymin) / float(self.max_scale_step)
-        position = ymin
-        if not step:
-            return [position]
+        order = round(math.log10(ymax)) - 1
+        if (ymax - ymin) / float(10 ** order) < 4:
+            order -= 1
+        step = 10 ** order
         positions = set()
-        while position < (ymax + step):
-            positions.add(round_to_scale(position, self.scale))
+        position = round_to_scale(ymin, step)
+        while position < ymax:
+            rounded = round_to_scale(position, self.scale)
+            if ymin <= rounded <= ymax:
+                positions.add(rounded)
             position += step
+        if not positions:
+            return [ymin]
         return positions
 
     def _compute_margin(self, x_labels, y_labels):
