@@ -1,38 +1,38 @@
 from pygal import Serie, Margin, Label
 from pygal.svg import Svg
+from pygal.util import round_to_int, round_to_float
 from pygal.base import BaseGraph
 
 
 class Bar(BaseGraph):
     """Bar graph"""
 
-    def __init__(self, width, height, precision=5,
-               format='g', style=None):
+    def __init__(self, width, height, scale=1, style=None):
         self.width = width
         self.height = height
         self.svg = Svg(width, height, style=style)
         self.label_font_size = 12
-        self.format = format
-        self.precision = precision
         self.series = []
+        self.scale = scale
         self.x_labels = self.y_labels = self.title = None
+        rnd = round_to_float if self.scale < 1 else round_to_int
+        self.round = lambda x: rnd(x, self.scale)
 
     def add(self, title, values):
-        self.series.append(
-            Serie(title, values))
+        self.series.append(Serie(title, values))
 
-    def _label(self, label):
-        return Label(('{:.%d%s}' % (
-            self.precision, self.format)).format(label), label)
+    def _label(self, number):
+        return Label(*self.round(number))
 
     def _y_labels(self, ymin, ymax):
         step = (ymax - ymin) / 20.
+
         if not step:
             return [self._label(ymin)]
         label = ymin
-        labels = []
-        while label <= ymax:
-            labels.append(self._label(label))
+        labels = set()
+        while label < (ymax + step):
+            labels.add(self._label(label))
             label += step
         return labels
 

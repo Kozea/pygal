@@ -3,14 +3,14 @@ from math import cos, sin
 
 
 def test_simple_line():
-    line = Line(800, 600, precision=2, format='f')
-    rng = range(-30, 30, 5)
+    line = Line(800, 600)
+    rng = range(-30, 31, 5)
     line.add('test1', [cos(x / 10.) for x in rng])
     line.add('test2', [sin(x / 10.) for x in rng])
     line.add('test3', [cos(x / 10.) - sin(x / 10.) for x in rng])
     line.x_labels = map(str, rng)
     line.title = "cos sin and cos - sin"
-    line.render()
+    line._in_browser()
 
 
 def test_one_dot():
