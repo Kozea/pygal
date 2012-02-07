@@ -37,3 +37,5 @@ LightStyle = Style(
     colors=('#242424', '#9f6767', '#92ac68',
             '#d0d293', '#9aacc3', '#bb77a4',
             '#77bbb5', '#777777'))
+
+styles = [DefaultStyle, LightStyle]

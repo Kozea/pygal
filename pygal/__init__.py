@@ -1,6 +1,6 @@
 from collections import namedtuple
 
-Serie = namedtuple('Serie', ('title', 'values'))
+Serie = namedtuple('Serie', ('title', 'values', 'index'))
 Label = namedtuple('Label', ('label', 'pos'))
 
 

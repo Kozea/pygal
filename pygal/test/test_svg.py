@@ -1,8 +1,13 @@
 from pygal.svg import Svg
+from pygal.config import Config
 
 
 def test_root():
-    svg = Svg(800, 600)
+    class RootConfig(Config):
+        width = 800
+        height = 600
+
+    svg = Svg(RootConfig)
     assert svg.render().startswith('\n'.join((
         '<?xml version=\'1.0\' encoding=\'utf-8\'?>',
         '<svg xmlns:xlink="http://www.w3.org/1999/xlink" '

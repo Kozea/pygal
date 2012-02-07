@@ -14,8 +14,8 @@ class View(object):
         self.height = height
         xrng = (xmax - xmin) or 1
         yrng = (ymax - ymin) or 1
-        # if yrng == 1:
-            # ymin -= .5x
+        if (ymax - ymin) == 0:
+            ymin -= .5
         self.box = Box(xmin, ymin, xrng, yrng)
 
     def x(self, x):

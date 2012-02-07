@@ -1,79 +1,32 @@
-from pygal import Serie, Margin, Label
-from pygal.svg import Svg
-from pygal.util import round_to_int, round_to_float
+from pygal import Margin, Label
 from pygal.base import BaseGraph
 
 
 class Bar(BaseGraph):
     """Bar graph"""
 
-    def __init__(self, width, height, scale=1, style=None):
-        self.width = width
-        self.height = height
-        self.svg = Svg(width, height, style=style)
-        self.label_font_size = 12
-        self.series = []
-        self.scale = scale
-        self.x_labels = self.y_labels = self.title = None
-        rnd = round_to_float if self.scale < 1 else round_to_int
-        self.round = lambda x: rnd(x, self.scale)
-
-    def add(self, title, values):
-        self.series.append(Serie(title, values))
-
-    def _label(self, number):
-        return Label(*self.round(number))
-
-    def _y_labels(self, ymin, ymax):
-        step = (ymax - ymin) / 20.
-
-        if not step:
-            return [self._label(ymin)]
-        label = ymin
-        labels = set()
-        while label < (ymax + step):
-            labels.add(self._label(label))
-            label += step
-        return labels
-
-    def validate(self):
-        assert len(self.series)
-        if self.x_labels:
-            assert len(self.series[0].values) == len(self.x_labels)
-        for serie in self.series:
-            assert len(self.series[0].values) == len(serie.values)
-
-    def draw(self):
-        self.validate()
+    def _draw(self):
+        ymin, ymax = 0, max([
+            val for serie in self.series for val in serie.values])
         x_step = len(self.series[0].values)
         x_pos = [x / float(x_step) for x in range(x_step + 1)
         ] if x_step > 1 else [0, 1]  # Center if only one value
+        y_pos = self._y_pos(ymin, ymax) if not self.y_labels else map(
+            int, self.y_labels)
         x_ranges = zip(x_pos, x_pos[1:])
 
-        vals = [val for serie in self.series for val in serie.values]
-        margin = Margin(*(4 * [10]))
-        ymin, ymax = 0, max(vals)
-        if self.x_labels:
-            x_labels = [Label(label, sum(x_ranges[i]) / 2)
-                         for i, label in enumerate(self.x_labels)]
-        y_labels = self.y_labels or self._y_labels(ymin, ymax)
-        series_labels = [serie.title for serie in self.series]
-        margin.left += 10 + max(
-            map(len, [l.label for l in y_labels])) * 0.6 * self.label_font_size
-        if self.x_labels:
-            margin.bottom += 10 + self.label_font_size
-        margin.right += 20 + max(
-            map(len, series_labels)) * 0.6 * self.label_font_size
-        margin.top += 10 + self.label_font_size
+        x_labels = self.x_labels and zip(self.x_labels, [
+            sum(x_range) / 2 for x_range in x_ranges])
+        y_labels = zip(map(str, y_pos), y_pos)
 
-        # Actual drawing
-        self.svg.set_view(margin, ymin, ymax)
-        self.svg.graph(margin)
-        if self.x_labels:
-            self.svg.x_axis(x_labels)
+        self._compute_margin(x_labels, y_labels)
+        self.svg.set_view(ymin, ymax)
+        self.svg.make_graph()
+        self.svg.x_axis(x_labels)
         self.svg.y_axis(y_labels)
-        self.svg.legend(margin, series_labels)
-        self.svg.title(margin, self.title)
+        self.svg.legend([serie.title for serie in self.series])
+        self.svg.title()
+
         for serie_index, serie in enumerate(self.series):
             serie_node = self.svg.serie(serie_index)
             self.svg.bar(serie_node, [
