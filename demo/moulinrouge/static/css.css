@@ -1,0 +1,9 @@
+html, body, section, figure {
+  margin: 0;
+  padding: 0;
+}
+
+figure {
+  float: left;
+  border: 1px solid #ccc;
+}

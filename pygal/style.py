@@ -38,4 +38,5 @@ LightStyle = Style(
             '#d0d293', '#9aacc3', '#bb77a4',
             '#77bbb5', '#777777'))
 
-styles = [DefaultStyle, LightStyle]
+styles = {'default': DefaultStyle,
+          'light': LightStyle}
