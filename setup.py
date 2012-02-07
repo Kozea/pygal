@@ -9,4 +9,5 @@ setup(
     name="pygal",
     packages=find_packages(),
     tests_require=["pytest"],
+    package_data={'pygal': ['css/*']},
     install_requires=['lxml'])
