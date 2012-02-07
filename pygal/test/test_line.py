@@ -4,7 +4,7 @@ from math import cos, sin
 
 
 def test_simple_line():
-    line = Line(Config(scale=.5))
+    line = Line(Config(scale=.0005))
     rng = range(-30, 31, 5)
     line.add('test1', [cos(x / 10.) for x in rng])
     line.add('test2', [sin(x / 10.) for x in rng])

@@ -164,11 +164,15 @@ class Svg(object):
             bar_padding = .1 * bar_width
             bar_inner_width = bar_width - 2 * bar_padding
             offset = serie.index * bar_width + bar_padding
+            height = self.view.y(0) - y
+            if height < 0:
+                y = y + height
+                height = -height
             self.node(serie_node, 'rect',
                       x=x + padding + offset,
                       y=y,
                       width=bar_inner_width,
-                      height=self.view.y(0) - y,
+                      height=height,
                       class_='rect')
 
     def render(self):

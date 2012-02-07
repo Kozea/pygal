@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from flask import Flask, Response, render_template, url_for
 from log_colorizer import make_colored_stream_handler
-from logging import getLogger, INFO, WARN, DEBUG
+from logging import getLogger, INFO, DEBUG
 from moulinrouge.data import labels, series
 # from pygal.bar import VerticalBar, HorizontalBar
 from pygal.line import Line
@@ -9,7 +9,6 @@ from pygal.bar import Bar
 from pygal.config import Config
 from pygal.style import styles
 # from pygal.pie import Pie
-import math
 import string
 import random
 
@@ -73,7 +72,8 @@ def create_app():
             return
 
         for i in range(random.randrange(1, 10)):
-            values = [random_value(min, max) for i in range(data)]
+            values = [random_value((-max, min)[random.randrange(0, 2)],
+                                   max) for i in range(data)]
             g.add(random_label(), values)
 
         return Response(g.render(), mimetype='image/svg+xml')

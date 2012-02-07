@@ -12,6 +12,7 @@ class Config(object):
     x_labels = None
     y_labels = None
     title = None
+    x_start_at_zero = False
 
     def __init__(self, **kwargs):
         self.__dict__.update(kwargs)

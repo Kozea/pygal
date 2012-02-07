@@ -6,7 +6,7 @@ class Bar(BaseGraph):
 
     def _draw(self):
         vals = [val for serie in self.series for val in serie.values]
-        ymin, ymax = min(min(vals), 0), max(vals)
+        ymin, ymax = min(min(vals), 0), max(max(vals), 0)
         x_step = len(self.series[0].values)
         x_pos = [x / float(x_step) for x in range(x_step + 1)
         ] if x_step > 1 else [0, 1]  # Center if only one value

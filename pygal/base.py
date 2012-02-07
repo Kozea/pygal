@@ -20,13 +20,16 @@ class BaseGraph(object):
         return object.__getattribute__(self, attr)
 
     def _y_pos(self, ymin, ymax):
-        order = round(math.log10(ymax)) - 1
+        order = round(math.log10(max(abs(ymin), abs(ymax)))) - 1
         if (ymax - ymin) / float(10 ** order) < 4:
             order -= 1
         step = 10 ** order
         positions = set()
-        position = round_to_scale(ymin, step)
-        while position < ymax:
+        if self.x_start_at_zero:
+            position = 0
+        else:
+            position = round_to_scale(ymin, step)
+        while position < (ymax + step):
             rounded = round_to_scale(position, self.scale)
             if ymin <= rounded <= ymax:
                 positions.add(rounded)
