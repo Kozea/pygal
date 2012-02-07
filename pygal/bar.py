@@ -1,4 +1,3 @@
-from pygal import Margin, Label
 from pygal.base import BaseGraph
 
 
@@ -27,8 +26,8 @@ class Bar(BaseGraph):
         self.svg.legend([serie.title for serie in self.series])
         self.svg.title()
 
-        for serie_index, serie in enumerate(self.series):
-            serie_node = self.svg.serie(serie_index)
-            self.svg.bar(serie_node, [
+        for serie in self.series:
+            serie_node = self.svg.serie(serie.index)
+            self.svg.bar(serie_node, serie, [
                 tuple((x_ranges[i][j], v) for j in range(2))
                 for i, v in enumerate(serie.values)])

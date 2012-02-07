@@ -1,5 +1,3 @@
-from pygal import Serie, Margin, Label
-from pygal.util import round_to_scale
 from pygal.base import BaseGraph
 
 
@@ -26,8 +24,8 @@ class Line(BaseGraph):
         self.svg.legend([serie.title for serie in self.series])
         self.svg.title()
 
-        for serie_index, serie in enumerate(self.series):
+        for serie in self.series:
             self.svg.line(
-                self.svg.serie(serie_index), [
+                self.svg.serie(serie.index), [
                 (x_pos[i], v)
                 for i, v in enumerate(serie.values)])

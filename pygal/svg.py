@@ -146,7 +146,7 @@ class Svg(object):
         self.node(serie, 'path',
                   d='M%s L%s' % (origin, svg_values), class_='line')
 
-    def bar(self, serie, values, origin=None):
+    def bar(self, serie_node, serie, values, origin=None):
         """Draw a bar graph for a serie"""
         # value here is a list of tuple range of tuple coord
 
@@ -159,11 +159,15 @@ class Svg(object):
             # x and y are left range coords and X, Y right ones
             width = X - x
             padding = .1 * width
-            width = width - 2 * padding
-            self.node(serie, 'rect',
-                      x=x + padding,
+            inner_width = width - 2 * padding
+            bar_width = inner_width / len(self.graph.series)
+            bar_padding = .1 * bar_width
+            bar_inner_width = bar_width - 2 * bar_padding
+            offset = serie.index * bar_width + bar_padding
+            self.node(serie_node, 'rect',
+                      x=x + padding + offset,
                       y=y,
-                      width=width,
+                      width=bar_inner_width,
                       height=self.view.y(0) - y,
                       class_='rect')
 
