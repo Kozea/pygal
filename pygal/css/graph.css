@@ -1,3 +1,8 @@
+svg {
+  background-color: {{ style.background }};
+  box-shadow: 0 0 5px {{ style.foreground }};
+}
+
 svg * {
   -webkit-transition: 250ms;
   -moz-transition: 250ms;
@@ -60,31 +65,41 @@ svg * {
   opacity: 0;
 }
 
-.axis .guides:hover .guide.line {
+.axis.y .guides:hover .guide.line, .Line .axis.x .guides:hover .guide.line {
   stroke: {{ style.foreground_light }};
   opacity: 1;
 }
 
 .axis .guides:hover text {
-  opacity: 1;
   fill: {{ style.foreground_light }};
+  opacity: 1;
 }
 
 .series .dots .dot circle {
-  stroke-width: 9px;
-  stroke: transparent;
+  stroke-width: 1px;
 }
 
-.series .dots .dot text {
+.series .dots .dot:hover circle {
+  stroke-width: 5px;
+}
+
+.series .dots .dot text, .series .bars .bar text, .series .slices .slice text {
   opacity: 0;
-  font-size: 10px;
+  font-size: 12px;
   text-anchor: middle;
   alignment-baseline: baseline;
-  stroke: none;
+  stroke: {{ style.foreground_light }};
   fill: {{ style.foreground_light }};
+  alignment-baseline: baseline;
+  text-shadow: 0 0 5px {{ style.background }};
+  z-index: 9999;
 }
 
-.series .dots .dot:hover text {
+.series .bars .bar text, .series .slices .slice text  {
+  alignment-baseline: middle;
+}
+
+.series .dots .dot:hover text, .series .bars .bar:hover text, .series .slices .slice:hover text {
   opacity: 1;
 }
 
@@ -98,12 +113,12 @@ svg * {
   stroke-width: 2px;
 }
 
-.series .rect {
-  opacity: .8;
+.series .rect, .series .slice {
+  fill-opacity: .8;
 }
 
-.series .rect:hover {
-  opacity: 1;
+.series .rect:hover, .series .slice:hover {
+  fill-opacity: 1;
 }
 
 

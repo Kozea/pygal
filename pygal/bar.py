@@ -10,7 +10,8 @@ class Bar(BaseGraph):
         x_step = len(self.series[0].values)
         x_pos = [x / float(x_step) for x in range(x_step + 1)
         ] if x_step > 1 else [0, 1]  # Center if only one value
-        y_pos = self._y_pos(ymin, ymax) if not self.y_labels else map(
+        y_pos = self._pos(
+            ymin, ymax, self.y_scale) if not self.y_labels else map(
             int, self.y_labels)
         x_ranges = zip(x_pos, x_pos[1:])
 

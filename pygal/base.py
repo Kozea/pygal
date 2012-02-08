@@ -1,4 +1,5 @@
-from pygal import Serie, Margin
+from pygal.serie import Serie
+from pygal.view import Margin
 from pygal.util import round_to_scale
 from pygal.svg import Svg
 from pygal.config import Config
@@ -19,29 +20,32 @@ class BaseGraph(object):
             return object.__getattribute__(self.config, attr)
         return object.__getattribute__(self, attr)
 
-    def _y_pos(self, ymin, ymax):
-        order = round(math.log10(max(abs(ymin), abs(ymax)))) - 1
-        if (ymax - ymin) / float(10 ** order) < 4:
+    def _pos(self, min_, max_, scale):
+        order = round(math.log10(max(abs(min_), abs(max_)))) - 1
+        while (max_ - min_) / float(10 ** order) < 4:
             order -= 1
-        step = 10 ** order
+        step = float(10 ** order)
+        while (max_ - min_) / step > 20:
+            step *= 2.
         positions = set()
         if self.x_start_at_zero:
             position = 0
         else:
-            position = round_to_scale(ymin, step)
-        while position < (ymax + step):
-            rounded = round_to_scale(position, self.scale)
-            if ymin <= rounded <= ymax:
+            position = round_to_scale(min_, step)
+        while position < (max_ + step):
+            rounded = round_to_scale(position, scale)
+            if min_ <= rounded <= max_:
                 positions.add(rounded)
             position += step
         if not positions:
-            return [ymin]
+            return [min_]
         return positions
 
-    def _compute_margin(self, x_labels, y_labels):
-        self.margin.left += 10 + max(
-            map(len, [l for l, _ in y_labels])
-        ) * 0.6 * self.label_font_size
+    def _compute_margin(self, x_labels=None, y_labels=None):
+        if y_labels:
+            self.margin.left += 10 + max(
+                map(len, [l for l, _ in y_labels])
+            ) * 0.6 * self.label_font_size
         if x_labels:
             self.margin.bottom += 10 + self.label_font_size
         self.margin.right += 20 + max(
@@ -55,10 +59,14 @@ class BaseGraph(object):
     def render(self):
         if len(self.series) == 0 or sum(
                 map(len, map(lambda s: s.values, self.series))) == 0:
-            return
-        self.validate()
-        self._draw()
-        return self.svg.render()
+            return "No data"
+        try:
+            self.validate()
+            self._draw()
+            return self.svg.render()
+        except Exception:
+            from traceback import format_exc
+            return format_exc()
 
     def validate(self):
         if self.x_labels:

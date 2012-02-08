@@ -2,6 +2,7 @@ import os
 from lxml import etree
 from pygal.view import View
 from pygal.style import DefaultStyle
+from math import cos, sin, pi
 
 
 class Svg(object):
@@ -52,14 +53,15 @@ class Svg(object):
 
         return etree.SubElement(parent, tag, attrib)
 
-    def set_view(self, ymin, ymax, xmin=0, xmax=1):
+    def set_view(self, ymin=0, ymax=1, xmin=0, xmax=1):
         self.view = View(
             self.graph.width - self.graph.margin.x,
             self.graph.height - self.graph.margin.y,
             xmin, xmax, ymin, ymax)
 
     def make_graph(self):
-        self.graph_node = self.node(class_='graph')
+        self.graph_node = self.node(
+            class_='graph %s' % self.graph.__class__.__name__)
         self.node(self.graph_node, 'rect',
                   class_='background',
                   x=0, y=0,
@@ -131,19 +133,19 @@ class Svg(object):
         return self.node(
             self.plot, class_='series serie-%d color-%d' % (serie, serie))
 
-    def line(self, serie, values, origin=None):
+    def line(self, serie_node, values, origin=None):
         view_values = map(self.view, values)
         if origin == None:
             origin = '%f %f' % view_values[0]
 
-        dots = self.node(serie, class_="dots")
+        dots = self.node(serie_node, class_="dots")
         for i, (x, y) in enumerate(view_values):
             dot = self.node(dots, class_='dot')
             self.node(dot, 'circle', cx=x, cy=y, r=2.5)
             self.node(dot, 'text', x=x, y=y).text = str(values[i][1])
 
         svg_values = ' '.join(map(lambda x: '%f %f' % x, view_values))
-        self.node(serie, 'path',
+        self.node(serie_node, 'path',
                   d='M%s L%s' % (origin, svg_values), class_='line')
 
     def bar(self, serie_node, serie, values, origin=None):
@@ -154,6 +156,7 @@ class Svg(object):
             """Project range"""
             return (self.view(rng[0]), self.view(rng[1]))
 
+        bars = self.node(serie_node, class_="bars")
         view_values = map(view, values)
         for i, ((x, y), (X, Y)) in enumerate(view_values):
             # x and y are left range coords and X, Y right ones
@@ -165,15 +168,48 @@ class Svg(object):
             bar_inner_width = bar_width - 2 * bar_padding
             offset = serie.index * bar_width + bar_padding
             height = self.view.y(0) - y
+            x = x + padding + offset
+            y_txt = y + height / 2
             if height < 0:
                 y = y + height
                 height = -height
-            self.node(serie_node, 'rect',
-                      x=x + padding + offset,
+                y_txt = y + height / 2
+            bar = self.node(bars, class_='bar')
+            self.node(bar, 'rect',
+                      x=x,
                       y=y,
+                      rx=self.graph.rounded_bars * 1,
+                      ry=self.graph.rounded_bars * 1,
                       width=bar_inner_width,
                       height=height,
                       class_='rect')
+            self.node(bar, 'text',
+                      x=x + bar_inner_width / 2,
+                      y=y_txt,
+                      ).text = str(values[i][1][1])
+
+    def slice(self, serie_node, start_angle, angle, perc):
+        slices = self.node(serie_node, class_="slices")
+        slice_ = self.node(slices, class_="slice")
+        center = ((self.graph.width - self.graph.margin.x) / 2.,
+                  (self.graph.height - self.graph.margin.y) / 2.)
+        r = min(center) - 20
+        center_str = '%f %f' % center
+        rxy = '%f %f' % tuple([r] * 2)
+        to = '%f %f' % (r * sin(angle), r * (1 - cos(angle)))
+        self.node(slice_, 'path',
+                  d='M%s v%f a%s 0 0 1 %s z' % (
+                      center_str, -center[1] + 20,
+                      rxy, to),
+                  transform='rotate(%f %s)' % (
+                      start_angle * 180 / pi, center_str),
+                  class_='slice')
+        text_angle = pi / 2. - (start_angle + angle / 2.)
+        text_r = min(center)
+        self.node(slice_, 'text',
+                  x=center[0] + text_r * cos(text_angle) * 1.05,
+                  y=center[1] - text_r * sin(text_angle),
+              ).text = '{:.2%}'.format(perc)
 
     def render(self):
         return etree.tostring(
