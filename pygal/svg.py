@@ -205,8 +205,8 @@ class Svg(object):
             height = self.view.y(0) - y
             x = x + padding
             y_txt = y + height / 2
-            shift = stack_vals[i]
-            stack_vals[i] += height
+            shift = stack_vals[i][int(height < 0)]
+            stack_vals[i][int(height < 0)] += height
             if height < 0:
                 y = y + height
                 height = -height

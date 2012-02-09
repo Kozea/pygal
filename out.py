@@ -12,9 +12,9 @@ with open('out-bar.svg', 'w') as f:
     f.write(bar.render())
 
 stackedbar = StackedBar()
-rng = [3, 32, 39, 12]
+rng = [3, -32, 39, 12]
 stackedbar.add('test1', rng)
-rng2 = [24, 8, 18, 12]
+rng2 = [24, -8, 18, 12]
 stackedbar.add('test2', rng2)
 rng3 = [6, 1, -10, 0]
 stackedbar.add('test3', rng3)

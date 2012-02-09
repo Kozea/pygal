@@ -6,8 +6,11 @@ class StackedBar(BaseGraph):
 
     def _draw(self):
         transposed = zip(*[serie.values for serie in self.series])
-        vals = [sum(val) for val in transposed]
-        ymin, ymax = min(min(vals), 0), max(max(vals), 0)
+        positive_vals = [sum([val if val > 0 else 0 for val in vals])
+                           for vals in transposed]
+        negative_vals = [sum([val if val < 0 else 0 for val in vals])
+                           for vals in transposed]
+        ymin, ymax = min(min(negative_vals), 0), max(max(positive_vals), 0)
         length = len(self.series[0].values)
         x_pos = [x / float(length) for x in range(length + 1)
         ] if length > 1 else [0, 1]  # Center if only one value
@@ -28,7 +31,7 @@ class StackedBar(BaseGraph):
         self.svg.legend([serie.title for serie in self.series])
         self.svg.title()
 
-        stack_vals = [0] * length
+        stack_vals = [[0, 0] for i in range(length)]
         for serie in self.series:
             serie_node = self.svg.serie(serie.index)
             stack_vals = self.svg.stackbar(
