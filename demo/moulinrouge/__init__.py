@@ -2,13 +2,9 @@
 from flask import Flask, Response, render_template, url_for
 from log_colorizer import make_colored_stream_handler
 from logging import getLogger, INFO, DEBUG
-from moulinrouge.data import labels, series
-# from pygal.bar import VerticalBar, HorizontalBar
-from pygal.line import Line
-from pygal.bar import Bar
+import pygal
 from pygal.config import Config
 from pygal.style import styles
-# from pygal.pie import Pie
 import string
 import random
 
@@ -23,14 +19,6 @@ def random_label():
 
 def random_value(min=0, max=15):
     return random.randrange(min, max, 1)
-
-
-# def generate_vbar(**opts):
-#     g = VerticalBar(labels, opts)
-#     for serie, values in series.items():
-#         g.add_data({'data': values, 'title': serie})
-
-#     return Response(g.burn(), mimetype='image/svg+xml')
 
 
 def create_app():
@@ -57,23 +45,22 @@ def create_app():
         config.width = 600
         config.height = 400
         config.style = styles[style]
-        config.x_labels = [random_label() for i in range(data)]
+        if type != 'Pie':
+            config.x_labels = [random_label() for i in range(data)]
         config.title = "%d - %d" % (min, max)
-        if type == 'bar':
-            g = Bar(config)
-        # elif type == 'hbar':
-            # g = HorizontalBar(labels)
-        # elif type == 'pie':
-            # series = 1
-            # g = Pie({'fields': labels})
-        elif type == 'line':
-            g = Line(config)
-        else:
-            return
+        g = getattr(pygal, type)(config)
 
         for i in range(random.randrange(1, 10)):
-            values = [random_value((-max, min)[random.randrange(0, 2)],
-                                   max) for i in range(data)]
+            if type == 'Pie':
+                values = random_value(min, max)
+            elif type == 'XY':
+                values = [(
+                    random_value((-max, min)[random.randrange(0, 2)], max),
+                    random_value((-max, min)[random.randrange(0, 2)], max))
+                          for i in range(data)]
+            else:
+                values = [random_value((-max, min)[random.randrange(0, 2)],
+                                       max) for i in range(data)]
             g.add(random_label(), values)
 
         return Response(g.render(), mimetype='image/svg+xml')
@@ -83,7 +70,7 @@ def create_app():
         width, height = 600, 400
         svgs = [url_for('all_svg', type=type, style=style)
                 for style in styles
-                for type in ('bar', 'line')]
+                for type in ('Bar', 'Line', 'XY', 'Pie', 'StackedBar')]
         return render_template('svgs.jinja2',
                                svgs=svgs,
                                width=width,
@@ -108,7 +95,7 @@ def create_app():
 
     @app.route("/bigline.svg")
     def big_line_svg():
-        g = Line(600, 400)
+        g = pygal.Line(600, 400)
         g.x_labels = ['a', 'b', 'c', 'd']
         g.add('serie', [11, 50, 133, 2])
         return Response(g.render(), mimetype='image/svg+xml')

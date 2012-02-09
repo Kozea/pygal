@@ -133,10 +133,9 @@ class Svg(object):
         return self.node(
             self.plot, class_='series serie-%d color-%d' % (serie, serie))
 
-    def line(self, serie_node, values, origin=None):
+    def line(self, serie_node, values):
         view_values = map(self.view, values)
-        if origin == None:
-            origin = '%f %f' % view_values[0]
+        origin = '%f %f' % view_values[0]
 
         dots = self.node(serie_node, class_="dots")
         for i, (x, y) in enumerate(view_values):
@@ -148,7 +147,7 @@ class Svg(object):
         self.node(serie_node, 'path',
                   d='M%s L%s' % (origin, svg_values), class_='line')
 
-    def bar(self, serie_node, serie, values, origin=None):
+    def bar(self, serie_node, serie, values):
         """Draw a bar graph for a serie"""
         # value here is a list of tuple range of tuple coord
 
@@ -188,26 +187,67 @@ class Svg(object):
                       y=y_txt,
                       ).text = str(values[i][1][1])
 
+    def stackbar(self, serie_node, serie, values, stack_vals):
+        """Draw a bar graph for a serie"""
+        # value here is a list of tuple range of tuple coord
+
+        def view(rng):
+            """Project range"""
+            return (self.view(rng[0]), self.view(rng[1]))
+
+        bars = self.node(serie_node, class_="bars")
+        view_values = map(view, values)
+        for i, ((x, y), (X, Y)) in enumerate(view_values):
+            # x and y are left range coords and X, Y right ones
+            width = X - x
+            padding = .1 * width
+            inner_width = width - 2 * padding
+            height = self.view.y(0) - y
+            x = x + padding
+            y_txt = y + height / 2
+            shift = stack_vals[i]
+            stack_vals[i] += height
+            if height < 0:
+                y = y + height
+                height = -height
+                y_txt = y + height / 2
+            bar = self.node(bars, class_='bar')
+            self.node(bar, 'rect',
+                      x=x,
+                      y=y - shift,
+                      rx=self.graph.rounded_bars * 1,
+                      ry=self.graph.rounded_bars * 1,
+                      width=inner_width,
+                      height=height,
+                      class_='rect')
+            self.node(bar, 'text',
+                      x=x + inner_width / 2,
+                      y=y_txt - shift,
+                      ).text = str(values[i][1][1])
+        return stack_vals
+
     def slice(self, serie_node, start_angle, angle, perc):
         slices = self.node(serie_node, class_="slices")
         slice_ = self.node(slices, class_="slice")
         center = ((self.graph.width - self.graph.margin.x) / 2.,
                   (self.graph.height - self.graph.margin.y) / 2.)
-        r = min(center) - 20
+        r = min(center)
         center_str = '%f %f' % center
         rxy = '%f %f' % tuple([r] * 2)
         to = '%f %f' % (r * sin(angle), r * (1 - cos(angle)))
         self.node(slice_, 'path',
-                  d='M%s v%f a%s 0 0 1 %s z' % (
-                      center_str, -center[1] + 20,
-                      rxy, to),
+                  d='M%s v%f a%s 0 %d 1 %s z' % (
+                      center_str, -r,
+                      rxy,
+                      1 if angle > pi else 0,
+                      to),
                   transform='rotate(%f %s)' % (
                       start_angle * 180 / pi, center_str),
                   class_='slice')
         text_angle = pi / 2. - (start_angle + angle / 2.)
         text_r = min(center)
         self.node(slice_, 'text',
-                  x=center[0] + text_r * cos(text_angle) * 1.05,
+                  x=center[0] + text_r * cos(text_angle),
                   y=center[1] - text_r * sin(text_angle),
               ).text = '{:.2%}'.format(perc)
 

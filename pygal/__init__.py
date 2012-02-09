@@ -1,6 +1,7 @@
 from collections import namedtuple
 
 from pygal.bar import Bar
+from pygal.stackedbar import StackedBar
 from pygal.line import Line
 from pygal.xy import XY
 from pygal.pie import Pie

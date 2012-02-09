@@ -1,4 +1,5 @@
 #!/bin/zsh
-while inotifywait -e modify **/*.py >> ~/.log/inotifywait.log 2>&1; do
-    py.test pygal/test
-done
+livereload&
+reload ./out.py&
+python -m SimpleHTTPServer 1515&
+chromium http://localhost:1515/&
