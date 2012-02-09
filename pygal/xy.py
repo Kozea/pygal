@@ -28,4 +28,4 @@ class XY(BaseGraph):
 
         for serie in self.series:
             self.svg.line(
-                self.svg.serie(serie.index), serie.values)
+                self.svg.serie(serie.index), serie.values, True)

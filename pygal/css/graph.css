@@ -65,7 +65,7 @@ svg * {
   opacity: 0;
 }
 
-.axis.y .guides:hover .guide.line, .Line .axis.x .guides:hover .guide.line {
+.axis.y .guides:hover .guide.line, .Line .axis.x .guides:hover .guide.line, .XY .axis.x .guides:hover .guide.line {
   stroke: {{ style.foreground_light }};
   opacity: 1;
 }

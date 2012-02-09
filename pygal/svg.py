@@ -79,10 +79,11 @@ class Svg(object):
 
     def x_axis(self, labels):
         axis = self.node(self.plot, class_="axis x")
-        # Plot axis
-        self.node(axis, 'path',
-                  d='M%f %f v%f' % (0, 0, self.view.height),
-                  class_='line')
+
+        if 0 not in [label[1] for label in labels]:
+            self.node(axis, 'path',
+                      d='M%f %f v%f' % (0, 0, self.view.height),
+                      class_='line')
         if not labels:
             return
         for label, position in labels:
@@ -91,24 +92,26 @@ class Svg(object):
             if x != 0:
                 self.node(guides, 'path',
                           d='M%f %f v%f' % (x, 0, self.view.height),
-                          class_='guide line')
-
+                          class_='%sline' % (
+                              'guide ' if position != 0 else ''))
             text = self.node(guides, 'text', x=x, y=self.view.height + 5)
             text.text = label
 
     def y_axis(self, labels):
         axis = self.node(self.plot, class_="axis y")
-        # Plot axis
-        self.node(axis, 'path',
-                  d='M%f %f h%f' % (0, self.view.height, self.view.width),
-                  class_='line')
+
+        if 0 not in [label[1] for label in labels]:
+            self.node(axis, 'path',
+                      d='M%f %f h%f' % (0, self.view.height, self.view.width),
+                      class_='line')
         for label, position in labels:
             guides = self.node(axis, class_='guides')
             y = self.view.y(position)
             if y != self.view.height:
                 self.node(guides, 'path',
                           d='M%f %f h%f' % (0, y, self.view.width),
-                          class_='guide line')
+                          class_='%sline' % (
+                              'guide ' if position != 0 else ''))
             text = self.node(guides, 'text', x=-5, y=y)
             text.text = label
 
@@ -133,7 +136,7 @@ class Svg(object):
         return self.node(
             self.plot, class_='series serie-%d color-%d' % (serie, serie))
 
-    def line(self, serie_node, values):
+    def line(self, serie_node, values, xy=False):
         view_values = map(self.view, values)
         origin = '%f %f' % view_values[0]
 
@@ -141,7 +144,8 @@ class Svg(object):
         for i, (x, y) in enumerate(view_values):
             dot = self.node(dots, class_='dot')
             self.node(dot, 'circle', cx=x, cy=y, r=2.5)
-            self.node(dot, 'text', x=x, y=y).text = str(values[i][1])
+            self.node(dot, 'text', x=x, y=y).text = str(
+                values[i]) if xy else str(values[i][1])
 
         svg_values = ' '.join(map(lambda x: '%f %f' % x, view_values))
         self.node(serie_node, 'path',
@@ -245,7 +249,7 @@ class Svg(object):
                       start_angle * 180 / pi, center_str),
                   class_='slice')
         text_angle = pi / 2. - (start_angle + angle / 2.)
-        text_r = min(center)
+        text_r = min(center) * .8
         self.node(slice_, 'text',
                   x=center[0] + text_r * cos(text_angle),
                   y=center[1] - text_r * sin(text_angle),
