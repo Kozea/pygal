@@ -5,6 +5,8 @@ class Style(object):
         foreground='#999',
         foreground_light='#eee',
         foreground_dark='#555',
+        opacity='.8',
+        transition='250ms',
         colors=(
                 '#ff5995', '#b6e354', '#feed6c', '#8cedff', '#9e6ffe',
                 '#899ca1', '#f8f8f2', '#808384', '#bf4646', '#516083',
@@ -15,6 +17,8 @@ class Style(object):
             self.foreground = foreground
             self.foreground_light = foreground_light
             self.foreground_dark = foreground_dark
+            self.opacity = opacity
+            self.transition = transition
             self._colors = colors
 
     @property
@@ -37,6 +41,10 @@ LightStyle = Style(
     colors=('#242424', '#9f6767', '#92ac68',
             '#d0d293', '#9aacc3', '#bb77a4',
             '#77bbb5', '#777777'))
+NeonStyle = Style(
+    opacity='.1',
+    transition='1s ease-out')
 
 styles = {'default': DefaultStyle,
-          'light': LightStyle}
+          'light': LightStyle,
+          'neon': NeonStyle}

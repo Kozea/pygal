@@ -1,9 +1,9 @@
 from pygal.serie import Serie
 from pygal.view import Margin
-from pygal.util import round_to_scale
+from pygal.util import round_to_scale, cut, rad
 from pygal.svg import Svg
 from pygal.config import Config
-import math
+from math import log10, sin, cos, pi
 
 
 class BaseGraph(object):
@@ -13,7 +13,7 @@ class BaseGraph(object):
         self.config = config or Config()
         self.svg = Svg(self)
         self.series = []
-        self.margin = Margin(*([10] * 4))
+        self.margin = Margin(*([20] * 4))
 
     def __getattr__(self, attr):
         if attr in dir(self.config):
@@ -21,7 +21,7 @@ class BaseGraph(object):
         return object.__getattribute__(self, attr)
 
     def _pos(self, min_, max_, scale):
-        order = round(math.log10(max(abs(min_), abs(max_)))) - 1
+        order = round(log10(max(abs(min_), abs(max_)))) - 1
         while (max_ - min_) / float(10 ** order) < 4:
             order -= 1
         step = float(10 ** order)
@@ -41,17 +41,38 @@ class BaseGraph(object):
             return [min_]
         return positions
 
+    def _text_len(self, lenght, fs):
+        return lenght * 0.6 * fs
+
+    def _get_text_box(self, text, fs):
+        return (fs, self._text_len(len(text), fs))
+
+    def _get_texts_box(self, texts, fs):
+        max_len = max(map(len, texts))
+        return (fs, self._text_len(max_len, fs))
+
     def _compute_margin(self, x_labels=None, y_labels=None):
-        if y_labels:
-            self.margin.left += 10 + max(
-                map(len, [l for l, _ in y_labels])
-            ) * 0.6 * self.label_font_size
+        if self.show_legend:
+            h, w = self._get_texts_box(
+                cut(self.series, 'title'), self.legend_font_size)
+            self.margin.right += 10 + w + self.legend_box_size
+
+        if self.title:
+            h, w = self._get_text_box(self.title, self.title_font_size)
+            self.margin.top += 10 + h
+
         if x_labels:
-            self.margin.bottom += 10 + self.label_font_size
-        self.margin.right += 20 + max(
-            map(len, [serie.title for serie in self.series])
-        ) * 0.6 * self.label_font_size
-        self.margin.top += 10 + self.label_font_size
+            h, w = self._get_texts_box(cut(x_labels), self.label_font_size)
+            self.margin.bottom += 10 + max(
+                w * sin(rad(self.x_label_rotation)), h)
+            if self.x_label_rotation:
+                self.margin.right = max(
+                    .5 * w * cos(rad(self.x_label_rotation)),
+                    self.margin.right)
+        if y_labels:
+            h, w = self._get_texts_box(cut(y_labels), self.label_font_size)
+            self.margin.left += 10 + max(
+                w * cos(rad(self.y_label_rotation)), h)
 
     def add(self, title, values):
         self.series.append(Serie(title, values, len(self.series)))
@@ -91,3 +112,7 @@ class BaseGraph(object):
         from lxml.html import open_in_browser
         self._draw()
         open_in_browser(self.svg.root, encoding='utf-8')
+
+    def render_response(self):
+        from flask import Response
+        return Response(self.render(), mimetype='image/svg+xml')

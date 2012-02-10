@@ -3,9 +3,9 @@ from pygal import Line, Bar, XY, Pie, StackedBar, Config
 from math import cos, sin
 
 bar = Bar()
-rng = [6, 19]
+rng = [-6, -19, 0, -1, 2]
 bar.add('test1', rng)
-# bar.add('test2', map(abs, rng))
+bar.add('test2', map(abs, rng))
 bar.x_labels = map(str, rng)
 bar.title = "Bar test"
 with open('out-bar.svg', 'w') as f:
@@ -13,11 +13,12 @@ with open('out-bar.svg', 'w') as f:
 
 stackedbar = StackedBar()
 rng = [3, -32, 39, 12]
-stackedbar.add('test1', rng)
+stackedbar.add('@@@@@@@', rng)
 rng2 = [24, -8, 18, 12]
-stackedbar.add('test2', rng2)
+stackedbar.add('++++++', rng2)
 rng3 = [6, 1, -10, 0]
-stackedbar.add('test3', rng3)
+stackedbar.add('--->', rng3)
+stackedbar.x_label_rotation = 35
 stackedbar.x_labels = map(lambda x: '%s  / %s / %s' % x,
                         zip(map(str, rng),
                             map(str, rng2),

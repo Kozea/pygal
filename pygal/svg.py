@@ -37,7 +37,8 @@ class Svg(object):
                 .replace(' }}', '\x00')
                 .replace('}', '}}')
                 .replace('\x00', '}')
-                .format(style=self.graph.style))
+                .format(style=self.graph.style,
+                        font_sizes=self.graph.font_sizes))
 
     def node(self, parent=None, tag='g', attrib=None, **extras):
         if parent is None:
@@ -90,11 +91,17 @@ class Svg(object):
         for label, position in labels:
             guides = self.node(axis, class_='guides')
             x = self.view.x(position)
+            y = self.view.height + 5
             self.node(guides, 'path',
                       d='M%f %f v%f' % (x, 0, self.view.height),
                     class_='%sline' % (
                         'guide ' if position != 0 else ''))
-            text = self.node(guides, 'text', x=x, y=self.view.height + 5)
+            text = self.node(guides, 'text',
+                             x=x,
+                             y=y + .5 * self.graph.label_font_size + 5)
+            if self.graph.x_label_rotation:
+                text.attrib['transform'] = "rotate(%d %f %f)" % (
+                    self.graph.x_label_rotation, x, y)
             text.text = label
 
     def y_axis(self, labels):
@@ -102,37 +109,58 @@ class Svg(object):
             return
 
         axis = self.node(self.plot, class_="axis y")
-        # import pdb; pdb.set_trace()
+
         if 0 not in [label[1] for label in labels]:
             self.node(axis, 'path',
                       d='M%f %f h%f' % (0, self.view.height, self.view.width),
                       class_='line')
         for label, position in labels:
             guides = self.node(axis, class_='guides')
+            x = -5
             y = self.view.y(position)
             self.node(guides, 'path',
                       d='M%f %f h%f' % (0, y, self.view.width),
                       class_='%sline' % (
                           'guide ' if position != 0 else ''))
-            text = self.node(guides, 'text', x=-5, y=y)
+            text = self.node(guides, 'text',
+                             x=x,
+                             y=y + .35 * self.graph.label_font_size)
+            if self.graph.y_label_rotation:
+                text.attrib['transform'] = "rotate(%d %f %f)" % (
+                    self.graph.y_label_rotation, x, y)
             text.text = label
 
     def legend(self, titles):
-        legend = self.node(
-            self.graph_node, class_='legend',
+        if not self.graph.show_legend:
+            return
+        legends = self.node(
+            self.graph_node, class_='legends',
             transform='translate(%d, %d)' % (
                 self.graph.margin.left + self.view.width + 10,
                 self.graph.margin.top + 10))
         for i, title in enumerate(titles):
-            self.node(legend, 'rect', x=0, y=i * 15,
-                      width=8, height=8, class_="color-%d" % i,
+            legend = self.node(legends, class_='legend')
+            self.node(legend, 'rect',
+                      x=0,
+                      y=1.5 * i * self.graph.legend_box_size,
+                      width=self.graph.legend_box_size,
+                      height=self.graph.legend_box_size,
+                      class_="color-%d" % i,
                   ).text = title
-            self.node(legend, 'text', x=15, y=i * 15).text = title
+            # Serious magical numbers here
+            self.node(legend, 'text',
+                      x=self.graph.legend_box_size + 5,
+                      y=1.5 * i * self.graph.legend_box_size
+                      + .5 * self.graph.legend_box_size
+                      + .3 * self.graph.legend_font_size
+            ).text = title
 
     def title(self):
-        self.node(self.graph_node, 'text', class_='title',
-                  x=self.graph.margin.left + self.view.width / 2,
-                  y=10).text = self.graph.title
+        if self.graph.title:
+            self.node(self.graph_node, 'text', class_='title',
+                      x=self.graph.margin.left + self.view.width / 2,
+                      y=self.graph.title_font_size + 10
+            ).text = self.graph.title
 
     def serie(self, serie):
         return self.node(
@@ -153,7 +181,7 @@ class Svg(object):
         self.node(serie_node, 'path',
                   d='M%s L%s' % (origin, svg_values), class_='line')
 
-    def bar(self, serie_node, serie, values):
+    def bar(self, serie_node, serie, values, stack_vals=None):
         """Draw a bar graph for a serie"""
         # value here is a list of tuple range of tuple coord
 
@@ -168,21 +196,29 @@ class Svg(object):
             width = X - x
             padding = .1 * width
             inner_width = width - 2 * padding
-            bar_width = inner_width / len(self.graph.series)
-            bar_padding = .1 * bar_width
-            bar_inner_width = bar_width - 2 * bar_padding
-            offset = serie.index * bar_width + bar_padding
             height = self.view.y(0) - y
+            if stack_vals == None:
+                bar_width = inner_width / len(self.graph.series)
+                bar_padding = .1 * bar_width
+                bar_inner_width = bar_width - 2 * bar_padding
+                offset = serie.index * bar_width + bar_padding
+                shift = 0
+            else:
+                offset = 0
+                bar_inner_width = inner_width
+                shift = stack_vals[i][int(height < 0)]
+                stack_vals[i][int(height < 0)] += height
             x = x + padding + offset
-            y_txt = y + height / 2
+
             if height < 0:
                 y = y + height
                 height = -height
-                y_txt = y + height / 2
+
+            y_txt = y + height / 2 + .3 * self.graph.values_font_size
             bar = self.node(bars, class_='bar')
             self.node(bar, 'rect',
                       x=x,
-                      y=y,
+                      y=y - shift,
                       rx=self.graph.rounded_bars * 1,
                       ry=self.graph.rounded_bars * 1,
                       width=bar_inner_width,
@@ -190,44 +226,6 @@ class Svg(object):
                       class_='rect')
             self.node(bar, 'text',
                       x=x + bar_inner_width / 2,
-                      y=y_txt,
-                      ).text = str(values[i][1][1])
-
-    def stackbar(self, serie_node, serie, values, stack_vals):
-        """Draw a bar graph for a serie"""
-        # value here is a list of tuple range of tuple coord
-
-        def view(rng):
-            """Project range"""
-            return (self.view(rng[0]), self.view(rng[1]))
-
-        bars = self.node(serie_node, class_="bars")
-        view_values = map(view, values)
-        for i, ((x, y), (X, Y)) in enumerate(view_values):
-            # x and y are left range coords and X, Y right ones
-            width = X - x
-            padding = .1 * width
-            inner_width = width - 2 * padding
-            height = self.view.y(0) - y
-            x = x + padding
-            y_txt = y + height / 2
-            shift = stack_vals[i][int(height < 0)]
-            stack_vals[i][int(height < 0)] += height
-            if height < 0:
-                y = y + height
-                height = -height
-                y_txt = y + height / 2
-            bar = self.node(bars, class_='bar')
-            self.node(bar, 'rect',
-                      x=x,
-                      y=y - shift,
-                      rx=self.graph.rounded_bars * 1,
-                      ry=self.graph.rounded_bars * 1,
-                      width=inner_width,
-                      height=height,
-                      class_='rect')
-            self.node(bar, 'text',
-                      x=x + inner_width / 2,
                       y=y_txt - shift,
                       ).text = str(values[i][1][1])
         return stack_vals

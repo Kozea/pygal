@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from flask import Flask, Response, render_template, url_for
 from log_colorizer import make_colored_stream_handler
+from moulinrouge.data import labels, series
 from logging import getLogger, INFO, DEBUG
 import pygal
 from pygal.config import Config
@@ -62,8 +63,7 @@ def create_app():
                 values = [random_value((-max, min)[random.randrange(0, 2)],
                                        max) for i in range(data)]
             g.add(random_label(), values)
-
-        return Response(g.render(), mimetype='image/svg+xml')
+        return g.render_response()
 
     @app.route("/all")
     def all():
@@ -76,12 +76,19 @@ def create_app():
                                width=width,
                                height=height)
 
-    # @app.route("/rotation[<int:angle>].svg")
-    # def rotation_svg(angle):
-    #     return generate_vbar(
-    #         show_graph_title=True,
-    #         graph_title="Rotation %d" % angle,
-    #         x_label_rotation=angle)
+    @app.route("/rotation[<int:angle>].svg")
+    def rotation_svg(angle):
+        config = Config()
+        config.width = 375
+        config.height = 245
+        config.x_labels = labels
+        config.x_label_rotation = angle
+        g = pygal.Line(config)
+        for serie, values in series.items():
+            g.add(serie, values)
+
+        g.add(serie, values)
+        return g.render_response()
 
     @app.route("/rotation")
     def rotation():
@@ -98,7 +105,7 @@ def create_app():
         g = pygal.Line(600, 400)
         g.x_labels = ['a', 'b', 'c', 'd']
         g.add('serie', [11, 50, 133, 2])
-        return Response(g.render(), mimetype='image/svg+xml')
+        return g.render_response()
 
     @app.route("/bigline")
     def big_line():

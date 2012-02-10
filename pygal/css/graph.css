@@ -1,12 +1,11 @@
 svg {
   background-color: {{ style.background }};
-  box-shadow: 0 0 5px {{ style.foreground }};
 }
 
 svg * {
-  -webkit-transition: 250ms;
-  -moz-transition: 250ms;
-  transition: 250ms;
+  -webkit-transition: {{ style.transition }};
+  -moz-transition: {{ style.transition }};
+  transition: {{ style.transition }};
 }
 
 .graph > .background {
@@ -23,33 +22,44 @@ svg * {
 
 .title {
   fill: {{ style.foreground_light }};
+  font-size: {{ font_sizes.title }};
   text-anchor: middle;
-  alignment-baseline: baseline;
 }
 
-.legend text {
-  font-size: 12px;
-  font-family: sans;  
-  alignment-baseline: hanging;
+.legends .legend text {
+  font-family: monospace;  
+  font-size: {{ font_sizes.legend }};
 }
 
-.legend rect {
-  stroke: {{ style.foreground_dark }};
+.legends .legend rect {
+  fill-opacity: {{ style.opacity }};
+}
+
+.legends .legend:hover text {
+  stroke: {{ style.foreground_light }};
+}
+
+.legends .legend:hover rect {
+  fill-opacity: 1
 }
 
 .axis text {
-  font-size: 12px;
+  font-size: {{ font_sizes.label }};
   font-family: sans;
 }
 
 .axis.x text {
+  font-family: monospace;
   text-anchor: middle;
-  alignment-baseline: baseline;
+}
+
+.axis.x text[transform] {
+  text-anchor: start;
 }
 
 .axis.y text {
+  font-family: monospace;
   text-anchor: end;
-  alignment-baseline: middle;
 }
 
 .axis .line {
@@ -83,23 +93,16 @@ svg * {
   stroke-width: 5px;
 }
 
-.series .dots .dot text, .series .bars .bar text, .series .slices .slice text {
+.series text {
   opacity: 0;
-  font-size: 12px;
+  font-size: {{ font_sizes.values }};
   text-anchor: middle;
-  alignment-baseline: baseline;
   stroke: {{ style.foreground_light }};
   fill: {{ style.foreground_light }};
-  alignment-baseline: baseline;
-  text-shadow: 0 0 5px {{ style.background }};
-  z-index: 9999;
+  text-shadow: 0 0 16px {{ style.background }};
 }
 
-.series .bars .bar text, .series .slices .slice text  {
-  alignment-baseline: middle;
-}
-
-.series .dots .dot:hover text, .series .bars .bar:hover text, .series .slices .slice:hover text {
+.series .dot:hover text, .series .bar:hover text, .series .slice:hover text {
   opacity: 1;
 }
 
@@ -114,7 +117,7 @@ svg * {
 }
 
 .series .rect, .series .slice {
-  fill-opacity: .8;
+  fill-opacity: {{ style.opacity }};
 }
 
 .series .rect:hover, .series .slice:hover {

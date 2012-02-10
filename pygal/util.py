@@ -1,5 +1,5 @@
 from decimal import Decimal
-from math import floor
+from math import floor, pi
 
 
 def round_to_int(number, precision):
@@ -18,3 +18,15 @@ def round_to_scale(number, precision):
     if precision < 1:
         return round_to_float(number, precision)
     return round_to_int(number, precision)
+
+
+def cut(list_, index=0):
+    if isinstance(index, int):
+        cut = lambda x: x[index]
+    else:
+        cut = lambda x: getattr(x, index)
+    return map(cut, list_)
+
+
+def rad(deg):
+    return pi * deg / 180.

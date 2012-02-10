@@ -34,7 +34,7 @@ class StackedBar(BaseGraph):
         stack_vals = [[0, 0] for i in range(length)]
         for serie in self.series:
             serie_node = self.svg.serie(serie.index)
-            stack_vals = self.svg.stackbar(
+            stack_vals = self.svg.bar(
                 serie_node, serie, [
                 tuple((x_ranges[i][j], v) for j in range(2))
                 for i, v in enumerate(serie.values)],
