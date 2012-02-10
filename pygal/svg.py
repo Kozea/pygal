@@ -90,11 +90,10 @@ class Svg(object):
         for label, position in labels:
             guides = self.node(axis, class_='guides')
             x = self.view.x(position)
-            if x != 0:
-                self.node(guides, 'path',
-                          d='M%f %f v%f' % (x, 0, self.view.height),
-                          class_='%sline' % (
-                              'guide ' if position != 0 else ''))
+            self.node(guides, 'path',
+                      d='M%f %f v%f' % (x, 0, self.view.height),
+                    class_='%sline' % (
+                        'guide ' if position != 0 else ''))
             text = self.node(guides, 'text', x=x, y=self.view.height + 5)
             text.text = label
 
@@ -103,7 +102,7 @@ class Svg(object):
             return
 
         axis = self.node(self.plot, class_="axis y")
-
+        # import pdb; pdb.set_trace()
         if 0 not in [label[1] for label in labels]:
             self.node(axis, 'path',
                       d='M%f %f h%f' % (0, self.view.height, self.view.width),
@@ -111,11 +110,10 @@ class Svg(object):
         for label, position in labels:
             guides = self.node(axis, class_='guides')
             y = self.view.y(position)
-            if y != self.view.height:
-                self.node(guides, 'path',
-                          d='M%f %f h%f' % (0, y, self.view.width),
-                          class_='%sline' % (
-                              'guide ' if position != 0 else ''))
+            self.node(guides, 'path',
+                      d='M%f %f h%f' % (0, y, self.view.width),
+                      class_='%sline' % (
+                          'guide ' if position != 0 else ''))
             text = self.node(guides, 'text', x=-5, y=y)
             text.text = label
 
