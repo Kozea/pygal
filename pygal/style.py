@@ -29,7 +29,7 @@ class Style(object):
 
 DefaultStyle = Style()
 LightStyle = Style(
-    background='transparent',
+    background='white',
     plot_background='rgba(0, 0, 255, 0.1)',
     foreground='rgba(0, 0, 0, 0.7)',
     foreground_light='rgba(0, 0, 0, 0.9)',
