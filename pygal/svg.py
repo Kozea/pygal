@@ -78,14 +78,15 @@ class Svg(object):
                   height=self.view.height)
 
     def x_axis(self, labels):
+        if not labels:
+            return
+
         axis = self.node(self.plot, class_="axis x")
 
         if 0 not in [label[1] for label in labels]:
             self.node(axis, 'path',
                       d='M%f %f v%f' % (0, 0, self.view.height),
                       class_='line')
-        if not labels:
-            return
         for label, position in labels:
             guides = self.node(axis, class_='guides')
             x = self.view.x(position)
@@ -98,6 +99,9 @@ class Svg(object):
             text.text = label
 
     def y_axis(self, labels):
+        if not labels:
+            return
+
         axis = self.node(self.plot, class_="axis y")
 
         if 0 not in [label[1] for label in labels]:
