@@ -93,6 +93,10 @@ svg * {
   stroke-width: 5px;
 }
 
+.series .rect, .series .slice {
+  fill-opacity: {{ style.opacity }};
+}
+
 .series text {
   opacity: 0;
   font-size: {{ font_sizes.values }};
@@ -106,6 +110,10 @@ svg * {
   opacity: 1;
 }
 
+.series .bar:hover .rect, .series .slice:hover path{
+  fill-opacity: 1;
+}
+
 .series .line {
   fill: none;
   stroke-width: 1px;
@@ -116,13 +124,7 @@ svg * {
   stroke-width: 2px;
 }
 
-.series .rect, .series .slice {
-  fill-opacity: {{ style.opacity }};
-}
 
-.series .rect:hover, .series .slice:hover {
-  fill-opacity: 1;
-}
 
 
 {{ style.colors }}

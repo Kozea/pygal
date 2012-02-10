@@ -1,7 +1,6 @@
 import os
 from lxml import etree
 from pygal.view import View
-from pygal.style import DefaultStyle
 from math import cos, sin, pi
 
 

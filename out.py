@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 from pygal import Line, Bar, XY, Pie, StackedBar, Config
+from pygal.style import NeonStyle
 from math import cos, sin
 
 bar = Bar()
@@ -11,19 +12,23 @@ bar.title = "Bar test"
 with open('out-bar.svg', 'w') as f:
     f.write(bar.render())
 
-stackedbar = StackedBar()
+
 rng = [3, -32, 39, 12]
-stackedbar.add('@@@@@@@', rng)
 rng2 = [24, -8, 18, 12]
-stackedbar.add('++++++', rng2)
 rng3 = [6, 1, -10, 0]
-stackedbar.add('--->', rng3)
-stackedbar.x_label_rotation = 35
-stackedbar.x_labels = map(lambda x: '%s  / %s / %s' % x,
+config = Config()
+config.x_label_rotation = 35
+config.x_labels = map(lambda x: '%s  / %s / %s' % x,
                         zip(map(str, rng),
                             map(str, rng2),
                             map(str, rng3)))
-stackedbar.title = "Stackedbar test"
+config.title = "Config test"
+config.style = NeonStyle
+
+stackedbar = StackedBar(config)
+stackedbar.add('@@@@@@@', rng)
+stackedbar.add('++++++', rng2)
+stackedbar.add('--->', rng3)
 with open('out-stackedbar.svg', 'w') as f:
     f.write(stackedbar.render())
 
