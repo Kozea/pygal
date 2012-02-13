@@ -40,13 +40,22 @@ class Svg(object):
         attrib = attrib or {}
         attrib.update(extras)
         for key, value in attrib.items():
-            if not isinstance(value, basestring):
+            if value is None:
+                del attrib[key]
+            elif not isinstance(value, basestring):
                 attrib[key] = str(value)
-            if key == 'class_':
+            elif key == 'class_':
                 attrib['class'] = attrib['class_']
                 del attrib['class_']
-
         return etree.SubElement(parent, tag, attrib)
+
+    def transposable_node(self, parent=None, tag='g', attrib=None, **extras):
+        if self.graph.horizontal:
+            for key1, key2 in (('x', 'y'), ('width', 'height')):
+                attr1 = extras.get(key1, None)
+                attr2 = extras.get(key2, None)
+                extras[key1], extras[key2] = attr2, attr1
+        return self.node(parent, tag, attrib, **extras)
 
     def set_view(self):
         self.view = View(
@@ -217,32 +226,18 @@ class Svg(object):
 
             y_txt = y + height / 2 + .3 * self.graph.values_font_size
             bar = self.node(bars, class_='bar')
-            if self.graph.horizontal:
-                self.node(bar, 'rect',
-                          x=y - shift,
-                          y=x,
-                          rx=self.graph.rounded_bars * 1,
-                          ry=self.graph.rounded_bars * 1,
-                          width=height,
-                          height=bar_inner_width,
-                          class_='rect')
-                self.node(bar, 'text',
-                          x=y_txt - shift,
-                          y=x + bar_inner_width / 2,
-                      ).text = str(values[i][1][1])
-            else:
-                self.node(bar, 'rect',
-                          x=x,
-                          y=y - shift,
-                          rx=self.graph.rounded_bars * 1,
-                          ry=self.graph.rounded_bars * 1,
-                          width=bar_inner_width,
-                          height=height,
-                          class_='rect')
-                self.node(bar, 'text',
-                          x=x + bar_inner_width / 2,
-                          y=y_txt - shift,
-                      ).text = str(values[i][1][1])
+            self.transposable_node(bar, 'rect',
+                      x=x,
+                      y=y - shift,
+                      rx=self.graph.rounded_bars * 1,
+                      ry=self.graph.rounded_bars * 1,
+                      width=bar_inner_width,
+                      height=height,
+                      class_='rect')
+            self.transposable_node(bar, 'text',
+                      x=x + bar_inner_width / 2,
+                      y=y_txt - shift,
+            ).text = str(values[i][1][1])
         return stack_vals
 
     def slice(self, serie_node, start_angle, angle, perc):
