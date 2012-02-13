@@ -1,0 +1,143 @@
+from pygal.serie import Serie
+from pygal.view import Margin, Box
+from pygal.util import round_to_scale, cut, rad
+from pygal.svg import Svg
+from pygal.config import Config
+from math import log10, sin, cos, pi
+
+
+class BaseGraph(object):
+    """Graphs commons"""
+
+    def __init__(self, config=None):
+        self.config = config or Config()
+        self.svg = Svg(self)
+        self.series = []
+        self.margin = Margin(*([20] * 4))
+        self._x_labels = self._y_labels = None
+        self._box = Box()
+
+    def __getattr__(self, attr):
+        if attr in dir(self.config):
+            return object.__getattribute__(self.config, attr)
+        return object.__getattribute__(self, attr)
+
+    def _pos(self, min_, max_, scale):
+        order = round(log10(max(abs(min_), abs(max_)))) - 1
+        while (max_ - min_) / float(10 ** order) < 4:
+            order -= 1
+        step = float(10 ** order)
+        while (max_ - min_) / step > 20:
+            step *= 2.
+        positions = set()
+        if self.x_start_at_zero:
+            position = 0
+        else:
+            position = round_to_scale(min_, step)
+        while position < (max_ + step):
+            rounded = round_to_scale(position, scale)
+            if min_ <= rounded <= max_:
+                positions.add(rounded)
+            position += step
+        if not positions:
+            return [min_]
+        return positions
+
+    def _text_len(self, lenght, fs):
+        return lenght * 0.6 * fs
+
+    def _get_text_box(self, text, fs):
+        return (fs, self._text_len(len(text), fs))
+
+    def _get_texts_box(self, texts, fs):
+        max_len = max(map(len, texts))
+        return (fs, self._text_len(max_len, fs))
+
+    def _compute(self):
+        """Initial computations to draw the graph"""
+
+    def _compute_margin(self):
+        if self.show_legend:
+            h, w = self._get_texts_box(
+                cut(self.series, 'title'), self.legend_font_size)
+            self.margin.right += 10 + w + self.legend_box_size
+
+        if self.title:
+            h, w = self._get_text_box(self.title, self.title_font_size)
+            self.margin.top += 10 + h
+
+        if self._x_labels:
+            h, w = self._get_texts_box(
+                cut(self._x_labels), self.label_font_size)
+            self.margin.bottom += 10 + max(
+                w * sin(rad(self.x_label_rotation)), h)
+            if self.x_label_rotation:
+                self.margin.right = max(
+                    .5 * w * cos(rad(self.x_label_rotation)),
+                    self.margin.right)
+        if self._y_labels:
+            h, w = self._get_texts_box(
+                cut(self._y_labels), self.label_font_size)
+            self.margin.left += 10 + max(
+                w * cos(rad(self.y_label_rotation)), h)
+
+    @property
+    def _legends(self):
+        return [serie.title for serie in self.series]
+
+    def _decorate(self):
+        self.svg.set_view()
+        self.svg.make_graph()
+        self.svg.x_axis()
+        self.svg.y_axis()
+        self.svg.legend()
+        self.svg.title()
+
+    def _draw(self):
+        self._compute()
+        self._compute_margin()
+        self._decorate()
+        self._plot()
+
+    def add(self, title, values):
+        self.series.append(Serie(title, values, len(self.series)))
+
+    def render(self):
+        if len(self.series) == 0 or sum(
+                map(len, map(lambda s: s.values, self.series))) == 0:
+            return "No data"
+        try:
+            self.validate()
+            self._draw()
+            return self.svg.render()
+        except Exception:
+            from traceback import format_exc
+            error_svg = (
+                '<?xml version="1.0" standalone="no"?>'
+                '<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" '
+                '"http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">'
+                '<svg xmlns="http://www.w3.org/2000/svg" version="1.1">')
+            trace = (format_exc()
+                     .replace('&', '&amp;')
+                     .replace('<', '&lt;')
+                     .replace('>', '&gt;'))
+            for i, line in enumerate(trace.split('\n')):
+                error_svg += '<text y="%d">%s</text>' % (
+                    (i + 1) * 25, line)
+            error_svg += '</svg>'
+            return error_svg
+
+    def validate(self):
+        if self.x_labels:
+            assert len(self.series[0].values) == len(self.x_labels)
+        for serie in self.series:
+            assert len(self.series[0].values) == len(serie.values)
+
+    def _in_browser(self):
+        from lxml.html import open_in_browser
+        self._draw()
+        open_in_browser(self.svg.root, encoding='utf-8')
+
+    def render_response(self):
+        from flask import Response
+        return Response(self.render(), mimetype='image/svg+xml')
