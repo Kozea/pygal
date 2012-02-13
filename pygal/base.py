@@ -3,7 +3,7 @@ from pygal.view import Margin, Box
 from pygal.util import round_to_scale, cut, rad
 from pygal.svg import Svg
 from pygal.config import Config
-from math import log10, sin, cos, pi
+from math import log10, sin, cos
 
 
 class BaseGraph(object):

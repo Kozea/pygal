@@ -1,4 +1,6 @@
-from pygal.util import round_to_int, round_to_float
+# -*- coding: utf-8 -*-
+from pygal.util import round_to_int, round_to_float, _swap_curly, template
+from pytest import raises
 
 
 def test_round_to_int():
@@ -20,3 +22,37 @@ def test_round_to_float():
     assert round_to_float(12.1134, .00001) == 12.1134
     assert round_to_float(12.1934, .5) == 12.0
     assert round_to_float(12.2934, .5) == 12.5
+
+
+def test_swap_curly():
+    for str in (
+            'foo',
+            u'foo foo foo bar',
+            'foo béè b¡ð/ĳə˘©þß®~¯æ',
+            u'foo béè b¡ð/ĳə˘©þß®~¯æ'):
+        assert _swap_curly(str) == str
+    assert _swap_curly('foo{bar}baz') == 'foo{{bar}}baz'
+    assert _swap_curly('foo{{bar}}baz') == 'foo{bar}baz'
+    assert _swap_curly('{foo}{{bar}}{baz}') == '{{foo}}{bar}{{baz}}'
+    assert _swap_curly('{foo}{{{bar}}}{baz}') == '{{foo}}{{{bar}}}{{baz}}'
+    assert _swap_curly('foo{ bar }baz') == 'foo{{ bar }}baz'
+    assert _swap_curly('foo{ bar}baz') == 'foo{{ bar}}baz'
+    assert _swap_curly('foo{bar }baz') == 'foo{{bar }}baz'
+    assert _swap_curly('foo{{ bar }}baz') == 'foo{bar}baz'
+    assert _swap_curly('foo{{bar }}baz') == 'foo{bar}baz'
+    assert _swap_curly('foo{{ bar}}baz') == 'foo{bar}baz'
+
+
+def test_format():
+    assert template('foo {{ baz }}', baz='bar') == 'foo bar'
+    with raises(KeyError):
+        assert template('foo {{ baz }}') == 'foo baz'
+
+    class Object(object):
+        pass
+    obj = Object()
+    obj.a = 1
+    obj.b = True
+    obj.c = '3'
+    assert template('foo {{ o.a }} {{o.b}}-{{o.c}}',
+               o=obj) == 'foo 1 True-3'

@@ -1,5 +1,4 @@
-from pygal.bar import Bar
-from math import cos, sin
+from pygal import Bar
 
 
 def test_simple_bar():

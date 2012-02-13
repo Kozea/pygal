@@ -1,4 +1,4 @@
-from pygal.line import Line
+from pygal import Line
 from pygal.config import Config
 from math import cos, sin
 

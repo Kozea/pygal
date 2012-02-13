@@ -1,6 +1,7 @@
 import os
 from lxml import etree
 from pygal.view import View
+from pygal.util import template
 from math import cos, sin, pi
 
 
@@ -27,17 +28,10 @@ class Svg(object):
     def add_style(self, css):
         style = self.node(self.defs, 'style', type='text/css')
         with open(css) as f:
-            style.text = (
-                f.read()
-                # Lol
-                .replace('{{ ', '\x00')
-                .replace('{', '{{')
-                .replace('\x00', '{')
-                .replace(' }}', '\x00')
-                .replace('}', '}}')
-                .replace('\x00', '}')
-                .format(style=self.graph.style,
-                        font_sizes=self.graph.font_sizes))
+            style.text = template(
+                f.read(),
+                style=self.graph.style,
+                font_sizes=self.graph.font_sizes)
 
     def node(self, parent=None, tag='g', attrib=None, **extras):
         if parent is None:

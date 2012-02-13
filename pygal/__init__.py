@@ -1,8 +1,8 @@
 from collections import namedtuple
 
-from pygal.bar import Bar
-from pygal.stackedbar import StackedBar
-from pygal.line import Line
-from pygal.xy import XY
-from pygal.pie import Pie
+from pygal.graph.bar import Bar
+from pygal.graph.stackedbar import StackedBar
+from pygal.graph.line import Line
+from pygal.graph.xy import XY
+from pygal.graph.pie import Pie
 from pygal.config import Config

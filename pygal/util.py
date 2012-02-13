@@ -30,3 +30,21 @@ def cut(list_, index=0):
 
 def rad(deg):
     return pi * deg / 180.
+
+
+def _swap_curly(string):
+    """Swap single and double curly brackets"""
+    return (string
+            .replace('{{ ', '{{')
+            .replace('{{', '\x00')
+            .replace('{', '{{')
+            .replace('\x00', '{')
+            .replace(' }}', '}}')
+            .replace('}}', '\x00')
+            .replace('}', '}}')
+            .replace('\x00', '}'))
+
+
+def template(string, **kwargs):
+    """Format a string using double braces"""
+    return _swap_curly(string).format(**kwargs)
