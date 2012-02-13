@@ -53,11 +53,11 @@ class Svg(object):
 
         return etree.SubElement(parent, tag, attrib)
 
-    def set_view(self, ymin=0, ymax=1, xmin=0, xmax=1):
+    def set_view(self):
         self.view = View(
             self.graph.width - self.graph.margin.x,
             self.graph.height - self.graph.margin.y,
-            xmin, xmax, ymin, ymax)
+            self.graph._box)
 
     def make_graph(self):
         self.graph_node = self.node(
@@ -77,17 +77,17 @@ class Svg(object):
                   width=self.view.width,
                   height=self.view.height)
 
-    def x_axis(self, labels):
-        if not labels:
+    def x_axis(self):
+        if not self.graph._x_labels:
             return
 
         axis = self.node(self.plot, class_="axis x")
 
-        if 0 not in [label[1] for label in labels]:
+        if 0 not in [label[1] for label in self.graph._x_labels]:
             self.node(axis, 'path',
                       d='M%f %f v%f' % (0, 0, self.view.height),
                       class_='line')
-        for label, position in labels:
+        for label, position in self.graph._x_labels:
             guides = self.node(axis, class_='guides')
             x = self.view.x(position)
             y = self.view.height + 5
@@ -103,17 +103,17 @@ class Svg(object):
                     self.graph.x_label_rotation, x, y)
             text.text = label
 
-    def y_axis(self, labels):
-        if not labels:
+    def y_axis(self):
+        if not self.graph._y_labels:
             return
 
         axis = self.node(self.plot, class_="axis y")
 
-        if 0 not in [label[1] for label in labels]:
+        if 0 not in [label[1] for label in self.graph._y_labels]:
             self.node(axis, 'path',
                       d='M%f %f h%f' % (0, self.view.height, self.view.width),
                       class_='line')
-        for label, position in labels:
+        for label, position in self.graph._y_labels:
             guides = self.node(axis, class_='guides')
             x = -5
             y = self.view.y(position)
@@ -129,7 +129,7 @@ class Svg(object):
                     self.graph.y_label_rotation, x, y)
             text.text = label
 
-    def legend(self, titles):
+    def legend(self):
         if not self.graph.show_legend:
             return
         legends = self.node(
@@ -137,7 +137,7 @@ class Svg(object):
             transform='translate(%d, %d)' % (
                 self.graph.margin.left + self.view.width + 10,
                 self.graph.margin.top + 10))
-        for i, title in enumerate(titles):
+        for i, title in enumerate(self.graph._legends):
             legend = self.node(legends, class_='legend')
             self.node(legend, 'rect',
                       x=0,

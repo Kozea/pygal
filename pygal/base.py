@@ -1,5 +1,5 @@
 from pygal.serie import Serie
-from pygal.view import Margin
+from pygal.view import Margin, Box
 from pygal.util import round_to_scale, cut, rad
 from pygal.svg import Svg
 from pygal.config import Config
@@ -14,6 +14,8 @@ class BaseGraph(object):
         self.svg = Svg(self)
         self.series = []
         self.margin = Margin(*([20] * 4))
+        self._x_labels = self._y_labels = None
+        self._box = Box()
 
     def __getattr__(self, attr):
         if attr in dir(self.config):
@@ -51,7 +53,10 @@ class BaseGraph(object):
         max_len = max(map(len, texts))
         return (fs, self._text_len(max_len, fs))
 
-    def _compute_margin(self, x_labels=None, y_labels=None):
+    def _compute(self):
+        """Initial computations to draw the graph"""
+
+    def _compute_margin(self):
         if self.show_legend:
             h, w = self._get_texts_box(
                 cut(self.series, 'title'), self.legend_font_size)
@@ -61,18 +66,38 @@ class BaseGraph(object):
             h, w = self._get_text_box(self.title, self.title_font_size)
             self.margin.top += 10 + h
 
-        if x_labels:
-            h, w = self._get_texts_box(cut(x_labels), self.label_font_size)
+        if self._x_labels:
+            h, w = self._get_texts_box(
+                cut(self._x_labels), self.label_font_size)
             self.margin.bottom += 10 + max(
                 w * sin(rad(self.x_label_rotation)), h)
             if self.x_label_rotation:
                 self.margin.right = max(
                     .5 * w * cos(rad(self.x_label_rotation)),
                     self.margin.right)
-        if y_labels:
-            h, w = self._get_texts_box(cut(y_labels), self.label_font_size)
+        if self._y_labels:
+            h, w = self._get_texts_box(
+                cut(self._y_labels), self.label_font_size)
             self.margin.left += 10 + max(
                 w * cos(rad(self.y_label_rotation)), h)
+
+    @property
+    def _legends(self):
+        return [serie.title for serie in self.series]
+
+    def _decorate(self):
+        self.svg.set_view()
+        self.svg.make_graph()
+        self.svg.x_axis()
+        self.svg.y_axis()
+        self.svg.legend()
+        self.svg.title()
+
+    def _draw(self):
+        self._compute()
+        self._compute_margin()
+        self._decorate()
+        self._plot()
 
     def add(self, title, values):
         self.series.append(Serie(title, values, len(self.series)))

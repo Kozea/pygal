@@ -1,5 +1,5 @@
 #!/bin/zsh
 livereload&
-reload ./out.py&
+reload ./out.py **/*.py&
 python -m SimpleHTTPServer 1515&
 chromium http://localhost:1515/&

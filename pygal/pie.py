@@ -9,12 +9,7 @@ class Pie(BaseGraph):
     def add(self, title, value):
         self.series.append(Serie(title, [value], len(self.series)))
 
-    def _draw(self):
-        self._compute_margin()
-        self.svg.set_view()
-        self.svg.make_graph()
-        self.svg.legend([serie.title for serie in self.series])
-        self.svg.title()
+    def _plot(self):
         total = float(sum(serie.values[0] for serie in self.series))
         current_angle = 0
         for serie in self.series:
