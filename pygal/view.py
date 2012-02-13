@@ -27,6 +27,10 @@ class Box(object):
     def height(self):
         return self.ymax - self.ymin
 
+    def swap(self):
+        self.xmin, self.ymin = self.ymin, self.xmin
+        self.xmax, self.ymax = self.ymax, self.xmax
+
     def fix(self):
         if not self.width:
             self.xmax = self.xmin + 1

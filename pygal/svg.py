@@ -1,7 +1,7 @@
 import os
 from lxml import etree
 from pygal.view import View
-from pygal.util import template
+from pygal.util import template, swap, ident
 from math import cos, sin, pi
 
 
@@ -31,7 +31,8 @@ class Svg(object):
             style.text = template(
                 f.read(),
                 style=self.graph.style,
-                font_sizes=self.graph.font_sizes)
+                font_sizes=self.graph.font_sizes,
+                hidden='y' if self.graph.horizontal else 'x')
 
     def node(self, parent=None, tag='g', attrib=None, **extras):
         if parent is None:
@@ -180,16 +181,23 @@ class Svg(object):
 
         def view(rng):
             """Project range"""
-            return (self.view(rng[0]), self.view(rng[1]))
+            t, T = rng
+            fun = swap if self.graph.horizontal else ident
+            return (self.view(fun(t)), self.view(fun(T)))
 
         bars = self.node(serie_node, class_="bars")
         view_values = map(view, values)
         for i, ((x, y), (X, Y)) in enumerate(view_values):
             # x and y are left range coords and X, Y right ones
+            if self.graph.horizontal:
+                x, y, X, Y = Y, X, y, x
             width = X - x
             padding = .1 * width
             inner_width = width - 2 * padding
-            height = self.view.y(0) - y
+            if self.graph.horizontal:
+                height = self.view.x(0) - y
+            else:
+                height = self.view.y(0) - y
             if stack_vals == None:
                 bar_width = inner_width / len(self.graph.series)
                 bar_padding = .1 * bar_width
@@ -209,17 +217,31 @@ class Svg(object):
 
             y_txt = y + height / 2 + .3 * self.graph.values_font_size
             bar = self.node(bars, class_='bar')
-            self.node(bar, 'rect',
-                      x=x,
-                      y=y - shift,
-                      rx=self.graph.rounded_bars * 1,
-                      ry=self.graph.rounded_bars * 1,
-                      width=bar_inner_width,
-                      height=height,
-                      class_='rect')
-            self.node(bar, 'text',
-                      x=x + bar_inner_width / 2,
-                      y=y_txt - shift,
+            if self.graph.horizontal:
+                self.node(bar, 'rect',
+                          x=y - shift,
+                          y=x,
+                          rx=self.graph.rounded_bars * 1,
+                          ry=self.graph.rounded_bars * 1,
+                          width=height,
+                          height=bar_inner_width,
+                          class_='rect')
+                self.node(bar, 'text',
+                          x=y_txt - shift,
+                          y=x + bar_inner_width / 2,
+                      ).text = str(values[i][1][1])
+            else:
+                self.node(bar, 'rect',
+                          x=x,
+                          y=y - shift,
+                          rx=self.graph.rounded_bars * 1,
+                          ry=self.graph.rounded_bars * 1,
+                          width=bar_inner_width,
+                          height=height,
+                          class_='rect')
+                self.node(bar, 'text',
+                          x=x + bar_inner_width / 2,
+                          y=y_txt - shift,
                       ).text = str(values[i][1][1])
         return stack_vals
 

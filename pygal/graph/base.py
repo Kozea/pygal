@@ -3,13 +3,14 @@ from pygal.view import Margin, Box
 from pygal.util import round_to_scale, cut, rad
 from pygal.svg import Svg
 from pygal.config import Config
-from math import log10, sin, cos, pi
+from math import log10, sin, cos
 
 
 class BaseGraph(object):
     """Graphs commons"""
 
-    def __init__(self, config=None):
+    def __init__(self, config=None, horizontal=False):
+        self.horizontal = horizontal
         self.config = config or Config()
         self.svg = Svg(self)
         self.series = []

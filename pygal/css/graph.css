@@ -71,7 +71,7 @@ svg * {
   stroke-dasharray: 5,5;
 }
 
-.axis.x .guide.line {
+.axis.{{ hidden }} .guide.line {
   opacity: 0;
 }
 

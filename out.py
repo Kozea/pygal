@@ -1,5 +1,7 @@
 #!/usr/bin/env python
-from pygal import Line, Bar, XY, Pie, StackedBar, Config
+from pygal import (
+    Line, Bar, XY, Pie, StackedBar, Config,
+    HorizontalBar, HorizontalStackedBar)
 from pygal.style import NeonStyle
 from math import cos, sin
 
@@ -12,6 +14,17 @@ bar.title = "Bar test"
 with open('out-bar.svg', 'w') as f:
     f.write(bar.render())
 
+hbar = HorizontalBar()
+rng = [18, 9, 7, 3, 1, 0, -5]
+hbar.add('test1', rng)
+rng2 = [16, 14, 10, 9, 7, 3, -1]
+hbar.add('test2', rng2)
+hbar.x_labels = map(
+    lambda x: '%s / %s' % x, zip(map(str, rng), map(str, rng2)))
+hbar.title = "Horizontal Bar test"
+with open('out-horizontalbar.svg', 'w') as f:
+    f.write(hbar.render())
+
 
 rng = [3, -32, 39, 12]
 rng2 = [24, -8, 18, 12]
@@ -22,8 +35,9 @@ config.x_labels = map(lambda x: '%s  / %s / %s' % x,
                         zip(map(str, rng),
                             map(str, rng2),
                             map(str, rng3)))
-config.title = "Config test"
+config.title = "Stacked Bar test"
 config.style = NeonStyle
+config.horizontal = True
 
 stackedbar = StackedBar(config)
 stackedbar.add('@@@@@@@', rng)
@@ -31,6 +45,14 @@ stackedbar.add('++++++', rng2)
 stackedbar.add('--->', rng3)
 with open('out-stackedbar.svg', 'w') as f:
     f.write(stackedbar.render())
+
+config.title = "Horizontal Stacked Bar test"
+hstackedbar = HorizontalStackedBar(config)
+hstackedbar.add('@@@@@@@', rng)
+hstackedbar.add('++++++', rng2)
+hstackedbar.add('--->', rng3)
+with open('out-horizontalstackedbar.svg', 'w') as f:
+    f.write(hstackedbar.render())
 
 line = Line(Config(y_scale=.0005))
 rng = range(-30, 31, 5)

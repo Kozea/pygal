@@ -48,3 +48,6 @@ def _swap_curly(string):
 def template(string, **kwargs):
     """Format a string using double braces"""
     return _swap_curly(string).format(**kwargs)
+
+swap = lambda tuple_: tuple(reversed(tuple_))
+ident = lambda x: x
