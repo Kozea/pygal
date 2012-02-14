@@ -7,6 +7,9 @@ from math import cos, sin, pi
 class Radar(Line):
     """Kiviat graph"""
 
+    def _get_value(self, values, i):
+        return str(values[i][0])
+
     def _set_view(self):
         self.view = PolarView(
             self.width - self.margin.x,
@@ -72,6 +75,7 @@ class Radar(Line):
         self._x_labels = self.x_labels and zip(self.x_labels, self._x_pos)
         self._y_labels = zip(map(str, self._y_pos), self._y_pos)
         self._box.xmin = self._box.ymin = - self._box.ymax
+        self._line_close = True
 
     def _plot(self):
         for serie in self.series:

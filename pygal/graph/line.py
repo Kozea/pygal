@@ -4,6 +4,10 @@ from pygal.graph.graph import Graph
 class Line(Graph):
     """Line graph"""
 
+    def __init__(self, *args, **kwargs):
+        super(Line, self).__init__(*args, **kwargs)
+        self._line_close = False
+
     def _get_value(self, values, i):
         return str(values[i][1])
 
@@ -16,7 +20,8 @@ class Line(Graph):
             self.svg.node(dot, 'circle', cx=x, cy=y, r=2.5)
             self.svg.node(dot, 'text', x=x, y=y
             ).text = self._get_value(values, i)
-        self.svg.line(serie_node, view_values, class_='line', close=True)
+        self.svg.line(
+            serie_node, view_values, class_='line', close=self._line_close)
 
     def _compute(self):
         vals = [val for serie in self.series for val in serie.values]

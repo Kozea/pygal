@@ -72,5 +72,6 @@ class View(object):
 class PolarView(View):
     def __call__(self, rtheta):
         r, theta = rtheta
+        r = max(r, 0)
         return super(PolarView, self).__call__(
             (r * cos(theta), r * sin(theta)))

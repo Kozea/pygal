@@ -71,7 +71,7 @@ def create_app():
         svgs = [url_for('all_svg', type=type, style=style)
                 for style in styles
                 for type in ('Bar', 'Line', 'XY', 'Pie', 'StackedBar',
-                          'HorizontalBar', 'HorizontalStackedBar')]
+                          'HorizontalBar', 'HorizontalStackedBar', 'Radar')]
         return render_template('svgs.jinja2',
                                svgs=svgs,
                                width=width,
