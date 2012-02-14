@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import os
 from lxml import etree
 from pygal.view import View
@@ -20,7 +21,8 @@ class Svg(object):
                 None: self.ns,
                 'xlink': 'http://www.w3.org/1999/xlink',
             })
-
+        self.root.append(etree.Comment(u'Generated with pygal ©Kozea 2012'))
+        self.root.append(etree.Comment(u'http://github.com/Kozea/pygal'))
         self.defs = self.node(tag='defs')
         self.add_style(self.graph.base_css or os.path.join(
             os.path.dirname(__file__), 'css', 'graph.css'))
@@ -132,6 +134,22 @@ class Svg(object):
                 text.attrib['transform'] = "rotate(%d %f %f)" % (
                     self.graph.y_label_rotation, x, y)
             text.text = label
+
+    def web_axis(self):
+        axis = self.node(self.plot, class_="axis polar")
+        delta = 2 * pi / float(len(self.graph.x_labels))
+        center = self.view((0, 0))
+        f = lambda x: '%f %f' % x
+        for i, title in enumerate(self.graph.x_labels):
+            angle = .5 * pi - i * delta
+            end = self.view((cos(angle), sin(angle)))
+            self.node(axis, 'path',
+                      d='M%s L%s' % (f(center), f(end)),
+                      class_='line')
+            self.node(axis, 'text',
+                      x=end[0],
+                      y=end[1]
+            ).text = str(i)
 
     def legend(self):
         if not self.graph.show_legend:
@@ -264,6 +282,18 @@ class Svg(object):
                   x=center[0] + text_r * cos(text_angle),
                   y=center[1] - text_r * sin(text_angle),
               ).text = '{:.2%}'.format(perc)
+
+    def web(self, serie_node, serie, radius):
+        webs = self.node(serie_node, class_="webs")
+        web = self.node(webs, class_="web")
+        # view_radius = map(self.view, radius)
+        origin = '%f %f' % self.view((0, 0))
+        dot1 = '%f %f' % self.view((1, 1))
+        dot2 = '%f %f' % self.view((-1, -1))
+        self.node(web, 'path',
+                  d='M%s L%s %s' % (
+                      origin, dot1, dot2),
+                  class_='web')
 
     def render(self):
         return etree.tostring(

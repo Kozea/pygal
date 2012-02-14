@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 from pygal import (
-    Line, Bar, XY, Pie, StackedBar, Config,
+    Line, Bar, XY, Pie, Radar, StackedBar, Config,
     HorizontalBar, HorizontalStackedBar)
 from pygal.style import NeonStyle
 from math import cos, sin
@@ -80,3 +80,14 @@ pie.add('test2', 29)
 pie.title = "Pie test"
 with open('out-pie.svg', 'w') as f:
     f.write(pie.render())
+
+config = Config()
+config.x_labels = (
+    'black', 'red', 'blue', 'yellow', 'orange', 'green', 'white')
+radar = Radar(config)
+radar.add('test', [9, 10, 3, 5, 7, 2, 5])
+radar.add('test2', [10, 2, 0, 5, 1, 9, 4])
+
+radar.title = "Radar test"
+with open('out-radar.svg', 'w') as f:
+    f.write(radar.render())
