@@ -6,6 +6,7 @@ class Style(object):
         foreground_light='#eee',
         foreground_dark='#555',
         opacity='.8',
+        opacity_hover='1',
         transition='250ms',
         colors=(
                 '#ff5995', '#b6e354', '#feed6c', '#8cedff', '#9e6ffe',
@@ -18,6 +19,7 @@ class Style(object):
             self.foreground_light = foreground_light
             self.foreground_dark = foreground_dark
             self.opacity = opacity
+            self.opacity_hover = opacity_hover
             self.transition = transition
             self._colors = colors
 
@@ -43,6 +45,7 @@ LightStyle = Style(
             '#77bbb5', '#777777'))
 NeonStyle = Style(
     opacity='.1',
+    opacity_hover='.75',
     transition='1s ease-out')
 
 styles = {'default': DefaultStyle,

@@ -20,6 +20,10 @@ svg * {
   fill: {{ style.foreground }};
 }
 
+.line {
+  fill-opacity: 0;
+}
+
 .title {
   fill: {{ style.foreground_light }};
   font-size: {{ font_sizes.title }};
@@ -53,7 +57,7 @@ svg * {
   text-anchor: middle;
 }
 
-.axis.x text[transform] {
+.axis.x:not(.web) text[transform] {
   text-anchor: start;
 }
 
@@ -115,13 +119,13 @@ svg * {
 }
 
 .series .line {
-  fill: none;
   stroke-width: 1px;
+  fill-opacity: {{ fill_opacity }};
 }
 
 .series .line:hover {
-  fill: none;
   stroke-width: 2px;
+  fill-opacity: {{ fill_opacity_hover }};
 }
 
 

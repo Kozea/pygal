@@ -1,3 +1,6 @@
+from math import sin, cos
+
+
 class Margin(object):
     def __init__(self, top, right, bottom, left):
         self.top = top
@@ -64,3 +67,10 @@ class View(object):
     def __call__(self, xy):
         x, y = xy
         return (self.x(x), self.y(y))
+
+
+class PolarView(View):
+    def __call__(self, rtheta):
+        r, theta = rtheta
+        return super(PolarView, self).__call__(
+            (r * cos(theta), r * sin(theta)))

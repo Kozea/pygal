@@ -32,6 +32,10 @@ def rad(deg):
     return pi * deg / 180.
 
 
+def deg(deg):
+    return 180 * deg / pi
+
+
 def _swap_curly(string):
     """Swap single and double curly brackets"""
     return (string

@@ -1,7 +1,7 @@
-from pygal.graph.base import BaseGraph
+from pygal.graph.bar import Bar
 
 
-class StackedBar(BaseGraph):
+class StackedBar(Bar):
     """Stacked Bar graph"""
 
     def _compute(self):
@@ -29,8 +29,8 @@ class StackedBar(BaseGraph):
     def _plot(self):
         stack_vals = [[0, 0] for i in range(self._length)]
         for serie in self.series:
-            serie_node = self.svg.serie(serie.index)
-            stack_vals = self.svg.bar(
+            serie_node = self._serie(serie.index)
+            stack_vals = self.bar(
                 serie_node, serie, [
                 tuple((self._x_ranges[i][j], v) for j in range(2))
                 for i, v in enumerate(serie.values)],

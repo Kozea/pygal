@@ -1,8 +1,22 @@
-from pygal.graph.base import BaseGraph
+from pygal.graph.graph import Graph
 
 
-class Line(BaseGraph):
+class Line(Graph):
     """Line graph"""
+
+    def _get_value(self, values, i):
+        return str(values[i][1])
+
+    def line(self, serie_node, values):
+        view_values = map(self.view, values)
+
+        dots = self.svg.node(serie_node, class_="dots")
+        for i, (x, y) in enumerate(view_values):
+            dot = self.svg.node(dots, class_='dot')
+            self.svg.node(dot, 'circle', cx=x, cy=y, r=2.5)
+            self.svg.node(dot, 'text', x=x, y=y
+            ).text = self._get_value(values, i)
+        self.svg.line(serie_node, view_values, class_='line', close=True)
 
     def _compute(self):
         vals = [val for serie in self.series for val in serie.values]
@@ -18,7 +32,7 @@ class Line(BaseGraph):
 
     def _plot(self):
         for serie in self.series:
-            self.svg.line(
-                self.svg.serie(serie.index), [
+            self.line(
+                self._serie(serie.index), [
                 (self._x_pos[i], v)
                 for i, v in enumerate(serie.values)])

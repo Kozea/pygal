@@ -41,6 +41,8 @@ class Config(object):
     rounded_bars = False
     # Always include x axis
     x_start_at_zero = False
+    # Fill areas
+    fill = False
 
     def __init__(self, **kwargs):
         """Can be instanciated with config kwargs"""

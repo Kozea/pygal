@@ -1,8 +1,11 @@
-from pygal.graph.base import BaseGraph
+from pygal.graph.line import Line
 
 
-class XY(BaseGraph):
+class XY(Line):
     """XY Line graph"""
+
+    def _get_value(self, values, i):
+        return str(values[i])
 
     def _compute(self):
         for serie in self.series:
@@ -20,5 +23,5 @@ class XY(BaseGraph):
 
     def _plot(self):
         for serie in self.series:
-            self.svg.line(
-                self.svg.serie(serie.index), serie.values, True)
+            self.line(
+                self._serie(serie.index), serie.values)

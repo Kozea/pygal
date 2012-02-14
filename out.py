@@ -82,10 +82,12 @@ with open('out-pie.svg', 'w') as f:
     f.write(pie.render())
 
 config = Config()
+config.fill = True
+config.style = NeonStyle
 config.x_labels = (
     'black', 'red', 'blue', 'yellow', 'orange', 'green', 'white')
 radar = Radar(config)
-radar.add('test', [9, 10, 3, 5, 7, 2, 5])
+radar.add('test', [1, 4, 1, 5, 7, 2, 5])
 radar.add('test2', [10, 2, 0, 5, 1, 9, 4])
 
 radar.title = "Radar test"

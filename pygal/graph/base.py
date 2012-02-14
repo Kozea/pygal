@@ -86,14 +86,6 @@ class BaseGraph(object):
     def _legends(self):
         return [serie.title for serie in self.series]
 
-    def _decorate(self):
-        self.svg.set_view()
-        self.svg.make_graph()
-        self.svg.x_axis()
-        self.svg.y_axis()
-        self.svg.legend()
-        self.svg.title()
-
     def _draw(self):
         self._compute()
         self._compute_margin()
