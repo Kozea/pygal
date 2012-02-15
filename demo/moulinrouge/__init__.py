@@ -16,8 +16,7 @@
 #
 # You should have received a copy of the GNU Lesser General Public License
 # along with pygal. If not, see <http://www.gnu.org/licenses/>.
-from flask import Flask, Response, render_template, url_for
-from log_colorizer import make_colored_stream_handler
+from flask import Flask, render_template, url_for
 from moulinrouge.data import labels, series
 from logging import getLogger, INFO, DEBUG
 import pygal
@@ -43,7 +42,13 @@ def create_app():
     """Creates the pygal test web app"""
 
     app = Flask(__name__)
-    handler = make_colored_stream_handler()
+    try:
+        from log_colorizer import make_colored_stream_handler
+        handler = make_colored_stream_handler()
+    except ImportError:
+        from logging import StreamHandler
+        handler = StreamHandler()
+
     getLogger('werkzeug').addHandler(handler)
     getLogger('werkzeug').setLevel(INFO)
     getLogger('pygal').addHandler(handler)

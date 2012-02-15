@@ -67,7 +67,17 @@ NeonStyle = Style(
     opacity='.1',
     opacity_hover='.75',
     transition='1s ease-out')
+CleanStyle = Style(
+    background='transparent',
+    plot_background='rgba(0, 0, 0, 0.05)',
+    foreground='rgba(0, 0, 0, 0.9)',
+    foreground_light='rgba(0, 0, 0, 0.9)',
+    foreground_dark='rgba(0, 0, 0, 0.5)',
+    colors=(
+        'rgb(12,55,149)', 'rgb(117,38,65)', 'rgb(228,127,0)', 'rgb(159,170,0)',
+        'rgb(149,12,12)'))
 
 styles = {'default': DefaultStyle,
           'light': LightStyle,
-          'neon': NeonStyle}
+          'neon': NeonStyle,
+          'clean': CleanStyle}
