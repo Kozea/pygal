@@ -82,7 +82,7 @@ class Radar(Line):
     def _compute(self):
         self._box._margin *= 2
         self._box.xmin = self._box.ymin = 0
-        self._box.xmax = self._box.ymax = self._rmax = max(self.values)
+        self._box.xmax = self._box.ymax = self._rmax = max(self._values)
 
         x_step = len(self.series[0].values)
         delta = 2 * pi / float(len(self.x_labels))

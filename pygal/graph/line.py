@@ -43,11 +43,11 @@ class Line(Graph):
 
     def _compute(self):
         if self.include_x_axis:
-            self._box.ymin = min(min(self.values), 0)
-            self._box.ymax = max(max(self.values), 0)
+            self._box.ymin = min(min(self._values), 0)
+            self._box.ymax = max(max(self._values), 0)
         else:
-            self._box.ymin = min(self.values)
-            self._box.ymax = max(self.values)
+            self._box.ymin = min(self._values)
+            self._box.ymax = max(self._values)
 
         x_step = len(self.series[0].values)
         self._x_pos = [x / float(x_step - 1) for x in range(x_step)

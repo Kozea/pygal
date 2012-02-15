@@ -45,7 +45,7 @@ class Svg(object):
     def add_style(self, css):
         style = self.node(self.defs, 'style', type='text/css')
         with open(css) as f:
-            style.text = template(
+            templ = template(
                 f.read(),
                 style=self.graph.style,
                 font_sizes=self.graph.font_sizes,
@@ -54,6 +54,7 @@ class Svg(object):
                 if self.graph.fill else 0,
                 fill_opacity_hover=self.graph.style.opacity_hover
                 if self.graph.fill else 0)
+            style.text = templ.decode('utf-8')
 
     def node(self, parent=None, tag='g', attrib=None, **extras):
         if parent is None:
