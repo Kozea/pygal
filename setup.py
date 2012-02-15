@@ -31,7 +31,7 @@ setup(
     packages=['pygal'],
     provides=['pygal'],
     keywords=["svg", "graph", "diagram", "plot", "histogram", "kiviat"],
-    tests_require=["pytest"],
+    tests_require=["pytest", "flask"],
     package_data={'pygal': ['css/*']},
     install_requires=['lxml'],
     classifiers=[
