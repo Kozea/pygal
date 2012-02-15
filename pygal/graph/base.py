@@ -88,6 +88,10 @@ class BaseGraph(object):
     def _values(self):
         return [val for serie in self.series for val in serie.values]
 
+    @cached_property
+    def _len(self):
+        return len(self.series[0].values)
+
     def _draw(self):
         self._compute()
         self._compute_margin()

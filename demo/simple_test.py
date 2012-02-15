@@ -19,7 +19,7 @@
 # along with pygal. If not, see <http://www.gnu.org/licenses/>.
 from pygal import (
     Line, Bar, XY, Pie, Radar, StackedBar, Config,
-    HorizontalBar, HorizontalStackedBar)
+    StackedLine, HorizontalBar, HorizontalStackedBar)
 from pygal.style import NeonStyle
 from math import cos, sin
 
@@ -72,15 +72,24 @@ hstackedbar.add('--->', rng3)
 with open('out-horizontalstackedbar.svg', 'w') as f:
     f.write(hstackedbar.render())
 
-line = Line(Config(y_scale=.0005))
+line = Line(Config(y_scale=.0005, fill=True, style=NeonStyle))
 rng = range(-30, 31, 5)
-line.add('test1', [1000 + cos(x / 10.) for x in rng])
-line.add('test2', [1000 + sin(x / 10.) for x in rng])
-line.add('test3', [1000 + cos(x / 10.) - sin(x / 10.) for x in rng])
+line.add('test1', [cos(x / 10.) for x in rng])
+line.add('test2', [sin(x / 10.) for x in rng])
+line.add('test3', [cos(x / 10.) - sin(x / 10.) for x in rng])
 line.x_labels = map(str, rng)
 line.title = "Line test"
 with open('out-line.svg', 'w') as f:
     f.write(line.render())
+
+stackedline = StackedLine(Config(y_scale=.0005, fill=True, style=NeonStyle))
+stackedline.add('test1', [1, 3, 2, 18, 2, 13, 8])
+stackedline.add('test2', [4, 1, 0,  1, 3, 12, 3])
+stackedline.add('test3', [9, 3, 2,  10, 8, 2, 3])
+stackedline.x_labels = map(str, ['a', 'b', 'c', 'd', 'e', 'f', 'g'])
+stackedline.title = "Stackedline test"
+with open('out-stackedline.svg', 'w') as f:
+    f.write(stackedline.render())
 
 xy = XY(Config(x_scale=1))
 xy.add('test1', [(1981, 1), (2004, 2), (2003, 10), (2012, 8), (1999, -4)])

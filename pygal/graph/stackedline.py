@@ -16,16 +16,23 @@
 #
 # You should have received a copy of the GNU Lesser General Public License
 # along with pygal. If not, see <http://www.gnu.org/licenses/>.
-__version__ = '0.9.3'
-from collections import namedtuple
-
-from pygal.graph.bar import Bar
-from pygal.graph.horizontal import HorizontalBar
-from pygal.graph.stackedbar import StackedBar
-from pygal.graph.horizontal import HorizontalStackedBar
 from pygal.graph.line import Line
-from pygal.graph.stackedline import StackedLine
-from pygal.graph.xy import XY
-from pygal.graph.pie import Pie
-from pygal.graph.radar import Radar
-from pygal.config import Config
+
+
+class StackedLine(Line):
+    """Stacked Line graph"""
+
+    @property
+    def _values(self):
+        sums = map(sum, zip(*[serie.values for serie in self.series]))
+        return sums + super(StackedLine, self)._values
+
+    def _plot(self):
+        accumulation = map(sum, zip(*[serie.values for serie in self.series]))
+        for serie in self.series:
+            self.line(
+                self._serie(serie.index), [
+                (self._x_pos[i], v)
+                for i, v in enumerate(accumulation)])
+            accumulation = map(sum, zip(accumulation,
+                                    [-v for v in serie.values]))

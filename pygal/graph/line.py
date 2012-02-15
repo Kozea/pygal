@@ -38,6 +38,11 @@ class Line(Graph):
             self.svg.node(dot, 'circle', cx=x, cy=y, r=2.5)
             self.svg.node(dot, 'text', x=x, y=y
             ).text = self._get_value(values, i)
+        if self.fill:
+            zero = self.view.y(min(max(0, self._box.ymin), self._box.ymax))
+            view_values = ([(view_values[0][0], zero)] +
+                           view_values +
+                           [(view_values[-1][0], zero)])
         self.svg.line(
             serie_node, view_values, class_='line', close=self._line_close)
 
@@ -49,9 +54,8 @@ class Line(Graph):
             self._box.ymin = min(self._values)
             self._box.ymax = max(self._values)
 
-        x_step = len(self.series[0].values)
-        self._x_pos = [x / float(x_step - 1) for x in range(x_step)
-        ] if x_step != 1 else [.5]  # Center if only one value
+        self._x_pos = [x / float(self._len - 1) for x in range(self._len)
+        ] if self._len != 1 else [.5]  # Center if only one value
         self._y_pos = self._pos(self._box.ymin, self._box.ymax, self.y_scale
         ) if not self.y_labels else map(int, self.y_labels)
 

@@ -83,7 +83,7 @@ def create_app():
                     random_value((-max, min)[random.randrange(0, 2)], max))
                           for i in range(data)]
             else:
-                values = [random_value((-max, min)[random.randrange(0, 2)],
+                values = [random_value((-max, min)[random.randrange(1, 2)],
                                        max) for i in range(data)]
             g.add(random_label(), values)
         return g.render_response()
@@ -94,8 +94,10 @@ def create_app():
         svgs = [url_for('all_svg', type=type, style=style, fill=fill)
                 for style in styles
                 for fill in (False, True)
-                for type in ('Bar', 'Line', 'XY', 'Pie', 'StackedBar',
-                          'HorizontalBar', 'HorizontalStackedBar', 'Radar')]
+                for type in ('Bar', 'Line', 'XY', 'StackedBar',
+                          'StackedLine', 'HorizontalBar',
+                          'HorizontalStackedBar',
+                          'Pie', 'Radar')]
         return render_template('svgs.jinja2',
                                svgs=svgs,
                                width=width,

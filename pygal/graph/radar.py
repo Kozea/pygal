@@ -19,7 +19,7 @@
 from pygal.graph.line import Line
 from pygal.view import PolarView
 from pygal.util import deg
-from math import cos, sin, pi
+from math import cos, pi
 
 
 class Radar(Line):
