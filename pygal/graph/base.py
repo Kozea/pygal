@@ -3,6 +3,7 @@ from pygal.view import Margin, Box
 from pygal.util import round_to_scale, cut, rad
 from pygal.svg import Svg
 from pygal.config import Config
+from pygal.util import cached_property
 from math import log10, sin, cos
 
 
@@ -31,10 +32,7 @@ class BaseGraph(object):
         while (max_ - min_) / step > max_scale:
             step *= 2.
         positions = set()
-        if self.x_start_at_zero:
-            position = 0
-        else:
-            position = round_to_scale(min_, step)
+        position = round_to_scale(min_, step)
         while position < (max_ + step):
             rounded = round_to_scale(position, scale)
             if min_ <= rounded <= max_:
@@ -82,9 +80,13 @@ class BaseGraph(object):
             self.margin.left += 10 + max(
                 w * cos(rad(self.y_label_rotation)), h)
 
-    @property
+    @cached_property
     def _legends(self):
         return [serie.title for serie in self.series]
+
+    @cached_property
+    def _values(self):
+        return [val for serie in self.series for val in serie.values]
 
     def _draw(self):
         self._compute()

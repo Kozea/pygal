@@ -54,11 +54,11 @@ hstackedbar.add('--->', rng3)
 with open('out-horizontalstackedbar.svg', 'w') as f:
     f.write(hstackedbar.render())
 
-line = Line(Config(y_scale=.0005))
+line = Line(Config(y_scale=.0005, include_x_axis=True))
 rng = range(-30, 31, 5)
-line.add('test1', [cos(x / 10.) for x in rng])
-line.add('test2', [sin(x / 10.) for x in rng])
-line.add('test3', [cos(x / 10.) - sin(x / 10.) for x in rng])
+line.add('test1', [1000 + cos(x / 10.) for x in rng])
+line.add('test2', [1000 + sin(x / 10.) for x in rng])
+line.add('test3', [1000 + cos(x / 10.) - sin(x / 10.) for x in rng])
 line.x_labels = map(str, rng)
 line.title = "Line test"
 with open('out-line.svg', 'w') as f:

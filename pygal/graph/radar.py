@@ -1,3 +1,21 @@
+# -*- coding: utf-8 -*-
+# This file is part of pygal
+#
+# A python svg graph plotting library
+# Copyright © 2012 Kozea
+#
+# This library is free software: you can redistribute it and/or modify it under
+# the terms of the GNU Lesser General Public License as published by the Free
+# Software Foundation, either version 3 of the License, or (at your option) any
+# later version.
+#
+# This library is distributed in the hope that it will be useful, but WITHOUT
+# ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+# FOR A PARTICULAR PURPOSE.  See the GNU Lesser General Public License for more
+# details.
+#
+# You should have received a copy of the GNU Lesser General Public License
+# along with pygal. If not, see <http://www.gnu.org/licenses/>.
 from pygal.graph.line import Line
 from pygal.view import PolarView
 from pygal.util import deg
@@ -62,10 +80,9 @@ class Radar(Line):
             ).text = label
 
     def _compute(self):
-        vals = [val for serie in self.series for val in serie.values]
         self._box._margin *= 2
         self._box.xmin = self._box.ymin = 0
-        self._box.xmax = self._box.ymax = self._rmax = max(vals)
+        self._box.xmax = self._box.ymax = self._rmax = max(self.values)
 
         x_step = len(self.series[0].values)
         delta = 2 * pi / float(len(self.x_labels))
