@@ -2,7 +2,6 @@
 import os
 from lxml import etree
 from pygal.util import template
-from math import cos, sin, pi
 
 
 class Svg(object):

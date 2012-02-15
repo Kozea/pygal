@@ -23,12 +23,12 @@ class BaseGraph(object):
             return object.__getattribute__(self.config, attr)
         return object.__getattribute__(self, attr)
 
-    def _pos(self, min_, max_, scale):
+    def _pos(self, min_, max_, scale, min_scale=4, max_scale=20):
         order = round(log10(max(abs(min_), abs(max_)))) - 1
-        while (max_ - min_) / float(10 ** order) < 4:
+        while (max_ - min_) / float(10 ** order) < min_scale:
             order -= 1
         step = float(10 ** order)
-        while (max_ - min_) / step > 20:
+        while (max_ - min_) / step > max_scale:
             step *= 2.
         positions = set()
         if self.x_start_at_zero:

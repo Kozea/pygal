@@ -36,8 +36,8 @@ def create_app():
     def index():
         return render_template('index.jinja2')
 
-    @app.route("/all-<type>-<style>.svg")
-    def all_svg(type, style):
+    @app.route("/all-<type>-<style>(fill=<fill>).svg")
+    def all_svg(type, style, fill):
         data = random.randrange(1, 10)
         order = random.randrange(1, 10)
         max = 10 ** order
@@ -45,6 +45,7 @@ def create_app():
         config = Config()
         config.width = 600
         config.height = 400
+        config.fill = fill == 'True'
         config.style = styles[style]
         if type != 'Pie':
             config.x_labels = [random_label() for i in range(data)]
@@ -68,8 +69,9 @@ def create_app():
     @app.route("/all")
     def all():
         width, height = 600, 400
-        svgs = [url_for('all_svg', type=type, style=style)
+        svgs = [url_for('all_svg', type=type, style=style, fill=fill)
                 for style in styles
+                for fill in (False, True)
                 for type in ('Bar', 'Line', 'XY', 'Pie', 'StackedBar',
                           'HorizontalBar', 'HorizontalStackedBar', 'Radar')]
         return render_template('svgs.jinja2',

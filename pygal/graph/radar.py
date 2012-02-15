@@ -70,7 +70,8 @@ class Radar(Line):
         x_step = len(self.series[0].values)
         delta = 2 * pi / float(len(self.x_labels))
         self._x_pos = [.5 * pi - i * delta for i in range(x_step)]
-        self._y_pos = self._pos(self._box.ymin, self._box.ymax, self.y_scale
+        self._y_pos = self._pos(
+            self._box.ymin, self._box.ymax, self.y_scale, max_scale=8
         ) if not self.y_labels else map(int, self.y_labels)
         self._x_labels = self.x_labels and zip(self.x_labels, self._x_pos)
         self._y_labels = zip(map(str, self._y_pos), self._y_pos)
