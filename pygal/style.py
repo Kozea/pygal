@@ -77,7 +77,36 @@ CleanStyle = Style(
         'rgb(12,55,149)', 'rgb(117,38,65)', 'rgb(228,127,0)', 'rgb(159,170,0)',
         'rgb(149,12,12)'))
 
+solarized_colors = (
+    '#b58900', '#cb4b16', '#dc322f', '#d33682',
+    '#6c71c4', '#268bd2', '#2aa198', '#859900')
+
+DarkSolarizedStyle = Style(
+    background='#073642',
+    plot_background='#002b36',
+    foreground='#839496',
+    foreground_light='#93a1a1',
+    foreground_dark='#657b83',
+    opacity='.66',
+    opacity_hover='.9',
+    transition='500ms ease-in',
+    colors=solarized_colors)
+
+LightSolarizedStyle = Style(
+    background='#fdf6e3',
+    plot_background='#eee8d5',
+    foreground='#657b83',
+    foreground_light='#586e75',
+    foreground_dark='#839496',
+    opacity='.6',
+    opacity_hover='.9',
+    transition='500ms ease-in',
+    colors=solarized_colors)
+
+
 styles = {'default': DefaultStyle,
           'light': LightStyle,
           'neon': NeonStyle,
-          'clean': CleanStyle}
+          'clean': CleanStyle,
+          'dark_solarized': DarkSolarizedStyle,
+          'light_solarized': LightSolarizedStyle}
