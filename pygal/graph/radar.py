@@ -18,15 +18,27 @@
 # along with pygal. If not, see <http://www.gnu.org/licenses/>.
 from pygal.graph.line import Line
 from pygal.view import PolarView
-from pygal.util import deg
+from pygal.util import deg, cached_property
+from pygal.interpolate import interpolation
 from math import cos, pi
 
 
 class Radar(Line):
     """Kiviat graph"""
 
+    def _fill(self, values):
+        return values
+
     def _get_value(self, values, i):
         return str(values[i][0])
+
+    @cached_property
+    def _values(self):
+        if self.interpolate:
+            return [val[0] for serie in self.series
+                    for val in serie.interpolated]
+        else:
+            return super(Line, self)._values
 
     def _set_view(self):
         self.view = PolarView(
@@ -80,24 +92,37 @@ class Radar(Line):
             ).text = label
 
     def _compute(self):
+        delta = 2 * pi / float(self._len)
+        self._x_pos = [.5 * pi + i * delta for i in range(self._len + 1)]
+        for serie in self.series:
+            vals = list(serie.values)
+            vals.append(vals[0])
+            serie.points = [
+                (v, self._x_pos[i])
+                for i, v in enumerate(vals)]
+            if self.interpolate:
+                extend = 2
+                extended_x_pos = (
+                    [.5 * pi + i * delta for i in range(-extend, 0)] +
+                    self._x_pos +
+                    [.5 * pi + i * delta for i in range(
+                        self._len + 1, self._len + 1 + extend)])
+                extended_vals = vals[-extend:] + vals + vals[:extend]
+                interpolate = interpolation(
+                    extended_x_pos, extended_vals, kind=self.interpolate)
+                serie.interpolated = []
+                p = float(self.interpolation_precision)
+                for s in range(int(p + 1)):
+                    x = .5 * pi + 2 * pi * (s / p)
+                    serie.interpolated.append((float(interpolate(x)), x))
+
         self._box._margin *= 2
         self._box.xmin = self._box.ymin = 0
         self._box.xmax = self._box.ymax = self._rmax = max(self._values)
 
-        x_step = len(self.series[0].values)
-        delta = 2 * pi / float(len(self.x_labels))
-        self._x_pos = [.5 * pi - i * delta for i in range(x_step)]
         self._y_pos = self._pos(
             self._box.ymin, self._box.ymax, self.y_scale, max_scale=8
         ) if not self.y_labels else map(int, self.y_labels)
         self._x_labels = self.x_labels and zip(self.x_labels, self._x_pos)
         self._y_labels = zip(map(str, self._y_pos), self._y_pos)
         self._box.xmin = self._box.ymin = - self._box.ymax
-        self._line_close = True
-
-    def _plot(self):
-        for serie in self.series:
-            serie_node = self._serie(serie.index)
-            self.line(serie_node, [
-                     (v, self._x_pos[i])
-                     for i, v in enumerate(serie.values)])

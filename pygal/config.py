@@ -59,8 +59,17 @@ class Config(object):
     rounded_bars = False
     # Always include x axis
     include_x_axis = False
-    # Fill areas
+    # Fill areas under lines
     fill = False
+    # Line dots (set it to false to get a scatter plot)
+    stroke = True
+    # Interpolation, this requires scipy module
+    # May be any of ‘linear’, ’nearest’, ‘zero’, ‘slinear’, ‘quadratic, ‘cubic’
+    # 'krogh', 'barycentric', 'univariate', or an integer specifying the order
+    # of the spline interpolator
+    interpolate = None
+    # Number of interpolated points between two values
+    interpolation_precision = 250
 
     def __init__(self, **kwargs):
         """Can be instanciated with config kwargs"""

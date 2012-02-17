@@ -88,8 +88,8 @@ class View(object):
 
 
 class PolarView(View):
-    def __call__(self, rtheta):
-        r, theta = rtheta
-        r = max(r, 0)
+    def __call__(self, rhotheta):
+        rho, theta = rhotheta
+        rho = max(rho, 0)
         return super(PolarView, self).__call__(
-            (r * cos(theta), r * sin(theta)))
+            (rho * cos(theta), rho * sin(theta)))

@@ -49,11 +49,15 @@ class Pie(Graph):
                   y=center[1] - text_r * sin(text_angle),
               ).text = '{:.2%}'.format(perc)
 
-    def add(self, title, value):
-        self.series.append(Serie(title, [value], len(self.series)))
+    def _compute(self):
+        for serie in self.series:
+            serie.values = [max(serie.values[0], 0)]
+        return super(Pie, self)._compute()
 
     def _plot(self):
         total = float(sum(serie.values[0] for serie in self.series))
+        if total == 0:
+            return
         current_angle = 0
         for serie in self.series:
             val = serie.values[0]

@@ -16,14 +16,19 @@
 #
 # You should have received a copy of the GNU Lesser General Public License
 # along with pygal. If not, see <http://www.gnu.org/licenses/>.
-from flask import Flask, render_template, url_for
-from moulinrouge.data import labels, series
+from flask import Flask, render_template
 from logging import getLogger, INFO, DEBUG
 import pygal
 from pygal.config import Config
-from pygal.style import styles
+from pygal.util import cut
+from pygal.style import styles, DefaultStyle
+from pygal.serie import Serie
+from base64 import (
+    urlsafe_b64encode as b64encode,
+    urlsafe_b64decode as b64decode)
 import string
 import random
+import pickle
 
 
 def random_label():
@@ -54,26 +59,24 @@ def create_app():
     getLogger('pygal').addHandler(handler)
     getLogger('pygal').setLevel(DEBUG)
 
-    @app.route("/")
-    def index():
-        return render_template('index.jinja2')
-
-    @app.route("/all-<type>-<style>(fill=<fill>).svg")
-    def all_svg(type, style, fill):
-        data = random.randrange(1, 10)
-        order = random.randrange(1, 10)
+    def _random(data, order):
         max = 10 ** order
         min = 10 ** random.randrange(0, order)
-        config = Config()
-        config.width = 600
-        config.height = 400
-        config.fill = fill == 'True'
-        config.style = styles[style]
-        if type != 'Pie':
-            config.x_labels = [random_label() for i in range(data)]
-        config.title = "%d - %d" % (min, max)
-        g = getattr(pygal, type)(config)
 
+        series = []
+        for i in range(random.randrange(1, 10)):
+            values = [(
+                random_value((-max, min)[random.randrange(0, 2)], max),
+                random_value((-max, min)[random.randrange(0, 2)], max))
+                      for i in range(data)]
+            series.append(Serie(random_label(), values, len(series)))
+        return series
+
+    def _random_series(type, data, order):
+        max = 10 ** order
+        min = 10 ** random.randrange(0, order)
+
+        series = []
         for i in range(random.randrange(1, 10)):
             if type == 'Pie':
                 values = random_value(min, max)
@@ -85,59 +88,101 @@ def create_app():
             else:
                 values = [random_value((-max, min)[random.randrange(1, 2)],
                                        max) for i in range(data)]
-            g.add(random_label(), values)
-        return g.render_response()
+            series.append(Serie(random_label(), values, len(series)))
+        return series
+
+    @app.route("/")
+    def index():
+        return render_template('index.jinja2', styles=styles)
+
+    @app.route("/svg/<type>/<series>/<config>")
+    def svg(type, series, config):
+        graph = getattr(pygal, type)(pickle.loads(b64decode(str(config))))
+        graph.series = pickle.loads(b64decode(str(series)))
+        return graph.render_response()
 
     @app.route("/all")
-    def all():
+    @app.route("/all/style=<style>")
+    def all(style=DefaultStyle):
         width, height = 600, 400
-        svgs = [url_for('all_svg', type=type, style=style, fill=fill)
-                for style in styles
-                for fill in (False, True)
-                for type in ('Bar', 'Line', 'XY', 'StackedBar',
-                          'StackedLine', 'HorizontalBar',
-                          'HorizontalStackedBar',
-                          'Pie', 'Radar')]
+        data = random.randrange(1, 10)
+        order = random.randrange(1, 10)
+        xy_series = _random(data, order)
+        other_series = []
+        for serie in xy_series:
+            other_series.append(
+                Serie(serie.title, cut(serie.values, 1), serie.index))
+        xy_series = b64encode(pickle.dumps(xy_series))
+        other_series = b64encode(pickle.dumps(other_series))
+        config = Config()
+        config.width = width
+        config.height = height
+        config.fill = True
+        config.style = styles[style]
+        labels = [random_label() for i in range(data)]
+        svgs = []
+        for type in ('Bar', 'Line', 'XY', 'StackedBar',
+                  'StackedLine', 'HorizontalBar',
+                  'HorizontalStackedBar',
+                  'Pie', 'Radar'):
+            config.x_labels = labels if type != 'Pie' else None
+            svgs.append({'type': type,
+                         'series': xy_series if type == 'XY' else other_series,
+                         'config': b64encode(pickle.dumps(config))})
+
         return render_template('svgs.jinja2',
                                svgs=svgs,
                                width=width,
                                height=height)
-
-    @app.route("/rotation[<int:angle>].svg")
-    def rotation_svg(angle):
-        config = Config()
-        config.width = 375
-        config.height = 245
-        config.x_labels = labels
-        config.x_label_rotation = angle
-        g = pygal.Line(config)
-        for serie, values in series.items():
-            g.add(serie, values)
-
-        g.add(serie, values)
-        return g.render_response()
 
     @app.route("/rotation")
     def rotation():
         width, height = 375, 245
-        svgs = [url_for('rotation_svg', angle=angle)
-                for angle in range(0, 91, 5)]
+        config = Config()
+        config.width = width
+        config.height = height
+        config.fill = True
+        config.style = styles['neon']
+        data = random.randrange(1, 10)
+        order = random.randrange(1, 10)
+        series = b64encode(pickle.dumps(_random(type, data, order)))
+        labels = [random_label() for i in range(data)]
+        svgs = []
+        config.show_legend = bool(random.randrange(0, 1))
+        for angle in range(0, 91, 5):
+            config.title = "%d rotation" % angle
+            config.x_labels = labels
+            config.x_label_rotation = angle
+            svgs.append({'type': 'Bar',
+                         'series': series,
+                         'config': b64encode(pickle.dumps(config))})
+
         return render_template('svgs.jinja2',
                                svgs=svgs,
                                width=width,
                                height=height)
 
-    @app.route("/bigline.svg")
-    def big_line_svg():
-        g = pygal.Line(600, 400)
-        g.x_labels = ['a', 'b', 'c', 'd']
-        g.add('serie', [11, 50, 133, 2])
-        return g.render_response()
+    @app.route("/interpolation")
+    def interpolation():
+        width, height = 600, 400
+        config = Config()
+        config.width = width
+        config.height = height
+        config.fill = True
+        config.style = styles['neon']
+        data = random.randrange(1, 10)
+        order = random.randrange(1, 10)
+        series = b64encode(pickle.dumps(_random(type, data, order)))
+        svgs = []
+        for interpolation in (
+                'linear', 'slinear', 'nearest', 'zero', 'quadratic', 'cubic',
+                'krogh', 'barycentric', 'univariate', 4, 5, 6, 7, 8):
+            config.title = "%s interpolation" % interpolation
+            config.interpolate = interpolation
+            svgs.append({'type': 'StackedLine',
+                         'series': series,
+                         'config': b64encode(pickle.dumps(config))})
 
-    @app.route("/bigline")
-    def big_line():
-        width, height = 900, 800
-        svgs = [url_for('big_line_svg')]
         return render_template('svgs.jinja2',
                                svgs=svgs,
                                width=width,

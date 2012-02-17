@@ -102,9 +102,13 @@ class BaseGraph(object):
         self.series.append(Serie(title, values, len(self.series)))
 
     def render(self):
-        if len(self.series) == 0 or sum(
-                map(len, map(lambda s: s.values, self.series))) == 0:
-            return "No data"
+        if len(self.series) == 0:
+            return
+        for serie in self.series:
+            if not hasattr(serie.values, '__iter__'):
+                serie.values = [serie.values]
+        if sum(map(len, map(lambda s: s.values, self.series))) == 0:
+            return
         try:
             self.validate()
             self._draw()

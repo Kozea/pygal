@@ -1,7 +1,12 @@
 {% extends '_layout.jinja2' %}
 
 {% block section %}
-  <a href="{{ url_for('all') }}">All types</a>
+  <dl>
+    <dt>All types</dt>
+    {% for style in styles %}
+      <dd><a href="{{ url_for('all', style=style) }}">{{ style }}</a></dd>
+    {% endfor %}
+  </dl>
+  <a href="{{ url_for('interpolation') }}">Interpolation</a>
   <a href="{{ url_for('rotation') }}">Rotations test</a>
-  <a href="{{ url_for('big_line') }}">Big line</a>
 {% endblock section %}

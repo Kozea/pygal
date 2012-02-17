@@ -72,8 +72,9 @@ hstackedbar.add('--->', rng3)
 with open('out-horizontalstackedbar.svg', 'w') as f:
     f.write(hstackedbar.render())
 
-line = Line(Config(y_scale=.0005, fill=True, style=NeonStyle))
-rng = range(-30, 31, 5)
+line = Line(Config(y_scale=.0005, fill=True, style=NeonStyle,
+                   interpolate='univariate'))
+rng = range(-30, 31, 10)
 line.add('test1', [cos(x / 10.) for x in rng])
 line.add('test2', [sin(x / 10.) for x in rng])
 line.add('test3', [cos(x / 10.) - sin(x / 10.) for x in rng])
@@ -82,7 +83,8 @@ line.title = "Line test"
 with open('out-line.svg', 'w') as f:
     f.write(line.render())
 
-stackedline = StackedLine(Config(y_scale=.0005, fill=True, style=NeonStyle))
+stackedline = StackedLine(Config(y_scale=.0005, fill=True,
+                                 style=NeonStyle, interpolate='cubic'))
 stackedline.add('test1', [1, 3, 2, 18, 2, 13, 8])
 stackedline.add('test2', [4, 1, 0,  1, 3, 12, 3])
 stackedline.add('test3', [9, 3, 2,  10, 8, 2, 3])
@@ -91,9 +93,11 @@ stackedline.title = "Stackedline test"
 with open('out-stackedline.svg', 'w') as f:
     f.write(stackedline.render())
 
-xy = XY(Config(x_scale=1))
+xy = XY(Config(x_scale=1, fill=True, style=NeonStyle, interpolate='cubic'))
 xy.add('test1', [(1981, 1), (2004, 2), (2003, 10), (2012, 8), (1999, -4)])
 xy.add('test2', [(1988, -1), (1986, 12), (2007, 7), (2010, 4), (1999, 2)])
+# xy.add('test2', [(1980, 0), (1985, 2), (1995, -2), (2005, 4), (2020, -4)])
+                 # (2005, 6), (2010, -6), (2015, 3), (2020, -3), (2025, 0)])
 xy.title = "XY test"
 with open('out-xy.svg', 'w') as f:
     f.write(xy.render())
@@ -113,6 +117,7 @@ config.fill = True
 config.style = NeonStyle
 config.x_labels = (
     'black', 'red', 'blue', 'yellow', 'orange', 'green', 'white')
+config.interpolate = 'nearest'
 radar = Radar(config)
 radar.add('test', [1, 4, 1, 5, 7, 2, 5])
 radar.add('test2', [10, 2, 7, 5, 1, 9, 4])
