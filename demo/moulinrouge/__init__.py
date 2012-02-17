@@ -119,13 +119,12 @@ def create_app():
         config.height = height
         config.fill = True
         config.style = styles[style]
-        labels = [random_label() for i in range(data)]
+        config.x_labels = [random_label() for i in range(data)]
         svgs = []
         for type in ('Bar', 'Line', 'XY', 'StackedBar',
                   'StackedLine', 'HorizontalBar',
                   'HorizontalStackedBar',
                   'Pie', 'Radar'):
-            config.x_labels = labels if type != 'Pie' else None
             svgs.append({'type': type,
                          'series': xy_series if type == 'XY' else other_series,
                          'config': b64encode(pickle.dumps(config))})
