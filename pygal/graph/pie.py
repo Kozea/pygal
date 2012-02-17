@@ -16,7 +16,6 @@
 #
 # You should have received a copy of the GNU Lesser General Public License
 # along with pygal. If not, see <http://www.gnu.org/licenses/>.
-from pygal.serie import Serie
 from pygal.graph.graph import Graph
 from math import cos, sin, pi
 
@@ -32,7 +31,7 @@ class Pie(Graph):
                   (self.height - self.margin.y) / 2.)
         r = min(center)
         if small:
-            r *= .8
+            r *= .9
         center_str = '%f %f' % center
         rxy = '%f %f' % tuple([r] * 2)
         to = '%f %f' % (r * sin(angle), r * (1 - cos(angle)))

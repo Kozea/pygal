@@ -171,7 +171,7 @@ def create_app():
         config.style = styles['neon']
         data = random.randrange(1, 10)
         order = random.randrange(1, 10)
-        series = b64encode(pickle.dumps(_random(type, data, order)))
+        series = b64encode(pickle.dumps(_random_series(type, data, order)))
         svgs = []
         for interpolation in (
                 'linear', 'slinear', 'nearest', 'zero', 'quadratic', 'cubic',
