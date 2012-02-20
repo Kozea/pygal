@@ -45,12 +45,13 @@ class Line(Graph):
     def line(self, serie_node, serie):
         view_values = map(self.view, serie.points)
 
-        dots = self.svg.node(serie_node, class_="dots")
-        for i, (x, y) in enumerate(view_values):
-            dot = self.svg.node(dots, class_='dot')
-            self.svg.node(dot, 'circle', cx=x, cy=y, r=2.5)
-            self.svg.node(dot, 'text', x=x, y=y
-            ).text = self._get_value(serie.points, i)
+        if self.show_dots:
+            dots = self.svg.node(serie_node, class_="dots")
+            for i, (x, y) in enumerate(view_values):
+                dot = self.svg.node(dots, class_='dot')
+                self.svg.node(dot, 'circle', cx=x, cy=y, r=2.5)
+                self.svg.node(dot, 'text', x=x, y=y
+                ).text = self._get_value(serie.points, i)
 
         if self.stroke:
             if self.interpolate:

@@ -25,6 +25,7 @@ class FontSizes(object):
 
 class Config(object):
     """Class holding config values"""
+    _horizontal = False
 
     # Graph width and height
     width, height = 800, 600
@@ -45,6 +46,8 @@ class Config(object):
     y_label_rotation = 0
     # Set to false to remove legend
     show_legend = True
+    # Set to false to remove dots
+    show_dots = True
     # Size of legend boxes
     legend_box_size = 12
     # X labels, must have same len than data.
@@ -73,6 +76,10 @@ class Config(object):
 
     def __init__(self, **kwargs):
         """Can be instanciated with config kwargs"""
+        self.__dict__.update(kwargs)
+
+    def __call__(self, **kwargs):
+        """Can be updated with kwargs"""
         self.__dict__.update(kwargs)
 
     @property

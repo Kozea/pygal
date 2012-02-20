@@ -134,7 +134,7 @@ svg * {
   opacity: 1;
 }
 
-.series .bar:hover .rect, .series .slice:hover path{
+.series .bar:hover .rect, .series .slice:hover path, .series .slice:hover circle{
   fill-opacity: 1;
 }
 

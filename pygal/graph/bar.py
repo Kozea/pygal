@@ -30,19 +30,19 @@ class Bar(Graph):
         def view(rng):
             """Project range"""
             t, T = rng
-            fun = swap if self.horizontal else ident
+            fun = swap if self._horizontal else ident
             return (self.view(fun(t)), self.view(fun(T)))
 
         bars = self.svg.node(serie_node, class_="bars")
         view_values = map(view, values)
         for i, ((x, y), (X, Y)) in enumerate(view_values):
             # x and y are left range coords and X, Y right ones
-            if self.horizontal:
+            if self._horizontal:
                 x, y, X, Y = Y, X, y, x
             width = X - x
             padding = .1 * width
             inner_width = width - 2 * padding
-            if self.horizontal:
+            if self._horizontal:
                 height = self.view.x(0) - y
             else:
                 height = self.view.y(0) - y
@@ -63,7 +63,6 @@ class Bar(Graph):
                 y = y + height
                 height = -height
 
-            y_txt = y + height / 2 + .3 * self.values_font_size
             bar = self.svg.node(bars, class_='bar')
             self.svg.transposable_node(bar, 'rect',
                       x=x,
@@ -73,9 +72,14 @@ class Bar(Graph):
                       width=bar_inner_width,
                       height=height,
                       class_='rect')
+            if self._horizontal:
+                x += .3 * self.values_font_size
+                y += height / 2
+            else:
+                y += height / 2 + .3 * self.values_font_size
             self.svg.transposable_node(bar, 'text',
                       x=x + bar_inner_width / 2,
-                      y=y_txt - shift,
+                      y=y - shift,
             ).text = str(values[i][1][1])
         return stack_vals
 

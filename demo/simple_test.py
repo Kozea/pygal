@@ -55,7 +55,6 @@ config.x_labels = map(lambda x: '%s  / %s / %s' % x,
                             map(str, rng3)))
 config.title = "Stacked Bar test"
 config.style = NeonStyle
-config.horizontal = True
 
 stackedbar = StackedBar(config)
 stackedbar.add('@@@@@@@', rng)
@@ -73,7 +72,7 @@ with open('out-horizontalstackedbar.svg', 'w') as f:
     f.write(hstackedbar.render())
 
 line = Line(Config(y_scale=.0005, fill=True, style=NeonStyle,
-                   interpolate='univariate'))
+                   interpolate='univariate', show_dots=False))
 rng = range(-30, 31, 10)
 line.add('test1', [cos(x / 10.) for x in rng])
 line.add('test2', [sin(x / 10.) for x in rng])
@@ -103,11 +102,11 @@ with open('out-xy.svg', 'w') as f:
     f.write(xy.render())
 
 pie = Pie(Config(style=NeonStyle))
-pie.add('test', [11, 7, 12])
-pie.add('test2', [29, 21, 9])
-pie.add('test3', [24, 10, 32])
-pie.add('test4', [20, 18, 9])
-pie.add('test5', [17, 5, 10])
+pie.add('test', [11])
+# pie.add('test2', [29, 21, 9])
+# pie.add('test3', [24, 10, 32])
+# pie.add('test4', [20, 18, 9])
+# pie.add('test5', [17, 5, 10])
 pie.title = "Pie test"
 with open('out-pie.svg', 'w') as f:
     f.write(pie.render())

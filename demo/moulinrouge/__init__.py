@@ -144,7 +144,7 @@ def create_app():
         config.style = styles['neon']
         data = random.randrange(1, 10)
         order = random.randrange(1, 10)
-        series = b64encode(pickle.dumps(_random(type, data, order)))
+        series = b64encode(pickle.dumps(_random_series(type, data, order)))
         labels = [random_label() for i in range(data)]
         svgs = []
         config.show_legend = bool(random.randrange(0, 1))

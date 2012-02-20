@@ -33,17 +33,24 @@ class Pie(Graph):
         if small:
             r *= .9
         center_str = '%f %f' % center
-        rxy = '%f %f' % tuple([r] * 2)
-        to = '%f %f' % (r * sin(angle), r * (1 - cos(angle)))
-        self.svg.node(slice_, 'path',
-                  d='M%s v%f a%s 0 %d 1 %s z' % (
-                      center_str, -r,
-                      rxy,
-                      1 if angle > pi else 0,
-                      to),
-                  transform='rotate(%f %s)' % (
-                      start_angle * 180 / pi, center_str),
-                  class_='slice')
+        if perc == 1:
+            self.svg.node(slice_, 'circle',
+                          cx=center[0],
+                          cy=center[1],
+                          r=r,
+                          class_='slice')
+        else:
+            rxy = '%f %f' % tuple([r] * 2)
+            to = '%f %f' % (r * sin(angle), r * (1 - cos(angle)))
+            self.svg.node(slice_, 'path',
+                          d='M%s v%f a%s 0 %d 1 %s z' % (
+                              center_str, -r,
+                              rxy,
+                              1 if angle > pi else 0,
+                              to),
+                          transform='rotate(%f %s)' % (
+                              start_angle * 180 / pi, center_str),
+                          class_='slice')
         text_angle = pi / 2. - (start_angle + angle / 2.)
         text_r = min(center) * .8
         self.svg.node(slice_, 'text',

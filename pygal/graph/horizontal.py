@@ -24,7 +24,7 @@ from pygal.graph.stackedbar import StackedBar
 class HorizontalGraph(Graph):
     """Horizontal graph"""
     def __init__(self, *args, **kwargs):
-        kwargs['horizontal'] = True
+        kwargs['_horizontal'] = True
         super(HorizontalGraph, self).__init__(*args, **kwargs)
 
     def _compute(self):

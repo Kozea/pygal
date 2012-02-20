@@ -10,9 +10,9 @@ from math import log10, sin, cos
 class BaseGraph(object):
     """Graphs commons"""
 
-    def __init__(self, config=None, horizontal=False):
-        self.horizontal = horizontal
+    def __init__(self, config=None, **kwargs):
         self.config = config or Config()
+        self.config(**kwargs)
         self.svg = Svg(self)
         self.series = []
         self.margin = Margin(*([20] * 4))
