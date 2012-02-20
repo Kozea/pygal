@@ -84,8 +84,8 @@ class Bar(Graph):
         return stack_vals
 
     def _compute(self):
-        self._box.ymin = min(min(self._values), 0)
-        self._box.ymax = max(max(self._values), 0)
+        self._box.ymin = min(min(self._values), self.zero)
+        self._box.ymax = max(max(self._values), self.zero)
         x_step = len(self.series[0].values)
         x_pos = [x / float(x_step) for x in range(x_step + 1)
         ] if x_step > 1 else [0, 1]  # Center if only one value

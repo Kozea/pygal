@@ -73,6 +73,7 @@ class Config(object):
     interpolate = None
     # Number of interpolated points between two values
     interpolation_precision = 250
+    zero = 0
 
     def __init__(self, **kwargs):
         """Can be instanciated with config kwargs"""

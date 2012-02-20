@@ -37,7 +37,7 @@ class Line(Graph):
                     for val in serie.points]
 
     def _fill(self, values):
-        zero = self.view.y(min(max(0, self._box.ymin), self._box.ymax))
+        zero = self.view.y(min(max(self.zero, self._box.ymin), self._box.ymax))
         return ([(values[0][0], zero)] +
                 values +
                 [(values[-1][0], zero)])
