@@ -25,6 +25,8 @@ class BaseGraph(object):
         return object.__getattribute__(self, attr)
 
     def _pos(self, min_, max_, scale, min_scale=4, max_scale=20):
+        if min_ == 0 and max_ == 0:
+            return [0]
         order = round(log10(max(abs(min_), abs(max_)))) - 1
         while (max_ - min_) / float(10 ** order) < min_scale:
             order -= 1
@@ -38,8 +40,8 @@ class BaseGraph(object):
             if min_ <= rounded <= max_:
                 positions.add(rounded)
             position += step
-        if not positions:
-            return [min_]
+        if len(positions) < 2:
+            return [min_, max_]
         return positions
 
     def _text_len(self, lenght, fs):
@@ -109,26 +111,9 @@ class BaseGraph(object):
                 serie.values = [serie.values]
         if sum(map(len, map(lambda s: s.values, self.series))) == 0:
             return
-        try:
-            self.validate()
-            self._draw()
-            return self.svg.render()
-        except Exception:
-            from traceback import format_exc
-            error_svg = (
-                '<?xml version="1.0" standalone="no"?>'
-                '<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" '
-                '"http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">'
-                '<svg xmlns="http://www.w3.org/2000/svg" version="1.1">')
-            trace = (format_exc()
-                     .replace('&', '&amp;')
-                     .replace('<', '&lt;')
-                     .replace('>', '&gt;'))
-            for i, line in enumerate(trace.split('\n')):
-                error_svg += '<text y="%d">%s</text>' % (
-                    (i + 1) * 25, line)
-            error_svg += '</svg>'
-            return error_svg
+        self.validate()
+        self._draw()
+        return self.svg.render()
 
     def validate(self):
         if self.x_labels:
