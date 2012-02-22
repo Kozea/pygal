@@ -36,6 +36,10 @@ class Graph(BaseGraph):
                   x=0, y=0,
                   width=self.view.width,
                   height=self.view.height)
+        self.overlay = self.svg.node(
+            self.graph_node, class_="plot overlay",
+            transform="translate(%d, %d)" % (
+                self.margin.left, self.margin.top))
 
     def _x_axis(self):
         if not self._x_labels:
@@ -102,11 +106,12 @@ class Graph(BaseGraph):
         for i, title in enumerate(self._legends):
             legend = self.svg.node(legends, class_='legend')
             self.svg.node(legend, 'rect',
-                      x=0,
-                      y=1.5 * i * self.legend_box_size,
-                      width=self.legend_box_size,
-                      height=self.legend_box_size,
-                      class_="color-%d" % i,
+                          x=0,
+                          y=1.5 * i * self.legend_box_size,
+                          width=self.legend_box_size,
+                          height=self.legend_box_size,
+                          class_="color-%d activate-serie reactive" % i,
+                          id="activate-serie-%d" % i
                   ).text = title
             # Serious magical numbers here
             self.svg.node(legend, 'text',
@@ -124,5 +129,9 @@ class Graph(BaseGraph):
             ).text = self.title
 
     def _serie(self, serie):
-        return self.svg.node(
-            self.plot, class_='series serie-%d color-%d' % (serie, serie))
+        return dict(
+            plot=self.svg.node(
+                self.plot, class_='series serie-%d color-%d' % (serie, serie)),
+            overlay=self.svg.node(
+                self.overlay, class_='series serie-%d color-%d' % (
+                    serie, serie)))

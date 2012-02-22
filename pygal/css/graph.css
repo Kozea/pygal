@@ -55,16 +55,8 @@ svg * {
   font-size: {{ font_sizes.legend }};
 }
 
-.legends .legend rect {
-  fill-opacity: {{ style.opacity }};
-}
-
 .legends .legend:hover text {
   stroke: {{ style.foreground_light }};
-}
-
-.legends .legend:hover rect {
-  fill-opacity: 1
 }
 
 .axis text {
@@ -117,8 +109,12 @@ svg * {
   stroke-width: 5px;
 }
 
-.series .rect, .series .slice {
+.reactive {
   fill-opacity: {{ style.opacity }};
+}
+
+.reactive.active {
+  fill-opacity:  {{ fill_opacity_hover }};
 }
 
 .series text {
@@ -130,23 +126,13 @@ svg * {
   text-shadow: 0 0 16px {{ style.background }};
 }
 
-.series .dot:hover text, .series .bar:hover text, .series .slice:hover text {
+.series text.active {
   opacity: 1;
 }
 
-.series .bar:hover .rect, .series .slice:hover path, .series .slice:hover circle{
-  fill-opacity: 1;
-}
-
-.series .line {
-  stroke-width: 1px;
-  fill-opacity: {{ fill_opacity }};
-}
-
-.series .line:hover {
-  stroke-width: 2px;
-  fill-opacity: {{ fill_opacity_hover }};
-}
+/* .series .line { */
+/*   fill-opacity: {{ fill_opacity }}; */
+/* } */
 
 
 

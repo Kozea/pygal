@@ -33,9 +33,10 @@ class Bar(Graph):
             fun = swap if self._horizontal else ident
             return (self.view(fun(t)), self.view(fun(T)))
 
-        bars = self.svg.node(serie_node, class_="bars")
+        bars = self.svg.node(serie_node['plot'], class_="bars")
         view_values = map(view, values)
         for i, ((x, y), (X, Y)) in enumerate(view_values):
+            tag = '%d_%d' % (serie.index, i)
             # x and y are left range coords and X, Y right ones
             if self._horizontal:
                 x, y, X, Y = Y, X, y, x
@@ -64,22 +65,27 @@ class Bar(Graph):
                 height = -height
 
             bar = self.svg.node(bars, class_='bar')
-            self.svg.transposable_node(bar, 'rect',
-                      x=x,
-                      y=y - shift,
-                      rx=self.rounded_bars * 1,
-                      ry=self.rounded_bars * 1,
-                      width=bar_inner_width,
-                      height=height,
-                      class_='rect')
+            self.svg.transposable_node(
+                bar, 'rect',
+                x=x,
+                y=y - shift,
+                rx=self.rounded_bars * 1,
+                ry=self.rounded_bars * 1,
+                width=bar_inner_width,
+                height=height,
+                id="active-%s" % tag,
+                class_='rect reactive')
             if self._horizontal:
                 x += .3 * self.values_font_size
                 y += height / 2
             else:
                 y += height / 2 + .3 * self.values_font_size
-            self.svg.transposable_node(bar, 'text',
-                      x=x + bar_inner_width / 2,
-                      y=y - shift,
+            self.svg.transposable_node(
+                bar, 'text',
+                x=x + bar_inner_width / 2,
+                y=y - shift,
+                id="reactive-%s" % tag,
+                class_='reactive-text'
             ).text = str(values[i][1][1])
         return stack_vals
 

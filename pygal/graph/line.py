@@ -46,11 +46,16 @@ class Line(Graph):
         view_values = map(self.view, serie.points)
 
         if self.show_dots:
-            dots = self.svg.node(serie_node, class_="dots")
+            dots = self.svg.node(serie_node['overlay'], class_="dots")
             for i, (x, y) in enumerate(view_values):
                 dot = self.svg.node(dots, class_='dot')
-                self.svg.node(dot, 'circle', cx=x, cy=y, r=2.5)
-                self.svg.node(dot, 'text', x=x, y=y
+                tag = '%d_%d' % (serie.index, i)
+                self.svg.node(dot, 'circle', cx=x, cy=y, r=2.5,
+                              id="active-%s" % tag,
+                              class_='reactive')
+                self.svg.node(dot, 'text', x=x, y=y,
+                              id="reactive-%s" % tag,
+                              class_='reactive-text'
                 ).text = self._get_value(serie.points, i)
 
         if self.stroke:
@@ -59,7 +64,8 @@ class Line(Graph):
             if self.fill:
                 view_values = self._fill(view_values)
             self.svg.line(
-                serie_node, view_values, class_='line')
+                serie_node['plot'], view_values,
+                class_='line reactive')
 
     def _compute(self):
         self._x_pos = [x / float(self._len - 1) for x in range(self._len)

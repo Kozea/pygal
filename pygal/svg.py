@@ -35,12 +35,15 @@ class Svg(object):
             nsmap={
                 None: self.ns,
                 'xlink': 'http://www.w3.org/1999/xlink',
-            })
+            },
+            onload="svg_load();")
         self.root.append(etree.Comment(u'Generated with pygal ©Kozea 2012'))
         self.root.append(etree.Comment(u'http://github.com/Kozea/pygal'))
         self.defs = self.node(tag='defs')
         self.add_style(self.graph.base_css or os.path.join(
             os.path.dirname(__file__), 'css', 'graph.css'))
+        self.add_script(self.graph.base_js or os.path.join(
+            os.path.dirname(__file__), 'js', 'graph.js'))
 
     def add_style(self, css):
         style = self.node(self.defs, 'style', type='text/css')
@@ -55,6 +58,11 @@ class Svg(object):
                 fill_opacity_hover=self.graph.style.opacity_hover
                 if self.graph.fill else 0)
             style.text = templ.decode('utf-8')
+
+    def add_script(self, js):
+        script = self.node(self.root, 'script', type='text/javascript')
+        with open(js) as f:
+            script.text = f.read()
 
     def node(self, parent=None, tag='g', attrib=None, **extras):
         if parent is None:

@@ -1,6 +1,10 @@
 #!/bin/zsh
+pkill -f livereload
+pkill -f reload
+pkill -f SimpleHTTPServer
+
 livereload&
-reload ./demo/simple_test.py **/*.py&
+reload ./demo/simple_test.py **/*.{py,js,css}&
 python -m SimpleHTTPServer 1515&
 sleep 1
 chromium http://localhost:1515/&

@@ -34,6 +34,8 @@ class Config(object):
     y_scale = 1
     # If set to a filename, this will replace the default css
     base_css = None
+    # or default js
+    base_js = None
     # Style holding values injected in css
     style = DefaultStyle
     # Various font sizes

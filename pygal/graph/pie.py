@@ -23,9 +23,9 @@ from math import cos, sin, pi
 class Pie(Graph):
     """Pie graph"""
 
-    def slice(self, serie_node, start_angle, angle, perc,
+    def slice(self, serie_node, start_angle, angle, perc, tag,
             small=False):
-        slices = self.svg.node(serie_node, class_="slices")
+        slices = self.svg.node(serie_node['plot'], class_="slices")
         slice_ = self.svg.node(slices, class_="slice")
         center = ((self.width - self.margin.x) / 2.,
                   (self.height - self.margin.y) / 2.)
@@ -38,7 +38,8 @@ class Pie(Graph):
                           cx=center[0],
                           cy=center[1],
                           r=r,
-                          class_='slice')
+                          id="active-%s" % tag,
+                          class_='slice reactive')
         else:
             rxy = '%f %f' % tuple([r] * 2)
             to = '%f %f' % (r * sin(angle), r * (1 - cos(angle)))
@@ -48,14 +49,17 @@ class Pie(Graph):
                               rxy,
                               1 if angle > pi else 0,
                               to),
+                          id="active-%s" % tag,
                           transform='rotate(%f %s)' % (
                               start_angle * 180 / pi, center_str),
-                          class_='slice')
+                          class_='slice reactive')
         text_angle = pi / 2. - (start_angle + angle / 2.)
-        text_r = min(center) * .8
-        self.svg.node(slice_, 'text',
-                  x=center[0] + text_r * cos(text_angle),
-                  y=center[1] - text_r * sin(text_angle),
+        text_r = r * .8
+        self.svg.node(serie_node['overlay'], 'text',
+                      x=center[0] + text_r * cos(text_angle),
+                      y=center[1] - text_r * sin(text_angle),
+                      id="reactive-%s" % tag,
+                      class_='reactive-text'
               ).text = '{:.2%}'.format(perc)
 
     def _compute(self):
@@ -74,14 +78,17 @@ class Pie(Graph):
             self.slice(
                 self._serie(serie.index),
                 current_angle,
-                angle, sum(serie.values) / total)
+                angle, sum(serie.values) / total,
+                '%d' % serie.index)
             if len(serie.values) > 1:
                 small_current_angle = current_angle
-                for val in serie.values:
+                for i, val in enumerate(serie.values):
                     small_angle = 2 * pi * val / total
                     self.slice(
                         self._serie(serie.index),
                         small_current_angle,
-                        small_angle, val / total, True)
+                        small_angle, val / total,
+                        '%d_%d' % (serie.index, i),
+                        True)
                     small_current_angle += small_angle
             current_angle += angle

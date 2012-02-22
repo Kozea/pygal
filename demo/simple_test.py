@@ -102,11 +102,11 @@ with open('out-xy.svg', 'w') as f:
     f.write(xy.render())
 
 pie = Pie(Config(style=NeonStyle))
-pie.add('test', [11])
-# pie.add('test2', [29, 21, 9])
-# pie.add('test3', [24, 10, 32])
-# pie.add('test4', [20, 18, 9])
-# pie.add('test5', [17, 5, 10])
+pie.add('test', [11, 8, 21])
+pie.add('test2', [29, 21, 9])
+pie.add('test3', [24, 10, 32])
+pie.add('test4', [20, 18, 9])
+pie.add('test5', [17, 5, 10])
 pie.title = "Pie test"
 with open('out-pie.svg', 'w') as f:
     f.write(pie.render())
