@@ -65,7 +65,7 @@ class Line(Graph):
                 view_values = self._fill(view_values)
             self.svg.line(
                 serie_node['plot'], view_values,
-                class_='line reactive')
+                class_='line reactive' + (' nofill' if not self.fill else ''))
 
     def _compute(self):
         self._x_pos = [x / float(self._len - 1) for x in range(self._len)

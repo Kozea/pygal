@@ -49,6 +49,14 @@
     return _results;
   };
 
+  Function.prototype.bind = function(scope) {
+    var _fun;
+    _fun = this;
+    return function() {
+      return _fun.apply(scope, arguments);
+    };
+  };
+
   reactive = function(element) {
     return document.getElementById('re' + element.id);
   };
@@ -62,16 +70,8 @@
     _results = [];
     for (_i = 0, _len = elts.length; _i < _len; _i++) {
       elt = elts[_i];
-      elt.addEventListener('mouseover', (function(elt) {
-        return function() {
-          return over.call(elt);
-        };
-      })(elt), false);
-      _results.push(elt.addEventListener('mouseout', (function(elt) {
-        return function() {
-          return out.call(elt);
-        };
-      })(elt), false));
+      elt.addEventListener('mouseover', over.bind(elt), false);
+      _results.push(elt.addEventListener('mouseout', out.bind(elt), false));
     }
     return _results;
   };

@@ -81,7 +81,7 @@ class Bar(Graph):
             else:
                 y += height / 2 + .3 * self.values_font_size
             self.svg.transposable_node(
-                bar, 'text',
+                serie_node['overlay'], 'text',
                 x=x + bar_inner_width / 2,
                 y=y - shift,
                 id="reactive-%s" % tag,

@@ -23,17 +23,18 @@ deactivate = (elements...) ->
     for element in elements
         rm_class(element, 'active')
 
+Function.prototype.bind = (scope) ->
+    _fun = @
+    ->
+        _fun.apply(scope, arguments)
+
 reactive = (element) -> document.getElementById('re' + element.id)
 active = (element) -> document.getElementById(element.id.replace(/re/, ''))
 
 hover = (elts, over, out) ->
     for elt in elts
-        elt.addEventListener('mouseover',
-            ((elt) -> (-> over.call(elt)))(elt)
-        , false)
-        elt.addEventListener('mouseout',
-            ((elt) -> (-> out.call(elt)))(elt)
-        , false)
+        elt.addEventListener('mouseover', over.bind(elt) , false)
+        elt.addEventListener('mouseout', out.bind(elt) , false)
 
 @svg_load = ->
     hover _('.reactive-text'), (-> activate(@, active(@))), (-> deactivate(@, active(@)))

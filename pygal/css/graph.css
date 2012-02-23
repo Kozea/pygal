@@ -91,7 +91,10 @@ svg * {
   opacity: 0;
 }
 
-.axis.y .guides:hover .guide.line, .Line .axis.x .guides:hover .guide.line, .XY .axis.x .guides:hover .guide.line {
+.axis.y .guides:hover .guide.line,
+.Line .axis.x .guides:hover .guide.line,
+.StackedLine .axis.x .guides:hover .guide.line,
+.XY .axis.x .guides:hover .guide.line {
   stroke: {{ style.foreground_light }};
   opacity: 1;
 }
@@ -101,12 +104,17 @@ svg * {
   opacity: 1;
 }
 
-.series .dots .dot circle {
+.dot circle {
   stroke-width: 1px;
+  fill-opacity: 1;
 }
 
-.series .dots .dot:hover circle {
+.dot circle.active {
   stroke-width: 5px;
+}
+
+.nofill {
+  fill: none;
 }
 
 .reactive {
@@ -129,12 +137,6 @@ svg * {
 .series text.active {
   opacity: 1;
 }
-
-/* .series .line { */
-/*   fill-opacity: {{ fill_opacity }}; */
-/* } */
-
-
 
 
 {{ style.colors }}

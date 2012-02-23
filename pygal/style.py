@@ -26,7 +26,7 @@ class Style(object):
         foreground_light='#eee',
         foreground_dark='#555',
         opacity='.8',
-        opacity_hover='1',
+        opacity_hover='.3',
         transition='250ms',
         colors=(
                 '#ff5995', '#b6e354', '#feed6c', '#8cedff', '#9e6ffe',

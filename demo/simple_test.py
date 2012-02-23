@@ -29,6 +29,7 @@ bar.add('test1', rng)
 bar.add('test2', map(abs, rng))
 bar.x_labels = map(str, rng)
 bar.title = "Bar test"
+bar.fill = True
 with open('out-bar.svg', 'w') as f:
     f.write(bar.render())
 
@@ -71,8 +72,8 @@ hstackedbar.add('--->', rng3)
 with open('out-horizontalstackedbar.svg', 'w') as f:
     f.write(hstackedbar.render())
 
-line = Line(Config(y_scale=.0005, fill=True, style=NeonStyle,
-                   interpolate='univariate', show_dots=False))
+line = Line(Config(y_scale=.0005, style=NeonStyle,
+                   interpolate='univariate'))
 rng = range(-30, 31, 10)
 line.add('test1', [cos(x / 10.) for x in rng])
 line.add('test2', [sin(x / 10.) for x in rng])
