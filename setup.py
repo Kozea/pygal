@@ -32,7 +32,7 @@ setup(
     provides=['pygal'],
     keywords=["svg", "graph", "diagram", "plot", "histogram", "kiviat"],
     tests_require=["pytest", "flask"],
-    package_data={'pygal': ['css/*']},
+    package_data={'pygal': ['css/*', 'js/*']},
     install_requires=['lxml'],
     classifiers=[
         "Development Status :: 4 - Beta",
