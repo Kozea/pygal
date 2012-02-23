@@ -53,10 +53,13 @@ svg * {
 .legends .legend text {
   font-family: monospace;  
   font-size: {{ font_sizes.legend }};
+  stroke: {{ style.foreground }};
+  fill: {{ style.foreground }};
 }
 
 .legends .legend:hover text {
   stroke: {{ style.foreground_light }};
+  fill: {{ style.foreground_light }};
 }
 
 .axis text {
@@ -121,7 +124,7 @@ svg * {
   fill-opacity: {{ style.opacity }};
 }
 
-.reactive.active {
+.reactive.active, .active .reactive {
   fill-opacity:  {{ style.opacity_hover }};
 }
 

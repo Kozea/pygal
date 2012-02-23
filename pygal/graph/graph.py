@@ -104,21 +104,24 @@ class Graph(BaseGraph):
                 self.margin.left + self.view.width + 10,
                 self.margin.top + 10))
         for i, title in enumerate(self._legends):
-            legend = self.svg.node(legends, class_='legend')
-            self.svg.node(legend, 'rect',
-                          x=0,
-                          y=1.5 * i * self.legend_box_size,
-                          width=self.legend_box_size,
-                          height=self.legend_box_size,
-                          class_="color-%d activate-serie reactive" % i,
-                          id="activate-serie-%d" % i
-                  ).text = title
+            legend = self.svg.node(
+                legends, class_='legend reactive activate-serie',
+                id="activate-serie-%d" % i)
+            self.svg.node(
+                legend, 'rect',
+                x=0,
+                y=1.5 * i * self.legend_box_size,
+                width=self.legend_box_size,
+                height=self.legend_box_size,
+                class_="color-%d reactive" % i
+            ).text = title
             # Serious magical numbers here
-            self.svg.node(legend, 'text',
-                      x=self.legend_box_size + 5,
-                      y=1.5 * i * self.legend_box_size
-                      + .5 * self.legend_box_size
-                      + .3 * self.legend_font_size
+            self.svg.node(
+                legend, 'text',
+                x=self.legend_box_size + 5,
+                y=1.5 * i * self.legend_box_size
+                + .5 * self.legend_box_size
+                + .3 * self.legend_font_size
             ).text = title
 
     def _title(self):
