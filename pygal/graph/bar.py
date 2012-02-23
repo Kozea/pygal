@@ -86,7 +86,7 @@ class Bar(Graph):
                 y=y - shift,
                 id="reactive-%s" % tag,
                 class_='reactive-text'
-            ).text = str(values[i][1][1])
+            ).text = self.format(values[i][1][1])
         return stack_vals
 
     def _compute(self):
@@ -101,7 +101,7 @@ class Bar(Graph):
         self._x_ranges = zip(x_pos, x_pos[1:])
         self._x_labels = self.x_labels and zip(self.x_labels, [
             sum(x_range) / 2. for x_range in self._x_ranges])
-        self._y_labels = zip(map(str, y_pos), y_pos)
+        self._y_labels = zip(map(self.format, y_pos), y_pos)
 
     def _plot(self):
         for serie in self.series:

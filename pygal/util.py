@@ -17,7 +17,30 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with pygal. If not, see <http://www.gnu.org/licenses/>.
 from decimal import Decimal
-from math import floor, pi
+from math import floor, pi, log, ceil
+
+
+def float_format(number):
+    return ("%.3f" % number).rstrip('0').rstrip('.')
+
+
+def humanize(number):
+    if number == 0:
+        return '0'
+    order = int(floor(log(abs(number)) / log(1000)))
+    if order > 0:
+        human_readable = "kMGTPEZY"
+        if order > len(human_readable):
+            return str(number)
+    elif order < 0:
+        human_readable = u"yzafpnµm "
+        if order > len(human_readable):
+            return str(number)
+    else:
+        return str(number)
+    return (
+        float_format(number / float(1000 ** int(order))) +
+        human_readable[int(order) - 1])
 
 
 def round_to_int(number, precision):

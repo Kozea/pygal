@@ -32,6 +32,8 @@ class Config(object):
     # Scale order range
     x_scale = 1
     y_scale = 1
+    # Display values in human readable format (ie: 12.4M)
+    human_readable = False
     # If set to a filename, this will replace the default css
     base_css = None
     # or default js

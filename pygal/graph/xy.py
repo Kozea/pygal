@@ -60,5 +60,5 @@ class XY(Line):
         x_pos = self._pos(self._box.xmin, self._box.xmax, self.x_scale)
         y_pos = self._pos(self._box.ymin, self._box.ymax, self.y_scale)
 
-        self._x_labels = zip(map(str, x_pos), x_pos)
-        self._y_labels = zip(map(str, y_pos), y_pos)
+        self._x_labels = zip(map(self.format, x_pos), x_pos)
+        self._y_labels = zip(map(self.format, y_pos), y_pos)

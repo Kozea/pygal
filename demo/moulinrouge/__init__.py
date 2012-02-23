@@ -118,6 +118,7 @@ def create_app():
         config.width = width
         config.height = height
         config.fill = True
+        config.human_readable = True
         config.style = styles[style]
         config.x_labels = [random_label() for i in range(data)]
         svgs = []

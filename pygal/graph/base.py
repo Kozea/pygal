@@ -1,6 +1,6 @@
 from pygal.serie import Serie
 from pygal.view import Margin, Box
-from pygal.util import round_to_scale, cut, rad
+from pygal.util import round_to_scale, cut, rad, humanize
 from pygal.svg import Svg
 from pygal.config import Config
 from pygal.util import cached_property
@@ -18,6 +18,7 @@ class BaseGraph(object):
         self.margin = Margin(*([20] * 4))
         self._x_labels = self._y_labels = None
         self._box = Box()
+        self.format = humanize if self.human_readable else str
 
     def __getattr__(self, attr):
         if attr in dir(self.config):
