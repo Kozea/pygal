@@ -72,7 +72,7 @@ hstackedbar.add('--->', rng3)
 with open('out-horizontalstackedbar.svg', 'w') as f:
     f.write(hstackedbar.render())
 
-line = Line(Config(y_scale=.0005, style=NeonStyle,
+line = Line(Config(y_scale=.0005, style=NeonStyle, human_readable=True,
                    interpolate='univariate'))
 rng = range(-30, 31, 5)
 line.add('test1', [1000 ** cos(x / 10.) for x in rng])
