@@ -114,7 +114,7 @@ svg * {
 }
 
 .reactive.active {
-  fill-opacity:  {{ fill_opacity_hover }};
+  fill-opacity:  {{ style.opacity_hover }};
 }
 
 .series text {

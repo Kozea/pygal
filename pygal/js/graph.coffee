@@ -15,43 +15,35 @@ rm_class = (e, class_name) ->
             cn.splice(i, 1)
     e.setAttribute('class', cn.join(' '))
 
+activate = (elements...) ->
+    for element in elements
+        add_class(element, 'active')
+
+deactivate = (elements...) ->
+    for element in elements
+        rm_class(element, 'active')
+
+reactive = (element) -> document.getElementById('re' + element.id)
+active = (element) -> document.getElementById(element.id.replace(/re/, ''))
+
+hover = (elts, over, out) ->
+    for elt in elts
+        elt.addEventListener('mouseover',
+            ((elt) -> (-> over.call(elt)))(elt)
+        , false)
+        elt.addEventListener('mouseout',
+            ((elt) -> (-> out.call(elt)))(elt)
+        , false)
 
 @svg_load = ->
-    for element in _('.reactive-text')
-        element.addEventListener('mouseover', ((e) ->
-            ->
-                add_class(e, 'active')
-                add_class(document.getElementById(e.id.replace(/re/, '')), 'active')
-        )(element), false)
-        element.addEventListener('mouseout', ((e) ->
-            ->
-                rm_class(e, 'active')
-                rm_class(document.getElementById(e.id.replace(/re/, '')), 'active')
-        )(element), false)
-    for element in _('.reactive')
-        element.addEventListener('mouseover', ((e) ->
-            ->
-                add_class(e, 'active')
-                add_class(document.getElementById('re' + e.id), 'active')
-        )(element), false)
-        element.addEventListener('mouseout', ((e) ->
-            ->
-                rm_class(e, 'active')
-                rm_class(document.getElementById('re' + e.id), 'active')
-        )(element), false)
-
-    for element in _('.activate-serie')
-       element.addEventListener('mouseover', ((e) ->
-            ->
-                num = e.id.replace('activate-serie-', '')
-                for element in _('.serie-' + num + ' .reactive')
-                    add_class(element, 'active')
-                    add_class(document.getElementById('re' + element.id), 'active')
-        )(element), false)
-        element.addEventListener('mouseout', ((e) ->
-            ->
-                num = e.id.replace('activate-serie-', '')
-                for element in _('.serie-' + num + ' .reactive')
-                    rm_class(element, 'active')
-                    rm_class(document.getElementById('re' + element.id), 'active')
-        )(element), false)
+    hover _('.reactive-text'), (-> activate(@, active(@))), (-> deactivate(@, active(@)))
+    hover _('.reactive'), (-> activate(@, reactive(@))), (-> deactivate(@, reactive(@)))
+    hover _('.activate-serie'), (
+        ->
+            num = this.id.replace('activate-serie-', '')
+            for element in _('.serie-' + num + ' .reactive')
+                activate(element, reactive(element))), (
+        ->
+            num = this.id.replace('activate-serie-', '')
+            for element in _('.serie-' + num + ' .reactive')
+                deactivate(element, reactive(element)))

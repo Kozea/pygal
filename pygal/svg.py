@@ -54,9 +54,9 @@ class Svg(object):
                 font_sizes=self.graph.font_sizes,
                 hidden='y' if self.graph._horizontal else 'x',
                 fill_opacity=self.graph.style.opacity
-                if self.graph.fill else 0,
+                if self.graph.fill else .4,
                 fill_opacity_hover=self.graph.style.opacity_hover
-                if self.graph.fill else 0)
+                if self.graph.fill else .6)
             style.text = templ.decode('utf-8')
 
     def add_script(self, js):
