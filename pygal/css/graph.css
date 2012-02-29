@@ -58,12 +58,11 @@ text.no_data {
 .legends .legend text {
   font-family: monospace;  
   font-size: {{ font_sizes.legend }};
-  stroke: {{ style.foreground }};
   fill: {{ style.foreground }};
+  fill-opacity: 1;
 }
 
 .legends .legend:hover text {
-  stroke: {{ style.foreground_light }};
   fill: {{ style.foreground_light }};
 }
 
@@ -94,7 +93,6 @@ text.no_data {
   stroke: {{ style.foreground_light }};
 }
 
-
 .axis .guide.line {
   stroke: {{ style.foreground_dark }};
   stroke-dasharray: 4,4;
@@ -103,6 +101,11 @@ text.no_data {
 .axis .major.line {
   stroke: {{ style.foreground }};
   stroke-dasharray: 6,6;
+}
+.axis text.major {
+  stroke-width: 0.5px;
+  stroke: {{ style.foreground_light }};
+  fill: {{ style.foreground_light }};
 }
 
 .axis.{{ hidden }} .guide.line {
@@ -122,15 +125,6 @@ text.no_data {
   opacity: 1;
 }
 
-.dot circle {
-  stroke-width: 1px;
-  fill-opacity: 1;
-}
-
-.dot circle.active {
-  stroke-width: 5px;
-}
-
 .nofill {
   fill: none;
 }
@@ -143,18 +137,35 @@ text.no_data {
   fill-opacity:  {{ style.opacity_hover }};
 }
 
+.dot {
+  stroke-width: 1px;
+  fill-opacity: 1;
+}
+
+.dot.active {
+  stroke-width: 5px;
+}
+
 .series text {
-  opacity: 0;
-  font-size: {{ font_sizes.values }};
-  text-anchor: middle;
-  stroke: {{ style.foreground_light }};
+  font-size: {{ font_sizes.value }};
+  stroke: none;
   fill: {{ style.foreground_light }};
-  text-shadow: 0 0 16px {{ style.background }};
 }
 
 .series text.active {
   opacity: 1;
 }
 
+#tooltip rect {
+  fill-opacity: 0.8;
+  fill: {{ style.background }};
+  stroke: {{ style.foreground_light }};
+}
+
+#tooltip text {
+  fill-opacity: 1;
+  fill: {{ style.foreground_light }};
+  font-size: {{ font_sizes.tooltip }};
+}
 
 {{ style.colors }}

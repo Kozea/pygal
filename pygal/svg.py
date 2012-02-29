@@ -51,14 +51,17 @@ class Svg(object):
             templ = template(
                 f.read(),
                 style=self.graph.style,
-                font_sizes=self.graph.font_sizes,
+                font_sizes=self.graph.font_sizes(),
                 hidden='y' if self.graph._horizontal else 'x')
             style.text = templ.decode('utf-8')
 
     def add_script(self, js):
         script = self.node(self.root, 'script', type='text/javascript')
         with open(js) as f:
-            script.text = f.read()
+            templ = template(
+                 f.read(),
+                font_sizes=self.graph.font_sizes(False))
+            script.text = templ.decode('utf-8')
 
     def node(self, parent=None, tag='g', attrib=None, **extras):
         if parent is None:

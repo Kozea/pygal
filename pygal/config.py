@@ -44,7 +44,8 @@ class Config(object):
     style = DefaultStyle
     # Various font sizes
     label_font_size = 10
-    values_font_size = 12
+    value_font_size = 8
+    tooltip_font_size = 20
     title_font_size = 16
     legend_font_size = 14
     # Specify labels rotation angles in degrees
@@ -92,12 +93,13 @@ class Config(object):
         """Can be updated with kwargs"""
         self.__dict__.update(kwargs)
 
-    @property
-    def font_sizes(self):
+    def font_sizes(self, with_unit=True):
         fs = FontSizes()
         for name in dir(self):
             if name.endswith('_font_size'):
-                setattr(fs,
-                        name.replace('_font_size', ''),
-                        '%dpx' % getattr(self, name))
+                setattr(
+                    fs,
+                    name.replace('_font_size', ''),
+                    ('%dpx' % getattr(self, name)
+                    ) if with_unit else getattr(self, name))
         return fs

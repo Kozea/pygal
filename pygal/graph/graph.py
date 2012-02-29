@@ -41,6 +41,20 @@ class Graph(BaseGraph):
             self.graph_node, class_="plot overlay",
             transform="translate(%d, %d)" % (
                 self.margin.left, self.margin.top))
+        self.text_overlay = self.svg.node(
+            self.graph_node, class_="plot text-overlay",
+            transform="translate(%d, %d)" % (
+                self.margin.left, self.margin.top))
+        tooltip_overlay = self.svg.node(
+            self.graph_node, class_="tooltip-overlay",
+            transform="translate(%d, %d)" % (
+                self.margin.left, self.margin.top))
+        self.tooltip_node = self.svg.node(tooltip_overlay, id="tooltip")
+        self.svg.node(self.tooltip_node, 'rect',
+                      id="tooltip-box",
+                      rx=5, ry=5,
+        )
+        self.svg.node(self.tooltip_node, 'text')
 
     def _x_axis(self):
         if not self._x_labels:
@@ -140,7 +154,11 @@ class Graph(BaseGraph):
     def _serie(self, serie):
         return dict(
             plot=self.svg.node(
-                self.plot, class_='series serie-%d color-%d' % (serie, serie)),
+                self.plot,
+                class_='series serie-%d color-%d' % (serie, serie)),
             overlay=self.svg.node(
-                self.overlay, class_='series serie-%d color-%d' % (
-                    serie, serie)))
+                self.overlay,
+                class_='series serie-%d color-%d' % (serie, serie)),
+            text_overlay=self.svg.node(
+                self.text_overlay,
+                class_='series serie-%d color-%d' % (serie, serie)))

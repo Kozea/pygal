@@ -48,15 +48,14 @@ class Line(Graph):
         if self.show_dots:
             dots = self.svg.node(serie_node['overlay'], class_="dots")
             for i, (x, y) in enumerate(view_values):
-                dot = self.svg.node(dots, class_='dot')
-                tag = '%d_%d' % (serie.index, i)
-                self.svg.node(dot, 'circle', cx=x, cy=y, r=2.5,
-                              id="active-%s" % tag,
-                              class_='reactive')
-                self.svg.node(dot, 'text', x=x, y=y,
-                              id="reactive-%s" % tag,
-                              class_='reactive-text'
-                ).text = self._get_value(serie.points, i)
+                val = self._get_value(serie.points, i)
+                self.svg.node(dots, 'circle', cx=x, cy=y, r=2.5,
+                              class_='dot reactive tooltip-trigger')
+                self.svg.node(dots, 'desc').text = val
+                self.svg.node(serie_node['text_overlay'], 'text',
+                              x=x + self.value_font_size,
+                              y=y + self.value_font_size,
+                ).text = val
 
         if self.stroke:
             if self.interpolate:
