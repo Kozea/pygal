@@ -36,8 +36,8 @@ class Bar(Graph):
         bars = self.svg.node(serie_node['plot'], class_="bars")
         view_values = map(view, values)
         for i, ((x, y), (X, Y)) in enumerate(view_values):
-            tag = '%d_%d' % (serie.index, i)
             # x and y are left range coords and X, Y right ones
+            val = self.format(values[i][1][1])
             if self._horizontal:
                 x, y, X, Y = Y, X, y, x
             width = X - x
@@ -73,20 +73,18 @@ class Bar(Graph):
                 ry=self.rounded_bars * 1,
                 width=bar_inner_width,
                 height=height,
-                id="active-%s" % tag,
-                class_='rect reactive')
+                class_='rect reactive tooltip-trigger')
+            self.svg.node(bar, 'desc').text = val
             if self._horizontal:
                 x += .3 * self.value_font_size
                 y += height / 2
             else:
                 y += height / 2 + .3 * self.value_font_size
             self.svg.transposable_node(
-                serie_node['overlay'], 'text',
+                serie_node['text_overlay'], 'text',
                 x=x + bar_inner_width / 2,
-                y=y - shift,
-                id="reactive-%s" % tag,
-                class_='reactive-text'
-            ).text = self.format(values[i][1][1])
+                y=y - shift
+            ).text = val
         return stack_vals
 
     def _compute(self):

@@ -32,11 +32,7 @@ deactivate = (elements...) ->
 
 Function.prototype.bind = (scope) ->
     _fun = @
-    ->
-        _fun.apply(scope, arguments)
-
-reactive = (element) -> document.getElementById('re' + element.id)
-active = (element) -> document.getElementById(element.id.replace(/re/, ''))
+    -> _fun.apply(scope, arguments)
 
 hover = (elts, over, out) ->
     for elt in elts
@@ -70,17 +66,18 @@ untooltip = ->
 @svg_load = ->
     for text in _('.text-overlay .series')
         text.setAttribute('display', 'none')
-    hover _('.reactive-text'), (-> activate(@, active(@))), (-> deactivate(@, active(@)))
-    hover _('.reactive'), (-> activate(@, reactive(@))), (-> deactivate(@, reactive(@)))
+    hover _('.reactive'), (-> activate(@)), (-> deactivate(@))
     hover _('.activate-serie'), (
         ->
             num = this.id.replace('activate-serie-', '')
-            _('.text-overlay .serie-' + num)[0].setAttribute('display', 'inline')
+            for element in _('.text-overlay .serie-' + num)
+                element.setAttribute('display', 'inline')
             for element in _('.serie-' + num + ' .reactive')
                 activate(element, reactive(element))), (
         ->
             num = this.id.replace('activate-serie-', '')
-            _('.text-overlay .serie-' + num)[0].setAttribute('display', 'none')
+            for element in _('.text-overlay .serie-' + num)
+                element.setAttribute('display', 'none')
             for element in _('.serie-' + num + ' .reactive')
                 deactivate(element, reactive(element)))
     hover _('.tooltip-trigger'), (-> tooltip(@)), (-> untooltip())

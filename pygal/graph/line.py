@@ -44,10 +44,9 @@ class Line(Graph):
 
     def line(self, serie_node, serie):
         view_values = map(self.view, serie.points)
-
         if self.show_dots:
-            dots = self.svg.node(serie_node['overlay'], class_="dots")
             for i, (x, y) in enumerate(view_values):
+                dots = self.svg.node(serie_node['overlay'], class_="dots")
                 val = self._get_value(serie.points, i)
                 self.svg.node(dots, 'circle', cx=x, cy=y, r=2.5,
                               class_='dot reactive tooltip-trigger')
