@@ -1,5 +1,6 @@
 from pygal.graph.base import BaseGraph
-from pygal.view import View
+from pygal.view import View, LogView
+from pygal.util import is_major
 
 
 class Graph(BaseGraph):
@@ -14,7 +15,7 @@ class Graph(BaseGraph):
         self._title()
 
     def _set_view(self):
-        self.view = View(
+        self.view = (LogView if self.logarithmic else View)(
             self.width - self.margin.x,
             self.height - self.margin.y,
             self._box)
@@ -79,16 +80,21 @@ class Graph(BaseGraph):
                       d='M%f %f h%f' % (0, self.view.height, self.view.width),
                       class_='line')
         for label, position in self._y_labels:
-            guides = self.svg.node(axis, class_='guides')
+            major = is_major(position)
+            guides = self.svg.node(axis, class_='%sguides' % (
+                'logarithmic ' if self.logarithmic else ''
+            ))
             x = -5
             y = self.view.y(position)
             self.svg.node(guides, 'path',
-                      d='M%f %f h%f' % (0, y, self.view.width),
-                      class_='%sline' % (
-                          'guide ' if position != 0 else ''))
+                          d='M%f %f h%f' % (0, y, self.view.width),
+                          class_='%s%sline' % (
+                              'major ' if major else '',
+                              'guide ' if position != 0 else ''))
             text = self.svg.node(guides, 'text',
-                             x=x,
-                             y=y + .35 * self.label_font_size
+                                 x=x,
+                                 y=y + .35 * self.label_font_size,
+                                 class_='major' if major else ''
             )
             text.text = label
             if self.y_label_rotation:

@@ -17,7 +17,7 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with pygal. If not, see <http://www.gnu.org/licenses/>.
 from decimal import Decimal
-from math import floor, pi, log
+from math import floor, pi, log, log10
 ORDERS = u"yzafpnµm kMGTPEZY"
 
 
@@ -33,6 +33,11 @@ def humanize(number):
     return (
         float_format(number / float(1000 ** int(order))) +
         human_readable[int(order) - int(order > 0)])
+
+
+def is_major(number):
+    """Returns True if number is a round order: 1, 100, 0.001"""
+    return not number or 10 ** floor(log10(abs(number))) == abs(number)
 
 
 def round_to_int(number, precision):

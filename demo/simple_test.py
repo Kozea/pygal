@@ -72,23 +72,28 @@ hstackedbar.add('--->', rng3)
 with open('out-horizontalstackedbar.svg', 'w') as f:
     f.write(hstackedbar.render())
 
-line = Line(Config(y_scale=.0005, style=NeonStyle, human_readable=True,
-                   interpolate='univariate'))
-rng = range(-30, 31, 5)
-line.add('test1', [1000 ** cos(x / 10.) for x in rng])
-line.add('test2', [1000 ** sin(x / 10.) for x in rng])
-line.add('test3', [1000 ** (cos(x / 10.) - sin(x / 10.)) for x in rng])
+line = Line(Config(y_scale=.0005, style=NeonStyle,
+                   zero=1, interpolate='cubic',
+                   human_readable=True, logarithmic=True))
+# rng = range(-30, 31, 1)
+
+# line.add('test1', [1000 ** cos(x / 10.) for x in rng])
+# line.add('test2', [1000 ** sin(x / 10.) for x in rng])
+# line.add('test3', [1000 ** (cos(x / 10.) - sin(x / 10.)) for x in rng])
+rng = range(1, 2000, 50)
+line.add('x', rng)
+line.add('10^x', map(lambda x: 10 ** (x / 333.), rng))
+line.add('10^10^x', map(lambda x: ((x / 333.) ** (x / 333.)), rng))
 line.x_labels = map(str, rng)
 line.title = "Line test"
 with open('out-line.svg', 'w') as f:
     f.write(line.render())
 
-stackedline = StackedLine(Config(y_scale=.0005, fill=True,
-                                 style=NeonStyle, interpolate='cubic'))
+stackedline = StackedLine(Config(y_scale=.0005, fill=True))
 stackedline.add('test1', [1, 3, 2, 18, 2, 13, 8])
-stackedline.add('test2', [4, 1, 0,  1, 3, 12, 3])
+stackedline.add('test2', [4, 1, 10,  1, 3, 12, 3])
 stackedline.add('test3', [9, 3, 2,  10, 8, 2, 3])
-stackedline.x_labels = map(str, ['a', 'b', 'c', 'd', 'e', 'f', 'g'])
+stackedline.x_labels = ['a', 'b', 'c', 'd', 'e', 'f', 'g']
 stackedline.title = "Stackedline test"
 with open('out-stackedline.svg', 'w') as f:
     f.write(stackedline.render())

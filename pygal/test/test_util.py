@@ -17,7 +17,8 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with pygal. If not, see <http://www.gnu.org/licenses/>.
 from pygal.util import (
-    round_to_int, round_to_float, _swap_curly, template, humanize)
+    round_to_int, round_to_float, _swap_curly, template, humanize,
+    is_major)
 from pytest import raises
 
 
@@ -101,3 +102,10 @@ def test_humanize():
     assert humanize(0) == '0'
     assert humanize(-1337) == '-1.337k'
     assert humanize(-.000000042) == '-42n'
+
+
+def test_is_major():
+    for n in (0, 1, 1000, 10., 0.1, 0.000001, -10, -.001000, -100.):
+        assert is_major(n)
+    for n in (2, 10002., 100000.0003, -200, -0.0005):
+        assert not is_major(n)

@@ -93,7 +93,13 @@ class Svg(object):
         self.node(node, 'path',
                   d=root % (origin, line), **kwargs)
 
-    def render(self):
+    def render(self, no_data=False):
+        if no_data:
+            no_data = self.node(self.root, 'text',
+            x=self.graph.width / 2,
+            y=self.graph.height / 2,
+            class_='no_data')
+            no_data.text = self.graph.no_data_text
         return etree.tostring(
             self.root, pretty_print=True,
             xml_declaration=True, encoding='utf-8')

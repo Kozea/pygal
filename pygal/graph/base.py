@@ -4,7 +4,7 @@ from pygal.util import round_to_scale, cut, rad, humanize
 from pygal.svg import Svg
 from pygal.config import Config
 from pygal.util import cached_property
-from math import log10, sin, cos
+from math import log10, sin, cos, floor, ceil
 
 
 class BaseGraph(object):
@@ -25,9 +25,22 @@ class BaseGraph(object):
             return object.__getattribute__(self.config, attr)
         return object.__getattribute__(self, attr)
 
+    def _pos_logarithmic(self, min_, max_):
+        min_order = int(floor(log10(min_)))
+        max_order = int(ceil(log10(max_)))
+        positions = []
+        for order in range(min_order, max_order + 1):
+            for i in range(10):
+                tick = i * 10 ** order
+                if min_ <= tick <= max_:
+                    positions.append(tick)
+        return positions
+
     def _pos(self, min_, max_, scale, min_scale=4, max_scale=20):
         if min_ == 0 and max_ == 0:
             return [0]
+        if self.logarithmic:
+            return self._pos_logarithmic(min_, max_)
         order = round(log10(max(abs(min_), abs(max_)))) - 1
         while (max_ - min_) / float(10 ** order) < min_scale:
             order -= 1
@@ -106,12 +119,12 @@ class BaseGraph(object):
 
     def render(self):
         if len(self.series) == 0:
-            return
+            return self.svg.render(no_data=True)
         for serie in self.series:
             if not hasattr(serie.values, '__iter__'):
                 serie.values = [serie.values]
         if sum(map(len, map(lambda s: s.values, self.series))) == 0:
-            return
+            return self.svg.render(no_data=True)
         self.validate()
         self._draw()
         return self.svg.render()

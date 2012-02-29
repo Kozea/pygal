@@ -40,6 +40,11 @@ svg * {
   fill: {{ style.foreground }};
 }
 
+text.no_data {
+  fill: {{ style.foreground_light }};
+  text-anchor: middle;
+}
+
 .line {
   fill-opacity: 0;
 }
@@ -81,13 +86,23 @@ svg * {
   text-anchor: end;
 }
 
+.axis.y .logarithmic text:not(.major) {
+  opacity: 0;
+}
+
 .axis .line {
   stroke: {{ style.foreground_light }};
 }
 
+
 .axis .guide.line {
   stroke: {{ style.foreground_dark }};
-  stroke-dasharray: 5,5;
+  stroke-dasharray: 4,4;
+}
+
+.axis .major.line {
+  stroke: {{ style.foreground }};
+  stroke-dasharray: 6,6;
 }
 
 .axis.{{ hidden }} .guide.line {

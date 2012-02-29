@@ -16,7 +16,7 @@
 #
 # You should have received a copy of the GNU Lesser General Public License
 # along with pygal. If not, see <http://www.gnu.org/licenses/>.
-from math import sin, cos
+from math import sin, cos, log10
 
 
 class Margin(object):
@@ -93,3 +93,20 @@ class PolarView(View):
         rho = max(rho, 0)
         return super(PolarView, self).__call__(
             (rho * cos(theta), rho * sin(theta)))
+
+
+class LogView(View):
+    def __init__(self, width, height, box):
+        self.width = width
+        self.height = height
+        self.box = box
+        self.ymin = self.box.ymin
+        self.ymax = self.box.ymax
+        self.log10_ymax = log10(self.box.ymax)
+        self.log10_ymin = log10(self.box.ymin)
+        self.box.fix()
+
+    def y(self, y):
+        return (self.height - self.height *
+                (log10(y) - self.log10_ymin)
+                / float(self.log10_ymax - self.log10_ymin))

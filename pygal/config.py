@@ -34,6 +34,8 @@ class Config(object):
     y_scale = 1
     # Display values in human readable format (ie: 12.4M)
     human_readable = False
+    # Display values in logarithmic scale
+    logarithmic = False
     # If set to a filename, this will replace the default css
     base_css = None
     # or default js
@@ -42,7 +44,7 @@ class Config(object):
     style = DefaultStyle
     # Various font sizes
     label_font_size = 10
-    values_font_size = 18
+    values_font_size = 12
     title_font_size = 16
     legend_font_size = 14
     # Specify labels rotation angles in degrees
@@ -77,7 +79,10 @@ class Config(object):
     interpolate = None
     # Number of interpolated points between two values
     interpolation_precision = 250
+    # Set the ordinate zero value (for filling)
     zero = 0
+    # Text to display when no data is given
+    no_data_text = "No data"
 
     def __init__(self, **kwargs):
         """Can be instanciated with config kwargs"""
