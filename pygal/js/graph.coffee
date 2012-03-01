@@ -44,19 +44,16 @@ tooltip = (elt) ->
     _tooltip = __('tooltip')
     _text = _tooltip.getElementsByTagName('text')[0]
     _rect = _tooltip.getElementsByTagName('rect')[0]
-    _text.textContent = elt.nextElementSibling.textContent
+    value = elt.nextElementSibling
+    _text.textContent = value.textContent
     w = _text.offsetWidth + 2 * padding
     h = _text.offsetHeight + 2 * padding
     _rect.setAttribute('width', w)
     _rect.setAttribute('height', h)
     _text.setAttribute('x', padding)
     _text.setAttribute('y', padding + tooltip_font_size)
-    x = elt.getAttribute('cx') || elt.getAttribute('x')
-    y = elt.getAttribute('cy') || elt.getAttribute('y')
-    if x - w  > 0
-        x -= w
-    if y - h > 0
-        y -= h
+    x = value.nextElementSibling.textContent - w / 2
+    y = value.nextElementSibling.nextElementSibling.textContent - h / 2
     _tooltip.setAttribute('transform', "translate(#{x} #{y})")
 
 untooltip = ->

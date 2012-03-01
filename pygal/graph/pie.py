@@ -32,8 +32,10 @@ class Pie(Graph):
                   (self.height - self.margin.y) / 2.)
         r = min(center)
         if small:
-            r *= .9
-        center_str = '%f %f' % center
+            small_r = r * .9
+        else:
+            r = r * .9
+            small_r = 0
         if perc == 1:
             self.svg.node(slice_, 'circle',
                           cx=center[0],
@@ -45,18 +47,27 @@ class Pie(Graph):
                 rho * sin(-alpha), rho * cos(-alpha))
             diff = lambda x, y: (x[0] - y[0], x[1] - y[1])
             fmt = lambda x: '%f %f' % x
-            to1 = fmt(diff(center, project(r, start_angle)))
-            to2 = fmt(diff(center, project(r, start_angle + angle)))
-            rxy = fmt(tuple([r] * 2))
+            get_radius = lambda r: fmt(tuple([r] * 2))
+            absolute_project = lambda rho, theta: fmt(
+                diff(center, project(rho, theta)))
+            to1 = absolute_project(r, start_angle)
+            to2 = absolute_project(r, start_angle + angle)
+            to3 = absolute_project(small_r, start_angle + angle)
+            to4 = absolute_project(small_r, start_angle)
             self.svg.node(slice_, 'path',
-                          d='M%s L%s A%s 0 %d 1 %s z' % (
-                              center_str,
+                          d='M%s A%s 0 %d 1 %s L%s A%s 0 %d 0 %s z' % (
                               to1,
-                              rxy,
-                              1 if angle > pi else 0,
-                              to2),
+                              get_radius(r), int(angle > pi), to2,
+                              to3,
+                              get_radius(small_r), int(angle > pi), to4),
                           class_='slice reactive tooltip-trigger')
-        self.svg.node(slice_, 'desc').text = val
+        self.svg.node(slice_, 'desc', class_="value").text = val
+        tooltip_position = map(
+            str, diff(center, project(
+                (r + small_r) / 2., start_angle + angle / 2.)))
+        self.svg.node(slice_, 'desc', class_="x").text = tooltip_position[0]
+        self.svg.node(slice_, 'desc', class_="y").text = tooltip_position[1]
+
         text_angle = pi / 2. - (start_angle + angle / 2.)
         text_r = r * .95
         self.svg.node(serie_node['text_overlay'], 'text',
@@ -81,14 +92,14 @@ class Pie(Graph):
                 self._serie(serie.index),
                 current_angle,
                 angle, sum(serie.values) / total)
-            # if len(serie.values) > 1:
-            #     small_current_angle = current_angle
-            #     for i, val in enumerate(serie.values):
-            #         small_angle = 2 * pi * val / total
-            #         self.slice(
-            #             self._serie(serie.index),
-            #             small_current_angle,
-            #             small_angle, val / total,
-            #             True)
-            #         small_current_angle += small_angle
+            if len(serie.values) > 1:
+                small_current_angle = current_angle
+                for i, val in enumerate(serie.values):
+                    small_angle = 2 * pi * val / total
+                    self.slice(
+                        self._serie(serie.index),
+                        small_current_angle,
+                        small_angle, val / total,
+                        True)
+                    small_current_angle += small_angle
             current_angle += angle
