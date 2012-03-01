@@ -41,16 +41,20 @@ class Pie(Graph):
                           r=r,
                           class_='slice reactive tooltip-trigger')
         else:
-            rxy = '%f %f' % tuple([r] * 2)
-            to = '%f %f' % (r * sin(angle), r * (1 - cos(angle)))
+            project = lambda rho, alpha: (
+                rho * sin(-alpha), rho * cos(-alpha))
+            diff = lambda x, y: (x[0] - y[0], x[1] - y[1])
+            fmt = lambda x: '%f %f' % x
+            to1 = fmt(diff(center, project(r, start_angle)))
+            to2 = fmt(diff(center, project(r, start_angle + angle)))
+            rxy = fmt(tuple([r] * 2))
             self.svg.node(slice_, 'path',
-                          d='M%s v%f a%s 0 %d 1 %s z' % (
-                              center_str, -r,
+                          d='M%s L%s A%s 0 %d 1 %s z' % (
+                              center_str,
+                              to1,
                               rxy,
                               1 if angle > pi else 0,
-                              to),
-                          transform='rotate(%f %s)' % (
-                              start_angle * 180 / pi, center_str),
+                              to2),
                           class_='slice reactive tooltip-trigger')
         self.svg.node(slice_, 'desc').text = val
         text_angle = pi / 2. - (start_angle + angle / 2.)
@@ -77,14 +81,14 @@ class Pie(Graph):
                 self._serie(serie.index),
                 current_angle,
                 angle, sum(serie.values) / total)
-            if len(serie.values) > 1:
-                small_current_angle = current_angle
-                for i, val in enumerate(serie.values):
-                    small_angle = 2 * pi * val / total
-                    self.slice(
-                        self._serie(serie.index),
-                        small_current_angle,
-                        small_angle, val / total,
-                        True)
-                    small_current_angle += small_angle
+            # if len(serie.values) > 1:
+            #     small_current_angle = current_angle
+            #     for i, val in enumerate(serie.values):
+            #         small_angle = 2 * pi * val / total
+            #         self.slice(
+            #             self._serie(serie.index),
+            #             small_current_angle,
+            #             small_angle, val / total,
+            #             True)
+            #         small_current_angle += small_angle
             current_angle += angle
