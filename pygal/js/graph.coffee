@@ -4,6 +4,36 @@ padding = 5
 tooltip_timeout = 0
 tooltip_font_size = parseInt("{{ font_sizes.tooltip }}")
 
+class Queue
+    constructor: (@delay) ->
+        @queue = []
+        @running = false
+
+    add: (f, args...) ->
+        @queue.push f: f, a: args
+        if (!@running)
+            @running = true
+            @_back()
+
+    _run: (f) ->
+        if(!f)
+            @running = false
+        else
+            setTimeout (=>
+                f.f f.a...
+                @_back()
+            ), @delay
+
+    _back: ->
+        @_run @queue.shift()
+
+    clear: ->
+        if @running
+            @queue = []
+            @running = false
+
+tooltip_anim_Q = new Queue 1
+
 has_class = (e, class_name) ->
     return if not e
     cn = e.getAttribute('class').split(' ')
@@ -27,6 +57,9 @@ rm_class = (e, class_name) ->
             cn.splice(i, 1)
     e.setAttribute('class', cn.join(' '))
 
+width = (e) -> (e.getBBox() and e.getBBox().width) or e.offsetWidth
+height = (e) -> (e.getBBox() and e.getBBox().height) or e.offsetHeight
+
 svg = (tag) -> document.createElementNS('http://www.w3.org/2000/svg', tag)
 
 activate = (elements...) ->
@@ -47,33 +80,49 @@ hover = (elts, over, out) ->
         elt.addEventListener('mouseout', out.bind(elt) , false)
 
 tooltip = (elt) ->
+    tooltip_anim_Q.clear()
     clearTimeout(tooltip_timeout)
     _tooltip = __('tooltip')
-    # _tooltip.setAttribute('display', 'inline')
+    _tooltip.setAttribute('display', 'inline')
     _text = _tooltip.getElementsByTagName('text')[0]
     _rect = _tooltip.getElementsByTagName('rect')[0]
     value = elt.nextElementSibling
     _text.textContent = value.textContent
-    w = _text.offsetWidth + 2 * padding
-    h = _text.offsetHeight + 2 * padding
+    w = width(_text) + 2 * padding
+    h = height(_text) + 2 * padding
     _rect.setAttribute('width', w)
     _rect.setAttribute('height', h)
     _text.setAttribute('x', padding)
     _text.setAttribute('y', padding + tooltip_font_size)
     x_elt = value.nextElementSibling
     y_elt = x_elt.nextElementSibling
-    x = x_elt.textContent
+    x = parseInt(x_elt.textContent)
     if has_class(x_elt, 'centered')
         x -= w / 2
 
-    y = y_elt.textContent
+    y = parseInt(y_elt.textContent)
     if has_class(y_elt, 'centered')
         y -= h / 2
-    _tooltip.setAttribute('transform', "translate(#{x} #{y})")
 
-untooltip = -> 0
+    [current_x, current_y] = (parseInt(s) for s in _tooltip.getAttribute('transform').replace('translate(', '').replace(')', '').split ' ')
+    return if current_x == x and current_y == y
+    step = 20
+    x_step = (x - current_x) / step
+    y_step = (y - current_y) / step
+    anim_x = current_x
+    anim_y = current_y
+    for i in [0..step]
+        anim_x += x_step
+        anim_y += y_step
+        tooltip_anim_Q.add ((_x, _y) ->
+            _tooltip.setAttribute('transform', "translate(#{_x} #{_y})")), anim_x, anim_y
+    tooltip_anim_Q.add ((_x, _y) ->
+        _tooltip.setAttribute('transform', "translate(#{_x} #{_y})")), x, y
+
+
+untooltip = ->
     tooltip_timeout = setTimeout (->
-        __('tooltip').setfAttribute('display', 'none')), 1000
+        __('tooltip').setAttribute('display', 'none')), 1000
 
 @svg_load = ->
     for text in _('.text-overlay .series')
