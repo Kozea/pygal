@@ -49,6 +49,10 @@ text.no_data {
   fill-opacity: 0;
 }
 
+.centered {
+  text-anchor: middle;
+}
+
 .title {
   fill: {{ style.foreground_light }};
   font-size: {{ font_sizes.title }};
@@ -56,7 +60,7 @@ text.no_data {
 }
 
 .legends .legend text {
-  font-family: monospace;  
+  font-family: monospace;
   font-size: {{ font_sizes.legend }};
   fill: {{ style.foreground }};
   fill-opacity: 1;

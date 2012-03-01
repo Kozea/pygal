@@ -4,11 +4,18 @@ padding = 5
 tooltip_timeout = 0
 tooltip_font_size = parseInt("{{ font_sizes.tooltip }}")
 
+has_class = (e, class_name) ->
+    return if not e
+    cn = e.getAttribute('class').split(' ')
+    for cls, i in cn
+        if cls == class_name
+            return true
+    false
 
 add_class = (e, class_name) ->
     return if not e
     cn = e.getAttribute('class').split(' ')
-    if class_name not in cn
+    if not has_class(e, class_name)
         cn.push(class_name)
     e.setAttribute('class', cn.join(' '))
 
@@ -52,8 +59,15 @@ tooltip = (elt) ->
     _rect.setAttribute('height', h)
     _text.setAttribute('x', padding)
     _text.setAttribute('y', padding + tooltip_font_size)
-    x = value.nextElementSibling.textContent - w / 2
-    y = value.nextElementSibling.nextElementSibling.textContent - h / 2
+    x_elt = value.nextElementSibling
+    y_elt = x_elt.nextElementSibling
+    x = x_elt.textContent
+    if has_class(x_elt, 'centered')
+        x -= w / 2
+
+    y = y_elt.textContent
+    if has_class(y_elt, 'centered')
+        y -= h / 2
     _tooltip.setAttribute('transform', "translate(#{x} #{y})")
 
 untooltip = ->
@@ -70,11 +84,11 @@ untooltip = ->
             for element in _('.text-overlay .serie-' + num)
                 element.setAttribute('display', 'inline')
             for element in _('.serie-' + num + ' .reactive')
-                activate(element, reactive(element))), (
+                activate(element)), (
         ->
             num = this.id.replace('activate-serie-', '')
             for element in _('.text-overlay .serie-' + num)
                 element.setAttribute('display', 'none')
             for element in _('.serie-' + num + ' .reactive')
-                deactivate(element, reactive(element)))
+                deactivate(element))
     hover _('.tooltip-trigger'), (-> tooltip(@)), (-> untooltip())

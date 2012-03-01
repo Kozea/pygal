@@ -50,11 +50,15 @@ class Line(Graph):
                 val = self._get_value(serie.points, i)
                 self.svg.node(dots, 'circle', cx=x, cy=y, r=2.5,
                               class_='dot reactive tooltip-trigger')
-                self.svg.node(dots, 'desc').text = val
-                self.svg.node(serie_node['text_overlay'], 'text',
-                              x=x + self.value_font_size,
-                              y=y + self.value_font_size,
-                ).text = val
+                self.svg.node(dots, 'desc', class_="value").text = val
+                self.svg.node(dots, 'desc', class_="x").text = str(x)
+                self.svg.node(dots, 'desc', class_="y").text = str(y)
+                if self.print_values:
+                    self.svg.node(
+                        serie_node['text_overlay'], 'text',
+                        x=x + self.value_font_size,
+                        y=y + self.value_font_size,
+                    ).text = val
 
         if self.stroke:
             if self.interpolate:

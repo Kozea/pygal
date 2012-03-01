@@ -74,17 +74,25 @@ class Bar(Graph):
                 width=bar_inner_width,
                 height=height,
                 class_='rect reactive tooltip-trigger')
-            self.svg.node(bar, 'desc').text = val
+            self.svg.node(bar, 'desc', class_="values").text = val
+            self.svg.node(bar, 'desc',
+                          class_="x centered"
+            ).text = str(x + bar_inner_width / 2.)
+            self.svg.node(bar, 'desc',
+                          class_="y centered"
+            ).text = str(y + height / 2.)
             if self._horizontal:
                 x += .3 * self.value_font_size
                 y += height / 2
             else:
                 y += height / 2 + .3 * self.value_font_size
-            self.svg.transposable_node(
-                serie_node['text_overlay'], 'text',
-                x=x + bar_inner_width / 2,
-                y=y - shift
-            ).text = val
+            if self.print_values:
+                self.svg.transposable_node(
+                    serie_node['text_overlay'], 'text',
+                    class_='centered',
+                    x=x + bar_inner_width / 2,
+                    y=y - shift
+                ).text = val if self.print_zeroes or val != '0' else ''
         return stack_vals
 
     def _compute(self):

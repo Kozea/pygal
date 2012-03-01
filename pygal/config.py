@@ -84,6 +84,10 @@ class Config(object):
     zero = 0
     # Text to display when no data is given
     no_data_text = "No data"
+    # Print values when graph is in non interactive mode
+    print_values = True
+    # Print zeroes when graph is in non interactive mode
+    print_zeroes = False
 
     def __init__(self, **kwargs):
         """Can be instanciated with config kwargs"""

@@ -65,15 +65,17 @@ class Pie(Graph):
         tooltip_position = map(
             str, diff(center, project(
                 (r + small_r) / 2., start_angle + angle / 2.)))
-        self.svg.node(slice_, 'desc', class_="x").text = tooltip_position[0]
-        self.svg.node(slice_, 'desc', class_="y").text = tooltip_position[1]
-
-        text_angle = pi / 2. - (start_angle + angle / 2.)
-        text_r = r * .95
-        self.svg.node(serie_node['text_overlay'], 'text',
-                      x=center[0] + text_r * cos(text_angle),
-                      y=center[1] - text_r * sin(text_angle)
-        ).text = val
+        self.svg.node(slice_, 'desc',
+                      class_="x centered").text = tooltip_position[0]
+        self.svg.node(slice_, 'desc',
+                      class_="y centered").text = tooltip_position[1]
+        if self.print_values:
+            self.svg.node(
+                serie_node['text_overlay'], 'text',
+                class_='centered',
+                x=tooltip_position[0],
+                y=tooltip_position[1]
+            ).text = val if self.print_zeroes or val != '0%' else ''
 
     def _compute(self):
         for serie in self.series:
