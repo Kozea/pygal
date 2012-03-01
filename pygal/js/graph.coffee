@@ -49,6 +49,7 @@ hover = (elts, over, out) ->
 tooltip = (elt) ->
     clearTimeout(tooltip_timeout)
     _tooltip = __('tooltip')
+    # _tooltip.setAttribute('display', 'inline')
     _text = _tooltip.getElementsByTagName('text')[0]
     _rect = _tooltip.getElementsByTagName('rect')[0]
     value = elt.nextElementSibling
@@ -70,9 +71,9 @@ tooltip = (elt) ->
         y -= h / 2
     _tooltip.setAttribute('transform', "translate(#{x} #{y})")
 
-untooltip = ->
+untooltip = -> 0
     tooltip_timeout = setTimeout (->
-        __('tooltip').setAttribute('transform', 'translate(-100000, -100000)')), 1000
+        __('tooltip').setfAttribute('display', 'none')), 1000
 
 @svg_load = ->
     for text in _('.text-overlay .series')

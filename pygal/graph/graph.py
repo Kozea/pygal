@@ -46,10 +46,23 @@ class Graph(BaseGraph):
             transform="translate(%d, %d)" % (
                 self.margin.left, self.margin.top))
         tooltip_overlay = self.svg.node(
-            self.graph_node, class_="tooltip-overlay",
+            self.graph_node, class_="plot tooltip-overlay",
             transform="translate(%d, %d)" % (
                 self.margin.left, self.margin.top))
         self.tooltip_node = self.svg.node(tooltip_overlay, id="tooltip")
+        self.svg.node(
+            self.tooltip_node, 'animateTransform',
+            attributeName='transform',
+            attributeType='XML',
+            type='translate',
+            dur='1.5s',
+            end='indefinite',
+            begin='indefinite',
+            from_="0 0",
+            to="100 100",
+            additive="sum",
+            repeatCount='indefinite')
+
         self.svg.node(self.tooltip_node, 'rect',
                       id="tooltip-box",
                       rx=5, ry=5,

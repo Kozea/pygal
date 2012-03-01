@@ -26,7 +26,7 @@ class Style(object):
         foreground_light='#eee',
         foreground_dark='#555',
         opacity='.8',
-        opacity_hover='.3',
+        opacity_hover='.9',
         transition='250ms',
         colors=(
                 '#ff5995', '#b6e354', '#feed6c', '#8cedff', '#9e6ffe',
@@ -53,7 +53,7 @@ class Style(object):
                     '}}\n'.format(*tupl))
         return '\n'.join(map(color, enumerate(self._colors)))
 
-DefaultStyle = Style()
+DefaultStyle = Style(opacity_hover='.4', opacity='.8')
 LightStyle = Style(
     background='white',
     plot_background='rgba(0, 0, 255, 0.1)',

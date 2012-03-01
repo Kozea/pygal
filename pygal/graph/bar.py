@@ -75,12 +75,14 @@ class Bar(Graph):
                 height=height,
                 class_='rect reactive tooltip-trigger')
             self.svg.node(bar, 'desc', class_="values").text = val
+            tooltip_positions = map(
+                str, (x + bar_inner_width / 2., y + height / 2.))
             self.svg.node(bar, 'desc',
                           class_="x centered"
-            ).text = str(x + bar_inner_width / 2.)
+            ).text = tooltip_positions[int(self._horizontal)]
             self.svg.node(bar, 'desc',
                           class_="y centered"
-            ).text = str(y + height / 2.)
+            ).text = tooltip_positions[int(not self._horizontal)]
             if self._horizontal:
                 x += .3 * self.value_font_size
                 y += height / 2

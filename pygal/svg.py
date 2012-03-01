@@ -73,9 +73,9 @@ class Svg(object):
                 del attrib[key]
             elif not isinstance(value, basestring):
                 attrib[key] = str(value)
-            elif key == 'class_':
-                attrib['class'] = attrib['class_']
-                del attrib['class_']
+            elif key.endswith('_'):
+                attrib[key.rstrip('_')] = attrib[key]
+                del attrib[key]
         return etree.SubElement(parent, tag, attrib)
 
     def transposable_node(self, parent=None, tag='g', attrib=None, **extras):

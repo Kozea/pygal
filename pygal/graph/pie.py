@@ -18,6 +18,11 @@
 # along with pygal. If not, see <http://www.gnu.org/licenses/>.
 from pygal.graph.graph import Graph
 from math import cos, sin, pi
+project = lambda rho, alpha: (
+    rho * sin(-alpha), rho * cos(-alpha))
+diff = lambda x, y: (x[0] - y[0], x[1] - y[1])
+fmt = lambda x: '%f %f' % x
+get_radius = lambda r: fmt(tuple([r] * 2))
 
 
 class Pie(Graph):
@@ -43,11 +48,6 @@ class Pie(Graph):
                           r=r,
                           class_='slice reactive tooltip-trigger')
         else:
-            project = lambda rho, alpha: (
-                rho * sin(-alpha), rho * cos(-alpha))
-            diff = lambda x, y: (x[0] - y[0], x[1] - y[1])
-            fmt = lambda x: '%f %f' % x
-            get_radius = lambda r: fmt(tuple([r] * 2))
             absolute_project = lambda rho, theta: fmt(
                 diff(center, project(rho, theta)))
             to1 = absolute_project(r, start_angle)

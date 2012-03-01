@@ -116,9 +116,7 @@
   };
 
   untooltip = function() {
-    return tooltip_timeout = setTimeout((function() {
-      return __('tooltip').setAttribute('transform', 'translate(-100000, -100000)');
-    }), 1000);
+    return 0;
   };
 
   this.svg_load = function() {

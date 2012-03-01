@@ -162,7 +162,7 @@ text.no_data {
 
 #tooltip rect {
   fill-opacity: 0.8;
-  fill: {{ style.background }};
+  fill: {{ style.plot_background }};
   stroke: {{ style.foreground_light }};
 }
 
