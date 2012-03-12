@@ -63,12 +63,12 @@ class Bar(Graph):
             if height < 0:
                 y = y + height
                 height = -height
-
+            y -= shift
             bar = self.svg.node(bars, class_='bar')
             self.svg.transposable_node(
                 bar, 'rect',
                 x=x,
-                y=y - shift,
+                y=y,
                 rx=self.rounded_bars * 1,
                 ry=self.rounded_bars * 1,
                 width=bar_inner_width,
@@ -93,7 +93,7 @@ class Bar(Graph):
                     serie_node['text_overlay'], 'text',
                     class_='centered',
                     x=x + bar_inner_width / 2,
-                    y=y - shift
+                    y=y
                 ).text = val if self.print_zeroes or val != '0' else ''
         return stack_vals
 

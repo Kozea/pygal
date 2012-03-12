@@ -106,7 +106,7 @@ tooltip = (elt) ->
 
     [current_x, current_y] = (parseInt(s) for s in _tooltip.getAttribute('transform').replace('translate(', '').replace(')', '').split ' ')
     return if current_x == x and current_y == y
-    step = 20
+    step = 12
     x_step = (x - current_x) / step
     y_step = (y - current_y) / step
     anim_x = current_x

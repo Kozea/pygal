@@ -185,7 +185,7 @@
       return _results;
     })(), current_x = _ref[0], current_y = _ref[1];
     if (current_x === x && current_y === y) return;
-    step = 20;
+    step = 12;
     x_step = (x - current_x) / step;
     y_step = (y - current_y) / step;
     anim_x = current_x;
