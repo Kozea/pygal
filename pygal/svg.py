@@ -59,8 +59,10 @@ class Svg(object):
         script = self.node(self.root, 'script', type='text/javascript')
         with open(js) as f:
             templ = template(
-                 f.read(),
-                font_sizes=self.graph.font_sizes(False))
+                f.read(),
+                font_sizes=self.graph.font_sizes(False),
+                animation_steps=self.graph.animation_steps
+            )
             script.text = templ.decode('utf-8')
 
     def node(self, parent=None, tag='g', attrib=None, **extras):

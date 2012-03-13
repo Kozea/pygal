@@ -117,7 +117,7 @@ def create_app():
         config = Config()
         config.width = width
         config.height = height
-        config.fill = True
+        config.fill = bool(random.randrange(0, 2))
         config.human_readable = True
         config.style = styles[style]
         config.x_labels = [random_label() for i in range(data)]
@@ -148,7 +148,7 @@ def create_app():
         series = b64encode(pickle.dumps(_random_series(type, data, order)))
         labels = [random_label() for i in range(data)]
         svgs = []
-        config.show_legend = bool(random.randrange(0, 1))
+        config.show_legend = bool(random.randrange(0, 2))
         for angle in range(0, 91, 5):
             config.title = "%d rotation" % angle
             config.x_labels = labels

@@ -16,16 +16,18 @@
 #
 # You should have received a copy of the GNU Lesser General Public License
 # along with pygal. If not, see <http://www.gnu.org/licenses/>.
-__version__ = '0.9.12'
-from collections import namedtuple
+import os
+from pygal import Line
 
-from pygal.graph.bar import Bar
-from pygal.graph.horizontal import HorizontalBar
-from pygal.graph.stackedbar import StackedBar
-from pygal.graph.horizontal import HorizontalStackedBar
-from pygal.graph.line import Line
-from pygal.graph.stackedline import StackedLine
-from pygal.graph.xy import XY
-from pygal.graph.pie import Pie
-from pygal.graph.radar import Radar
-from pygal.config import Config
+
+def test_render_to_file():
+    file_name = '/tmp/test_graph.svg'
+    if os.path.exists(file_name):
+        os.remove(file_name)
+
+    line = Line()
+    line.add('Serie 1', [1])
+    line.render_to_file(file_name)
+    with open(file_name) as f:
+        assert 'pygal' in f.read()
+    os.remove(file_name)

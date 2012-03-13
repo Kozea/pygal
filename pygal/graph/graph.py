@@ -22,7 +22,7 @@ class Graph(BaseGraph):
 
     def _make_graph(self):
         self.graph_node = self.svg.node(
-            class_='graph %s' % self.__class__.__name__)
+            class_='graph %s-graph' % self.__class__.__name__.lower())
         self.svg.node(self.graph_node, 'rect',
                   class_='background',
                   x=0, y=0,
@@ -51,19 +51,6 @@ class Graph(BaseGraph):
                 self.margin.left, self.margin.top))
         self.tooltip_node = self.svg.node(tooltip_overlay, id="tooltip",
                                           transform='translate(0 0)')
-        # self.svg.node(
-        #     self.tooltip_node, 'animateTransform',
-        #     id="tooltip-slide",
-        #     attributeName='transform',
-        #     attributeType='XML',
-        #     type='translate',
-        #     calcMode='spline',
-        #     dur='100ms',
-        #     end='indefinite',
-        #     begin='indefinite',
-        #     from_="0 0",
-        #     to="100 100",
-        #     fill='freeze')
 
         self.svg.node(self.tooltip_node, 'rect',
                       id="tooltip-box",

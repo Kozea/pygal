@@ -39,6 +39,8 @@ class BaseGraph(object):
     def _pos(self, min_, max_, scale, min_scale=4, max_scale=20):
         if min_ == 0 and max_ == 0:
             return [0]
+        if max_ - min_ == 0:
+            return [min_]
         if self.logarithmic:
             return self._pos_logarithmic(min_, max_)
         order = round(log10(max(abs(min_), abs(max_)))) - 1
@@ -143,3 +145,7 @@ class BaseGraph(object):
     def render_response(self):
         from flask import Response
         return Response(self.render(), mimetype='image/svg+xml')
+
+    def render_to_file(self, filename):
+        with open(filename, 'w') as f:
+            f.write(self.render())

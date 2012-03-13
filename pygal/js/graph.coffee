@@ -3,6 +3,7 @@ __ = (x) -> document.getElementById(x)
 padding = 5
 tooltip_timeout = 0
 tooltip_font_size = parseInt("{{ font_sizes.tooltip }}")
+anim_steps = parseInt("{{ animation_steps }}")
 
 class Queue
     constructor: (@delay) ->
@@ -32,7 +33,7 @@ class Queue
             @queue = []
             @running = false
 
-tooltip_anim_Q = new Queue 1
+tooltip_anim_Q = new Queue 100
 
 has_class = (e, class_name) ->
     return if not e
@@ -106,19 +107,19 @@ tooltip = (elt) ->
 
     [current_x, current_y] = (parseInt(s) for s in _tooltip.getAttribute('transform').replace('translate(', '').replace(')', '').split ' ')
     return if current_x == x and current_y == y
-    step = 12
-    x_step = (x - current_x) / step
-    y_step = (y - current_y) / step
-    anim_x = current_x
-    anim_y = current_y
-    for i in [0..step]
-        anim_x += x_step
-        anim_y += y_step
-        tooltip_anim_Q.add ((_x, _y) ->
-            _tooltip.setAttribute('transform', "translate(#{_x} #{_y})")), anim_x, anim_y
-    tooltip_anim_Q.add ((_x, _y) ->
-        _tooltip.setAttribute('transform', "translate(#{_x} #{_y})")), x, y
-
+    if anim_steps
+        x_step = (x - current_x) / (anim_steps + 1)
+        y_step = (y - current_y) / (anim_steps + 1)
+        anim_x = current_x
+        anim_y = current_y
+        for i in [0..anim_steps]
+            anim_x += x_step
+            anim_y += y_step
+            tooltip_anim_Q.add ((_x, _y) ->
+                _tooltip.setAttribute('transform', "translate(#{_x} #{_y})")), anim_x, anim_y
+        tooltip_anim_Q.add -> _tooltip.setAttribute('transform', "translate(#{x} #{y})")
+    else
+        _tooltip.setAttribute('transform', "translate(#{x} #{y})")
 
 untooltip = ->
     tooltip_timeout = setTimeout (->

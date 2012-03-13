@@ -88,6 +88,8 @@ class Config(object):
     print_values = True
     # Print zeroes when graph is in non interactive mode
     print_zeroes = False
+    # Animate tooltip steps (0 disable animation)
+    animation_steps = 0
 
     def __init__(self, **kwargs):
         """Can be instanciated with config kwargs"""
