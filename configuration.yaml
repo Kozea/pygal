@@ -1,0 +1,30 @@
+name: pygal
+description: A python svg graph plotting library
+license: LGPLv3
+public: true
+url: http://www.pygal.org/
+
+menu:
+  - Contribute:
+      link: /contribute/
+  - Download:
+      link: /download/
+  
+project (git):
+  url: git://github.com/Kozea/pygal.git
+  path: pygal
+
+vcs (git):
+  url: git://github.com/Kozea/pygal.git
+  path: /var/db/git/pygal.git
+
+code browser (github):
+  project name: Kozea/pygal
+
+bug tracker (redmine):
+  base url: http://redmine.kozea.fr/
+  project name: pygal
+
+continuous integration (jenkins):
+  base url: http://jenkins.kozea.org/
+  project name: pygal
