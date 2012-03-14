@@ -5,6 +5,8 @@ public: true
 url: http://www.pygal.org/
 
 menu:
+  - Documentation:
+      link: /documentation/
   - Contribute:
       link: /contribute/
   - Download:

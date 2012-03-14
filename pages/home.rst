@@ -27,6 +27,9 @@ And a lot of options to customize the charts.
 Technical Description
 =====================
 
+As of now pygal is known to work for python 2.7
+
+
 Needed dependencies
 -------------------
 
