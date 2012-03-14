@@ -13,10 +13,10 @@ install, just type as superuser::
 Git Repository
 ==============
 
-If you want the development version of CairoSVG, take a look at the
+If you want the development version of pygal, take a look at the
 :codelink:`git repository on GitHub`, or clone it thanks to::
 
-  git clone git://github.com/Kozea/CairoSVG.git
+  git clone git://github.com/Kozea/pygal.git
 
 You can also download `the pygal package of the git repository
 <https://github.com/Kozea/pygal/tarball/master>`_.
