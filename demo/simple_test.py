@@ -30,8 +30,7 @@ bar.add('test2', map(abs, rng))
 bar.x_labels = map(str, rng)
 bar.title = "Bar test"
 bar.fill = True
-with open('out-bar.svg', 'w') as f:
-    f.write(bar.render())
+bar.render_to_file('out-bar.svg')
 
 hbar = HorizontalBar()
 rng = [18, 9, 7, 3, 1, 0, -5]
@@ -41,9 +40,7 @@ hbar.add('test2', rng2)
 hbar.x_labels = map(
     lambda x: '%s / %s' % x, zip(map(str, rng), map(str, rng2)))
 hbar.title = "Horizontal Bar test"
-with open('out-horizontalbar.svg', 'w') as f:
-    f.write(hbar.render())
-
+hbar.render_to_file('out-horizontalbar.svg')
 
 rng = [3, -32, 39, 12]
 rng2 = [24, -8, 18, 12]
@@ -61,16 +58,14 @@ stackedbar = StackedBar(config)
 stackedbar.add('@@@@@@@', rng)
 stackedbar.add('++++++', rng2)
 stackedbar.add('--->', rng3)
-with open('out-stackedbar.svg', 'w') as f:
-    f.write(stackedbar.render())
+stackedbar.render_to_file('out-stackedbar.svg')
 
 config.title = "Horizontal Stacked Bar test"
 hstackedbar = HorizontalStackedBar(config)
 hstackedbar.add('@@@@@@@', rng)
 hstackedbar.add('++++++', rng2)
 hstackedbar.add('--->', rng3)
-with open('out-horizontalstackedbar.svg', 'w') as f:
-    f.write(hstackedbar.render())
+hstackedbar.render_to_file('out-horizontalstackedbar.svg')
 
 line = Line(Config(y_scale=.0005, style=NeonStyle,
                    zero=1, interpolate='cubic',
@@ -86,8 +81,7 @@ line.add('10^x', map(lambda x: 10 ** (x / 333.), rng))
 line.add('10^10^x', map(lambda x: ((x / 333.) ** (x / 333.)), rng))
 line.x_labels = map(str, rng)
 line.title = "Line test"
-with open('out-line.svg', 'w') as f:
-    f.write(line.render())
+line.render_to_file('out-line.svg')
 
 stackedline = StackedLine(Config(y_scale=.0005, fill=True))
 stackedline.add('test1', [1, 3, 2, 18, 2, 13, 8])
@@ -95,8 +89,7 @@ stackedline.add('test2', [4, 1, 10,  1, 3, 12, 3])
 stackedline.add('test3', [9, 3, 2,  10, 8, 2, 3])
 stackedline.x_labels = ['a', 'b', 'c', 'd', 'e', 'f', 'g']
 stackedline.title = "Stackedline test"
-with open('out-stackedline.svg', 'w') as f:
-    f.write(stackedline.render())
+stackedline.render_to_file('out-stackedline.svg')
 
 xy = XY(Config(x_scale=1, fill=True, style=NeonStyle, interpolate='cubic'))
 xy.add('test1', [(1981, 1), (2004, 2), (2003, 10), (2012, 8), (1999, -4)])
@@ -104,8 +97,7 @@ xy.add('test2', [(1988, -1), (1986, 12), (2007, 7), (2010, 4), (1999, 2)])
 # xy.add('test2', [(1980, 0), (1985, 2), (1995, -2), (2005, 4), (2020, -4)])
                  # (2005, 6), (2010, -6), (2015, 3), (2020, -3), (2025, 0)])
 xy.title = "XY test"
-with open('out-xy.svg', 'w') as f:
-    f.write(xy.render())
+xy.render_to_file('out-xy.svg')
 
 pie = Pie(Config(style=NeonStyle))
 pie.add('test', [11, 8, 21])
@@ -114,8 +106,7 @@ pie.add('test3', [24, 10, 32])
 pie.add('test4', [20, 18, 9])
 pie.add('test5', [17, 5, 10])
 pie.title = "Pie test"
-with open('out-pie.svg', 'w') as f:
-    f.write(pie.render())
+pie.render_to_file('out-pie.svg')
 
 config = Config()
 config.fill = True
@@ -128,5 +119,4 @@ radar.add('test', [1, 4, 1, 5, 7, 2, 5])
 radar.add('test2', [10, 2, 7, 5, 1, 9, 4])
 
 radar.title = "Radar test"
-with open('out-radar.svg', 'w') as f:
-    f.write(radar.render())
+radar.render_to_file('out-radar.svg')
