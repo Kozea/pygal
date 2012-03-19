@@ -70,27 +70,30 @@ nav ul li {
   - HEADER - 
   ----------
 */
-header {
+body > header {
   background: url(img/ribbon.png) no-repeat center 145px;
   height: 250px;
 }
 
-header h1 {
+body > header h1 {
   margin: 0 0 0 5%;
 }
 
-header h1 a {
+body > header h1 a {
   background: url(img/logo.png) no-repeat top left;
   color: transparent;
   display: block;
+  font-size: 0;
   height: 158px;
   width: 256px;
   transition: background 0.5s linear;
 }
 
-header h1 a:hover, 
-header h1 a:focus {
+body > header h1 a:hover, 
+body > header h1 a:focus {
   background: url(img/logo-hover.png) no-repeat top left;
+  color: transparent;
+  font-size: 0;
   transition: background 0.5s linear;
 }
 
@@ -149,7 +152,7 @@ body > section {
   border-radius: 8px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.8);
   color: #c3c3c3;
-  margin: 20px 10%;
+  margin: 20px 10% 40px;
   padding: 10px 2%;
   width: 76%;
 }
@@ -171,7 +174,7 @@ section article h2 {
   padding: 0.2em 10px 0.1em;
 }
 
-sectoin article > section {
+section article > section {
   background: url(img/article.png) repeat-x bottom left;
   margin: 0 15px;
   padding: 0.5em 0 1.5em;
@@ -185,7 +188,7 @@ section article > section:last-child {
 
 section article section h3 {
   background: url(img/article-h3.png) repeat-y top left;
-  margin: 20px -30px 8px;
+  margin: 20px -15px 8px;
   padding: 0.1em 15px;
 }
 
