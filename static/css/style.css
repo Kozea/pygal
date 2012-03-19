@@ -1,8 +1,221 @@
+/*
+  -------------
+  - FONT FACE -
+  -------------
+*/
+@font-face {
+  font-family: "philisopher";
+  src: url(Philosopher.otf);
+}
+
+
+/*
+  ----------
+  - COMMON -
+  ----------
+*/
+html {
+  background: #fff url(img/back.png) repeat-x top left;
+  border-top: 5px solid #d7393b;
+}
+
+
 body {
-  color: white;
-  background-color: rgba(25, 0, 23, 0.9);
+  font-family: "philisopher";
+  font-size: 0.9em;
+  margin: 0;
+}
+
+p {
+  margin: 0; 
+  padding: 3px 0;
+}
+
+h2 {
+  font-size: 1.7em;
+}
+
+
+h3 {
+  font-size: 1.5em;
+}
+
+h4 {
+  font-size: 1.3em; 
+  margin: 0.8em 0 0.2em;
 }
 
 a {
-  color: rgba(255, 0, 232, 0.8);
+  color: #ee6768;
+}
+
+a:hover, a:focus {
+  color: #f69091;
+}
+
+
+footer ul, 
+nav ul {
+  display: inline; 
+}
+
+footer ul li, 
+nav ul li {
+  display: inline-block;
+}
+
+
+/* 
+  ----------
+  - HEADER - 
+  ----------
+*/
+header {
+  background: url(img/ribbon.png) no-repeat center 145px;
+  height: 250px;
+}
+
+header h1 {
+  margin: 0 0 0 5%;
+}
+
+header h1 a {
+  background: url(img/logo.png) no-repeat top left;
+  color: transparent;
+  display: block;
+  height: 158px;
+  width: 256px;
+  transition: background 0.5s linear;
+}
+
+header h1 a:hover, 
+header h1 a:focus {
+  background: url(img/logo-hover.png) no-repeat top left;
+  transition: background 0.5s linear;
+}
+
+
+
+/* 
+  -------
+  - NAV - 
+  -------
+*/
+nav {
+  font-size: 1.1em;
+  position: absolute;
+  top: 20px;
+  right: 5%;
+}
+
+nav ul {
+  display: inline;
+  list-style: none;
+}
+ 
+nav ul li {
+  background: #000;
+  border: 1px solid #2a272a;
+  border-radius: 5px;
+  margin: 0 5px;
+  padding: 5px;
+}
+
+nav ul li a {
+  background: linear-gradient(#e95355, #d63739);
+  border-bottom: 1px solid #e95355;
+  border-radius: 2px;
+  color: #1a171a;
+  display: block;
+  padding: 2px 8px;
+  text-shadow: 1px 1px 1px #f29899;
+} 
+
+nav ul li a:hover, 
+nav ul li a:focus {
+  background: #f58283;
+  color: #b42829;
+  text-shadow: 1px 1px 1px #facbcc;
+}
+
+
+/* 
+  -----------
+  - SECTION - 
+  -----------
+*/
+body > section {
+  background: #151315;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.8);
+  color: #c3c3c3;
+  margin: 20px 10%;
+  padding: 10px 2%;
+  width: 76%;
+}
+
+section ul li {
+  list-style: disc;
+}
+
+section article {
+  padding: 0 15px;
+}
+
+section article h2 {
+  background: linear-gradient(#e95355, #d63739);
+  border-bottom: 1px solid #e95355;
+  border-radius: 4px; 
+  color: #151315;
+  margin: 20px -15px 0px;
+  padding: 0.2em 10px 0.1em;
+}
+
+sectoin article > section {
+  background: url(img/article.png) repeat-x bottom left;
+  margin: 0 15px;
+  padding: 0.5em 0 1.5em;
+}
+
+
+section article > section:last-child {
+  background: none;
+}
+
+
+section article section h3 {
+  background: url(img/article-h3.png) repeat-y top left;
+  margin: 20px -30px 8px;
+  padding: 0.1em 15px;
+}
+
+section article section section h4 {
+  color: #da3d3f;
+  text-decoration: underline;
+}
+
+
+
+/* 
+  ----------
+  - FOOTER - 
+  ----------
+*/
+footer {
+  background: #151315;
+  border-top: 1px solid #d63739;
+  font-size: 0.85em;
+  padding: 0.8em 0;
+  text-align: center;
+}
+
+footer ul li a {
+  color: #6c6c6c;
+  margin: 0 5px;
+}
+
+
+footer ul li a:hover, 
+footer ul li a:focus {
+  color: #8b8b8b;
 }
