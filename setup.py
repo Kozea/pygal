@@ -22,7 +22,7 @@ import pygal
 
 setup(
     name="pygal",
-    version=pygal.__version__,
+    version=pygal.__version__.replace('-dev', ''),
     description="A python svg graph plotting library",
     author="Kozea",
     author_email="florian.mounier@kozea.fr",

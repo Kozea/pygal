@@ -29,9 +29,6 @@ class Svg(object):
         self.graph = graph
         self.root = etree.Element(
             "{%s}svg" % self.ns,
-            attrib={
-                'viewBox': '0 0 %d %d' % (self.graph.width, self.graph.height)
-            },
             nsmap={
                 None: self.ns,
                 'xlink': 'http://www.w3.org/1999/xlink',
@@ -40,10 +37,6 @@ class Svg(object):
         self.root.append(etree.Comment(u'Generated with pygal ©Kozea 2012'))
         self.root.append(etree.Comment(u'http://github.com/Kozea/pygal'))
         self.defs = self.node(tag='defs')
-        self.add_style(self.graph.base_css or os.path.join(
-            os.path.dirname(__file__), 'css', 'graph.css'))
-        self.add_script(self.graph.base_js or os.path.join(
-            os.path.dirname(__file__), 'js', 'graph.js'))
 
     def add_style(self, css):
         style = self.node(self.defs, 'style', type='text/css')
@@ -99,12 +92,25 @@ class Svg(object):
                   d=root % (origin, line), **kwargs)
 
     def render(self, no_data=False):
+        self.add_style(self.graph.base_css or os.path.join(
+            os.path.dirname(__file__), 'css', 'graph.css'))
+        self.add_script(self.graph.base_js or os.path.join(
+            os.path.dirname(__file__), 'js', 'graph.js'))
+        self.root.set(
+            'viewBox', '0 0 %d %d' % (self.graph.width, self.graph.height))
+        if self.graph.explicit_size:
+            self.root.set('width', str(self.graph.width))
+            self.root.set('height', str(self.graph.height))
         if no_data:
             no_data = self.node(self.root, 'text',
             x=self.graph.width / 2,
             y=self.graph.height / 2,
             class_='no_data')
             no_data.text = self.graph.no_data_text
-        return etree.tostring(
+        svg = etree.tostring(
             self.root, pretty_print=True,
-            xml_declaration=True, encoding='utf-8')
+            xml_declaration=not self.graph.disable_xml_declaration,
+            encoding='utf-8')
+        if self.graph.disable_xml_declaration:
+            svg = svg.decode('utf-8')
+        return svg

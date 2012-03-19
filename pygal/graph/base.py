@@ -133,9 +133,11 @@ class BaseGraph(object):
 
     def validate(self):
         if self.x_labels:
-            assert len(self.series[0].values) == len(self.x_labels)
+            assert len(self.series[0].values) == len(self.x_labels), (
+                'Labels and series must have the same length')
         for serie in self.series:
-            assert len(self.series[0].values) == len(serie.values)
+            assert len(self.series[0].values) == len(serie.values), (
+                'All series must have the same length')
 
     def _in_browser(self):
         from lxml.html import open_in_browser

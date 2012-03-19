@@ -90,6 +90,11 @@ class Config(object):
     print_zeroes = False
     # Animate tooltip steps (0 disable animation)
     animation_steps = 0
+    # Don't write xml declaration and return unicode instead of string
+    # (usefull for writing output in html)
+    disable_xml_declaration = False
+    # Write width and height attributes
+    explicit_size = False
 
     def __init__(self, **kwargs):
         """Can be instanciated with config kwargs"""
