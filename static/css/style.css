@@ -23,7 +23,12 @@ html {
 body {
   font-family: "philisopher";
   font-size: 0.9em;
-  margin: 0;
+  margin: -50px 0 0;
+  min-height: 100%;
+  padding: 0 0 50px;
+  display: block;
+  width: 100%;
+  position: absolute;
 }
 
 p {
@@ -73,6 +78,7 @@ nav ul li {
 body > header {
   background: url(img/ribbon.png) no-repeat center 145px;
   height: 250px;
+  margin: 50px 0 0;
 }
 
 body > header h1 {
@@ -107,7 +113,7 @@ body > header h1 a:focus {
 nav {
   font-size: 1.1em;
   position: absolute;
-  top: 20px;
+  top: 70px;
   right: 5%;
 }
 
@@ -152,7 +158,7 @@ body > section {
   border-radius: 8px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.8);
   color: #c3c3c3;
-  margin: 20px 10% 40px;
+  margin: 30px 10% 40px;
   padding: 10px 2%;
   width: 76%;
 }
@@ -165,7 +171,7 @@ section article {
   padding: 0 15px;
 }
 
-section article h2 {
+section h2 {
   background: linear-gradient(#e95355, #d63739);
   border-bottom: 1px solid #e95355;
   border-radius: 4px; 
@@ -174,27 +180,52 @@ section article h2 {
   padding: 0.2em 10px 0.1em;
 }
 
-section article > section {
+section > section, 
+section#id1 > section {
   background: url(img/article.png) repeat-x bottom left;
   margin: 0 15px;
   padding: 0.5em 0 1.5em;
 }
 
 
-section article > section:last-child {
+section > section:last-child,
+section#id1 > section:last-child {
   background: none;
 }
 
-
-section article section h3 {
+section h3 {
   background: url(img/article-h3.png) repeat-y top left;
   margin: 20px -15px 8px;
   padding: 0.1em 15px;
 }
 
-section article section section h4 {
+section h3 a {
+  color: #c3c3c3;
+}
+
+section h4 {
   color: #da3d3f;
   text-decoration: underline;
+}
+
+section aside > ul {
+  background: #000;
+  border-radius: 5px;
+  display: inline-block;
+  padding: 15px 30px;
+}
+
+section aside ul li {
+  font-size: 1.1em;
+  padding: 0.2em 0;
+}
+
+section aside ul li ul {
+  margin-bottom: 5px;
+}
+
+section figure {
+  text-align: center;
 }
 
 
@@ -207,9 +238,18 @@ section article section section h4 {
 footer {
   background: #151315;
   border-top: 1px solid #d63739;
+  bottom: 0;
   font-size: 0.85em;
-  padding: 0.8em 0;
+  height: 30px;
   text-align: center;
+  position: absolute;  
+  padding: 20px 0 0;
+  display: block;
+  width: 100%;
+}
+
+footer ul {
+  padding: 25px 0 0;
 }
 
 footer ul li a {
