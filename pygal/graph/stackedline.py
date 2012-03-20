@@ -18,6 +18,8 @@
 # along with pygal. If not, see <http://www.gnu.org/licenses/>.
 from pygal.graph.line import Line
 from pygal.interpolate import interpolation
+from math import isnan
+from itertools import izip_longest
 
 
 class StackedLine(Line):
@@ -36,7 +38,10 @@ class StackedLine(Line):
         ] if self._len != 1 else [.5]  # Center if only one value
         accumulation = [0] * self._len
         for serie in self.series:
-            accumulation = map(sum, zip(accumulation, serie.values))
+            accumulation = map(sum, izip_longest(
+                accumulation, [val
+                               if val != None else 0
+                               for val in serie.values], fillvalue=0))
             serie.points = [
                 (self._x_pos[i], v)
                 for i, v in enumerate(accumulation)]
@@ -44,6 +49,8 @@ class StackedLine(Line):
                 interpolate = interpolation(
                     self._x_pos, accumulation, kind=self.interpolate)
                 p = float(self.interpolation_precision)
-                serie.interpolated = [(x / p, float(interpolate(x / p)))
-                                      for x in range(int(p + 1))]
+                serie.interpolated = [
+                    (x / p, float(interpolate(x / p)))
+                    for x in range(int(p + 1))
+                    if not isnan(float(interpolate(x / p)))]
         return super(StackedLine, self)._compute()

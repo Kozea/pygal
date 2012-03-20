@@ -27,13 +27,18 @@ except:
 def interpolation(x, y, kind):
     assert scipy != None, 'You must have scipy installed to use interpolation'
     order = None
+    if len(y) < len(x):
+        x = x[:len(y)]
+
+    x, y = zip(*filter(lambda t: None not in t, zip(x, y)))
+
     if len(x) < 2:
         return ident
     if isinstance(kind, int):
         order = kind
-    elif kind in ['zero', 'slinear', 'quadratic', 'cubic']:
+    elif kind in ['zero', 'slinear', 'quadratic', 'cubic', 'univariate']:
         order = {'nearest': 0, 'zero': 0, 'slinear': 1,
-                 'quadratic': 2, 'cubic': 3}[kind]
+                 'quadratic': 2, 'cubic': 3, 'univariate': 3}[kind]
     if order and len(x) <= order:
         kind = len(x) - 1
     if kind == 'krogh':
@@ -42,4 +47,4 @@ def interpolation(x, y, kind):
         return interpolate.BarycentricInterpolator(x, y)
     elif kind == 'univariate':
         return interpolate.InterpolatedUnivariateSpline(x, y)
-    return interpolate.interp1d(x, y, kind=kind)
+    return interpolate.interp1d(x, y, kind=kind, bounds_error=False)

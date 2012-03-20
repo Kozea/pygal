@@ -19,6 +19,7 @@
 from pygal.graph.graph import Graph
 from pygal.util import cached_property
 from pygal.interpolate import interpolation
+from math import isnan
 
 
 class Line(Graph):
@@ -30,11 +31,15 @@ class Line(Graph):
     @cached_property
     def _values(self):
         if self.interpolate:
-            return [val[1] for serie in self.series
-                    for val in serie.interpolated]
+            return [val[1]
+                    for serie in self.series
+                    for val in serie.interpolated
+                    if val[1] != None]
         else:
-            return  [val[1] for serie in self.series
-                    for val in serie.points]
+            return  [val[1]
+                     for serie in self.series
+                     for val in serie.points
+                    if val[1] != None]
 
     def _fill(self, values):
         zero = self.view.y(min(max(self.zero, self._box.ymin), self._box.ymax))
@@ -46,6 +51,8 @@ class Line(Graph):
         view_values = map(self.view, serie.points)
         if self.show_dots:
             for i, (x, y) in enumerate(view_values):
+                if None in (x, y):
+                    continue
                 dots = self.svg.node(serie_node['overlay'], class_="dots")
                 val = self._get_value(serie.points, i)
                 self.svg.node(dots, 'circle', cx=x, cy=y, r=2.5,
@@ -81,8 +88,10 @@ class Line(Graph):
                     interpolate = interpolation(
                         self._x_pos, serie.values, kind=self.interpolate)
                     p = float(self.interpolation_precision)
-                    serie.interpolated = [(x / p, float(interpolate(x / p)))
-                                          for x in range(int(p + 1))]
+                    serie.interpolated = [
+                        (x / p, float(interpolate(x / p)))
+                        for x in range(int(p + 1))
+                        if not isnan(float(interpolate(x / p)))]
         if self.include_x_axis:
             self._box.ymin = min(min(self._values), 0)
             self._box.ymax = max(max(self._values), 0)

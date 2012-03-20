@@ -97,6 +97,7 @@ class Radar(Line):
         for serie in self.series:
             vals = list(serie.values)
             vals.append(vals[0])
+            vals = [val if val != None else 0 for val in vals]
             serie.points = [
                 (v, self._x_pos[i])
                 for i, v in enumerate(vals)]

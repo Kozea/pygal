@@ -86,8 +86,13 @@ class Svg(object):
 
     def line(self, node, coords, close=False, **kwargs):
         root = 'M%s L%s Z' if close else 'M%s L%s'
-        origin = self.format(coords[0])
-        line = ' '.join(map(self.format, coords[1:]))
+        origin_index = 0
+        while None in coords[origin_index]:
+            origin_index += 1
+        origin = self.format(coords[origin_index])
+        line = ' '.join([self.format(c)
+                         for c in coords[origin_index + 1:]
+                         if None not in c])
         self.node(node, 'path',
                   d=root % (origin, line), **kwargs)
 

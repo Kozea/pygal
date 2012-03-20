@@ -24,9 +24,11 @@ class StackedBar(Bar):
 
     def _compute(self):
         transposed = zip(*[serie.values for serie in self.series])
-        positive_vals = [sum([val if val > 0 else 0 for val in vals])
+        positive_vals = [sum([val
+                            if val != None and val > 0 else 0 for val in vals])
                            for vals in transposed]
-        negative_vals = [sum([val if val < 0 else 0 for val in vals])
+        negative_vals = [sum([val
+                            if val != None and val < 0 else 0 for val in vals])
                            for vals in transposed]
 
         self._box.ymin, self._box.ymax = (

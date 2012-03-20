@@ -18,11 +18,10 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with pygal. If not, see <http://www.gnu.org/licenses/>.
 from setuptools import setup, find_packages
-import pygal
 
 setup(
     name="pygal",
-    version=pygal.__version__.replace('-dev', ''),
+    version='0.9.15',
     description="A python svg graph plotting library",
     author="Kozea",
     author_email="florian.mounier@kozea.fr",

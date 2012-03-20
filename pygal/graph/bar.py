@@ -31,11 +31,13 @@ class Bar(Graph):
             """Project range"""
             t, T = rng
             fun = swap if self._horizontal else ident
-            return (self.view(fun(t)), self.view(fun(T)))
+            return self.view(fun(t)), self.view(fun(T))
 
         bars = self.svg.node(serie_node['plot'], class_="bars")
         view_values = map(view, values)
         for i, ((x, y), (X, Y)) in enumerate(view_values):
+            if None in (x, y):
+                continue
             # x and y are left range coords and X, Y right ones
             val = self.format(values[i][1][1])
             if self._horizontal:

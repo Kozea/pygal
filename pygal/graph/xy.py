@@ -27,12 +27,18 @@ class XY(Line):
         return str(values[i])
 
     def _compute(self):
-        xvals = [val[0] for serie in self.series for val in serie.values]
-        yvals = [val[1] for serie in self.series for val in serie.values]
+        xvals = [val[0]
+                 for serie in self.series
+                 for val in serie.values
+                 if val[0] != None]
+        yvals = [val[1]
+                 for serie in self.series
+                 for val in serie.values
+                 if val[1] != None]
         xmin = min(xvals)
 
         for serie in self.series:
-            serie.points = sorted(serie.values, key=lambda x: x[0])
+            serie.points = serie.values
             if self.interpolate:
                 vals = zip(*serie.points)
                 interpolate = interpolation(

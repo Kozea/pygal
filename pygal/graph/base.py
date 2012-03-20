@@ -49,12 +49,13 @@ class BaseGraph(object):
         step = float(10 ** order)
         while (max_ - min_) / step > max_scale:
             step *= 2.
-        positions = set()
+        positions = []
         position = round_to_scale(min_, step)
         while position < (max_ + step):
             rounded = round_to_scale(position, scale)
             if min_ <= rounded <= max_:
-                positions.add(rounded)
+                if rounded not in positions:
+                    positions.append(rounded)
             position += step
         if len(positions) < 2:
             return [min_, max_]
@@ -104,11 +105,14 @@ class BaseGraph(object):
 
     @cached_property
     def _values(self):
-        return [val for serie in self.series for val in serie.values]
+        return [val
+                for serie in self.series
+                for val in serie.values
+                if val != None]
 
     @cached_property
     def _len(self):
-        return len(self.series[0].values)
+        return max([len(serie.values) for serie in self.series])
 
     def _draw(self):
         self._compute()
@@ -127,17 +131,8 @@ class BaseGraph(object):
                 serie.values = [serie.values]
         if sum(map(len, map(lambda s: s.values, self.series))) == 0:
             return self.svg.render(no_data=True)
-        self.validate()
         self._draw()
         return self.svg.render()
-
-    def validate(self):
-        if self.x_labels:
-            assert len(self.series[0].values) == len(self.x_labels), (
-                'Labels and series must have the same length')
-        for serie in self.series:
-            assert len(self.series[0].values) == len(serie.values), (
-                'All series must have the same length')
 
     def _in_browser(self):
         from lxml.html import open_in_browser

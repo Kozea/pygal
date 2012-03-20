@@ -76,9 +76,13 @@ class View(object):
         self.box.fix()
 
     def x(self, x):
+        if x == None:
+            return None
         return self.width * (x - self.box.xmin) / float(self.box.width)
 
     def y(self, y):
+        if y == None:
+            return None
         return (self.height - self.height *
                 (y - self.box.ymin) / float(self.box.height))
 
@@ -89,6 +93,8 @@ class View(object):
 
 class PolarView(View):
     def __call__(self, rhotheta):
+        if None in rhotheta:
+            return None, None
         rho, theta = rhotheta
         rho = max(rho, 0)
         return super(PolarView, self).__call__(
@@ -107,6 +113,8 @@ class LogView(View):
         self.box.fix()
 
     def y(self, y):
+        if y == None:
+            return None
         return (self.height - self.height *
                 (log10(y) - self.log10_ymin)
                 / float(self.log10_ymax - self.log10_ymin))
