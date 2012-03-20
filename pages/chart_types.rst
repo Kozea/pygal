@@ -128,3 +128,58 @@ Disabling stroke make a good scatter plot
   xy_chart.add('A', [(0, 0), (.1, .2), (.3, .1), (.5, 1), (.8, .6), (1, 1.08), (1.3, 1.1), (2, 3.23), (2.43, 2)])
   xy_chart.add('B', [(.1, .15), (.12, .23), (.4, .3), (.6, .4), (.21, .21), (.5, .3), (.6, .8), (.7, .8)])
   xy_chart.add('C', [(.05, .01), (.13, .02), (1.5, 1.7), (1.52, 1.6), (1.8, 1.63), (1.5, 1.82), (1.7, 1.23), (2.1, 2.23), (2.3, 1.98)])
+
+
+Pies
+----
+
+Basic
+^^^^^
+
+Simple pie:
+
+
+.. pygal-code::
+
+  pie_chart = pygal.Pie()
+  pie_chart.title = 'Browser usage in February 2012 (in %)'
+  pie_chart.add('IE', 19.5)
+  pie_chart.add('Firefox', 36.6)
+  pie_chart.add('Chrome', 36.3)
+  pie_chart.add('Safari', 4.5)
+  pie_chart.add('Opera', 2.3)
+
+
+Multi-series pie
+^^^^^^^^^^^^^^^^
+
+Same pie but divided in sub category:
+
+.. pygal-code::
+
+  pie_chart = pygal.Pie()
+  pie_chart.title = 'Browser usage by version in February 2012 (in %)'
+  pie_chart.add('IE', [5.7, 10.2, 2.6, 1])
+  pie_chart.add('Firefox', [.6, 16.8, 7.4, 2.2, 1.2, 1, 1, 1.1, 4.3, 1])
+  pie_chart.add('Chrome', [.3, .9, 17.1, 15.3, .6, .5, 1.6])
+  pie_chart.add('Safari', [4.4, .1])
+  pie_chart.add('Opera', [.1, 1.6, .1, .5])
+
+
+Radar charts
+------------
+
+Basic
+^^^^^
+
+Simple Kiviat diagram:
+
+.. pygal-code::
+
+  radar_chart = pygal.Radar()
+  radar_chart.title = 'V8 benchmark results'
+  radar_chart.x_labels = ['Richards', 'DeltaBlue', 'Crypto', 'RayTrace', 'EarleyBoyer', 'RegExp', 'Splay', 'NavierStokes']
+  radar_chart.add('Chrome', [4074, 3458, 12942, 3541, 10799, 1863, 657, 5918])
+  radar_chart.add('Firefox', [3100, 2579, 3638, 2524, 3800, 552, 3675, 9043])
+
+
