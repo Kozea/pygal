@@ -228,6 +228,9 @@ section figure {
   text-align: center;
 }
 
+section figure figcaption {
+  text-align: left;
+}
 
 
 /* 
