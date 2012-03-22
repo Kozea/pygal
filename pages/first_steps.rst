@@ -36,7 +36,7 @@ To make a multiple series graph just add another one:
   bar_chart.add('Fibonacci', [0, 1, 1, 2, 3, 5, 8, 13, 21, 34, 55])
   bar_chart.add('Padovan', [1, 1, 1, 2, 2, 3, 4, 5, 7, 9, 12])
 
-If you want to stack them, use StackedBar instead of Bar:
+If you want to stack them, use `StackedBar` instead of `Bar`:
 
 .. pygal-code::
 
@@ -45,7 +45,7 @@ If you want to stack them, use StackedBar instead of Bar:
   bar_chart.add('Padovan', [1, 1, 1, 2, 2, 3, 4, 5, 7, 9, 12])
 
 
-You can also make it horizontal with HorizontalStackedBar:
+You can also make it horizontal with `HorizontalStackedBar`:
 
 .. pygal-code::
 

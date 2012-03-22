@@ -29,7 +29,7 @@ For more info see `interp1d definition on scipy <http://docs.scipy.org/doc/scipy
 Without interpolation:
 ----------------------
 
-`interpolation`
+``interpolate``
 
 .. pygal-code::
 
@@ -39,7 +39,7 @@ Without interpolation:
 With cubic interpolation:
 -------------------------
 
-`interpolation`
+``interpolate``
 
 .. pygal-code::
 
@@ -49,7 +49,7 @@ With cubic interpolation:
 With krogh interpolation:
 -------------------------
 
-`interpolation`
+``interpolate``
 
 .. pygal-code::
 
@@ -60,7 +60,7 @@ With krogh interpolation:
 Interpolation precision
 -----------------------
 
-`interpolation_precision`
+``interpolation_precision``
 
 You can change the resolution of the interpolation with the help of `interpolation_precision`:
 

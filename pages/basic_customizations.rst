@@ -13,7 +13,7 @@ Basic customizations
 How to customize:
 -----------------
 
-pygal is customized with the help of the config class (see `config.py <https://github.com/Kozea/pygal/blob/master/pygal/config.py>`_). It can be changed in several ways:
+pygal is customized with the help of the `Config` class (see `config.py <https://github.com/Kozea/pygal/blob/master/pygal/config.py>`_). It can be changed in several ways:
 
 .. pygal::
 
@@ -32,7 +32,7 @@ pygal is customized with the help of the config class (see `config.py <https://g
 By instanciating it
 ^^^^^^^^^^^^^^^^^^^
 
-Just import the config class and instanciate it:
+Just import the `Config` class and instanciate it:
 
 .. code-block::
 
@@ -50,7 +50,7 @@ Just import the config class and instanciate it:
 By inheriting it
 ^^^^^^^^^^^^^^^^
 
-Import the config class and override it:
+Import the `Config` class and override it:
 
 .. code-block::
 
@@ -70,7 +70,7 @@ Import the config class and override it:
 Using keyword args
 ^^^^^^^^^^^^^^^^^^
 
-As a shorthand for a one shot config you can specify all config argument as keyword args:
+As a shorthand for a one shot config, you can specify all config arguments as keyword args:
 
 .. code-block::
 
@@ -81,7 +81,7 @@ As a shorthand for a one shot config you can specify all config argument as keyw
 Size
 ----
 
-`width, height, explicit_size`
+``width, height, explicit_size``
 
 
 The simplest and usefull customizations is the svg size to render.
@@ -99,7 +99,7 @@ You can also set `explicit_size` to True to add size attributes to the svg tag.
 Scaling
 -------
 
-`x_scale, y_scale, include_x_axis`
+``x_scale, y_scale, include_x_axis``
 
 
 Indicate a hint for the scale computation:
@@ -126,9 +126,9 @@ You may want to always have the absissa in your graph:
 Title
 -----
 
-`title`
+``title``
 
-You can add a title to the chart by setting the title option:
+You can add a title to the chart by setting the `title` option:
 
 .. pygal-code::
 
@@ -139,7 +139,7 @@ You can add a title to the chart by setting the title option:
 Labels
 ------
 
-`x_labels, y_labels`
+``x_labels, y_labels``
 
 You can specify x labels and y labels, depending on the graph type:
 
@@ -154,9 +154,9 @@ You can specify x labels and y labels, depending on the graph type:
 Display
 -------
 
-`show_legend, show dots`
+``show_legend, show dots``
 
-You can remove legend and dots by setting these at False
+You can remove legend and dots by setting these at `False`
 
 .. pygal-code::
 
@@ -172,7 +172,7 @@ You can remove legend and dots by setting these at False
 Rendering
 ---------
 
-`fill, stroke, zero`
+``fill, stroke, zero``
 
 You can disable line stroking:
 
@@ -199,7 +199,7 @@ To fill to an other reference than zero:
 Font sizes
 ----------
 
-`label_font_size, value_font_size, tooltip_font_size, title_font_size, legend_font_size`
+``label_font_size, value_font_size, tooltip_font_size, title_font_size, legend_font_size``
 
 
 Set the various font size
@@ -213,7 +213,7 @@ Set the various font size
 Label rotation
 --------------
 
-`x_label_rotation, y_label_rotation`
+``x_label_rotation, y_label_rotation``
 
 
 Allow label rotation (in degrees) to avoid axis cluttering:
@@ -235,7 +235,7 @@ Allow label rotation (in degrees) to avoid axis cluttering:
 Human readable
 --------------
 
-`human_readable`
+``human_readable``
 
 
 Display values in human readable form:
@@ -252,7 +252,7 @@ Display values in human readable form:
 No data text
 ------------
 
-`no_data_text`
+``no_data_text``
 
 
 Text to display instead of the graph when no data is supplied:

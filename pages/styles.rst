@@ -102,7 +102,7 @@ You can customize styles in two ways:
 Using Style class
 ^^^^^^^^^^^^^^^^^
 
-You can instantiate the Style class with some customizations for quick styling:
+You can instantiate the `Style` class with some customizations for quick styling:
 
 .. pygal-code::
 

@@ -22,7 +22,7 @@ html {
 
 body {
   font-family: "philisopher";
-  font-size: 0.9em;
+  font-size: 1.1em;
   margin: -50px 0 0;
   min-height: 100%;
   padding: 0 0 50px;
@@ -32,8 +32,8 @@ body {
 }
 
 p {
-  margin: 0; 
-  padding: 3px 0;
+  margin: 0;
+  padding: 5px 0;
 }
 
 h2 {
@@ -46,7 +46,7 @@ h3 {
 }
 
 h4 {
-  font-size: 1.3em; 
+  font-size: 1.25em; 
   margin: 0.8em 0 0.2em;
 }
 
@@ -171,6 +171,10 @@ section article {
   padding: 0 15px;
 }
 
+article section {
+  padding: 10px 0;
+}
+
 section h2 {
   background: linear-gradient(#e95355, #d63739);
   border-bottom: 1px solid #e95355;
@@ -180,16 +184,13 @@ section h2 {
   padding: 0.2em 10px 0.1em;
 }
 
-section > section, 
-section#id1 > section {
+section section {
   background: url(img/article.png) repeat-x bottom left;
   margin: 0 15px;
   padding: 0.5em 0 1.5em;
 }
 
-
-section > section:last-child,
-section#id1 > section:last-child {
+section section:last-child {
   background: none;
 }
 
@@ -205,18 +206,34 @@ section h3 a {
 
 section h4 {
   color: #da3d3f;
-  text-decoration: underline;
 }
 
-section aside > ul {
+section aside.caution > header {
+  color: #feed6c;
+  margin: .25em 1em .75em;
+}
+
+section aside.caution {
+  margin: 10px;
+  padding: 1em;
+  border: 1px solid rgba(254, 237, 108, .5);
+  background-color: #111;
+}
+
+section aside.topic {
   background: #000;
   border-radius: 5px;
   display: inline-block;
   padding: 15px 30px;
+  margin-left: 50px;
+}
+
+section aside.topic > header {
+  font-size: 1.5em;
 }
 
 section aside ul li {
-  font-size: 1.1em;
+  font-size: 1em;
   padding: 0.2em 0;
 }
 
@@ -228,10 +245,39 @@ section figure {
   text-align: center;
 }
 
-section figure figcaption {
+section figure figcaption pre {
   text-align: left;
+  display: inline-block;
+  margin: 1em;
+  padding: 1em;
+  background-color: #0a0a0a;
+  border: 1px solid black;
 }
 
+section samp {
+  background-color: #111;
+  border: 1px solid black;
+  margin: .5em;
+  padding: .25em .5em;
+  color: #9e6ffe;
+}
+
+section cite {
+  font-style: normal;
+  color: #9e6ffe;
+  font-family: monospace;
+}
+
+section > p:first-of-type {
+  padding-top: 20px;
+}
+
+section .thumbs embed {
+  display: inline-block;
+  border-radius: 15px;
+  box-shadow: 0 0 5px #000;
+  margin: 1em;
+}
 
 /* 
   ----------
