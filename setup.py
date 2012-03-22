@@ -21,7 +21,7 @@ from setuptools import setup, find_packages
 
 setup(
     name="pygal",
-    version='0.9.15',
+    version='0.9.16',
     description="A python svg graph plotting library",
     author="Kozea",
     author_email="florian.mounier@kozea.fr",
@@ -30,7 +30,7 @@ setup(
     packages=find_packages(),
     provides=['pygal'],
     keywords=["svg", "graph", "diagram", "plot", "histogram", "kiviat"],
-    tests_require=["pytest", "flask"],
+    tests_require=["pytest", "pyquery", "flask"],
     package_data={'pygal': ['css/*', 'js/*']},
     install_requires=['lxml'],
     classifiers=[

@@ -16,18 +16,9 @@
 #
 # You should have received a copy of the GNU Lesser General Public License
 # along with pygal. If not, see <http://www.gnu.org/licenses/>.
-from pygal import Bar
+from pygal import Line
+from pyquery import PyQuery as pq
 
 
-def test_simple_bar():
-    bar = Bar()
-    rng = [-3, -32, -39]
-    bar.add('test1', rng)
-    bar.add('test2', map(abs, rng))
-    bar.x_labels = map(str, rng)
-    bar.title = "Bar test"
-    q = bar.render_pyquery()
-    assert len(q(".axis.x")) == 1
-    assert len(q(".axis.y")) == 1
-    assert len(q(".legend")) == 2
-    assert len(q(".plot .series rect")) == 2 * 3
+def texts(i, e):
+    return pq(e).text()

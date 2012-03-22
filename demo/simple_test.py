@@ -72,10 +72,10 @@ hstackedbar.add('++++++', rng2)
 hstackedbar.add('--->', rng3)
 hstackedbar.render_to_file('out-horizontalstackedbar.svg')
 
-line = Line(Config(y_scale=.0005, style=NeonStyle,
+line = Line(Config(style=NeonStyle,
                    zero=1,
-                   human_readable=True, logarithmic=True))
-# rng = range(-30, 31, 1)
+                   human_readable=True, logarithmic=not True))
+rng = range(-30, 31, 1)
 
 # line.add('test1', [1000 ** cos(x / 10.) for x in rng])
 # line.add('test2', [1000 ** sin(x / 10.) for x in rng])
@@ -87,13 +87,14 @@ rng = range(1, 2000, 25)
 # line.add('None', [None, None, None, 12, 31, 11, None, None, 12, 14])
 line.add('2', [None, None, 2, 4, 8, None, 14, 10, None])
 line.add('1', [1, 5, 3, 4, 6, 12, 13, 7, 2])
+# line.add('1', [.000000091, .000000094, .000092])
 line.x_labels = map(str, rng)
 line.title = "Line test"
 line.interpolate = "cubic"
 line.interpolation_precision = 200
 line.render_to_file('out-line.svg')
 
-stackedline = StackedLine(Config(y_scale=.0005, fill=True))
+stackedline = StackedLine(fill=True)
 stackedline.add('test1', [1, 3, 2, None, 2, 13, 2, 5, 8])
 stackedline.add('test2', [4, 1, 1,  3, 12,  3])
 stackedline.add('test3', [9, 3, 2, 10,  8,  2])
@@ -102,7 +103,7 @@ stackedline.title = "Stackedline test"
 stackedline.interpolate = "cubic"
 stackedline.render_to_file('out-stackedline.svg')
 
-xy = XY(Config(x_scale=1, fill=True, style=NeonStyle, interpolate='cubic'))
+xy = XY(Config(fill=True, style=NeonStyle, interpolate='cubic'))
 xy.add('test1', [(1981, 1), (1999, -4), (2001, 2), (2003, 10), (2012, 8)])
 xy.add('test2', [(1988, -1), (1986, 12), (2007, 7), (2010, 4)])
 xy.add('test2', [(None, None), (None, 12), (2007, None), (2002.3, 12)])
@@ -132,5 +133,5 @@ radar.add('test', [1, 4, 1, 5, None, 2, 5])
 radar.add('test2', [10, 2, 0, 5, 1, 9, 4])
 
 radar.title = "Radar test"
-radar.render_to_file('out-radar.svg')
 
+radar.render_to_file('out-radar.svg')

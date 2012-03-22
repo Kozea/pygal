@@ -69,7 +69,7 @@
 
   })();
 
-  tooltip_anim_Q = new Queue(100);
+  tooltip_anim_Q = new Queue(1);
 
   has_class = function(e, class_name) {
     var cls, cn, i, _i, _len;
@@ -173,9 +173,17 @@
     x_elt = value.nextElementSibling;
     y_elt = x_elt.nextElementSibling;
     x = parseInt(x_elt.textContent);
-    if (has_class(x_elt, 'centered')) x -= w / 2;
+    if (has_class(x_elt, 'centered')) {
+      x -= w / 2;
+    } else if (has_class(x_elt, 'left')) {
+      x -= w;
+    }
     y = parseInt(y_elt.textContent);
-    if (has_class(y_elt, 'centered')) y -= h / 2;
+    if (has_class(y_elt, 'centered')) {
+      y -= h / 2;
+    } else if (has_class(y_elt, 'top')) {
+      y -= h;
+    }
     _ref = (function() {
       var _i, _len, _ref, _results;
       _ref = _tooltip.getAttribute('transform').replace('translate(', '').replace(')', '').split(' ');

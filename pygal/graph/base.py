@@ -25,7 +25,7 @@ class BaseGraph(object):
             return object.__getattribute__(self.config, attr)
         return object.__getattribute__(self, attr)
 
-    def _pos_logarithmic(self, min_, max_):
+    def _compute_logarithmic_scale(self, min_, max_):
         min_order = int(floor(log10(min_)))
         max_order = int(ceil(log10(max_)))
         positions = []
@@ -36,13 +36,13 @@ class BaseGraph(object):
                     positions.append(tick)
         return positions
 
-    def _pos(self, min_, max_, scale, min_scale=4, max_scale=20):
+    def _compute_scale(self, min_, max_, min_scale=4, max_scale=20):
         if min_ == 0 and max_ == 0:
             return [0]
         if max_ - min_ == 0:
             return [min_]
         if self.logarithmic:
-            return self._pos_logarithmic(min_, max_)
+            return self._compute_logarithmic_scale(min_, max_)
         order = round(log10(max(abs(min_), abs(max_)))) - 1
         while (max_ - min_) / float(10 ** order) < min_scale:
             order -= 1
@@ -52,7 +52,7 @@ class BaseGraph(object):
         positions = []
         position = round_to_scale(min_, step)
         while position < (max_ + step):
-            rounded = round_to_scale(position, scale)
+            rounded = round_to_scale(position, step)
             if min_ <= rounded <= max_:
                 if rounded not in positions:
                     positions.append(rounded)
@@ -123,22 +123,39 @@ class BaseGraph(object):
     def add(self, title, values):
         self.series.append(Serie(title, values, len(self.series)))
 
-    def render(self):
+    def _has_data(self):
         if len(self.series) == 0:
-            return self.svg.render(no_data=True)
+            return False
         for serie in self.series:
             if not hasattr(serie.values, '__iter__'):
                 serie.values = [serie.values]
         if sum(map(len, map(lambda s: s.values, self.series))) == 0:
-            return self.svg.render(no_data=True)
-        self._draw()
+            return False
+        return True
+
+    def _render(self):
+        self.svg._init()
+        if self._has_data():
+            self._draw()
+            self.svg._pre_render(False)
+        else:
+            self.svg._pre_render(True)
+
+    def render(self):
+        self._render()
         return self.svg.render()
 
-    def _in_browser(self):
+    def render_tree(self):
+        self._render()
+        return self.svg.root
+
+    def render_pyquery(self):
+        from pyquery import PyQuery as pq
+        return pq(self.render_tree())
+
+    def render_in_browser(self):
         from lxml.html import open_in_browser
-        self._draw()
-        self.svg.render()
-        open_in_browser(self.svg.root, encoding='utf-8')
+        open_in_browser(self.render_tree(), encoding='utf-8')
 
     def render_response(self):
         from flask import Response

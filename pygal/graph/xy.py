@@ -65,8 +65,8 @@ class XY(Line):
 
         self._box.xmin, self._box.xmax = min(xvals), max(xvals)
         self._box.ymin, self._box.ymax = min(yvals), max(yvals)
-        x_pos = self._pos(self._box.xmin, self._box.xmax, self.x_scale)
-        y_pos = self._pos(self._box.ymin, self._box.ymax, self.y_scale)
+        x_pos = self._compute_scale(self._box.xmin, self._box.xmax)
+        y_pos = self._compute_scale(self._box.ymin, self._box.ymax)
 
         self._x_labels = zip(map(self.format, x_pos), x_pos)
         self._y_labels = zip(map(self.format, y_pos), y_pos)

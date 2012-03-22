@@ -53,13 +53,23 @@ class Line(Graph):
             for i, (x, y) in enumerate(view_values):
                 if None in (x, y):
                     continue
+
+                classes = []
+                if x > self.view.width / 2.:
+                    classes.append('left')
+                if y > self.view.height / 2.:
+                    classes.append('top')
+                classes = ' '.join(classes)
+
                 dots = self.svg.node(serie_node['overlay'], class_="dots")
                 val = self._get_value(serie.points, i)
                 self.svg.node(dots, 'circle', cx=x, cy=y, r=2.5,
                               class_='dot reactive tooltip-trigger')
                 self.svg.node(dots, 'desc', class_="value").text = val
-                self.svg.node(dots, 'desc', class_="x").text = str(x)
-                self.svg.node(dots, 'desc', class_="y").text = str(y)
+                self.svg.node(dots, 'desc',
+                              class_="x " + classes).text = str(x)
+                self.svg.node(dots, 'desc',
+                              class_="y " + classes).text = str(y)
                 if self.print_values:
                     self.svg.node(
                         serie_node['text_overlay'], 'text',
@@ -99,7 +109,7 @@ class Line(Graph):
             self._box.ymin = min(self._values)
             self._box.ymax = max(self._values)
 
-        self._y_pos = self._pos(self._box.ymin, self._box.ymax, self.y_scale
+        self._y_pos = self._compute_scale(self._box.ymin, self._box.ymax
         ) if not self.y_labels else map(float, self.y_labels)
 
         self._x_labels = self.x_labels and zip(self.x_labels, self._x_pos)

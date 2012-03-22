@@ -38,7 +38,7 @@ class StackedBar(Bar):
         x_pos = [x / float(self._length)
                  for x in range(self._length + 1)
              ] if self._length > 1 else [0, 1]  # Center if only one value
-        y_pos = self._pos(self._box.ymin, self._box.ymax, self.y_scale
+        y_pos = self._compute_scale(self._box.ymin, self._box.ymax
         ) if not self.y_labels else map(float, self.y_labels)
         self._x_ranges = zip(x_pos, x_pos[1:])
 

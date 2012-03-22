@@ -33,7 +33,7 @@ class Queue
             @queue = []
             @running = false
 
-tooltip_anim_Q = new Queue 100
+tooltip_anim_Q = new Queue 1
 
 has_class = (e, class_name) ->
     return if not e
@@ -100,10 +100,14 @@ tooltip = (elt) ->
     x = parseInt(x_elt.textContent)
     if has_class(x_elt, 'centered')
         x -= w / 2
+    else if has_class(x_elt, 'left')
+        x -= w
 
     y = parseInt(y_elt.textContent)
     if has_class(y_elt, 'centered')
         y -= h / 2
+    else if has_class(y_elt, 'top')
+        y -= h
 
     [current_x, current_y] = (parseInt(s) for s in _tooltip.getAttribute('transform').replace('translate(', '').replace(')', '').split ' ')
     return if current_x == x and current_y == y

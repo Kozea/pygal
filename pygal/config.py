@@ -29,9 +29,6 @@ class Config(object):
 
     # Graph width and height
     width, height = 800, 600
-    # Scale order range
-    x_scale = 1
-    y_scale = 1
     # Display values in human readable format (ie: 12.4M)
     human_readable = False
     # Display values in logarithmic scale

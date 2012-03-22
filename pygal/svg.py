@@ -27,6 +27,8 @@ class Svg(object):
 
     def __init__(self, graph):
         self.graph = graph
+
+    def _init(self):
         self.root = etree.Element(
             "{%s}svg" % self.ns,
             nsmap={
@@ -96,7 +98,7 @@ class Svg(object):
         self.node(node, 'path',
                   d=root % (origin, line), **kwargs)
 
-    def render(self, no_data=False):
+    def _pre_render(self, no_data=False):
         self.add_style(self.graph.base_css or os.path.join(
             os.path.dirname(__file__), 'css', 'graph.css'))
         self.add_script(self.graph.base_js or os.path.join(
@@ -112,6 +114,8 @@ class Svg(object):
             y=self.graph.height / 2,
             class_='no_data')
             no_data.text = self.graph.no_data_text
+
+    def render(self):
         svg = etree.tostring(
             self.root, pretty_print=True,
             xml_declaration=not self.graph.disable_xml_declaration,
