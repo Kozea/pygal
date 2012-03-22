@@ -245,7 +245,7 @@ section figure {
   text-align: center;
 }
 
-section figure figcaption pre {
+section pre {
   text-align: left;
   display: inline-block;
   margin: 1em;
