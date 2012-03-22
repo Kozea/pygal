@@ -54,7 +54,7 @@ class Box(object):
         self.xmin, self.ymin = self.ymin, self.xmin
         self.xmax, self.ymax = self.ymax, self.xmax
 
-    def fix(self):
+    def fix(self, with_margin=True):
         if not self.width:
             self.xmax = self.xmin + 1
         if not self.height:
@@ -63,9 +63,10 @@ class Box(object):
         xmargin = self._margin * self.width
         self.xmin -= xmargin
         self.xmax += xmargin
-        ymargin = self._margin * self.height
-        self.ymin -= ymargin
-        self.ymax += ymargin
+        if with_margin:
+            ymargin = self._margin * self.height
+            self.ymin -= ymargin
+            self.ymax += ymargin
 
 
 class View(object):
@@ -110,7 +111,7 @@ class LogView(View):
         self.ymax = self.box.ymax
         self.log10_ymax = log10(self.box.ymax)
         self.log10_ymin = log10(self.box.ymin)
-        self.box.fix()
+        self.box.fix(False)
 
     def y(self, y):
         if y == None:

@@ -21,7 +21,7 @@ from setuptools import setup, find_packages
 
 setup(
     name="pygal",
-    version='0.9.16',
+    version='0.9.17',
     description="A python svg graph plotting library",
     author="Kozea",
     author_email="florian.mounier@kozea.fr",

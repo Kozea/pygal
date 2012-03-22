@@ -30,7 +30,7 @@ bar.add('test1', rng)
 bar.add('test2', map(abs, rng))
 bar.add('inc', [None, 1, None, 2])
 bar.x_labels = map(str, rng)
-bar.title = "Bar test"
+
 bar.fill = True
 bar.render_to_file('out-bar.svg')
 
@@ -73,24 +73,25 @@ hstackedbar.add('--->', rng3)
 hstackedbar.render_to_file('out-horizontalstackedbar.svg')
 
 line = Line(Config(style=NeonStyle,
-                   zero=1,
-                   human_readable=True, logarithmic=not True))
+                   zero=1, fill=True,
+                   human_readable=True, logarithmic=True))
 rng = range(-30, 31, 1)
 
 # line.add('test1', [1000 ** cos(x / 10.) for x in rng])
 # line.add('test2', [1000 ** sin(x / 10.) for x in rng])
 # line.add('test3', [1000 ** (cos(x / 10.) - sin(x / 10.)) for x in rng])
-rng = range(1, 2000, 25)
+# rng = range(1, 2000, 25)
 # line.add('x', rng)
 # line.add('x', rng)
 # line.add('10^10^x', map(lambda x: ((x / 333.) ** (x / 333.)), rng))
 # line.add('None', [None, None, None, 12, 31, 11, None, None, 12, 14])
-line.add('2', [None, None, 2, 4, 8, None, 14, 10, None])
-line.add('1', [1, 5, 3, 4, 6, 12, 13, 7, 2])
+# line.add('2', [None, None, 2, 4, 8, None, 14, 10, None])
+# line.add('1', [1, 5, 3, 4, 6, 12, 13, 7, 2])
 # line.add('1', [.000000091, .000000094, .000092])
+line.add('_', [12, 200001, 12])
 line.x_labels = map(str, rng)
 line.title = "Line test"
-line.interpolate = "cubic"
+# line.interpolate = "cubic"
 line.interpolation_precision = 200
 line.render_to_file('out-line.svg')
 
