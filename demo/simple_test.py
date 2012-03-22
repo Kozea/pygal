@@ -23,6 +23,7 @@ from pygal import (
 from pygal.style import NeonStyle
 from math import cos, sin
 
+
 bar = Bar()
 rng = [-6, -19, 0, -1, 2]
 bar.add('test1', rng)
@@ -132,3 +133,4 @@ radar.add('test2', [10, 2, 0, 5, 1, 9, 4])
 
 radar.title = "Radar test"
 radar.render_to_file('out-radar.svg')
+

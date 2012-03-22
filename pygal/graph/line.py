@@ -100,7 +100,7 @@ class Line(Graph):
             self._box.ymax = max(self._values)
 
         self._y_pos = self._pos(self._box.ymin, self._box.ymax, self.y_scale
-        ) if not self.y_labels else map(int, self.y_labels)
+        ) if not self.y_labels else map(float, self.y_labels)
 
         self._x_labels = self.x_labels and zip(self.x_labels, self._x_pos)
         self._y_labels = zip(map(self.format, self._y_pos), self._y_pos)

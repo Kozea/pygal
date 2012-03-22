@@ -29,7 +29,7 @@ def humanize(number):
     order = number and int(floor(log(abs(number)) / log(1000)))
     human_readable = ORDERS.split(" ")[int(order > 0)]
     if order == 0 or order > len(human_readable):
-        return str(number)
+        return float_format(number / float(1000 ** int(order)))
     return (
         float_format(number / float(1000 ** int(order))) +
         human_readable[int(order) - int(order > 0)])

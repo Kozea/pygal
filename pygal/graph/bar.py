@@ -106,7 +106,7 @@ class Bar(Graph):
         x_pos = [x / float(x_step) for x in range(x_step + 1)
         ] if x_step > 1 else [0, 1]  # Center if only one value
         y_pos = self._pos(self._box.ymin, self._box.ymax, self.y_scale
-        ) if not self.y_labels else map(int, self.y_labels)
+        ) if not self.y_labels else map(float, self.y_labels)
 
         self._x_ranges = zip(x_pos, x_pos[1:])
         self._x_labels = self.x_labels and zip(self.x_labels, [

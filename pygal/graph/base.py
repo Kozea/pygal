@@ -91,7 +91,7 @@ class BaseGraph(object):
                 w * sin(rad(self.x_label_rotation)), h)
             if self.x_label_rotation:
                 self.margin.right = max(
-                    .5 * w * cos(rad(self.x_label_rotation)),
+                    w * cos(rad(self.x_label_rotation)),
                     self.margin.right)
         if self._y_labels:
             h, w = self._get_texts_box(
@@ -137,6 +137,7 @@ class BaseGraph(object):
     def _in_browser(self):
         from lxml.html import open_in_browser
         self._draw()
+        self.svg.render()
         open_in_browser(self.svg.root, encoding='utf-8')
 
     def render_response(self):

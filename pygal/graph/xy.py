@@ -18,13 +18,14 @@
 # along with pygal. If not, see <http://www.gnu.org/licenses/>.
 from pygal.graph.line import Line
 from pygal.interpolate import interpolation
+from math import isnan
 
 
 class XY(Line):
     """XY Line graph"""
 
     def _get_value(self, values, i):
-        return str(values[i])
+        return 'x=%s, y=%s' % tuple(map(self.format, values[i]))
 
     def _compute(self):
         xvals = [val[0]
@@ -50,7 +51,8 @@ class XY(Line):
                 p = float(self.interpolation_precision)
                 for s in range(int(p + 1)):
                     x = xmin + r * (s / p)
-                    if serie_xmin <= x <= serie_xmax:
+                    if (serie_xmin <= x <= serie_xmax and not
+                        isnan(float(interpolate(x)))):
                         serie.interpolated.append((x, float(interpolate(x))))
 
         if self.interpolate:

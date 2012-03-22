@@ -79,6 +79,7 @@ def test_format():
 
 def test_humanize():
     assert humanize(1) == '1'
+    assert humanize(1.) == '1'
     assert humanize(10) == '10'
     assert humanize(12.5) == '12.5'
     assert humanize(1000) == '1k'
@@ -100,6 +101,7 @@ def test_humanize():
     assert humanize(0.0000000001) == u'100p'
 
     assert humanize(0) == '0'
+    assert humanize(0.) == '0'
     assert humanize(-1337) == '-1.337k'
     assert humanize(-.000000042) == '-42n'
 
