@@ -90,7 +90,7 @@ text.no_data {
 }
 
 .axis.y .logarithmic text:not(.major) {
-  opacity: 0;
+  font-size: 50%;
 }
 
 .axis .line {

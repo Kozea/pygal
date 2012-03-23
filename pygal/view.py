@@ -114,7 +114,7 @@ class LogView(View):
         self.box.fix(False)
 
     def y(self, y):
-        if y == None:
+        if y == None or y <= 0:
             return None
         return (self.height - self.height *
                 (log10(y) - self.log10_ymin)

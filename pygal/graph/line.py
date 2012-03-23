@@ -34,12 +34,12 @@ class Line(Graph):
             return [val[1]
                     for serie in self.series
                     for val in serie.interpolated
-                    if val[1] != None]
+                    if val[1] != None and (not self.logarithmic or val[1] > 0)]
         else:
             return  [val[1]
                      for serie in self.series
                      for val in serie.points
-                    if val[1] != None]
+                    if val[1] != None and (not self.logarithmic or val[1] > 0)]
 
     def _fill(self, values):
         zero = self.view.y(min(max(self.zero, self._box.ymin), self._box.ymax))

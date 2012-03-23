@@ -29,10 +29,19 @@ class BaseGraph(object):
         min_order = int(floor(log10(min_)))
         max_order = int(ceil(log10(max_)))
         positions = []
+        amplitude = max_order - min_order
+        if amplitude <= 1:
+            return []
+        detail = 10.
+        while amplitude * detail < 20:
+            detail *= 2
+        while amplitude * detail > 50:
+            detail /= 2
         for order in range(min_order, max_order + 1):
-            for i in range(10):
-                tick = i * 10 ** order
-                if min_ <= tick <= max_:
+            for i in range(int(detail)):
+                tick = (10 * i / detail or 1.) * 10 ** order
+                tick = round_to_scale(tick, tick)
+                if min_ <= tick <= max_ and tick not in positions:
                     positions.append(tick)
         return positions
 
@@ -42,7 +51,10 @@ class BaseGraph(object):
         if max_ - min_ == 0:
             return [min_]
         if self.logarithmic:
-            return self._compute_logarithmic_scale(min_, max_)
+            log_scale = self._compute_logarithmic_scale(min_, max_)
+            if log_scale:
+                return log_scale
+                # else we fallback to normal scalling
         order = round(log10(max(abs(min_), abs(max_)))) - 1
         while (max_ - min_) / float(10 ** order) < min_scale:
             order -= 1
