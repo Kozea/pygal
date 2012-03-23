@@ -14,7 +14,7 @@ User documentation
 - `Other customizations </other_customizations>`_ - customize all the things.
 
 
-Developper documentation
-========================
+Developer documentation
+=======================
 
 - `Create a chart type </chart_creation>`_ - extend pygal.
