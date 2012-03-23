@@ -107,7 +107,7 @@ You may want to always have the absissa in your graph:
 
 .. pygal-code::
 
-  chart = pygal.Line(y_scale=.0001, include_x_axis=True)
+  chart = pygal.Line(include_x_axis=True)
   chart.add('line', [.0002, .0005, .00035])
 
 
