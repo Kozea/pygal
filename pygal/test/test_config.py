@@ -17,6 +17,7 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with pygal. If not, see <http://www.gnu.org/licenses/>.
 from pygal import Line
+from pygal.test.utils import texts
 
 
 def test_logarithmic():
@@ -51,3 +52,44 @@ def test_logarithmic_small_scale():
     line.add('_', [1 + 10 ** 10, 3 + 10 ** 10, 2 + 10 ** 10])
     q = line.render_pyquery()
     assert len(q(".y.axis .guides")) == 21
+
+
+def test_human_readable():
+    line = Line()
+    line.add('_', [10 ** 4, 10 ** 5, 23 * 10 ** 4])
+    # q = line.render_pyquery()
+    # assert q(".axis.y text").map(texts) == map(
+        # str, range(20000, 240000, 20000))
+    line.human_readable = True
+    q = line.render_pyquery()
+    assert q(".axis.y text").map(texts) == map(
+        lambda x: '%dk' % x, range(20, 240, 20))
+
+
+def test_show_legend():
+    line = Line()
+    line.add('_', [1, 2, 3])
+    q = line.render_pyquery()
+    assert len(q(".legend")) == 1
+    line.show_legend = False
+    q = line.render_pyquery()
+    assert len(q(".legend")) == 0
+
+
+def test_show_dots():
+    line = Line()
+    line.add('_', [1, 2, 3])
+    q = line.render_pyquery()
+    assert len(q(".dots")) == 3
+    line.show_dots = False
+    q = line.render_pyquery()
+    assert len(q(".dots")) == 0
+
+
+def test_no_data():
+    line = Line()
+    q = line.render_pyquery()
+    assert q("text").text() == "No data"
+    line.no_data_text = u"þæ®þæ€€&ĳ¿’€"
+    q = line.render_pyquery()
+    assert q("text").text() == u"þæ®þæ€€&ĳ¿’€"

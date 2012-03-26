@@ -18,12 +18,15 @@ class BaseGraph(object):
         self.margin = Margin(*([20] * 4))
         self._x_labels = self._y_labels = None
         self._box = Box()
-        self.format = humanize if self.human_readable else str
 
     def __getattr__(self, attr):
         if attr in dir(self.config):
             return object.__getattribute__(self.config, attr)
         return object.__getattribute__(self, attr)
+
+    @property
+    def format(self):
+        return humanize if self.human_readable else str
 
     def _compute_logarithmic_scale(self, min_, max_):
         min_order = int(floor(log10(min_)))
