@@ -21,14 +21,16 @@ from setuptools import setup, find_packages
 
 setup(
     name="pygal",
-    version='0.9.17',
+    version='0.9.18',
     description="A python svg graph plotting library",
     author="Kozea",
+    url="http://pygal.org/",
     author_email="florian.mounier@kozea.fr",
     license="GNU LGPL v3",
     platforms="Any",
     packages=find_packages(),
     provides=['pygal'],
+    scripts=["pygal_gen.py"],
     keywords=["svg", "graph", "diagram", "plot", "histogram", "kiviat"],
     tests_require=["pytest", "pyquery", "flask"],
     package_data={'pygal': ['css/*', 'js/*']},

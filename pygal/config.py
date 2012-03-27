@@ -27,8 +27,10 @@ class Config(object):
     """Class holding config values"""
     _horizontal = False
 
-    # Graph width and height
-    width, height = 800, 600
+    # Graph width
+    width = 800
+    # Graph height
+    height = 600
     # Display values in human readable format (ie: 12.4M)
     human_readable = False
     # Display values in logarithmic scale
