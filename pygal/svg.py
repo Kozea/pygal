@@ -19,7 +19,7 @@
 import os
 from lxml import etree
 from pygal.util import template
-from pygal._version import __version__
+from pygal import __version__
 
 
 class Svg(object):

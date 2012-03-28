@@ -17,8 +17,13 @@
 #
 # You should have received a copy of the GNU Lesser General Public License
 # along with pygal. If not, see <http://www.gnu.org/licenses/>.
+import os
+import re
 from setuptools import setup, find_packages
-from pygal._version import __version__
+
+ROOT = os.path.dirname(__file__)
+with open(os.path.join(ROOT, 'pygal', '__init__.py')) as fd:
+    __version__ = re.search("__version__ = '([^']+)'", fd.read()).group(1)
 
 setup(
     name="pygal",
@@ -34,7 +39,7 @@ setup(
     scripts=["pygal_gen.py"],
     keywords=[
         "svg", "chart", "graph", "diagram", "plot", "histogram", "kiviat"],
-    tests_require=["pytest", "pyquery", "flask"],
+    tests_require=["pytest", "pyquery", "flask", "cairosvg"],
     package_data={'pygal': ['css/*', 'js/*']},
     install_requires=['lxml'],
     classifiers=[
