@@ -1,2 +1,3 @@
 include pygal/css/*.css
 include pygal/js/*.js
+include pygal_gen.py

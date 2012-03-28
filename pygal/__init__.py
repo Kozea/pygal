@@ -16,7 +16,7 @@
 #
 # You should have received a copy of the GNU Lesser General Public License
 # along with pygal. If not, see <http://www.gnu.org/licenses/>.
-__version__ = '0.9.18'
+from pygal._version import __version__
 from pygal.graph.bar import Bar
 from pygal.graph.horizontal import HorizontalBar
 from pygal.graph.stackedbar import StackedBar

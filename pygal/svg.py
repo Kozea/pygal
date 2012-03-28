@@ -19,6 +19,7 @@
 import os
 from lxml import etree
 from pygal.util import template
+from pygal._version import __version__
 
 
 class Svg(object):
@@ -36,7 +37,8 @@ class Svg(object):
                 'xlink': 'http://www.w3.org/1999/xlink',
             },
             onload="svg_load();")
-        self.root.append(etree.Comment(u'Generated with pygal ©Kozea 2012'))
+        self.root.append(etree.Comment(
+            u'Generated with pygal %s ©Kozea 2012' % __version__))
         self.root.append(etree.Comment(u'http://github.com/Kozea/pygal'))
         self.defs = self.node(tag='defs')
 
