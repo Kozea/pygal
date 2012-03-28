@@ -51,7 +51,7 @@ class Svg(object):
             style.text = templ.decode('utf-8')
 
     def add_script(self, js):
-        script = self.node(self.root, 'script', type='text/javascript')
+        script = self.node(self.defs, 'script', type='text/javascript')
         with open(js) as f:
             templ = template(
                 f.read(),
@@ -87,6 +87,8 @@ class Svg(object):
         return '%f %f' % xy
 
     def line(self, node, coords, close=False, **kwargs):
+        if len(coords) < 2:
+            return
         root = 'M%s L%s Z' if close else 'M%s L%s'
         origin_index = 0
         while None in coords[origin_index]:

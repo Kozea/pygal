@@ -31,7 +31,7 @@ setup(
     packages=find_packages(),
     provides=['pygal'],
     scripts=["pygal_gen.py"],
-    keywords=["svg", "graph", "diagram", "plot", "histogram", "kiviat"],
+    keywords=["svg", "chart", "graph", "diagram", "plot", "histogram", "kiviat"],
     tests_require=["pytest", "pyquery", "flask"],
     package_data={'pygal': ['css/*', 'js/*']},
     install_requires=['lxml'],

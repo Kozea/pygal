@@ -24,18 +24,21 @@ from pygal.graph.stackedbar import StackedBar
 class HorizontalGraph(Graph):
     """Horizontal graph"""
     def __init__(self, *args, **kwargs):
+        self.first_pass = True
         kwargs['_horizontal'] = True
         super(HorizontalGraph, self).__init__(*args, **kwargs)
 
     def _compute(self):
-        if self.x_labels:
-            self.x_labels = reversed(self.x_labels)
+        self.first_pass = False
+        if self.first_pass and self.x_labels:
+            self.x_labels = list(reversed(self.x_labels))
         super(HorizontalGraph, self)._compute()
         self._x_labels, self._y_labels = self._y_labels, self._x_labels
         self._box.swap()
         # Y axis is inverted
-        for serie in self.series:
-            serie.values = reversed(serie.values)
+        if self.first_pass:
+            for serie in self.series:
+                serie.values = list(reversed(serie.values))
 
 
 class HorizontalBar(HorizontalGraph, Bar):

@@ -18,6 +18,20 @@
 # along with pygal. If not, see <http://www.gnu.org/licenses/>.
 import os
 from pygal import Line
+import pygal
+
+
+def test_multi_render():
+    for Chart in pygal.CHARTS:
+        chart = Chart()
+        rng = range(20)
+        if Chart == pygal.XY:
+            rng = zip(rng, rng)
+        chart.add('Serie', rng)
+        chart.add('Serie 2', list(reversed(rng)))
+        svg = chart.render()
+        for i in range(2):
+            assert svg == chart.render()
 
 
 def test_render_to_file():
@@ -30,4 +44,17 @@ def test_render_to_file():
     line.render_to_file(file_name)
     with open(file_name) as f:
         assert 'pygal' in f.read()
+    os.remove(file_name)
+
+
+def test_render_to_png():
+    file_name = '/tmp/test_graph.png'
+    if os.path.exists(file_name):
+        os.remove(file_name)
+
+    line = Line()
+    line.add('Serie 1', [1])
+    line.render_to_png(file_name)
+    with open(file_name) as f:
+        assert f.read()
     os.remove(file_name)

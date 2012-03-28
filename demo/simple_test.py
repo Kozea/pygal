@@ -46,7 +46,7 @@ hbar.x_labels = map(
 hbar.title = "Horizontal Bar test"
 # hbar.render_to_file('out-horizontalbar.svg')
 
-rng = [3, -32, 39, 12]
+rng = [30, -32, 39, 12]
 rng2 = [24, -8, 18, 12]
 rng3 = [6, 1, -10, 0]
 config = Config()
@@ -70,7 +70,9 @@ hstackedbar = HorizontalStackedBar(config)
 hstackedbar.add('@@@@@@@', rng)
 hstackedbar.add('++++++', rng2)
 hstackedbar.add('--->', rng3)
-# hstackedbar.render_to_file('out-horizontalstackedbar.svg')
+
+hstackedbar.render_to_file('out-horizontalstackedbar1.svg')
+hstackedbar.render_to_file('out-horizontalstackedbar2.svg')
 
 line = Line(Config(style=NeonStyle,
                    zero=.0001, fill=True,

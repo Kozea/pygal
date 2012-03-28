@@ -15,8 +15,10 @@ class BaseGraph(object):
         self.config(**kwargs)
         self.svg = Svg(self)
         self.series = []
-        self.margin = Margin(*([20] * 4))
         self._x_labels = self._y_labels = None
+
+    def _init(self):
+        self.margin = Margin(*([20] * 4))
         self._box = Box()
 
     def __getattr__(self, attr):
@@ -149,6 +151,7 @@ class BaseGraph(object):
         return True
 
     def _render(self):
+        self._init()
         self.svg._init()
         if self._has_data():
             self._draw()
@@ -179,3 +182,12 @@ class BaseGraph(object):
     def render_to_file(self, filename):
         with open(filename, 'w') as f:
             f.write(self.render())
+
+    def render_to_png(self, filename):
+        import cairosvg
+        import StringIO
+        fakefile = StringIO.StringIO()
+        fakefile.write(self.render())
+        fakefile.seek(0)
+        cairosvg.surface.PNGSurface.convert(
+            file_obj=fakefile, write_to=filename)
