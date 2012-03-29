@@ -1,6 +1,6 @@
-======================
- A SVG Charts Creator
-======================
+=============================
+ A python SVG Charts Creator
+=============================
 
 Presentation
 ============
@@ -61,6 +61,15 @@ Python/Css styling with some packaged themes (`default </styles/#default>`_,
 `light_solarized </styles/#light-solarized>`_)
 
 `And a lot of options to customize the charts. </basic_customizations>`_
+
+
+Get it !
+========
+
+- `Get the package on pypi <http://pypi.python.org/pypi/pygal/>`_
+- `Fork me on github <http://github.com/Kozea/pygal>`_
+
+More information in the `download page </download>`_
 
 Technical Description
 =====================
