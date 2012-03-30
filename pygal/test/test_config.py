@@ -34,6 +34,10 @@ def test_logarithmic():
 
 
 def test_logarithmic_bad_interpolation():
+    try:
+        import scipy
+    except ImportError:
+        return
     line = Line(logarithmic=True, interpolate='cubic')
     line.add('_', [.001, .00000001, 1])
     q = line.render_pyquery()

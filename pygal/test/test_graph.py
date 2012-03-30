@@ -48,6 +48,11 @@ def test_render_to_file():
 
 
 def test_render_to_png():
+    try:
+        import cairosvg
+    except ImportError:
+        return
+
     file_name = '/tmp/test_graph.png'
     if os.path.exists(file_name):
         os.remove(file_name)

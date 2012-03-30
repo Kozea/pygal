@@ -16,6 +16,7 @@
 #
 # You should have received a copy of the GNU Lesser General Public License
 # along with pygal. If not, see <http://www.gnu.org/licenses/>.
+from __future__ import division
 from pygal.graph.graph import Graph
 from math import cos, sin, pi
 project = lambda rho, alpha: (
@@ -30,7 +31,7 @@ class Pie(Graph):
 
     def slice(self, serie_node, start_angle, angle, perc,
             small=False):
-        val = '{:.2%}'.format(perc)
+        val = '{0:.2%}'.format(perc)
         slices = self.svg.node(serie_node['plot'], class_="slices")
         slice_ = self.svg.node(slices, class_="slice")
         center = ((self.width - self.margin.x) / 2.,
@@ -64,7 +65,7 @@ class Pie(Graph):
         self.svg.node(slice_, 'desc', class_="value").text = val
         tooltip_position = map(
             str, diff(center, project(
-                (r + small_r) / 2., start_angle + angle / 2.)))
+                (r + small_r) / 2, start_angle + angle / 2)))
         self.svg.node(slice_, 'desc',
                       class_="x centered").text = tooltip_position[0]
         self.svg.node(slice_, 'desc',

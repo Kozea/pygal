@@ -1,3 +1,23 @@
+# -*- coding: utf-8 -*-
+# This file is part of pygal
+#
+# A python svg graph plotting library
+# Copyright © 2012 Kozea
+#
+# This library is free software: you can redistribute it and/or modify it under
+# the terms of the GNU Lesser General Public License as published by the Free
+# Software Foundation, either version 3 of the License, or (at your option) any
+# later version.
+#
+# This library is distributed in the hope that it will be useful, but WITHOUT
+# ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+# FOR A PARTICULAR PURPOSE.  See the GNU Lesser General Public License for more
+# details.
+#
+# You should have received a copy of the GNU Lesser General Public License
+# along with pygal. If not, see <http://www.gnu.org/licenses/>.
+from __future__ import division
+import io
 from pygal.serie import Serie
 from pygal.view import Margin, Box
 from pygal.util import round_to_scale, cut, rad, humanize
@@ -44,7 +64,7 @@ class BaseGraph(object):
             detail /= 2
         for order in range(min_order, max_order + 1):
             for i in range(int(detail)):
-                tick = (10 * i / detail or 1.) * 10 ** order
+                tick = (10 * i / detail or 1) * 10 ** order
                 tick = round_to_scale(tick, tick)
                 if min_ <= tick <= max_ and tick not in positions:
                     positions.append(tick)
@@ -61,7 +81,7 @@ class BaseGraph(object):
                 return log_scale
                 # else we fallback to normal scalling
         order = round(log10(max(abs(min_), abs(max_)))) - 1
-        while (max_ - min_) / float(10 ** order) < min_scale:
+        while (max_ - min_) / (10 ** order) < min_scale:
             order -= 1
         step = float(10 ** order)
         while (max_ - min_) / step > max_scale:
@@ -159,9 +179,9 @@ class BaseGraph(object):
         else:
             self.svg._pre_render(True)
 
-    def render(self):
+    def render(self, is_unicode=False):
         self._render()
-        return self.svg.render()
+        return self.svg.render(is_unicode=is_unicode)
 
     def render_tree(self):
         self._render()
@@ -180,8 +200,8 @@ class BaseGraph(object):
         return Response(self.render(), mimetype='image/svg+xml')
 
     def render_to_file(self, filename):
-        with open(filename, 'w') as f:
-            f.write(self.render())
+        with io.open(filename, 'w', encoding='utf-8') as f:
+            f.write(self.render(is_unicode=True))
 
     def render_to_png(self, filename):
         import cairosvg

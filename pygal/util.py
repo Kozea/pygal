@@ -16,6 +16,7 @@
 #
 # You should have received a copy of the GNU Lesser General Public License
 # along with pygal. If not, see <http://www.gnu.org/licenses/>.
+from __future__ import division
 from decimal import Decimal
 from math import floor, pi, log, log10
 ORDERS = u"yzafpnµm kMGTPEZY"
@@ -29,9 +30,9 @@ def humanize(number):
     order = number and int(floor(log(abs(number)) / log(1000)))
     human_readable = ORDERS.split(" ")[int(order > 0)]
     if order == 0 or order > len(human_readable):
-        return float_format(number / float(1000 ** int(order)))
+        return float_format(number / (1000 ** int(order)))
     return (
-        float_format(number / float(1000 ** int(order))) +
+        float_format(number / (1000 ** int(order))) +
         human_readable[int(order) - int(order > 0)])
 
 
@@ -42,13 +43,13 @@ def is_major(number):
 
 def round_to_int(number, precision):
     precision = int(precision)
-    rounded = (int(number) + precision / 2) / precision * precision
+    rounded = (int(number) + precision / 2) // precision * precision
     return rounded
 
 
 def round_to_float(number, precision):
-    rounded = Decimal(
-        floor((number + precision / 2) / precision)) * Decimal(str(precision))
+    rounded = Decimal(str(floor((number + precision / 2) // precision))
+    ) * Decimal(str(precision))
     return float(rounded)
 
 
@@ -67,7 +68,7 @@ def cut(list_, index=0):
 
 
 def rad(deg):
-    return pi * deg / 180.
+    return pi * deg / 180
 
 
 def deg(deg):

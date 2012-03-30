@@ -16,6 +16,7 @@
 #
 # You should have received a copy of the GNU Lesser General Public License
 # along with pygal. If not, see <http://www.gnu.org/licenses/>.
+from __future__ import division
 from pygal.graph.graph import Graph
 from pygal.util import swap, ident
 
@@ -78,7 +79,7 @@ class Bar(Graph):
                 class_='rect reactive tooltip-trigger')
             self.svg.node(bar, 'desc', class_="values").text = val
             tooltip_positions = map(
-                str, (x + bar_inner_width / 2., y + height / 2.))
+                str, (x + bar_inner_width / 2, y + height / 2))
             self.svg.node(bar, 'desc',
                           class_="x centered"
             ).text = tooltip_positions[int(self._horizontal)]
@@ -103,14 +104,14 @@ class Bar(Graph):
         self._box.ymin = min(min(self._values), self.zero)
         self._box.ymax = max(max(self._values), self.zero)
         x_step = len(self.series[0].values)
-        x_pos = [x / float(x_step) for x in range(x_step + 1)
+        x_pos = [x / x_step for x in range(x_step + 1)
         ] if x_step > 1 else [0, 1]  # Center if only one value
         y_pos = self._compute_scale(self._box.ymin, self._box.ymax,
         ) if not self.y_labels else map(float, self.y_labels)
 
         self._x_ranges = zip(x_pos, x_pos[1:])
         self._x_labels = self.x_labels and zip(self.x_labels, [
-            sum(x_range) / 2. for x_range in self._x_ranges])
+            sum(x_range) / 2 for x_range in self._x_ranges])
         self._y_labels = zip(map(self.format, y_pos), y_pos)
 
     def _plot(self):

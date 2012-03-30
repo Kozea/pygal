@@ -16,6 +16,7 @@
 #
 # You should have received a copy of the GNU Lesser General Public License
 # along with pygal. If not, see <http://www.gnu.org/licenses/>.
+from __future__ import division
 from pygal.graph.bar import Bar
 
 
@@ -35,7 +36,7 @@ class StackedBar(Bar):
             min(min(negative_vals), 0), max(max(positive_vals), 0))
         self._length = len(self.series[0].values)
 
-        x_pos = [x / float(self._length)
+        x_pos = [x / self._length
                  for x in range(self._length + 1)
              ] if self._length > 1 else [0, 1]  # Center if only one value
         y_pos = self._compute_scale(self._box.ymin, self._box.ymax

@@ -16,6 +16,7 @@
 #
 # You should have received a copy of the GNU Lesser General Public License
 # along with pygal. If not, see <http://www.gnu.org/licenses/>.
+from __future__ import division
 from math import sin, cos, log10
 
 
@@ -79,13 +80,13 @@ class View(object):
     def x(self, x):
         if x == None:
             return None
-        return self.width * (x - self.box.xmin) / float(self.box.width)
+        return self.width * (x - self.box.xmin) / self.box.width
 
     def y(self, y):
         if y == None:
             return None
         return (self.height - self.height *
-                (y - self.box.ymin) / float(self.box.height))
+                (y - self.box.ymin) / self.box.height)
 
     def __call__(self, xy):
         x, y = xy
@@ -118,4 +119,4 @@ class LogView(View):
             return None
         return (self.height - self.height *
                 (log10(y) - self.log10_ymin)
-                / float(self.log10_ymax - self.log10_ymin))
+                / (self.log10_ymax - self.log10_ymin))

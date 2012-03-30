@@ -16,6 +16,7 @@
 #
 # You should have received a copy of the GNU Lesser General Public License
 # along with pygal. If not, see <http://www.gnu.org/licenses/>.
+from __future__ import division
 from pygal.graph.line import Line
 from pygal.view import PolarView
 from pygal.util import deg, cached_property
@@ -67,7 +68,7 @@ class Radar(Line):
                       y=pos_text[1]
             )
             text.text = label
-            angle = - theta + pi / 2.
+            angle = - theta + pi / 2
             if cos(angle) < 0:
                 angle -= pi
             text.attrib['transform'] = 'rotate(%f %s)' % (
@@ -92,7 +93,7 @@ class Radar(Line):
             ).text = label
 
     def _compute(self):
-        delta = 2 * pi / float(self._len)
+        delta = 2 * pi / self._len
         self._x_pos = [.5 * pi + i * delta for i in range(self._len + 1)]
         for serie in self.series:
             vals = list(serie.values)
@@ -112,7 +113,7 @@ class Radar(Line):
                 interpolate = interpolation(
                     extended_x_pos, extended_vals, kind=self.interpolate)
                 serie.interpolated = []
-                p = float(self.interpolation_precision)
+                p = self.interpolation_precision
                 for s in range(int(p + 1)):
                     x = .5 * pi + 2 * pi * (s / p)
                     serie.interpolated.append((float(interpolate(x)), x))

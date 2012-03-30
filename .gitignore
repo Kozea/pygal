@@ -1,3 +1,4 @@
 *.svg
 .livereload
 dist
+.tox

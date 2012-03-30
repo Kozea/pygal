@@ -16,6 +16,7 @@
 #
 # You should have received a copy of the GNU Lesser General Public License
 # along with pygal. If not, see <http://www.gnu.org/licenses/>.
+from __future__ import division
 from pygal import Line
 from pygal.test.utils import texts
 from math import cos, sin
@@ -24,9 +25,9 @@ from math import cos, sin
 def test_simple_line():
     line = Line()
     rng = range(-30, 31, 5)
-    line.add('test1', [cos(x / 10.) for x in rng])
-    line.add('test2', [sin(x / 10.) for x in rng])
-    line.add('test3', [cos(x / 10.) - sin(x / 10.) for x in rng])
+    line.add('test1', [cos(x / 10) for x in rng])
+    line.add('test2', [sin(x / 10) for x in rng])
+    line.add('test3', [cos(x / 10) - sin(x / 10) for x in rng])
     line.x_labels = map(str, rng)
     line.title = "cos sin and cos - sin"
     q = line.render_pyquery()

@@ -16,6 +16,8 @@
 #
 # You should have received a copy of the GNU Lesser General Public License
 # along with pygal. If not, see <http://www.gnu.org/licenses/>.
+from __future__ import division
+import io
 import os
 from lxml import etree
 from pygal.util import template
@@ -44,23 +46,23 @@ class Svg(object):
 
     def add_style(self, css):
         style = self.node(self.defs, 'style', type='text/css')
-        with open(css) as f:
+        with io.open(css, encoding='utf-8') as f:
             templ = template(
                 f.read(),
                 style=self.graph.style,
                 font_sizes=self.graph.font_sizes(),
                 hidden='y' if self.graph._horizontal else 'x')
-            style.text = templ.decode('utf-8')
+            style.text = templ
 
     def add_script(self, js):
         script = self.node(self.defs, 'script', type='text/javascript')
-        with open(js) as f:
+        with io.open(js, encoding='utf-8') as f:
             templ = template(
                 f.read(),
                 font_sizes=self.graph.font_sizes(False),
                 animation_steps=self.graph.animation_steps
             )
-            script.text = templ.decode('utf-8')
+            script.text = templ
 
     def node(self, parent=None, tag='g', attrib=None, **extras):
         if parent is None:
@@ -119,11 +121,11 @@ class Svg(object):
             class_='no_data')
             no_data.text = self.graph.no_data_text
 
-    def render(self):
+    def render(self, is_unicode=False):
         svg = etree.tostring(
             self.root, pretty_print=True,
             xml_declaration=not self.graph.disable_xml_declaration,
             encoding='utf-8')
-        if self.graph.disable_xml_declaration:
+        if self.graph.disable_xml_declaration or is_unicode:
             svg = svg.decode('utf-8')
         return svg

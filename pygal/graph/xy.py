@@ -16,6 +16,7 @@
 #
 # You should have received a copy of the GNU Lesser General Public License
 # along with pygal. If not, see <http://www.gnu.org/licenses/>.
+from __future__ import division
 from pygal.graph.line import Line
 from pygal.interpolate import interpolation
 from math import isnan
@@ -48,7 +49,7 @@ class XY(Line):
                 serie_xmax = max(vals[0])
                 serie.interpolated = []
                 r = (max(xvals) - xmin)
-                p = float(self.interpolation_precision)
+                p = self.interpolation_precision
                 for s in range(int(p + 1)):
                     x = xmin + r * (s / p)
                     if (serie_xmin <= x <= serie_xmax and not

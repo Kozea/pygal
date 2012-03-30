@@ -16,6 +16,7 @@
 #
 # You should have received a copy of the GNU Lesser General Public License
 # along with pygal. If not, see <http://www.gnu.org/licenses/>.
+from __future__ import division
 from pygal.graph.graph import Graph
 from pygal.util import cached_property
 from pygal.interpolate import interpolation
@@ -55,9 +56,9 @@ class Line(Graph):
                     continue
 
                 classes = []
-                if x > self.view.width / 2.:
+                if x > self.view.width / 2:
                     classes.append('left')
-                if y > self.view.height / 2.:
+                if y > self.view.height / 2:
                     classes.append('top')
                 classes = ' '.join(classes)
 
