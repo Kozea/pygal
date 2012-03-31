@@ -23,6 +23,10 @@ You can set the scale to be logarithmic:
   chart.x_labels = map(str, values)
   chart.add('log example', values)
 
+.. caution::
+
+  Negative values are ignored, interpolation might be broken if it goes below zero...
+
 
 Custom css and js
 -----------------

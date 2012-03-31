@@ -99,27 +99,15 @@ You can also set `explicit_size` to True to add size attributes to the svg tag.
 Scaling
 -------
 
-``x_scale, y_scale, include_x_axis``
+``include_x_axis``
 
-
-Indicate a hint for the scale computation:
-
-.. pygal-code::
-
-  chart = pygal.Line()
-  chart.add('line', [.0002, .0005, .00035])
-
-.. pygal-code::
-
-  chart = pygal.Line(y_scale=.0001)
-  chart.add('line', [.0002, .0005, .00035])
-
+Scales are computed automaticaly between the min and the max values.
 
 You may want to always have the absissa in your graph:
 
 .. pygal-code::
 
-  chart = pygal.Line(y_scale=.0001, include_x_axis=True)
+  chart = pygal.Line(include_x_axis=True)
   chart.add('line', [.0002, .0005, .00035])
 
 
