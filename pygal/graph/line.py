@@ -27,7 +27,7 @@ class Line(Graph):
     """Line graph"""
 
     def _get_value(self, values, i):
-        return self.format(values[i][1])
+        return self._format(values[i][1])
 
     @cached_property
     def _values(self):
@@ -114,7 +114,7 @@ class Line(Graph):
         ) if not self.y_labels else map(float, self.y_labels)
 
         self._x_labels = self.x_labels and zip(self.x_labels, self._x_pos)
-        self._y_labels = zip(map(self.format, self._y_pos), self._y_pos)
+        self._y_labels = zip(map(self._format, self._y_pos), self._y_pos)
 
     def _plot(self):
         for serie in self.series:

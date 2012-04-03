@@ -26,7 +26,7 @@ class XY(Line):
     """XY Line graph"""
 
     def _get_value(self, values, i):
-        return 'x=%s, y=%s' % tuple(map(self.format, values[i]))
+        return 'x=%s, y=%s' % tuple(map(self._format, values[i]))
 
     def _compute(self):
         xvals = [val[0]
@@ -69,5 +69,5 @@ class XY(Line):
         x_pos = self._compute_scale(self._box.xmin, self._box.xmax)
         y_pos = self._compute_scale(self._box.ymin, self._box.ymax)
 
-        self._x_labels = zip(map(self.format, x_pos), x_pos)
-        self._y_labels = zip(map(self.format, y_pos), y_pos)
+        self._x_labels = zip(map(self._format, x_pos), x_pos)
+        self._y_labels = zip(map(self._format, y_pos), y_pos)

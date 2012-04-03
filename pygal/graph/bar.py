@@ -40,7 +40,7 @@ class Bar(Graph):
             if None in (x, y):
                 continue
             # x and y are left range coords and X, Y right ones
-            val = self.format(values[i][1][1])
+            val = self._format(values[i][1][1])
             if self._horizontal:
                 x, y, X, Y = Y, X, y, x
             width = X - x
@@ -112,7 +112,7 @@ class Bar(Graph):
         self._x_ranges = zip(x_pos, x_pos[1:])
         self._x_labels = self.x_labels and zip(self.x_labels, [
             sum(x_range) / 2 for x_range in self._x_ranges])
-        self._y_labels = zip(map(self.format, y_pos), y_pos)
+        self._y_labels = zip(map(self._format, y_pos), y_pos)
 
     def _plot(self):
         for serie in self.series:

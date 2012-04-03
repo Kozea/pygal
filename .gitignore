@@ -2,3 +2,4 @@
 .livereload
 dist
 .tox
+.coverage

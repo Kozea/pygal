@@ -45,7 +45,7 @@ class StackedBar(Bar):
 
         self._x_labels = self.x_labels and zip(self.x_labels, [
             sum(x_range) / 2 for x_range in self._x_ranges])
-        self._y_labels = zip(map(self.format, y_pos), y_pos)
+        self._y_labels = zip(map(self._format, y_pos), y_pos)
 
     def _plot(self):
         stack_vals = [[0, 0] for i in range(self._length)]

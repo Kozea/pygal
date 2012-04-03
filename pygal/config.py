@@ -104,6 +104,7 @@ class Config(object):
         self.__dict__.update(kwargs)
 
     def font_sizes(self, with_unit=True):
+        """Getter for all font size configs"""
         fs = FontSizes()
         for name in dir(self):
             if name.endswith('_font_size'):
@@ -111,5 +112,5 @@ class Config(object):
                     fs,
                     name.replace('_font_size', ''),
                     ('%dpx' % getattr(self, name)
-                    ) if with_unit else getattr(self, name))
+                 ) if with_unit else getattr(self, name))
         return fs

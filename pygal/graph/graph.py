@@ -26,6 +26,7 @@ class Graph(BaseGraph):
     """Graph super class containing generic common functions"""
 
     def _decorate(self):
+        """Draw all decorations"""
         self._set_view()
         self._make_graph()
         self._x_axis()
@@ -34,12 +35,14 @@ class Graph(BaseGraph):
         self._title()
 
     def _set_view(self):
+        """Assign a view to current graph"""
         self.view = (LogView if self.logarithmic else View)(
             self.width - self.margin.x,
             self.height - self.margin.y,
             self._box)
 
     def _make_graph(self):
+        """Init common graph svg structure"""
         self.graph_node = self.svg.node(
             class_='graph %s-graph' % self.__class__.__name__.lower())
         self.svg.node(self.graph_node, 'rect',
@@ -78,6 +81,7 @@ class Graph(BaseGraph):
         self.svg.node(self.tooltip_node, 'text')
 
     def _x_axis(self):
+        """Make the x axis: labels and guides"""
         if not self._x_labels:
             return
 
@@ -105,6 +109,7 @@ class Graph(BaseGraph):
                     self.x_label_rotation, x, y)
 
     def _y_axis(self):
+        """Make the y axis: labels and guides"""
         if not self._y_labels:
             return
 
@@ -137,6 +142,7 @@ class Graph(BaseGraph):
                     self.y_label_rotation, x, y)
 
     def _legend(self):
+        """Make the legend box"""
         if not self.show_legend:
             return
         legends = self.svg.node(
@@ -166,6 +172,7 @@ class Graph(BaseGraph):
             ).text = title
 
     def _title(self):
+        """Make the title"""
         if self.title:
             self.svg.node(self.graph_node, 'text', class_='title',
                       x=self.margin.left + self.view.width / 2,
@@ -173,6 +180,7 @@ class Graph(BaseGraph):
             ).text = self.title
 
     def _serie(self, serie):
+        """Make serie node"""
         return dict(
             plot=self.svg.node(
                 self.plot,

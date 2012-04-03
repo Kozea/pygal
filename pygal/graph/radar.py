@@ -31,7 +31,7 @@ class Radar(Line):
         return values
 
     def _get_value(self, values, i):
-        return self.format(values[i][0])
+        return self._format(values[i][0])
 
     @cached_property
     def _values(self):
@@ -126,5 +126,5 @@ class Radar(Line):
             self._box.ymin, self._box.ymax, max_scale=8
         ) if not self.y_labels else map(int, self.y_labels)
         self._x_labels = self.x_labels and zip(self.x_labels, self._x_pos)
-        self._y_labels = zip(map(self.format, self._y_pos), self._y_pos)
+        self._y_labels = zip(map(self._format, self._y_pos), self._y_pos)
         self._box.xmin = self._box.ymin = - self._box.ymax
