@@ -19,6 +19,7 @@
 import os
 from pygal import Line
 import pygal
+import uuid
 
 
 def test_multi_render():
@@ -35,7 +36,7 @@ def test_multi_render():
 
 
 def test_render_to_file():
-    file_name = '/tmp/test_graph.svg'
+    file_name = '/tmp/test_graph-%s.svg' % uuid.uuid4()
     if os.path.exists(file_name):
         os.remove(file_name)
 
@@ -53,7 +54,7 @@ def test_render_to_png():
     except ImportError:
         return
 
-    file_name = '/tmp/test_graph.png'
+    file_name = '/tmp/test_graph-%s.png' % uuid.uuid4()
     if os.path.exists(file_name):
         os.remove(file_name)
 
