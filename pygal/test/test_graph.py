@@ -61,6 +61,6 @@ def test_render_to_png():
     line = Line()
     line.add('Serie 1', [1])
     line.render_to_png(file_name)
-    with open(file_name) as f:
+    with open(file_name, 'rb') as f:
         assert f.read()
     os.remove(file_name)

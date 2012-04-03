@@ -205,8 +205,8 @@ class BaseGraph(object):
 
     def render_to_png(self, filename):
         import cairosvg
-        import StringIO
-        fakefile = StringIO.StringIO()
+        from io import BytesIO
+        fakefile = BytesIO()
         fakefile.write(self.render())
         fakefile.seek(0)
         cairosvg.surface.PNGSurface.convert(
