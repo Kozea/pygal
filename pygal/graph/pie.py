@@ -16,6 +16,11 @@
 #
 # You should have received a copy of the GNU Lesser General Public License
 # along with pygal. If not, see <http://www.gnu.org/licenses/>.
+"""
+Pie chart
+
+"""
+
 from __future__ import division
 from pygal.graph.graph import Graph
 from math import cos, sin, pi
@@ -31,6 +36,7 @@ class Pie(Graph):
 
     def slice(self, serie_node, start_angle, angle, perc,
             small=False):
+        """Make a serie slice"""
         val = '{0:.2%}'.format(perc)
         slices = self.svg.node(serie_node['plot'], class_="slices")
         slice_ = self.svg.node(slices, class_="slice")
@@ -51,16 +57,16 @@ class Pie(Graph):
         else:
             absolute_project = lambda rho, theta: fmt(
                 diff(center, project(rho, theta)))
-            to1 = absolute_project(r, start_angle)
-            to2 = absolute_project(r, start_angle + angle)
-            to3 = absolute_project(small_r, start_angle + angle)
-            to4 = absolute_project(small_r, start_angle)
+            to = [absolute_project(r, start_angle),
+                  absolute_project(r, start_angle + angle),
+                  absolute_project(small_r, start_angle + angle),
+                  absolute_project(small_r, start_angle)]
             self.svg.node(slice_, 'path',
                           d='M%s A%s 0 %d 1 %s L%s A%s 0 %d 0 %s z' % (
-                              to1,
-                              get_radius(r), int(angle > pi), to2,
-                              to3,
-                              get_radius(small_r), int(angle > pi), to4),
+                              to[0],
+                              get_radius(r), int(angle > pi), to[1],
+                              to[2],
+                              get_radius(small_r), int(angle > pi), to[3]),
                           class_='slice reactive tooltip-trigger')
         self.svg.node(slice_, 'desc', class_="value").text = val
         tooltip_position = map(
@@ -97,7 +103,7 @@ class Pie(Graph):
                 angle, sum(serie.values) / total)
             if len(serie.values) > 1:
                 small_current_angle = current_angle
-                for i, val in enumerate(serie.values):
+                for val in serie.values:
                     small_angle = 2 * pi * val / total
                     self.slice(
                         self._serie(serie.index),

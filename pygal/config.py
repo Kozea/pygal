@@ -31,7 +31,6 @@ class FontSizes(object):
 
 class Config(object):
     """Class holding config values"""
-    _horizontal = False
 
     #: Graph width
     width = 800

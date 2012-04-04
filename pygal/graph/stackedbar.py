@@ -16,8 +16,14 @@
 #
 # You should have received a copy of the GNU Lesser General Public License
 # along with pygal. If not, see <http://www.gnu.org/licenses/>.
+"""
+Stacked Bar chart
+
+"""
+
 from __future__ import division
 from pygal.graph.bar import Bar
+from pygal.util import compute_scale
 
 
 class StackedBar(Bar):
@@ -34,12 +40,12 @@ class StackedBar(Bar):
 
         self._box.ymin, self._box.ymax = (
             min(min(negative_vals), 0), max(max(positive_vals), 0))
-        self._length = len(self.series[0].values)
 
-        x_pos = [x / self._length
-                 for x in range(self._length + 1)
-             ] if self._length > 1 else [0, 1]  # Center if only one value
-        y_pos = self._compute_scale(self._box.ymin, self._box.ymax
+        x_pos = [x / self._len
+                 for x in range(self._len + 1)
+             ] if self._len > 1 else [0, 1]  # Center if only one value
+        y_pos = compute_scale(
+            self._box.ymin, self._box.ymax, self.logarithmic
         ) if not self.y_labels else map(float, self.y_labels)
         self._x_ranges = zip(x_pos, x_pos[1:])
 
@@ -48,7 +54,7 @@ class StackedBar(Bar):
         self._y_labels = zip(map(self._format, y_pos), y_pos)
 
     def _plot(self):
-        stack_vals = [[0, 0] for i in range(self._length)]
+        stack_vals = [[0, 0] for i in range(self._len)]
         for serie in self.series:
             serie_node = self._serie(serie.index)
             stack_vals = self.bar(

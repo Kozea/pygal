@@ -16,10 +16,17 @@
 #
 # You should have received a copy of the GNU Lesser General Public License
 # along with pygal. If not, see <http://www.gnu.org/licenses/>.
+"""
+Commmon graphing functions
+
+"""
+
 from __future__ import division
+from pygal.interpolate import interpolation
 from pygal.graph.base import BaseGraph
 from pygal.view import View, LogView
 from pygal.util import is_major
+from math import isnan, pi
 
 
 class Graph(BaseGraph):
@@ -43,49 +50,51 @@ class Graph(BaseGraph):
 
     def _make_graph(self):
         """Init common graph svg structure"""
-        self.graph_node = self.svg.node(
+        self.nodes['graph'] = self.svg.node(
             class_='graph %s-graph' % self.__class__.__name__.lower())
-        self.svg.node(self.graph_node, 'rect',
+        self.svg.node(self.nodes['graph'], 'rect',
                   class_='background',
                   x=0, y=0,
                   width=self.width,
                   height=self.height)
-        self.plot = self.svg.node(
-            self.graph_node, class_="plot",
+        self.nodes['plot'] = self.svg.node(
+            self.nodes['graph'], class_="plot",
             transform="translate(%d, %d)" % (
                 self.margin.left, self.margin.top))
-        self.svg.node(self.plot, 'rect',
+        self.svg.node(self.nodes['plot'], 'rect',
                   class_='background',
                   x=0, y=0,
                   width=self.view.width,
                   height=self.view.height)
-        self.overlay = self.svg.node(
-            self.graph_node, class_="plot overlay",
+        self.nodes['overlay'] = self.svg.node(
+            self.nodes['graph'], class_="plot overlay",
             transform="translate(%d, %d)" % (
                 self.margin.left, self.margin.top))
-        self.text_overlay = self.svg.node(
-            self.graph_node, class_="plot text-overlay",
+        self.nodes['text_overlay'] = self.svg.node(
+            self.nodes['graph'], class_="plot text-overlay",
             transform="translate(%d, %d)" % (
                 self.margin.left, self.margin.top))
-        tooltip_overlay = self.svg.node(
-            self.graph_node, class_="plot tooltip-overlay",
+        self.nodes['tooltip_overlay'] = self.svg.node(
+            self.nodes['graph'], class_="plot tooltip-overlay",
             transform="translate(%d, %d)" % (
                 self.margin.left, self.margin.top))
-        self.tooltip_node = self.svg.node(tooltip_overlay, id="tooltip",
-                                          transform='translate(0 0)')
+        self.nodes['tooltip'] = self.svg.node(
+            self.nodes['tooltip_overlay'],
+            id="tooltip",
+            transform='translate(0 0)')
 
-        self.svg.node(self.tooltip_node, 'rect',
+        self.svg.node(self.nodes['tooltip'], 'rect',
                       id="tooltip-box",
                       rx=5, ry=5,
         )
-        self.svg.node(self.tooltip_node, 'text')
+        self.svg.node(self.nodes['tooltip'], 'text')
 
     def _x_axis(self):
         """Make the x axis: labels and guides"""
         if not self._x_labels:
             return
 
-        axis = self.svg.node(self.plot, class_="axis x")
+        axis = self.svg.node(self.nodes['plot'], class_="axis x")
 
         if 0 not in [label[1] for label in self._x_labels]:
             self.svg.node(axis, 'path',
@@ -113,7 +122,7 @@ class Graph(BaseGraph):
         if not self._y_labels:
             return
 
-        axis = self.svg.node(self.plot, class_="axis y")
+        axis = self.svg.node(self.nodes['plot'], class_="axis y")
 
         if 0 not in [label[1] for label in self._y_labels]:
             self.svg.node(axis, 'path',
@@ -146,7 +155,7 @@ class Graph(BaseGraph):
         if not self.show_legend:
             return
         legends = self.svg.node(
-            self.graph_node, class_='legends',
+            self.nodes['graph'], class_='legends',
             transform='translate(%d, %d)' % (
                 self.margin.left + self.view.width + 10,
                 self.margin.top + 10))
@@ -174,7 +183,7 @@ class Graph(BaseGraph):
     def _title(self):
         """Make the title"""
         if self.title:
-            self.svg.node(self.graph_node, 'text', class_='title',
+            self.svg.node(self.nodes['graph'], 'text', class_='title',
                       x=self.margin.left + self.view.width / 2,
                       y=self.title_font_size + 10
             ).text = self.title
@@ -183,11 +192,34 @@ class Graph(BaseGraph):
         """Make serie node"""
         return dict(
             plot=self.svg.node(
-                self.plot,
+                self.nodes['plot'],
                 class_='series serie-%d color-%d' % (serie, serie)),
             overlay=self.svg.node(
-                self.overlay,
+                self.nodes['overlay'],
                 class_='series serie-%d color-%d' % (serie, serie)),
             text_overlay=self.svg.node(
-                self.text_overlay,
+                self.nodes['text_overlay'],
                 class_='series serie-%d color-%d' % (serie, serie)))
+
+    def _interpolate(self, ys, xs,
+                   polar=False, xy=False, xy_xmin=None, xy_rng=None):
+        """Make the interpolation"""
+        interpolate = interpolation(
+            xs, ys, kind=self.interpolate)
+        p = self.interpolation_precision
+        xmin = min(xs)
+        xmax = max(xs)
+        interpolateds = []
+        for i in range(int(p + 1)):
+            x = i / p
+            if polar:
+                x = .5 * pi + 2 * pi * x
+            elif xy:
+                x = xy_xmin + xy_rng * x
+            interpolated = float(interpolate(x))
+            if not isnan(interpolated) and xmin <= x <= xmax:
+                coord = (x, interpolated)
+                if polar:
+                    coord = tuple(reversed(coord))
+                interpolateds.append(coord)
+        return interpolateds

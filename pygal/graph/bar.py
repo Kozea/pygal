@@ -16,13 +16,22 @@
 #
 # You should have received a copy of the GNU Lesser General Public License
 # along with pygal. If not, see <http://www.gnu.org/licenses/>.
+"""
+Bar chart
+
+"""
+
 from __future__ import division
 from pygal.graph.graph import Graph
-from pygal.util import swap, ident
+from pygal.util import swap, ident, compute_scale
 
 
 class Bar(Graph):
     """Bar graph"""
+
+    def __init__(self, *args, **kwargs):
+        self._x_ranges = None
+        super(Bar, self).__init__(*args, **kwargs)
 
     def bar(self, serie_node, serie, values, stack_vals=None):
         """Draw a bar graph for a serie"""
@@ -31,7 +40,7 @@ class Bar(Graph):
         def view(rng):
             """Project range"""
             t, T = rng
-            fun = swap if self._horizontal else ident
+            fun = swap if self.horizontal else ident
             return self.view(fun(t)), self.view(fun(T))
 
         bars = self.svg.node(serie_node['plot'], class_="bars")
@@ -52,12 +61,12 @@ class Bar(Graph):
             #
             # x and y are left range coords and X, Y right ones
             val = self._format(values[i][1][1])
-            if self._horizontal:
+            if self.horizontal:
                 x, y, X, Y = Y, X, y, x
             width = X - x
             padding = .1 * width
             inner_width = width - 2 * padding
-            if self._horizontal:
+            if self.horizontal:
                 height = self.view.x(0) - y
             else:
                 height = self.view.y(0) - y
@@ -93,11 +102,11 @@ class Bar(Graph):
                 str, (x + bar_inner_width / 2, y + height / 2))
             self.svg.node(bar, 'desc',
                           class_="x centered"
-            ).text = tooltip_positions[int(self._horizontal)]
+            ).text = tooltip_positions[int(self.horizontal)]
             self.svg.node(bar, 'desc',
                           class_="y centered"
-            ).text = tooltip_positions[int(not self._horizontal)]
-            if self._horizontal:
+            ).text = tooltip_positions[int(not self.horizontal)]
+            if self.horizontal:
                 x += .3 * self.value_font_size
                 y += height / 2
             else:
@@ -117,7 +126,8 @@ class Bar(Graph):
         x_step = len(self.series[0].values)
         x_pos = [x / x_step for x in range(x_step + 1)
         ] if x_step > 1 else [0, 1]  # Center if only one value
-        y_pos = self._compute_scale(self._box.ymin, self._box.ymax,
+        y_pos = compute_scale(
+            self._box.ymin, self._box.ymax, self.logarithmic
         ) if not self.y_labels else map(float, self.y_labels)
 
         self._x_ranges = zip(x_pos, x_pos[1:])

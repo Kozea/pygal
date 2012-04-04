@@ -60,7 +60,7 @@ class Svg(object):
                 f.read(),
                 style=self.graph.style,
                 font_sizes=self.graph.font_sizes(),
-                hidden='y' if self.graph._horizontal else 'x')
+                hidden='y' if self.graph.horizontal else 'x')
             style.text = templ
 
     def add_script(self, js):
@@ -92,7 +92,7 @@ class Svg(object):
 
     def transposable_node(self, parent=None, tag='g', attrib=None, **extras):
         """Make a new svg node which can be transposed if horizontal"""
-        if self.graph._horizontal:
+        if self.graph.horizontal:
             for key1, key2 in (('x', 'y'), ('width', 'height')):
                 attr1 = extras.get(key1, None)
                 attr2 = extras.get(key2, None)

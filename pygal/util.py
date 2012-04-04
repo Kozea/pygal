@@ -23,7 +23,7 @@ Various utils
 
 from __future__ import division
 from decimal import Decimal
-from math import floor, pi, log, log10
+from math import floor, pi, log, log10, ceil
 ORDERS = u"yzafpnµm kMGTPEZY"
 
 
@@ -112,6 +112,74 @@ def coord_format(xy):
 
 swap = lambda tuple_: tuple(reversed(tuple_))
 ident = lambda x: x
+
+
+def compute_logarithmic_scale(min_, max_):
+    """Compute an optimal scale for logarithmic"""
+    min_order = int(floor(log10(min_)))
+    max_order = int(ceil(log10(max_)))
+    positions = []
+    amplitude = max_order - min_order
+    if amplitude <= 1:
+        return []
+    detail = 10.
+    while amplitude * detail < 20:
+        detail *= 2
+    while amplitude * detail > 50:
+        detail /= 2
+    for order in range(min_order, max_order + 1):
+        for i in range(int(detail)):
+            tick = (10 * i / detail or 1) * 10 ** order
+            tick = round_to_scale(tick, tick)
+            if min_ <= tick <= max_ and tick not in positions:
+                positions.append(tick)
+    return positions
+
+
+def compute_scale(min_, max_, logarithmic=False, min_scale=4, max_scale=20):
+    """Compute an optimal scale between min and max"""
+    if min_ == 0 and max_ == 0:
+        return [0]
+    if max_ - min_ == 0:
+        return [min_]
+    if logarithmic:
+        log_scale = compute_logarithmic_scale(min_, max_)
+        if log_scale:
+            return log_scale
+            # else we fallback to normal scalling
+    order = round(log10(max(abs(min_), abs(max_)))) - 1
+    while (max_ - min_) / (10 ** order) < min_scale:
+        order -= 1
+    step = float(10 ** order)
+    while (max_ - min_) / step > max_scale:
+        step *= 2.
+    positions = []
+    position = round_to_scale(min_, step)
+    while position < (max_ + step):
+        rounded = round_to_scale(position, step)
+        if min_ <= rounded <= max_:
+            if rounded not in positions:
+                positions.append(rounded)
+        position += step
+    if len(positions) < 2:
+        return [min_, max_]
+    return positions
+
+
+def text_len(lenght, fs):
+    """Approximation of text length"""
+    return lenght * 0.6 * fs
+
+
+def get_text_box(text, fs):
+    """Approximation of text bounds"""
+    return (fs, text_len(len(text), fs))
+
+
+def get_texts_box(texts, fs):
+    """Approximation of multiple texts bounds"""
+    max_len = max(map(len, texts))
+    return (fs, text_len(max_len, fs))
 
 
 # Stolen from brownie http://packages.python.org/Brownie/

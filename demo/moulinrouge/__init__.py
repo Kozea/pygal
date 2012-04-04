@@ -103,7 +103,8 @@ def create_app():
 
     @app.route("/all")
     @app.route("/all/style=<style>")
-    def all(style=DefaultStyle):
+    @app.route("/all/interpolate=<interpolate>")
+    def all(style='default', interpolate=None):
         width, height = 600, 400
         data = random.randrange(1, 10)
         order = random.randrange(1, 10)
@@ -119,6 +120,7 @@ def create_app():
         config.height = height
         config.fill = bool(random.randrange(0, 2))
         config.human_readable = True
+        config.interpolate = interpolate
         config.style = styles[style]
         config.x_labels = [random_label() for i in range(data)]
         svgs = []

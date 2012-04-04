@@ -16,6 +16,10 @@
 #
 # You should have received a copy of the GNU Lesser General Public License
 # along with pygal. If not, see <http://www.gnu.org/licenses/>.
+"""
+Horizontal graph
+
+"""
 from pygal.graph.graph import Graph
 from pygal.graph.bar import Bar
 from pygal.graph.stackedbar import StackedBar
@@ -25,13 +29,16 @@ class HorizontalGraph(Graph):
     """Horizontal graph"""
     def __init__(self, *args, **kwargs):
         self.first_pass = True
-        kwargs['_horizontal'] = True
+        self.horizontal = True
         super(HorizontalGraph, self).__init__(*args, **kwargs)
 
     def _compute(self):
         self.first_pass = False
+        # Stupid pylint
+        # pylint: disable-msg=E0203,W0201
         if self.first_pass and self.x_labels:
             self.x_labels = list(reversed(self.x_labels))
+        # pylint: enable-msg=W0201,E0203
         super(HorizontalGraph, self)._compute()
         self._x_labels, self._y_labels = self._y_labels, self._x_labels
         self._box.swap()

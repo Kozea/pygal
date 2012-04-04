@@ -45,7 +45,7 @@ class Margin(object):
 
 class Box(object):
     """Chart boundings"""
-    _margin = .02
+    margin = .02
 
     def __init__(self):
         self.xmin = self.ymin = 0
@@ -73,11 +73,11 @@ class Box(object):
         if not self.height:
             self.ymin -= .5
             self.ymax = self.ymin + 1
-        xmargin = self._margin * self.width
+        xmargin = self.margin * self.width
         self.xmin -= xmargin
         self.xmax += xmargin
         if with_margin:
-            ymargin = self._margin * self.height
+            ymargin = self.margin * self.height
             self.ymin -= ymargin
             self.ymax += ymargin
 

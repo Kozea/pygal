@@ -16,17 +16,20 @@
 #
 # You should have received a copy of the GNU Lesser General Public License
 # along with pygal. If not, see <http://www.gnu.org/licenses/>.
+"""
+Line chart
+
+"""
 from __future__ import division
 from pygal.graph.graph import Graph
-from pygal.util import cached_property
-from pygal.interpolate import interpolation
-from math import isnan
+from pygal.util import cached_property, compute_scale
 
 
 class Line(Graph):
     """Line graph"""
 
     def _get_value(self, values, i):
+        """Get the value formatted for tooltip"""
         return self._format(values[i][1])
 
     @cached_property
@@ -43,12 +46,14 @@ class Line(Graph):
                     if val[1] != None and (not self.logarithmic or val[1] > 0)]
 
     def _fill(self, values):
+        """Add extra values to fill the line"""
         zero = self.view.y(min(max(self.zero, self._box.ymin), self._box.ymax))
         return ([(values[0][0], zero)] +
                 values +
                 [(values[-1][0], zero)])
 
     def line(self, serie_node, serie):
+        """Draw the line serie"""
         view_values = map(self.view, serie.points)
         if self.show_dots:
             for i, (x, y) in enumerate(view_values):
@@ -88,21 +93,16 @@ class Line(Graph):
                 class_='line reactive' + (' nofill' if not self.fill else ''))
 
     def _compute(self):
-        self._x_pos = [x / float(self._len - 1) for x in range(self._len)
+        x_pos = [x / float(self._len - 1) for x in range(self._len)
         ] if self._len != 1 else [.5]  # Center if only one value
         for serie in self.series:
             if not hasattr(serie, 'points'):
                 serie.points = [
-                    (self._x_pos[i], v)
+                    (x_pos[i], v)
                     for i, v in enumerate(serie.values)]
                 if self.interpolate:
-                    interpolate = interpolation(
-                        self._x_pos, serie.values, kind=self.interpolate)
-                    p = float(self.interpolation_precision)
-                    serie.interpolated = [
-                        (x / p, float(interpolate(x / p)))
-                        for x in range(int(p + 1))
-                        if not isnan(float(interpolate(x / p)))]
+                    serie.interpolated = self._interpolate(serie.values, x_pos)
+
         if self.include_x_axis:
             self._box.ymin = min(min(self._values), 0)
             self._box.ymax = max(max(self._values), 0)
@@ -110,11 +110,12 @@ class Line(Graph):
             self._box.ymin = min(self._values)
             self._box.ymax = max(self._values)
 
-        self._y_pos = self._compute_scale(self._box.ymin, self._box.ymax
+        y_pos = compute_scale(
+            self._box.ymin, self._box.ymax, self.logarithmic
         ) if not self.y_labels else map(float, self.y_labels)
 
-        self._x_labels = self.x_labels and zip(self.x_labels, self._x_pos)
-        self._y_labels = zip(map(self._format, self._y_pos), self._y_pos)
+        self._x_labels = self.x_labels and zip(self.x_labels, x_pos)
+        self._y_labels = zip(map(self._format, y_pos), y_pos)
 
     def _plot(self):
         for serie in self.series:

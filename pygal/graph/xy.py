@@ -16,10 +16,14 @@
 #
 # You should have received a copy of the GNU Lesser General Public License
 # along with pygal. If not, see <http://www.gnu.org/licenses/>.
+"""
+XY Line graph
+
+"""
+
 from __future__ import division
+from pygal.util import compute_scale
 from pygal.graph.line import Line
-from pygal.interpolate import interpolation
-from math import isnan
 
 
 class XY(Line):
@@ -38,23 +42,17 @@ class XY(Line):
                  for val in serie.values
                  if val[1] != None]
         xmin = min(xvals)
+        xmax = max(xvals)
+        rng = (xmax - xmin)
 
         for serie in self.series:
             serie.points = serie.values
             if self.interpolate:
-                vals = zip(*serie.points)
-                interpolate = interpolation(
-                    vals[0], vals[1], kind=self.interpolate)
-                serie_xmin = min(vals[0])
-                serie_xmax = max(vals[0])
-                serie.interpolated = []
-                r = (max(xvals) - xmin)
-                p = self.interpolation_precision
-                for s in range(int(p + 1)):
-                    x = xmin + r * (s / p)
-                    if (serie_xmin <= x <= serie_xmax and not
-                        isnan(float(interpolate(x)))):
-                        serie.interpolated.append((x, float(interpolate(x))))
+                vals = zip(*sorted(serie.points, key=lambda x: x[0]))
+                serie.interpolated = self._interpolate(
+                    vals[1], vals[0], xy=True, xy_xmin=xmin, xy_rng=rng)
+                if not serie.interpolated:
+                    serie.interpolated = serie.values
 
         if self.interpolate:
             xvals = [val[0]
@@ -66,8 +64,10 @@ class XY(Line):
 
         self._box.xmin, self._box.xmax = min(xvals), max(xvals)
         self._box.ymin, self._box.ymax = min(yvals), max(yvals)
-        x_pos = self._compute_scale(self._box.xmin, self._box.xmax)
-        y_pos = self._compute_scale(self._box.ymin, self._box.ymax)
+        x_pos = compute_scale(
+        self._box.xmin, self._box.xmax, self.logarithmic)
+        y_pos = compute_scale(
+            self._box.ymin, self._box.ymax, self.logarithmic)
 
         self._x_labels = zip(map(self._format, x_pos), x_pos)
         self._y_labels = zip(map(self._format, y_pos), y_pos)
