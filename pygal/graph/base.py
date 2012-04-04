@@ -37,9 +37,9 @@ class BaseGraph(object):
 
     def __init__(self, config=None, **kwargs):
         """Init the graph"""
-        self.horizontal = hasattr(self, 'horizontal') and self.horizontal
         self.config = config or Config()
         self.config(**kwargs)
+        self.horizontal = getattr(self, 'horizontal', False)
         self.svg = Svg(self)
         self.series = []
         self._x_labels = None
