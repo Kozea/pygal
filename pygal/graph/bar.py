@@ -39,6 +39,17 @@ class Bar(Graph):
         for i, ((x, y), (X, Y)) in enumerate(view_values):
             if None in (x, y):
                 continue
+
+            #          +-------+
+            #          |       |
+            #          |       |
+            #          |       +-------+
+            #          |       |       |
+            #          |       |       |
+            #          |       |       |
+            #          +-------+-------+
+            #        (x,y)   (X,Y)
+            #
             # x and y are left range coords and X, Y right ones
             val = self._format(values[i][1][1])
             if self._horizontal:

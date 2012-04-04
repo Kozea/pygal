@@ -16,15 +16,21 @@
 #
 # You should have received a copy of the GNU Lesser General Public License
 # along with pygal. If not, see <http://www.gnu.org/licenses/>.
+"""
+Interpolation using scipy
+"""
 from pygal.util import ident
+
+scipy = None
 try:
     import scipy
     from scipy import interpolate
-except:
-    scipy = None
+except ImportError:
+    pass
 
 
 def interpolation(x, y, kind):
+    """Make the interpolation function"""
     assert scipy != None, 'You must have scipy installed to use interpolation'
     order = None
     if len(y) < len(x):

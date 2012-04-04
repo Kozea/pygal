@@ -16,9 +16,13 @@
 #
 # You should have received a copy of the GNU Lesser General Public License
 # along with pygal. If not, see <http://www.gnu.org/licenses/>.
+"""
+Charts styling
+"""
 
 
 class Style(object):
+    """Styling class containing colors for the css generation"""
     def __init__(self,
         background='black',
         plot_background='#111',
@@ -33,19 +37,21 @@ class Style(object):
                 '#899ca1', '#f8f8f2', '#808384', '#bf4646', '#516083',
                 '#f92672', '#82b414', '#fd971f', '#56c2d6', '#8c54fe',
                 '#465457')):
-            self.background = background
-            self.plot_background = plot_background
-            self.foreground = foreground
-            self.foreground_light = foreground_light
-            self.foreground_dark = foreground_dark
-            self.opacity = opacity
-            self.opacity_hover = opacity_hover
-            self.transition = transition
-            self._colors = colors
+        self.background = background
+        self.plot_background = plot_background
+        self.foreground = foreground
+        self.foreground_light = foreground_light
+        self.foreground_dark = foreground_dark
+        self.opacity = opacity
+        self.opacity_hover = opacity_hover
+        self.transition = transition
+        self._colors = colors
 
     @property
     def colors(self):
+        """Get the css color list"""
         def color(tupl):
+            """Make a color css"""
             return (
                     '.color-{0} {{\n'
                     '  stroke: {1};\n'

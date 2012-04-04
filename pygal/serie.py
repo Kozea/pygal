@@ -16,9 +16,13 @@
 #
 # You should have received a copy of the GNU Lesser General Public License
 # along with pygal. If not, see <http://www.gnu.org/licenses/>.
+"""
+Little helpers for series
+"""
 
 
 class Serie(object):
+    """Serie containing title, values and the graph serie index"""
     def __init__(self, title, values, index):
         self.title = title
         self.values = values
@@ -26,6 +30,7 @@ class Serie(object):
 
 
 class Label(object):
+    """A label with his position"""
     def __init__(self, label, pos):
         self.label = label
         self.pos = pos

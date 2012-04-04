@@ -16,6 +16,10 @@
 #
 # You should have received a copy of the GNU Lesser General Public License
 # along with pygal. If not, see <http://www.gnu.org/licenses/>.
+"""
+Pygal -  A python svg graph plotting library
+
+"""
 
 __version__ = '0.9.21'
 
@@ -30,7 +34,8 @@ from pygal.graph.pie import Pie
 from pygal.graph.radar import Radar
 from pygal.config import Config
 
-"""List of all chart types"""
+
+#: List of all chart types
 CHARTS = [
     Bar, HorizontalBar, StackedBar, HorizontalStackedBar,
     Line, StackedLine, XY, Pie, Radar]
