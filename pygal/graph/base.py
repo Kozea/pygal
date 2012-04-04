@@ -42,8 +42,8 @@ class BaseGraph(object):
         """Add a serie to this graph"""
         self.series.append(Serie(title, values, len(self.series)))
 
-    def _init(self):
-        """Init the graph"""
+    def reinit(self):
+        """(Re-)Init the graph"""
         self.margin = Margin(*([20] * 4))
         self._box = Box()
 
@@ -191,13 +191,13 @@ class BaseGraph(object):
 
     def _render(self):
         """Make the graph internally"""
-        self._init()
-        self.svg._init()
+        self.reinit()
+        self.svg.reinit()
         if self._has_data():
             self._draw()
-            self.svg._pre_render(False)
+            self.svg.pre_render(False)
         else:
-            self.svg._pre_render(True)
+            self.svg.pre_render(True)
 
     def render(self, is_unicode=False):
         """Render the graph, and return the svg string"""

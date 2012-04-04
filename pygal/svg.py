@@ -16,11 +16,16 @@
 #
 # You should have received a copy of the GNU Lesser General Public License
 # along with pygal. If not, see <http://www.gnu.org/licenses/>.
+"""
+Svg helper
+
+"""
+
 from __future__ import division
 import io
 import os
 from lxml import etree
-from pygal.util import template
+from pygal.util import template, coord_format
 from pygal import __version__
 
 
@@ -30,8 +35,11 @@ class Svg(object):
 
     def __init__(self, graph):
         self.graph = graph
+        self.root = None
+        self.defs = None
 
-    def _init(self):
+    def reinit(self):
+        """(Re-)initialization"""
         self.root = etree.Element(
             "{%s}svg" % self.ns,
             nsmap={
@@ -45,6 +53,7 @@ class Svg(object):
         self.defs = self.node(tag='defs')
 
     def add_style(self, css):
+        """Add the css to the svg"""
         style = self.node(self.defs, 'style', type='text/css')
         with io.open(css, encoding='utf-8') as f:
             templ = template(
@@ -55,6 +64,7 @@ class Svg(object):
             style.text = templ
 
     def add_script(self, js):
+        """Add the js to the svg"""
         script = self.node(self.defs, 'script', type='text/javascript')
         with io.open(js, encoding='utf-8') as f:
             templ = template(
@@ -65,6 +75,7 @@ class Svg(object):
             script.text = templ
 
     def node(self, parent=None, tag='g', attrib=None, **extras):
+        """Make a new svg node"""
         if parent is None:
             parent = self.root
         attrib = attrib or {}
@@ -80,6 +91,7 @@ class Svg(object):
         return etree.SubElement(parent, tag, attrib)
 
     def transposable_node(self, parent=None, tag='g', attrib=None, **extras):
+        """Make a new svg node which can be transposed if horizontal"""
         if self.graph._horizontal:
             for key1, key2 in (('x', 'y'), ('width', 'height')):
                 attr1 = extras.get(key1, None)
@@ -87,24 +99,23 @@ class Svg(object):
                 extras[key1], extras[key2] = attr2, attr1
         return self.node(parent, tag, attrib, **extras)
 
-    def format(self, xy):
-        return '%f %f' % xy
-
     def line(self, node, coords, close=False, **kwargs):
+        """Draw a svg line"""
         if len(coords) < 2:
             return
         root = 'M%s L%s Z' if close else 'M%s L%s'
         origin_index = 0
         while None in coords[origin_index]:
             origin_index += 1
-        origin = self.format(coords[origin_index])
-        line = ' '.join([self.format(c)
+        origin = coord_format(coords[origin_index])
+        line = ' '.join([coord_format(c)
                          for c in coords[origin_index + 1:]
                          if None not in c])
         self.node(node, 'path',
                   d=root % (origin, line), **kwargs)
 
-    def _pre_render(self, no_data=False):
+    def pre_render(self, no_data=False):
+        """Last things to do before rendering"""
         self.add_style(self.graph.base_css or os.path.join(
             os.path.dirname(__file__), 'css', 'graph.css'))
         self.add_script(self.graph.base_js or os.path.join(
@@ -122,6 +133,7 @@ class Svg(object):
             no_data.text = self.graph.no_data_text
 
     def render(self, is_unicode=False):
+        """Last thing to do before rendering"""
         svg = etree.tostring(
             self.root, pretty_print=True,
             xml_declaration=not self.graph.disable_xml_declaration,

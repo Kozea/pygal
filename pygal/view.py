@@ -136,6 +136,7 @@ class LogView(View):
         self.log10_ymin = log10(self.box.ymin)
         self.box.fix(False)
 
+    # pylint: enable-msg=W0231
     def y(self, y):
         """Project y"""
         if y == None or y <= 0:
