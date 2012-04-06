@@ -130,9 +130,6 @@ class BaseGraph(object):
         """Check if there is any data"""
         if len(self.series) == 0:
             return False
-        for serie in self.series:
-            if not hasattr(serie.values, '__iter__'):
-                serie.values = [serie.values]
         if sum(map(len, map(lambda s: s.values, self.series))) == 0:
             return False
         return True

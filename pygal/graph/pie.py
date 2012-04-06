@@ -22,67 +22,48 @@ Pie chart
 """
 
 from __future__ import division
+from pygal.util import decorate
 from pygal.graph.graph import Graph
-from math import cos, sin, pi
-project = lambda rho, alpha: (
-    rho * sin(-alpha), rho * cos(-alpha))
-diff = lambda x, y: (x[0] - y[0], x[1] - y[1])
-fmt = lambda x: '%f %f' % x
-get_radius = lambda r: fmt(tuple([r] * 2))
+from math import pi
 
 
 class Pie(Graph):
     """Pie graph"""
 
-    def slice(self, serie_node, start_angle, angle, perc,
-            small=False):
+    def slice(self, serie_node, start_angle, serie, total):
         """Make a serie slice"""
-        val = '{0:.2%}'.format(perc)
+
         slices = self.svg.node(serie_node['plot'], class_="slices")
-        slice_ = self.svg.node(slices, class_="slice")
+        serie_angle = 0
+        original_start_angle = start_angle
         center = ((self.width - self.margin.x) / 2.,
                   (self.height - self.margin.y) / 2.)
-        r = min(center)
-        if small:
-            small_r = r * .9
-        else:
-            r = r * .9
-            small_r = 0
-        if perc == 1:
-            self.svg.node(slice_, 'circle',
-                          cx=center[0],
-                          cy=center[1],
-                          r=r,
-                          class_='slice reactive tooltip-trigger')
-        else:
-            absolute_project = lambda rho, theta: fmt(
-                diff(center, project(rho, theta)))
-            to = [absolute_project(r, start_angle),
-                  absolute_project(r, start_angle + angle),
-                  absolute_project(small_r, start_angle + angle),
-                  absolute_project(small_r, start_angle)]
-            self.svg.node(slice_, 'path',
-                          d='M%s A%s 0 %d 1 %s L%s A%s 0 %d 0 %s z' % (
-                              to[0],
-                              get_radius(r), int(angle > pi), to[1],
-                              to[2],
-                              get_radius(small_r), int(angle > pi), to[3]),
-                          class_='slice reactive tooltip-trigger')
-        self.svg.node(slice_, 'desc', class_="value").text = val
-        tooltip_position = map(
-            str, diff(center, project(
-                (r + small_r) / 2, start_angle + angle / 2)))
-        self.svg.node(slice_, 'desc',
-                      class_="x centered").text = tooltip_position[0]
-        self.svg.node(slice_, 'desc',
-                      class_="y centered").text = tooltip_position[1]
-        if self.print_values:
-            self.svg.node(
-                serie_node['text_overlay'], 'text',
-                class_='centered',
-                x=tooltip_position[0],
-                y=tooltip_position[1]
-            ).text = val if self.print_zeroes or val != '0%' else ''
+        radius = min(center)
+        for i, val in enumerate(serie.values):
+            perc = val / total
+            angle = 2 * pi * perc
+            serie_angle += angle
+            val = '{0:.2%}'.format(perc)
+            metadata = serie.metadata[i]
+            slice_ = decorate(
+                self.svg,
+                self.svg.node(slices, class_="slice"),
+                metadata)
+            if len(serie.values) > 1:
+                small_radius = radius * .9
+            else:
+                radius = radius * .9
+                small_radius = 0
+
+            self.svg.slice(serie_node,
+                slice_, radius, small_radius, angle, start_angle, center, val)
+            start_angle += angle
+
+        if len(serie.values) > 1:
+            self.svg.slice(serie_node,
+                slice_, radius * .9, 0, serie_angle,
+                original_start_angle, center, val)
+        return serie_angle
 
     def _compute(self):
         for serie in self.series:
@@ -90,25 +71,12 @@ class Pie(Graph):
         return super(Pie, self)._compute()
 
     def _plot(self):
-        total = float(sum(map(sum, map(lambda x: x.values, self.series))))
+        total = sum(map(sum, map(lambda x: x.values, self.series)))
 
         if total == 0:
             return
         current_angle = 0
         for serie in self.series:
-            angle = 2 * pi * sum(serie.values) / total
-            self.slice(
-                self._serie(serie.index),
-                current_angle,
-                angle, sum(serie.values) / total)
-            if len(serie.values) > 1:
-                small_current_angle = current_angle
-                for val in serie.values:
-                    small_angle = 2 * pi * val / total
-                    self.slice(
-                        self._serie(serie.index),
-                        small_current_angle,
-                        small_angle, val / total,
-                        True)
-                    small_current_angle += small_angle
+            angle = self.slice(
+                self._serie(serie.index), current_angle, serie, total)
             current_angle += angle

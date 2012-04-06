@@ -22,7 +22,7 @@ Line chart
 """
 from __future__ import division
 from pygal.graph.graph import Graph
-from pygal.util import cached_property, compute_scale
+from pygal.util import cached_property, compute_scale, decorate
 
 
 class Line(Graph):
@@ -60,6 +60,7 @@ class Line(Graph):
                 if None in (x, y):
                     continue
 
+                metadata = serie.metadata[i]
                 classes = []
                 if x > self.view.width / 2:
                     classes.append('left')
@@ -67,7 +68,10 @@ class Line(Graph):
                     classes.append('top')
                 classes = ' '.join(classes)
 
-                dots = self.svg.node(serie_node['overlay'], class_="dots")
+                dots = decorate(
+                    self.svg,
+                    self.svg.node(serie_node['overlay'], class_="dots"),
+                    metadata)
                 val = self._get_value(serie.points, i)
                 self.svg.node(dots, 'circle', cx=x, cy=y, r=2.5,
                               class_='dot reactive tooltip-trigger')

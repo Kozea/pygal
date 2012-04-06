@@ -27,6 +27,12 @@ from math import floor, pi, log, log10, ceil
 ORDERS = u"yzafpnµm kMGTPEZY"
 
 
+def get_value(val):
+    if isinstance(val, dict):
+        return val['value']
+    return val
+
+
 def float_format(number):
     """Format a float to a precision of 3, without zeroes or dots"""
     return ("%.3f" % number).rstrip('0').rstrip('.')
@@ -180,6 +186,16 @@ def get_texts_box(texts, fs):
     """Approximation of multiple texts bounds"""
     max_len = max(map(len, texts))
     return (fs, text_len(max_len, fs))
+
+
+def decorate(svg, node, metadata):
+    if hasattr(metadata, 'xlink'):
+        return svg.node(node, 'a', href=metadata.xlink)
+    for key in dir(metadata):
+        if key not in ('xlink', 'value') and not key.startswith('_'):
+            svg.node(node, 'desc', class_=key).text = str(
+                getattr(metadata, key))
+    return node
 
 
 # Stolen from brownie http://packages.python.org/Brownie/

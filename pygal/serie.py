@@ -25,8 +25,18 @@ class Serie(object):
     """Serie containing title, values and the graph serie index"""
     def __init__(self, title, values, index):
         self.title = title
-        self.values = values
+        if isinstance(values, dict) or not hasattr(values, '__iter__'):
+            values = [values]
+        self.metadata = map(Value, values)
+        self.values = [value.value for value in self.metadata]
         self.index = index
+
+
+class Value(object):
+    def __init__(self, value):
+        if not isinstance(value, dict):
+            value = {'value': value}
+        self.__dict__.update(value)
 
 
 class Label(object):

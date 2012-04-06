@@ -25,6 +25,7 @@ from __future__ import division
 import io
 import os
 from lxml import etree
+from math import cos, sin, pi
 from pygal.util import template, coord_format
 from pygal import __version__
 
@@ -88,6 +89,9 @@ class Svg(object):
             elif key.endswith('_'):
                 attrib[key.rstrip('_')] = attrib[key]
                 del attrib[key]
+            elif key == 'href':
+                attrib['{http://www.w3.org/1999/xlink}' + key] = attrib[key]
+                del attrib[key]
         return etree.SubElement(parent, tag, attrib)
 
     def transposable_node(self, parent=None, tag='g', attrib=None, **extras):
@@ -113,6 +117,51 @@ class Svg(object):
                          if None not in c])
         self.node(node, 'path',
                   d=root % (origin, line), **kwargs)
+
+    def slice(self, serie_node, node, radius, small_radius,
+            angle, start_angle, center, val):
+        """Draw a pie slice"""
+        project = lambda rho, alpha: (
+            rho * sin(-alpha), rho * cos(-alpha))
+        diff = lambda x, y: (x[0] - y[0], x[1] - y[1])
+        fmt = lambda x: '%f %f' % x
+        get_radius = lambda r: fmt(tuple([r] * 2))
+        absolute_project = lambda rho, theta: fmt(
+                diff(center, project(rho, theta)))
+
+        if angle == 2 * pi:
+            self.node(node, 'circle',
+                          cx=center[0],
+                          cy=center[1],
+                          r=radius,
+                          class_='slice reactive tooltip-trigger')
+        else:
+            to = [absolute_project(radius, start_angle),
+                  absolute_project(radius, start_angle + angle),
+                  absolute_project(small_radius, start_angle + angle),
+                  absolute_project(small_radius, start_angle)]
+            self.node(node, 'path',
+                      d='M%s A%s 0 %d 1 %s L%s A%s 0 %d 0 %s z' % (
+                          to[0],
+                          get_radius(radius), int(angle > pi), to[1],
+                          to[2],
+                          get_radius(small_radius), int(angle > pi), to[3]),
+                      class_='slice reactive tooltip-trigger')
+        self.node(node, 'desc', class_="value").text = val
+        tooltip_position = map(
+            str, diff(center, project(
+                (radius + small_radius) / 2, start_angle + angle / 2)))
+        self.node(node, 'desc',
+                      class_="x centered").text = tooltip_position[0]
+        self.node(node, 'desc',
+                      class_="y centered").text = tooltip_position[1]
+        if self.graph.print_values:
+            self.node(
+                serie_node['text_overlay'], 'text',
+                class_='centered',
+                x=tooltip_position[0],
+                y=tooltip_position[1]
+            ).text = val if self.graph.print_zeroes or val != '0%' else ''
 
     def pre_render(self, no_data=False):
         """Last things to do before rendering"""

@@ -23,7 +23,7 @@ Bar chart
 
 from __future__ import division
 from pygal.graph.graph import Graph
-from pygal.util import swap, ident, compute_scale
+from pygal.util import swap, ident, compute_scale, decorate
 
 
 class Bar(Graph):
@@ -60,6 +60,7 @@ class Bar(Graph):
             #        (x,y)   (X,Y)
             #
             # x and y are left range coords and X, Y right ones
+            metadata = serie.metadata[i]
             val = self._format(values[i][1][1])
             if self.horizontal:
                 x, y, X, Y = Y, X, y, x
@@ -87,7 +88,11 @@ class Bar(Graph):
                 y = y + height
                 height = -height
             y -= shift
-            bar = self.svg.node(bars, class_='bar')
+
+            bar = decorate(
+                self.svg,
+                self.svg.node(bars, class_='bar'),
+                metadata)
             self.svg.transposable_node(
                 bar, 'rect',
                 x=x,

@@ -17,22 +17,26 @@
 #
 # You should have received a copy of the GNU Lesser General Public License
 # along with pygal. If not, see <http://www.gnu.org/licenses/>.
-from pygal import (
-    Line, Bar, XY, Pie, Radar, StackedBar, Config,
-    StackedLine, HorizontalBar, HorizontalStackedBar)
-from pygal.style import NeonStyle
+from pygal import *
+from pygal.style import *
 from math import cos, sin
 
+lnk = lambda v: {'value': v, 'xlink': 'javascript:alert("Test %s")' % v}
 
-bar = Bar()
-rng = [-6, -19, 0, -1, 2]
-bar.add('test1', rng)
-bar.add('test2', map(abs, rng))
-bar.add('inc', [None, 1, None, 2])
-bar.x_labels = map(str, rng)
+bar = Bar(style=styles['neon'])
+bar.add('1234', [
+    {'value': 10, 'label': 'Ten',    'xlink': 'http://google.com?q=10'},
+    {'value': 20, 'label': 'Twenty', 'xlink': 'http://google.com?q=20'},
+    {'value': 30, 'label': 'Thirty', 'xlink': 'http://google.com?q=30'},
+    {'value': 40, 'label': 'Forty',  'xlink': 'http://google.com?q=40'}
+])
+
+bar.add('4321', [40, 30, 20, 10])
+bar.x_labels = map(str, range(1, 5))
 
 bar.fill = True
-# bar.render_to_file('out-bar.svg')
+bar.render_to_file('out-bar.svg')
+
 
 hbar = HorizontalBar()
 rng = [18, 9, 7, 3, 1, None, -5]
@@ -71,8 +75,8 @@ hstackedbar.add('@@@@@@@', rng)
 hstackedbar.add('++++++', rng2)
 hstackedbar.add('--->', rng3)
 
-hstackedbar.render_to_file('out-horizontalstackedbar1.svg')
-hstackedbar.render_to_file('out-horizontalstackedbar2.svg')
+# hstackedbar.render_to_file('out-horizontalstackedbar1.svg')
+# hstackedbar.render_to_file('out-horizontalstackedbar2.svg')
 
 line = Line(Config(style=NeonStyle,
                    zero=.0001, fill=True,
@@ -93,7 +97,7 @@ rng = range(-30, 31, 1)
 # line.add('_', [2 ** -3, 2.9 ** -8, 2])
 # line.add('_', [.001, .0001, .00001])
 # line.add('_', [1 + 10 ** 10, 3 + 10 ** 10, 2 + 10 ** 10])
-line.add('_', [1, -4, 2, 8, -2])
+line.add('_', [1, lnk(4), None,  2, 8, lnk(-2), None, lnk(2)])
 line.x_labels = map(str, rng)
 line.title = "Line test"
 # line.interpolate = "cubic"
@@ -119,14 +123,17 @@ xy.title = "XY test"
 # xy.render_to_file('out-xy.svg')
 
 pie = Pie(Config(style=NeonStyle))
-pie.add('test', [11, 8, 21])
-pie.add('test2', [29, None, 9])
+pie.add('test', [lnk(11), 8, 21])
+pie.add('test2', [lnk(29), None, 9])
 pie.add('test3', [24, 10, 32])
-pie.add('test4', [20, 18, 9])
+pie.add('test4', [20, lnk(18), 9])
 pie.add('test5', [17, 5, 10])
 pie.add('test6', [None, None, 10])
-pie.title = "Pie test"
-# pie.render_to_file('out-pie.svg')
+# pie.add('test', {'value': 11, 'xlink': 'javascript:alert("lol 11")'})
+# pie.add('test2', 1)
+# pie.add('test3', 5)
+# pie.title = "Pie test"
+pie.render_to_file('out-pie.svg')
 
 config = Config()
 config.fill = True
@@ -135,9 +142,9 @@ config.x_labels = (
     'black', 'red', 'blue', 'yellow', 'orange', 'green', 'white')
 config.interpolate = 'nearest'
 radar = Radar(config)
-radar.add('test', [1, 4, 1, 5, None, 2, 5])
+radar.add('test', [1, 4, lnk(1), 5, None, 2, 5])
 radar.add('test2', [10, 2, 0, 5, 1, 9, 4])
 
 radar.title = "Radar test"
 
-# radar.render_to_file('out-radar.svg')
+radar.render_to_file('out-radar.svg')
