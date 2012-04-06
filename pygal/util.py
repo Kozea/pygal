@@ -190,7 +190,10 @@ def get_texts_box(texts, fs):
 
 def decorate(svg, node, metadata):
     if hasattr(metadata, 'xlink'):
-        return svg.node(node, 'a', href=metadata.xlink)
+        xlink = metadata.xlink
+        if not isinstance(xlink, dict):
+            xlink = {'href': xlink}
+        return svg.node(node, 'a', **xlink)
     for key in dir(metadata):
         if key not in ('xlink', 'value') and not key.startswith('_'):
             svg.node(node, 'desc', class_=key).text = str(
