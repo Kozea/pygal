@@ -43,11 +43,10 @@ class Config(object):
     #: If set to a filename, this will replace the default css
     base_css = None
     #: or default js
-    included_js = [os.path.join(os.path.dirname(__file__), 'js', 'graph.js')]
+    included_js = []
     external_js = [
-        # 'http://code.jquery.com/jquery.min.js',
-        # 'http://keith-wood.name/js/jquery.svg.js',
-        # 'http://keith-wood.name/js/jquery.svgdom.js'
+        'https://raw.github.com/Kozea/pygal.js/master/svg.jquery.js',
+        'https://raw.github.com/Kozea/pygal.js/master/pygal-tooltips.js'
     ]
     #: Style holding values injected in css
     style = DefaultStyle

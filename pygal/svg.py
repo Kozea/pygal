@@ -48,7 +48,8 @@ class Svg(object):
                 None: self.ns,
                 'xlink': 'http://www.w3.org/1999/xlink',
             },
-            onload="svg_load();")
+            # onload="svg_load(evt);"
+)
         self.root.append(etree.Comment(
             u'Generated with pygal %s ©Kozea 2012' % __version__))
         self.root.append(etree.Comment(u'http://github.com/Kozea/pygal'))

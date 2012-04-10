@@ -83,11 +83,14 @@ class Graph(BaseGraph):
             id="tooltip",
             transform='translate(0 0)')
 
-        self.svg.node(self.nodes['tooltip'], 'rect',
+        a = self.svg.node(self.nodes['tooltip'], 'a')
+        self.svg.node(a, 'rect',
                       id="tooltip-box",
                       rx=5, ry=5,
         )
-        self.svg.node(self.nodes['tooltip'], 'text')
+        text = self.svg.node(a, 'text', class_='text')
+        self.svg.node(text, 'tspan', class_='label')
+        self.svg.node(text, 'tspan', class_='value')
 
     def _x_axis(self):
         """Make the x axis: labels and guides"""

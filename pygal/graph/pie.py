@@ -35,6 +35,7 @@ class Pie(Graph):
 
         slices = self.svg.node(serie_node['plot'], class_="slices")
         serie_angle = 0
+        total_perc = 0
         original_start_angle = start_angle
         center = ((self.width - self.margin.x) / 2.,
                   (self.height - self.margin.y) / 2.)
@@ -58,11 +59,14 @@ class Pie(Graph):
             self.svg.slice(serie_node,
                 slice_, radius, small_radius, angle, start_angle, center, val)
             start_angle += angle
+            total_perc += perc
 
         if len(serie.values) > 1:
+            val = '{0:.2%}'.format(total_perc)
             self.svg.slice(serie_node,
-                slice_, radius * .9, 0, serie_angle,
-                original_start_angle, center, val)
+                           self.svg.node(slices, class_="big_slice"),
+                           radius * .9, 0, serie_angle,
+                           original_start_angle, center, val)
         return serie_angle
 
     def _compute(self):

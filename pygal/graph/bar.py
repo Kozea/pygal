@@ -102,7 +102,7 @@ class Bar(Graph):
                 width=bar_inner_width,
                 height=height,
                 class_='rect reactive tooltip-trigger')
-            self.svg.node(bar, 'desc', class_="values").text = val
+            self.svg.node(bar, 'desc', class_="value").text = val
             tooltip_positions = map(
                 str, (x + bar_inner_width / 2, y + height / 2))
             self.svg.node(bar, 'desc',

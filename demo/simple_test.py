@@ -21,19 +21,24 @@ from pygal import *
 from pygal.style import *
 from math import cos, sin
 
-lnk = lambda v: {'value': v, 'xlink': 'javascript:alert("Test %s")' % v}
+lnk = lambda v, l=None: {'value': v, 'xlink': 'javascript:alert("Test %s")' % v, 'label': l}
 
 bar = Bar(style=styles['neon'])
 bar.add('1234', [
     {'value': 10, 'label': 'Ten',    'xlink': 'http://google.com?q=10'},
     {'value': 20, 'label': 'Twenty', 'xlink': 'http://google.com?q=20'},
-    {'value': 30, 'label': 'Thirty', 'xlink': 'http://google.com?q=30'},
+    30,
     {'value': 40, 'label': 'Forty',  'xlink': 'http://google.com?q=40'}
 ])
 
-bar.add('4321', [40, 30, 20, 10])
+bar.add('4321', [40, {'value': 30, 'label': 'Thirty', 'xlink': 'http://google.com?q=30'}, 20, 10])
 bar.x_labels = map(str, range(1, 5))
 
+bar.included_js = []
+bar.external_js = [
+    'http://localhost:7575/svg.jquery.js',
+    'http://localhost:7575/pygal.js',
+]
 bar.fill = True
 bar.render_to_file('out-bar.svg')
 
@@ -123,12 +128,17 @@ xy.title = "XY test"
 # xy.render_to_file('out-xy.svg')
 
 pie = Pie(Config(style=NeonStyle))
-pie.add('test', [lnk(11), 8, 21])
+pie.add('test', [lnk(11, 'LOL'), {'value': 8, 'label': 'Lol2'}, 21])
 pie.add('test2', [lnk(29), None, 9])
 pie.add('test3', [24, 10, 32])
 pie.add('test4', [20, lnk(18), 9])
 pie.add('test5', [17, 5, 10])
 pie.add('test6', [None, None, 10])
+pie.included_js = []
+pie.external_js = [
+    'http://localhost:7575/svg.jquery.js',
+    'http://localhost:7575/pygal.js',
+]
 # pie.add('test', {'value': 11, 'xlink': 'javascript:alert("lol 11")'})
 # pie.add('test2', 1)
 # pie.add('test3', 5)

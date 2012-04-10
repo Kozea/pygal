@@ -172,4 +172,12 @@ text.no_data {
   font-size: {{ font_sizes.tooltip }};
 }
 
+#tooltip text tspan.label {
+  fill-opacity: .8;
+}
+
+a:visited {
+  fill: none;
+}
+
 {{ style.colors }}

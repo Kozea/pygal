@@ -193,11 +193,12 @@ def decorate(svg, node, metadata):
         xlink = metadata.xlink
         if not isinstance(xlink, dict):
             xlink = {'href': xlink}
-        return svg.node(node, 'a', **xlink)
+        node = svg.node(node, 'a', **xlink)
     for key in dir(metadata):
-        if key not in ('xlink', 'value') and not key.startswith('_'):
-            svg.node(node, 'desc', class_=key).text = str(
-                getattr(metadata, key))
+        if key not in ('value') and not key.startswith('_'):
+            value = getattr(metadata, key)
+            if value:
+                svg.node(node, 'desc', class_=key).text = str(value)
     return node
 
 
