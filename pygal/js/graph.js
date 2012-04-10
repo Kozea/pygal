@@ -15,9 +15,9 @@
 
   tooltip_timeout = 0;
 
-  tooltip_font_size = parseInt("{{ font_sizes.tooltip }}");
+  tooltip_font_size = this.config.tooltip_font_size;
 
-  anim_steps = parseInt("{{ animation_steps }}");
+  anim_steps = this.config.animation_steps;
 
   Queue = (function() {
 

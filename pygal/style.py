@@ -59,6 +59,16 @@ class Style(object):
                     '}}\n'.format(*tupl))
         return '\n'.join(map(color, enumerate(self._colors)))
 
+    def to_dict(self):
+        config = {}
+        for attr in dir(self):
+            if not attr.startswith('__'):
+                value = getattr(self, attr)
+                if not hasattr(value, '__call__'):
+                    config[attr] = value
+        return config
+
+
 DefaultStyle = Style(opacity_hover='.4', opacity='.8')
 LightStyle = Style(
     background='white',

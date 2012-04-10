@@ -2,8 +2,8 @@ _ = (x) -> document.querySelectorAll(x)
 __ = (x) -> document.getElementById(x)
 padding = 5
 tooltip_timeout = 0
-tooltip_font_size = parseInt("{{ font_sizes.tooltip }}")
-anim_steps = parseInt("{{ animation_steps }}")
+tooltip_font_size = @config.tooltip_font_size
+anim_steps = @config.animation_steps
 
 class Queue
     constructor: (@delay) ->

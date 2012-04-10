@@ -21,7 +21,7 @@
 Config module with all options
 """
 
-
+import os
 from pygal.style import DefaultStyle
 
 
@@ -43,7 +43,12 @@ class Config(object):
     #: If set to a filename, this will replace the default css
     base_css = None
     #: or default js
-    base_js = None
+    included_js = [os.path.join(os.path.dirname(__file__), 'js', 'graph.js')]
+    external_js = [
+        # 'http://code.jquery.com/jquery.min.js',
+        # 'http://keith-wood.name/js/jquery.svg.js',
+        # 'http://keith-wood.name/js/jquery.svgdom.js'
+    ]
     #: Style holding values injected in css
     style = DefaultStyle
     #: Various font sizes
@@ -120,3 +125,14 @@ class Config(object):
                     ('%dpx' % getattr(self, name)
                  ) if with_unit else getattr(self, name))
         return fs
+
+    def to_dict(self):
+        config = {}
+        for attr in dir(self):
+            if not attr.startswith('__'):
+                value = getattr(self, attr)
+                if hasattr(value, 'to_dict'):
+                    config[attr] = value.to_dict()
+                elif not hasattr(value, '__call__'):
+                    config[attr] = value
+        return config

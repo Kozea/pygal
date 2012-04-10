@@ -24,6 +24,7 @@ Svg helper
 from __future__ import division
 import io
 import os
+import json
 from lxml import etree
 from math import cos, sin, pi
 from pygal.util import template, coord_format
@@ -64,16 +65,19 @@ class Svg(object):
                 hidden='y' if self.graph.horizontal else 'x')
             style.text = templ
 
-    def add_script(self, js):
+    def add_scripts(self):
         """Add the js to the svg"""
-        script = self.node(self.defs, 'script', type='text/javascript')
-        with io.open(js, encoding='utf-8') as f:
-            templ = template(
-                f.read(),
-                font_sizes=self.graph.font_sizes(False),
-                animation_steps=self.graph.animation_steps
-            )
-            script.text = templ
+        common_script = self.node(self.defs, 'script', type='text/javascript')
+        common_script.text = " = ".join(
+            ("window.config", json.dumps(self.graph.config.to_dict())))
+
+        for external_js in self.graph.external_js:
+            self.node(
+                self.defs, 'script', type='text/javascript', href=external_js)
+        for included_js in self.graph.included_js:
+            script = self.node(self.defs, 'script', type='text/javascript')
+            with io.open(included_js, encoding='utf-8') as f:
+                script.text = f.read()
 
     def node(self, parent=None, tag='g', attrib=None, **extras):
         """Make a new svg node"""
@@ -167,8 +171,7 @@ class Svg(object):
         """Last things to do before rendering"""
         self.add_style(self.graph.base_css or os.path.join(
             os.path.dirname(__file__), 'css', 'graph.css'))
-        self.add_script(self.graph.base_js or os.path.join(
-            os.path.dirname(__file__), 'js', 'graph.js'))
+        self.add_scripts()
         self.root.set(
             'viewBox', '0 0 %d %d' % (self.graph.width, self.graph.height))
         if self.graph.explicit_size:
