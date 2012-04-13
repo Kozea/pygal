@@ -21,8 +21,7 @@ from logging import getLogger, INFO, DEBUG
 import pygal
 from pygal.config import Config
 from pygal.util import cut
-from pygal.style import styles, DefaultStyle
-from pygal.serie import Serie
+from pygal.style import styles
 from base64 import (
     urlsafe_b64encode as b64encode,
     urlsafe_b64decode as b64decode)
@@ -69,7 +68,7 @@ def create_app():
                 random_value((-max, min)[random.randrange(0, 2)], max),
                 random_value((-max, min)[random.randrange(0, 2)], max))
                       for i in range(data)]
-            series.append(Serie(random_label(), values, len(series)))
+            series.append((random_label(), values))
         return series
 
     def _random_series(type, data, order):
@@ -88,7 +87,7 @@ def create_app():
             else:
                 values = [random_value((-max, min)[random.randrange(1, 2)],
                                        max) for i in range(data)]
-            series.append(Serie(random_label(), values, len(series)))
+            series.append((random_label(), values))
         return series
 
     @app.route("/")
@@ -98,7 +97,8 @@ def create_app():
     @app.route("/svg/<type>/<series>/<config>")
     def svg(type, series, config):
         graph = getattr(pygal, type)(pickle.loads(b64decode(str(config))))
-        graph.series = pickle.loads(b64decode(str(series)))
+        for title, values in pickle.loads(b64decode(str(series))):
+            graph.add(title, values)
         return graph.render_response()
 
     @app.route("/all")
@@ -110,9 +110,9 @@ def create_app():
         order = random.randrange(1, 10)
         xy_series = _random(data, order)
         other_series = []
-        for serie in xy_series:
+        for title, values in xy_series:
             other_series.append(
-                Serie(serie.title, cut(serie.values, 1), serie.index))
+                (title, cut(values, 1)))
         xy_series = b64encode(pickle.dumps(xy_series))
         other_series = b64encode(pickle.dumps(other_series))
         config = Config()
@@ -124,10 +124,8 @@ def create_app():
         config.style = styles[style]
         config.x_labels = [random_label() for i in range(data)]
         svgs = []
-        for type in ('Bar', 'Line', 'XY', 'StackedBar',
-                  'StackedLine', 'HorizontalBar',
-                  'HorizontalStackedBar',
-                  'Pie', 'Radar'):
+        for chart in pygal.CHARTS:
+            type = chart.__name__
             svgs.append({'type': type,
                          'series': xy_series if type == 'XY' else other_series,
                          'config': b64encode(pickle.dumps(config))})

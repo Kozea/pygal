@@ -23,19 +23,29 @@ Pygal -  A python svg graph plotting library
 
 __version__ = '0.9.21'
 
+from pygal.config import Config
 from pygal.graph.bar import Bar
+from pygal.graph.dot import Dot
 from pygal.graph.horizontal import HorizontalBar
-from pygal.graph.stackedbar import StackedBar
 from pygal.graph.horizontal import HorizontalStackedBar
 from pygal.graph.line import Line
-from pygal.graph.stackedline import StackedLine
-from pygal.graph.xy import XY
 from pygal.graph.pie import Pie
 from pygal.graph.radar import Radar
-from pygal.config import Config
+from pygal.graph.stackedbar import StackedBar
+from pygal.graph.stackedline import StackedLine
+from pygal.graph.xy import XY
 
 
 #: List of all chart types
 CHARTS = [
-    Bar, HorizontalBar, StackedBar, HorizontalStackedBar,
-    Line, StackedLine, XY, Pie, Radar]
+    Bar,
+    Dot,
+    HorizontalBar,
+    HorizontalStackedBar,
+    Line,
+    Pie,
+    Radar,
+    StackedBar,
+    StackedLine,
+    XY
+]
