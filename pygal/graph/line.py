@@ -75,17 +75,11 @@ class Line(Graph):
                 val = self._get_value(serie.points, i)
                 self.svg.node(dots, 'circle', cx=x, cy=y, r=2.5,
                               class_='dot reactive tooltip-trigger')
-                self.svg.node(dots, 'desc', class_="value").text = val
-                self.svg.node(dots, 'desc',
-                              class_="x " + classes).text = str(x)
-                self.svg.node(dots, 'desc',
-                              class_="y " + classes).text = str(y)
-                if self.print_values:
-                    self.svg.node(
-                        serie_node['text_overlay'], 'text',
-                        x=x + self.value_font_size,
-                        y=y + self.value_font_size,
-                    ).text = val
+                self._tooltip_data(dots, val, x, y)
+                self._static_value(
+                    serie_node, val,
+                    x + self.value_font_size,
+                    y + self.value_font_size)
 
         if self.stroke:
             if self.interpolate:
@@ -97,7 +91,7 @@ class Line(Graph):
                 class_='line reactive' + (' nofill' if not self.fill else ''))
 
     def _compute(self):
-        x_pos = [x / float(self._len - 1) for x in range(self._len)
+        x_pos = [x / (self._len - 1) for x in range(self._len)
         ] if self._len != 1 else [.5]  # Center if only one value
         for serie in self.series:
             if not hasattr(serie, 'points'):

@@ -152,21 +152,11 @@ class Svg(object):
                           to[2],
                           get_radius(small_radius), int(angle > pi), to[3]),
                       class_='slice reactive tooltip-trigger')
-        self.node(node, 'desc', class_="value").text = val
-        tooltip_position = map(
-            str, diff(center, project(
-                (radius + small_radius) / 2, start_angle + angle / 2)))
-        self.node(node, 'desc',
-                      class_="x centered").text = tooltip_position[0]
-        self.node(node, 'desc',
-                      class_="y centered").text = tooltip_position[1]
-        if self.graph.print_values:
-            self.node(
-                serie_node['text_overlay'], 'text',
-                class_='centered',
-                x=tooltip_position[0],
-                y=tooltip_position[1]
-            ).text = val if self.graph.print_zeroes or val != '0%' else ''
+        x, y = diff(center, project(
+                (radius + small_radius) / 2, start_angle + angle / 2))
+
+        self.graph._tooltip_data(node, val, x, y, classes="centered")
+        self.graph._static_value(serie_node, val, x, y)
 
     def pre_render(self, no_data=False):
         """Last things to do before rendering"""

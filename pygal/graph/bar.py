@@ -102,27 +102,16 @@ class Bar(Graph):
                 width=bar_inner_width,
                 height=height,
                 class_='rect reactive tooltip-trigger')
-            self.svg.node(bar, 'desc', class_="value").text = val
-            tooltip_positions = map(
-                str, (x + bar_inner_width / 2, y + height / 2))
-            self.svg.node(bar, 'desc',
-                          class_="x centered"
-            ).text = tooltip_positions[int(self.horizontal)]
-            self.svg.node(bar, 'desc',
-                          class_="y centered"
-            ).text = tooltip_positions[int(not self.horizontal)]
+
+            x += bar_inner_width / 2
+            y += height / 2
+
             if self.horizontal:
-                x += .3 * self.value_font_size
-                y += height / 2
-            else:
-                y += height / 2 + .3 * self.value_font_size
-            if self.print_values:
-                self.svg.transposable_node(
-                    serie_node['text_overlay'], 'text',
-                    class_='centered',
-                    x=x + bar_inner_width / 2,
-                    y=y
-                ).text = val if self.print_zeroes or val != '0' else ''
+                x, y = y, x
+
+            self._tooltip_data(bar, val, x, y, classes="centered")
+            self._static_value(serie_node, val, x, y)
+
         return stack_vals
 
     def _compute(self):

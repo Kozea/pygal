@@ -23,7 +23,7 @@ Base for pygal charts
 
 from __future__ import division
 import io
-from pygal.serie import Serie
+from pygal.serie import Serie, Value
 from pygal.view import Margin, Box
 from pygal.util import get_text_box, get_texts_box, cut, rad, humanize
 from pygal.svg import Svg
@@ -34,6 +34,8 @@ from math import sin, cos
 
 class BaseGraph(object):
     """Graphs commons"""
+
+    __value__ = Value
 
     def __init__(self, config=None, **kwargs):
         """Init the graph"""
@@ -51,7 +53,8 @@ class BaseGraph(object):
 
     def add(self, title, values):
         """Add a serie to this graph"""
-        self.series.append(Serie(title, values, len(self.series)))
+        self.series.append(
+            Serie(title, list(values), len(self.series), self.__value__))
 
     def reinit(self):
         """(Re-)Init the graph"""
@@ -119,6 +122,11 @@ class BaseGraph(object):
         """Getter for the maximum series size"""
         return max([len(serie.values) for serie in self.series])
 
+    @cached_property
+    def _max(self):
+        """Getter for the maximum series value"""
+        return max(self._values)
+
     def _draw(self):
         """Draw all the things"""
         self._compute()
@@ -133,6 +141,13 @@ class BaseGraph(object):
         if sum(map(len, map(lambda s: s.values, self.series))) == 0:
             return False
         return True
+
+    def _uniformize_data(self):
+        """Make all series to max len"""
+        for serie in self.series:
+            if len(serie.values) < self._len:
+                diff = self._len - len(serie.values)
+                serie.metadata += diff * [self.__value__(0)]
 
     def _render(self):
         """Make the graph internally"""

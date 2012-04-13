@@ -41,6 +41,7 @@ class StackedLine(Line):
         return new_values
 
     def _compute(self):
+        self._uniformize_data()
         x_pos = [x / float(self._len - 1) for x in range(self._len)
         ] if self._len != 1 else [.5]  # Center if only one value
         accumulation = [0] * self._len

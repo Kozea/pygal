@@ -36,10 +36,14 @@ class Graph(BaseGraph):
         """Draw all decorations"""
         self._set_view()
         self._make_graph()
-        self._x_axis()
-        self._y_axis()
+        self._axes()
         self._legend()
         self._title()
+
+    def _axes(self):
+        """Draw axes"""
+        self._x_axis()
+        self._y_axis()
 
     def _set_view(self):
         """Assign a view to current graph"""
@@ -92,14 +96,14 @@ class Graph(BaseGraph):
         self.svg.node(text, 'tspan', class_='label')
         self.svg.node(text, 'tspan', class_='value')
 
-    def _x_axis(self):
+    def _x_axis(self, draw_axes=True):
         """Make the x axis: labels and guides"""
         if not self._x_labels:
             return
 
         axis = self.svg.node(self.nodes['plot'], class_="axis x")
 
-        if 0 not in [label[1] for label in self._x_labels]:
+        if 0 not in [label[1] for label in self._x_labels] and draw_axes:
             self.svg.node(axis, 'path',
                       d='M%f %f v%f' % (0, 0, self.view.height),
                       class_='line')
@@ -107,10 +111,12 @@ class Graph(BaseGraph):
             guides = self.svg.node(axis, class_='guides')
             x = self.view.x(position)
             y = self.view.height + 5
-            self.svg.node(guides, 'path',
-                      d='M%f %f v%f' % (x, 0, self.view.height),
+            if draw_axes:
+                self.svg.node(
+                    guides, 'path',
+                    d='M%f %f v%f' % (x, 0, self.view.height),
                     class_='%sline' % (
-                        'guide ' if position != 0 else ''))
+                    'guide ' if position != 0 else ''))
             text = self.svg.node(guides, 'text',
                              x=x,
                              y=y + .5 * self.label_font_size + 5
@@ -120,14 +126,14 @@ class Graph(BaseGraph):
                 text.attrib['transform'] = "rotate(%d %f %f)" % (
                     self.x_label_rotation, x, y)
 
-    def _y_axis(self):
+    def _y_axis(self, draw_axes=True):
         """Make the y axis: labels and guides"""
         if not self._y_labels:
             return
 
         axis = self.svg.node(self.nodes['plot'], class_="axis y")
 
-        if 0 not in [label[1] for label in self._y_labels]:
+        if 0 not in [label[1] for label in self._y_labels] and draw_axes:
             self.svg.node(axis, 'path',
                       d='M%f %f h%f' % (0, self.view.height, self.view.width),
                       class_='line')
@@ -138,11 +144,13 @@ class Graph(BaseGraph):
             ))
             x = -5
             y = self.view.y(position)
-            self.svg.node(guides, 'path',
-                          d='M%f %f h%f' % (0, y, self.view.width),
-                          class_='%s%sline' % (
-                              'major ' if major else '',
-                              'guide ' if position != 0 else ''))
+            if draw_axes:
+                self.svg.node(
+                    guides, 'path',
+                    d='M%f %f h%f' % (0, y, self.view.width),
+                    class_='%s%sline' % (
+                        'major ' if major else '',
+                        'guide ' if position != 0 else ''))
             text = self.svg.node(guides, 'text',
                                  x=x,
                                  y=y + .35 * self.label_font_size,
@@ -226,3 +234,27 @@ class Graph(BaseGraph):
                     coord = tuple(reversed(coord))
                 interpolateds.append(coord)
         return interpolateds
+
+    def _tooltip_data(self, node, value, x, y, classes=None):
+        self.svg.node(node, 'desc', class_="value").text = value
+        if classes is None:
+            classes = []
+            if x > self.view.width / 2:
+                classes.append('left')
+            if y > self.view.height / 2:
+                classes.append('top')
+            classes = ' '.join(classes)
+
+        self.svg.node(node, 'desc',
+                      class_="x " + classes).text = str(x)
+        self.svg.node(node, 'desc',
+                      class_="y " + classes).text = str(y)
+
+    def _static_value(self, serie_node, value, x, y):
+        if self.print_values:
+            self.svg.node(
+                serie_node['text_overlay'], 'text',
+                class_='centered',
+                x=x,
+                y=y + self.value_font_size / 3
+            ).text = value if self.print_zeroes or value != '0' else ''

@@ -22,6 +22,7 @@ Pie chart
 """
 
 from __future__ import division
+from pygal.serie import PositiveValue
 from pygal.util import decorate
 from pygal.graph.graph import Graph
 from math import pi
@@ -29,6 +30,8 @@ from math import pi
 
 class Pie(Graph):
     """Pie graph"""
+
+    __value__ = PositiveValue
 
     def slice(self, serie_node, start_angle, serie, total):
         """Make a serie slice"""
@@ -68,11 +71,6 @@ class Pie(Graph):
                            radius * .9, 0, serie_angle,
                            original_start_angle, center, val)
         return serie_angle
-
-    def _compute(self):
-        for serie in self.series:
-            serie.values = map(lambda x: max(x, 0), serie.values)
-        return super(Pie, self)._compute()
 
     def _plot(self):
         total = sum(map(sum, map(lambda x: x.values, self.series)))

@@ -18,25 +18,39 @@
 # along with pygal. If not, see <http://www.gnu.org/licenses/>.
 """
 Little helpers for series
+
 """
+from pygal.util import cut
 
 
 class Serie(object):
     """Serie containing title, values and the graph serie index"""
-    def __init__(self, title, values, index):
+    def __init__(self, title, values, index, value_class):
         self.title = title
         if isinstance(values, dict) or not hasattr(values, '__iter__'):
             values = [values]
-        self.metadata = map(Value, values)
-        self.values = [value.value for value in self.metadata]
+        self.metadata = map(value_class, values)
         self.index = index
+
+    @property
+    def values(self):
+        return cut(self.metadata, 'value')
 
 
 class Value(object):
+    """Value container"""
+
     def __init__(self, value):
         if not isinstance(value, dict):
             value = {'value': value}
         self.__dict__.update(value)
+
+
+class PositiveValue(Value):
+    """Positive or zero value container"""
+
+    def __init__(self, value):
+        super(PositiveValue, self).__init__(max(0, value))
 
 
 class Label(object):
