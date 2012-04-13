@@ -19,6 +19,7 @@
 """
 Charts styling
 """
+from pygal.util import cycle_fill
 
 
 class Style(object):
@@ -50,6 +51,7 @@ class Style(object):
     @property
     def colors(self):
         """Get the css color list"""
+
         def color(tupl):
             """Make a color css"""
             return (
@@ -57,7 +59,7 @@ class Style(object):
                     '  stroke: {1};\n'
                     '  fill: {1};\n'
                     '}}\n'.format(*tupl))
-        return '\n'.join(map(color, enumerate(self._colors)))
+        return '\n'.join(map(color, enumerate(cycle_fill(self._colors, 16))))
 
     def to_dict(self):
         config = {}

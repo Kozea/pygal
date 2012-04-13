@@ -24,6 +24,7 @@ Various utils
 from __future__ import division
 from decimal import Decimal
 from math import floor, pi, log, log10, ceil
+from itertools import cycle
 ORDERS = u"yzafpnµm kMGTPEZY"
 
 
@@ -189,6 +190,7 @@ def get_texts_box(texts, fs):
 
 
 def decorate(svg, node, metadata):
+    """Add metedata next to a node"""
     if hasattr(metadata, 'xlink'):
         xlink = metadata.xlink
         if not isinstance(xlink, dict):
@@ -200,6 +202,15 @@ def decorate(svg, node, metadata):
             if value:
                 svg.node(node, 'desc', class_=key).text = str(value)
     return node
+
+
+def cycle_fill(short_list, max_len):
+    """Fill a list to max_len using a cycle of it"""
+    short_list = list(short_list)
+    list_cycle = cycle(short_list)
+    while len(short_list) < 16:
+        short_list.append(list_cycle.next())
+    return short_list
 
 
 # Stolen from brownie http://packages.python.org/Brownie/

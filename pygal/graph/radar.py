@@ -109,8 +109,9 @@ class Radar(Line):
         x_pos = [.5 * pi + i * delta for i in range(self._len + 1)]
         for serie in self.series:
             vals = list(serie.values)
-            vals.append(vals[0])
-            serie.metadata.append(serie.metadata[0])
+            # TODO: Fix metadata add here
+            # vals.append(vals[0])
+            # serie.metadata.append(serie.metadata[0])
             vals = [val if val != None else 0 for val in vals]
             serie.points = [
                 (v, x_pos[i])

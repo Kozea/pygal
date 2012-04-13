@@ -41,4 +41,64 @@ def test_colors():
   stroke: rgb(12, 231, 3);
   fill: rgb(12, 231, 3);
 }
+
+.color-4 {
+  stroke: red;
+  fill: red;
+}
+
+.color-5 {
+  stroke: #231A3b;
+  fill: #231A3b;
+}
+
+.color-6 {
+  stroke: #ff0;
+  fill: #ff0;
+}
+
+.color-7 {
+  stroke: rgb(12, 231, 3);
+  fill: rgb(12, 231, 3);
+}
+
+.color-8 {
+  stroke: red;
+  fill: red;
+}
+
+.color-9 {
+  stroke: #231A3b;
+  fill: #231A3b;
+}
+
+.color-10 {
+  stroke: #ff0;
+  fill: #ff0;
+}
+
+.color-11 {
+  stroke: rgb(12, 231, 3);
+  fill: rgb(12, 231, 3);
+}
+
+.color-12 {
+  stroke: red;
+  fill: red;
+}
+
+.color-13 {
+  stroke: #231A3b;
+  fill: #231A3b;
+}
+
+.color-14 {
+  stroke: #ff0;
+  fill: #ff0;
+}
+
+.color-15 {
+  stroke: rgb(12, 231, 3);
+  fill: rgb(12, 231, 3);
+}
 '''
