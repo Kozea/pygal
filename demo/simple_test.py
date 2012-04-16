@@ -161,7 +161,7 @@ config.fill = True
 config.style = NeonStyle
 config.x_labels = (
     'black', 'red', 'blue', 'yellow', 'orange', 'green', 'white')
-config.interpolate = 'nearest'
+# config.interpolate = 'nearest'
 radar = Radar(config)
 radar.add('test', [1, 4, lnk(10), 5, None, -2, 5])
 radar.add('test2', [10, 2, 0, 5, 1, 9, 4])

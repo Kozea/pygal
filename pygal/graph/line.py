@@ -28,6 +28,10 @@ from pygal.util import cached_property, compute_scale, decorate
 class Line(Graph):
     """Line graph"""
 
+    def __init__(self, *args, **kwargs):
+        self._self_close = False
+        super(Line, self).__init__(*args, **kwargs)
+
     def _get_value(self, values, i):
         """Get the value formatted for tooltip"""
         return self._format(values[i][1])
@@ -87,7 +91,7 @@ class Line(Graph):
             if self.fill:
                 view_values = self._fill(view_values)
             self.svg.line(
-                serie_node['plot'], view_values,
+                serie_node['plot'], view_values, close=self._self_close,
                 class_='line reactive' + (' nofill' if not self.fill else ''))
 
     def _compute(self):
