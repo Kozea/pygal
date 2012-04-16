@@ -123,6 +123,8 @@ ident = lambda x: x
 
 def compute_logarithmic_scale(min_, max_):
     """Compute an optimal scale for logarithmic"""
+    if max_ <= 0 or min_ <= 0:
+        return []
     min_order = int(floor(log10(min_)))
     max_order = int(ceil(log10(max_)))
     positions = []
@@ -199,6 +201,8 @@ def decorate(svg, node, metadata):
     for key in dir(metadata):
         if key not in ('value') and not key.startswith('_'):
             value = getattr(metadata, key)
+            if key == 'xlink' and isinstance(value, dict):
+                value = value.get('href', value)
             if value:
                 svg.node(node, 'desc', class_=key).text = str(value)
     return node

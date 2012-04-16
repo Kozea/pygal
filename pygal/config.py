@@ -21,7 +21,6 @@
 Config module with all options
 """
 
-import os
 from pygal.style import DefaultStyle
 
 
@@ -40,11 +39,10 @@ class Config(object):
     human_readable = False
     #: Display values in logarithmic scale
     logarithmic = False
-    #: If set to a filename, this will replace the default css
-    base_css = None
-    #: or default js
-    included_js = []
-    external_js = [
+    #: List of css file, can be an absolute file path or an external link
+    css = ['style.css', 'graph.css']  # Relative path to pygal css
+    #: List of js file, can be a filepath or an external link
+    js = [
         'https://raw.github.com/Kozea/pygal.js/master/svg.jquery.js',
         'https://raw.github.com/Kozea/pygal.js/master/pygal-tooltips.js'
     ]

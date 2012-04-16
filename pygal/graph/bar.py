@@ -68,9 +68,9 @@ class Bar(Graph):
             padding = .1 * width
             inner_width = width - 2 * padding
             if self.horizontal:
-                height = self.view.x(0) - y
+                height = self.view.x(self.zero) - y
             else:
-                height = self.view.y(0) - y
+                height = self.view.y(self.zero) - y
             if stack_vals == None:
                 bar_width = inner_width / len(self.series)
                 bar_padding = .1 * bar_width

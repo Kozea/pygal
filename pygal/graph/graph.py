@@ -55,7 +55,9 @@ class Graph(BaseGraph):
     def _make_graph(self):
         """Init common graph svg structure"""
         self.nodes['graph'] = self.svg.node(
-            class_='graph %s-graph' % self.__class__.__name__.lower())
+            class_='graph %s-graph %s' % (
+                self.__class__.__name__.lower(),
+            'horizontal' if self.horizontal else 'vertical'))
         self.svg.node(self.nodes['graph'], 'rect',
                   class_='background',
                   x=0, y=0,

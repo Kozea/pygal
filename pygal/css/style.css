@@ -1,0 +1,112 @@
+/*
+ * This file is part of pygal
+ *
+ * A python svg graph plotting library
+ * Copyright © 2012 Kozea
+
+ * This library is free software: you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation, either version 3 of the License, or (at your option) any
+ * later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE.  See the GNU Lesser General Public License for more
+ * details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with pygal. If not, see <http://www.gnu.org/licenses/>.
+*/
+
+/* 
+ * Styles from config
+ */
+
+svg {
+  background-color: {{ style.background }};
+}
+
+svg * {
+  -webkit-transition: {{ style.transition }};
+  -moz-transition: {{ style.transition }};
+  transition: {{ style.transition }};
+}
+
+.graph > .background {
+  fill: {{ style.background }};
+}
+
+.plot > .background {
+  fill: {{ style.plot_background }};
+}
+
+.graph {
+  fill: {{ style.foreground }};
+}
+
+text.no_data {
+  fill: {{ style.foreground_light }};
+}
+
+.title {
+  fill: {{ style.foreground_light }};
+}
+
+.legends .legend text {
+  fill: {{ style.foreground }};
+}
+
+.legends .legend:hover text {
+  fill: {{ style.foreground_light }};
+}
+
+.axis .line {
+  stroke: {{ style.foreground_light }};
+}
+
+.axis .guide.line {
+  stroke: {{ style.foreground_dark }};
+}
+
+.axis .major.line {
+  stroke: {{ style.foreground }};
+}
+
+.axis text.major {
+  stroke: {{ style.foreground_light }};
+  fill: {{ style.foreground_light }};
+}
+
+.axis.y .guides:hover .guide.line,
+.line-graph .axis.x .guides:hover .guide.line,
+.stackedline-graph .axis.x .guides:hover .guide.line,
+.xy-graph .axis.x .guides:hover .guide.line {
+  stroke: {{ style.foreground_light }};
+}
+
+.axis .guides:hover text {
+  fill: {{ style.foreground_light }};
+}
+
+.reactive {
+  fill-opacity: {{ style.opacity }};
+}
+
+.reactive.active, .active .reactive {
+  fill-opacity:  {{ style.opacity_hover }};
+}
+
+.series text {
+  fill: {{ style.foreground_light }};
+}
+
+#tooltip rect {
+  fill: {{ style.plot_background }};
+  stroke: {{ style.foreground_light }};
+}
+
+#tooltip text {
+  fill: {{ style.foreground_light }};
+}
+
+{{ style.colors }}

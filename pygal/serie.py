@@ -50,7 +50,7 @@ class PositiveValue(Value):
     """Positive or zero value container"""
 
     def __init__(self, value):
-        super(PositiveValue, self).__init__(max(0, value))
+        super(PositiveValue, self).__init__(max(value, 0))
 
 
 class Label(object):

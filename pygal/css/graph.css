@@ -18,30 +18,7 @@
  * along with pygal. If not, see <http://www.gnu.org/licenses/>.
 */
 
-svg {
-  background-color: {{ style.background }};
-}
-
-svg * {
-  -webkit-transition: {{ style.transition }};
-  -moz-transition: {{ style.transition }};
-  transition: {{ style.transition }};
-}
-
-.graph > .background {
-  fill: {{ style.background }};
-}
-
-.plot > .background {
-  fill: {{ style.plot_background }};
-}
-
-.graph {
-  fill: {{ style.foreground }};
-}
-
 text.no_data {
-  fill: {{ style.foreground_light }};
   text-anchor: middle;
 }
 
@@ -54,29 +31,14 @@ text.no_data {
 }
 
 .title {
-  fill: {{ style.foreground_light }};
-  font-size: {{ font_sizes.title }};
   text-anchor: middle;
 }
 
 .legends .legend text {
-  font-family: monospace;
-  font-size: {{ font_sizes.legend }};
-  fill: {{ style.foreground }};
   fill-opacity: 1;
 }
 
-.legends .legend:hover text {
-  fill: {{ style.foreground_light }};
-}
-
-.axis text {
-  font-size: {{ font_sizes.label }};
-  font-family: sans;
-}
-
 .axis.x text {
-  font-family: monospace;
   text-anchor: middle;
 }
 
@@ -85,7 +47,6 @@ text.no_data {
 }
 
 .axis.y text {
-  font-family: monospace;
   text-anchor: end;
 }
 
@@ -93,26 +54,19 @@ text.no_data {
   font-size: 50%;
 }
 
-.axis .line {
-  stroke: {{ style.foreground_light }};
-}
-
 .axis .guide.line {
-  stroke: {{ style.foreground_dark }};
   stroke-dasharray: 4,4;
 }
 
 .axis .major.line {
-  stroke: {{ style.foreground }};
   stroke-dasharray: 6,6;
 }
 .axis text.major {
   stroke-width: 0.5px;
-  stroke: {{ style.foreground_light }};
-  fill: {{ style.foreground_light }};
 }
 
-.axis.{{ hidden }} .guide.line {
+.horizontal .axis.y .guide.line,
+.vertical .axis.x .guide.line {
   opacity: 0;
 }
 
@@ -120,25 +74,15 @@ text.no_data {
 .line-graph .axis.x .guides:hover .guide.line,
 .stackedline-graph .axis.x .guides:hover .guide.line,
 .xy-graph .axis.x .guides:hover .guide.line {
-  stroke: {{ style.foreground_light }};
   opacity: 1;
 }
 
 .axis .guides:hover text {
-  fill: {{ style.foreground_light }};
   opacity: 1;
 }
 
 .nofill {
   fill: none;
-}
-
-.reactive {
-  fill-opacity: {{ style.opacity }};
-}
-
-.reactive.active, .active .reactive {
-  fill-opacity:  {{ style.opacity_hover }};
 }
 
 .dot {
@@ -151,9 +95,7 @@ text.no_data {
 }
 
 .series text {
-  font-size: {{ font_sizes.value }};
   stroke: none;
-  fill: {{ style.foreground_light }};
 }
 
 .series text.active {
@@ -162,14 +104,10 @@ text.no_data {
 
 #tooltip rect {
   fill-opacity: 0.8;
-  fill: {{ style.plot_background }};
-  stroke: {{ style.foreground_light }};
 }
 
 #tooltip text {
   fill-opacity: 1;
-  fill: {{ style.foreground_light }};
-  font-size: {{ font_sizes.tooltip }};
 }
 
 #tooltip text tspan.label {
@@ -179,5 +117,3 @@ text.no_data {
 a:visited {
   fill: none;
 }
-
-{{ style.colors }}

@@ -23,7 +23,7 @@ Base for pygal charts
 
 from __future__ import division
 import io
-from pygal.serie import Serie, Value
+from pygal.serie import Serie, Value, PositiveValue
 from pygal.view import Margin, Box
 from pygal.util import get_text_box, get_texts_box, cut, rad, humanize
 from pygal.svg import Svg
@@ -60,6 +60,9 @@ class BaseGraph(object):
         """(Re-)Init the graph"""
         self.margin = Margin(*([20] * 4))
         self._box = Box()
+        if self.logarithmic and self.zero == 0:
+            # If logarithmic, default zero to 1
+            self.zero = 1
 
     def __getattr__(self, attr):
         """Search in config, then in self"""
@@ -129,6 +132,7 @@ class BaseGraph(object):
 
     def _draw(self):
         """Draw all the things"""
+        self._prepare_data()
         self._compute()
         self._compute_margin()
         self._decorate()
@@ -141,6 +145,14 @@ class BaseGraph(object):
         if sum(map(len, map(lambda s: s.values, self.series))) == 0:
             return False
         return True
+
+    def _prepare_data(self):
+        """Remove aberrant values"""
+        if self.logarithmic:
+            for serie in self.series:
+                for metadata in serie.metadata:
+                    if metadata.value <= 0:
+                        metadata.value = None
 
     def _uniformize_data(self):
         """Make all series to max len"""

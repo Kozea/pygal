@@ -27,6 +27,7 @@ import os
 import json
 from lxml import etree
 from math import cos, sin, pi
+from urlparse import urlparse
 from pygal.util import template, coord_format
 from pygal import __version__
 
@@ -37,6 +38,8 @@ class Svg(object):
 
     def __init__(self, graph):
         self.graph = graph
+        self.processing_instructions = [
+            etree.PI('xml', "version='1.0' encoding='utf-8'")]
         self.root = None
         self.defs = None
 
@@ -47,24 +50,30 @@ class Svg(object):
             nsmap={
                 None: self.ns,
                 'xlink': 'http://www.w3.org/1999/xlink',
-            },
-            # onload="svg_load(evt);"
-)
+            })
         self.root.append(etree.Comment(
             u'Generated with pygal %s ©Kozea 2012' % __version__))
         self.root.append(etree.Comment(u'http://github.com/Kozea/pygal'))
         self.defs = self.node(tag='defs')
 
-    def add_style(self, css):
+    def add_styles(self):
         """Add the css to the svg"""
-        style = self.node(self.defs, 'style', type='text/css')
-        with io.open(css, encoding='utf-8') as f:
-            templ = template(
-                f.read(),
-                style=self.graph.style,
-                font_sizes=self.graph.font_sizes(),
-                hidden='y' if self.graph.horizontal else 'x')
-            style.text = templ
+        for css in ['base.css'] + list(self.graph.css):
+            if urlparse(css).scheme:
+                self.processing_instructions.append(
+                    etree.PI(
+                        'xml-stylesheet', 'href="%s"' % css))
+            else:
+                if not os.path.exists(css):
+                    css = os.path.join(
+                        os.path.dirname(__file__), 'css', css)
+                with io.open(css, encoding='utf-8') as f:
+                    templ = template(
+                        f.read(),
+                        style=self.graph.style,
+                        font_sizes=self.graph.font_sizes())
+                    self.node(
+                        self.defs, 'style', type='text/css').text = templ
 
     def add_scripts(self):
         """Add the js to the svg"""
@@ -72,13 +81,14 @@ class Svg(object):
         common_script.text = " = ".join(
             ("window.config", json.dumps(self.graph.config.to_dict())))
 
-        for external_js in self.graph.external_js:
-            self.node(
-                self.defs, 'script', type='text/javascript', href=external_js)
-        for included_js in self.graph.included_js:
-            script = self.node(self.defs, 'script', type='text/javascript')
-            with io.open(included_js, encoding='utf-8') as f:
-                script.text = f.read()
+        for js in self.graph.js:
+            if urlparse(js).scheme:
+                self.node(
+                    self.defs, 'script', type='text/javascript', href=js)
+            else:
+                script = self.node(self.defs, 'script', type='text/javascript')
+                with io.open(js, encoding='utf-8') as f:
+                    script.text = f.read()
 
     def node(self, parent=None, tag='g', attrib=None, **extras):
         """Make a new svg node"""
@@ -160,8 +170,7 @@ class Svg(object):
 
     def pre_render(self, no_data=False):
         """Last things to do before rendering"""
-        self.add_style(self.graph.base_css or os.path.join(
-            os.path.dirname(__file__), 'css', 'graph.css'))
+        self.add_styles()
         self.add_scripts()
         self.root.set(
             'viewBox', '0 0 %d %d' % (self.graph.width, self.graph.height))
@@ -179,8 +188,12 @@ class Svg(object):
         """Last thing to do before rendering"""
         svg = etree.tostring(
             self.root, pretty_print=True,
-            xml_declaration=not self.graph.disable_xml_declaration,
+            xml_declaration=False,
             encoding='utf-8')
+        if not self.graph.disable_xml_declaration:
+            svg = '\n'.join(
+                [etree.tostring(pi) for pi in self.processing_instructions]
+            ) + '\n' + svg
         if self.graph.disable_xml_declaration or is_unicode:
             svg = svg.decode('utf-8')
         return svg

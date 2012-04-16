@@ -28,7 +28,7 @@ dot = Dot()
 dot.x_labels = map(str, range(4))
 
 dot.add('a', [1, lnk(3, 'Foo'), 5, 3])
-dot.add('b', [2, -2, 0, 2])
+dot.add('b', [2, 2, 0, 2])
 dot.add('c', [5, 1, 5, lnk(3, 'Bar')])
 dot.add('d', [5, 5, lnk(0, 'Babar'), 3])
 
@@ -45,7 +45,8 @@ bar.add('1234', [
 
 bar.add('4321', [40, {'value': 30, 'label': 'Thirty', 'xlink': 'http://google.com?q=30'}, 20, 10])
 bar.x_labels = map(str, range(1, 5))
-
+bar.logarithmic = True
+bar.zero = 1
 # bar.included_js = []
 # bar.external_js = [
     # 'http://localhost:7575/svg.jquery.js',
@@ -163,7 +164,7 @@ config.x_labels = (
     'black', 'red', 'blue', 'yellow', 'orange', 'green', 'white')
 # config.interpolate = 'nearest'
 radar = Radar(config)
-radar.add('test', [1, 4, lnk(10), 5, None, -2, 5])
+radar.add('test', [1, 4, lnk(10), 5, None, 2, 5])
 radar.add('test2', [10, 2, 0, 5, 1, 9, 4])
 
 radar.title = "Radar test"
