@@ -46,7 +46,7 @@ h3 {
 }
 
 h4 {
-  font-size: 1.25em; 
+  font-size: 1.25em;
   margin: 0.8em 0 0.2em;
 }
 
@@ -59,20 +59,9 @@ a:hover, a:focus {
 }
 
 
-footer ul, 
-nav ul {
-  display: inline; 
-}
-
-footer ul li, 
-nav ul li {
-  display: inline-block;
-}
-
-
-/* 
+/*
   ----------
-  - HEADER - 
+  - HEADER -
   ----------
 */
 body > header {
@@ -95,7 +84,7 @@ body > header h1 a {
   transition: background 0.5s linear;
 }
 
-body > header h1 a:hover, 
+body > header h1 a:hover,
 body > header h1 a:focus {
   background: url(img/logo-hover.png) no-repeat top left;
   color: transparent;
