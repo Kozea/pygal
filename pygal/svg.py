@@ -39,7 +39,7 @@ class Svg(object):
     def __init__(self, graph):
         self.graph = graph
         self.processing_instructions = [
-            etree.PI('xml', "version='1.0' encoding='utf-8'")]
+            etree.PI(u'xml', u"version='1.0' encoding='utf-8'")]
         self.root = None
         self.defs = None
 
@@ -62,7 +62,7 @@ class Svg(object):
             if urlparse(css).scheme:
                 self.processing_instructions.append(
                     etree.PI(
-                        'xml-stylesheet', 'href="%s"' % css))
+                        u'xml-stylesheet', u'href="%s"' % css))
             else:
                 if not os.path.exists(css):
                     css = os.path.join(
@@ -191,9 +191,10 @@ class Svg(object):
             xml_declaration=False,
             encoding='utf-8')
         if not self.graph.disable_xml_declaration:
-            svg = '\n'.join(
-                [etree.tostring(pi) for pi in self.processing_instructions]
-            ) + '\n' + svg
+            svg = b'\n'.join(
+                [etree.tostring(pi, encoding='utf-8', pretty_print=True)
+                 for pi in self.processing_instructions]
+            ) + b'\n' + svg
         if self.graph.disable_xml_declaration or is_unicode:
             svg = svg.decode('utf-8')
         return svg
