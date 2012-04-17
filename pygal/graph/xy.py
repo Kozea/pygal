@@ -33,6 +33,11 @@ class XY(Line):
         return 'x=%s, y=%s' % tuple(map(self._format, values[i]))
 
     def _compute(self):
+        for serie in self.series:
+            for metadata in serie.metadata:
+                if not hasattr(metadata.value, '__iter__'):
+                    metadata.value = (metadata.value, self.zero)
+
         xvals = [val[0]
                  for serie in self.series
                  for val in serie.values

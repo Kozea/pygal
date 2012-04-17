@@ -196,7 +196,7 @@ def decorate(svg, node, metadata):
     if hasattr(metadata, 'xlink'):
         xlink = metadata.xlink
         if not isinstance(xlink, dict):
-            xlink = {'href': xlink}
+            xlink = {'href': xlink, 'target': '_blank'}
         node = svg.node(node, 'a', **xlink)
     for key in dir(metadata):
         if key not in ('value') and not key.startswith('_'):

@@ -22,7 +22,7 @@ text.no_data {
   text-anchor: middle;
 }
 
-.line {
+.guide.line {
   fill-opacity: 0;
 }
 

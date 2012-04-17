@@ -23,7 +23,7 @@
  */
 
 .title {
-  font-family: monospace;
+  font-family: sans;
   font-size: {{ font_sizes.title }};
 }
 

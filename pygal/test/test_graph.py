@@ -62,6 +62,12 @@ def test_render_to_png(Chart, datas):
     os.remove(file_name)
 
 
+def test_simple_value(Chart):
+    chart = Chart()
+    chart.add('uni-value', 1)
+    assert chart.render()
+
+
 def test_metadata(Chart):
     chart = Chart()
     v = range(7)

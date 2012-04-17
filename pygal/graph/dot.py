@@ -62,7 +62,7 @@ class Dot(Graph):
         self._box.ymax = y_len
 
         x_pos = [n / 2 for n in range(1, 2 * x_len, 2)]
-        y_pos = [n / 2 for n in range(1, 2 * y_len, 2)]
+        y_pos = [n / 2 for n in reversed(range(1, 2 * y_len, 2))]
 
         for j, serie in enumerate(self.series):
             serie.points = [

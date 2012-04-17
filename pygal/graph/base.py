@@ -54,7 +54,7 @@ class BaseGraph(object):
     def add(self, title, values):
         """Add a serie to this graph"""
         self.series.append(
-            Serie(title, list(values), len(self.series), self.__value__))
+            Serie(title, values, len(self.series), self.__value__))
 
     def reinit(self):
         """(Re-)Init the graph"""

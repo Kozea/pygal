@@ -40,12 +40,12 @@ class Config(object):
     #: Display values in logarithmic scale
     logarithmic = False
     #: List of css file, can be an absolute file path or an external link
-    css = ['style.css', 'graph.css']  # Relative path to pygal css
+    css = ('style.css', 'graph.css')  # Relative path to pygal css
     #: List of js file, can be a filepath or an external link
-    js = [
+    js = (
         'https://raw.github.com/Kozea/pygal.js/master/svg.jquery.js',
         'https://raw.github.com/Kozea/pygal.js/master/pygal-tooltips.js'
-    ]
+    )
     #: Style holding values injected in css
     style = DefaultStyle
     #: Various font sizes
@@ -105,6 +105,8 @@ class Config(object):
 
     def __init__(self, **kwargs):
         """Can be instanciated with config kwargs"""
+        self.css = list(self.css)
+        self.js = list(self.js)
         self.__dict__.update(kwargs)
 
     def __call__(self, **kwargs):
