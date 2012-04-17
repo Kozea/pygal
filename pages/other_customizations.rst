@@ -78,26 +78,6 @@ It can be disabled by setting `print_values` to `False`.
 ``print_zeroes`` can be enabled to display static values even if equal to zero.
 
 
-Tooltip animation
------------------
-
-``animation_steps``
-
-.. caution::
-   Experimental (might be slow acconding to particular conditions)
-
-If you want some smoothing in tooltip display you can set animation_steps to a number.
-The greater the number the slowest but detailed the animation:
-
-
-.. pygal-code::
-
-  chart = pygal.Line(animation_steps=20)
-  values = [1, 3, 43, 123, 1231, 23192]
-  chart.x_labels = map(str, values)
-  chart.add('log example', values)
-
-
 Disable xml declaration
 -----------------------
 

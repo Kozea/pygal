@@ -129,8 +129,11 @@ You can instantiate the `Style` class with some customizations for quick styling
 Using a custom css
 ^^^^^^^^^^^^^^^^^^
 
-You can also specify a file containing a custom css for more customization.
-(See the `default css <https://github.com/Kozea/pygal/blob/master/pygal/css/graph.css>`_)
+You can also specify a file containing a custom css for more customization. The css option is an array containing included css by default (except from ``base.css`` which is always included).
+
+It supports local file names and external stylesheet too, just append your URI in the list.
+
+(See the `default css <https://github.com/Kozea/pygal/blob/master/pygal/css/>`_)
 
 .. pygal-code::
 
@@ -184,7 +187,9 @@ You can also specify a file containing a custom css for more customization.
   custom_css_file = '/tmp/pygal_custom_style.css'
   with open(custom_css_file, 'w') as f:
     f.write(custom_css)
-  chart = pygal.StackedLine(fill=True, interpolate='cubic', base_css=custom_css_file)
+  config = pygal.Config(fill=True, interpolate='cubic')
+  config.css.append(custom_css_file)
+  chart = pygal.StackedLine(config)
   chart.add('A', [1, 3,  5, 16, 13, 3,  7])
   chart.add('B', [5, 2,  3,  2,  5, 7, 17])
   chart.add('C', [6, 10, 9,  7,  3, 1,  0])

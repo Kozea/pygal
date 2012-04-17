@@ -11,6 +11,7 @@ User documentation
 - `Styles </styles>`_ - change the style.
 - `Basic customizations </basic_customizations>`_ - start to improve your chats.
 - `Interpolations </interpolations>`_ - smooth your lines.
+- `Metadata </metadata>`_ - enrich your graph.
 - `Other customizations </other_customizations>`_ - customize all the things.
 
 

@@ -39,6 +39,13 @@ pygal is a dynamic SVG charting library.
      chart.add('red', [1, 2, 3, 1, 2])
      chart.add('green', [4, 3, 0, 1, 2])
 
+  .. pygal:: 300 200
+
+     chart = pygal.Dot(style=pygal.style.NeonStyle)
+     chart.x_labels = 'one', 'two', 'three', 'four', 'five'
+     chart.add('red', [1, 2, 3, 1, 2])
+     chart.add('green', [4, 3, 0, 1, 2])
+
 
 It features various graph types:
 
@@ -51,6 +58,8 @@ It features various graph types:
 - `Pie charts </chart_types/#pies>`_
 
 - `Radar charts </chart_types/#radar-charts>`_
+
+- `Dot charts </chart_types/#dot-charts>`_
 
 
 Python/Css styling with some packaged themes (`default </styles/#default>`_,
