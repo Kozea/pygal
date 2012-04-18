@@ -115,11 +115,10 @@ class Bar(Graph):
         return stack_vals
 
     def _compute(self):
-        self._box.ymin = min(min(self._values), self.zero)
-        self._box.ymax = max(max(self._values), self.zero)
-        x_step = len(self.series[0].values)
-        x_pos = [x / x_step for x in range(x_step + 1)
-        ] if x_step > 1 else [0, 1]  # Center if only one value
+        self._box.ymin = min(self._min, self.zero)
+        self._box.ymax = max(self._max, self.zero)
+        x_pos = [x / self._len for x in range(self._len + 1)
+        ] if self._len > 1 else [0, 1]  # Center if only one value
         y_pos = compute_scale(
             self._box.ymin, self._box.ymax, self.logarithmic
         ) if not self.y_labels else map(float, self.y_labels)

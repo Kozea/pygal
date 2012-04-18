@@ -17,12 +17,34 @@
 #
 # You should have received a copy of the GNU Lesser General Public License
 # along with pygal. If not, see <http://www.gnu.org/licenses/>.
-import sys
+import time
 
 from pygal import *
 from pygal.style import *
 from math import cos, sin
 lnk = lambda v, l=None: {'value': v, 'xlink': 'javascript:alert("Test %s")' % v, 'label': l}
+
+t_start  = time.time()
+
+pyramid = Pyramid()
+
+pyramid.x_labels = ['0-25', '25-45', '45-65', '65+']
+pyramid.add('Man single', [2, 4, 2, 1])
+pyramid.add('Woman single', [10, 6, 1, 1])
+pyramid.add('Man maried', [10, 3, 4, 2])
+pyramid.add('Woman maried', [3, 3, 5, 3])
+
+pyramid.render_to_file('out-pyramid.svg')
+
+
+funnel = Funnel()
+
+funnel.add('1', [1, 2, 3])
+funnel.add('3', [3, 4, 5])
+funnel.add('6', [6, 5, 4])
+funnel.add('12', [12, 2, 9])
+
+funnel.render_to_file('out-funnel.svg')
 
 dot = Dot()
 dot.x_labels = map(str, range(4))
@@ -170,3 +192,5 @@ radar.add('test2', [10, 2, 0, 5, 1, 9, 4])
 radar.title = "Radar test"
 
 radar.render_to_file('out-radar.svg')
+
+print "Ok (%dms)" % (1000 * (time.time() - t_start))

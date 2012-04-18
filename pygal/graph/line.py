@@ -97,20 +97,20 @@ class Line(Graph):
     def _compute(self):
         x_pos = [x / (self._len - 1) for x in range(self._len)
         ] if self._len != 1 else [.5]  # Center if only one value
+
         for serie in self.series:
-            if not hasattr(serie, 'points'):
-                serie.points = [
-                    (x_pos[i], v)
-                    for i, v in enumerate(serie.values)]
-                if self.interpolate:
-                    serie.interpolated = self._interpolate(serie.values, x_pos)
+            serie.points = [
+                (x_pos[i], v)
+                for i, v in enumerate(serie.values)]
+            if self.interpolate:
+                serie.interpolated = self._interpolate(serie.values, x_pos)
 
         if self.include_x_axis:
-            self._box.ymin = min(min(self._values), 0)
-            self._box.ymax = max(max(self._values), 0)
+            self._box.ymin = min(self._min, 0)
+            self._box.ymax = max(self._max, 0)
         else:
-            self._box.ymin = min(self._values)
-            self._box.ymax = max(self._values)
+            self._box.ymin = self._min
+            self._box.ymax = self._max
 
         y_pos = compute_scale(
             self._box.ymin, self._box.ymax, self.logarithmic

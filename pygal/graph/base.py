@@ -126,6 +126,11 @@ class BaseGraph(object):
         return max([len(serie.values) for serie in self.series])
 
     @cached_property
+    def _min(self):
+        """Getter for the minimum series value"""
+        return min(self._values)
+
+    @cached_property
     def _max(self):
         """Getter for the maximum series value"""
         return max(self._values)

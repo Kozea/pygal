@@ -59,7 +59,7 @@ class Radar(Line):
             self.height - self.margin.y,
             self._box)
 
-    def _x_axis(self):
+    def _x_axis(self, draw_axes=True):
         if not self._x_labels:
             return
 
@@ -86,7 +86,7 @@ class Radar(Line):
             text.attrib['transform'] = 'rotate(%f %s)' % (
                 deg(angle), format_(pos_text))
 
-    def _y_axis(self):
+    def _y_axis(self, draw_axes=True):
         if not self._y_labels:
             return
 
@@ -124,15 +124,14 @@ class Radar(Line):
                     extended_vals, extended_x_pos, polar=True)
 
         self._box.margin *= 2
-        self._box.xmin = self._box.ymin = 0
-        self._box.xmax = self._box.ymax = self._rmax = max(self._values)
+        self._box.xmin = self._box.ymin = - self._max
+        self._box.xmax = self._box.ymax = self._rmax = self._max
 
         y_pos = compute_scale(
-            self._box.ymin, self._box.ymax, self.logarithmic, max_scale=8
+            0, self._box.ymax, self.logarithmic, max_scale=8
         ) if not self.y_labels else map(int, self.y_labels)
         self._x_labels = self.x_labels and zip(self.x_labels, x_pos)
         self._y_labels = zip(map(self._format, y_pos), y_pos)
-        self._box.xmin = self._box.ymin = - self._box.ymax
 
         self.x_pos = x_pos
         self._self_close = True

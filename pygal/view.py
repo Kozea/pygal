@@ -47,9 +47,11 @@ class Box(object):
     """Chart boundings"""
     margin = .02
 
-    def __init__(self):
-        self.xmin = self.ymin = 0
-        self.xmax = self.ymax = 1
+    def __init__(self, xmin=0, ymin=0, xmax=1, ymax=1):
+        self.xmin = xmin
+        self.ymin = ymin
+        self.xmax = xmax
+        self.ymax = ymax
 
     @property
     def width(self):
