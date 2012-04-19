@@ -50,6 +50,8 @@ class Gauge(Graph):
     def needle(self, serie_node, serie,):
         thickness = .05
         for i, value in enumerate(serie.values):
+            if not value:
+                continue
             theta = self.arc_pos(value)
             fmt = lambda x: '%f %f' % x
             value = self._format(serie.values[i])
