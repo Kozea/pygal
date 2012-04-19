@@ -87,6 +87,8 @@ class Config(object):
     interpolate = None
     #: Number of interpolated points between two values
     interpolation_precision = 250
+    #: Explicitly specify min and max of values (ie: (0, 100))
+    range = None
     #: Set the ordinate zero value (for filling)
     zero = 0
     #: Text to display when no data is given

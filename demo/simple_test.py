@@ -26,6 +26,13 @@ lnk = lambda v, l=None: {'value': v, 'xlink': 'javascript:alert("Test %s")' % v,
 
 t_start  = time.time()
 
+gauge = Gauge()
+
+gauge.range = [-10, 10]
+gauge.add('Need l', [2.3, 5.12])
+# gauge.add('No', [99, -99])
+gauge.render_to_file('out-gauge.svg')
+
 pyramid = Pyramid()
 
 pyramid.x_labels = ['0-25', '25-45', '45-65', '65+']
@@ -168,6 +175,7 @@ pie.add('test3', [24, 10, 32])
 pie.add('test4', [20, lnk(18), 9])
 pie.add('test5', [17, 5, 10])
 pie.add('test6', [None, None, 10])
+
 # pie.included_js = []
 # pie.external_js = [
 #     'http://localhost:7575/svg.jquery.js',

@@ -128,12 +128,12 @@ class BaseGraph(object):
     @cached_property
     def _min(self):
         """Getter for the minimum series value"""
-        return min(self._values)
+        return (self.range and self.range[0]) or min(self._values)
 
     @cached_property
     def _max(self):
         """Getter for the maximum series value"""
-        return max(self._values)
+        return (self.range and self.range[1]) or max(self._values)
 
     def _draw(self):
         """Draw all the things"""

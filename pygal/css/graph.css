@@ -72,6 +72,7 @@ text.no_data {
 
 .axis.y .guides:hover .guide.line,
 .line-graph .axis.x .guides:hover .guide.line,
+.gauge-graph .axis.x .guides:hover .guide.line,
 .stackedline-graph .axis.x .guides:hover .guide.line,
 .xy-graph .axis.x .guides:hover .guide.line {
   opacity: 1;

@@ -26,11 +26,12 @@ __version__ = '0.9.22'
 from pygal.config import Config
 from pygal.graph.bar import Bar
 from pygal.graph.dot import Dot
+from pygal.graph.funnel import Funnel
+from pygal.graph.gauge import Gauge
 from pygal.graph.horizontal import HorizontalBar
 from pygal.graph.horizontal import HorizontalStackedBar
 from pygal.graph.line import Line
 from pygal.graph.pie import Pie
-from pygal.graph.funnel import Funnel
 from pygal.graph.pyramid import Pyramid
 from pygal.graph.radar import Radar
 from pygal.graph.stackedbar import StackedBar
@@ -41,8 +42,9 @@ from pygal.graph.xy import XY
 #: List of all chart types
 CHARTS = [
     Bar,
-    Funnel,
     Dot,
+    Funnel,
+    Gauge,
     HorizontalBar,
     HorizontalStackedBar,
     Line,

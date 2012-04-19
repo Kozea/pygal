@@ -35,6 +35,7 @@ class Pie(Graph):
 
     def slice(self, serie_node, start_angle, serie, total):
         """Make a serie slice"""
+        dual = self._len > 1 and not len(self.series) == 1
 
         slices = self.svg.node(serie_node['plot'], class_="slices")
         serie_angle = 0
@@ -53,18 +54,20 @@ class Pie(Graph):
                 self.svg,
                 self.svg.node(slices, class_="slice"),
                 metadata)
-            if len(serie.values) > 1:
+            if dual:
                 small_radius = radius * .9
+                big_radius = radius
             else:
-                radius = radius * .9
+                big_radius = radius * .9
                 small_radius = 0
 
-            self.svg.slice(serie_node,
-                slice_, radius, small_radius, angle, start_angle, center, val)
+            self.svg.slice(
+                serie_node, slice_, big_radius, small_radius,
+                angle, start_angle, center, val)
             start_angle += angle
             total_perc += perc
 
-        if len(serie.values) > 1:
+        if dual:
             val = '{0:.2%}'.format(total_perc)
             self.svg.slice(serie_node,
                            self.svg.node(slices, class_="big_slice"),
