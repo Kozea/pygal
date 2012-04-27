@@ -26,7 +26,7 @@ from pygal.interpolate import interpolation
 from pygal.graph.base import BaseGraph
 from pygal.view import View, LogView
 from pygal.util import is_major, truncate, reverse_text_len
-from math import isnan, pi
+from math import isnan, pi, sqrt, floor, ceil
 
 
 class Graph(BaseGraph):
@@ -181,29 +181,50 @@ class Graph(BaseGraph):
         """Make the legend box"""
         if not self.show_legend:
             return
+        truncation = self.truncate_legend
+        if self.legend_at_bottom:
+            x = self.margin.left + 10
+            y = (self.margin.top + self.view.height +
+                 self._x_labels_height + 10)
+            cols = ceil(sqrt(len(self.series)))
+            if not truncation:
+                available_space = self.width / cols - (
+                    self.legend_box_size + 5)
+                truncation = int(reverse_text_len(
+                    available_space, self.legend_font_size))
+        else:
+            x = self.margin.left + self.view.width + 10
+            y = self.margin.top + 10
+            cols = 1
+            if not truncation:
+                truncation = 15
+
         legends = self.svg.node(
             self.nodes['graph'], class_='legends',
-            transform='translate(%d, %d)' % (
-                self.margin.left + self.view.width + 10,
-                self.margin.top + 10))
+            transform='translate(%d, %d)' % (x, y))
+
+        x_step = self.width / cols
         for i, title in enumerate(self._legends):
+            col = i % cols
+            row = i // cols
+
             legend = self.svg.node(
                 legends, class_='legend reactive activate-serie',
                 id="activate-serie-%d" % i)
             self.svg.node(
                 legend, 'rect',
-                x=0,
-                y=1.5 * i * self.legend_box_size,
+                x=col * x_step,
+                y=1.5 * row * self.legend_box_size,
                 width=self.legend_box_size,
                 height=self.legend_box_size,
-                class_="color-%d reactive" % i
+                class_="color-%d reactive" % (i % 16)
             )
-            truncated = truncate(title, self.truncate_legend)
+            truncated = truncate(title, truncation)
             # Serious magical numbers here
             self.svg.node(
                 legend, 'text',
-                x=self.legend_box_size + 5,
-                y=1.5 * i * self.legend_box_size
+                x=col * x_step + self.legend_box_size + 5,
+                y=1.5 * row * self.legend_box_size
                 + .5 * self.legend_box_size
                 + .3 * self.legend_font_size
             ).text = truncated
@@ -224,13 +245,13 @@ class Graph(BaseGraph):
         return dict(
             plot=self.svg.node(
                 self.nodes['plot'],
-                class_='series serie-%d color-%d' % (serie, serie)),
+                class_='series serie-%d color-%d' % (serie, serie % 16)),
             overlay=self.svg.node(
                 self.nodes['overlay'],
-                class_='series serie-%d color-%d' % (serie, serie)),
+                class_='series serie-%d color-%d' % (serie, serie % 16)),
             text_overlay=self.svg.node(
                 self.nodes['text_overlay'],
-                class_='series serie-%d color-%d' % (serie, serie)))
+                class_='series serie-%d color-%d' % (serie, serie % 16)))
 
     def _interpolate(self, ys, xs,
                    polar=False, xy=False, xy_xmin=None, xy_rng=None):

@@ -60,7 +60,7 @@ class Config(object):
     #: Set to false to remove legend
     show_legend = True
     #: Set to true to position legend at bottom
-    legend_at_bottom = True
+    legend_at_bottom = False
     #: Set to false to remove dots
     show_dots = True
     #: Size of legend boxes
@@ -106,8 +106,8 @@ class Config(object):
     disable_xml_declaration = False
     #: Write width and height attributes
     explicit_size = False
-    #: Legend string length truncation threshold
-    truncate_legend = 15
+    #: Legend string length truncation threshold (None = auto)
+    truncate_legend = None
     #: Label string length truncation threshold (None = auto)
     truncate_label = None
 

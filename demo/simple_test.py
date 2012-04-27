@@ -172,12 +172,14 @@ xy.title = "XY test"
 xy.render_to_file('out-xy.svg')
 
 pie = Pie(Config(style=NeonStyle))
-pie.add('test', [lnk(11, 'Foo'), {'value': 8, 'label': 'Few'}, 21])
-pie.add('test2', [lnk(29), None, 9])
-pie.add('test3', [24, 10, 32])
-pie.add('test4', [20, lnk(18), 9])
-pie.add('test5', [17, 5, 10])
-pie.add('test6', [None, None, 10])
+# pie.add('test', [lnk(11, 'Foo'), {'value': 8, 'label': 'Few'}, 21])
+# pie.add('test2', [lnk(29), None, 9])
+# pie.add('test3', [24, 10, 32])
+# pie.add('test4', [20, lnk(18), 9])
+# pie.add('test5', [17, 5, 10])
+# pie.add('test6', [None, None, 10])
+for i in range(30):
+    pie.add(str(i) + '!' * i, [i, 30 - i])
 
 # pie.included_js = []
 # pie.external_js = [

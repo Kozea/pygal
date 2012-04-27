@@ -217,7 +217,7 @@ def cycle_fill(short_list, max_len):
     """Fill a list to max_len using a cycle of it"""
     short_list = list(short_list)
     list_cycle = cycle(short_list)
-    while len(short_list) < 16:
+    while len(short_list) < max_len:
         short_list.append(list_cycle.next())
     return short_list
 

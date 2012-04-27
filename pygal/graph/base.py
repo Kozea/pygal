@@ -30,7 +30,7 @@ from pygal.util import (
 from pygal.svg import Svg
 from pygal.config import Config
 from pygal.util import cached_property
-from math import sin, cos
+from math import sin, cos, sqrt
 
 
 class BaseGraph(object):
@@ -86,10 +86,13 @@ class BaseGraph(object):
         """Compute graph margins from set texts"""
         if self.show_legend:
             h, w = get_texts_box(
-                map(lambda x: truncate(x, self.truncate_legend),
+                map(lambda x: truncate(x, self.truncate_legend or 15),
                   cut(self.series, 'title')),
                 self.legend_font_size)
-            self.margin.right += 10 + w + self.legend_box_size
+            if self.legend_at_bottom:
+                self.margin.bottom += 10 + h * int(sqrt(len(self.series)))
+            else:
+                self.margin.right += 10 + w + self.legend_box_size
 
         if self.title:
             h, w = get_text_box(self.title, self.title_font_size)
@@ -98,12 +101,15 @@ class BaseGraph(object):
         if self._x_labels:
             h, w = get_texts_box(
                 cut(self._x_labels), self.label_font_size)
-            self.margin.bottom += 10 + max(
+            self._x_labels_height = 10 + max(
                 w * sin(rad(self.x_label_rotation)), h)
+            self.margin.bottom += self._x_labels_height
             if self.x_label_rotation:
                 self.margin.right = max(
                     w * cos(rad(self.x_label_rotation)),
                     self.margin.right)
+        else:
+            self._x_labels_height = 0
         if self._y_labels:
             h, w = get_texts_box(
                 cut(self._y_labels), self.label_font_size)
