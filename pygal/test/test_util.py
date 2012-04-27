@@ -18,7 +18,7 @@
 # along with pygal. If not, see <http://www.gnu.org/licenses/>.
 from pygal.util import (
     round_to_int, round_to_float, _swap_curly, template, humanize,
-    is_major)
+    is_major, truncate)
 from pytest import raises
 
 
@@ -111,3 +111,13 @@ def test_is_major():
         assert is_major(n)
     for n in (2, 10002., 100000.0003, -200, -0.0005):
         assert not is_major(n)
+
+
+def test_truncate():
+    assert truncate('1234567890', 50) == '1234567890'
+    assert truncate('1234567890', 5) == u'1234…'
+    assert truncate('1234567890', 1) == u'…'
+    assert truncate('1234567890', 9) == u'12345678…'
+    assert truncate('1234567890', 10) == '1234567890'
+    assert truncate('1234567890', 0) == '1234567890'
+    assert truncate('1234567890', -1) == '1234567890'

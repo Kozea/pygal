@@ -104,6 +104,10 @@ class Config(object):
     disable_xml_declaration = False
     #: Write width and height attributes
     explicit_size = False
+    #: Legend string length truncation threshold
+    truncate_legend = 15
+    #: Label string length truncation threshold (None = auto)
+    truncate_label = None
 
     def __init__(self, **kwargs):
         """Can be instanciated with config kwargs"""

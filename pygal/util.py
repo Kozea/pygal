@@ -175,9 +175,14 @@ def compute_scale(min_, max_, logarithmic=False, min_scale=4, max_scale=20):
     return positions
 
 
-def text_len(lenght, fs):
+def text_len(length, fs):
+    """Approximation of text width"""
+    return length * 0.6 * fs
+
+
+def reverse_text_len(width, fs):
     """Approximation of text length"""
-    return lenght * 0.6 * fs
+    return width / (0.6 * fs)
 
 
 def get_text_box(text, fs):
@@ -215,6 +220,13 @@ def cycle_fill(short_list, max_len):
     while len(short_list) < 16:
         short_list.append(list_cycle.next())
     return short_list
+
+
+def truncate(string, index):
+    """Truncate a string at index and add ..."""
+    if len(string) > index and index > 0:
+        string = string[:index - 1] + u'…'
+    return string
 
 
 # Stolen from brownie http://packages.python.org/Brownie/

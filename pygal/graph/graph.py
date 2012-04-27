@@ -25,7 +25,7 @@ from __future__ import division
 from pygal.interpolate import interpolation
 from pygal.graph.base import BaseGraph
 from pygal.view import View, LogView
-from pygal.util import is_major
+from pygal.util import is_major, truncate, reverse_text_len
 from math import isnan, pi
 
 
@@ -104,6 +104,18 @@ class Graph(BaseGraph):
             return
 
         axis = self.svg.node(self.nodes['plot'], class_="axis x")
+        truncation = self.truncate_label
+        if not truncation:
+            if self.x_label_rotation:
+                truncation = 25
+            else:
+                first_label_position = self.view.x(self._x_labels[0][1])
+                last_label_position = self.view.x(self._x_labels[-1][1])
+                available_space = (
+                    last_label_position - first_label_position) / (
+                        len(self._x_labels) - 1)
+                truncation = int(
+                    reverse_text_len(available_space, self.label_font_size))
 
         if 0 not in [label[1] for label in self._x_labels] and draw_axes:
             self.svg.node(axis, 'path',
@@ -123,7 +135,9 @@ class Graph(BaseGraph):
                              x=x,
                              y=y + .5 * self.label_font_size + 5
             )
-            text.text = label
+            text.text = truncate(label, truncation)
+            if text.text != label:
+                self.svg.node(guides, 'title').text = label
             if self.x_label_rotation:
                 text.attrib['transform'] = "rotate(%d %f %f)" % (
                     self.x_label_rotation, x, y)
@@ -183,7 +197,8 @@ class Graph(BaseGraph):
                 width=self.legend_box_size,
                 height=self.legend_box_size,
                 class_="color-%d reactive" % i
-            ).text = title
+            )
+            truncated = truncate(title, self.truncate_legend)
             # Serious magical numbers here
             self.svg.node(
                 legend, 'text',
@@ -191,7 +206,9 @@ class Graph(BaseGraph):
                 y=1.5 * i * self.legend_box_size
                 + .5 * self.legend_box_size
                 + .3 * self.legend_font_size
-            ).text = title
+            ).text = truncated
+            if truncated != title:
+                self.svg.node(legend, 'title').text = title
 
     def _title(self):
         """Make the title"""
@@ -199,7 +216,8 @@ class Graph(BaseGraph):
             self.svg.node(self.nodes['graph'], 'text', class_='title',
                       x=self.margin.left + self.view.width / 2,
                       y=self.title_font_size + 10
-            ).text = self.title
+            ).text = truncate(self.title, int(reverse_text_len(
+                self.width, self.title_font_size)))
 
     def _serie(self, serie):
         """Make serie node"""

@@ -23,9 +23,10 @@ Base for pygal charts
 
 from __future__ import division
 import io
-from pygal.serie import Serie, Value, PositiveValue
+from pygal.serie import Serie, Value
 from pygal.view import Margin, Box
-from pygal.util import get_text_box, get_texts_box, cut, rad, humanize
+from pygal.util import (
+    get_text_box, get_texts_box, cut, rad, humanize, truncate)
 from pygal.svg import Svg
 from pygal.config import Config
 from pygal.util import cached_property
@@ -85,7 +86,9 @@ class BaseGraph(object):
         """Compute graph margins from set texts"""
         if self.show_legend:
             h, w = get_texts_box(
-                cut(self.series, 'title'), self.legend_font_size)
+                map(lambda x: truncate(x, self.truncate_legend),
+                  cut(self.series, 'title')),
+                self.legend_font_size)
             self.margin.right += 10 + w + self.legend_box_size
 
         if self.title:

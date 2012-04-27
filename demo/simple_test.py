@@ -18,10 +18,12 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with pygal. If not, see <http://www.gnu.org/licenses/>.
 import time
-
+import sys
+from math import cos, sin
+from subprocess import call
 from pygal import *
 from pygal.style import *
-from math import cos, sin
+
 lnk = lambda v, l=None: {'value': v, 'xlink': 'javascript:alert("Test %s")' % v, 'label': l}
 
 t_start  = time.time()
@@ -151,12 +153,13 @@ line.interpolation_precision = 200
 line.render_to_file('out-line.svg')
 
 stackedline = StackedLine(fill=True)
-stackedline.add('test1', [1, 3, 2, None, 2, 13, 2, 5, 8])
+stackedline.add('test1u euirset uriets ur itseruie uriset uriest u', [1, 3, 2, None, 2, 13, 2, 5, 8])
 stackedline.add('test2', [4, 1, 1,  3, 12,  3])
 stackedline.add('test3', [9, 3, 2, lnk(10, '!'),  8,  2])
-stackedline.x_labels = ['a', 'b', 'c', 'd', 'e', 'f', 'g']
-stackedline.title = "Stackedline test"
-# stackedline.interpolate = "cubic"
+stackedline.x_labels = ['aaisaruistarsitauritaria', 'bsruie trstie rusiet ruetsru', 'cuasitaruisrnauciuestuirue uiretsu iersut irasui', 'd', 'e', 'f', 'g']
+stackedline.title = "Stackedline ine uisernuis enuir esnue sunres nuise nuires uinsre auin ruist arusit arst ierustie ruiset uriest uirest test"
+# stackedline.interpolate = "cubic"xb
+
 stackedline.render_to_file('out-stackedline.svg')
 
 xy = XY(Config(fill=True, style=NeonStyle, interpolate='cubic'))
@@ -201,4 +204,10 @@ radar.title = "Radar test"
 
 radar.render_to_file('out-radar.svg')
 
+call(['wsreload', '--url', "file:///*/*/kozea/pygal/*"])
+
 print "Ok (%dms)" % (1000 * (time.time() - t_start))
+
+if '-t' in sys.argv:
+    import pytest
+    pytest.main('')
