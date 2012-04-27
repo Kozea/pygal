@@ -59,6 +59,8 @@ class Config(object):
     y_label_rotation = 0
     #: Set to false to remove legend
     show_legend = True
+    #: Set to true to position legend at bottom
+    legend_at_bottom = True
     #: Set to false to remove dots
     show_dots = True
     #: Size of legend boxes

@@ -106,7 +106,7 @@ class Graph(BaseGraph):
         axis = self.svg.node(self.nodes['plot'], class_="axis x")
         truncation = self.truncate_label
         if not truncation:
-            if self.x_label_rotation:
+            if self.x_label_rotation or len(self._x_labels) <= 1:
                 truncation = 25
             else:
                 first_label_position = self.view.x(self._x_labels[0][1])
@@ -214,10 +214,10 @@ class Graph(BaseGraph):
         """Make the title"""
         if self.title:
             self.svg.node(self.nodes['graph'], 'text', class_='title',
-                      x=self.margin.left + self.view.width / 2,
-                      y=self.title_font_size + 10
-            ).text = truncate(self.title, int(reverse_text_len(
-                self.width, self.title_font_size)))
+                          x=self.margin.left + self.view.width / 2,
+                          y=self.title_font_size + 10
+                      ).text = truncate(self.title, int(reverse_text_len(
+                          self.width, self.title_font_size)))
 
     def _serie(self, serie):
         """Make serie node"""
