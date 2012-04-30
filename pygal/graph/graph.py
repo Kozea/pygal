@@ -187,8 +187,9 @@ class Graph(BaseGraph):
             y = (self.margin.top + self.view.height +
                  self._x_labels_height + 10)
             cols = ceil(sqrt(len(self.series)))
+
             if not truncation:
-                available_space = self.width / cols - (
+                available_space = self.view.width / cols - (
                     self.legend_box_size + 5)
                 truncation = int(reverse_text_len(
                     available_space, self.legend_font_size))
@@ -203,7 +204,8 @@ class Graph(BaseGraph):
             self.nodes['graph'], class_='legends',
             transform='translate(%d, %d)' % (x, y))
 
-        x_step = self.width / cols
+        h = max(self.legend_box_size, self.legend_font_size)
+        x_step = self.view.width / cols
         for i, title in enumerate(self._legends):
             col = i % cols
             row = i // cols
@@ -214,7 +216,10 @@ class Graph(BaseGraph):
             self.svg.node(
                 legend, 'rect',
                 x=col * x_step,
-                y=1.5 * row * self.legend_box_size,
+                y=1.5 * row * h + (
+                    self.legend_font_size - self.legend_box_size
+                    if self.legend_font_size > self.legend_box_size else 0
+                ) / 2,
                 width=self.legend_box_size,
                 height=self.legend_box_size,
                 class_="color-%d reactive" % (i % 16)
@@ -224,8 +229,8 @@ class Graph(BaseGraph):
             self.svg.node(
                 legend, 'text',
                 x=col * x_step + self.legend_box_size + 5,
-                y=1.5 * row * self.legend_box_size
-                + .5 * self.legend_box_size
+                y=1.5 * row * h
+                + .5 * h
                 + .3 * self.legend_font_size
             ).text = truncated
             if truncated != title:

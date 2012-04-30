@@ -25,6 +25,7 @@ from __future__ import division
 from decimal import Decimal
 from math import floor, pi, log, log10, ceil
 from itertools import cycle
+import re
 ORDERS = u"yzafpnµm kMGTPEZY"
 
 
@@ -243,3 +244,32 @@ class cached_property(object):
             return self
         value = obj.__dict__[self.__name__] = self.getter(obj)
         return value
+
+css_comments = re.compile(r'/\*.*?\*/', re.MULTILINE | re.DOTALL)
+
+
+def minify_css(css):
+    # Inspired by slimmer by Peter Bengtsson
+    remove_next_comment = 1
+    for css_comment in css_comments.findall(css):
+        if css_comment[-3:] == '\*/':
+            remove_next_comment = 0
+            continue
+        if remove_next_comment:
+            css = css.replace(css_comment, '')
+        else:
+            remove_next_comment = 1
+
+    # >= 2 whitespace becomes one whitespace
+    css = re.sub(r'\s\s+', ' ', css)
+    # no whitespace before end of line
+    css = re.sub(r'\s+\n', '', css)
+    # Remove space before and after certain chars
+    for char in ('{', '}', ':', ';', ','):
+        css = re.sub(char + r'\s', char, css)
+        css = re.sub(r'\s' + char, char, css)
+    css = re.sub(r'}\s(#|\w)', r'}\1', css)
+    # no need for the ; before end of attributes
+    css = re.sub(r';}', r'}', css)
+    css = re.sub(r'}//-->', r'}\n//-->', css)
+    return css.strip()

@@ -178,18 +178,19 @@ pie = Pie(Config(style=NeonStyle))
 # pie.add('test4', [20, lnk(18), 9])
 # pie.add('test5', [17, 5, 10])
 # pie.add('test6', [None, None, 10])
-for i in range(30):
-    pie.add(str(i) + '!' * i, [i, 30 - i])
+for i in range(10):
+    pie.add('P' + str(i) + '!' * i, [i, 30 - i])
 
-# pie.included_js = []
-# pie.external_js = [
-#     'http://localhost:7575/svg.jquery.js',
-#     'http://localhost:7575/pygal.js',
+# pie.js = [
+    # 'http://localhost:9898/svg.jquery.js',
+    # 'http://localhost:9898/pygal-tooltips.js',
 # ]
 # pie.add('test', {'value': 11, 'xlink': 'javascript:alert("lol 11")'})
 # pie.add('test2', 1)
 # pie.add('test3', 5)
 # pie.title = "Pie test"
+pie.legend_at_bottom = True
+pie.legend_box_size = 100
 pie.render_to_file('out-pie.svg')
 
 config = Config()

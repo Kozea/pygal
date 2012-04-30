@@ -28,7 +28,7 @@ import json
 from lxml import etree
 from math import cos, sin, pi
 from urlparse import urlparse
-from pygal.util import template, coord_format
+from pygal.util import template, coord_format, minify_css
 from pygal import __version__
 
 
@@ -68,12 +68,14 @@ class Svg(object):
                     css = os.path.join(
                         os.path.dirname(__file__), 'css', css)
                 with io.open(css, encoding='utf-8') as f:
-                    templ = template(
+                    css_text = template(
                         f.read(),
                         style=self.graph.style,
                         font_sizes=self.graph.font_sizes())
+                    if not self.graph.pretty_print:
+                        css_text = minify_css(css_text)
                     self.node(
-                        self.defs, 'style', type='text/css').text = templ
+                        self.defs, 'style', type='text/css').text = css_text
 
     def add_scripts(self):
         """Add the js to the svg"""
@@ -184,15 +186,16 @@ class Svg(object):
             class_='no_data')
             no_data.text = self.graph.no_data_text
 
-    def render(self, is_unicode=False):
+    def render(self, is_unicode=False, pretty_print=False):
         """Last thing to do before rendering"""
         svg = etree.tostring(
-            self.root, pretty_print=True,
+            self.root, pretty_print=pretty_print,
             xml_declaration=False,
             encoding='utf-8')
         if not self.graph.disable_xml_declaration:
             svg = b'\n'.join(
-                [etree.tostring(pi, encoding='utf-8', pretty_print=True)
+                [etree.tostring(
+                    pi, encoding='utf-8', pretty_print=pretty_print)
                  for pi in self.processing_instructions]
             ) + b'\n' + svg
         if self.graph.disable_xml_declaration or is_unicode:

@@ -90,7 +90,9 @@ class BaseGraph(object):
                   cut(self.series, 'title')),
                 self.legend_font_size)
             if self.legend_at_bottom:
-                self.margin.bottom += 10 + h * int(sqrt(len(self.series)))
+                h_max = max(h, self.legend_box_size)
+                self.margin.bottom += 10 + h_max * round(
+                        sqrt(len(self.series)) - 1) * 1.5 + h_max
             else:
                 self.margin.right += 10 + w + self.legend_box_size
 
@@ -188,7 +190,8 @@ class BaseGraph(object):
     def render(self, is_unicode=False):
         """Render the graph, and return the svg string"""
         self._render()
-        return self.svg.render(is_unicode=is_unicode)
+        return self.svg.render(
+            is_unicode=is_unicode, pretty_print=self.pretty_print)
 
     def render_tree(self):
         """Render the graph, and return lxml tree"""

@@ -110,6 +110,8 @@ class Config(object):
     truncate_legend = None
     #: Label string length truncation threshold (None = auto)
     truncate_label = None
+    #: Pretty print the svg
+    pretty_print = False
 
     def __init__(self, **kwargs):
         """Can be instanciated with config kwargs"""

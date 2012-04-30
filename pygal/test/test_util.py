@@ -18,7 +18,7 @@
 # along with pygal. If not, see <http://www.gnu.org/licenses/>.
 from pygal.util import (
     round_to_int, round_to_float, _swap_curly, template, humanize,
-    is_major, truncate)
+    is_major, truncate, minify_css)
 from pytest import raises
 
 
@@ -121,3 +121,24 @@ def test_truncate():
     assert truncate('1234567890', 10) == '1234567890'
     assert truncate('1234567890', 0) == '1234567890'
     assert truncate('1234567890', -1) == '1234567890'
+
+
+def test_minify_css():
+    css = '''
+/* 
+ * Font-sizes from config, override with care
+ */
+
+.title  {
+  font-family: sans;
+
+  font-size:  12 ;
+}
+
+.legends .legend text {
+  font-family: monospace; 
+  font-size: 14 ;}
+'''
+    assert minify_css(css) == (
+        '.title{font-family:sans;font-size:12}'
+        '.legends .legend text{font-family:monospace;font-size:14}')
