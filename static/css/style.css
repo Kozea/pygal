@@ -147,7 +147,7 @@ body > section {
   border-radius: 8px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.8);
   color: #c3c3c3;
-  margin: 30px 10% 40px;
+  margin: 30px 10% 100px;
   padding: 10px 2%;
   width: 76%;
 }
@@ -278,17 +278,12 @@ footer {
   border-top: 1px solid #d63739;
   bottom: 0;
   font-size: 0.85em;
-  height: 30px;
   text-align: center;
   position: absolute;  
-  padding: 20px 0 0;
   display: block;
   width: 100%;
 }
 
-footer ul {
-  padding: 25px 0 0;
-}
 
 footer ul li a {
   color: #6c6c6c;
