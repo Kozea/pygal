@@ -177,6 +177,10 @@ class BaseGraph(object):
                 diff = self._len - len(serie.values)
                 serie.metadata += diff * [self.__value__(0)]
 
+            for metadata in serie.metadata:
+                if metadata.value == None:
+                    metadata.value = 0
+
     def _render(self):
         """Make the graph internally"""
         self.reinit()

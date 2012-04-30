@@ -46,10 +46,7 @@ class StackedLine(Line):
         ] if self._len != 1 else [.5]  # Center if only one value
         accumulation = [0] * self._len
         for serie in self.series:
-            accumulation = map(sum, izip_longest(
-                accumulation, [val
-                               if val != None else 0
-                               for val in serie.values], fillvalue=0))
+            accumulation = map(sum, zip(accumulation, serie.values))
             serie.points = [
                 (x_pos[i], v)
                 for i, v in enumerate(accumulation)]

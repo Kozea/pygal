@@ -99,11 +99,12 @@ class Line(Graph):
         ] if self._len != 1 else [.5]  # Center if only one value
 
         for serie in self.series:
-            serie.points = [
-                (x_pos[i], v)
-                for i, v in enumerate(serie.values)]
-            if self.interpolate:
-                serie.interpolated = self._interpolate(serie.values, x_pos)
+            if not hasattr(serie, 'points'):
+                serie.points = [
+                    (x_pos[i], v)
+                    for i, v in enumerate(serie.values)]
+                if self.interpolate:
+                    serie.interpolated = self._interpolate(serie.values, x_pos)
 
         if self.include_x_axis:
             self._box.ymin = min(self._min, 0)

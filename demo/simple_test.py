@@ -156,7 +156,7 @@ stackedline = StackedLine(fill=True)
 stackedline.add('test1u euirset uriets ur itseruie uriset uriest u', [1, 3, 2, None, 2, 13, 2, 5, 8])
 stackedline.add('test2', [4, 1, 1,  3, 12,  3])
 stackedline.add('test3', [9, 3, 2, lnk(10, '!'),  8,  2])
-stackedline.x_labels = ['aaisaruistarsitauritaria', 'bsruie trstie rusiet ruetsru', 'cuasitaruisrnauciuestuirue uiretsu iersut irasui', 'd', 'e', 'f', 'g']
+stackedline.x_labels = ['aaisaruistarsitauritaria', 'bsruie trstie rusiet ruetsru', 'cuasitaruisrnauciuestuirue uiretsu iersut irasui', 'd', 'e', 'f', 'g'] 
 stackedline.title = "Stackedline ine uisernuis enuir esnue sunres nuise nuires uinsre auin ruist arusit arst ierustie ruiset uriest uirest test"
 # stackedline.interpolate = "cubic"xb
 

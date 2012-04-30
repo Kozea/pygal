@@ -34,10 +34,10 @@ class Style(object):
         opacity_hover='.9',
         transition='250ms',
         colors=(
-                '#ff5995', '#b6e354', '#feed6c', '#8cedff', '#9e6ffe',
-                '#899ca1', '#f8f8f2', '#808384', '#bf4646', '#516083',
-                '#f92672', '#82b414', '#fd971f', '#56c2d6', '#8c54fe',
-                '#465457')):
+            '#ff5995', '#b6e354', '#feed6c', '#8cedff', '#9e6ffe',
+            '#899ca1', '#f8f8f2', '#bf4646', '#516083', '#f92672',
+            '#82b414', '#fd971f', '#56c2d6', '#808384', '#8c54fe',
+            '#465457')):
         self.background = background
         self.plot_background = plot_background
         self.foreground = foreground
