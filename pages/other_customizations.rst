@@ -31,10 +31,20 @@ You can set the scale to be logarithmic:
 Custom css and js
 -----------------
 
-``base_css, base_js``
+``css, js``
 
-You can specify a css/js file to replace the one by default using `base_css` and `base_js` options.
-These options take a filename in parameter.
+You can add or replace css/js files in pygal using the `css` and `js` array options.
+These lists contain absolute filenames and/or external URI. (Relative filenames are relative to pygal internal files)
+
+Default:
+
+.. code-block::
+
+    css = ['style.css', 'graph.css']
+    js = [
+        'https://raw.github.com/Kozea/pygal.js/master/svg.jquery.js',
+        'https://raw.github.com/Kozea/pygal.js/master/pygal-tooltips.js'
+    ]
 
 
 Legend box size
@@ -53,7 +63,7 @@ You can change the size of the rectangle next to the legend:
 
 
 Rounded bars
----------------
+------------
 
 ``rounded_bars``
 
@@ -62,6 +72,19 @@ You can add a round effect to bar diagrams with `rounded_bars`:
 .. pygal-code::
 
   chart = pygal.Bar(rounded_bars=20)
+  chart.add('rounded', [3, 10, 7, 2, 9, 7])
+
+
+Pretty print
+------------
+
+``pretty_print``
+
+You can enable pretty print if you want to edit the source at hand (look at this frame source):
+
+.. pygal-code::
+
+  chart = pygal.Bar(pretty_print=True)
   chart.add('rounded', [3, 10, 7, 2, 9, 7])
 
 
@@ -75,7 +98,7 @@ viewer or as an image, all the values are displayed on the graph.
 
 It can be disabled by setting `print_values` to `False`.
 
-``print_zeroes`` can be enabled to display static values even if equal to zero.
+`print_zeroes` can be enabled to display static values even if equal to zero.
 
 
 Disable xml declaration

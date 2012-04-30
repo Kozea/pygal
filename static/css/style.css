@@ -241,7 +241,7 @@ section pre {
   padding: 1em;
   background-color: #0a0a0a;
   border: 1px solid black;
-  width: 100%;
+  max-width: 100%;
   overflow-x: auto;
 }
 

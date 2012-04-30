@@ -267,7 +267,7 @@ Population pyramid:
            'Males divorced', 'Females divorced']
 
   pyramid_chart = pygal.Pyramid(human_readable=True, legend_at_bottom=True)
-  pyramid_chart.title = 'England population by age (source: ons.gov.uk)'
+  pyramid_chart.title = 'England population by age in 2010 (source: ons.gov.uk)'
   pyramid_chart.x_labels = map(lambda x: str(x) if not x % 5 else '', range(90))
   for type, age in zip(types, ages):
       pyramid_chart.add(type, age)

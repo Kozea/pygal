@@ -157,6 +157,21 @@ You can remove legend and dots by setting these at `False`
   chart = pygal.Line(show_dots=False)
   chart.add('line', [.0002, .0005, .00035])
 
+
+Legend at bottom
+----------------
+
+``legend_at_bottom``
+
+You can put legend at bottom by setting `legend_at_bottom` at True:
+
+
+.. pygal-code::
+
+  chart = pygal.Line(legend_at_bottom=True)
+  chart.add('line', [.0002, .0005, .00035])
+
+
 Rendering
 ---------
 
@@ -216,6 +231,23 @@ Allow label rotation (in degrees) to avoid axis cluttering:
 .. pygal-code::
 
   chart = pygal.Line(x_label_rotation=20)
+  chart.x_labels = ['This is the first point !', 'This is the second point !', 'This is the third point !', 'This is the fourth point !']
+  chart.add('line', [0, .0002, .0005, .00035])
+
+
+Text truncation
+---------------
+
+``truncate_legend, truncate_label``
+
+By default long text are automatically truncated at reasonable length which fit in the graph.
+
+You can override that by setting truncation lenght with `truncate_legend` and `truncate_label`.
+
+
+.. pygal-code::
+
+  chart = pygal.Line(truncate_legend=3, truncate_label=17)
   chart.x_labels = ['This is the first point !', 'This is the second point !', 'This is the third point !', 'This is the fourth point !']
   chart.add('line', [0, .0002, .0005, .00035])
 
