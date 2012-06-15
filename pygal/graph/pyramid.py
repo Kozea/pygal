@@ -51,7 +51,7 @@ class VerticalPyramid(Bar):
                  for x in range(self._len + 1)
              ] if self._len > 1 else [0, 1]  # Center if only one value
         y_pos = compute_scale(
-            self._box.ymin, self._box.ymax, self.logarithmic
+            self._box.ymin, self._box.ymax, self.logarithmic, self.order_min
         ) if not self.y_labels else map(float, self.y_labels)
 
         self._x_ranges = zip(x_pos, x_pos[1:])

@@ -70,9 +70,9 @@ class XY(Line):
         self._box.xmin, self._box.xmax = min(xvals), max(xvals)
         self._box.ymin, self._box.ymax = min(yvals), max(yvals)
         x_pos = compute_scale(
-        self._box.xmin, self._box.xmax, self.logarithmic)
+        self._box.xmin, self._box.xmax, self.logarithmic, self.order_min)
         y_pos = compute_scale(
-            self._box.ymin, self._box.ymax, self.logarithmic)
+            self._box.ymin, self._box.ymax, self.logarithmic, self.order_min)
 
         self._x_labels = zip(map(self._format, x_pos), x_pos)
         self._y_labels = zip(map(self._format, y_pos), y_pos)

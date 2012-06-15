@@ -87,7 +87,8 @@ class Graph(BaseGraph):
         self.nodes['tooltip'] = self.svg.node(
             self.nodes['tooltip_overlay'],
             id="tooltip",
-            transform='translate(0 0)')
+            transform='translate(0 0)',
+            style="opacity: 0")
 
         a = self.svg.node(self.nodes['tooltip'], 'a')
         self.svg.node(a, 'rect',

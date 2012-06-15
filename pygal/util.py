@@ -146,7 +146,8 @@ def compute_logarithmic_scale(min_, max_):
     return positions
 
 
-def compute_scale(min_, max_, logarithmic=False, min_scale=4, max_scale=20):
+def compute_scale(min_, max_, logarithmic=False, order_min=None,
+                min_scale=4, max_scale=20):
     """Compute an optimal scale between min and max"""
     if min_ == 0 and max_ == 0:
         return [0]
@@ -158,8 +159,12 @@ def compute_scale(min_, max_, logarithmic=False, min_scale=4, max_scale=20):
             return log_scale
             # else we fallback to normal scalling
     order = round(log10(max(abs(min_), abs(max_)))) - 1
-    while (max_ - min_) / (10 ** order) < min_scale:
-        order -= 1
+    if order < order_min:
+        order = order_min
+    else:
+        while ((max_ - min_) / (10 ** order) < min_scale and
+               (order_min == None or order > order_min)):
+            order -= 1
     step = float(10 ** order)
     while (max_ - min_) / step > max_scale:
         step *= 2.

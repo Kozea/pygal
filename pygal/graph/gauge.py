@@ -114,7 +114,7 @@ class Gauge(Graph):
             self.max_ += 1
 
         x_pos = compute_scale(
-            self.min_, self.max_, self.logarithmic
+            self.min_, self.max_, self.logarithmic, self.order_min
         )
         self._x_labels = zip(map(self._format, x_pos), x_pos)
 

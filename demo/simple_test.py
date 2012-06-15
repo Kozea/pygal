@@ -128,7 +128,7 @@ hstackedbar.render_to_file('out-horizontalstackedbar.svg')
 
 line = Line(Config(style=NeonStyle,
                    zero=.0001, fill=True,
-                   human_readable=not True, logarithmic=True))
+                   human_readable=not True, logarithmic=not True))
 rng = range(-30, 31, 1)
 
 # line.add('test1', [1000 ** cos(x / 10.) for x in rng])
@@ -145,9 +145,13 @@ rng = range(-30, 31, 1)
 # line.add('_', [2 ** -3, 2.9 ** -8, 2])
 # line.add('_', [.001, .0001, .00001])
 # line.add('_', [1 + 10 ** 10, 3 + 10 ** 10, 2 + 10 ** 10])
-line.add('_', [1, lnk(4), None,  2, 8, lnk(-2), None, lnk(2)])
+# line.add('_', [1, lnk(4), None,  2, 8, lnk(-2), None, lnk(2)])
+line.add('_', [0, .5, 1])
 line.x_labels = map(str, rng)
+line.order_min = 0
 line.title = "Line test"
+# line.range = (40000, 70000)
+# line.y_labels = [40000, 50000, 60000, 70000]
 # line.interpolate = "cubic"
 line.interpolation_precision = 200
 line.render_to_file('out-line.svg')
@@ -181,16 +185,16 @@ pie = Pie(Config(style=NeonStyle))
 for i in range(10):
     pie.add('P' + str(i) + '!' * i, [i, 30 - i])
 
-# pie.js = [
-    # 'http://localhost:9898/svg.jquery.js',
-    # 'http://localhost:9898/pygal-tooltips.js',
-# ]
+pie.js = [
+    'http://localhost:9898/svg.jquery.js',
+    'http://localhost:9898/pygal-tooltips.js',
+]
 # pie.add('test', {'value': 11, 'xlink': 'javascript:alert("lol 11")'})
 # pie.add('test2', 1)
 # pie.add('test3', 5)
 # pie.title = "Pie test"
 pie.legend_at_bottom = True
-pie.legend_box_size = 100
+pie.legend_box_size = 10
 pie.render_to_file('out-pie.svg')
 
 config = Config()
@@ -207,7 +211,7 @@ radar.title = "Radar test"
 
 radar.render_to_file('out-radar.svg')
 
-call(['wsreload', '--url', "file:///*/*/kozea/pygal/*"])
+# call(['wsreload', '--url', "file:///*/*/kozea/pygal/*"])
 
 print "Ok (%dms)" % (1000 * (time.time() - t_start))
 

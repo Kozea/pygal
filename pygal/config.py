@@ -39,6 +39,8 @@ class Config(object):
     human_readable = False
     #: Display values in logarithmic scale
     logarithmic = False
+    #: Minimum order of scale, defaults to None
+    order_min = None
     #: List of css file, can be an absolute file path or an external link
     css = ('style.css', 'graph.css')  # Relative path to pygal css
     #: List of js file, can be a filepath or an external link

@@ -84,7 +84,7 @@ class Funnel(Graph):
         self._box.ymax = val_max
 
         y_pos = compute_scale(
-            self._box.ymin, self._box.ymax, self.logarithmic
+            self._box.ymin, self._box.ymax, self.logarithmic, self.order_min
         ) if not self.y_labels else map(float, self.y_labels)
 
         self._x_labels = zip(cut(self.series, 'title'),
