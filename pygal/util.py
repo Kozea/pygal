@@ -159,11 +159,11 @@ def compute_scale(min_, max_, logarithmic=False, order_min=None,
             return log_scale
             # else we fallback to normal scalling
     order = round(log10(max(abs(min_), abs(max_)))) - 1
-    if order < order_min:
+    if order_min is not None and order < order_min:
         order = order_min
     else:
         while ((max_ - min_) / (10 ** order) < min_scale and
-               (order_min == None or order > order_min)):
+               (order_min is None or order > order_min)):
             order -= 1
     step = float(10 ** order)
     while (max_ - min_) / step > max_scale:
