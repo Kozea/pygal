@@ -9,4 +9,11 @@
   </dl>
   <a href="{{ url_for('interpolation') }}">Interpolation</a>
   <a href="{{ url_for('rotation') }}">Rotations test</a>
+  <hr />
+  <h3>Quick tests</h3>
+  <dl>
+    {% for link in links %}
+      <dd><a href="{{ url_for(link) }}">{{ link.replace('test_', '').replace('_', ' ') | title }}</a></dd>
+    {% endfor %}
+  </dl>
 {% endblock section %}

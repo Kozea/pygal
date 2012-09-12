@@ -46,17 +46,6 @@ def create_app():
     """Creates the pygal test web app"""
 
     app = Flask(__name__)
-    try:
-        from log_colorizer import make_colored_stream_handler
-        handler = make_colored_stream_handler()
-    except ImportError:
-        from logging import StreamHandler
-        handler = StreamHandler()
-
-    getLogger('werkzeug').addHandler(handler)
-    getLogger('werkzeug').setLevel(INFO)
-    getLogger('pygal').addHandler(handler)
-    getLogger('pygal').setLevel(DEBUG)
 
     def _random(data, order):
         max = 10 ** order
@@ -90,9 +79,12 @@ def create_app():
             series.append((random_label(), values))
         return series
 
+    from .tests import get_test_routes
+    links = get_test_routes(app)
+
     @app.route("/")
     def index():
-        return render_template('index.jinja2', styles=styles)
+        return render_template('index.jinja2', styles=styles, links=links)
 
     @app.route("/svg/<type>/<series>/<config>")
     def svg(type, series, config):
@@ -187,5 +179,5 @@ def create_app():
                                svgs=svgs,
                                width=width,
                                height=height)
-
+    
     return app
