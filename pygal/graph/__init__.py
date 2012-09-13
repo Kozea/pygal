@@ -20,3 +20,19 @@
 Graph modules
 
 """
+
+CHARTS_NAMES = [
+    'Bar',
+    'Dot',
+    'Funnel',
+    'Gauge',
+    'HorizontalBar',
+    'HorizontalStackedBar',
+    'Line',
+    'Pie',
+    'Pyramid',
+    'Radar',
+    'StackedBar',
+    'StackedLine',
+    'XY'
+]

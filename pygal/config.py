@@ -119,11 +119,16 @@ class Config(object):
         """Can be instanciated with config kwargs"""
         self.css = list(self.css)
         self.js = list(self.js)
-        self.__dict__.update(kwargs)
+        self._update(kwargs)
 
     def __call__(self, **kwargs):
         """Can be updated with kwargs"""
-        self.__dict__.update(kwargs)
+        self._update(kwargs)
+
+    def _update(self, kwargs):
+        self.__dict__.update(
+            dict([(k, v) for (k, v) in kwargs.items()
+                  if not k.startswith('_') and k in dir(self)]))
 
     def font_sizes(self, with_unit=True):
         """Getter for all font size configs"""
@@ -133,8 +138,8 @@ class Config(object):
                 setattr(
                     fs,
                     name.replace('_font_size', ''),
-                    ('%dpx' % getattr(self, name)
-                 ) if with_unit else getattr(self, name))
+                    ('%dpx' % getattr(self, name))
+                    if with_unit else getattr(self, name))
         return fs
 
     def to_dict(self):

@@ -22,13 +22,11 @@ Base for pygal charts
 """
 
 from __future__ import division
-import io
-from pygal.serie import Serie, Value
 from pygal.view import Margin, Box
+from pygal.serie import Value
 from pygal.util import (
     get_text_box, get_texts_box, cut, rad, humanize, truncate)
 from pygal.svg import Svg
-from pygal.config import Config
 from pygal.util import cached_property
 from math import sin, cos, sqrt
 
@@ -38,24 +36,18 @@ class BaseGraph(object):
 
     __value__ = Value
 
-    def __init__(self, config=None, **kwargs):
+    def __init__(self, config, series):
         """Init the graph"""
-        self.config = config or Config()
-        self.config(**kwargs)
+        self.config = config
+        self.series = series
         self.horizontal = getattr(self, 'horizontal', False)
         self.svg = Svg(self)
-        self.series = []
         self._x_labels = None
         self._y_labels = None
         self._box = None
         self.nodes = {}
         self.margin = None
         self.view = None
-
-    def add(self, title, values):
-        """Add a serie to this graph"""
-        self.series.append(
-            Serie(title, values, len(self.series), self.__value__))
 
     def reinit(self):
         """(Re-)Init the graph"""
@@ -191,7 +183,7 @@ class BaseGraph(object):
         else:
             self.svg.pre_render(True)
 
-    def render(self, is_unicode=False):
+    def render(self, is_unicode):
         """Render the graph, and return the svg string"""
         self._render()
         return self.svg.render(
@@ -201,33 +193,3 @@ class BaseGraph(object):
         """Render the graph, and return lxml tree"""
         self._render()
         return self.svg.root
-
-    def render_pyquery(self):
-        """Render the graph, and return a pyquery wrapped tree"""
-        from pyquery import PyQuery as pq
-        return pq(self.render_tree())
-
-    def render_in_browser(self):
-        """Render the graph, open it in your browser with black magic"""
-        from lxml.html import open_in_browser
-        open_in_browser(self.render_tree(), encoding='utf-8')
-
-    def render_response(self):
-        """Render the graph, and return a Flask response"""
-        from flask import Response
-        return Response(self.render(), mimetype='image/svg+xml')
-
-    def render_to_file(self, filename):
-        """Render the graph, and write it to filename"""
-        with io.open(filename, 'w', encoding='utf-8') as f:
-            f.write(self.render(is_unicode=True))
-
-    def render_to_png(self, filename):
-        """Render the graph, convert it to png and write it to filename"""
-        import cairosvg
-        from io import BytesIO
-        fakefile = BytesIO()
-        fakefile.write(self.render())
-        fakefile.seek(0)
-        cairosvg.surface.PNGSurface.convert(
-            file_obj=fakefile, write_to=filename)

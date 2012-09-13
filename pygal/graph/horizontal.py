@@ -17,12 +17,10 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with pygal. If not, see <http://www.gnu.org/licenses/>.
 """
-Horizontal graph
+Horizontal graph base
 
 """
 from pygal.graph.graph import Graph
-from pygal.graph.bar import Bar
-from pygal.graph.stackedbar import StackedBar
 
 
 class HorizontalGraph(Graph):
@@ -46,11 +44,3 @@ class HorizontalGraph(Graph):
         if self.first_pass:
             for serie in self.series:
                 serie.values = list(reversed(serie.values))
-
-
-class HorizontalBar(HorizontalGraph, Bar):
-    """Horizontal Bar graph"""
-
-
-class HorizontalStackedBar(HorizontalGraph, StackedBar):
-    """Horizontal Stacked Bar graph"""

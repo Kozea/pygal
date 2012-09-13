@@ -24,20 +24,21 @@ from pygal.util import cycle_fill
 
 class Style(object):
     """Styling class containing colors for the css generation"""
-    def __init__(self,
-        background='black',
-        plot_background='#111',
-        foreground='#999',
-        foreground_light='#eee',
-        foreground_dark='#555',
-        opacity='.8',
-        opacity_hover='.9',
-        transition='250ms',
-        colors=(
-            '#ff5995', '#b6e354', '#feed6c', '#8cedff', '#9e6ffe',
-            '#899ca1', '#f8f8f2', '#bf4646', '#516083', '#f92672',
-            '#82b414', '#fd971f', '#56c2d6', '#808384', '#8c54fe',
-            '#465457')):
+    def __init__(
+            self,
+            background='black',
+            plot_background='#111',
+            foreground='#999',
+            foreground_light='#eee',
+            foreground_dark='#555',
+            opacity='.8',
+            opacity_hover='.9',
+            transition='250ms',
+            colors=(
+                '#ff5995', '#b6e354', '#feed6c', '#8cedff', '#9e6ffe',
+                '#899ca1', '#f8f8f2', '#bf4646', '#516083', '#f92672',
+                '#82b414', '#fd971f', '#56c2d6', '#808384', '#8c54fe',
+                '#465457')):
         self.background = background
         self.plot_background = plot_background
         self.foreground = foreground
@@ -55,10 +56,10 @@ class Style(object):
         def color(tupl):
             """Make a color css"""
             return (
-                    '.color-{0} {{\n'
-                    '  stroke: {1};\n'
-                    '  fill: {1};\n'
-                    '}}\n'.format(*tupl))
+                '.color-{0} {{\n'
+                '  stroke: {1};\n'
+                '  fill: {1};\n'
+                '}}\n'.format(*tupl))
         return '\n'.join(map(color, enumerate(cycle_fill(self._colors, 16))))
 
     def to_dict(self):

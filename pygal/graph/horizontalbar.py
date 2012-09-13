@@ -17,22 +17,12 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with pygal. If not, see <http://www.gnu.org/licenses/>.
 """
-Pygal -  A python svg graph plotting library
+Horizontal bar graph
 
 """
-
-__version__ = '0.11.0'
-import sys
-from pygal.config import Config
-from pygal.ghost import Ghost
-from pygal.graph import CHARTS_NAMES
-
-CHARTS = []
-
-for NAME in CHARTS_NAMES:
-    _CHART = type(NAME, (Ghost,), {})
-    CHARTS.append(_CHART)
-    setattr(sys.modules[__name__], NAME, _CHART)
+from pygal.graph.horizontal import HorizontalGraph
+from pygal.graph.bar import Bar
 
 
-__all__ = CHARTS_NAMES + [Config.__name__, 'CHARTS']
+class HorizontalBar(HorizontalGraph, Bar):
+    """Horizontal Bar graph"""
