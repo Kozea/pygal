@@ -40,6 +40,8 @@ class Ghost(object):
 
     def __init__(self, config=None, **kwargs):
         """Init config"""
+        name = self.__class__.__name__
+        self.cls = REAL_CHARTS[name]
         if config and type(config) == type:
             config = config()
 
@@ -55,13 +57,11 @@ class Ghost(object):
     def add(self, title, values):
         """Add a serie to this graph"""
         self.series.append(
-            Serie(title, values, len(self.series), Value))
+            Serie(title, values, len(self.series), self.cls.__value__))
 
     def make_instance(self):
         self.config(**self.__dict__)
-        name = self.__class__.__name__
-        cls = REAL_CHARTS[name]
-        self._last__inst = cls(self.config, self.series)
+        self._last__inst = self.cls(self.config, self.series)
         return self._last__inst
 
     # Rendering
