@@ -43,7 +43,7 @@ class VerticalPyramid(Bar):
                               for index, serie in enumerate(self.series)
                               if not index % 2])
         positive_sum = map(sum, positive_vals) or [0]
-        negative_sum = map(sum, negative_vals)
+        negative_sum = map(sum, negative_vals) or [0]
 
         self._box.ymax = max(max(positive_sum), max(negative_sum))
         self._box.ymin = - self._box.ymax

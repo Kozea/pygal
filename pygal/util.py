@@ -29,12 +29,6 @@ from pygal.adapters import not_zero, positive
 ORDERS = u"yzafpnµm kMGTPEZY"
 
 
-def get_value(val):
-    if isinstance(val, dict):
-        return val['value']
-    return val
-
-
 def float_format(number):
     """Format a float to a precision of 3, without zeroes or dots"""
     return ("%.3f" % number).rstrip('0').rstrip('.')
@@ -307,10 +301,17 @@ def prepare_values(raw, config, cls):
         adapters = [not_zero, positive] + adapters
     adapter = reduce(compose, adapters)
     series = []
-    width = max([len(values) for _, values in raw])
+    width = max([len(values) for _, values in raw] +
+                [len(config.x_labels or [])])
     for title, raw_values in raw:
         metadata = {}
         values = []
+        if isinstance(raw_values, dict):
+            value_list = [None] * width
+            for k, v in raw_values.items():
+                if k in config.x_labels:
+                    value_list[config.x_labels.index(k)] = v
+            raw_values = value_list
         for index, raw_value in enumerate(
                 raw_values + (
                     (width - len(raw_values)) * [None]  # aligning values

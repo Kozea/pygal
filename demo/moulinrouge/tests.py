@@ -6,7 +6,10 @@ from pygal.style import styles
 
 
 def get_test_routes(app):
-    lnk = lambda v, l=None: {'value': v, 'xlink': 'javascript:alert("Test %s")' % v, 'label': l}
+    lnk = lambda v, l=None: {
+        'value': v,
+        'xlink': 'javascript:alert("Test %s")' % v,
+        'label': l}
 
     @app.route('/test/unsorted')
     def test_unsorted():

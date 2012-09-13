@@ -120,12 +120,15 @@ class Svg(object):
 
     def line(self, node, coords, close=False, **kwargs):
         """Draw a svg line"""
-        if len(coords) < 2:
+        line_len = len(coords)
+        if line_len < 2:
             return
         root = 'M%s L%s Z' if close else 'M%s L%s'
         origin_index = 0
-        while None in coords[origin_index]:
+        while origin_index < line_len and None in coords[origin_index]:
             origin_index += 1
+        if origin_index == line_len:
+            return
         origin = coord_format(coords[origin_index])
         line = ' '.join([coord_format(c)
                          for c in coords[origin_index + 1:]

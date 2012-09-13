@@ -85,3 +85,40 @@ def test_metadata(Chart):
             'Three', 'http://4.example.com/',
             'Five', 'http://7.example.com/', 'Seven'):
         assert md in cut(q('desc'), 'text')
+
+
+def test_empty_lists(Chart):
+    chart = Chart()
+    chart.add('A', [1, 2])
+    chart.add('B', [])
+    chart.x_labels = ('red', 'green', 'blue')
+    q = chart.render_pyquery()
+    assert len(q(".legend")) == 2
+
+    chart = Chart()
+    chart.add('A', [None, None])
+    chart.add('B', [None, 4, 4])
+    chart.x_labels = ('red', 'green', 'blue')
+    q = chart.render_pyquery()
+    assert len(q(".legend")) == 2
+
+
+def test_values_by_dict(Chart):
+    chart = Chart()
+    chart.add('A', {'red': 10, 'green': 12, 'blue': 14})
+    chart.add('B', {'green': 11, 'red': 7})
+    chart.add('C', {'blue': 7})
+    chart.add('D', {})
+    chart.add('E', {'blue': 2, 'red': 13})
+    chart.x_labels = ('red', 'green', 'blue')
+    chart1 = chart.render()
+
+    chart = Chart()
+    chart.add('A', [10, 12, 14])
+    chart.add('B', [7, 11])
+    chart.add('C', [None, None, 7])
+    chart.add('D', [])
+    chart.add('E', [13, None, 2])
+    chart.x_labels = ('red', 'green', 'blue')
+    chart2 = chart.render()
+    assert chart1 == chart2
