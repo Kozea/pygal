@@ -46,26 +46,25 @@ class XY(Line):
         rng = (xmax - xmin)
 
         for serie in self.series:
-            serie.points = serie.values
             if self.interpolate:
                 vals = zip(*sorted(serie.points, key=lambda x: x[0]))
-                serie.interpolated = self._interpolate(
+                serie.points = self._interpolate(
                     vals[1], vals[0], xy=True, xy_xmin=xmin, xy_rng=rng)
-                if not serie.interpolated:
-                    serie.interpolated = serie.values
+            else:
+                serie.points = serie.values
 
         if self.interpolate:
             xvals = [val[0]
                      for serie in self.series
-                     for val in serie.interpolated]
+                     for val in serie.points]
             yvals = [val[1]
                      for serie in self.series
-                     for val in serie.interpolated]
+                     for val in serie.points]
 
         self._box.xmin, self._box.xmax = min(xvals), max(xvals)
         self._box.ymin, self._box.ymax = min(yvals), max(yvals)
         x_pos = compute_scale(
-        self._box.xmin, self._box.xmax, self.logarithmic, self.order_min)
+            self._box.xmin, self._box.xmax, self.logarithmic, self.order_min)
         y_pos = compute_scale(
             self._box.ymin, self._box.ymax, self.logarithmic, self.order_min)
 

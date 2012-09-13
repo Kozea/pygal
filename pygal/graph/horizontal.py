@@ -26,21 +26,16 @@ from pygal.graph.graph import Graph
 class HorizontalGraph(Graph):
     """Horizontal graph"""
     def __init__(self, *args, **kwargs):
-        self.first_pass = True
         self.horizontal = True
         super(HorizontalGraph, self).__init__(*args, **kwargs)
 
     def _compute(self):
-        self.first_pass = False
-        # Stupid pylint
-        # pylint: disable-msg=E0203,W0201
-        if self.first_pass and self.x_labels:
+        if self.x_labels:
             self.x_labels = list(reversed(self.x_labels))
-        # pylint: enable-msg=W0201,E0203
+
         super(HorizontalGraph, self)._compute()
         self._x_labels, self._y_labels = self._y_labels, self._x_labels
         self._box.swap()
         # Y axis is inverted
-        if self.first_pass:
-            for serie in self.series:
-                serie.values = list(reversed(serie.values))
+        for serie in self.series:
+            serie.values = list(reversed(serie.values))

@@ -49,9 +49,11 @@ class StackedLine(Line):
         accumulation = [0] * self._len
         for serie in self.series:
             accumulation = map(sum, zip(accumulation, serie.values))
-            serie.points = [
-                (x_pos[i], v)
-                for i, v in enumerate(accumulation)]
             if self.interpolate:
-                serie.interpolated = self._interpolate(accumulation, x_pos)
+                serie.points = self._interpolate(accumulation, x_pos)
+            else:
+                serie.points = [
+                    (x_pos[i], v)
+                    for i, v in enumerate(accumulation)]
+
         return super(StackedLine, self)._compute()

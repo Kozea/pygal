@@ -23,7 +23,7 @@ Radar chart
 
 from __future__ import division
 from pygal.graph.line import Line
-from pygal.adapters import positive
+from pygal.adapters import positive, none_to_zero
 from pygal.view import PolarView
 from pygal.util import deg, cached_property, compute_scale
 from math import cos, pi
@@ -32,7 +32,7 @@ from math import cos, pi
 class Radar(Line):
     """Kiviat graph"""
 
-    _adapters = [positive]
+    _adapters = [positive, none_to_zero]
 
     def __init__(self, *args, **kwargs):
         self.x_pos = None
@@ -49,7 +49,7 @@ class Radar(Line):
     def _values(self):
         if self.interpolate:
             return [val[0] for serie in self.series
-                    for val in serie.interpolated]
+                    for val in serie.points]
         else:
             return super(Line, self)._values
 
@@ -70,15 +70,16 @@ class Radar(Line):
         for label, theta in self._x_labels:
             guides = self.svg.node(axis, class_='guides')
             end = self.view((r, theta))
-            self.svg.node(guides, 'path',
-                      d='M%s L%s' % (format_(center), format_(end)),
-                      class_='line')
+            self.svg.node(
+                guides, 'path',
+                d='M%s L%s' % (format_(center), format_(end)),
+                class_='line')
             r_txt = (1 - self._box.__class__.margin) * self._box.ymax
             pos_text = self.view((r_txt, theta))
-            text = self.svg.node(guides, 'text',
-                      x=pos_text[0],
-                      y=pos_text[1]
-            )
+            text = self.svg.node(
+                guides, 'text',
+                x=pos_text[0],
+                y=pos_text[1])
             text.text = label
             angle = - theta + pi / 2
             if cos(angle) < 0:
@@ -99,19 +100,15 @@ class Radar(Line):
                 close=True,
                 class_='guide line')
             x, y = self.view((r, self.x_pos[0]))
-            self.svg.node(guides, 'text',
-                             x=x - 5,
-                             y=y
-            ).text = label
+            self.svg.node(
+                guides, 'text',
+                x=x - 5,
+                y=y).text = label
 
     def _compute(self):
         delta = 2 * pi / self._len
         x_pos = [.5 * pi + i * delta for i in range(self._len + 1)]
         for serie in self.series:
-            vals = [val if val != None else 0 for val in serie.values]
-            serie.points = [
-                (v, x_pos[i])
-                for i, v in enumerate(vals)]
             if self.interpolate:
                 extend = 2
                 extended_x_pos = (
@@ -119,9 +116,15 @@ class Radar(Line):
                     x_pos +
                     [.5 * pi + i * delta for i in range(
                         self._len + 1, self._len + 1 + extend)])
-                extended_vals = vals[-extend:] + vals + vals[:extend]
-                serie.interpolated = self._interpolate(
+                extended_vals = (serie.values[-extend:] +
+                                 serie.values +
+                                 serie.values[:extend])
+                serie.point = self._interpolate(
                     extended_vals, extended_x_pos, polar=True)
+            else:
+                serie.points = [
+                    (v, x_pos[i])
+                    for i, v in enumerate(serie.values)]
 
         self._box.margin *= 2
         self._box.xmin = self._box.ymin = - self._max
