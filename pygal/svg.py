@@ -25,6 +25,7 @@ from __future__ import division
 import io
 import os
 import json
+from datetime import date
 from lxml import etree
 from math import cos, sin, pi
 from urlparse import urlparse
@@ -40,19 +41,16 @@ class Svg(object):
         self.graph = graph
         self.processing_instructions = [
             etree.PI(u'xml', u"version='1.0' encoding='utf-8'")]
-        self.root = None
-        self.defs = None
-
-    def reinit(self):
-        """(Re-)initialization"""
         self.root = etree.Element(
             "{%s}svg" % self.ns,
             nsmap={
                 None: self.ns,
                 'xlink': 'http://www.w3.org/1999/xlink',
             })
-        self.root.append(etree.Comment(
-            u'Generated with pygal %s ©Kozea 2012' % __version__))
+        self.root.append(
+            etree.Comment(u'Generated with pygal %s ©Kozea 2012 on %s' % (
+                __version__, date.today().isoformat())))
+        self.root.append(etree.Comment(u'http://pygal.org'))
         self.root.append(etree.Comment(u'http://github.com/Kozea/pygal'))
         self.defs = self.node(tag='defs')
 
@@ -135,7 +133,8 @@ class Svg(object):
         self.node(node, 'path',
                   d=root % (origin, line), **kwargs)
 
-    def slice(self, serie_node, node, radius, small_radius,
+    def slice(
+            self, serie_node, node, radius, small_radius,
             angle, start_angle, center, val):
         """Draw a pie slice"""
         project = lambda rho, alpha: (
@@ -144,14 +143,14 @@ class Svg(object):
         fmt = lambda x: '%f %f' % x
         get_radius = lambda r: fmt(tuple([r] * 2))
         absolute_project = lambda rho, theta: fmt(
-                diff(center, project(rho, theta)))
+            diff(center, project(rho, theta)))
 
         if angle == 2 * pi:
             self.node(node, 'circle',
-                          cx=center[0],
-                          cy=center[1],
-                          r=radius,
-                          class_='slice reactive tooltip-trigger')
+                      cx=center[0],
+                      cy=center[1],
+                      r=radius,
+                      class_='slice reactive tooltip-trigger')
         else:
             to = [absolute_project(radius, start_angle),
                   absolute_project(radius, start_angle + angle),
@@ -165,7 +164,7 @@ class Svg(object):
                           get_radius(small_radius), int(angle > pi), to[3]),
                       class_='slice reactive tooltip-trigger')
         x, y = diff(center, project(
-                (radius + small_radius) / 2, start_angle + angle / 2))
+            (radius + small_radius) / 2, start_angle + angle / 2))
 
         self.graph._tooltip_data(node, val, x, y, classes="centered")
         self.graph._static_value(serie_node, val, x, y)
@@ -181,9 +180,9 @@ class Svg(object):
             self.root.set('height', str(self.graph.height))
         if no_data:
             no_data = self.node(self.root, 'text',
-            x=self.graph.width / 2,
-            y=self.graph.height / 2,
-            class_='no_data')
+                                x=self.graph.width / 2,
+                                y=self.graph.height / 2,
+                                class_='no_data')
             no_data.text = self.graph.no_data_text
 
     def render(self, is_unicode=False, pretty_print=False):

@@ -44,18 +44,10 @@ class BaseGraph(object):
         self.svg = Svg(self)
         self._x_labels = None
         self._y_labels = None
-        self._box = None
         self.nodes = {}
-        self.margin = None
-        self.view = None
-
-    def reinit(self):
-        """(Re-)Init the graph"""
         self.margin = Margin(*([20] * 4))
         self._box = Box()
-        if self.logarithmic and self.zero == 0:
-            # If logarithmic, default zero to 1
-            self.zero = 1
+        self.view = None
 
     def __getattr__(self, attr):
         """Search in config, then in self"""
@@ -79,12 +71,12 @@ class BaseGraph(object):
         if self.show_legend:
             h, w = get_texts_box(
                 map(lambda x: truncate(x, self.truncate_legend or 15),
-                  cut(self.series, 'title')),
+                    cut(self.series, 'title')),
                 self.legend_font_size)
             if self.legend_at_bottom:
                 h_max = max(h, self.legend_box_size)
                 self.margin.bottom += 10 + h_max * round(
-                        sqrt(len(self.series)) - 1) * 1.5 + h_max
+                    sqrt(len(self.series)) - 1) * 1.5 + h_max
             else:
                 self.margin.right += 10 + w + self.legend_box_size
 
@@ -121,7 +113,7 @@ class BaseGraph(object):
         return [val
                 for serie in self.series
                 for val in serie.values
-                if val != None]
+                if val is not None]
 
     @cached_property
     def _len(self):
@@ -170,13 +162,11 @@ class BaseGraph(object):
                 serie.metadata += diff * [self.__value__(0)]
 
             for metadata in serie.metadata:
-                if metadata.value == None:
+                if metadata.value is None:
                     metadata.value = 0
 
     def _render(self):
         """Make the graph internally"""
-        self.reinit()
-        self.svg.reinit()
         if self._has_data():
             self._draw()
             self.svg.pre_render(False)

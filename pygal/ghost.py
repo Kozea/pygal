@@ -61,8 +61,13 @@ class Ghost(object):
         self.series.append(
             Serie(title, values, len(self.series), self.cls.__value__))
 
+    def _check(self):
+        if self.config.logarithmic and self.config.zero == 0:
+            self.config.zero = 1
+
     def make_instance(self):
         self.config(**self.__dict__)
+        self._check()
         self._last__inst = self.cls(self.config, self.series)
         return self._last__inst
 
