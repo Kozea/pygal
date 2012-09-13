@@ -22,11 +22,13 @@ Stacked Line chart
 """
 
 from pygal.graph.line import Line
-from itertools import izip_longest
+from pygal.adapters import none_to_zero
 
 
 class StackedLine(Line):
     """Stacked Line graph"""
+
+    _adapters = [none_to_zero]
 
     def __init__(self, *args, **kwargs):
         self._previous_line = None
@@ -41,8 +43,8 @@ class StackedLine(Line):
         return new_values
 
     def _compute(self):
-        self._uniformize_data()
-        x_pos = [x / float(self._len - 1) for x in range(self._len)
+        x_pos = [
+            x / float(self._len - 1) for x in range(self._len)
         ] if self._len != 1 else [.5]  # Center if only one value
         accumulation = [0] * self._len
         for serie in self.series:

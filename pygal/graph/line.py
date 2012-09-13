@@ -39,15 +39,17 @@ class Line(Graph):
     @cached_property
     def _values(self):
         if self.interpolate:
-            return [val[1]
-                    for serie in self.series
-                    for val in serie.interpolated
-                    if val[1] != None and (not self.logarithmic or val[1] > 0)]
+            return [
+                val[1]
+                for serie in self.series
+                for val in serie.interpolated
+                if val[1] is not None and (not self.logarithmic or val[1] > 0)]
         else:
-            return  [val[1]
-                     for serie in self.series
-                     for val in serie.points
-                    if val[1] != None and (not self.logarithmic or val[1] > 0)]
+            return  [
+                val[1]
+                for serie in self.series
+                for val in serie.points
+                if val[1] is not None and (not self.logarithmic or val[1] > 0)]
 
     def _fill(self, values):
         """Add extra values to fill the line"""
@@ -64,7 +66,7 @@ class Line(Graph):
                 if None in (x, y):
                     continue
 
-                metadata = serie.metadata[i]
+                metadata = serie.metadata.get(i)
                 classes = []
                 if x > self.view.width / 2:
                     classes.append('left')
@@ -95,7 +97,8 @@ class Line(Graph):
                 class_='line reactive' + (' nofill' if not self.fill else ''))
 
     def _compute(self):
-        x_pos = [x / (self._len - 1) for x in range(self._len)
+        x_pos = [
+            x / (self._len - 1) for x in range(self._len)
         ] if self._len != 1 else [.5]  # Center if only one value
 
         for serie in self.series:
@@ -121,5 +124,5 @@ class Line(Graph):
         self._y_labels = zip(map(self._format, y_pos), y_pos)
 
     def _plot(self):
-        for serie in self.series:
-            self.line(self._serie(serie.index), serie)
+        for index, serie in enumerate(self.series):
+            self.line(self._serie(index), serie)

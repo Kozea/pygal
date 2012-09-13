@@ -23,7 +23,6 @@ Base for pygal charts
 
 from __future__ import division
 from pygal.view import Margin, Box
-from pygal.serie import Value
 from pygal.util import (
     get_text_box, get_texts_box, cut, rad, humanize, truncate)
 from pygal.svg import Svg
@@ -34,7 +33,7 @@ from math import sin, cos, sqrt
 class BaseGraph(object):
     """Graphs commons"""
 
-    __value__ = Value
+    _adapters = []
 
     def __init__(self, config, series):
         """Init the graph"""
@@ -76,7 +75,7 @@ class BaseGraph(object):
             if self.legend_at_bottom:
                 h_max = max(h, self.legend_box_size)
                 self.margin.bottom += 10 + h_max * round(
-                    sqrt(len(self.series)) - 1) * 1.5 + h_max
+                    sqrt(self._order) - 1) * 1.5 + h_max
             else:
                 self.margin.right += 10 + w + self.legend_box_size
 
@@ -130,9 +129,18 @@ class BaseGraph(object):
         """Getter for the maximum series value"""
         return (self.range and self.range[1]) or max(self._values)
 
+    @cached_property
+    def _cumul_max(self):
+        """Getter for the maximum sum of series value"""
+        return max(map(sum, cut(self.series, 'safe_values')))
+
+    @cached_property
+    def _order(self):
+        """Getter for the maximum series value"""
+        return len(self.series)
+
     def _draw(self):
         """Draw all the things"""
-        self._prepare_data()
         self._compute()
         self._compute_margin()
         self._decorate()
@@ -140,34 +148,15 @@ class BaseGraph(object):
 
     def _has_data(self):
         """Check if there is any data"""
-        if len(self.series) == 0:
+        if self._order == 0:
             return False
         if sum(map(len, map(lambda s: s.values, self.series))) == 0:
             return False
         return True
 
-    def _prepare_data(self):
-        """Remove aberrant values"""
-        if self.logarithmic:
-            for serie in self.series:
-                for metadata in serie.metadata:
-                    if metadata.value <= 0:
-                        metadata.value = None
-
-    def _uniformize_data(self):
-        """Make all series to max len"""
-        for serie in self.series:
-            if len(serie.values) < self._len:
-                diff = self._len - len(serie.values)
-                serie.metadata += diff * [self.__value__(0)]
-
-            for metadata in serie.metadata:
-                if metadata.value is None:
-                    metadata.value = 0
-
     def _render(self):
         """Make the graph internally"""
-        if self._has_data():
+        if self.series and self._has_data():
             self._draw()
             self.svg.pre_render(False)
         else:

@@ -22,20 +22,20 @@ Pie chart
 """
 
 from __future__ import division
-from pygal.serie import PositiveValue
 from pygal.util import decorate
 from pygal.graph.graph import Graph
+from pygal.adapters import positive, none_to_zero
 from math import pi
 
 
 class Pie(Graph):
     """Pie graph"""
 
-    __value__ = PositiveValue
+    _adapters = [positive, none_to_zero]
 
     def slice(self, serie_node, start_angle, serie, total):
         """Make a serie slice"""
-        dual = self._len > 1 and not len(self.series) == 1
+        dual = self._len > 1 and not self._order == 1
 
         slices = self.svg.node(serie_node['plot'], class_="slices")
         serie_angle = 0
@@ -49,7 +49,7 @@ class Pie(Graph):
             angle = 2 * pi * perc
             serie_angle += angle
             val = '{0:.2%}'.format(perc)
-            metadata = serie.metadata[i]
+            metadata = serie.metadata.get(i)
             slice_ = decorate(
                 self.svg,
                 self.svg.node(slices, class_="slice"),
@@ -81,7 +81,7 @@ class Pie(Graph):
         if total == 0:
             return
         current_angle = 0
-        for serie in self.series:
+        for index, serie in enumerate(self.series):
             angle = self.slice(
-                self._serie(serie.index), current_angle, serie, total)
+                self._serie(index), current_angle, serie, total)
             current_angle += angle

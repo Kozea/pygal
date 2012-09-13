@@ -26,8 +26,8 @@ It is used to delegate rendering to real objects but keeping config in place
 import io
 import sys
 from pygal.config import Config
-from pygal.serie import Serie
 from pygal.graph import CHARTS_NAMES
+from pygal.util import prepare_values
 
 
 REAL_CHARTS = {}
@@ -54,21 +54,24 @@ class Ghost(object):
 
         config(**kwargs)
         self.config = config
-        self.series = []
+        self.raw_series = []
 
     def add(self, title, values):
         """Add a serie to this graph"""
-        self.series.append(
-            Serie(title, values, len(self.series), self.cls.__value__))
+        self.raw_series.append((title, values))
 
     def _check(self):
         if self.config.logarithmic and self.config.zero == 0:
             self.config.zero = 1
 
+    def make_series(self):
+        return prepare_values(self.raw_series, self.config, self.cls)
+
     def make_instance(self):
         self.config(**self.__dict__)
         self._check()
-        self._last__inst = self.cls(self.config, self.series)
+        series = self.make_series()
+        self._last__inst = self.cls(self.config, series)
         return self._last__inst
 
     # Rendering

@@ -45,6 +45,12 @@ def get_test_routes(app):
         bar.zero = 1
         return bar.render_response()
 
+    @app.route('/test/none')
+    def test_bar_none():
+        bar = Bar()
+        bar.add('Lol', [2, None, 12])
+        return bar.render_response()
+
     @app.route('/test/gauge')
     def test_gauge():
         gauge = Gauge()
@@ -54,7 +60,7 @@ def get_test_routes(app):
         gauge.add('No', [99, -99])
         return gauge.render_response()
 
-    @app.route('/test/gauge')
+    @app.route('/test/pyramid')
     def test_pyramid():
         pyramid = Pyramid()
 

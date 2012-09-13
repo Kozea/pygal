@@ -20,38 +20,19 @@
 Little helpers for series
 
 """
-from pygal.util import cut
+from pygal.util import cached_property
 
 
 class Serie(object):
     """Serie containing title, values and the graph serie index"""
-    def __init__(self, title, values, index, value_class):
+    def __init__(self, title, values, metadata=None):
         self.title = title
-        if isinstance(values, dict) or not hasattr(values, '__iter__'):
-            values = [values]
-        self.metadata = map(value_class, values)
-        self.index = index
+        self.values = values
+        self.metadata = metadata or {}
 
-    @property
-    def values(self):
-        return cut(self.metadata, 'value')
-
-
-class Value(object):
-    """Value container"""
-
-    def __init__(self, value):
-        if not isinstance(value, dict):
-            value = {'value': value}
-        self.__dict__.update(value)
-
-
-class PositiveValue(Value):
-    """Positive or zero value container"""
-
-    def __init__(self, value):
-        super(PositiveValue, self).__init__(value)
-        self.value = max(self.value or 0, 0)
+    @cached_property
+    def safe_values(self):
+        return filter(lambda x: x is not None, self.values)
 
 
 class Label(object):

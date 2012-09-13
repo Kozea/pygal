@@ -23,24 +23,24 @@ Funnel chart
 
 from __future__ import division
 from pygal.util import decorate, cut, compute_scale
-from pygal.serie import PositiveValue
+from pygal.adapters import positive, none_to_zero
 from pygal.graph.graph import Graph
 
 
 class Funnel(Graph):
     """Funnel graph"""
 
-    __value__ = PositiveValue
+    _adapters = [positive, none_to_zero]
 
     def _format(self, value):
         return super(Funnel, self)._format(abs(value))
 
-    def funnel(self, serie_node, serie):
+    def funnel(self, serie_node, serie, index):
         """Draw a dot line"""
 
         fmt = lambda x: '%f %f' % x
         for i, poly in enumerate(serie.points):
-            metadata = serie.metadata[i]
+            metadata = serie.metadata.get(i)
             value = self._format(serie.values[i])
 
             funnels = decorate(
@@ -54,19 +54,19 @@ class Funnel(Graph):
                 class_='funnel reactive tooltip-trigger')
 
             x, y = self.view((
-                self._x_labels[serie.index][1],  # Poly center from label
+                self._x_labels[index][1],  # Poly center from label
                 sum([point[1] for point in poly]) / len(poly)))
             self._tooltip_data(funnels, value, x, y, classes='centered')
             self._static_value(serie_node, value, x, y)
 
     def _compute(self):
-        xlen = len(self.series)
-        x_pos = [(x + 1) / xlen for x in range(xlen)
-        ] if xlen != 1 else [.5]  # Center if only one value
+        x_pos = [
+            (x + 1) / self._order for x in range(self._order)
+        ] if self._order != 1 else [.5]  # Center if only one value
 
         previous = [[0, 0] for i in range(self._len)]
         for i, serie in enumerate(self.series):
-            y_height = - sum(serie.values) / 2
+            y_height = - sum(serie.safe_values) / 2
             all_x_pos = [0] + x_pos
             serie.points = []
             for j, value in enumerate(serie.values):
@@ -88,10 +88,10 @@ class Funnel(Graph):
         ) if not self.y_labels else map(float, self.y_labels)
 
         self._x_labels = zip(cut(self.series, 'title'),
-                             map(lambda x: x - 1 / (2 * xlen), x_pos))
+                             map(lambda x: x - 1 / (2 * self._order), x_pos))
         self._y_labels = zip(map(self._format, y_pos), y_pos)
 
     def _plot(self):
-        for serie in self.series:
+        for index, serie in enumerate(self.series):
             self.funnel(
-                self._serie(serie.index), serie)
+                self._serie(index), serie, index)

@@ -22,17 +22,18 @@ Graph modules
 """
 
 CHARTS_NAMES = [
-    'Bar',
-    'Dot',
-    'Funnel',
-    'Gauge',
-    'HorizontalBar',
-    'HorizontalStackedBar',
     'Line',
-    'Pie',
-    'Pyramid',
-    'Radar',
-    'StackedBar',
     'StackedLine',
-    'XY'
+    'XY',
+    'Bar',
+    'HorizontalBar',
+    'StackedBar',
+    'HorizontalStackedBar',
+    'Pie',
+    'Radar',
+    'Funnel',
+    'Pyramid',
+    'VerticalPyramid',
+    'Dot',
+    'Gauge'
 ]

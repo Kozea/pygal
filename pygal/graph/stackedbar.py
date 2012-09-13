@@ -31,19 +31,19 @@ class StackedBar(Bar):
 
     def _compute(self):
         transposed = zip(*[serie.values for serie in self.series])
-        positive_vals = [sum([val
-                            if val != None and val > 0 else 0 for val in vals])
-                           for vals in transposed]
-        negative_vals = [sum([val
-                            if val != None and val < 0 else 0 for val in vals])
-                           for vals in transposed]
+        positive_vals = [
+            sum([val if val is not None and val > 0 else 0 for val in vals])
+            for vals in transposed]
+        negative_vals = [
+            sum([val if val is not None and val < 0 else 0 for val in vals])
+            for vals in transposed]
 
         self._box.ymin, self._box.ymax = (
             min(min(negative_vals), 0), max(max(positive_vals), 0))
 
-        x_pos = [x / self._len
-                 for x in range(self._len + 1)
-             ] if self._len > 1 else [0, 1]  # Center if only one value
+        x_pos = [
+            x / self._len for x in range(self._len + 1)
+        ] if self._len > 1 else [0, 1]  # Center if only one value
         y_pos = compute_scale(
             self._box.ymin, self._box.ymax, self.logarithmic, self.order_min
         ) if not self.y_labels else map(float, self.y_labels)
@@ -55,10 +55,10 @@ class StackedBar(Bar):
 
     def _plot(self):
         stack_vals = [[0, 0] for i in range(self._len)]
-        for serie in self.series:
-            serie_node = self._serie(serie.index)
+        for index, serie in enumerate(self.series):
+            serie_node = self._serie(index)
             stack_vals = self.bar(
                 serie_node, serie, [
-                tuple((self._x_ranges[i][j], v) for j in range(2))
-                for i, v in enumerate(serie.values)],
+                    tuple((self._x_ranges[i][j], v) for j in range(2))
+                    for i, v in enumerate(serie.values)], index,
                 stack_vals)

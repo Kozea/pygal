@@ -33,7 +33,7 @@ class Bar(Graph):
         self._x_ranges = None
         super(Bar, self).__init__(*args, **kwargs)
 
-    def bar(self, serie_node, serie, values, stack_vals=None):
+    def bar(self, serie_node, serie, values, index, stack_vals=None):
         """Draw a bar graph for a serie"""
         # value here is a list of tuple range of tuple coord
 
@@ -60,7 +60,7 @@ class Bar(Graph):
             #        (x,y)   (X,Y)
             #
             # x and y are left range coords and X, Y right ones
-            metadata = serie.metadata[i]
+            metadata = serie.metadata.get(i)
             val = self._format(values[i][1][1])
             if self.horizontal:
                 x, y, X, Y = Y, X, y, x
@@ -71,11 +71,11 @@ class Bar(Graph):
                 height = self.view.x(self.zero) - y
             else:
                 height = self.view.y(self.zero) - y
-            if stack_vals == None:
-                bar_width = inner_width / len(self.series)
+            if stack_vals is None:
+                bar_width = inner_width / self._order
                 bar_padding = .1 * bar_width
                 bar_inner_width = bar_width - 2 * bar_padding
-                offset = serie.index * bar_width + bar_padding
+                offset = index * bar_width + bar_padding
                 shift = 0
             else:
                 offset = 0
@@ -117,7 +117,8 @@ class Bar(Graph):
     def _compute(self):
         self._box.ymin = min(self._min, self.zero)
         self._box.ymax = max(self._max, self.zero)
-        x_pos = [x / self._len for x in range(self._len + 1)
+        x_pos = [
+            x / self._len for x in range(self._len + 1)
         ] if self._len > 1 else [0, 1]  # Center if only one value
         y_pos = compute_scale(
             self._box.ymin, self._box.ymax, self.logarithmic, self.order_min
@@ -129,8 +130,8 @@ class Bar(Graph):
         self._y_labels = zip(map(self._format, y_pos), y_pos)
 
     def _plot(self):
-        for serie in self.series:
-            serie_node = self._serie(serie.index)
+        for index, serie in enumerate(self.series):
+            serie_node = self._serie(index)
             self.bar(serie_node, serie, [
                 tuple((self._x_ranges[i][j], v) for j in range(2))
-                for i, v in enumerate(serie.values)])
+                for i, v in enumerate(serie.values)], index)

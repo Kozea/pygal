@@ -20,12 +20,12 @@
 Various utils
 
 """
-
 from __future__ import division
+import re
 from decimal import Decimal
 from math import floor, pi, log, log10, ceil
 from itertools import cycle
-import re
+from pygal.adapters import not_zero, positive
 ORDERS = u"yzafpnµm kMGTPEZY"
 
 
@@ -65,7 +65,8 @@ def round_to_int(number, precision):
 
 def round_to_float(number, precision):
     """Round a float to a precision"""
-    rounded = Decimal(str(floor((number + precision / 2) // precision))
+    rounded = Decimal(
+        str(floor((number + precision / 2) // precision))
     ) * Decimal(str(precision))
     return float(rounded)
 
@@ -146,8 +147,9 @@ def compute_logarithmic_scale(min_, max_):
     return positions
 
 
-def compute_scale(min_, max_, logarithmic=False, order_min=None,
-                min_scale=4, max_scale=20):
+def compute_scale(
+        min_, max_, logarithmic=False, order_min=None,
+        min_scale=4, max_scale=20):
     """Compute an optimal scale between min and max"""
     if min_ == 0 and max_ == 0:
         return [0]
@@ -204,18 +206,18 @@ def get_texts_box(texts, fs):
 
 def decorate(svg, node, metadata):
     """Add metedata next to a node"""
-    if hasattr(metadata, 'xlink'):
-        xlink = metadata.xlink
+    if not metadata:
+        return node
+    xlink = metadata.get('xlink')
+    if xlink:
         if not isinstance(xlink, dict):
             xlink = {'href': xlink, 'target': '_blank'}
         node = svg.node(node, 'a', **xlink)
-    for key in dir(metadata):
-        if key not in ('value') and not key.startswith('_'):
-            value = getattr(metadata, key)
-            if key == 'xlink' and isinstance(value, dict):
-                value = value.get('href', value)
-            if value:
-                svg.node(node, 'desc', class_=key).text = str(value)
+    for key, value in metadata.items():
+        if key == 'xlink' and isinstance(value, dict):
+            value = value.get('href', value)
+        if value:
+            svg.node(node, 'desc', class_=key).text = str(value)
     return node
 
 
@@ -278,3 +280,54 @@ def minify_css(css):
     css = re.sub(r';}', r'}', css)
     css = re.sub(r'}//-->', r'}\n//-->', css)
     return css.strip()
+
+
+def compose(f, g):
+    """Chain functions"""
+    return lambda *args, **kwargs: f(g(*args, **kwargs))
+
+
+def safe_enumerate(iterable):
+    for i, v in enumerate(iterable):
+        if v is not None:
+            yield i, v
+
+from pygal.serie import Serie
+
+
+def prepare_values(raw, config, cls):
+    """Prepare the values to start with sane values"""
+    if not raw:
+        return
+    adapters = list(cls._adapters) or [lambda x:x]
+    if config.logarithmic:
+        for fun in not_zero, positive:
+            if fun in adapters:
+                adapters.remove(fun)
+        adapters = [not_zero, positive] + adapters
+    adapter = reduce(compose, adapters)
+    series = []
+    width = max([len(values) for _, values in raw])
+    for title, raw_values in raw:
+        metadata = {}
+        values = []
+        for index, raw_value in enumerate(
+                raw_values + (
+                    (width - len(raw_values)) * [None]  # aligning values
+                    if len(raw_values) < width else [])):
+            if isinstance(raw_value, dict):
+                value = dict(raw_value).pop('value')
+                metadata[index] = raw_value
+            else:
+                value = raw_value
+
+            if cls.__name__ == 'XY':
+                if not hasattr(value, '__iter__'):
+                    value = (value, config.zero)
+                value = map(adapter, value)
+            else:
+                value = adapter(value)
+
+            values.append(value)
+        series.append(Serie(title, values, metadata))
+    return series

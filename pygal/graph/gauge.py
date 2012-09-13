@@ -55,18 +55,19 @@ class Gauge(Graph):
             theta = self.arc_pos(value)
             fmt = lambda x: '%f %f' % x
             value = self._format(serie.values[i])
-            metadata = serie.metadata[i]
+            metadata = serie.metadata.get(i)
             gauges = decorate(
                 self.svg,
                 self.svg.node(serie_node['plot'], class_="dots"),
                 metadata)
 
-            self.svg.node(gauges, 'polygon', points=' '.join([
-                fmt(self.view((0, 0))),
-                fmt(self.view((.75, theta + thickness))),
-                fmt(self.view((.8, theta))),
-                fmt(self.view((.75, theta - thickness)))]),
-                          class_='line reactive tooltip-trigger')
+            self.svg.node(
+                gauges, 'polygon', points=' '.join([
+                    fmt(self.view((0, 0))),
+                    fmt(self.view((.75, theta + thickness))),
+                    fmt(self.view((.8, theta))),
+                    fmt(self.view((.75, theta - thickness)))]),
+                class_='line reactive tooltip-trigger')
 
             x, y = self.view((.75, theta))
             self._tooltip_data(gauges, value, x, y)
@@ -119,6 +120,6 @@ class Gauge(Graph):
         self._x_labels = zip(map(self._format, x_pos), x_pos)
 
     def _plot(self):
-        for serie in self.series:
+        for index, serie in enumerate(self.series):
             self.needle(
-                self._serie(serie.index), serie)
+                self._serie(index), serie)

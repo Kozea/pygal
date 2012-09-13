@@ -23,7 +23,7 @@ Radar chart
 
 from __future__ import division
 from pygal.graph.line import Line
-from pygal.serie import PositiveValue
+from pygal.adapters import positive
 from pygal.view import PolarView
 from pygal.util import deg, cached_property, compute_scale
 from math import cos, pi
@@ -32,7 +32,7 @@ from math import cos, pi
 class Radar(Line):
     """Kiviat graph"""
 
-    __value__ = PositiveValue
+    _adapters = [positive]
 
     def __init__(self, *args, **kwargs):
         self.x_pos = None

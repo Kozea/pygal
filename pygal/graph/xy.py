@@ -33,19 +33,14 @@ class XY(Line):
         return 'x=%s, y=%s' % tuple(map(self._format, values[i]))
 
     def _compute(self):
-        for serie in self.series:
-            for metadata in serie.metadata:
-                if not hasattr(metadata.value, '__iter__'):
-                    metadata.value = (metadata.value, self.zero)
-
         xvals = [val[0]
                  for serie in self.series
                  for val in serie.values
-                 if val[0] != None]
+                 if val[0] is not None]
         yvals = [val[1]
                  for serie in self.series
                  for val in serie.values
-                 if val[1] != None]
+                 if val[1] is not None]
         xmin = min(xvals)
         xmax = max(xvals)
         rng = (xmax - xmin)

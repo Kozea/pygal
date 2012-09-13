@@ -22,15 +22,15 @@ Dot chart
 """
 
 from __future__ import division
-from pygal.util import decorate, cut
-from pygal.serie import PositiveValue
+from pygal.util import decorate, cut, safe_enumerate
+from pygal.adapters import positive
 from pygal.graph.graph import Graph
 
 
 class Dot(Graph):
     """Dot graph"""
 
-    __value__ = PositiveValue
+    _adapters = [positive]
 
     def _axes(self):
         """Draw axes"""
@@ -40,15 +40,15 @@ class Dot(Graph):
     def dot(self, serie_node, serie, r_max):
         """Draw a dot line"""
         view_values = map(self.view, serie.points)
-        for i, (x, y) in enumerate(view_values):
-            value = serie.values[i]
+        for i, value in safe_enumerate(serie.values):
+            x, y = view_values[i]
             size = r_max * value
             value = self._format(value)
-            metadata = serie.metadata[i]
+            metadata = serie.metadata.get(i)
             dots = decorate(
-                    self.svg,
-                    self.svg.node(serie_node['plot'], class_="dots"),
-                    metadata)
+                self.svg,
+                self.svg.node(serie_node['plot'], class_="dots"),
+                metadata)
             self.svg.node(dots, 'circle', cx=x, cy=y, r=size,
                           class_='dot reactive tooltip-trigger')
 
@@ -57,7 +57,7 @@ class Dot(Graph):
 
     def _compute(self):
         x_len = self._len
-        y_len = len(self.series)
+        y_len = self._order
         self._box.xmax = x_len
         self._box.ymax = y_len
 
@@ -76,5 +76,5 @@ class Dot(Graph):
         r_max = min(
             self.view.x(1) - self.view.x(0),
             self.view.y(0) - self.view.y(1)) / (2 * (self._max or 1) * 1.05)
-        for serie in self.series:
-            self.dot(self._serie(serie.index), serie, r_max)
+        for index, serie in enumerate(self.series):
+            self.dot(self._serie(index), serie, r_max)
