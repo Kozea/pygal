@@ -24,15 +24,17 @@ It is used to delegate rendering to real objects but keeping config in place
 """
 
 import io
-from importlib import import_module
+import sys
 from pygal.config import Config
-from pygal.serie import Serie, Value
+from pygal.serie import Serie
 from pygal.graph import CHARTS_NAMES
 
 
 REAL_CHARTS = {}
 for NAME in CHARTS_NAMES:
-    mod = import_module('pygal.graph.%s' % NAME.lower())
+    mod_name = 'pygal.graph.%s' % NAME.lower()
+    __import__(mod_name)
+    mod = sys.modules[mod_name]
     REAL_CHARTS[NAME] = getattr(mod, NAME)
 
 
