@@ -16,9 +16,119 @@
 #
 # You should have received a copy of the GNU Lesser General Public License
 # along with pygal. If not, see <http://www.gnu.org/licenses/>.
-from pygal import Line, Dot, Pie, Radar
+from pygal import Line, Dot, Pie, Radar, Config
 from pygal.test.utils import texts
 from pygal.test import pytest_generate_tests, make_data
+
+
+def test_config_behaviours():
+    line1 = Line()
+    line1.show_legend = False
+    line1.fill = True
+    line1.pretty_print = True
+    line1.x_labels = ['a', 'b', 'c']
+    line1.add('_', [1, 2, 3])
+    l1 = line1.render()
+
+    line2 = Line(
+        show_legend=False,
+        fill=True,
+        pretty_print=True,
+        x_labels=['a', 'b', 'c'])
+    line2.add('_', [1, 2, 3])
+    l2 = line2.render()
+    assert l1 == l2
+
+    class LineConfig(Config):
+        show_legend = False
+        fill = True
+        pretty_print = True
+        x_labels = ['a', 'b', 'c']
+
+    line3 = Line(LineConfig)
+    line3.add('_', [1, 2, 3])
+    l3 = line3.render()
+    assert l1 == l3
+
+    line4 = Line(LineConfig())
+    line4.add('_', [1, 2, 3])
+    l4 = line4.render()
+    assert l1 == l4
+
+
+def test_config_alterations_class():
+    class LineConfig(Config):
+        show_legend = False
+        fill = True
+        pretty_print = True
+        x_labels = ['a', 'b', 'c']
+
+    line1 = Line(LineConfig)
+    line1.add('_', [1, 2, 3])
+    l1 = line1.render()
+
+    LineConfig.stroke = False
+    line2 = Line(LineConfig)
+    line2.add('_', [1, 2, 3])
+    l2 = line2.render()
+    assert l1 != l2
+
+    l1bis = line1.render()
+    assert l1 == l1bis
+
+
+def test_config_alterations_instance():
+    class LineConfig(Config):
+        show_legend = False
+        fill = True
+        pretty_print = True
+        x_labels = ['a', 'b', 'c']
+
+    config = LineConfig()
+    line1 = Line(config)
+    line1.add('_', [1, 2, 3])
+    l1 = line1.render()
+
+    config.stroke = False
+    line2 = Line(config)
+    line2.add('_', [1, 2, 3])
+    l2 = line2.render()
+    assert l1 != l2
+
+    l1bis = line1.render()
+    assert l1 == l1bis
+
+
+def test_config_alterations_kwargs():
+    class LineConfig(Config):
+        show_legend = False
+        fill = True
+        pretty_print = True
+        x_labels = ['a', 'b', 'c']
+
+    config = LineConfig()
+
+    line1 = Line(config)
+    line1.add('_', [1, 2, 3])
+    l1 = line1.render()
+
+    line1.stroke = False
+    l1bis = line1.render()
+    assert l1 != l1bis
+
+    line2 = Line(config)
+    line2.add('_', [1, 2, 3])
+    l2 = line2.render()
+    assert l1 == l2
+    assert l1bis != l2
+
+    line3 = Line(config, title='Title')
+    line3.add('_', [1, 2, 3])
+    l3 = line3.render()
+    assert l3 != l2
+
+    l2bis = line2.render()
+    assert l2 == l2bis
 
 
 def test_logarithmic():

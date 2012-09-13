@@ -20,7 +20,7 @@
 """
 Config module with all options
 """
-
+from copy import deepcopy
 from pygal.style import DefaultStyle
 
 
@@ -117,6 +117,13 @@ class Config(object):
 
     def __init__(self, **kwargs):
         """Can be instanciated with config kwargs"""
+        for k in dir(self):
+            v = getattr(self, k)
+            if (k not in self.__dict__ and not
+                    k.startswith('_') and not
+                    hasattr(v, '__call__')):
+                setattr(self, k, v)
+
         self.css = list(self.css)
         self.js = list(self.js)
         self._update(kwargs)
@@ -152,3 +159,6 @@ class Config(object):
                 elif not hasattr(value, '__call__'):
                     config[attr] = value
         return config
+
+    def copy(self):
+        return deepcopy(self)

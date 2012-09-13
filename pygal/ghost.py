@@ -40,8 +40,16 @@ class Ghost(object):
 
     def __init__(self, config=None, **kwargs):
         """Init config"""
-        self.config = config or Config()
-        self.config(**kwargs)
+        if config and type(config) == type:
+            config = config()
+
+        if config:
+            config = config.copy()
+        else:
+            config = Config()
+
+        config(**kwargs)
+        self.config = config
         self.series = []
 
     def add(self, title, values):
