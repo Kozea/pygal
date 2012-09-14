@@ -158,9 +158,16 @@ class Config(object):
                 value = getattr(self, attr)
                 if hasattr(value, 'to_dict'):
                     config[attr] = value.to_dict()
-                elif not hasattr(value, '__call__'):
+                elif attr != '_items' and not hasattr(value, '__call__'):
                     config[attr] = value
         return config
 
     def copy(self):
         return deepcopy(self)
+
+    @property
+    def _items(self):
+        return filter(
+            lambda x:
+            not x[0].startswith('_') and not hasattr(x[1], '__call__'),
+            [(k, getattr(self, k)) for k in dir(self) if k != '_items'])
