@@ -172,7 +172,7 @@ class Svg(object):
         self.graph._tooltip_data(node, val, x, y, classes="centered")
         self.graph._static_value(serie_node, val, x, y)
 
-    def pre_render(self, no_data=False):
+    def pre_render(self):
         """Last things to do before rendering"""
         self.add_styles()
         self.add_scripts()
@@ -181,12 +181,13 @@ class Svg(object):
         if self.graph.explicit_size:
             self.root.set('width', str(self.graph.width))
             self.root.set('height', str(self.graph.height))
-        if no_data:
-            no_data = self.node(self.root, 'text',
-                                x=self.graph.width / 2,
-                                y=self.graph.height / 2,
-                                class_='no_data')
-            no_data.text = self.graph.no_data_text
+
+    def draw_no_data(self):
+        no_data = self.node(self.root, 'text',
+                            x=self.graph.width / 2,
+                            y=self.graph.height / 2,
+                            class_='no_data')
+        no_data.text = self.graph.no_data_text
 
     def render(self, is_unicode=False, pretty_print=False):
         """Last thing to do before rendering"""

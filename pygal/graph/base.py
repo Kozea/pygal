@@ -48,6 +48,13 @@ class BaseGraph(object):
         self._box = Box()
         self.view = None
 
+        if self.series and self._has_data():
+            self._draw()
+        else:
+            self.svg.draw_no_data()
+
+        self.svg.pre_render()
+
     def __getattr__(self, attr):
         """Search in config, then in self"""
         if attr in dir(self.config):
@@ -130,11 +137,6 @@ class BaseGraph(object):
         return (self.range and self.range[1]) or max(self._values)
 
     @cached_property
-    def _cumul_max(self):
-        """Getter for the maximum sum of series value"""
-        return max(map(sum, cut(self.series, 'safe_values')))
-
-    @cached_property
     def _order(self):
         """Getter for the maximum series value"""
         return len(self.series)
@@ -148,27 +150,13 @@ class BaseGraph(object):
 
     def _has_data(self):
         """Check if there is any data"""
-        if self._order == 0:
-            return False
-        if sum(map(len, map(lambda s: s.values, self.series))) == 0:
-            return False
-        return True
-
-    def _render(self):
-        """Make the graph internally"""
-        if self.series and self._has_data():
-            self._draw()
-            self.svg.pre_render(False)
-        else:
-            self.svg.pre_render(True)
+        return sum(map(len, map(lambda s: s.values, self.series))) != 0
 
     def render(self, is_unicode):
         """Render the graph, and return the svg string"""
-        self._render()
         return self.svg.render(
             is_unicode=is_unicode, pretty_print=self.pretty_print)
 
     def render_tree(self):
         """Render the graph, and return lxml tree"""
-        self._render()
         return self.svg.root

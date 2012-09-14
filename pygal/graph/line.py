@@ -41,7 +41,8 @@ class Line(Graph):
         return  [
             val[1]
             for serie in self.series
-            for val in serie.points
+            for val in (serie.interpolated
+                        if self.interpolate else serie.points)
             if val[1] is not None and (not self.logarithmic or val[1] > 0)]
 
     def _fill(self, values):
@@ -81,6 +82,8 @@ class Line(Graph):
                     y + self.value_font_size)
 
         if self.stroke:
+            if self.interpolate:
+                view_values = map(self.view, serie.interpolated)
             if self.fill:
                 view_values = self._fill(view_values)
             self.svg.line(
@@ -93,12 +96,11 @@ class Line(Graph):
         ] if self._len != 1 else [.5]  # Center if only one value
 
         for serie in self.series:
+            serie.points = [
+                (x_pos[i], v)
+                for i, v in enumerate(serie.values)]
             if self.interpolate:
-                serie.points = self._interpolate(serie.values, x_pos)
-            else:
-                serie.points = [
-                    (x_pos[i], v)
-                    for i, v in enumerate(serie.values)]
+                serie.interpolated = self._interpolate(serie.values, x_pos)
 
         if self.include_x_axis:
             self._box.ymin = min(self._min, 0)

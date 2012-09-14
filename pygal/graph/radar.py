@@ -49,7 +49,7 @@ class Radar(Line):
     def _values(self):
         if self.interpolate:
             return [val[0] for serie in self.series
-                    for val in serie.points]
+                    for val in serie.interpolated]
         else:
             return super(Line, self)._values
 
@@ -109,6 +109,9 @@ class Radar(Line):
         delta = 2 * pi / self._len
         x_pos = [.5 * pi + i * delta for i in range(self._len + 1)]
         for serie in self.series:
+            serie.points = [
+                (v, x_pos[i])
+                for i, v in enumerate(serie.values)]
             if self.interpolate:
                 extend = 2
                 extended_x_pos = (
@@ -119,12 +122,8 @@ class Radar(Line):
                 extended_vals = (serie.values[-extend:] +
                                  serie.values +
                                  serie.values[:extend])
-                serie.point = self._interpolate(
+                serie.interpolated = self._interpolate(
                     extended_vals, extended_x_pos, polar=True)
-            else:
-                serie.points = [
-                    (v, x_pos[i])
-                    for i, v in enumerate(serie.values)]
 
         self._box.margin *= 2
         self._box.xmin = self._box.ymin = - self._max

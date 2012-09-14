@@ -114,6 +114,8 @@ class Config(object):
     truncate_label = None
     #: Pretty print the svg
     pretty_print = False
+    #: If True don't try to adapt / filter wrong values
+    strict = False
 
     def __init__(self, **kwargs):
         """Can be instanciated with config kwargs"""
