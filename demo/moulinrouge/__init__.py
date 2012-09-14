@@ -21,6 +21,7 @@ from logging import getLogger, INFO, DEBUG
 import pygal
 from pygal.config import Config
 from pygal.util import cut
+from pygal.graph import CHARTS_NAMES
 from pygal.style import styles
 from base64 import (
     urlsafe_b64encode as b64encode,
@@ -33,9 +34,9 @@ import pickle
 def random_label():
     chars = string.letters + string.digits + u' àéèçêâäëï'
     return ''.join(
-            [random.choice(chars)
-             for i in range(
-                     random.randrange(4, 30))])
+        [random.choice(chars)
+         for i in range(
+                 random.randrange(4, 30))])
 
 
 def random_value(min=0, max=15):
@@ -72,7 +73,7 @@ def create_app():
                 values = [(
                     random_value((-max, min)[random.randrange(0, 2)], max),
                     random_value((-max, min)[random.randrange(0, 2)], max))
-                          for i in range(data)]
+                    for i in range(data)]
             else:
                 values = [random_value((-max, min)[random.randrange(1, 2)],
                                        max) for i in range(data)]
@@ -84,7 +85,9 @@ def create_app():
 
     @app.route("/")
     def index():
-        return render_template('index.jinja2', styles=styles, links=links)
+        return render_template(
+            'index.jinja2', styles=styles,
+            links=links, charts_name=CHARTS_NAMES)
 
     @app.route("/svg/<type>/<series>/<config>")
     def svg(type, series, config):
@@ -179,5 +182,4 @@ def create_app():
                                svgs=svgs,
                                width=width,
                                height=height)
-    
     return app

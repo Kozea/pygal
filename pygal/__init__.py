@@ -28,11 +28,13 @@ from pygal.ghost import Ghost
 from pygal.graph import CHARTS_NAMES
 
 CHARTS = []
+CHARTS_BY_NAME = {}
 
 for NAME in CHARTS_NAMES:
     _CHART = type(NAME, (Ghost,), {})
     CHARTS.append(_CHART)
+    CHARTS_BY_NAME[NAME] = _CHART
     setattr(sys.modules[__name__], NAME, _CHART)
 
 
-__all__ = CHARTS_NAMES + [Config.__name__, 'CHARTS']
+__all__ = CHARTS_NAMES + [Config.__name__, 'CHARTS', 'CHARTS_BY_NAME']

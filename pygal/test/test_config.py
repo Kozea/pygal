@@ -144,6 +144,14 @@ def test_logarithmic():
     assert len(q(".dots")) == 3
 
 
+def test_interpolation(Chart):
+    chart = Chart(interpolate='cubic')
+    chart.add('1', [1, 3, 12, 3, 4])
+    chart.add('2', [7, -4, 10, None, 8, 3, 1])
+    q = chart.render_pyquery()
+    assert len(q(".legend")) == 2
+
+
 def test_logarithmic_bad_interpolation():
     try:
         import scipy

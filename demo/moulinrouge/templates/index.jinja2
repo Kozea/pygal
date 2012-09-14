@@ -13,7 +13,17 @@
   <h3>Quick tests</h3>
   <dl>
     {% for link in links %}
-      <dd><a href="{{ url_for(link) }}">{{ link.replace('test_', '').replace('_', ' ') | title }}</a></dd>
+      {% if link.endswith('_for') %}
+        <dd>{{ link.replace('test_', '').replace('_for', '').replace('_', ' ') | title }}
+          <small>
+        {% for chart_name in charts_name %}
+          <a href="{{ url_for(link, chart=chart_name) }}">{{ chart_name | title }}</a>
+        {% endfor %}
+          </small>
+        </dd>
+      {% else %}
+        <dd><a href="{{ url_for(link) }}">{{ link.replace('test_', '').replace('_', ' ') | title }}</a></dd>
+    {% endif %}
     {% endfor %}
   </dl>
 {% endblock section %}

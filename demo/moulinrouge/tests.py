@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 # This file is part of pygal
-import pygal
-from pygal import Bar, Gauge, Pyramid, Funnel, Dot
+from pygal import Bar, Gauge, Pyramid, Funnel, Dot, CHARTS_BY_NAME
 from pygal.style import styles
 
 
@@ -97,5 +96,12 @@ def get_test_routes(app):
         dot.add('d', [5, 5, lnk(0, 'Babar'), 3])
 
         return dot.render_response()
+
+    @app.route('/test/interpolate/<chart>')
+    def test_interpolate_for(chart):
+        graph = CHARTS_BY_NAME[chart](interpolate='cubic')
+        graph.add('1', [1, 3, 12, 3, 4])
+        graph.add('2', [7, -4, 10, None, 8, 3, 1])
+        return graph.render_response()
 
     return filter(lambda x: x.startswith('test'), locals())
