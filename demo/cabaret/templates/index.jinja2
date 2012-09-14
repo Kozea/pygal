@@ -1,0 +1,45 @@
+{% extends '_layout.jinja2' %}
+{% block side %}
+  <ul class="nav nav-list">
+    <li class="nav-header">Type</li>
+    <li>
+      <select id="type">
+        {% for name in charts_names %}
+          <option value="{{ name }}">{{ name }}</option>
+        {% endfor %}
+      </select>
+    </li>
+    <li class="divider"></li>
+    <li class="nav-header">Data</li>
+    <li>
+      <textarea id="data" rows="3">
+"Serie 1": [4, 5, 2, 8, 2, 0],
+"Serie 2": [0, 5, 2, 6, 2]
+      </textarea>
+    </li>
+    <li class="divider"></li>
+    <li>
+    <li class="nav-header">Style</li>
+      <select id="style">
+        {% for style in styles_names | sort(-1) %}
+          <option value="{{ style }}">{{ style.replace('_', ' ') | title }}</option>
+        {% endfor %}
+      </select>
+    </li>
+    <li class="divider"></li>
+    {% for key, value in configs.items() %}
+      <li>
+        <label class="nav-header" for="c-{{ key }}">{{ key }}</label>
+        <div class="controls">
+          <input type="text" id="c-{{ key }}" class="c-opts" placeholder="{{ value }}">
+        </div>
+      </li>
+    {% endfor %}
+  </ul>
+{% endblock side %}
+
+{% block section %}
+  <figure>
+    <figcaption></figcaption>
+  </figure>
+{% endblock section %}
