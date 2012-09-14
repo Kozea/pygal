@@ -48,7 +48,9 @@ class XY(Line):
         for serie in self.series:
             serie.points = serie.values
             if self.interpolate:
-                vals = zip(*sorted(serie.points, key=lambda x: x[0]))
+                vals = zip(*sorted(
+                    filter(lambda t: None not in t,
+                           serie.points), key=lambda x: x[0]))
                 serie.interpolated = self._interpolate(
                     vals[1], vals[0], xy=True, xy_xmin=xmin, xy_rng=rng)
 
