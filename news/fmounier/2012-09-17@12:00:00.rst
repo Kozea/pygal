@@ -1,0 +1,31 @@
+Pygal 0.12.0
+============
+
+
+Pygal 0.12.0 is out!
+
+Get it via `PyPi <http://pypi.python.org/pypi/pygal/>`_.
+
+Changelog
+---------
+
+- Core rewrite of the instanciation mechanism. Now it works with ghost objects holding configuration and values. Those phantoms instanciate the real objects only when the render function is called. It simplifies a lot of code.
+
+- Support of label indexed values, ie:
+
+.. pygal-code::
+
+    chart = pygal.Bar()
+    chart.add('A', {'red': 10, 'green': 12, 'blue': 14})
+    chart.add('B', {'green': 11, 'red': 7})
+    chart.add('C', {'blue': 2, 'red': 13})
+    chart.x_labels = ('red', 'green', 'blue')
+
+.. caution::
+
+  It breaks the api when adding only a value with its metadata:
+
+  .. code-block::
+
+    chart.add('Serie', {'value': 2, 'label': 'my only value'})    # Don't write that
+    chart.add('Serie', [{'value': 2, 'label': 'my only value'}])  # Write this instead

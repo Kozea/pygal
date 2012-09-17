@@ -310,21 +310,15 @@ footer ul li a:focus {
 
 .ribbon {
   background: linear-gradient(#E95355, #D63739);
-  overflow: hidden;
-  position: fixed;
-  right: -3em;
-  top: 2em;
-  transform: rotate(45deg);
-  box-shadow: 0 0 1em #888;
 }
+
 .ribbon a {
-  font: bold .8em "philisopher";
-  border: 1px solid #faa;
-  color: #fff;
-  display: block;
-  margin: 0.05em 0 0.075em 0;
-  padding: 0.5em 3.5em;
-  text-align: center;
-  text-decoration: none;
-  text-shadow: 0 0 0.5em #444;
+  font: bold .8em "philisopher" ;
+}
+
+
+#rss {
+  background-color: #DA3D3F;
+  float: right;
+  margin: 10px;
 }

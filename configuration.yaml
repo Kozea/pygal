@@ -5,6 +5,10 @@ public: true
 url: http://www.pygal.org/
 
 menu:
+  - Try it online:
+      link: '#'
+  - News:
+      link: /news/
   - Documentation:
       link: /documentation/
   - Support:
