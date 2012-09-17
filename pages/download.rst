@@ -14,17 +14,15 @@ Git Repository
 ==============
 
 If you want the development version of pygal, take a look at the
-:codelink:`git repository on GitHub`, or clone it thanks to::
+:codelink:`git repository on GitHub`, or clone it with::
 
   git clone git://github.com/Kozea/pygal.git
 
-You can also download `the pygal package of the git repository
-<https://github.com/Kozea/pygal/tarball/master>`_.
+You can also download `the development snapshot from github <http://github.com/Kozea/pygal/tarball/master>`_.
 
 Linux Distribution Packages
 ===========================
 
 *Not packaged yet.*
 
-If you are interested in creating packages for Linux distributions, read the
-`"Contribute" page </contribute/>`_.
+If you are interested in creating packages for Linux distributions, `contact us </support/>`_.

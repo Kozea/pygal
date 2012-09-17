@@ -7,11 +7,14 @@ url: http://www.pygal.org/
 menu:
   - Documentation:
       link: /documentation/
-  - Contribute:
-      link: /contribute/
+  - Support:
+      link: /support/
   - Download:
       link: /download/
   
+ribbon: 
+  url: http://github.com/Kozea/pygal
+
 project (git):
   url: git://github.com/Kozea/pygal.git
   path: pygal
@@ -23,9 +26,9 @@ vcs (git):
 code browser (github):
   project name: Kozea/pygal
 
-bug tracker (redmine):
-  base url: http://redmine.kozea.fr/
-  project name: pygal
+bug tracker (github):
+  base url: http://github.com/Kozea/pygal/issues
+  project name: Kozea/pygal
 
 continuous integration (jenkins):
   base url: http://jenkins.kozea.org/

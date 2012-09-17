@@ -25,7 +25,7 @@ You can set the scale to be logarithmic:
 
 .. caution::
 
-  Negative values are ignored, interpolation might be broken if it goes below zero...
+  Negative values are ignored
 
 
 Custom css and js
