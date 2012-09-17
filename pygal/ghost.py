@@ -58,6 +58,8 @@ class Ghost(object):
 
     def add(self, title, values):
         """Add a serie to this graph"""
+        if not hasattr(values, '__iter__') and not isinstance(values, dict):
+            values = [values]
         self.raw_series.append((title, values))
 
     def _check(self):

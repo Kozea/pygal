@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 # This file is part of pygal
-from pygal import Bar, Gauge, Pyramid, Funnel, Dot, CHARTS_BY_NAME
+from pygal import Bar, Gauge, Pyramid, Funnel, Dot, StackedBar, CHARTS_BY_NAME
 from pygal.style import styles
 
 
@@ -103,5 +103,12 @@ def get_test_routes(app):
         graph.add('1', [1, 3, 12, 3, 4])
         graph.add('2', [7, -4, 10, None, 8, 3, 1])
         return graph.render_response()
+
+    @app.route('/test/stacked')
+    def test_stacked():
+        stacked = StackedBar()
+        stacked.add('1', [1, 2, 3])
+        stacked.add('2', [4, 5, 6])
+        return stacked.render_response()
 
     return filter(lambda x: x.startswith('test'), locals())

@@ -103,6 +103,35 @@ def test_empty_lists(Chart):
     assert len(q(".legend")) == 2
 
 
+def test_non_iterable_value(Chart):
+    chart = Chart()
+    chart.add('A', 1)
+    chart.add('B', 2)
+    chart.x_labels = ('red', 'green', 'blue')
+    chart1 = chart.render()
+    chart = Chart()
+    chart.add('A', [1])
+    chart.add('B', [2])
+    chart.x_labels = ('red', 'green', 'blue')
+    chart2 = chart.render()
+    assert chart1 == chart2
+
+
+def test_iterable_types(Chart):
+    chart = Chart()
+    chart.add('A', [1, 2])
+    chart.add('B', [])
+    chart.x_labels = ('red', 'green', 'blue')
+    chart1 = chart.render()
+
+    chart = Chart()
+    chart.add('A', (1, 2))
+    chart.add('B', tuple())
+    chart.x_labels = ('red', 'green', 'blue')
+    chart2 = chart.render()
+    assert chart1 == chart2
+
+
 def test_values_by_dict(Chart):
     chart = Chart()
     chart.add('A', {'red': 10, 'green': 12, 'blue': 14})

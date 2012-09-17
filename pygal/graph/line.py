@@ -90,17 +90,20 @@ class Line(Graph):
                 serie_node['plot'], view_values, close=self._self_close,
                 class_='line reactive' + (' nofill' if not self.fill else ''))
 
-    def _compute(self):
-        x_pos = [
-            x / (self._len - 1) for x in range(self._len)
-        ] if self._len != 1 else [.5]  # Center if only one value
-
+    def _points(self, x_pos):
         for serie in self.series:
             serie.points = [
                 (x_pos[i], v)
                 for i, v in enumerate(serie.values)]
             if self.interpolate:
                 serie.interpolated = self._interpolate(serie.values, x_pos)
+
+    def _compute(self):
+        x_pos = [
+            x / (self._len - 1) for x in range(self._len)
+        ] if self._len != 1 else [.5]  # Center if only one value
+
+        self._points(x_pos)
 
         if self.include_x_axis:
             self._box.ymin = min(self._min, 0)

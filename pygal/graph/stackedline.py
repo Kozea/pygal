@@ -20,7 +20,7 @@
 Stacked Line chart
 
 """
-
+from __future__ import division
 from pygal.graph.line import Line
 from pygal.adapters import none_to_zero
 
@@ -42,10 +42,7 @@ class StackedLine(Line):
         self._previous_line = values
         return new_values
 
-    def _compute(self):
-        x_pos = [
-            x / float(self._len - 1) for x in range(self._len)
-        ] if self._len != 1 else [.5]  # Center if only one value
+    def _points(self, x_pos):
         accumulation = [0] * self._len
         for serie in self.series:
             accumulation = map(sum, zip(accumulation, serie.values))
@@ -54,5 +51,3 @@ class StackedLine(Line):
                 for i, v in enumerate(accumulation)]
             if self.interpolate:
                 serie.interpolated = self._interpolate(accumulation, x_pos)
-
-        return super(StackedLine, self)._compute()

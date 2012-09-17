@@ -30,12 +30,6 @@ class HorizontalGraph(Graph):
         super(HorizontalGraph, self).__init__(*args, **kwargs)
 
     def _compute(self):
-        if self.x_labels:
-            self.x_labels = list(reversed(self.x_labels))
-
         super(HorizontalGraph, self)._compute()
         self._x_labels, self._y_labels = self._y_labels, self._x_labels
         self._box.swap()
-        # Y axis is inverted
-        for serie in self.series:
-            serie.values = list(reversed(serie.values))

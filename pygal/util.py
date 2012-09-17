@@ -312,6 +312,9 @@ def prepare_values(raw, config, cls):
                 if k in config.x_labels:
                     value_list[config.x_labels.index(k)] = v
             raw_values = value_list
+        else:
+            raw_values = list(raw_values)
+
         for index, raw_value in enumerate(
                 raw_values + (
                     (width - len(raw_values)) * [None]  # aligning values
