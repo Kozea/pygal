@@ -44,7 +44,7 @@ class Ghost(object):
         """Init config"""
         name = self.__class__.__name__
         self.cls = REAL_CHARTS[name]
-        if config and type(config) == type:
+        if config and isinstance(config, type):
             config = config()
 
         if config:
