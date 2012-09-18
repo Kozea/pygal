@@ -21,101 +21,184 @@
 Config module with all options
 """
 from copy import deepcopy
-from pygal.style import DefaultStyle
+from pygal.style import Style, DefaultStyle
 
 
 class FontSizes(object):
     """Container for font sizes"""
 
+CONFIG_ITEMS = []
+
+
+class Key(object):
+
+    def __init__(self, default_value, type_, doc, subdoc="", subtype=None):
+        self.value = default_value
+        self.type = type_
+        self.doc = doc
+        self.subdoc = subdoc
+        self.subtype = subtype
+        self.name = "Unbound"
+        CONFIG_ITEMS.append(self)
+
+    @property
+    def is_boolean(self):
+        return self.type == bool
+
+    @property
+    def is_numeric(self):
+        return self.type == int
+
+    @property
+    def is_string(self):
+        return self.type == str
+
+    @property
+    def is_list(self):
+        return self.type == list
+
+    def coerce(self, value):
+        if self.type == Style:
+            return value
+        elif self.type == list:
+            return self.type(
+                map(
+                    self.subtype, map(
+                        lambda x: x.strip(), value.split(','))))
+        return self.type(value)
+
+
+class MetaConfig(type):
+    def __new__(mcs, classname, bases, classdict):
+        for k, v in classdict.items():
+            if isinstance(v, Key):
+                v.name = k
+        return type.__new__(mcs, classname, bases, classdict)
+
 
 class Config(object):
     """Class holding config values"""
 
-    #: Graph width
-    width = 800
-    #: Graph height
-    height = 600
-    #: Display values in human readable format (ie: 12.4M)
-    human_readable = False
-    #: Display values in logarithmic scale
-    logarithmic = False
-    #: Minimum order of scale, defaults to None
-    order_min = None
-    #: List of css file, can be an absolute file path or an external link
-    css = ('style.css', 'graph.css')  # Relative path to pygal css
-    #: List of js file, can be a filepath or an external link
-    js = (
-        'https://raw.github.com/Kozea/pygal.js/master/svg.jquery.js',
-        'https://raw.github.com/Kozea/pygal.js/master/pygal-tooltips.js'
-    )
-    #: Style holding values injected in css
-    style = DefaultStyle
-    #: Various font sizes
-    label_font_size = 10
-    value_font_size = 8
-    tooltip_font_size = 20
-    title_font_size = 16
-    legend_font_size = 14
-    #: Specify labels rotation angles in degrees
-    x_label_rotation = 0
-    y_label_rotation = 0
-    #: Set to false to remove legend
-    show_legend = True
-    #: Set to true to position legend at bottom
-    legend_at_bottom = False
-    #: Set to false to remove dots
-    show_dots = True
-    #: Size of legend boxes
-    legend_box_size = 12
-    #: X labels, must have same len than data.
-    #: Leave it to None to disable x labels display.
-    x_labels = None
-    #: You can specify explicit y labels (must be list(int))
-    y_labels = None
-    #: Graph title
-    #: Leave it to None to disable title.
-    title = None
-    #: Set this to the desired radius in px
-    rounded_bars = False
-    #: Always include x axis
-    include_x_axis = False
-    #: Fill areas under lines
-    fill = False
-    #: Line dots (set it to false to get a scatter plot)
-    stroke = True
-    #: Interpolation, this requires scipy module
-    #: May be any of 'linear', 'nearest', 'zero', 'slinear', 'quadratic,
-    #: 'cubic', 'krogh', 'barycentric', 'univariate',
-    #: or an integer specifying the order
-    #: of the spline interpolator
-    interpolate = None
-    #: Number of interpolated points between two values
-    interpolation_precision = 250
-    #: Explicitly specify min and max of values (ie: (0, 100))
-    range = None
-    #: Set the ordinate zero value (for filling)
-    zero = 0
-    #: Text to display when no data is given
-    no_data_text = "No data"
-    #: Print values when graph is in non interactive mode
-    print_values = True
-    #: Print zeroes when graph is in non interactive mode
-    print_zeroes = False
-    #: Animate tooltip steps (0 disable animation)
-    animation_steps = 0
-    #: Don't write xml declaration and return unicode instead of string
-    #: (usefull for writing output in html)
-    disable_xml_declaration = False
-    #: Write width and height attributes
-    explicit_size = False
-    #: Legend string length truncation threshold (None = auto)
-    truncate_legend = None
-    #: Label string length truncation threshold (None = auto)
-    truncate_label = None
-    #: Pretty print the svg
-    pretty_print = False
-    #: If True don't try to adapt / filter wrong values
-    strict = False
+    __metaclass__ = MetaConfig
+
+    width = Key(800, int, "Graph width")
+
+    height = Key(600, int, "Graph height")
+
+    human_readable = Key(
+        False, bool, "Display values in human readable format",
+        "(ie: 12.4M)")
+
+    logarithmic = Key(False, bool, "Display values in logarithmic scale")
+
+    order_min = Key(None, int, "Minimum order of scale, defaults to None")
+
+    css = Key(
+        ('style.css', 'graph.css'), list,
+        "List of css file",
+        "It can be an absolute file path or an external link",
+        str)
+
+    js = Key(
+        ('https://raw.github.com/Kozea/pygal.js/master/svg.jquery.js',
+         'https://raw.github.com/Kozea/pygal.js/master/pygal-tooltips.js'),
+        list, "List of js file",
+        "It can be a filepath or an external link",
+        str)
+
+    style = Key(DefaultStyle, Style, "Style holding values injected in css")
+
+    label_font_size = Key(10, int, "Label font size")
+
+    value_font_size = Key(8, int, "Value font size")
+
+    tooltip_font_size = Key(20, int, "Tooltip font size")
+
+    title_font_size = Key(16, int, "Title font size")
+
+    legend_font_size = Key(14, int, "Legend font size")
+
+    x_label_rotation = Key(
+        0, int, "Specify x labels rotation angles", "in degrees")
+
+    y_label_rotation = Key(
+        0, int, "Specify y labels rotation angles", "in degrees")
+
+    show_legend = Key(True, bool, "Set to false to remove legend")
+
+    legend_at_bottom = Key(
+        False, bool, "Set to true to position legend at bottom")
+
+    show_dots = Key(True, bool, "Set to false to remove dots")
+
+    legend_box_size = Key(12, int, "Size of legend boxes")
+
+    x_labels = Key(
+        None, list,
+        "X labels, must have same len than data.",
+        "Leave it to None to disable x labels display.",
+        str)
+
+    y_labels = Key(
+        None, list,
+        "You can specify explicit y labels",
+        "(must be list(int))", int)
+
+    title = Key(
+        None, str, "Graph title.", "Leave it to None to disable title.")
+
+    rounded_bars = Key(False, bool, "Set this to the desired radius in px")
+
+    include_x_axis = Key(False, bool, "Always include x axis")
+
+    fill = Key(False, bool, "Fill areas under lines")
+
+    stroke = Key(
+        True, bool, "Line dots (set it to false to get a scatter plot)")
+
+    interpolate = Key(
+        None, str, "Interpolation, this requires scipy module",
+        "May be any of 'linear', 'nearest', 'zero', 'slinear', 'quadratic,"
+        "'cubic', 'krogh', 'barycentric', 'univariate',"
+        "or an integer specifying the order"
+        "of the spline interpolator")
+
+    interpolation_precision = Key(
+        250, int, "Number of interpolated points between two values")
+
+    range = Key(
+        None, list, "Explicitly specify min and max of values",
+        "(ie: (0, 100))", int)
+
+    zero = Key(
+        0, int, "Set the ordinate zero value", "(for filling)")
+
+    no_data_text = Key(
+        "No data", str, "Text to display when no data is given")
+
+    print_values = Key(
+        True, bool, "Print values when graph is in non interactive mode")
+
+    print_zeroes = Key(
+        False, bool, "Print zeroes when graph is in non interactive mode")
+
+    disable_xml_declaration = Key(
+        False, bool,
+        "Don't write xml declaration and return str instead of string",
+        "usefull for writing output directly in html")
+
+    explicit_size = Key(False, bool, "Write width and height attributes")
+
+    truncate_legend = Key(
+        None, int, "Legend string length truncation threshold (None = auto)")
+
+    truncate_label = Key(
+        None, int, "Label string length truncation threshold (None = auto)")
+
+    pretty_print = Key(False, bool, "Pretty print the svg")
+
+    strict = Key(
+        False, bool, "If True don't try to adapt / filter wrong values")
 
     def __init__(self, **kwargs):
         """Can be instanciated with config kwargs"""
@@ -124,6 +207,8 @@ class Config(object):
             if (k not in self.__dict__ and not
                     k.startswith('_') and not
                     hasattr(v, '__call__')):
+                if isinstance(v, Key):
+                    v = v.value
                 setattr(self, k, v)
 
         self.css = list(self.css)
@@ -158,16 +243,9 @@ class Config(object):
                 value = getattr(self, attr)
                 if hasattr(value, 'to_dict'):
                     config[attr] = value.to_dict()
-                elif attr != '_items' and not hasattr(value, '__call__'):
+                elif not hasattr(value, '__call__'):
                     config[attr] = value
         return config
 
     def copy(self):
         return deepcopy(self)
-
-    @property
-    def _items(self):
-        return filter(
-            lambda x:
-            not x[0].startswith('_') and not hasattr(x[1], '__call__'),
-            [(k, getattr(self, k)) for k in dir(self) if k != '_items'])

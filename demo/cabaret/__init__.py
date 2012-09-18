@@ -19,7 +19,7 @@
 from flask import Flask, render_template, request
 from pygal import CHARTS_BY_NAME
 from pygal.graph import CHARTS_NAMES
-from pygal.config import Config
+from pygal.config import CONFIG_ITEMS
 from pygal.style import styles
 from json import loads
 
@@ -31,17 +31,22 @@ def create_app():
 
     @app.route("/")
     def index():
-        configs = Config()._items
         return render_template(
-            'index.jinja2', charts_names=CHARTS_NAMES, configs=dict(configs),
+            'index.jinja2', charts_names=CHARTS_NAMES, configs=CONFIG_ITEMS,
             styles_names=styles.keys())
 
     @app.route("/svg", methods=('POST',))
     def svg():
         values = request.values
-        chart = CHARTS_BY_NAME[values['type']](
-            disable_xml_declaration=True,
-            style=styles[values['style']], **loads(values['opts']))
+        config = loads(values['opts'])
+        config['disable_xml_declaration'] = True
+        config['style'] = styles[values['style']]
+        config['js'] = []
+        for item in CONFIG_ITEMS:
+            value = config.get(item.name, None)
+            if value:
+                config[item.name] = item.coerce(value)
+        chart = CHARTS_BY_NAME[values['type']](**config)
         for title, vals in loads(values['vals']).items():
             chart.add(title, vals)
         return chart.render_response()

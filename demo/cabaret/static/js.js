@@ -8,6 +8,9 @@ function resend() {
     $('.c-opts').each(function() {
         var $this = $(this),
             val = $this.val();
+        if($this.attr('type') == 'checkbox') {
+            val = $this.is(":checked");
+        }
         if(val) {
             opts[$this.attr('id').replace('c-', '')] = val;
         }
@@ -23,49 +26,22 @@ function resend() {
         },
         dataType: 'html'
     }).done(function (data) {
-        $fig.find('svg').remove();
-        $fig.prepend(data);
+        // $fig.find('div').get(0).innerHTML = data;
+        $fig.find('div').html(data);
+        init_svg($fig.find('svg').get(0));
         $('textarea').css({'-webkit-box-shadow': ''});
     }).fail(function () {
         $('textarea').css({'-webkit-box-shadow': 'inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(255, 0, 0, 0.6)'});
     });
-
-    // $embed.remove();
-    // $fig.prepend(
-    //     $('<embed>')
-    //         .attr({
-    //             src: src,
-    //             type: 'image/svg+xml'
-    //         })
-    // );
 }
 
 $(function () {
-    $('figure figcaption').append(
-        $('<button>')
-            .text('⟳')
-            .click(function() {
-                var $fig, $embed, w, h, src;
-                $fig = $(this).closest('figure');
-                $embed = $fig.find('embed');
-                w = $embed.width();
-                h = $embed.height();
-                src = $embed.attr('src');
-                $embed.remove();
-                $fig.prepend(
-                    $('<embed>')
-                        .attr({
-                            src: src,
-                            type: 'image/svg+xml',
-                            width: w,
-                            height: h
-                        })
-                );
-            })
-    );
     $('#type').on('change', resend);
     $('#data').on('input', resend);
     $('#style').on('change', resend);
-    $('.c-opts').on('input', resend);
+    $('.c-opts:not([type=checkbox])').on('input', resend);
+    $('.c-opts[type=checkbox]').on('change', resend);
+    $('label.tt').tooltip({ placement: 'right' });
+    $('input.tt').tooltip({ placement: 'top' });
     resend();
 });

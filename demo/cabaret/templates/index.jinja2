@@ -27,11 +27,24 @@
       </select>
     </li>
     <li class="divider"></li>
-    {% for key, value in configs.items() %}
+    {% for key in configs if key.name not in ['js', 'css'] %}
+      {% set doc = 'title="' + key.doc + ' ' +  key.subdoc + '"' %}
       <li>
-        <label class="nav-header" for="c-{{ key }}">{{ key }}</label>
         <div class="controls">
-          <input type="text" id="c-{{ key }}" class="c-opts" placeholder="{{ value }}">
+          {% if key.is_boolean %}
+            <label class="nav-header checkbox tt" for="c-{{ key.name }}" {{ doc }}>
+              <input type="checkbox" id="c-{{ key.name }}" class="c-opts tt" {{ 'checked' if key.value }} {{ doc }} />{{ key.name }}
+            </label>
+          {% else %}
+            <label class="nav-header tt" for="c-{{ key.name }}" {{ doc }}> {{ key.name }}</label>
+            {% if key.is_numeric %}
+              <input type="number" id="c-{{ key.name }}" class="c-opts tt" value="{{ key.value or ''}}" {{ doc }} />
+            {% elif key.is_string %}
+              <input type="text" id="c-{{ key.name }}" class="c-opts tt" value="{{ key.value or ''}}" {{ doc }} />
+            {% elif key.is_list %}
+              <input type="text" id="c-{{ key.name }}" class="c-opts tt list-of-{{ key.subtype}}" placeholder="value1, value2, ..." value="{{ key.value or ''}}" {{ doc }} />
+            {% endif %}
+          {% endif %}
         </div>
       </li>
     {% endfor %}
@@ -40,6 +53,7 @@
 
 {% block section %}
   <figure>
+    <div></div>
     <figcaption></figcaption>
   </figure>
 {% endblock section %}

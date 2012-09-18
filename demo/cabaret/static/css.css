@@ -7,12 +7,16 @@ body {
   padding: 9px 0;
 }
 
+figure {
+  margin: 0;
+}
+
 figure svg {
   width: 100%;
   background: none;
 }
 
-* {
+textarea {
   -webkit-transition: all 500ms ease-out;
   -moz-transition: all 500ms ease-out;
   transition: all 500ms ease-out;

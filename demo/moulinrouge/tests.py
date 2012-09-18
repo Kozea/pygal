@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 # This file is part of pygal
-from pygal import Bar, Gauge, Pyramid, Funnel, Dot, StackedBar, CHARTS_BY_NAME
+from pygal import Bar, Gauge, Pyramid, Funnel, Dot, StackedBar, CHARTS_BY_NAME, Config
 from pygal.style import styles
 
 
@@ -107,6 +107,18 @@ def get_test_routes(app):
     @app.route('/test/stacked')
     def test_stacked():
         stacked = StackedBar()
+        stacked.add('1', [1, 2, 3])
+        stacked.add('2', [4, 5, 6])
+        return stacked.render_response()
+
+    @app.route('/test/config')
+    def test_config():
+
+        class LolConfig(Config):
+            js = ['http://l:2343/svg.jquery.js',
+                  'http://l:2343/pygal-tooltips.js']
+
+        stacked = StackedBar(LolConfig())
         stacked.add('1', [1, 2, 3])
         stacked.add('2', [4, 5, 6])
         return stacked.render_response()

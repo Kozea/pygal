@@ -26,7 +26,7 @@ svg {
   background-color: {{ style.background }};
 }
 
-svg * {
+svg path, svg line, svg rect, svg circle {
   -webkit-transition: {{ style.transition }};
   -moz-transition: {{ style.transition }};
   transition: {{ style.transition }};
