@@ -129,11 +129,10 @@ nav ul li:last-child {
 }
 
 nav ul li a {
-
-  color: #781f20;
+  color: #f1b7b8;
   display: block;
   padding: 5px 8px 3px ;
-  text-shadow: 1px 1px 1px #f29899;
+
 } 
 
 nav ul li a:hover, 
@@ -141,6 +140,10 @@ nav ul li a:focus {
   color: #1a171a;
 }
 
+nav ul li a[href] {
+  color: #781f20;
+  text-shadow: 0px 1px 1px #f29899;
+}
 
 /* 
   -----------
