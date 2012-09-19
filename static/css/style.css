@@ -100,42 +100,50 @@ body > header h1 a:focus {
   -------
 */
 nav {
+  background: linear-gradient(#e95355, #d63739);
+  border-radius: 0 0 5px 5px;
   font-size: 1.1em;
   position: absolute;
-  top: 70px;
-  right: 8%;
+  top: 46px;
+  right:130px;
 }
 
 nav ul {
-  display: inline;
+  border-image: url(img/menu.png) 7 7 7 7 repeat;
+  border-width: 0 7px 7px 7px;
   list-style: none;
+  padding: 0;
+  margin: 0;
 }
  
 nav ul li {
-  background: #000;
-  border: 1px solid #2a272a;
-  border-radius: 5px;
-  margin: 0 5px;
-  padding: 5px;
+  background: url(img/menu-li.png) repeat-y top right;
+  display: inline-block;
+  margin: 0px 0 3px 0;
+  padding: 0 6px 0 0;
+}
+
+nav ul li:last-child {
+  background: none;
+  padding: 0;
 }
 
 nav ul li a {
-  background: linear-gradient(#e95355, #d63739);
-  border-bottom: 1px solid #e95355;
-  border-radius: 2px;
-  color: #1a171a;
+  color: #f1b7b8;
   display: block;
-  padding: 2px 8px;
-  text-shadow: 1px 1px 1px #f29899;
+  padding: 5px 8px 3px ;
+
 } 
 
 nav ul li a:hover, 
 nav ul li a:focus {
-  background: #f58283;
-  color: #b42829;
-  text-shadow: 1px 1px 1px #facbcc;
+  color: #1a171a;
 }
 
+nav ul li a[href] {
+  color: #781f20;
+  text-shadow: 0px 1px 1px #f29899;
+}
 
 /* 
   -----------
