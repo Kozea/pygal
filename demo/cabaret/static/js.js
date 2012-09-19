@@ -22,6 +22,7 @@ function resend() {
             values = $(this).find('.serie-value').val();
         vals.push([label, values.split(',').map(function (v) { return parseFloat(v); })]);
     });
+    var t = new Date().getTime();
     $.ajax({
         url: '/svg',
         type: 'POST',
@@ -31,11 +32,13 @@ function resend() {
             vals: JSON.stringify({vals: vals}),
             opts: JSON.stringify(opts)
         },
-        dataType: 'html',
+        dataType: 'json',
         traditional: true
     }).done(function (data) {
+        $('.total-time').html('<label>Total time: </label>' +  (new Date().getTime() - t) + 'ms');
+        $('.server-time').html('<label>Generation time:</label> ' + data.time + 'ms');
         // $fig.find('div').get(0).innerHTML = data;
-        $fig.find('div').html(data);
+        $fig.find('div').html(data.svg);
         init_svg($fig.find('svg').get(0));
         $('.nav a').css({color: ''});
     }).fail(function () {

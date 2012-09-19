@@ -16,13 +16,14 @@
 #
 # You should have received a copy of the GNU Lesser General Public License
 # along with pygal. If not, see <http://www.gnu.org/licenses/>.
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, jsonify
 from pygal import CHARTS_BY_NAME
 from pygal.graph import CHARTS_NAMES
 from pygal.config import CONFIG_ITEMS
 from pygal.interpolate import KINDS
 from pygal.style import styles
 from json import loads
+from time import time
 
 
 def create_app():
@@ -50,6 +51,9 @@ def create_app():
         chart = CHARTS_BY_NAME[values['type']](**config)
         for serie in loads(values['vals'])['vals']:
             chart.add(serie[0], serie[1])
-        return chart.render_response()
+        t = time()
+        svg = chart.render()
+        tt = int((time() - t) * 1000)
+        return jsonify(svg=svg, time=tt)
 
     return app

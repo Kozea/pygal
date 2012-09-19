@@ -31,3 +31,7 @@ label {
   font-variant: small-caps;
   color: #777;
 }
+
+.time label {
+  display: inline;
+}
