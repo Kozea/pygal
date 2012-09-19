@@ -6,7 +6,7 @@ url: http://www.pygal.org/
 
 menu:
   - Try it online:
-      link: '#'
+      link: http://cabaret.pygal.org/
   - News:
       link: /news/
   - Documentation:
