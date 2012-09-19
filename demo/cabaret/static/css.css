@@ -21,3 +21,12 @@ figure svg {
   -moz-transition: all 500ms ease-out;
   transition: all 500ms ease-out;
 }
+
+.side {
+  min-width: 400px;
+}
+
+label {
+  font-variant: small-caps;
+  color: #777;
+}

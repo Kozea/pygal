@@ -8,7 +8,7 @@
     <script type="text/javascript" src="https://raw.github.com/Kozea/pygal.js/master/pygal-tooltips.js"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='js.js') }}"></script>
     <link rel="stylesheet" href="{{ url_for('static', filename='components/bootstrap/docs/assets/css/bootstrap.css') }}" type="text/css" />
-    <link rel="stylesheet" href="{{ url_for('static', filename='components/bootstrap/docs/assets/css/bootstrap-responsive.css') }}" type="text/css" />
+    {# <link rel="stylesheet" href="{{ url_for('static', filename='components/bootstrap/docs/assets/css/bootstrap-responsive.css') }}" type="text/css" /> #}
     <link rel="stylesheet" href="{{ url_for('static', filename='css.css') }}" type="text/css" />
   </head>
   <body>
@@ -27,11 +27,9 @@
 
     <div class="container-fluid">
       <div class="row-fluid">
-        <div class="span4">
-          <div class="">
-            {% block side %}
-            {% endblock side %}
-          </div>
+        <div class="side span4">
+          {% block side %}
+          {% endblock side %}
         </div>
         <div class="span8">
           {% block section %}

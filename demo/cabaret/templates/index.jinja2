@@ -1,16 +1,17 @@
 {% extends '_layout.jinja2' %}
 {% block side %}
-  <form class="form-horizontal">
+  <form class="form">
     <div class="tabbable tabs-left">
       <ul class="nav nav-tabs">
         <li class="active"><a href="#main" data-toggle="tab">Main</a></li>
-        {% for group in configs[0].categories if group != 'Style' %}
+        {% for group in configs[0]._categories if group != 'Style' %}
           <li><a href="#{{ group }}" data-toggle="tab">{{ group }}</a></li>
         {% endfor %}
       </ul>
 
       <div class="tab-content">
         <div class="tab-pane active" id="main">
+          <legend>Main</legend>
           <div class="control-group tt" title="Chose the chart type">
             <label class="control-label" for="type">Type</label>
             <div class="controls">
@@ -46,6 +47,7 @@
 
         {% for group, keys in configs | groupby('category') %}
           <div class="tab-pane" id="{{ group }}">
+            <legend>{{ group }}</legend>
             {% for key in keys  if key.name not in ['js', 'css', 'style'] %}
               {% set doc = 'title="' + key.doc + ' <br /><small>' +  key.subdoc + '</small>"' %}
               <div class="control-group tt" {{ doc }}>

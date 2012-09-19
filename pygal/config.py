@@ -32,7 +32,7 @@ CONFIG_ITEMS = []
 
 class Key(object):
 
-    categories = []
+    _categories = []
 
     def __init__(
             self, default_value, type_, category, doc,
@@ -45,8 +45,8 @@ class Key(object):
         self.subdoc = subdoc
         self.subtype = subtype
         self.name = "Unbound"
-        if not category in self.categories:
-            self.categories.append(category)
+        if not category in self._categories:
+            self._categories.append(category)
 
         CONFIG_ITEMS.append(self)
 
