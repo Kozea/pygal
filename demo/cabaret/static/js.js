@@ -9,9 +9,8 @@ function resend() {
         var $this = $(this),
             val = $this.val();
         if($this.attr('type') == 'checkbox') {
-            val = $this.is(":checked");
-        }
-        if(val) {
+            opts[$this.attr('id').replace('c-', '')] = $this.is(":checked");
+        } else if(val) {
             opts[$this.attr('id').replace('c-', '')] = val;
         }
     });
@@ -29,9 +28,9 @@ function resend() {
         // $fig.find('div').get(0).innerHTML = data;
         $fig.find('div').html(data);
         init_svg($fig.find('svg').get(0));
-        $('textarea').css({'-webkit-box-shadow': ''});
+        $('.nav a').css({color: ''});
     }).fail(function () {
-        $('textarea').css({'-webkit-box-shadow': 'inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(255, 0, 0, 0.6)'});
+        $('.nav a').css({color: 'red'});
     });
 }
 
@@ -41,7 +40,6 @@ $(function () {
     $('#style').on('change', resend);
     $('.c-opts:not([type=checkbox])').on('input', resend);
     $('.c-opts[type=checkbox]').on('change', resend);
-    $('label.tt').tooltip({ placement: 'right' });
-    $('input.tt').tooltip({ placement: 'top' });
+    $('div.tt').tooltip();
     resend();
 });

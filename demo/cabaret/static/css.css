@@ -16,7 +16,7 @@ figure svg {
   background: none;
 }
 
-textarea {
+.nav a {
   -webkit-transition: all 500ms ease-out;
   -moz-transition: all 500ms ease-out;
   transition: all 500ms ease-out;

@@ -43,7 +43,7 @@ class Line(Graph):
             for serie in self.series
             for val in (serie.interpolated
                         if self.interpolate else serie.points)
-            if val[1] is not None and (not self.logarithmic or val[1] > 0)]
+            if val[1] is not None]
 
     def _fill(self, values):
         """Add extra values to fill the line"""

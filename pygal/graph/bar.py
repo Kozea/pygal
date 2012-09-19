@@ -97,8 +97,8 @@ class Bar(Graph):
                 bar, 'rect',
                 x=x,
                 y=y,
-                rx=self.rounded_bars * 1,
-                ry=self.rounded_bars * 1,
+                rx=self.rounded_bars * 1 if self.rounded_bars else 0,
+                ry=self.rounded_bars * 1 if self.rounded_bars else 0,
                 width=bar_inner_width,
                 height=height,
                 class_='rect reactive tooltip-trigger')

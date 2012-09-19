@@ -32,13 +32,22 @@ CONFIG_ITEMS = []
 
 class Key(object):
 
-    def __init__(self, default_value, type_, doc, subdoc="", subtype=None):
+    categories = []
+
+    def __init__(
+            self, default_value, type_, category, doc,
+            subdoc="", subtype=None):
+
         self.value = default_value
         self.type = type_
         self.doc = doc
+        self.category = category
         self.subdoc = subdoc
         self.subtype = subtype
         self.name = "Unbound"
+        if not category in self.categories:
+            self.categories.append(category)
+
         CONFIG_ITEMS.append(self)
 
     @property
@@ -81,124 +90,152 @@ class Config(object):
 
     __metaclass__ = MetaConfig
 
-    width = Key(800, int, "Graph width")
-
-    height = Key(600, int, "Graph height")
-
-    human_readable = Key(
-        False, bool, "Display values in human readable format",
-        "(ie: 12.4M)")
-
-    logarithmic = Key(False, bool, "Display values in logarithmic scale")
-
-    order_min = Key(None, int, "Minimum order of scale, defaults to None")
+    style = Key(
+        DefaultStyle, Style, "Style", "Style holding values injected in css")
 
     css = Key(
-        ('style.css', 'graph.css'), list,
+        ('style.css', 'graph.css'), list, "Style",
         "List of css file",
         "It can be an absolute file path or an external link",
         str)
 
-    js = Key(
-        ('https://raw.github.com/Kozea/pygal.js/master/svg.jquery.js',
-         'https://raw.github.com/Kozea/pygal.js/master/pygal-tooltips.js'),
-        list, "List of js file",
-        "It can be a filepath or an external link",
-        str)
 
-    style = Key(DefaultStyle, Style, "Style holding values injected in css")
+    ############ Look ############
 
-    label_font_size = Key(10, int, "Label font size")
+    title = Key(
+        None, str, "Look",
+        "Graph title.", "Leave it to None to disable title.")
 
-    value_font_size = Key(8, int, "Value font size")
+    width = Key(
+        800, int, "Look", "Graph width")
 
-    tooltip_font_size = Key(20, int, "Tooltip font size")
+    height = Key(
+        600, int, "Look", "Graph height")
 
-    title_font_size = Key(16, int, "Title font size")
+    show_dots = Key(True, bool, "Look", "Set to false to remove dots")
 
-    legend_font_size = Key(14, int, "Legend font size")
+    stroke = Key(
+        True, bool, "Look",
+        "Line dots (set it to false to get a scatter plot)")
 
-    x_label_rotation = Key(
-        0, int, "Specify x labels rotation angles", "in degrees")
+    fill = Key(
+        False, bool, "Look", "Fill areas under lines")
 
-    y_label_rotation = Key(
-        0, int, "Specify y labels rotation angles", "in degrees")
-
-    show_legend = Key(True, bool, "Set to false to remove legend")
+    show_legend = Key(
+        True, bool, "Look", "Set to false to remove legend")
 
     legend_at_bottom = Key(
-        False, bool, "Set to true to position legend at bottom")
+        False, bool, "Look", "Set to true to position legend at bottom")
 
-    show_dots = Key(True, bool, "Set to false to remove dots")
+    legend_box_size = Key(
+        12, int, "Look", "Size of legend boxes")
 
-    legend_box_size = Key(12, int, "Size of legend boxes")
+    rounded_bars = Key(
+        None, int, "Look", "Set this to the desired radius in px")
 
+    ############ Label ############
     x_labels = Key(
-        None, list,
+        None, list, "Label",
         "X labels, must have same len than data.",
         "Leave it to None to disable x labels display.",
         str)
 
     y_labels = Key(
-        None, list,
+        None, list, "Label",
         "You can specify explicit y labels",
-        "(must be list(int))", int)
+        "Must be a list of numbers", float)
 
-    title = Key(
-        None, str, "Graph title.", "Leave it to None to disable title.")
+    x_label_rotation = Key(
+        0, int, "Label", "Specify x labels rotation angles", "in degrees")
 
-    rounded_bars = Key(False, bool, "Set this to the desired radius in px")
+    y_label_rotation = Key(
+        0, int, "Label", "Specify y labels rotation angles", "in degrees")
 
-    include_x_axis = Key(False, bool, "Always include x axis")
+    ############ Value ############
+    human_readable = Key(
+        False, bool, "Value", "Display values in human readable format",
+        "(ie: 12.4M)")
 
-    fill = Key(False, bool, "Fill areas under lines")
-
-    stroke = Key(
-        True, bool, "Line dots (set it to false to get a scatter plot)")
+    logarithmic = Key(
+        False, bool, "Value", "Display values in logarithmic scale")
 
     interpolate = Key(
-        None, str, "Interpolation, this requires scipy module",
+        None, str, "Value", "Interpolation, this requires scipy module",
         "May be any of 'linear', 'nearest', 'zero', 'slinear', 'quadratic,"
         "'cubic', 'krogh', 'barycentric', 'univariate',"
         "or an integer specifying the order"
         "of the spline interpolator")
 
     interpolation_precision = Key(
-        250, int, "Number of interpolated points between two values")
+        250, int, "Value", "Number of interpolated points between two values")
+
+    order_min = Key(
+        None, int, "Value", "Minimum order of scale, defaults to None")
 
     range = Key(
-        None, list, "Explicitly specify min and max of values",
+        None, list, "Value", "Explicitly specify min and max of values",
         "(ie: (0, 100))", int)
 
-    zero = Key(
-        0, int, "Set the ordinate zero value", "(for filling)")
+    include_x_axis = Key(
+        False, bool, "Value", "Always include x axis")
 
+    zero = Key(
+        0, int, "Value",
+        "Set the ordinate zero value",
+        "Useful for filling to another base than abscissa")
+
+    ############ Text ############
     no_data_text = Key(
-        "No data", str, "Text to display when no data is given")
+        "No data", str, "Text", "Text to display when no data is given")
+
+    label_font_size = Key(10, int, "Text", "Label font size")
+
+    value_font_size = Key(8, int, "Text", "Value font size")
+
+    tooltip_font_size = Key(20, int, "Text", "Tooltip font size")
+
+    title_font_size = Key(16, int, "Text", "Title font size")
+
+    legend_font_size = Key(14, int, "Text", "Legend font size")
 
     print_values = Key(
-        True, bool, "Print values when graph is in non interactive mode")
+        True, bool,
+        "Text", "Print values when graph is in non interactive mode")
 
     print_zeroes = Key(
-        False, bool, "Print zeroes when graph is in non interactive mode")
+        False, bool,
+        "Text", "Print zeroes when graph is in non interactive mode")
+
+    truncate_legend = Key(
+        None, int, "Text",
+        "Legend string length truncation threshold", "None = auto")
+
+    truncate_label = Key(
+        None, int, "Text",
+        "Label string length truncation threshold", "None = auto")
+
+    ############ Misc ############
+    js = Key(
+        ('https://raw.github.com/Kozea/pygal.js/master/svg.jquery.js',
+         'https://raw.github.com/Kozea/pygal.js/master/pygal-tooltips.js'),
+        list, "Misc", "List of js file",
+        "It can be a filepath or an external link",
+        str)
 
     disable_xml_declaration = Key(
-        False, bool,
+        False, bool, "Misc",
         "Don't write xml declaration and return str instead of string",
         "usefull for writing output directly in html")
 
-    explicit_size = Key(False, bool, "Write width and height attributes")
+    explicit_size = Key(
+        False, bool, "Misc", "Write width and height attributes")
 
-    truncate_legend = Key(
-        None, int, "Legend string length truncation threshold (None = auto)")
-
-    truncate_label = Key(
-        None, int, "Label string length truncation threshold (None = auto)")
-
-    pretty_print = Key(False, bool, "Pretty print the svg")
+    pretty_print = Key(
+        False, bool, "Misc", "Pretty print the svg")
 
     strict = Key(
-        False, bool, "If True don't try to adapt / filter wrong values")
+        False, bool, "Misc",
+        "If True don't try to adapt / filter wrong values")
 
     def __init__(self, **kwargs):
         """Can be instanciated with config kwargs"""

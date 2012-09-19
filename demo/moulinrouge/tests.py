@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 # This file is part of pygal
-from pygal import Bar, Gauge, Pyramid, Funnel, Dot, StackedBar, CHARTS_BY_NAME, Config
+from pygal import (
+    Bar, Gauge, Pyramid, Funnel, Dot, StackedBar,
+    CHARTS_BY_NAME, Config, Line)
 from pygal.style import styles
 
 
@@ -110,6 +112,13 @@ def get_test_routes(app):
         stacked.add('1', [1, 2, 3])
         stacked.add('2', [4, 5, 6])
         return stacked.render_response()
+
+    @app.route('/test/show_dots')
+    def test_show_dots():
+        line = Line(show_dots=False)
+        line.add('1', [1, 2, 3])
+        line.add('2', [4, 5, 6])
+        return line.render_response()
 
     @app.route('/test/config')
     def test_config():

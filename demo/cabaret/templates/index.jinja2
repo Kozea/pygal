@@ -1,54 +1,80 @@
 {% extends '_layout.jinja2' %}
 {% block side %}
-  <ul class="nav nav-list">
-    <li class="nav-header">Type</li>
-    <li>
-      <select id="type">
-        {% for name in charts_names %}
-          <option value="{{ name }}">{{ name }}</option>
+  <form class="form-horizontal">
+    <div class="tabbable tabs-left">
+      <ul class="nav nav-tabs">
+        <li class="active"><a href="#main" data-toggle="tab">Main</a></li>
+        {% for group in configs[0].categories if group != 'Style' %}
+          <li><a href="#{{ group }}" data-toggle="tab">{{ group }}</a></li>
         {% endfor %}
-      </select>
-    </li>
-    <li class="divider"></li>
-    <li class="nav-header">Data</li>
-    <li>
-      <textarea id="data" rows="3">
+      </ul>
+
+      <div class="tab-content">
+        <div class="tab-pane active" id="main">
+          <div class="control-group tt" title="Chose the chart type">
+            <label class="control-label" for="type">Type</label>
+            <div class="controls">
+              <select id="type">
+                {% for name in charts_names %}
+                  <option value="{{ name }}">{{ name }}</option>
+                {% endfor %}
+              </select>
+            </div>
+          </div>
+          
+          <div class="control-group tt" title="Enter the chart data">
+            <label class="control-label" for="data">Data</label>
+            <div class="controls">
+              <textarea id="data" rows="3">
 "Serie 1": [4, 5, 2, 8, 2, 0],
 "Serie 2": [0, 5, 2, 6, 2]
-      </textarea>
-    </li>
-    <li class="divider"></li>
-    <li>
-    <li class="nav-header">Style</li>
-      <select id="style">
-        {% for style in styles_names | sort(-1) %}
-          <option value="{{ style }}">{{ style.replace('_', ' ') | title }}</option>
-        {% endfor %}
-      </select>
-    </li>
-    <li class="divider"></li>
-    {% for key in configs if key.name not in ['js', 'css'] %}
-      {% set doc = 'title="' + key.doc + ' ' +  key.subdoc + '"' %}
-      <li>
-        <div class="controls">
-          {% if key.is_boolean %}
-            <label class="nav-header checkbox tt" for="c-{{ key.name }}" {{ doc }}>
-              <input type="checkbox" id="c-{{ key.name }}" class="c-opts tt" {{ 'checked' if key.value }} {{ doc }} />{{ key.name }}
-            </label>
-          {% else %}
-            <label class="nav-header tt" for="c-{{ key.name }}" {{ doc }}> {{ key.name }}</label>
-            {% if key.is_numeric %}
-              <input type="number" id="c-{{ key.name }}" class="c-opts tt" value="{{ key.value or ''}}" {{ doc }} />
-            {% elif key.is_string %}
-              <input type="text" id="c-{{ key.name }}" class="c-opts tt" value="{{ key.value or ''}}" {{ doc }} />
-            {% elif key.is_list %}
-              <input type="text" id="c-{{ key.name }}" class="c-opts tt list-of-{{ key.subtype}}" placeholder="value1, value2, ..." value="{{ key.value or ''}}" {{ doc }} />
-            {% endif %}
-          {% endif %}
+              </textarea>
+            </div>
+          </div>
+
+          <div class="control-group tt" title="Chose the chart style">
+            <label class="control-label" for="style">Style</label>
+            <div class="controls">
+              <select id="style">
+                {% for style in styles_names | sort(-1) %}
+                  <option value="{{ style }}">{{ style.replace('_', ' ') | title }}</option>
+                {% endfor %}
+              </select>
+            </div>
+          </div>
         </div>
-      </li>
-    {% endfor %}
-  </ul>
+
+        {% for group, keys in configs | groupby('category') %}
+          <div class="tab-pane" id="{{ group }}">
+            {% for key in keys  if key.name not in ['js', 'css', 'style'] %}
+              {% set doc = 'title="' + key.doc + ' <br /><small>' +  key.subdoc + '</small>"' %}
+              <div class="control-group tt" {{ doc }}>
+                {% if key.is_boolean %}
+                  <div class="controls">
+                    <label class="checkbox" for="c-{{ key.name }}">
+                      <input type="checkbox" id="c-{{ key.name }}" class="c-opts" {{ 'checked' if key.value }} />{{ key.name.replace('_', ' ') |title }}
+                    </label>
+                  </div>
+                {% else %}
+                  <label class="control-label" for="c-{{ key.name }}" > {{ key.name.replace('_', ' ') | title }}</label>
+                  
+                  <div class="controls">
+                    {% if key.is_numeric %}
+                      <input type="number" id="c-{{ key.name }}" class="c-opts" value="{{ key.value or ''}}" />
+                    {% elif key.is_string %}
+                      <input type="text" id="c-{{ key.name }}" class="c-opts" value="{{ key.value or ''}}" />
+                    {% elif key.is_list %}
+                      <input type="text" id="c-{{ key.name }}" class="c-opts list-of-{{ key.subtype }}" placeholder="value1, value2{{ ', ...' if key.name != 'range' }}" value="{{ key.value or ''}}" />
+                    {% endif %}
+                  </div>
+                {% endif %}
+              </div>
+            {% endfor %}
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+  </form>
 {% endblock side %}
 
 {% block section %}

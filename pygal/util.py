@@ -299,10 +299,11 @@ def prepare_values(raw, config, cls):
             if fun in adapters:
                 adapters.remove(fun)
         adapters = [not_zero, positive] + adapters
-    adapter = reduce(compose, adapters)
+    adapter = reduce(compose, adapters) if not config.strict else ident
     series = []
     width = max([len(values) for _, values in raw] +
                 [len(config.x_labels or [])])
+
     for title, raw_values in raw:
         metadata = {}
         values = []
