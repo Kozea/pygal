@@ -99,9 +99,7 @@ class Config(object):
         "It can be an absolute file path or an external link",
         str)
 
-
     ############ Look ############
-
     title = Key(
         None, str, "Look",
         "Graph title.", "Leave it to None to disable title.")

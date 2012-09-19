@@ -1,10 +1,10 @@
 function resend() {
     var $fig = $('figure'),
-        // $embed = $fig.find('embed'),
         type = $('#type').val(),
-        data = $('#data').val(),
         style = $('#style').val(),
-        opts = {};
+        interpolation = $('#interpolation').val(),
+        opts = {},
+        vals = [];
     $('.c-opts').each(function() {
         var $this = $(this),
             val = $this.val();
@@ -14,16 +14,25 @@ function resend() {
             opts[$this.attr('id').replace('c-', '')] = val;
         }
     });
+    if(interpolation) {
+        opts['interpolate'] = interpolation;
+    }
+    $('.data .controls').each(function () {
+        var label = $(this).find('.serie-label').val(),
+            values = $(this).find('.serie-value').val();
+        vals.push([label, values.split(',').map(function (v) { return parseFloat(v); })]);
+    });
     $.ajax({
         url: '/svg',
         type: 'POST',
         data: {
             type: type,
             style: style,
-            vals: '{' + data + '}',
+            vals: JSON.stringify({vals: vals}),
             opts: JSON.stringify(opts)
         },
-        dataType: 'html'
+        dataType: 'html',
+        traditional: true
     }).done(function (data) {
         // $fig.find('div').get(0).innerHTML = data;
         $fig.find('div').html(data);
@@ -35,11 +44,19 @@ function resend() {
 }
 
 $(function () {
-    $('#type').on('change', resend);
+    $('#type').add('#style').add('#interpolation').on('change', resend);
     $('#data').on('input', resend);
-    $('#style').on('change', resend);
     $('.c-opts:not([type=checkbox])').on('input', resend);
     $('.c-opts[type=checkbox]').on('change', resend);
-    $('div.tt').tooltip();
+    $('div.tt').tooltip({ placement: 'top' });
+    $('.control-group.data').on('click keypress', '.btn.rem', function () {
+        if($('.data .controls').length > 1) {
+            $(this).closest('.controls').remove();
+        }
+    });
+    $('.control-group.data').on('click keypress', '.btn.add', function () {
+        $(this).siblings('.controls').last().clone().insertBefore($(this)).find('input').val('');
+    });
+    $('.control-group.data').on('input', 'input', resend);
     resend();
 });

@@ -23,14 +23,14 @@
             </div>
           </div>
           
-          <div class="control-group tt" title="Enter the chart data">
+          <div class="control-group data tt" title="Enter the chart data">
             <label class="control-label" for="data">Data</label>
-            <div class="controls">
-              <textarea id="data" rows="3">
-"Serie 1": [4, 5, 2, 8, 2, 0],
-"Serie 2": [0, 5, 2, 6, 2]
-              </textarea>
+            <div class="controls form-inline">
+              <input type="text" class="input-small serie-label" value="Serie" placeholder="Serie Name"/>
+              <input type="text" class="input-small serie-value" value="1, 1, 3, 7, 21" placeholder="Values" />
+              <button type="button" class="btn btn-small rem">-</button>
             </div>
+            <button type="button" class="btn btn-small add">+</button>
           </div>
 
           <div class="control-group tt" title="Chose the chart style">
@@ -43,12 +43,24 @@
               </select>
             </div>
           </div>
+
+          <div class="control-group tt" title="Add interpolation">
+            <label class="control-label" for="interpolation">Interpolation</label>
+            <div class="controls">
+              <select id="interpolation">
+                <option value=""></option>
+                {% for interpolation in interpolations %}
+                  <option value="{{ interpolation }}">{{ interpolation | title }}</option>
+                {% endfor %}
+              </select>
+            </div>
+          </div>
         </div>
 
         {% for group, keys in configs | groupby('category') %}
           <div class="tab-pane" id="{{ group }}">
             <legend>{{ group }}</legend>
-            {% for key in keys  if key.name not in ['js', 'css', 'style'] %}
+            {% for key in keys  if key.name not in ['js', 'css', 'style', 'interpolate'] %}
               {% set doc = 'title="' + key.doc + ' <br /><small>' +  key.subdoc + '</small>"' %}
               <div class="control-group tt" {{ doc }}>
                 {% if key.is_boolean %}

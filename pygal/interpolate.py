@@ -28,10 +28,13 @@ try:
 except ImportError:
     pass
 
+KINDS = ['cubic', 'univariate', 'quadratic', 'slinear', 'nearest', 'zero']
+
 
 def interpolation(x, y, kind):
     """Make the interpolation function"""
-    assert scipy != None, 'You must have scipy installed to use interpolation'
+    assert scipy is not None, (
+        'You must have scipy installed to use interpolation')
     order = None
     if len(y) < len(x):
         x = x[:len(y)]
@@ -42,7 +45,7 @@ def interpolation(x, y, kind):
         return ident
     if isinstance(kind, int):
         order = kind
-    elif kind in ['zero', 'slinear', 'quadratic', 'cubic', 'univariate']:
+    elif kind in KINDS:
         order = {'nearest': 0, 'zero': 0, 'slinear': 1,
                  'quadratic': 2, 'cubic': 3, 'univariate': 3}[kind]
     if order and len(x) <= order:

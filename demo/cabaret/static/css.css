@@ -13,6 +13,7 @@ figure {
 
 figure svg {
   width: 100%;
+  height: 0%;
   background: none;
 }
 
@@ -23,7 +24,7 @@ figure svg {
 }
 
 .side {
-  min-width: 400px;
+  width: 375px !important;
 }
 
 label {

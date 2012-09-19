@@ -20,6 +20,7 @@ from flask import Flask, render_template, request
 from pygal import CHARTS_BY_NAME
 from pygal.graph import CHARTS_NAMES
 from pygal.config import CONFIG_ITEMS
+from pygal.interpolate import KINDS
 from pygal.style import styles
 from json import loads
 
@@ -33,7 +34,7 @@ def create_app():
     def index():
         return render_template(
             'index.jinja2', charts_names=CHARTS_NAMES, configs=CONFIG_ITEMS,
-            styles_names=styles.keys())
+            interpolations=KINDS, styles_names=styles.keys())
 
     @app.route("/svg", methods=('POST',))
     def svg():
@@ -47,8 +48,8 @@ def create_app():
             if value:
                 config[item.name] = item.coerce(value)
         chart = CHARTS_BY_NAME[values['type']](**config)
-        for title, vals in loads(values['vals']).items():
-            chart.add(title, vals)
+        for serie in loads(values['vals'])['vals']:
+            chart.add(serie[0], serie[1])
         return chart.render_response()
 
     return app
