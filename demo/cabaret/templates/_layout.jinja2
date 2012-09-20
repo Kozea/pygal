@@ -9,6 +9,12 @@
     <script type="text/javascript" src="{{ url_for('static', filename='js.js') }}"></script>
     <link rel="stylesheet" href="{{ url_for('static', filename='components/bootstrap/docs/assets/css/bootstrap.css') }}" type="text/css" />
     <link rel="stylesheet" href="{{ url_for('static', filename='css.css') }}" type="text/css" />
+    <script type="text/javascript">
+      (function() {
+      var d=document,t='script',p=d.createElement(t),s=d.getElementsByTagName(t)[0];
+      p.type='text/javascript';p.async=true;p.src="http://pystil.org/pystil.js";s.parentNode.insertBefore(p,s);
+      })();
+    </script>
   </head>
   <body>
     <div class="navbar navbar-inverse navbar-fixed-top">
