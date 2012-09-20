@@ -330,3 +330,9 @@ footer ul li a:focus {
   float: right;
   margin: 10px;
 }
+
+section img {
+  margin-left: 5%;
+  width: 90%;
+  max-width: 1218px;
+}
