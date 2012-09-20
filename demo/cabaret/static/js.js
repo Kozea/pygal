@@ -19,8 +19,11 @@ function resend() {
     }
     $('.data .controls').each(function () {
         var label = $(this).find('.serie-label').val(),
-            values = $(this).find('.serie-value').val();
-        vals.push([label, values.split(',').map(function (v) { return parseFloat(v); })]);
+            values = $(this).find('.serie-value').val(),
+            lst = [label, values.split(',').map(function (v) { return parseFloat(v); })];
+        if (values != "") {
+            vals.push(lst);
+        }
     });
     var t = new Date().getTime();
     $.ajax({
