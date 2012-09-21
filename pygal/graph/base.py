@@ -150,7 +150,7 @@ class BaseGraph(object):
 
     def _has_data(self):
         """Check if there is any data"""
-        return sum(map(len, map(lambda s: s.values, self.series))) != 0
+        return sum(map(len, map(lambda s: s.safe_values, self.series))) != 0
 
     def render(self, is_unicode):
         """Render the graph, and return the svg string"""

@@ -180,9 +180,9 @@ def test_logarithmic_small_scale():
 def test_human_readable():
     line = Line()
     line.add('_', [10 ** 4, 10 ** 5, 23 * 10 ** 4])
-    # q = line.render_pyquery()
-    # assert q(".axis.y text").map(texts) == map(
-        # str, range(20000, 240000, 20000))
+    q = line.render_pyquery()
+    assert q(".axis.y text").map(texts) == map(
+        str, map(float, range(20000, 240000, 20000)))
     line.human_readable = True
     q = line.render_pyquery()
     assert q(".axis.y text").map(texts) == map(

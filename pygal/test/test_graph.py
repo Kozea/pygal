@@ -93,14 +93,16 @@ def test_empty_lists(Chart):
     chart.add('B', [])
     chart.x_labels = ('red', 'green', 'blue')
     q = chart.render_pyquery()
-    assert len(q(".legend")) == 2
+    assert len(q(".legend")) == 1
 
+
+def test_empty_lists_with_nones(Chart):
     chart = Chart()
     chart.add('A', [None, None])
     chart.add('B', [None, 4, 4])
     chart.x_labels = ('red', 'green', 'blue')
     q = chart.render_pyquery()
-    assert len(q(".legend")) == 2
+    assert len(q(".legend")) == 1
 
 
 def test_non_iterable_value(Chart):
@@ -151,3 +153,46 @@ def test_values_by_dict(Chart):
     chart.x_labels = ('red', 'green', 'blue')
     chart2 = chart.render()
     assert chart1 == chart2
+
+
+def test_no_data_with_no_values(Chart):
+    chart = Chart()
+    q = chart.render_pyquery()
+    assert q("text").text() == "No data"
+
+
+def test_no_data_with_empty_serie(Chart):
+    chart = Chart()
+    chart.add('Serie', [])
+    q = chart.render_pyquery()
+    assert q("text").text() == "No data"
+
+
+def test_no_data_with_empty_series(Chart):
+    chart = Chart()
+    chart.add('Serie1', [])
+    chart.add('Serie2', [])
+    q = chart.render_pyquery()
+    assert q("text").text() == "No data"
+
+
+def test_no_data_with_none(Chart):
+    chart = Chart()
+    chart.add('Serie', None)
+    q = chart.render_pyquery()
+    assert q("text").text() == "No data"
+
+
+def test_no_data_with_list_of_none(Chart):
+    chart = Chart()
+    chart.add('Serie', [None])
+    q = chart.render_pyquery()
+    assert q("text").text() == "No data"
+
+
+def test_no_data_with_lists_of_nones(Chart):
+    chart = Chart()
+    chart.add('Serie1', [None, None, None, None])
+    chart.add('Serie2', [None, None, None])
+    q = chart.render_pyquery()
+    assert q("text").text() == "No data"

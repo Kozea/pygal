@@ -316,6 +316,8 @@ def prepare_values(raw, config, cls):
         else:
             raw_values = list(raw_values)
 
+        if not filter(lambda x: x is not None, raw_values):
+            continue
         for index, raw_value in enumerate(
                 raw_values + (
                     (width - len(raw_values)) * [None]  # aligning values

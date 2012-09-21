@@ -125,7 +125,7 @@ def test_truncate():
 
 def test_minify_css():
     css = '''
-/* 
+/*
  * Font-sizes from config, override with care
  */
 
@@ -136,7 +136,7 @@ def test_minify_css():
 }
 
 .legends .legend text {
-  font-family: monospace; 
+  font-family: monospace;
   font-size: 14 ;}
 '''
     assert minify_css(css) == (
