@@ -131,6 +131,13 @@ def get_test_routes(app):
         graph.add('1', [10, 0, -10])
         return graph.render_response()
 
+    @app.route('/test/bar')
+    def test_bar():
+        bar = Bar()
+        bar.add('1', [1, 2, 3])
+        bar.add('2', [4, 5, 6])
+        return bar.render_response()
+
     @app.route('/test/stacked')
     def test_stacked():
         stacked = StackedBar()

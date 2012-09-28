@@ -57,12 +57,12 @@ class StackedBar(Bar):
             sum(x_range) / 2 for x_range in self._x_ranges])
         self._y_labels = zip(map(self._format, y_pos), y_pos)
 
-    def _plot(self):
-        stack_vals = [[0, 0] for i in range(self._len)]
-        for index, serie in enumerate(self.series):
-            serie_node = self._serie(index)
-            stack_vals = self.bar(
-                serie_node, serie, [
-                    tuple((self._x_ranges[i][j], v) for j in range(2))
-                    for i, v in enumerate(serie.values)], index,
-                stack_vals)
+    def _points(self, x_pos):
+        accumulation = [0] * self._len
+        for serie in self.series:
+            accumulation = map(sum, zip(accumulation, serie.values))
+            serie.points = [
+                (x_pos[i], v)
+                for i, v in enumerate(accumulation)]
+            if self.interpolate:
+                serie.interpolated = self._interpolate(accumulation, x_pos)

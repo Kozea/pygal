@@ -32,10 +32,6 @@ class Line(Graph):
         self._self_close = False
         super(Line, self).__init__(*args, **kwargs)
 
-    def _get_value(self, values, i):
-        """Get the value formatted for tooltip"""
-        return self._format(values[i][1])
-
     @cached_property
     def _values(self):
         return  [
@@ -89,14 +85,6 @@ class Line(Graph):
             self.svg.line(
                 serie_node['plot'], view_values, close=self._self_close,
                 class_='line reactive' + (' nofill' if not self.fill else ''))
-
-    def _points(self, x_pos):
-        for serie in self.series:
-            serie.points = [
-                (x_pos[i], v)
-                for i, v in enumerate(serie.values)]
-            if self.interpolate:
-                serie.interpolated = self._interpolate(serie.values, x_pos)
 
     def _compute(self):
         x_pos = [

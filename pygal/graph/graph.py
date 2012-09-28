@@ -322,3 +322,15 @@ class Graph(BaseGraph):
                 x=x,
                 y=y + self.value_font_size / 3
             ).text = value if self.print_zeroes or value != '0' else ''
+
+    def _get_value(self, values, i):
+        """Get the value formatted for tooltip"""
+        return self._format(values[i][1])
+
+    def _points(self, x_pos):
+        for serie in self.series:
+            serie.points = [
+                (x_pos[i], v)
+                for i, v in enumerate(serie.values)]
+            if self.interpolate:
+                serie.interpolated = self._interpolate(serie.values, x_pos)

@@ -49,6 +49,5 @@ class StackedLine(Line):
             serie.points = [
                 (x_pos[i], v)
                 for i, v in enumerate(accumulation)]
-            print serie.points
             if self.interpolate:
                 serie.interpolated = self._interpolate(accumulation, x_pos)
