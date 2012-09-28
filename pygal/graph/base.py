@@ -47,6 +47,8 @@ class BaseGraph(object):
         self.margin = Margin(*([20] * 4))
         self._box = Box()
         self.view = None
+        if self.logarithmic and self.zero == 0:
+            self.zero = self._min
 
         if self.series and self._has_data():
             self._draw()

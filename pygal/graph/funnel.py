@@ -64,7 +64,7 @@ class Funnel(Graph):
             (x + 1) / self._order for x in range(self._order)
         ] if self._order != 1 else [.5]  # Center if only one value
 
-        previous = [[0, 0] for i in range(self._len)]
+        previous = [[self.zero, self.zero] for i in range(self._len)]
         for i, serie in enumerate(self.series):
             y_height = - sum(serie.safe_values) / 2
             all_x_pos = [0] + x_pos
@@ -79,7 +79,7 @@ class Funnel(Graph):
                 poly.append((all_x_pos[i + 1], previous[j][0]))
                 serie.points.append(poly)
 
-        val_max = max(map(sum, cut(self.series, 'values')))
+        val_max = max(list(map(sum, cut(self.series, 'values'))) + [self.zero])
         self._box.ymin = -val_max
         self._box.ymax = val_max
 

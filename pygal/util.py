@@ -278,7 +278,9 @@ def minify_css(css):
 
 def compose(f, g):
     """Chain functions"""
-    return lambda *args, **kwargs: f(g(*args, **kwargs))
+    fun = lambda *args, **kwargs: f(g(*args, **kwargs))
+    fun.__name__ = "%s o %s" % (f.__name__, g.__name__)
+    return fun
 
 
 def safe_enumerate(iterable):
@@ -298,7 +300,7 @@ def prepare_values(raw, config, cls):
         for fun in not_zero, positive:
             if fun in adapters:
                 adapters.remove(fun)
-        adapters = [not_zero, positive] + adapters
+        adapters = adapters + [positive, not_zero]
     adapter = reduce(compose, adapters) if not config.strict else ident
     series = []
     width = max([len(values) for _, values in raw] +

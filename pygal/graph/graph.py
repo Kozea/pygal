@@ -24,9 +24,9 @@ Commmon graphing functions
 from __future__ import division
 from pygal.interpolate import interpolation
 from pygal.graph.base import BaseGraph
-from pygal.view import View, LogView
+from pygal.view import View, XLogView, YLogView, XYLogView
 from pygal.util import is_major, truncate, reverse_text_len
-from math import isnan, pi, sqrt, floor, ceil
+from math import isnan, pi, sqrt, ceil
 
 
 class Graph(BaseGraph):
@@ -47,7 +47,17 @@ class Graph(BaseGraph):
 
     def _set_view(self):
         """Assign a view to current graph"""
-        self.view = (LogView if self.logarithmic else View)(
+        if self.logarithmic:
+            if self.__class__.__name__ == 'XY':
+                view_class = XYLogView
+            elif self.horizontal:
+                view_class = XLogView
+            else:
+                view_class = YLogView
+        else:
+            view_class = View
+
+        self.view = view_class(
             self.width - self.margin.x,
             self.height - self.margin.y,
             self._box)
@@ -57,21 +67,21 @@ class Graph(BaseGraph):
         self.nodes['graph'] = self.svg.node(
             class_='graph %s-graph %s' % (
                 self.__class__.__name__.lower(),
-            'horizontal' if self.horizontal else 'vertical'))
+                'horizontal' if self.horizontal else 'vertical'))
         self.svg.node(self.nodes['graph'], 'rect',
-                  class_='background',
-                  x=0, y=0,
-                  width=self.width,
-                  height=self.height)
+                      class_='background',
+                      x=0, y=0,
+                      width=self.width,
+                      height=self.height)
         self.nodes['plot'] = self.svg.node(
             self.nodes['graph'], class_="plot",
             transform="translate(%d, %d)" % (
                 self.margin.left, self.margin.top))
         self.svg.node(self.nodes['plot'], 'rect',
-                  class_='background',
-                  x=0, y=0,
-                  width=self.view.width,
-                  height=self.view.height)
+                      class_='background',
+                      x=0, y=0,
+                      width=self.view.width,
+                      height=self.view.height)
         self.nodes['overlay'] = self.svg.node(
             self.nodes['graph'], class_="plot overlay",
             transform="translate(%d, %d)" % (
@@ -120,8 +130,8 @@ class Graph(BaseGraph):
 
         if 0 not in [label[1] for label in self._x_labels] and draw_axes:
             self.svg.node(axis, 'path',
-                      d='M%f %f v%f' % (0, 0, self.view.height),
-                      class_='line')
+                          d='M%f %f v%f' % (0, 0, self.view.height),
+                          class_='line')
         for label, position in self._x_labels:
             guides = self.svg.node(axis, class_='guides')
             x = self.view.x(position)
@@ -131,10 +141,11 @@ class Graph(BaseGraph):
                     guides, 'path',
                     d='M%f %f v%f' % (x, 0, self.view.height),
                     class_='%sline' % (
-                    'guide ' if position != 0 else ''))
-            text = self.svg.node(guides, 'text',
-                             x=x,
-                             y=y + .5 * self.label_font_size + 5
+                        'guide ' if position != 0 else ''))
+            text = self.svg.node(
+                guides, 'text',
+                x=x,
+                y=y + .5 * self.label_font_size + 5
             )
             text.text = truncate(label, truncation)
             if text.text != label:
@@ -151,9 +162,11 @@ class Graph(BaseGraph):
         axis = self.svg.node(self.nodes['plot'], class_="axis y")
 
         if 0 not in [label[1] for label in self._y_labels] and draw_axes:
-            self.svg.node(axis, 'path',
-                      d='M%f %f h%f' % (0, self.view.height, self.view.width),
-                      class_='line')
+            self.svg.node(
+                axis, 'path',
+                d='M%f %f h%f' % (0, self.view.height, self.view.width),
+                class_='line'
+            )
         for label, position in self._y_labels:
             major = is_major(position)
             guides = self.svg.node(axis, class_='%sguides' % (
@@ -168,10 +181,11 @@ class Graph(BaseGraph):
                     class_='%s%sline' % (
                         'major ' if major else '',
                         'guide ' if position != 0 else ''))
-            text = self.svg.node(guides, 'text',
-                                 x=x,
-                                 y=y + .35 * self.label_font_size,
-                                 class_='major' if major else ''
+            text = self.svg.node(
+                guides, 'text',
+                x=x,
+                y=y + .35 * self.label_font_size,
+                class_='major' if major else ''
             )
             text.text = label
             if self.y_label_rotation:
@@ -240,11 +254,13 @@ class Graph(BaseGraph):
     def _title(self):
         """Make the title"""
         if self.title:
-            self.svg.node(self.nodes['graph'], 'text', class_='title',
-                          x=self.margin.left + self.view.width / 2,
-                          y=self.title_font_size + 10
-                      ).text = truncate(self.title, int(reverse_text_len(
-                          self.width, self.title_font_size)))
+            self.svg.node(
+                self.nodes['graph'], 'text', class_='title',
+                x=self.margin.left + self.view.width / 2,
+                y=self.title_font_size + 10
+            ).text = truncate(
+                self.title, int(reverse_text_len(
+                    self.width, self.title_font_size)))
 
     def _serie(self, serie):
         """Make serie node"""
@@ -259,8 +275,9 @@ class Graph(BaseGraph):
                 self.nodes['text_overlay'],
                 class_='series serie-%d color-%d' % (serie, serie % 16)))
 
-    def _interpolate(self, ys, xs,
-                   polar=False, xy=False, xy_xmin=None, xy_rng=None):
+    def _interpolate(
+            self, ys, xs,
+            polar=False, xy=False, xy_xmin=None, xy_rng=None):
         """Make the interpolation"""
         interpolate = interpolation(
             xs, ys, kind=self.interpolate)

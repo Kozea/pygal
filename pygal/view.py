@@ -94,13 +94,13 @@ class View(object):
 
     def x(self, x):
         """Project x"""
-        if x == None:
+        if x is None:
             return None
         return self.width * (x - self.box.xmin) / self.box.width
 
     def y(self, y):
         """Project y"""
-        if y == None:
+        if y is None:
             return None
         return (self.height - self.height *
                 (y - self.box.ymin) / self.box.height)
@@ -124,7 +124,7 @@ class PolarView(View):
             (rho * cos(theta), rho * sin(theta)))
 
 
-class LogView(View):
+class YLogView(View):
     """Logarithmic projection """
     # Do not want to call the parent here
     # pylint: disable-msg=W0231
@@ -141,8 +141,48 @@ class LogView(View):
     # pylint: enable-msg=W0231
     def y(self, y):
         """Project y"""
-        if y == None or y <= 0:
+        if y is None or y <= 0 or self.log10_ymax - self.log10_ymin == 0:
             return None
         return (self.height - self.height *
                 (log10(y) - self.log10_ymin)
                 / (self.log10_ymax - self.log10_ymin))
+
+
+class XLogView(View):
+    """Logarithmic projection """
+    # Do not want to call the parent here
+    # pylint: disable-msg=W0231
+    def __init__(self, width, height, box):
+        self.width = width
+        self.height = height
+        self.box = box
+        self.xmin = self.box.xmin
+        self.xmax = self.box.xmax
+        self.log10_xmax = log10(self.box.xmax)
+        self.log10_xmin = log10(self.box.xmin)
+        self.box.fix(False)
+
+    # pylint: enable-msg=W0231
+    def x(self, x):
+        """Project x"""
+        if x is None or x <= 0 or self.log10_xmax - self.log10_xmin == 0:
+            return None
+        return (self.width - self.width *
+                (log10(x) - self.log10_xmin)
+                / (self.log10_xmax - self.log10_xmin))
+
+
+class XYLogView(XLogView, YLogView):
+    def __init__(self, width, height, box):
+        self.width = width
+        self.height = height
+        self.box = box
+        self.xmin = self.box.xmin
+        self.xmax = self.box.xmax
+        self.ymin = self.box.ymin
+        self.ymax = self.box.ymax
+        self.log10_ymax = log10(self.box.ymax)
+        self.log10_ymin = log10(self.box.ymin)
+        self.log10_xmax = log10(self.box.xmax)
+        self.log10_xmin = log10(self.box.xmin)
+        self.box.fix(False)

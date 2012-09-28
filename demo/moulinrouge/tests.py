@@ -106,9 +106,28 @@ def get_test_routes(app):
         graph.add('2', [7, -4, 10, None, 8, 3, 1])
         return graph.render_response()
 
+    @app.route('/test/logarithmic/<chart>')
+    def test_logarithmic_for(chart):
+        graph = CHARTS_BY_NAME[chart](logarithmic=True)
+        if graph.__class__.__name__ == 'XY':
+            graph.add('xy', [
+                (.1, .234), (10, 243), (.001, 2), (1000000, 1231)])
+        else:
+            graph.add('1', [.1, 10, .001, 1000000])
+            graph.add('2', [.234, 243, 2, 2981379, 1231])
+        return graph.render_response()
+
+    @app.route('/test/zero_at_34/<chart>')
+    @app.route('/test/zero_at_<int:zero>/<chart>')
+    def test_zero_at_34_for(chart, zero=34):
+        graph = CHARTS_BY_NAME[chart](fill=True, zero=zero)
+        graph.add('1', [100, 34, 12, 43, -48])
+        graph.add('2', [73, -14, 10, None, -58, 32, 91])
+        return graph.render_response()
+
     @app.route('/test/negative/<chart>')
     def test_negative_for(chart):
-        graph = CHARTS_BY_NAME[chart](interpolate='cubic')
+        graph = CHARTS_BY_NAME[chart]()
         graph.add('1', [10, 0, -10])
         return graph.render_response()
 
