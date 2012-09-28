@@ -50,7 +50,7 @@ class Gauge(Graph):
     def needle(self, serie_node, serie,):
         thickness = .05
         for i, value in enumerate(serie.values):
-            if not value:
+            if value is None:
                 continue
             theta = self.arc_pos(value)
             fmt = lambda x: '%f %f' % x
@@ -90,8 +90,9 @@ class Gauge(Graph):
             self.svg.line(
                 guides, [self.view((0, theta)), self.view((.95, theta))],
                 close=True,
-                class_='guide line %s' % ('major'
-                if i in (0, len(self._x_labels) - 1) else ''))
+                class_='guide line %s' % (
+                    'major' if i in (0, len(self._x_labels) - 1)
+                    else ''))
 
             x, y = self.view((.9, theta))
             self.svg.node(guides, 'text',

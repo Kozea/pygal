@@ -58,7 +58,7 @@ text.no_data {
   stroke-dasharray: 4,4;
 }
 
-.axis .major.line {
+.axis .major.guide.line {
   stroke-dasharray: 6,6;
 }
 .axis text.major {

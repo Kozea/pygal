@@ -86,6 +86,8 @@ def test_metadata(Chart):
             'Five', 'http://7.example.com/', 'Seven'):
         assert md in cut(q('desc'), 'text')
 
+    assert len(v) == len(q('.tooltip-trigger').siblings('.value'))
+
 
 def test_empty_lists(Chart):
     chart = Chart()

@@ -25,7 +25,7 @@ def get_test_routes(app):
 
     @app.route('/test/bar_links')
     def test_bar_links():
-        bar = Bar(style=styles['neon'])
+        bar = Gauge(style=styles['neon'])
         bar.add('1234', [
             {'value': 10,
              'label': 'Ten',
@@ -104,6 +104,12 @@ def get_test_routes(app):
         graph = CHARTS_BY_NAME[chart](interpolate='cubic')
         graph.add('1', [1, 3, 12, 3, 4])
         graph.add('2', [7, -4, 10, None, 8, 3, 1])
+        return graph.render_response()
+
+    @app.route('/test/negative/<chart>')
+    def test_negative_for(chart):
+        graph = CHARTS_BY_NAME[chart](interpolate='cubic')
+        graph.add('1', [10, 0, -10])
         return graph.render_response()
 
     @app.route('/test/stacked')
