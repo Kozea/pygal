@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+ # -*- coding: utf-8 -*-
 # This file is part of pygal
 #
 # A python svg graph plotting library
@@ -48,7 +48,9 @@ class BaseGraph(object):
         self._box = Box()
         self.view = None
         if self.logarithmic and self.zero == 0:
-            self.zero = self._min
+            # Explicit min to avoid interpolation dependency
+            self.zero = min(
+                val for serie in self.series for val in serie.values)
 
         if self.series and self._has_data():
             self._draw()
