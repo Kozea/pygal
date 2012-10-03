@@ -107,6 +107,7 @@ def get_test_routes(app):
         graph.add('3', [7, -14, -10, None, 8, 3, 1])
         graph.add('4', [7, 4, -10, None, 8, 3, 1])
         graph.x_labels = ('a', 'b', 'c', 'd', 'e', 'f', 'g')
+        graph.x_label_rotation = 90
         return graph.render_response()
 
     @app.route('/test/one/<chart>')
@@ -133,7 +134,7 @@ def get_test_routes(app):
             graph.add('1', [.1, 10, .001, 1000000])
             graph.add('2', [.234, 243, 2, 2981379, 1231])
             graph.x_labels = ('a', 'b', 'c', 'd', 'e')
-        graph.x_label_rotation = 45
+        graph.x_label_rotation = 90
         return graph.render_response()
 
     @app.route('/test/zero_at_34/<chart>')

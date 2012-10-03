@@ -130,6 +130,7 @@ class Graph(BaseGraph):
                           d='M%f %f v%f' % (0, 0, self.view.height),
                           class_='line')
         for label, position in self._x_labels:
+            major = is_major(position)
             guides = self.svg.node(axis, class_='guides')
             x = self.view.x(position)
             y = self.view.height + 5
@@ -137,12 +138,15 @@ class Graph(BaseGraph):
                 self.svg.node(
                     guides, 'path',
                     d='M%f %f v%f' % (x, 0, self.view.height),
-                    class_='%sline' % (
+                    class_='%s%sline' % (
+                        'major ' if major else '',
                         'guide ' if position != 0 else ''))
+            y += .5 * self.label_font_size + 5
             text = self.svg.node(
                 guides, 'text',
                 x=x,
-                y=y + .5 * self.label_font_size + 5
+                y=y,
+                class_='major' if major else ''
             )
             text.text = truncate(label, truncation)
             if text.text != label:
