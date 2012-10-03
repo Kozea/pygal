@@ -26,6 +26,7 @@ import io
 import os
 import json
 from datetime import date
+from numbers import Number
 from lxml import etree
 from math import cos, sin, pi
 from urlparse import urlparse
@@ -96,6 +97,16 @@ class Svg(object):
             parent = self.root
         attrib = attrib or {}
         attrib.update(extras)
+
+        def in_attrib_and_number(key):
+            return key in attrib and isinstance(attrib[key], Number)
+
+        for pos, dim in (('x', 'width'), ('y', 'height')):
+            if in_attrib_and_number(dim) and attrib[dim] < 0:
+                attrib[dim] = - attrib[dim]
+                if in_attrib_and_number(pos):
+                    attrib[pos] = attrib[pos] - attrib[dim]
+
         for key, value in attrib.items():
             if value is None:
                 del attrib[key]

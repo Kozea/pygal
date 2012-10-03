@@ -99,6 +99,21 @@ def get_test_routes(app):
 
         return dot.render_response()
 
+    @app.route('/test/<chart>')
+    def test_for(chart):
+        graph = CHARTS_BY_NAME[chart]()
+        graph.add('1', [1, 3, 12, 3, 4, None, 9])
+        graph.add('2', [7, -4, 10, None, 8, 3, 1])
+        graph.x_labels = ('a', 'b', 'c', 'd', 'e', 'f', 'g')
+        return graph.render_response()
+
+    @app.route('/test/one/<chart>')
+    def test_one_for(chart):
+        graph = CHARTS_BY_NAME[chart]()
+        graph.add('1', [1, 2])
+        graph.x_labels = 'a',
+        return graph.render_response()
+
     @app.route('/test/interpolate/<chart>')
     def test_interpolate_for(chart):
         graph = CHARTS_BY_NAME[chart](interpolate='cubic')

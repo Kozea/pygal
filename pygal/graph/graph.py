@@ -24,7 +24,7 @@ Commmon graphing functions
 from __future__ import division
 from pygal.interpolate import interpolation
 from pygal.graph.base import BaseGraph
-from pygal.view import View, XLogView, YLogView, XYLogView
+from pygal.view import View, XLogView, YLogView, XYLogView, HorizontalView
 from pygal.util import is_major, truncate, reverse_text_len
 from math import isnan, pi, sqrt, ceil
 
@@ -50,8 +50,6 @@ class Graph(BaseGraph):
         if self.logarithmic:
             if self.__class__.__name__ == 'XY':
                 view_class = XYLogView
-            elif self.horizontal:
-                view_class = XLogView
             else:
                 view_class = YLogView
         else:
@@ -104,7 +102,7 @@ class Graph(BaseGraph):
         self.svg.node(a, 'rect',
                       id="tooltip-box",
                       rx=5, ry=5, width=0, height=0
-        )
+                  )
         text = self.svg.node(a, 'text', class_='text')
         self.svg.node(text, 'tspan', class_='label')
         self.svg.node(text, 'tspan', class_='value')
@@ -113,7 +111,6 @@ class Graph(BaseGraph):
         """Make the x axis: labels and guides"""
         if not self._x_labels:
             return
-
         axis = self.svg.node(self.nodes['plot'], class_="axis x")
         truncation = self.truncate_label
         if not truncation:

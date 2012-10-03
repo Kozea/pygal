@@ -29,34 +29,31 @@ from pygal.util import swap, ident, compute_scale, decorate
 class Bar(Graph):
     """Bar graph"""
 
+    _series_margin = .06
+    _serie_margin = .06
+
     def __init__(self, *args, **kwargs):
         self._x_ranges = None
         super(Bar, self).__init__(*args, **kwargs)
 
     def _bar(self, parent, x, y, index):
-        width = self.view.x(1 / self._len)
-        margin = width * .1 * 0
-        x += margin
-        width -= 2 * margin
+        width = (self.view.x(1) - self.view.x(0)) / self._len
+        series_margin = width * self._series_margin
+        x += series_margin
+        width -= 2 * series_margin
         width /= self._order
         x += index * width
-        padding = width * .005 * 0
-        x += padding
-        width -= 2 * padding
-
-        y_0 = self.view.y(self.zero)
-        height = abs(y - y_0)
+        serie_margin = width * self._serie_margin
+        x += serie_margin
+        width -= 2 * serie_margin
+        height = self.view.y(self.zero) - y
+        r = self.rounded_bars * 1 if self.rounded_bars else 0
         self.svg.transposable_node(
-            parent,
-            'rect',
-            x=x,
-            y=y,
-            rx=self.rounded_bars * 1 if self.rounded_bars else 0,
-            ry=self.rounded_bars * 1 if self.rounded_bars else 0,
-            width=width,
-            height=height,
+            parent, 'rect',
+            x=x, y=y, rx=r, ry=r, width=width, height=height,
             class_='rect reactive tooltip-trigger')
-        return (x + width / 2, y + height / 2)
+        transpose = swap if self.horizontal else ident
+        return transpose((x + width / 2, y + height / 2))
 
     def bar(self, serie_node, serie, index):
         """Draw a bar graph for a serie"""
@@ -91,9 +88,8 @@ class Bar(Graph):
             self._box.ymin, self._box.ymax, self.logarithmic, self.order_min
         ) if not self.y_labels else map(float, self.y_labels)
 
-        # self._x_ranges = zip(x_pos, x_pos[1:])
         self._x_labels = self.x_labels and zip(self.x_labels, [
-            sum(x_range) / 2 for x_range in self._x_ranges])
+            (i + .5) / self._len for i in range(self._len)])
         self._y_labels = zip(map(self._format, y_pos), y_pos)
 
     def _plot(self):

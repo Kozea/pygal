@@ -21,6 +21,7 @@ Horizontal graph base
 
 """
 from pygal.graph.graph import Graph
+from pygal.view import HorizontalView, XLogView
 
 
 class HorizontalGraph(Graph):
@@ -32,4 +33,20 @@ class HorizontalGraph(Graph):
     def _compute(self):
         super(HorizontalGraph, self)._compute()
         self._x_labels, self._y_labels = self._y_labels, self._x_labels
-        self._box.swap()
+
+    def _axes(self):
+        self.view._force_vertical = True
+        super(HorizontalGraph, self)._axes()
+        self.view._force_vertical = False
+
+    def _set_view(self):
+        """Assign a view to current graph"""
+        if self.logarithmic:
+            view_class = XLogView
+        else:
+            view_class = HorizontalView
+
+        self.view = view_class(
+            self.width - self.margin.x,
+            self.height - self.margin.y,
+            self._box)

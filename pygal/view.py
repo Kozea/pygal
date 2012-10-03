@@ -64,7 +64,7 @@ class Box(object):
         return self.ymax - self.ymin
 
     def swap(self):
-        """Return the box (for horizontal qraphs)"""
+        """Return the box (for horizontal graphs)"""
         self.xmin, self.ymin = self.ymin, self.xmin
         self.xmax, self.ymax = self.ymax, self.xmax
 
@@ -109,6 +109,32 @@ class View(object):
         """Project x and y"""
         x, y = xy
         return (self.x(x), self.y(y))
+
+
+class HorizontalView(View):
+    def __init__(self, width, height, box):
+        self._force_vertical = None
+        self.width = width
+        self.height = height
+
+        self.box = box
+        self.box.fix()
+        self.box.swap()
+
+    def x(self, x):
+        """Project x"""
+        if x is None:
+            return None
+        if self._force_vertical:
+            return super(HorizontalView, self).x(x)
+        return super(HorizontalView, self).y(x)
+
+    def y(self, y):
+        if y is None:
+            return None
+        if self._force_vertical:
+            return super(HorizontalView, self).y(y)
+        return super(HorizontalView, self).x(y)
 
 
 class PolarView(View):
