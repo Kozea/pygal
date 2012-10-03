@@ -24,7 +24,7 @@ Commmon graphing functions
 from __future__ import division
 from pygal.interpolate import interpolation
 from pygal.graph.base import BaseGraph
-from pygal.view import View, XLogView, YLogView, XYLogView, HorizontalView
+from pygal.view import View, LogView, XYLogView
 from pygal.util import is_major, truncate, reverse_text_len
 from math import isnan, pi, sqrt, ceil
 
@@ -51,7 +51,7 @@ class Graph(BaseGraph):
             if self.__class__.__name__ == 'XY':
                 view_class = XYLogView
             else:
-                view_class = YLogView
+                view_class = LogView
         else:
             view_class = View
 

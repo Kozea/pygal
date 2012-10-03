@@ -21,7 +21,7 @@ Horizontal graph base
 
 """
 from pygal.graph.graph import Graph
-from pygal.view import HorizontalView, XLogView
+from pygal.view import HorizontalView, HorizontalLogView
 
 
 class HorizontalGraph(Graph):
@@ -42,7 +42,7 @@ class HorizontalGraph(Graph):
     def _set_view(self):
         """Assign a view to current graph"""
         if self.logarithmic:
-            view_class = XLogView
+            view_class = HorizontalLogView
         else:
             view_class = HorizontalView
 

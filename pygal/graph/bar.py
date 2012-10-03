@@ -62,7 +62,7 @@ class Bar(Graph):
         """Draw a bar graph for a serie"""
         bars = self.svg.node(serie_node['plot'], class_="bars")
         for i, (x, y) in enumerate(serie.points):
-            if None in (x, y):
+            if None in (x, y) or (self.logarithmic and y <= 0):
                 continue
             metadata = serie.metadata.get(i)
 

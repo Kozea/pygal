@@ -44,6 +44,10 @@ class StackedBar(Bar):
             if val is not None and val < self.zero])
             for vals in transposed]
 
+        if self.logarithmic:
+            positive_vals = filter(lambda x: x > 0, positive_vals)
+            negative_vals = filter(lambda x: x > 0, negative_vals)
+
         positive_vals = positive_vals or [self.zero]
         negative_vals = negative_vals or [self.zero]
 
@@ -68,13 +72,13 @@ class StackedBar(Bar):
         self.negative_cumulation = [0] * self._len
         self.positive_cumulation = [0] * self._len
 
-    def _bar(self, parent, x, val, index, i, zero):
-        cumulation = (self.negative_cumulation if val < self.zero else
+    def _bar(self, parent, x, y, index, i, zero):
+        cumulation = (self.negative_cumulation if y < self.zero else
                       self.positive_cumulation)
         zero = cumulation[i]
-        cumulation[i] = zero + val
+        cumulation[i] = zero + y
         if zero == 0:
             zero = self.zero
-            val -= self.zero
+            y -= self.zero
         return super(StackedBar, self)._bar(
-            parent, x, zero + val, index, i, zero, False)
+            parent, x, zero + y, index, i, zero, False)
