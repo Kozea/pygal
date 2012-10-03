@@ -24,10 +24,10 @@ Pyramid chart
 from __future__ import division
 from pygal.util import compute_scale, safe_enumerate
 from pygal.adapters import positive
-from pygal.graph.bar import Bar
+from pygal.graph.stackedbar import StackedBar
 
 
-class VerticalPyramid(Bar):
+class VerticalPyramid(StackedBar):
     """Pyramid graph"""
 
     _adapters = [positive]
@@ -35,41 +35,23 @@ class VerticalPyramid(Bar):
     def _format(self, value):
         return super(VerticalPyramid, self)._format(abs(value))
 
-    def _compute(self):
+    def _get_separated_values(self):
         positive_vals = zip(*[serie.safe_values
                               for index, serie in enumerate(self.series)
                               if index % 2])
         negative_vals = zip(*[serie.safe_values
                               for index, serie in enumerate(self.series)
                               if not index % 2])
-        positive_sum = map(sum, positive_vals) or [0]
-        negative_sum = map(sum, negative_vals) or [0]
+        return positive_vals, negative_vals
 
+    def _compute_box(self, positive_vals, negative_vals):
+        positive_sum = map(sum, positive_vals) or [self.zero]
+        negative_sum = map(sum, negative_vals) or [self.zero]
         self._box.ymax = max(max(positive_sum), max(negative_sum))
         self._box.ymin = - self._box.ymax
 
-        x_pos = [
-            x / self._len
-            for x in range(self._len + 1)
-        ] if self._len > 1 else [0, 1]  # Center if only one value
-        y_pos = compute_scale(
-            self._box.ymin, self._box.ymax, self.logarithmic, self.order_min
-        ) if not self.y_labels else map(float, self.y_labels)
-
-        self._x_ranges = zip(x_pos, x_pos[1:])
-
-        self._x_labels = self.x_labels and zip(self.x_labels, [
-            sum(x_range) / 2 for x_range in self._x_ranges])
-        self._y_labels = zip(map(self._format, y_pos), y_pos)
-
-    def _plot(self):
-        stack_vals = [[0, 0] for i in range(self._len)]
-        for index, serie in enumerate(self.series):
-            serie_node = self._serie(index)
-            stack_vals = self.bar(
-                serie_node, serie, [
-                    tuple(
-                        (self._x_ranges[i][j],
-                         v * (-1 if index % 2 else 1)) for j in range(2))
-                    for i, v in safe_enumerate(serie.values)], index,
-                stack_vals)
+    def _bar(self, parent, x, y, index, i, zero, shift=True):
+        if index % 2:
+            y = -y
+        return super(VerticalPyramid, self)._bar(
+            parent, x, y, index, i, zero, False)

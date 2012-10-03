@@ -32,7 +32,7 @@ class StackedBar(Bar):
 
     _adapters = [none_to_zero]
 
-    def _compute(self):
+    def _get_separated_values(self):
         transposed = zip(*[serie.values for serie in self.series])
         positive_vals = [sum([
             val for val in vals
@@ -43,6 +43,16 @@ class StackedBar(Bar):
             for val in vals
             if val is not None and val < self.zero])
             for vals in transposed]
+        return positive_vals, negative_vals
+
+    def _compute_box(self, positive_vals, negative_vals):
+        self._box.ymin, self._box.ymax = (
+            min(min(negative_vals), self.zero),
+            max(max(positive_vals), self.zero))
+
+    def _compute(self):
+        positive_vals, negative_vals = self._get_separated_values()
+        self._compute_box(positive_vals, negative_vals)
 
         if self.logarithmic:
             positive_vals = filter(lambda x: x > 0, positive_vals)
@@ -50,10 +60,6 @@ class StackedBar(Bar):
 
         positive_vals = positive_vals or [self.zero]
         negative_vals = negative_vals or [self.zero]
-
-        self._box.ymin, self._box.ymax = (
-            min(min(negative_vals), self.zero),
-            max(max(positive_vals), self.zero))
 
         x_pos = [
             x / self._len for x in range(self._len + 1)
@@ -72,7 +78,7 @@ class StackedBar(Bar):
         self.negative_cumulation = [0] * self._len
         self.positive_cumulation = [0] * self._len
 
-    def _bar(self, parent, x, y, index, i, zero):
+    def _bar(self, parent, x, y, index, i, zero, shift=True):
         cumulation = (self.negative_cumulation if y < self.zero else
                       self.positive_cumulation)
         zero = cumulation[i]
