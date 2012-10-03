@@ -36,17 +36,20 @@ class Bar(Graph):
         self._x_ranges = None
         super(Bar, self).__init__(*args, **kwargs)
 
-    def _bar(self, parent, x, y, index):
+    def _bar(self, parent, x, y, index, i, zero, shift=True):
         width = (self.view.x(1) - self.view.x(0)) / self._len
+        x, y = self.view((x, y))
         series_margin = width * self._series_margin
         x += series_margin
         width -= 2 * series_margin
-        width /= self._order
-        x += index * width
-        serie_margin = width * self._serie_margin
-        x += serie_margin
-        width -= 2 * serie_margin
-        height = self.view.y(self.zero) - y
+        if shift:
+            width /= self._order
+            x += index * width
+            serie_margin = width * self._serie_margin
+            x += serie_margin
+            width -= 2 * serie_margin
+        height = self.view.y(zero) - y
+        print height
         r = self.rounded_bars * 1 if self.rounded_bars else 0
         self.svg.transposable_node(
             parent, 'rect',
@@ -58,8 +61,7 @@ class Bar(Graph):
     def bar(self, serie_node, serie, index):
         """Draw a bar graph for a serie"""
         bars = self.svg.node(serie_node['plot'], class_="bars")
-        view_values = map(self.view, serie.points)
-        for i, (x, y) in enumerate(view_values):
+        for i, (x, y) in enumerate(serie.points):
             if None in (x, y):
                 continue
             metadata = serie.metadata.get(i)
@@ -68,9 +70,10 @@ class Bar(Graph):
                 self.svg,
                 self.svg.node(bars, class_='bar'),
                 metadata)
-            val = self._get_value(serie.points, i)
+            val = self._format(serie.values[i])
 
-            x_center, y_center = self._bar(bar, x, y, index)
+            x_center, y_center = self._bar(
+                bar, x, y, index, i, self.zero)
             self._tooltip_data(
                 bar, val, x_center, y_center, classes="centered")
             self._static_value(serie_node, val, x_center, y_center)

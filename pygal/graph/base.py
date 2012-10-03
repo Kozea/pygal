@@ -49,9 +49,9 @@ class BaseGraph(object):
         self.view = None
         if self.logarithmic and self.zero == 0:
             # Explicit min to avoid interpolation dependency
-            self.zero = min(
-                val for serie in self.series for val in serie.values)
-
+            self.zero = min(filter(
+                lambda x: x > 0,
+                [val for serie in self.series for val in serie.safe_values]))
         if self.series and self._has_data():
             self._draw()
         else:
