@@ -56,12 +56,6 @@ def get_test_routes(app):
         bar.title = '123456789 ' * 30
         return bar.render_response()
 
-    @app.route('/test/no_data')
-    def test_no_data():
-        bar = Bar()
-        bar.title = '123456789 ' * 30
-        return bar.render_response()
-
     @app.route('/test/none')
     def test_bar_none():
         bar = Bar()
@@ -126,8 +120,22 @@ def get_test_routes(app):
     @app.route('/test/one/<chart>')
     def test_one_for(chart):
         graph = CHARTS_BY_NAME[chart]()
-        graph.add('1', [1, 2])
+        graph.add('1', [10])
         graph.x_labels = 'a',
+        return graph.render_response()
+
+    @app.route('/test/no_data/<chart>')
+    def test_no_data_for(chart):
+        graph = CHARTS_BY_NAME[chart]()
+        graph.add('Empty 1', [])
+        graph.add('Empty 2', [])
+        graph.x_labels = 'empty'
+        graph.title = '123456789 ' * 30
+        return graph.render_response()
+
+    @app.route('/test/no_data/at_all/<chart>')
+    def test_no_data_at_all_for(chart):
+        graph = CHARTS_BY_NAME[chart]()
         return graph.render_response()
 
     @app.route('/test/interpolate/<chart>')

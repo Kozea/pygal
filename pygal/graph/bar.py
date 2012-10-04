@@ -80,6 +80,7 @@ class Bar(Graph):
     def _compute(self):
         self._box.ymin = min(self._min, self.zero)
         self._box.ymax = max(self._max, self.zero)
+
         x_pos = [
             x / self._len for x in range(self._len + 1)
         ] if self._len > 1 else [0, 1]  # Center if only one value

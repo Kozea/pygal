@@ -196,6 +196,8 @@ class Config(object):
 
     legend_font_size = Key(14, int, "Text", "Legend font size")
 
+    no_data_font_size = Key(64, int, "Text", "No data text font size")
+
     print_values = Key(
         True, bool,
         "Text", "Print values when graph is in non interactive mode")

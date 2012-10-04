@@ -38,7 +38,7 @@ class BaseGraph(object):
     def __init__(self, config, series):
         """Init the graph"""
         self.config = config
-        self.series = series
+        self.series = series or []
         self.horizontal = getattr(self, 'horizontal', False)
         self.svg = Svg(self)
         self._x_labels = None
@@ -52,11 +52,7 @@ class BaseGraph(object):
             self.zero = min(filter(
                 lambda x: x > 0,
                 [val for serie in self.series for val in serie.safe_values]))
-        if self.series and self._has_data():
-            self._draw()
-        else:
-            self.svg.draw_no_data()
-
+        self._draw()
         self.svg.pre_render()
 
     def __getattr__(self, attr):
@@ -66,6 +62,9 @@ class BaseGraph(object):
         return object.__getattribute__(self, attr)
 
     def _split_title(self):
+        if not self.title:
+            self.title = []
+            return
         size = reverse_text_len(self.width, self.title_font_size)
         title = self.title.strip()
         self.title = []
@@ -91,7 +90,7 @@ class BaseGraph(object):
 
     def _compute_margin(self):
         """Compute graph margins from set texts"""
-        if self.show_legend:
+        if self.show_legend and self.series:
             h, w = get_texts_box(
                 map(lambda x: truncate(x, self.truncate_legend or 15),
                     cut(self.series, 'title')),
@@ -141,17 +140,19 @@ class BaseGraph(object):
     @cached_property
     def _len(self):
         """Getter for the maximum series size"""
-        return max([len(serie.values) for serie in self.series])
+        return max([len(serie.values) for serie in self.series] or [0])
 
     @cached_property
     def _min(self):
         """Getter for the minimum series value"""
-        return (self.range and self.range[0]) or min(self._values)
+        return (self.range and self.range[0]) or (
+            min(self._values) if self._values else None)
 
     @cached_property
     def _max(self):
         """Getter for the maximum series value"""
-        return (self.range and self.range[1]) or max(self._values)
+        return (self.range and self.range[1]) or (
+            max(self._values) if self._values else None)
 
     @cached_property
     def _order(self):
@@ -164,11 +165,16 @@ class BaseGraph(object):
         self._split_title()
         self._compute_margin()
         self._decorate()
-        self._plot()
+        if self.series and self._has_data():
+            self._plot()
+        else:
+            self.svg.draw_no_data()
 
     def _has_data(self):
         """Check if there is any data"""
-        return sum(map(len, map(lambda s: s.safe_values, self.series))) != 0
+        return sum(
+            map(len, map(lambda s: s.safe_values, self.series))) != 0 and (
+                sum(map(abs, self._values)) != 0)
 
     def render(self, is_unicode):
         """Render the graph, and return the svg string"""

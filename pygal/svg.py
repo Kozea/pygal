@@ -194,9 +194,9 @@ class Svg(object):
             self.root.set('height', str(self.graph.height))
 
     def draw_no_data(self):
-        no_data = self.node(self.root, 'text',
-                            x=self.graph.width / 2,
-                            y=self.graph.height / 2,
+        no_data = self.node(self.graph.nodes['text_overlay'], 'text',
+                            x=self.graph.view.width / 2,
+                            y=self.graph.view.height / 2,
                             class_='no_data')
         no_data.text = self.graph.no_data_text
 

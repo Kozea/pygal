@@ -46,9 +46,8 @@ class StackedBar(Bar):
         return positive_vals, negative_vals
 
     def _compute_box(self, positive_vals, negative_vals):
-        self._box.ymin, self._box.ymax = (
-            min(min(negative_vals), self.zero),
-            max(max(positive_vals), self.zero))
+        self._box.ymin = negative_vals and min(min(negative_vals), self.zero)
+        self._box.ymax = positive_vals and max(max(positive_vals), self.zero)
 
     def _compute(self):
         positive_vals, negative_vals = self._get_separated_values()

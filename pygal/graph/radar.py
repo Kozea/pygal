@@ -106,7 +106,7 @@ class Radar(Line):
                 y=y).text = label
 
     def _compute(self):
-        delta = 2 * pi / self._len
+        delta = 2 * pi / self._len if self._len else 0
         x_pos = [.5 * pi + i * delta for i in range(self._len + 1)]
         for serie in self.series:
             serie.points = [
@@ -126,8 +126,9 @@ class Radar(Line):
                     extended_vals, extended_x_pos, polar=True)
 
         self._box.margin *= 2
-        self._box.xmin = self._box.ymin = - self._max
-        self._box.xmax = self._box.ymax = self._rmax = self._max
+        _max = self._max or 1
+        self._box.xmin = self._box.ymin = - _max
+        self._box.xmax = self._box.ymax = self._rmax = _max
 
         y_pos = compute_scale(
             0, self._box.ymax, self.logarithmic, self.order_min, max_scale=8

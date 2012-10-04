@@ -48,10 +48,46 @@ class Box(object):
     margin = .02
 
     def __init__(self, xmin=0, ymin=0, xmax=1, ymax=1):
-        self.xmin = xmin
-        self.ymin = ymin
-        self.xmax = xmax
-        self.ymax = ymax
+        self._xmin = xmin
+        self._ymin = ymin
+        self._xmax = xmax
+        self._ymax = ymax
+
+    @property
+    def xmin(self):
+        return self._xmin
+
+    @xmin.setter
+    def xmin(self, value):
+        if value:
+            self._xmin = value
+
+    @property
+    def ymin(self):
+        return self._ymin
+
+    @ymin.setter
+    def ymin(self, value):
+        if value:
+            self._ymin = value
+
+    @property
+    def xmax(self):
+        return self._xmax
+
+    @xmax.setter
+    def xmax(self, value):
+        if value:
+            self._xmax = value
+
+    @property
+    def ymax(self):
+        return self._ymax
+
+    @ymax.setter
+    def ymax(self, value):
+        if value:
+            self._ymax = value
 
     @property
     def width(self):

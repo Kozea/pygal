@@ -73,8 +73,9 @@ def test_format():
     obj.a = 1
     obj.b = True
     obj.c = '3'
-    assert template('foo {{ o.a }} {{o.b}}-{{o.c}}',
-               o=obj) == 'foo 1 True-3'
+    assert template(
+        'foo {{ o.a }} {{o.b}}-{{o.c}}',
+        o=obj) == 'foo 1 True-3'
 
 
 def test_humanize():

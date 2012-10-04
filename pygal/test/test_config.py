@@ -212,7 +212,7 @@ def test_show_dots():
 def test_no_data():
     line = Line()
     q = line.render_pyquery()
-    assert q("text").text() == "No data"
+    assert q(".text-overlay text").text() == "No data"
     line.no_data_text = u"þæ®þæ€€&ĳ¿’€"
     q = line.render_pyquery()
-    assert q("text").text() == u"þæ®þæ€€&ĳ¿’€"
+    assert q(".text-overlay text").text() == u"þæ®þæ€€&ĳ¿’€"

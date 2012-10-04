@@ -46,3 +46,8 @@
   font-family: monospace;
   font-size: {{ font_sizes.tooltip }};
 }
+
+text.no_data {
+  font-size: {{ font_sizes.no_data }};
+}
+

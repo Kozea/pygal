@@ -39,15 +39,15 @@ class Gauge(Graph):
 
     def arc_pos(self, value):
         aperture = pi / 3
-        if value > self._max:
+        if value > self.max_:
             return (3 * pi - aperture / 2) / 2
-        if value < self._min:
+        if value < self.min_:
             return (3 * pi + aperture / 2) / 2
         start = 3 * pi / 2 + aperture / 2
         return start + (2 * pi - aperture) * (
             value - self.min_) / (self.max_ - self.min_)
 
-    def needle(self, serie_node, serie,):
+    def needle(self, serie_node, serie):
         thickness = .05
         for i, value in enumerate(serie.values):
             if value is None:
@@ -95,10 +95,11 @@ class Gauge(Graph):
                     else ''))
 
             x, y = self.view((.9, theta))
-            self.svg.node(guides, 'text',
-                          x=x,
-                          y=y
-                      ).text = label
+            self.svg.node(
+                guides, 'text',
+                x=x,
+                y=y
+            ).text = label
 
     def _y_axis(self, draw_axes=True):
         axis = self.svg.node(self.nodes['plot'], class_="axis y gauge")
@@ -109,8 +110,8 @@ class Gauge(Graph):
         self._box.xmin = -1
         self._box.ymin = -1
 
-        self.min_ = self._min
-        self.max_ = self._max
+        self.min_ = self._min or 0
+        self.max_ = self._max or 0
         if self.max_ - self.min_ == 0:
             self.min_ -= 1
             self.max_ += 1

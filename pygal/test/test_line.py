@@ -75,11 +75,9 @@ def test_no_dot():
     line = Line()
     line.add('no dot', [])
     q = line.render_pyquery()
-    assert q(".plot") == []
-    assert q("text").text() == 'No data'
+    assert q(".text-overlay text").text() == 'No data'
 
 
 def test_no_dot_at_all():
     q = Line().render_pyquery()
-    assert q(".plot") == []
-    assert q("text").text() == 'No data'
+    assert q(".text-overlay text").text() == 'No data'
