@@ -122,8 +122,8 @@ class Graph(BaseGraph):
                 available_space = (
                     last_label_position - first_label_position) / (
                         len(self._x_labels) - 1)
-                truncation = int(
-                    reverse_text_len(available_space, self.label_font_size))
+                truncation = reverse_text_len(
+                    available_space, self.label_font_size)
 
         if 0 not in [label[1] for label in self._x_labels] and draw_axes:
             self.svg.node(axis, 'path',
@@ -207,8 +207,8 @@ class Graph(BaseGraph):
             if not truncation:
                 available_space = self.view.width / cols - (
                     self.legend_box_size + 5)
-                truncation = int(reverse_text_len(
-                    available_space, self.legend_font_size))
+                truncation = revesre_text_len(
+                    available_space, self.legend_font_size)
         else:
             x = self.margin.left + self.view.width + 10
             y = self.margin.top + 10
@@ -255,13 +255,12 @@ class Graph(BaseGraph):
     def _title(self):
         """Make the title"""
         if self.title:
-            self.svg.node(
-                self.nodes['graph'], 'text', class_='title',
-                x=self.margin.left + self.view.width / 2,
-                y=self.title_font_size + 10
-            ).text = truncate(
-                self.title, int(reverse_text_len(
-                    self.width, self.title_font_size)))
+            for i, title_line in enumerate(self.title, 1):
+                self.svg.node(
+                    self.nodes['graph'], 'text', class_='title',
+                    x=self.margin.left + self.view.width / 2,
+                    y=i * (self.title_font_size + 10)
+                ).text = title_line
 
     def _serie(self, serie):
         """Make serie node"""

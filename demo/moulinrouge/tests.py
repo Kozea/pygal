@@ -49,6 +49,19 @@ def get_test_routes(app):
         bar.zero = 1
         return bar.render_response()
 
+    @app.route('/test/long_title')
+    def test_long_title():
+        bar = Bar()
+        bar.add('Lol', [2, None, 12])
+        bar.title = '123456789 ' * 30
+        return bar.render_response()
+
+    @app.route('/test/no_data')
+    def test_no_data():
+        bar = Bar()
+        bar.title = '123456789 ' * 30
+        return bar.render_response()
+
     @app.route('/test/none')
     def test_bar_none():
         bar = Bar()

@@ -184,7 +184,7 @@ def text_len(length, fs):
 
 def reverse_text_len(width, fs):
     """Approximation of text length"""
-    return width / (0.6 * fs)
+    return int(width / (0.6 * fs))
 
 
 def get_text_box(text, fs):

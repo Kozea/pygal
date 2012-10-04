@@ -26,8 +26,8 @@ from pygal.view import Margin, Box
 from pygal.util import (
     get_text_box, get_texts_box, cut, rad, humanize, truncate)
 from pygal.svg import Svg
-from pygal.util import cached_property
-from math import sin, cos, sqrt
+from pygal.util import cached_property, reverse_text_len
+from math import sin, cos, sqrt, ceil
 
 
 class BaseGraph(object):
@@ -65,6 +65,19 @@ class BaseGraph(object):
             return object.__getattribute__(self.config, attr)
         return object.__getattribute__(self, attr)
 
+    def _split_title(self):
+        size = reverse_text_len(self.width, self.title_font_size)
+        title = self.title.strip()
+        self.title = []
+        while len(title) > size:
+            title_part = title[:size]
+            i = title_part.rfind(' ')
+            if i == -1:
+                i = len(title_part)
+            self.title.append(title_part[:i])
+            title = title[i:].strip()
+        self.title.append(title)
+
     @property
     def _format(self):
         """Return the value formatter for this graph"""
@@ -91,8 +104,8 @@ class BaseGraph(object):
                 self.margin.right += 10 + w + self.legend_box_size
 
         if self.title:
-            h, w = get_text_box(self.title, self.title_font_size)
-            self.margin.top += 10 + h
+            h, _ = get_text_box(self.title[0], self.title_font_size)
+            self.margin.top += len(self.title) * (10 + h)
 
         if self._x_labels:
             h, w = get_texts_box(
@@ -148,6 +161,7 @@ class BaseGraph(object):
     def _draw(self):
         """Draw all the things"""
         self._compute()
+        self._split_title()
         self._compute_margin()
         self._decorate()
         self._plot()
