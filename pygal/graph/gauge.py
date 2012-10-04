@@ -23,36 +23,28 @@ Gauge chart
 
 from __future__ import division
 from pygal.util import decorate, compute_scale
-from pygal.view import PolarView
+from pygal.view import PolarThetaView, PolarThetaLogView
 from pygal.graph.graph import Graph
-from math import pi
 
 
 class Gauge(Graph):
     """Gauge graph"""
 
     def _set_view(self):
-        self.view = PolarView(
+        if self.logarithmic:
+            view_class = PolarThetaLogView
+        else:
+            view_class = PolarThetaView
+
+        self.view = view_class(
             self.width - self.margin.x,
             self.height - self.margin.y,
             self._box)
 
-    def arc_pos(self, value):
-        aperture = pi / 3
-        if value > self.max_:
-            return (3 * pi - aperture / 2) / 2
-        if value < self.min_:
-            return (3 * pi + aperture / 2) / 2
-        start = 3 * pi / 2 + aperture / 2
-        return start + (2 * pi - aperture) * (
-            value - self.min_) / (self.max_ - self.min_)
-
     def needle(self, serie_node, serie):
-        thickness = .05
-        for i, value in enumerate(serie.values):
-            if value is None:
+        for i, theta in enumerate(serie.values):
+            if theta is None:
                 continue
-            theta = self.arc_pos(value)
             fmt = lambda x: '%f %f' % x
             value = self._format(serie.values[i])
             metadata = serie.metadata.get(i)
@@ -64,9 +56,9 @@ class Gauge(Graph):
             self.svg.node(
                 gauges, 'polygon', points=' '.join([
                     fmt(self.view((0, 0))),
-                    fmt(self.view((.75, theta + thickness))),
+                    fmt(self.view((.75, theta))),
                     fmt(self.view((.8, theta))),
-                    fmt(self.view((.75, theta - thickness)))]),
+                    fmt(self.view((.75, theta)))]),
                 class_='line reactive tooltip-trigger')
 
             x, y = self.view((.75, theta))
@@ -79,9 +71,9 @@ class Gauge(Graph):
 
         axis = self.svg.node(self.nodes['plot'], class_="axis x gauge")
 
-        for i, (label, pos) in enumerate(self._x_labels):
+        for i, (label, theta) in enumerate(self._x_labels):
             guides = self.svg.node(axis, class_='guides')
-            theta = self.arc_pos(pos)
+
             self.svg.line(
                 guides, [self.view((.95, theta)), self.view((1, theta))],
                 close=True,
@@ -107,15 +99,16 @@ class Gauge(Graph):
         self.svg.node(axis, 'circle', cx=x, cy=y, r=4)
 
     def _compute(self):
-        self._box.xmin = -1
-        self._box.ymin = -1
-
         self.min_ = self._min or 0
         self.max_ = self._max or 0
         if self.max_ - self.min_ == 0:
             self.min_ -= 1
             self.max_ += 1
 
+        self._box.set_polar_box(
+            0, 1,
+            self.min_,
+            self.max_)
         x_pos = compute_scale(
             self.min_, self.max_, self.logarithmic, self.order_min
         )

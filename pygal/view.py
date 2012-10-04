@@ -21,7 +21,7 @@ Projection and bounding helpers
 """
 
 from __future__ import division
-from math import sin, cos, log10
+from math import sin, cos, log10, pi
 
 
 class Margin(object):
@@ -52,6 +52,14 @@ class Box(object):
         self._ymin = ymin
         self._xmax = xmax
         self._ymax = ymax
+
+    def set_polar_box(self, rmin=0, rmax=1, tmin=0, tmax=2 * pi):
+        self._rmin = rmin
+        self._rmax = rmax
+        self._tmin = tmin
+        self._tmax = tmax
+        self.xmin = self.ymin = rmin - rmax
+        self.xmax = self.ymax = rmax - rmin
 
     @property
     def xmin(self):
@@ -181,8 +189,99 @@ class PolarView(View):
         if None in rhotheta:
             return None, None
         rho, theta = rhotheta
-        rho = max(rho, 0)
         return super(PolarView, self).__call__(
+            (rho * cos(theta), rho * sin(theta)))
+
+
+class PolarLogView(View):
+    """Logarithmic polar projection"""
+
+    def __init__(self, width, height, box):
+        super(PolarLogView, self).__init__(width, height, box)
+        if not hasattr(box, '_rmin') or not hasattr(box, '_rmax'):
+            raise Exception(
+                'Box must be set with set_polar_box for polar charts')
+        self.log10_rmax = log10(self.box._rmax)
+        self.log10_rmin = log10(self.box._rmin)
+
+    def __call__(self, rhotheta):
+        """Project rho and theta"""
+        if None in rhotheta:
+            return None, None
+        rho, theta = rhotheta
+        # Center case
+        if rho == 0:
+            return super(PolarLogView, self).__call__((0, 0))
+        rho = (self.box._rmax - self.box._rmin) * (
+            log10(rho) - self.log10_rmin) / (
+                self.log10_rmax - self.log10_rmin)
+        return super(PolarLogView, self).__call__(
+            (rho * cos(theta), rho * sin(theta)))
+
+
+class PolarThetaView(View):
+    """Logarithmic polar projection"""
+
+    def __init__(self, width, height, box):
+        super(PolarThetaView, self).__init__(width, height, box)
+        if not hasattr(box, '_tmin') or not hasattr(box, '_tmax'):
+            raise Exception(
+                'Box must be set with set_polar_box for polar charts')
+
+    def __call__(self, rhotheta):
+        """Project rho and theta"""
+        if None in rhotheta:
+            return None, None
+        rho, theta = rhotheta
+        aperture = pi / 3
+        if theta > self.box._tmax:
+            theta = (3 * pi - aperture / 2) / 2
+        elif theta < self.box._tmin:
+            theta = (3 * pi + aperture / 2) / 2
+        else:
+            start = 3 * pi / 2 + aperture / 2
+            theta = start + (2 * pi - aperture) * (
+                theta - self.box._tmin) / (
+                    self.box._tmax - self.box._tmin)
+        return super(PolarThetaView, self).__call__(
+            (rho * cos(theta), rho * sin(theta)))
+
+
+class PolarThetaLogView(View):
+    """Logarithmic polar projection"""
+
+    def __init__(self, width, height, box):
+        super(PolarThetaLogView, self).__init__(width, height, box)
+        if not hasattr(box, '_tmin') or not hasattr(box, '_tmax'):
+            raise Exception(
+                'Box must be set with set_polar_box for polar charts')
+        self.log10_tmax = log10(self.box._tmax)
+        self.log10_tmin = log10(self.box._tmin)
+
+    def __call__(self, rhotheta):
+        """Project rho and theta"""
+
+        if None in rhotheta:
+            return None, None
+        rho, theta = rhotheta
+        # Center case
+        if theta == 0:
+            return super(PolarThetaLogView, self).__call__((0, 0))
+        theta = self.box._tmin + (self.box._tmax - self.box._tmin) * (
+            log10(theta) - self.log10_tmin) / (
+                self.log10_tmax - self.log10_tmin)
+        aperture = pi / 3
+        if theta > self.box._tmax:
+            theta = (3 * pi - aperture / 2) / 2
+        elif theta < self.box._tmin:
+            theta = (3 * pi + aperture / 2) / 2
+        else:
+            start = 3 * pi / 2 + aperture / 2
+            theta = start + (2 * pi - aperture) * (
+                theta - self.box._tmin) / (
+                    self.box._tmax - self.box._tmin)
+
+        return super(PolarThetaLogView, self).__call__(
             (rho * cos(theta), rho * sin(theta)))
 
 

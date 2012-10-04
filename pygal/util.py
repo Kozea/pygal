@@ -117,7 +117,7 @@ swap = lambda tuple_: tuple(reversed(tuple_))
 ident = lambda x: x
 
 
-def compute_logarithmic_scale(min_, max_):
+def compute_logarithmic_scale(min_, max_, min_scale, max_scale):
     """Compute an optimal scale for logarithmic"""
     if max_ <= 0 or min_ <= 0:
         return []
@@ -128,9 +128,9 @@ def compute_logarithmic_scale(min_, max_):
     if amplitude <= 1:
         return []
     detail = 10.
-    while amplitude * detail < 20:
+    while amplitude * detail < min_scale * 5:
         detail *= 2
-    while amplitude * detail > 50:
+    while amplitude * detail > max_scale * 3:
         detail /= 2
     for order in range(min_order, max_order + 1):
         for i in range(int(detail)):
@@ -150,7 +150,8 @@ def compute_scale(
     if max_ - min_ == 0:
         return [min_]
     if logarithmic:
-        log_scale = compute_logarithmic_scale(min_, max_)
+        log_scale = compute_logarithmic_scale(
+            min_, max_, min_scale, max_scale)
         if log_scale:
             return log_scale
             # else we fallback to normal scalling

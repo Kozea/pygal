@@ -152,8 +152,8 @@ def get_test_routes(app):
             graph.add('xy', [
                 (.1, .234), (10, 243), (.001, 2), (1000000, 1231)])
         else:
-            graph.add('1', [.1, 10, .001, 1000000])
-            graph.add('2', [.234, 243, 2, 2981379, 1231])
+            graph.add('1', [.1, 10, .01, 10000])
+            graph.add('2', [.234, 243, 2, 2379, 1231])
             graph.x_labels = ('a', 'b', 'c', 'd', 'e')
         graph.x_label_rotation = 90
         return graph.render_response()

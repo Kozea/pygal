@@ -24,8 +24,8 @@ Radar chart
 from __future__ import division
 from pygal.graph.line import Line
 from pygal.adapters import positive, none_to_zero
-from pygal.view import PolarView
-from pygal.util import deg, cached_property, compute_scale
+from pygal.view import PolarView, PolarLogView
+from pygal.util import deg, cached_property, compute_scale, is_major
 from math import cos, pi
 
 
@@ -54,7 +54,12 @@ class Radar(Line):
             return super(Line, self)._values
 
     def _set_view(self):
-        self.view = PolarView(
+        if self.logarithmic:
+            view_class = PolarLogView
+        else:
+            view_class = PolarView
+
+        self.view = view_class(
             self.width - self.margin.x,
             self.height - self.margin.y,
             self._box)
@@ -94,16 +99,20 @@ class Radar(Line):
         axis = self.svg.node(self.nodes['plot'], class_="axis y web")
 
         for label, r in reversed(self._y_labels):
+            major = is_major(r)
             guides = self.svg.node(axis, class_='guides')
             self.svg.line(
                 guides, [self.view((r, theta)) for theta in self.x_pos],
                 close=True,
-                class_='guide line')
+                class_='%sguide line' % (
+                    'major ' if major else ''))
             x, y = self.view((r, self.x_pos[0]))
             self.svg.node(
                 guides, 'text',
                 x=x - 5,
-                y=y).text = label
+                y=y,
+                class_='major' if major else ''
+            ).text = label
 
     def _compute(self):
         delta = 2 * pi / self._len if self._len else 0
@@ -125,14 +134,17 @@ class Radar(Line):
                 serie.interpolated = self._interpolate(
                     extended_vals, extended_x_pos, polar=True)
 
+        # x labels space
         self._box.margin *= 2
-        _max = self._max or 1
-        self._box.xmin = self._box.ymin = - _max
-        self._box.xmax = self._box.ymax = self._rmax = _max
+        self._rmin = self.zero
+        self._rmax = self._max or 1
+        self._box.set_polar_box(self._rmin, self._rmax)
 
         y_pos = compute_scale(
-            0, self._box.ymax, self.logarithmic, self.order_min, max_scale=8
+            self._rmin, self._rmax, self.logarithmic, self.order_min,
+            max_scale=8
         ) if not self.y_labels else map(int, self.y_labels)
+
         self._x_labels = self.x_labels and zip(self.x_labels, x_pos)
         self._y_labels = zip(map(self._format, y_pos), y_pos)
 
