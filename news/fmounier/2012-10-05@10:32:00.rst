@@ -1,0 +1,18 @@
+Pygal 0.13.0
+============
+
+
+Pygal 0.13.0 is out!
+
+Get it via `PyPi <http://pypi.python.org/pypi/pygal/>`_.
+
+Changelog
+---------
+
+- Multiline titles
+- No data is now written like a normal chart (with title, legend, labels if any, ...)
+- Rewrite of bar drawing
+- Logarithmic scale is now supported in various charts (stackedbars, radar, ...)
+- New font size option for No data text
+- Minor style tweaks
+- Minor bug fixes
