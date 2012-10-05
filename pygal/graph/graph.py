@@ -101,8 +101,7 @@ class Graph(BaseGraph):
         a = self.svg.node(self.nodes['tooltip'], 'a')
         self.svg.node(a, 'rect',
                       id="tooltip-box",
-                      rx=5, ry=5, width=0, height=0
-                  )
+                      rx=5, ry=5, width=0, height=0)
         text = self.svg.node(a, 'text', class_='text')
         self.svg.node(text, 'tspan', class_='label')
         self.svg.node(text, 'tspan', class_='value')
@@ -207,7 +206,7 @@ class Graph(BaseGraph):
             if not truncation:
                 available_space = self.view.width / cols - (
                     self.legend_box_size + 5)
-                truncation = revesre_text_len(
+                truncation = reverse_text_len(
                     available_space, self.legend_font_size)
         else:
             x = self.margin.left + self.view.width + 10

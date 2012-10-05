@@ -64,6 +64,13 @@ class XY(Line):
             yvals = [val[1]
                      for serie in self.series
                      for val in serie.interpolated]
+            if xvals:
+                xmin = min(xvals)
+                xmax = max(xvals)
+                rng = (xmax - xmin)
+            else:
+                rng = None
+
         if rng:
             self._box.xmin, self._box.xmax = min(xvals), max(xvals)
             self._box.ymin, self._box.ymax = min(yvals), max(yvals)
