@@ -83,7 +83,7 @@ More information in the `download page </download>`_
 Technical Description
 =====================
 
-As of now pygal is known to work for python 2.6, 2.7, 3.2 and 3.3.
+As of now pygal is known to work for python 2.6, 2.7 and 3.2.
 
 
 Needed dependencies
