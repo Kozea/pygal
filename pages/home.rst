@@ -83,7 +83,7 @@ More information in the `download page </download>`_
 Technical Description
 =====================
 
-As of now pygal is known to work for python 2.7
+As of now pygal is known to work for python 2.6, 2.7, 3.2 and 3.3.
 
 
 Needed dependencies
@@ -95,7 +95,9 @@ Optional dependencies
 ---------------------
 
 PNG output requires `CairoSVG <http://cairosvg.org/>`_, `tinycss <http://packages.python.org/tinycss/>`_ and `cssselect <http://packages.python.org/cssselect/>`_.
-Install those with ``pip install CairoSVG tinycss cssselect``
+Install those with ``pip install CairoSVG tinycss cssselect``.
+
+Interpolations need the `scipy <http://www.scipy.org/>`_ python module.
 
 Unit testing needs `py.test <http://pytest.org/latest/>`_ or `nosetests <http://readthedocs.org/docs/nose/en/latest/>`_.
 
