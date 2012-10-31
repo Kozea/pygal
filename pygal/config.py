@@ -154,6 +154,10 @@ class Config(object):
         False, bool, "Value", "Display values in human readable format",
         "(ie: 12.4M)")
 
+    formatter = Key(
+        None, callable, "Value",
+        "Function used to convert values into human readable format")
+
     logarithmic = Key(
         False, bool, "Value", "Display values in logarithmic scale")
 
