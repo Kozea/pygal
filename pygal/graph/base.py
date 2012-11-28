@@ -80,7 +80,8 @@ class BaseGraph(object):
     @property
     def _format(self):
         """Return the value formatter for this graph"""
-        return humanize if self.human_readable else str
+        return self.value_formatter or (
+            humanize if self.human_readable else str)
 
     def _compute(self):
         """Initial computations to draw the graph"""
