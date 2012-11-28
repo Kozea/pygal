@@ -154,7 +154,7 @@ class Config(object):
         False, bool, "Value", "Display values in human readable format",
         "(ie: 12.4M)")
 
-    value_format = Key(
+    value_formatter = Key(
         None, type(lambda: 1), "Value",
         "A function to convert numeric value to strings")
 
