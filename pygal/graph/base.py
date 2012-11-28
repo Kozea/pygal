@@ -27,7 +27,7 @@ from pygal.util import (
     get_text_box, get_texts_box, cut, rad, humanize, truncate)
 from pygal.svg import Svg
 from pygal.util import cached_property, reverse_text_len
-from math import sin, cos, sqrt, ceil
+from math import sin, cos, sqrt
 
 
 class BaseGraph(object):
