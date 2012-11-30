@@ -98,12 +98,7 @@ class Ghost(object):
         with io.open(filename, 'w', encoding='utf-8') as f:
             f.write(self.render(is_unicode=True))
 
-    def render_to_png(self, filename):
+    def render_to_png(self, filename=None):
         """Render the graph, convert it to png and write it to filename"""
         import cairosvg
-        from io import BytesIO
-        fakefile = BytesIO()
-        fakefile.write(self.render())
-        fakefile.seek(0)
-        cairosvg.surface.PNGSurface.convert(
-            file_obj=fakefile, write_to=filename)
+        return cairosvg.svg2png(bytestring=self.render(), write_to=filename)
