@@ -69,7 +69,7 @@ class Line(Graph):
                     self.svg.node(serie_node['overlay'], class_="dots"),
                     metadata)
                 val = self._get_value(serie.points, i)
-                self.svg.node(dots, 'circle', cx=x, cy=y, r=2.5,
+                self.svg.node(dots, 'circle', cx=x, cy=y, r=self.dots_size,
                               class_='dot reactive tooltip-trigger')
                 self._tooltip_data(dots, val, x, y)
                 self._static_value(

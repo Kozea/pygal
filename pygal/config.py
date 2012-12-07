@@ -112,6 +112,8 @@ class Config(object):
 
     show_dots = Key(True, bool, "Look", "Set to false to remove dots")
 
+    dots_size = Key(2.5, float, "Look", "Radius of the dots")
+
     stroke = Key(
         True, bool, "Look",
         "Line dots (set it to false to get a scatter plot)")
