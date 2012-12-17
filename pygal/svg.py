@@ -181,7 +181,8 @@ class Svg(object):
             (radius + small_radius) / 2, start_angle + angle / 2))
 
         self.graph._tooltip_data(node, val, x, y, classes="centered")
-        self.graph._static_value(serie_node, val, x, y)
+        if angle >= 0.3:  # 0.3 radians is about 17 degrees
+            self.graph._static_value(serie_node, val, x, y)
 
     def pre_render(self):
         """Last things to do before rendering"""
