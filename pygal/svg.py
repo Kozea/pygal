@@ -165,7 +165,7 @@ class Svg(object):
                       cy=center[1],
                       r=radius,
                       class_='slice reactive tooltip-trigger')
-        else:
+        elif angle > 0:
             to = [absolute_project(radius, start_angle),
                   absolute_project(radius, start_angle + angle),
                   absolute_project(small_radius, start_angle + angle),
