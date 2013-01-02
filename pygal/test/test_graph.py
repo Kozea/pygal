@@ -64,7 +64,7 @@ def test_render_to_png(Chart, datas):
 
 def test_metadata(Chart):
     chart = Chart()
-    v = range(7)
+    v = range(1, 8)
     if Chart == pygal.XY:
         v = map(lambda x: (x, x + 1), v)
 
