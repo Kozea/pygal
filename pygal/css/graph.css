@@ -49,8 +49,12 @@ text.no_data {
 .axis.y text {
   text-anchor: end;
 }
+.axis.2y text {
+  text-anchor: start;
+}
 
-.axis.y .logarithmic text:not(.major) {
+.axis.y .logarithmic text:not(.major) ,
+.axis.2y .logarithmic text:not(.major) {
   font-size: 50%;
 }
 
@@ -66,11 +70,13 @@ text.no_data {
 }
 
 .horizontal .axis.y .guide.line,
+.horizontal .axis.2y .guide.line,
 .vertical .axis.x .guide.line {
   opacity: 0;
 }
 
 .axis.y .guides:hover .guide.line,
+.axis.2y .guides:hover .guide.line,
 .line-graph .axis.x .guides:hover .guide.line,
 .gauge-graph .axis.x .guides:hover .guide.line,
 .stackedline-graph .axis.x .guides:hover .guide.line,

@@ -55,20 +55,25 @@ class Ghost(object):
         config(**kwargs)
         self.config = config
         self.raw_series = []
+        self.raw_series2 = []
 
-    def add(self, title, values):
+    def add(self, title, values, secondary=False):
         """Add a serie to this graph"""
         if not hasattr(values, '__iter__') and not isinstance(values, dict):
             values = [values]
-        self.raw_series.append((title, values))
+        if secondary:
+            self.raw_series2.append((title, values))
+        else:
+            self.raw_series.append((title, values))
 
-    def make_series(self):
-        return prepare_values(self.raw_series, self.config, self.cls)
+    def make_series(self, series):
+        return prepare_values(series, self.config, self.cls)
 
     def make_instance(self):
         self.config(**self.__dict__)
-        series = self.make_series()
-        self._last__inst = self.cls(self.config, series)
+        series = self.make_series(self.raw_series)
+        secondary_series = self.make_series(self.raw_series2)
+        self._last__inst = self.cls(self.config, series, secondary_series)
         return self._last__inst
 
     # Rendering
