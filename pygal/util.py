@@ -212,7 +212,10 @@ def decorate(svg, node, metadata):
         if key == 'xlink' and isinstance(value, dict):
             value = value.get('href', value)
         if value:
-            svg.node(node, 'desc', class_=key).text = str(value)
+            if isinstance(value, unicode):
+                svg.node(node, 'desc', class_=key).text = value
+            else:
+                svg.node(node, 'desc', class_=key).text = str(value)
     return node
 
 
