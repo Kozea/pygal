@@ -107,3 +107,7 @@ class Ghost(object):
         """Render the graph, convert it to png and write it to filename"""
         import cairosvg
         return cairosvg.svg2png(bytestring=self.render(), write_to=filename)
+
+    def _repr_png_(self):
+        """Display png in IPython notebook"""
+        return self.render_to_png()
