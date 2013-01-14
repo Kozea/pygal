@@ -104,7 +104,13 @@ class Line(Graph):
             self._box.ymin, self._box.ymax, self.logarithmic, self.order_min
         ) if not self.y_labels else map(float, self.y_labels)
 
-        self._x_labels = self.x_labels and zip(self.x_labels, x_pos)
+        x_labels = zip(self.x_labels, x_pos)
+
+        if self.x_labels_num_limit and len(x_labels)>self.x_labels_num_limit:
+            step = (len(x_labels)-1)/(self.x_labels_num_limit-1)
+            x_labels = list(x_labels[int(i*step)] for i in range(self.x_labels_num_limit))
+
+        self._x_labels = self.x_labels and x_labels
         self._y_labels = zip(map(self._format, y_pos), y_pos)
 
     def _plot(self):
