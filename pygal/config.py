@@ -140,6 +140,11 @@ class Config(object):
         "Leave it to None to disable x labels display.",
         str)
 
+    x_labels_num_limit = Key(None, int, "Label", 
+            "Limits the number of X labels, defaults to None",
+            "If none, there will be as many x labels as provided in x_labels. When provided - limits the number of X labels"
+            )
+
     y_labels = Key(
         None, list, "Label",
         "You can specify explicit y labels",
