@@ -36,5 +36,4 @@ CHARTS_NAMES = [
     'VerticalPyramid',
     'Dot',
     'Gauge',
-    'DoubleYLine',
 ]
