@@ -132,7 +132,6 @@ class Line(Graph):
             else:
                 ymin = self._secondary_min
                 ymax = self._secondary_max
-            print("ymin: %f, ymax: %f" % (ymin, ymax))
             steps = len(y_pos)
             left_range = abs(y_pos[-1] -  y_pos[0])
             right_range = abs(ymax - ymin)
