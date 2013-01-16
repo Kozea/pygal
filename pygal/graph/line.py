@@ -75,7 +75,11 @@ class Line(Graph):
                 val = self._get_value(serie.points, i)
                 self.svg.node(dots, 'circle', cx=x, cy=y, r=self.dots_size,
                               class_='dot reactive tooltip-trigger')
-                self._tooltip_data(dots, val, x, y)
+                self._tooltip_data(dots, 
+                        "%s: %s" % (self.x_labels[i], val) if self.x_labels and 
+                                                self.x_labels_num_limit 
+                                                else val, 
+                        x, y)
                 self._static_value(
                     serie_node, val,
                     x + self.value_font_size,
