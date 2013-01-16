@@ -246,15 +246,7 @@ class Graph(BaseGraph):
                 truncation = reverse_text_len(
                     available_space, self.legend_font_size)
         else:
-            # draw primary y axis on left
-            x = 0
-            h, w = get_texts_box(
-                cut(self._y_labels), self.label_font_size)
-            #x -= 10 + max(w * cos(rad(self.y_label_rotation)), h)
-            x -= 10 + w
-            h, w = get_texts_box(self._legends + self._secondary_legends, self.label_font_size)
-            x -= w
-
+            x = 10
             y = self.margin.top + 10
             cols = 1
             if not truncation:

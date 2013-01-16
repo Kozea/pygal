@@ -97,7 +97,7 @@ class BaseGraph(object):
         if self.show_legend and self.series:
             h, w = get_texts_box(
                 map(lambda x: truncate(x, self.truncate_legend or 15),
-                    cut(self.series + self.secondary_series, 'title')),
+                    cut(self.series, 'title')),
                 self.legend_font_size)
             if self.legend_at_bottom:
                 h_max = max(h, self.legend_box_size)
@@ -105,6 +105,19 @@ class BaseGraph(object):
                     sqrt(self._order) - 1) * 1.5 + h_max
             else:
                 self.margin.right += 10 + w + self.legend_box_size
+        
+        if self.show_legend and self.secondary_series:
+            h, w = get_texts_box(
+                map(lambda x: truncate(x, self.truncate_legend or 15),
+                    cut(self.secondary_series, 'title')),
+                self.legend_font_size)
+            if self.legend_at_bottom:
+                h_max = max(h, self.legend_box_size)
+                self.margin.bottom += 10 + h_max * round(
+                    sqrt(self._order) - 1) * 1.5 + h_max
+            else:
+                self.margin.left += w + self.legend_box_size
+
 
         if self.title:
             h, _ = get_text_box(self.title[0], self.title_font_size)
@@ -127,7 +140,7 @@ class BaseGraph(object):
                 cut(self._y_labels), self.label_font_size)
             self.margin.left += 10 + max(
                 w * cos(rad(self.y_label_rotation)), w)
-	
+
 
     @cached_property
     def _legends(self):
