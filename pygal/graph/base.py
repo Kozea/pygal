@@ -48,7 +48,6 @@ class BaseGraph(object):
         self.nodes = {}
         self.margin = Margin(*([20] * 4))
         self._box = Box()
-        self._secondary_box = Box()
         self.view = None
         if self.logarithmic and self.zero == 0:
             # Explicit min to avoid interpolation dependency
