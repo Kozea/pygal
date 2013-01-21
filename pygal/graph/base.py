@@ -185,13 +185,6 @@ class BaseGraph(object):
             min(self._values) if self._values else None)
 
     @cached_property
-    def _secondary_min(self):
-        """Getter for the secondary minimum series value"""
-        return (self.range and self.range[0]) or (
-            min(self._secondary_values) if self._secondary_values else None)
-
-
-    @cached_property
     def _max(self):
         """Getter for the maximum series value"""
         return (self.range and self.range[1]) or (
