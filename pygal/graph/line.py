@@ -100,7 +100,6 @@ class Line(Graph):
             x / (self._len - 1) for x in range(self._len)
         ] if self._len != 1 else [.5]  # Center if only one value
 
-        # XXX: we need to have rescaled serie.values to execute this
         self._points(x_pos)
 
         x_labels = zip(self.x_labels, x_pos)
@@ -142,9 +141,6 @@ class Line(Graph):
             self._scale = left_range / right_range
             self._scale_diff = y_pos[0]
             self._scale_min_2nd = min_2nd
-
-
-
 
     def _plot(self):
         for index, serie in enumerate(self.series):

@@ -61,8 +61,6 @@ class Graph(BaseGraph):
             self.height - self.margin.y,
             self._box)
 
-                           
-
     def _make_graph(self):
         """Init common graph svg structure"""
         self.nodes['graph'] = self.svg.node(
@@ -198,27 +196,16 @@ class Graph(BaseGraph):
                 text.attrib['transform'] = "rotate(%d %f %f)" % (
                     self.y_label_rotation, x, y)
 
-        # TODO: 
-        # - shall we do separate axis 2y node, or use the above (and have an inner
-        #       loop condition)
-        # - it 
-        # 10 is a magic number around here - margin size, don't know, 
-        # what stands for the additional 2 px
         if self._y_2nd_labels:
-                secondary_ax = self.svg.node(self.nodes['plot'], class_="axis 2y")
-                #self.svg.node(secondary_ax, 'path',
-                #    d='M%f %f v%f' % (self.view.width-12, 0, self.view.height),
-                #    class_='major line'
-                #)
+                secondary_ax = self.svg.node(self.nodes['plot'], class_="axis y2")
                 for label, position in self._y_2nd_labels:
                     major = is_major(position)
-                    # it is needed, to have the same structure
+                    # it is needed, to have the same structure as primary axis
                     guides = self.svg.node(secondary_ax, class_='guides')
                     x = self.view.width + 5
                     y = self.view.y(position)
                     text = self.svg.node(guides, 'text',
                         x = x,
-                        # XXX: plus or minus?
                         y = y + .35 * self.label_font_size,
                         class_ = 'major' if major else ''
                     )
@@ -227,7 +214,6 @@ class Graph(BaseGraph):
                         text.attrib['transform'] = "rotate(%d %f %f)" % (
                             self.y_label_rotation, x, y)
 
-            
 
     def _legend(self):
         """Make the legend box"""
@@ -263,10 +249,14 @@ class Graph(BaseGraph):
             # if legends at the bottom, we dont split the windows
             counter = count()
             # gen structure - (i, (j, (l, tf)))
+            # i - global serie number - used for coloring and identification
+            # j - position within current legend box
+            # l - label
+            # tf - whether it is secondary label
             gen = enumerate(enumerate(chain(
                     izip(self._legends, repeat(False)),
                     izip(self._secondary_legends, repeat(True)))))
-            secondary_legends = legends
+            secondary_legends = legends # svg node is the same
         else:
             gen = enumerate(chain(
                     enumerate(izip(self._legends, repeat(False))),
@@ -284,9 +274,9 @@ class Graph(BaseGraph):
             secondary_legends = self.svg.node(
                 self.nodes['graph'], class_='legends',
                 transform='translate(%d, %d)' % (x, y))
-            
+
         for (global_serie_number, (i, (title, is_secondary))) in gen:
-                
+
             col = i % cols
             row = i // cols
 
