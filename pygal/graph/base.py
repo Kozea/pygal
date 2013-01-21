@@ -103,7 +103,7 @@ class BaseGraph(object):
                 self.margin.bottom += 10 + h_max * round(
                     sqrt(self._order) - 1) * 1.5 + h_max
             else:
-                self.margin.right += 10 + w + self.legend_box_size
+                self.margin.left += 10 + w + self.legend_box_size
 
         if self.show_legend and self.secondary_series:
             h, w = get_texts_box(
@@ -115,7 +115,7 @@ class BaseGraph(object):
                 self.margin.bottom += 10 + h_max * round(
                     sqrt(self._order) - 1) * 1.5 + h_max
             else:
-                self.margin.left += w + self.legend_box_size
+                self.margin.right += 10 + w + self.legend_box_size 
 
         if self.title:
             h, _ = get_text_box(self.title[0], self.title_font_size)
