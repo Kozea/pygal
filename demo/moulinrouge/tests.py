@@ -25,7 +25,9 @@ def get_test_routes(app):
 
     @app.route('/test/bar_links')
     def test_bar_links():
-        bar = Gauge(style=styles['neon'])
+        bar = Bar(style=styles['neon'])
+        # bar.js = ('http://l:2343/svg.jquery.js',
+                  # 'http://l:2343/pygal-tooltips.js')
         bar.add('1234', [
             {'value': 10,
              'label': 'Ten',

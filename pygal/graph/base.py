@@ -65,7 +65,7 @@ class BaseGraph(object):
         if not self.title:
             self.title = []
             return
-        size = reverse_text_len(self.width, self.title_font_size)
+        size = reverse_text_len(self.width, self.title_font_size * 1.1)
         title = self.title.strip()
         self.title = []
         while len(title) > size:
