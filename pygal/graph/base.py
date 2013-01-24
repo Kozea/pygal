@@ -35,14 +35,16 @@ class BaseGraph(object):
 
     _adapters = []
 
-    def __init__(self, config, series):
+    def __init__(self, config, series, secondary_series):
         """Init the graph"""
         self.config = config
         self.series = series or []
+        self.secondary_series = secondary_series or []
         self.horizontal = getattr(self, 'horizontal', False)
         self.svg = Svg(self)
         self._x_labels = None
         self._y_labels = None
+        self._y_2nd_labels = None
         self.nodes = {}
         self.margin = Margin(*([20] * 4))
         self._box = Box()
@@ -101,7 +103,19 @@ class BaseGraph(object):
                 self.margin.bottom += 10 + h_max * round(
                     sqrt(self._order) - 1) * 1.5 + h_max
             else:
-                self.margin.right += 10 + w + self.legend_box_size
+                self.margin.left += 10 + w + self.legend_box_size
+
+        if self.show_legend and self.secondary_series:
+            h, w = get_texts_box(
+                map(lambda x: truncate(x, self.truncate_legend or 15),
+                    cut(self.secondary_series, 'title')),
+                self.legend_font_size)
+            if self.legend_at_bottom:
+                h_max = max(h, self.legend_box_size)
+                self.margin.bottom += 10 + h_max * round(
+                    sqrt(self._order) - 1) * 1.5 + h_max
+            else:
+                self.margin.right += 10 + w + self.legend_box_size 
 
         if self.title:
             h, _ = get_text_box(self.title[0], self.title_font_size)
@@ -129,6 +143,11 @@ class BaseGraph(object):
     def _legends(self):
         """Getter for series title"""
         return [serie.title for serie in self.series]
+    
+    @cached_property
+    def _secondary_legends(self):
+        """Getter for series title on secondary y axis"""
+        return [serie.title for serie in self.secondary_series]
 
     @cached_property
     def _values(self):
@@ -139,9 +158,23 @@ class BaseGraph(object):
                 if val is not None]
 
     @cached_property
+    def _secondary_values(self):
+        """Getter for secondary series values (flattened)"""
+        return [val
+                for serie in self.secondary_series
+                for val in serie.values
+                if val is not None]
+
+    @cached_property
     def _len(self):
         """Getter for the maximum series size"""
-        return max([len(serie.values) for serie in self.series] or [0])
+        return max([len(serie.values) for serie in self.series + self.secondary_series] or [0])
+
+    @cached_property
+    def _secondary_min(self):
+        """Getter for the minimum series value"""
+        return (self.range and self.range[0]) or (
+            min(self._secondary_values) if self._secondary_values else None)
 
     @cached_property
     def _min(self):
@@ -156,9 +189,15 @@ class BaseGraph(object):
             max(self._values) if self._values else None)
 
     @cached_property
+    def _secondary_max(self):
+        """Getter for the maximum series value"""
+        return (self.range and self.range[1]) or (
+            max(self._secondary_values) if self._secondary_values else None)
+
+    @cached_property
     def _order(self):
         """Getter for the maximum series value"""
-        return len(self.series)
+        return len(self.series + self.secondary_series)
 
     def _draw(self):
         """Draw all the things"""
