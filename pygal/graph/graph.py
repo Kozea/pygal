@@ -25,8 +25,9 @@ from __future__ import division
 from pygal.interpolate import interpolation
 from pygal.graph.base import BaseGraph
 from pygal.view import View, LogView, XYLogView
-from pygal.util import is_major, truncate, reverse_text_len
-from math import isnan, pi, sqrt, ceil
+from pygal.util import is_major, truncate, reverse_text_len, get_texts_box, cut, rad
+from math import isnan, pi, sqrt, ceil, cos
+from itertools import repeat, izip, chain, count
 
 
 class Graph(BaseGraph):
@@ -128,18 +129,21 @@ class Graph(BaseGraph):
             self.svg.node(axis, 'path',
                           d='M%f %f v%f' % (0, 0, self.view.height),
                           class_='line')
+        lastlabel = self._x_labels[-1][0]
         for label, position in self._x_labels:
             major = is_major(position)
             guides = self.svg.node(axis, class_='guides')
             x = self.view.x(position)
             y = self.view.height + 5
             if draw_axes:
+                last_guide = (self._y_2nd_labels and label == lastlabel)
                 self.svg.node(
                     guides, 'path',
                     d='M%f %f v%f' % (x, 0, self.view.height),
                     class_='%s%sline' % (
                         'major ' if major else '',
-                        'guide ' if position != 0 else ''))
+                        'guide ' if position != 0 and not last_guide
+                                 else ''))
             y += .5 * self.label_font_size + 5
             text = self.svg.node(
                 guides, 'text',
@@ -192,6 +196,25 @@ class Graph(BaseGraph):
                 text.attrib['transform'] = "rotate(%d %f %f)" % (
                     self.y_label_rotation, x, y)
 
+        if self._y_2nd_labels:
+                secondary_ax = self.svg.node(self.nodes['plot'], class_="axis y2")
+                for label, position in self._y_2nd_labels:
+                    major = is_major(position)
+                    # it is needed, to have the same structure as primary axis
+                    guides = self.svg.node(secondary_ax, class_='guides')
+                    x = self.view.width + 5
+                    y = self.view.y(position)
+                    text = self.svg.node(guides, 'text',
+                        x = x,
+                        y = y + .35 * self.label_font_size,
+                        class_ = 'major' if major else ''
+                    )
+                    text.text = label
+                    if self.y_label_rotation:
+                        text.attrib['transform'] = "rotate(%d %f %f)" % (
+                            self.y_label_rotation, x, y)
+
+
     def _legend(self):
         """Make the legend box"""
         if not self.show_legend:
@@ -209,7 +232,7 @@ class Graph(BaseGraph):
                 truncation = reverse_text_len(
                     available_space, self.legend_font_size)
         else:
-            x = self.margin.left + self.view.width + 10
+            x = 10
             y = self.margin.top + 10
             cols = 1
             if not truncation:
@@ -219,15 +242,48 @@ class Graph(BaseGraph):
             self.nodes['graph'], class_='legends',
             transform='translate(%d, %d)' % (x, y))
 
+
         h = max(self.legend_box_size, self.legend_font_size)
         x_step = self.view.width / cols
-        for i, title in enumerate(self._legends):
+        if self.legend_at_bottom:
+            # if legends at the bottom, we dont split the windows
+            counter = count()
+            # gen structure - (i, (j, (l, tf)))
+            # i - global serie number - used for coloring and identification
+            # j - position within current legend box
+            # l - label
+            # tf - whether it is secondary label
+            gen = enumerate(enumerate(chain(
+                    izip(self._legends, repeat(False)),
+                    izip(self._secondary_legends, repeat(True)))))
+            secondary_legends = legends # svg node is the same
+        else:
+            gen = enumerate(chain(
+                    enumerate(izip(self._legends, repeat(False))),
+                    enumerate(izip(self._secondary_legends, repeat(True)))))
+
+            # draw secondary axis on right
+            x = self.margin.left + self.view.width + 10
+            if self._y_2nd_labels:
+                    h, w = get_texts_box(
+                        cut(self._y_labels), self.label_font_size)
+                    x += 10 + max(w * cos(rad(self.y_label_rotation)), h)
+
+            y = self.margin.top + 10
+
+            secondary_legends = self.svg.node(
+                self.nodes['graph'], class_='legends',
+                transform='translate(%d, %d)' % (x, y))
+
+        for (global_serie_number, (i, (title, is_secondary))) in gen:
+
             col = i % cols
             row = i // cols
 
             legend = self.svg.node(
-                legends, class_='legend reactive activate-serie',
-                id="activate-serie-%d" % i)
+                secondary_legends if is_secondary else legends,
+                class_='legend reactive activate-serie',
+                id="activate-serie-%d" % global_serie_number)
             self.svg.node(
                 legend, 'rect',
                 x=col * x_step,
@@ -237,7 +293,7 @@ class Graph(BaseGraph):
                 ) / 2,
                 width=self.legend_box_size,
                 height=self.legend_box_size,
-                class_="color-%d reactive" % (i % 16)
+                class_="color-%d reactive" % (global_serie_number % 16)
             )
             truncated = truncate(title, truncation)
             # Serious magical numbers here
@@ -327,7 +383,7 @@ class Graph(BaseGraph):
         return self._format(values[i][1])
 
     def _points(self, x_pos):
-        for serie in self.series:
+        for serie in self.series + self.secondary_series:
             serie.points = [
                 (x_pos[i], v)
                 for i, v in enumerate(serie.values)]
