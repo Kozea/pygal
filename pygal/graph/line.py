@@ -41,6 +41,15 @@ class Line(Graph):
                         if self.interpolate else serie.points)
             if val[1] is not None and (not self.logarithmic or val[1] > 0)]
 
+    @cached_property
+    def _secondary_values(self):
+        return  [
+            val[1]
+            for serie in self.secondary_series
+            for val in (serie.interpolated
+                        if self.interpolate else serie.points)
+            if val[1] is not None and (not self.logarithmic or val[1] > 0)]
+
     def _fill(self, values):
         """Add extra values to fill the line"""
         zero = self.view.y(min(max(self.zero, self._box.ymin), self._box.ymax))
@@ -51,7 +60,9 @@ class Line(Graph):
     def line(self, serie_node, serie, rescale=False):
         """Draw the line serie"""
         if rescale and self.secondary_series:
-            points = list ((x, self._scale_diff+(y - self._scale_min_2nd) * self._scale) for x, y in serie.points)
+            points = [
+                (x, self._scale_diff + (y - self._scale_min_2nd) * self._scale)
+                for x, y in serie.points]
         else:
             points = serie.points
         view_values = map(self.view, points)
@@ -75,11 +86,11 @@ class Line(Graph):
                 val = self._get_value(serie.points, i)
                 self.svg.node(dots, 'circle', cx=x, cy=y, r=self.dots_size,
                               class_='dot reactive tooltip-trigger')
-                self._tooltip_data(dots, 
-                        "%s: %s" % (self.x_labels[i], val) if self.x_labels and 
-                                                self.x_labels_num_limit 
-                                                else val, 
-                        x, y)
+                self._tooltip_data(
+                    dots, "%s: %s" % (
+                        self.x_labels[i], val)
+                    if self.x_labels and self.x_labels_num_limit
+                    else val, x, y)
                 self._static_value(
                     serie_node, val,
                     x + self.value_font_size,
@@ -102,16 +113,19 @@ class Line(Graph):
 
         self._points(x_pos)
 
-        x_labels = zip(self.x_labels, x_pos)
-
-        if self.x_labels_num_limit and len(x_labels)>self.x_labels_num_limit:
-            step = (len(x_labels)-1)/(self.x_labels_num_limit-1)
-            x_labels = list(x_labels[int(i*step)] for i in range(self.x_labels_num_limit))
-
-        self._x_labels = self.x_labels and x_labels
-        # Y Label
+        if self.x_labels:
+            x_labels = zip(self.x_labels, x_pos)
+            if (self.x_labels_num_limit and
+                    len(x_labels) > self.x_labels_num_limit):
+                step = (len(x_labels) - 1) / (self.x_labels_num_limit - 1)
+                x_labels = [x_labels[int(i * step)]
+                            for i in range(self.x_labels_num_limit)]
+            self._x_labels = x_labels
+        else:
+            self._x_labels = None
 
         if self.include_x_axis:
+        # Y Label
             self._box.ymin = min(self._min, 0)
             self._box.ymax = max(self._max, 0)
         else:
@@ -132,10 +146,11 @@ class Line(Graph):
                 ymin = self._secondary_min
                 ymax = self._secondary_max
             steps = len(y_pos)
-            left_range = abs(y_pos[-1] -  y_pos[0])
+            left_range = abs(y_pos[-1] - y_pos[0])
             right_range = abs(ymax - ymin)
-            scale = right_range / (steps-1)
-            self._y_2nd_labels = list((self._format(ymin+i*scale), pos) for i, pos in enumerate(y_pos))
+            scale = right_range / (steps - 1)
+            self._y_2nd_labels = [(self._format(ymin + i * scale), pos)
+                                  for i, pos in enumerate(y_pos)]
 
             min_2nd = float(self._y_2nd_labels[0][0])
             self._scale = left_range / right_range

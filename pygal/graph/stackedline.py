@@ -43,11 +43,12 @@ class StackedLine(Line):
         return new_values
 
     def _points(self, x_pos):
-        accumulation = [0] * self._len
-        for serie in self.series:
-            accumulation = map(sum, zip(accumulation, serie.values))
-            serie.points = [
-                (x_pos[i], v)
-                for i, v in enumerate(accumulation)]
-            if self.interpolate:
-                serie.interpolated = self._interpolate(accumulation, x_pos)
+        for series_group in (self.series, self.secondary_series):
+            accumulation = [0] * self._len
+            for serie in series_group:
+                accumulation = map(sum, zip(accumulation, serie.values))
+                serie.points = [
+                    (x_pos[i], v)
+                    for i, v in enumerate(accumulation)]
+                if self.interpolate:
+                    serie.interpolated = self._interpolate(accumulation, x_pos)

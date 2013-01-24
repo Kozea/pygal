@@ -50,5 +50,11 @@ else:
     wsreload.monkey_patch_http_server({'url': url}, callback=log)
     app.logger.debug('HTTPServer monkey patched for url %s' % url)
 
+try:
+    import wdb
+except ImportError:
+    pass
+else:
+    app.wsgi_app = wdb.Wdb(app.wsgi_app, start_disabled=True)
 
 app.run(debug=True, threaded=True, host='0.0.0.0', port=21112)

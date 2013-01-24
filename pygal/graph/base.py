@@ -28,6 +28,7 @@ from pygal.util import (
 from pygal.svg import Svg
 from pygal.util import cached_property, reverse_text_len
 from math import sin, cos, sqrt
+from itertools import chain
 
 
 class BaseGraph(object):
@@ -80,6 +81,10 @@ class BaseGraph(object):
         self.title.append(title)
 
     @property
+    def all_series(self):
+        return chain(self.series, self.secondary_series)
+
+    @property
     def _format(self):
         """Return the value formatter for this graph"""
         return self.value_formatter or (
@@ -115,7 +120,7 @@ class BaseGraph(object):
                 self.margin.bottom += 10 + h_max * round(
                     sqrt(self._order) - 1) * 1.5 + h_max
             else:
-                self.margin.right += 10 + w + self.legend_box_size 
+                self.margin.right += 10 + w + self.legend_box_size
 
         if self.title:
             h, _ = get_text_box(self.title[0], self.title_font_size)
@@ -143,7 +148,7 @@ class BaseGraph(object):
     def _legends(self):
         """Getter for series title"""
         return [serie.title for serie in self.series]
-    
+
     @cached_property
     def _secondary_legends(self):
         """Getter for series title on secondary y axis"""
@@ -168,7 +173,9 @@ class BaseGraph(object):
     @cached_property
     def _len(self):
         """Getter for the maximum series size"""
-        return max([len(serie.values) for serie in self.series + self.secondary_series] or [0])
+        return max([
+            len(serie.values)
+            for serie in self.all_series] or [0])
 
     @cached_property
     def _secondary_min(self):
@@ -197,7 +204,7 @@ class BaseGraph(object):
     @cached_property
     def _order(self):
         """Getter for the maximum series value"""
-        return len(self.series + self.secondary_series)
+        return len(self.all_series)
 
     def _draw(self):
         """Draw all the things"""

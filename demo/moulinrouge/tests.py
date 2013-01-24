@@ -181,6 +181,15 @@ def get_test_routes(app):
         bar.add('2', [4, 5, 6])
         return bar.render_response()
 
+    @app.route('/test/secondary/<chart>')
+    def test_secondary_for(chart):
+        chart = CHARTS_BY_NAME[chart]()
+        chart.add(10 * '1', [30, 20, 25])
+        chart.add(10 * '1b', [4, 5, 6], secondary=True)
+        chart.add(10 * '2b', [3, 0, 12], secondary=True)
+        chart.add(10 * '2', [8, 21, 5])
+        return chart.render_response()
+
     @app.route('/test/stacked')
     def test_stacked():
         stacked = StackedBar()
