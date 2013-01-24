@@ -28,7 +28,6 @@ from pygal.util import (
 from pygal.svg import Svg
 from pygal.util import cached_property, reverse_text_len
 from math import sin, cos, sqrt
-from itertools import chain
 
 
 class BaseGraph(object):
@@ -45,6 +44,7 @@ class BaseGraph(object):
         self.svg = Svg(self)
         self._x_labels = None
         self._y_labels = None
+        self._x_2nd_labels = None
         self._y_2nd_labels = None
         self.nodes = {}
         self.margin = Margin(*([20] * 4))
@@ -82,7 +82,7 @@ class BaseGraph(object):
 
     @property
     def all_series(self):
-        return chain(self.series, self.secondary_series)
+        return self.series + self.secondary_series
 
     @property
     def _format(self):
@@ -98,51 +98,53 @@ class BaseGraph(object):
 
     def _compute_margin(self):
         """Compute graph margins from set texts"""
-        if self.show_legend and self.series:
-            h, w = get_texts_box(
-                map(lambda x: truncate(x, self.truncate_legend or 15),
-                    cut(self.series, 'title')),
-                self.legend_font_size)
-            if self.legend_at_bottom:
-                h_max = max(h, self.legend_box_size)
-                self.margin.bottom += 10 + h_max * round(
-                    sqrt(self._order) - 1) * 1.5 + h_max
-            else:
-                self.margin.left += 10 + w + self.legend_box_size
-
-        if self.show_legend and self.secondary_series:
-            h, w = get_texts_box(
-                map(lambda x: truncate(x, self.truncate_legend or 15),
-                    cut(self.secondary_series, 'title')),
-                self.legend_font_size)
-            if self.legend_at_bottom:
-                h_max = max(h, self.legend_box_size)
-                self.margin.bottom += 10 + h_max * round(
-                    sqrt(self._order) - 1) * 1.5 + h_max
-            else:
-                self.margin.right += 10 + w + self.legend_box_size
+        for series_group in (self.series, self.secondary_series):
+            if self.show_legend and series_group:
+                h, w = get_texts_box(
+                    map(lambda x: truncate(x, self.truncate_legend or 15),
+                        cut(series_group, 'title')),
+                    self.legend_font_size)
+                if self.legend_at_bottom:
+                    h_max = max(h, self.legend_box_size)
+                    self.margin.bottom += 10 + h_max * round(
+                        sqrt(self._order) - 1) * 1.5 + h_max
+                else:
+                    if series_group is self.series:
+                        self.margin.left += 10 + w + self.legend_box_size
+                    else:
+                        self.margin.right += 10 + w + self.legend_box_size
 
         if self.title:
             h, _ = get_text_box(self.title[0], self.title_font_size)
             self.margin.top += len(self.title) * (10 + h)
 
-        if self._x_labels:
-            h, w = get_texts_box(
-                cut(self._x_labels), self.label_font_size)
-            self._x_labels_height = 10 + max(
-                w * sin(rad(self.x_label_rotation)), h)
-            self.margin.bottom += self._x_labels_height
-            if self.x_label_rotation:
-                self.margin.right = max(
-                    w * cos(rad(self.x_label_rotation)),
-                    self.margin.right)
-        else:
+        for xlabels in (self._x_labels, self._x_2nd_labels):
+            if xlabels:
+                h, w = get_texts_box(
+                    cut(xlabels), self.label_font_size)
+                self._x_labels_height = 10 + max(
+                    w * sin(rad(self.x_label_rotation)), h)
+                if xlabels is self._x_labels:
+                    self.margin.bottom += self._x_labels_height
+                else:
+                    self.margin.top += self._x_labels_height
+                if self.x_label_rotation:
+                    self.margin.right = max(
+                        w * cos(rad(self.x_label_rotation)),
+                        self.margin.right)
+        if not self._x_labels:
             self._x_labels_height = 0
-        if self._y_labels:
-            h, w = get_texts_box(
-                cut(self._y_labels), self.label_font_size)
-            self.margin.left += 10 + max(
-                w * cos(rad(self.y_label_rotation)), h)
+
+        for ylabels in (self._y_labels, self._y_2nd_labels):
+            if ylabels:
+                h, w = get_texts_box(
+                    cut(ylabels), self.label_font_size)
+                if ylabels is self._y_labels:
+                    self.margin.left += 10 + max(
+                        w * cos(rad(self.y_label_rotation)), h)
+                else:
+                    self.margin.right += 10 + max(
+                        w * cos(rad(self.y_label_rotation)), h)
 
     @cached_property
     def _legends(self):
@@ -209,6 +211,8 @@ class BaseGraph(object):
     def _draw(self):
         """Draw all the things"""
         self._compute()
+        self._compute_secondary()
+        self._post_compute()
         self._split_title()
         self._compute_margin()
         self._decorate()

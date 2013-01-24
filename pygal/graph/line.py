@@ -137,25 +137,6 @@ class Line(Graph):
         ) if not self.y_labels else map(float, self.y_labels)
 
         self._y_labels = zip(map(self._format, y_pos), y_pos)
-        # secondary y axis support
-        if self.secondary_series:
-            if self.include_x_axis:
-                ymin = min(self._secondary_min, 0)
-                ymax = max(self._secondary_max, 0)
-            else:
-                ymin = self._secondary_min
-                ymax = self._secondary_max
-            steps = len(y_pos)
-            left_range = abs(y_pos[-1] - y_pos[0])
-            right_range = abs(ymax - ymin)
-            scale = right_range / (steps - 1)
-            self._y_2nd_labels = [(self._format(ymin + i * scale), pos)
-                                  for i, pos in enumerate(y_pos)]
-
-            min_2nd = float(self._y_2nd_labels[0][0])
-            self._scale = left_range / right_range
-            self._scale_diff = y_pos[0]
-            self._scale_min_2nd = min_2nd
 
     def _plot(self):
         for index, serie in enumerate(self.series):

@@ -158,6 +158,26 @@ class Graph(BaseGraph):
                 text.attrib['transform'] = "rotate(%d %f %f)" % (
                     self.x_label_rotation, x, y)
 
+        if self._x_2nd_labels:
+            secondary_ax = self.svg.node(
+                self.nodes['plot'], class_="axis x x2")
+            for label, position in self._x_2nd_labels:
+                major = is_major(position)
+                # it is needed, to have the same structure as primary axis
+                guides = self.svg.node(secondary_ax, class_='guides')
+                x = self.view.x(position)
+                y = -5
+                text = self.svg.node(
+                    guides, 'text',
+                    x=x,
+                    y=y,
+                    class_='major' if major else ''
+                )
+                text.text = label
+                if self.x_label_rotation:
+                    text.attrib['transform'] = "rotate(%d %f %f)" % (
+                        -self.x_label_rotation, x, y)
+
     def _y_axis(self, draw_axes=True):
         """Make the y axis: labels and guides"""
         if not self._y_labels:
@@ -197,24 +217,24 @@ class Graph(BaseGraph):
                     self.y_label_rotation, x, y)
 
         if self._y_2nd_labels:
-                secondary_ax = self.svg.node(
-                    self.nodes['plot'], class_="axis y2")
-                for label, position in self._y_2nd_labels:
-                    major = is_major(position)
-                    # it is needed, to have the same structure as primary axis
-                    guides = self.svg.node(secondary_ax, class_='guides')
-                    x = self.view.width + 5
-                    y = self.view.y(position)
-                    text = self.svg.node(
-                        guides, 'text',
-                        x=x,
-                        y=y + .35 * self.label_font_size,
-                        class_='major' if major else ''
-                    )
-                    text.text = label
-                    if self.y_label_rotation:
-                        text.attrib['transform'] = "rotate(%d %f %f)" % (
-                            self.y_label_rotation, x, y)
+            secondary_ax = self.svg.node(
+                self.nodes['plot'], class_="axis y2")
+            for label, position in self._y_2nd_labels:
+                major = is_major(position)
+                # it is needed, to have the same structure as primary axis
+                guides = self.svg.node(secondary_ax, class_='guides')
+                x = self.view.width + 5
+                y = self.view.y(position)
+                text = self.svg.node(
+                    guides, 'text',
+                    x=x,
+                    y=y + .35 * self.label_font_size,
+                    class_='major' if major else ''
+                )
+                text.text = label
+                if self.y_label_rotation:
+                    text.attrib['transform'] = "rotate(%d %f %f)" % (
+                        self.y_label_rotation, x, y)
 
     def _legend(self):
         """Make the legend box"""
@@ -264,9 +284,9 @@ class Graph(BaseGraph):
             # draw secondary axis on right
             x = self.margin.left + self.view.width + 10
             if self._y_2nd_labels:
-                    h, w = get_texts_box(
-                        cut(self._y_labels), self.label_font_size)
-                    x += 10 + max(w * cos(rad(self.y_label_rotation)), h)
+                h, w = get_texts_box(
+                    cut(self._y_2nd_labels), self.label_font_size)
+                x += 10 + max(w * cos(rad(self.y_label_rotation)), h)
 
             y = self.margin.top + 10
 
@@ -388,3 +408,30 @@ class Graph(BaseGraph):
                 for i, v in enumerate(serie.values)]
             if self.interpolate:
                 serie.interpolated = self._interpolate(serie.values, x_pos)
+
+    def _compute_secondary(self):
+        # secondary y axis support
+        y_pos = zip(*self._y_labels)[1]
+
+        # secondary y axis support
+        if self.secondary_series:
+            if self.include_x_axis:
+                ymin = min(self._secondary_min, 0)
+                ymax = max(self._secondary_max, 0)
+            else:
+                ymin = self._secondary_min
+                ymax = self._secondary_max
+            steps = len(y_pos)
+            left_range = abs(y_pos[-1] - y_pos[0])
+            right_range = abs(ymax - ymin)
+            scale = right_range / (steps - 1)
+            self._y_2nd_labels = [(self._format(ymin + i * scale), pos)
+                                  for i, pos in enumerate(y_pos)]
+
+            min_2nd = float(self._y_2nd_labels[0][0])
+            self._scale = left_range / right_range
+            self._scale_diff = y_pos[0]
+            self._scale_min_2nd = min_2nd
+
+    def _post_compute(self):
+        pass

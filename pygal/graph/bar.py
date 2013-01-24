@@ -57,10 +57,17 @@ class Bar(Graph):
         transpose = swap if self.horizontal else ident
         return transpose((x + width / 2, y + height / 2))
 
-    def bar(self, serie_node, serie, index):
+    def bar(self, serie_node, serie, index, rescale=False):
         """Draw a bar graph for a serie"""
         bars = self.svg.node(serie_node['plot'], class_="bars")
-        for i, (x, y) in enumerate(serie.points):
+        if rescale and self.secondary_series:
+            points = [
+                (x, self._scale_diff + (y - self._scale_min_2nd) * self._scale)
+                for x, y in serie.points]
+        else:
+            points = serie.points
+
+        for i, (x, y) in enumerate(points):
             if None in (x, y) or (self.logarithmic and y <= 0):
                 continue
             metadata = serie.metadata.get(i)
@@ -100,3 +107,5 @@ class Bar(Graph):
     def _plot(self):
         for index, serie in enumerate(self.series):
             self.bar(self._serie(index), serie, index)
+        for index, serie in enumerate(self.secondary_series, len(self.series)):
+            self.bar(self._serie(index), serie, index, True)

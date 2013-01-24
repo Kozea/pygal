@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # This file is part of pygal
 from pygal import (
-    Bar, Gauge, Pyramid, Funnel, Dot, StackedBar,
+    Bar, Gauge, Pyramid, Funnel, Dot, StackedBar, XY,
     CHARTS_BY_NAME, Config, Line)
 from pygal.style import styles
 
@@ -183,11 +183,22 @@ def get_test_routes(app):
 
     @app.route('/test/secondary/<chart>')
     def test_secondary_for(chart):
-        chart = CHARTS_BY_NAME[chart]()
-        chart.add(10 * '1', [30, 20, 25])
-        chart.add(10 * '1b', [4, 5, 6], secondary=True)
+        chart = CHARTS_BY_NAME[chart](fill=True)
+        chart.x_label_rotation = 25
+        chart.y_label_rotation = 50
+        chart.add('1', [30, 20, 25])
+        chart.add(10 * '1b', [4000000, 5, 6], secondary=True)
         chart.add(10 * '2b', [3, 0, 12], secondary=True)
-        chart.add(10 * '2', [8, 21, 5])
+        chart.add('2', [8, 21, 5])
+        return chart.render_response()
+
+    @app.route('/test/secondary_xy')
+    def test_secondary_xy():
+        chart = XY()
+        chart.add(10 * '1', [(30, 5), (20, 12), (25, 4)])
+        chart.add(10 * '1b', [(4, 12), (5, 8), (6, 4)], secondary=True)
+        chart.add(10 * '2b', [(3, 24), (0, 17), (12, 9)], secondary=True)
+        chart.add(10 * '2', [(8, 23), (21, 1), (5, 0)])
         return chart.render_response()
 
     @app.route('/test/stacked')

@@ -34,7 +34,7 @@ class XY(Line):
 
     def _compute(self):
         xvals = [val[0]
-                 for serie in self.series
+                 for serie in self.all_series
                  for val in serie.values
                  if val[0] is not None]
         yvals = [val[1]
@@ -48,7 +48,7 @@ class XY(Line):
         else:
             rng = None
 
-        for serie in self.series:
+        for serie in self.all_series:
             serie.points = serie.values
             if self.interpolate and rng:
                 vals = zip(*sorted(
@@ -59,7 +59,7 @@ class XY(Line):
 
         if self.interpolate and rng:
             xvals = [val[0]
-                     for serie in self.series
+                     for serie in self.all_series
                      for val in serie.interpolated]
             yvals = [val[1]
                      for serie in self.series

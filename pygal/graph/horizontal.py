@@ -30,9 +30,10 @@ class HorizontalGraph(Graph):
         self.horizontal = True
         super(HorizontalGraph, self).__init__(*args, **kwargs)
 
-    def _compute(self):
-        super(HorizontalGraph, self)._compute()
+    def _post_compute(self):
         self._x_labels, self._y_labels = self._y_labels, self._x_labels
+        self._x_2nd_labels, self._y_2nd_labels = (
+            self._y_2nd_labels, self._x_2nd_labels)
 
     def _axes(self):
         self.view._force_vertical = True
