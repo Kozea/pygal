@@ -36,7 +36,7 @@ class Bar(Graph):
         self._x_ranges = None
         super(Bar, self).__init__(*args, **kwargs)
 
-    def _bar(self, parent, x, y, index, i, zero, shift=True):
+    def _bar(self, parent, x, y, index, i, zero, shift=True, secondary=False):
         width = (self.view.x(1) - self.view.x(0)) / self._len
         x, y = self.view((x, y))
         series_margin = width * self._series_margin
@@ -79,7 +79,7 @@ class Bar(Graph):
             val = self._format(serie.values[i])
 
             x_center, y_center = self._bar(
-                bar, x, y, index, i, self.zero)
+                bar, x, y, index, i, self.zero, secondary=rescale)
             self._tooltip_data(
                 bar, val, x_center, y_center, classes="centered")
             self._static_value(serie_node, val, x_center, y_center)
@@ -103,6 +103,32 @@ class Bar(Graph):
         self._x_labels = self.x_labels and zip(self.x_labels, [
             (i + .5) / self._len for i in range(self._len)])
         self._y_labels = zip(map(self._format, y_pos), y_pos)
+
+    def _compute_secondary(self):
+        if self.secondary_series:
+            y_pos = zip(*self._y_labels)[1]
+            ymin = self._secondary_min
+            ymax = self._secondary_max
+
+            min_0_ratio = (self.zero - self._box.ymin) / self._box.height
+            max_0_ratio = (self._box.ymax - self.zero) / self._box.height
+
+            new_ymax = (self.zero - ymin) * (1 / min_0_ratio - 1)
+            new_ymin = -(ymax - self.zero) * (1 / max_0_ratio - 1)
+            if ymax > self._box.ymax:
+                ymin = new_ymin
+            else:
+                ymax = new_ymax
+
+            left_range = abs(self._box.ymax - self._box.ymin)
+            right_range = abs(ymax - ymin)
+            self._scale = left_range / right_range
+            self._scale_diff = self._box.ymin
+            self._scale_min_2nd = ymin
+            self._y_2nd_labels = [
+                (self._format(self._box.xmin + y * right_range / left_range),
+                 y)
+                for y in y_pos]
 
     def _plot(self):
         for index, serie in enumerate(self.series):

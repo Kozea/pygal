@@ -184,12 +184,16 @@ def get_test_routes(app):
     @app.route('/test/secondary/<chart>')
     def test_secondary_for(chart):
         chart = CHARTS_BY_NAME[chart](fill=True)
+        chart.title = 'LOL ' * 23
+        chart.x_labels = 'abc'
         chart.x_label_rotation = 25
         chart.y_label_rotation = 50
-        chart.add('1', [30, 20, 25])
-        chart.add(10 * '1b', [4000000, 5, 6], secondary=True)
-        chart.add(10 * '2b', [3, 0, 12], secondary=True)
-        chart.add('2', [8, 21, 5])
+        chart.add('1', [30, 20, -2])
+        chart.add(10 * '1b', [-4, 50, 6], secondary=True)
+        chart.add(10 * '2b', [3, 30, -1], secondary=True)
+        chart.add('2', [8, 21, -0])
+        chart.add('3', [1, 2, 3])
+        chart.add('3b', [-1, 2, -3], secondary=True)
         return chart.render_response()
 
     @app.route('/test/secondary_xy')

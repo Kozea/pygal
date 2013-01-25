@@ -35,12 +35,13 @@ class VerticalPyramid(StackedBar):
     def _format(self, value):
         return super(VerticalPyramid, self)._format(abs(value))
 
-    def _get_separated_values(self):
+    def _get_separated_values(self, secondary=False):
+        series = self.secondary_series if secondary else self.series
         positive_vals = zip(*[serie.safe_values
-                              for index, serie in enumerate(self.series)
+                              for index, serie in enumerate(series)
                               if index % 2])
         negative_vals = zip(*[serie.safe_values
-                              for index, serie in enumerate(self.series)
+                              for index, serie in enumerate(series)
                               if not index % 2])
         return positive_vals, negative_vals
 
@@ -50,8 +51,38 @@ class VerticalPyramid(StackedBar):
         self._box.ymax = max(max(positive_sum), max(negative_sum))
         self._box.ymin = - self._box.ymax
 
-    def _bar(self, parent, x, y, index, i, zero, shift=True):
+    def _compute_secondary(self):
+        # Need refactoring
+        if self.secondary_series:
+            y_pos = zip(*self._y_labels)[1]
+            positive_vals, negative_vals = self._get_separated_values(True)
+            positive_sum = map(sum, positive_vals) or [self.zero]
+            negative_sum = map(sum, negative_vals) or [self.zero]
+            ymax = max(max(positive_sum), max(negative_sum))
+            ymin = -ymax
+
+            min_0_ratio = (self.zero - self._box.ymin) / self._box.height
+            max_0_ratio = (self._box.ymax - self.zero) / self._box.height
+
+            new_ymax = (self.zero - ymin) * (1 / min_0_ratio - 1)
+            new_ymin = -(ymax - self.zero) * (1 / max_0_ratio - 1)
+            if ymax > self._box.ymax:
+                ymin = new_ymin
+            else:
+                ymax = new_ymax
+
+            left_range = abs(self._box.ymax - self._box.ymin)
+            right_range = abs(ymax - ymin)
+            self._scale = left_range / right_range
+            self._scale_diff = self._box.ymin
+            self._scale_min_2nd = ymin
+            self._y_2nd_labels = [
+                (self._format(self._box.xmin + y * right_range / left_range),
+                 y)
+                for y in y_pos]
+
+    def _bar(self, parent, x, y, index, i, zero, shift=True, secondary=False):
         if index % 2:
             y = -y
         return super(VerticalPyramid, self)._bar(
-            parent, x, y, index, i, zero, False)
+            parent, x, y, index, i, zero, False, secondary)

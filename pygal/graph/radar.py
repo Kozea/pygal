@@ -117,7 +117,7 @@ class Radar(Line):
     def _compute(self):
         delta = 2 * pi / self._len if self._len else 0
         x_pos = [.5 * pi + i * delta for i in range(self._len + 1)]
-        for serie in self.series:
+        for serie in self.all_series:
             serie.points = [
                 (v, x_pos[i])
                 for i, v in enumerate(serie.values)]

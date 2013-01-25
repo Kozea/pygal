@@ -42,8 +42,9 @@ def pytest_generate_tests(metafunc):
             ])
 
 
-def make_data(chart, datas):
+def make_data(chart, datas, secondary=False):
     for data in datas:
         chart.add(data[0],
-                  data[1] if chart.__class__ == pygal.XY else cut(data[1]))
+                  data[1] if chart.__class__ == pygal.XY else cut(data[1]),
+                  secondary=secondary)
     return chart

@@ -411,10 +411,8 @@ class Graph(BaseGraph):
 
     def _compute_secondary(self):
         # secondary y axis support
-        y_pos = zip(*self._y_labels)[1]
-
-        # secondary y axis support
-        if self.secondary_series:
+        if self.secondary_series and self._y_labels:
+            y_pos = zip(*self._y_labels)[1]
             if self.include_x_axis:
                 ymin = min(self._secondary_min, 0)
                 ymax = max(self._secondary_max, 0)

@@ -23,7 +23,7 @@ Stacked Bar chart
 
 from __future__ import division
 from pygal.graph.bar import Bar
-from pygal.util import compute_scale
+from pygal.util import compute_scale, swap, ident
 from pygal.adapters import none_to_zero
 
 
@@ -32,8 +32,9 @@ class StackedBar(Bar):
 
     _adapters = [none_to_zero]
 
-    def _get_separated_values(self):
-        transposed = zip(*[serie.values for serie in self.series])
+    def _get_separated_values(self, secondary=False):
+        series = self.secondary_series if secondary else self.series
+        transposed = zip(*[serie.values for serie in series])
         positive_vals = [sum([
             val for val in vals
             if val is not None and val >= self.zero])
@@ -77,13 +78,50 @@ class StackedBar(Bar):
         self.negative_cumulation = [0] * self._len
         self.positive_cumulation = [0] * self._len
 
-    def _bar(self, parent, x, y, index, i, zero, shift=True):
-        cumulation = (self.negative_cumulation if y < self.zero else
-                      self.positive_cumulation)
+        if self.secondary_series:
+            positive_vals, negative_vals = self._get_separated_values(True)
+            self.secondary_negative_cumulation = [0] * self._len
+            self.secondary_positive_cumulation = [0] * self._len
+
+            # In case of pyramids
+            sum_ = lambda x: sum(x) if isinstance(x, tuple) else x
+            self._secondary_min = negative_vals and min(
+                sum_(min(negative_vals)), self.zero)
+            self._secondary_max = positive_vals and max(
+                sum_(max(positive_vals)), self.zero)
+
+    def _bar(self, parent, x, y, index, i, zero, shift=False, secondary=False):
+        if secondary:
+            cumulation = (self.secondary_negative_cumulation
+                          if y < self.zero else
+                          self.secondary_positive_cumulation)
+        else:
+            cumulation = (self.negative_cumulation
+                          if y < self.zero else
+                          self.positive_cumulation)
         zero = cumulation[i]
         cumulation[i] = zero + y
         if zero == 0:
             zero = self.zero
             y -= self.zero
-        return super(StackedBar, self)._bar(
-            parent, x, zero + y, index, i, zero, False)
+        y += zero
+
+        width = (self.view.x(1) - self.view.x(0)) / self._len
+        x, y = self.view((x, y))
+        series_margin = width * self._series_margin
+        x += series_margin
+        width -= 2 * series_margin
+        if self.secondary_series:
+            width /= 2
+            x += int(secondary) * width
+            serie_margin = width * self._serie_margin
+            x += serie_margin
+            width -= 2 * serie_margin
+        height = self.view.y(zero) - y
+        r = self.rounded_bars * 1 if self.rounded_bars else 0
+        self.svg.transposable_node(
+            parent, 'rect',
+            x=x, y=y, rx=r, ry=r, width=width, height=height,
+            class_='rect reactive tooltip-trigger')
+        transpose = swap if self.horizontal else ident
+        return transpose((x + width / 2, y + height / 2))
