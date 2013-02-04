@@ -22,58 +22,79 @@ XY Line graph
 """
 
 from __future__ import division
-from pygal.util import compute_scale
+from pygal.util import compute_scale, cached_property
 from pygal.graph.line import Line
 
 
 class XY(Line):
     """XY Line graph"""
 
+    @cached_property
+    def xvals(self):
+        return [val[0]
+                for serie in self.all_series
+                for val in serie.values
+                if val[0] is not None]
+
+    @cached_property
+    def yvals(self):
+        return [val[1]
+                for serie in self.series
+                for val in serie.values
+                if val[1] is not None]
+
+    def _has_data(self):
+        """Check if there is any data"""
+        return sum(
+            map(len, map(lambda s: s.safe_values, self.series))) != 0 and any((
+                sum(map(abs, self.xvals)) != 0,
+                sum(map(abs, self.yvals)) != 0))
+
     def _get_value(self, values, i):
         return 'x=%s, y=%s' % tuple(map(self._format, values[i]))
 
     def _compute(self):
-        xvals = [val[0]
-                 for serie in self.all_series
-                 for val in serie.values
-                 if val[0] is not None]
-        yvals = [val[1]
-                 for serie in self.series
-                 for val in serie.values
-                 if val[1] is not None]
-        if xvals:
-            xmin = min(xvals)
-            xmax = max(xvals)
-            rng = (xmax - xmin)
+        if self.xvals:
+            xmin = min(self.xvals)
+            xmax = max(self.xvals)
+            xrng = (xmax - xmin)
         else:
-            rng = None
+            xrng = None
+
+        if self.yvals:
+            ymin = min(self.yvals)
+            ymax = max(self.yvals)
+            yrng = (ymax - ymin)
+        else:
+            yrng = None
 
         for serie in self.all_series:
             serie.points = serie.values
-            if self.interpolate and rng:
+            if self.interpolate and xrng:
                 vals = zip(*sorted(
                     filter(lambda t: None not in t,
                            serie.points), key=lambda x: x[0]))
                 serie.interpolated = self._interpolate(
-                    vals[1], vals[0], xy=True, xy_xmin=xmin, xy_rng=rng)
+                    vals[1], vals[0], xy=True, xy_xmin=xmin, xy_rng=xrng)
 
-        if self.interpolate and rng:
-            xvals = [val[0]
-                     for serie in self.all_series
-                     for val in serie.interpolated]
-            yvals = [val[1]
-                     for serie in self.series
-                     for val in serie.interpolated]
-            if xvals:
-                xmin = min(xvals)
-                xmax = max(xvals)
-                rng = (xmax - xmin)
+        if self.interpolate and xrng:
+            self.xvals = [val[0]
+                          for serie in self.all_series
+                          for val in serie.interpolated]
+            self.yvals = [val[1]
+                          for serie in self.series
+                          for val in serie.interpolated]
+            if self.xvals:
+                xmin = min(self.xvals)
+                xmax = max(self.xvals)
+                xrng = (xmax - xmin)
             else:
-                rng = None
+                xrng = None
 
-        if rng:
-            self._box.xmin, self._box.xmax = min(xvals), max(xvals)
-            self._box.ymin, self._box.ymax = min(yvals), max(yvals)
+        if xrng:
+            self._box.xmin, self._box.xmax = min(self.xvals), max(self.xvals)
+        if yrng:
+            self._box.ymin, self._box.ymax = min(self.yvals), max(self.yvals)
 
         x_pos = compute_scale(
             self._box.xmin, self._box.xmax, self.logarithmic, self.order_min)
