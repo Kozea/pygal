@@ -299,6 +299,7 @@ def prepare_values(raw, config, cls):
     """Prepare the values to start with sane values"""
     if not raw:
         return
+
     adapters = list(cls._adapters) or [lambda x:x]
     if config.logarithmic:
         for fun in not_zero, positive:
@@ -333,7 +334,9 @@ def prepare_values(raw, config, cls):
                 value = raw_value
 
             if cls.__name__ == 'XY':
-                if not hasattr(value, '__iter__'):
+                if value is None:
+                    value = (None, None)
+                elif not hasattr(value, '__iter__'):
                     value = (value, config.zero)
                 value = map(adapter, value)
             else:
