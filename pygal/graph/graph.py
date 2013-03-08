@@ -198,6 +198,7 @@ class Graph(BaseGraph):
             ))
             x = -5
             y = self.view.y(position)
+            if not y: continue
             if draw_axes:
                 self.svg.node(
                     guides, 'path',
