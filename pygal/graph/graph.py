@@ -131,8 +131,25 @@ class Graph(BaseGraph):
                           d='M%f %f v%f' % (0, 0, self.view.height),
                           class_='line')
         lastlabel = self._x_labels[-1][0]
+        if self.x_labels_major:
+            x_labels_major = self.x_labels_major
+        elif self.x_labels_major_every:
+            x_labels_major = [self._x_labels[i][0] for i in xrange(
+                0, len(self._x_labels), self.x_labels_major_every)]
+        elif self.x_labels_major_count:
+            label_count = len(self._x_labels)
+            major_count = self.x_labels_major_count
+            if (major_count >= label_count):
+                x_labels_major = [label[0] for label in self._x_labels]
+            else:
+                x_labels_major = [self._x_labels[
+                    int(i * (label_count - 1) / (major_count - 1))][0]  
+                    for i in xrange(major_count)]
+        else:
+            x_labels_major = []
         for label, position in self._x_labels:
-            major = is_major(position)
+            major = label in x_labels_major
+            if not (self.show_minor_x_labels or major): continue
             guides = self.svg.node(axis, class_='guides')
             x = self.view.x(position)
             y = self.view.height + 5
@@ -162,7 +179,8 @@ class Graph(BaseGraph):
             secondary_ax = self.svg.node(
                 self.nodes['plot'], class_="axis x x2")
             for label, position in self._x_2nd_labels:
-                major = is_major(position)
+                major = label in x_labels_major
+                if not (self.show_minor_x_labels or major): continue
                 # it is needed, to have the same structure as primary axis
                 guides = self.svg.node(secondary_ax, class_='guides')
                 x = self.view.x(position)

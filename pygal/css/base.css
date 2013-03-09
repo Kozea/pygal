@@ -37,6 +37,11 @@
   font-size: {{ font_sizes.label }};
 }
 
+.axis text.major {
+  font-family: monospace;
+  font-size: {{ font_sizes.major_label }};
+}
+
 .series text {
   font-family: monospace;
   font-size: {{ font_sizes.value }};

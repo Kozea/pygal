@@ -140,10 +140,21 @@ class Config(object):
         "Leave it to None to disable x labels display.",
         str)
 
-    x_labels_num_limit = Key(None, int, "Label", 
-            "Limits the number of X labels, defaults to None",
-            "If none, there will be as many x labels as provided in x_labels. When provided - limits the number of X labels"
-            )
+    x_labels_major = Key(
+        None, list, "Label",
+        "X labels that will be marked major.",
+        str)
+
+    x_labels_major_every = Key(
+        None, int, "Label",
+        "Mark every n-th x label as major.")
+    
+    x_labels_major_count = Key(
+        None, int, "Label",
+        "Mark n evenly distributed labels as major.")
+
+    show_minor_x_labels = Key(
+        True, bool, "Label", "Set to false to hide x-labels not marked major")
 
     y_labels = Key(
         None, list, "Label",
@@ -198,6 +209,8 @@ class Config(object):
         "No data", str, "Text", "Text to display when no data is given")
 
     label_font_size = Key(10, int, "Text", "Label font size")
+    
+    major_label_font_size = Key(10, int, "Text", "Major label font size")
 
     value_font_size = Key(8, int, "Text", "Value font size")
 
