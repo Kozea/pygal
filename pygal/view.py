@@ -293,8 +293,8 @@ class LogView(View):
         self.width = width
         self.height = height
         self.box = box
-        self.log10_ymax = log10(self.box.ymax)
-        self.log10_ymin = log10(self.box.ymin)
+        self.log10_ymax = log10(self.box.ymax) if self.box.ymax > 0 else 0
+        self.log10_ymin = log10(self.box.ymin) if self.box.ymin > 0 else 0
         self.box.fix(False)
 
     # pylint: enable-msg=W0231

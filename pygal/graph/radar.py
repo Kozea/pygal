@@ -72,19 +72,39 @@ class Radar(Line):
         format_ = lambda x: '%f %f' % x
         center = self.view((0, 0))
         r = self._rmax
+        if self.x_labels_major:
+            x_labels_major = self.x_labels_major
+        elif self.x_labels_major_every:
+            x_labels_major = [self._x_labels[i][0] for i in xrange(
+                0, len(self._x_labels), self.x_labels_major_every)]
+        elif self.x_labels_major_count:
+            label_count = len(self._x_labels)
+            major_count = self.x_labels_major_count
+            if (major_count >= label_count):
+                x_labels_major = [label[0] for label in self._x_labels]
+            else:
+                x_labels_major = [self._x_labels[
+                    int(i * label_count / major_count)][0]  
+                    for i in xrange(major_count)]
+        else:
+            x_labels_major = []
+        
         for label, theta in self._x_labels:
+            major = label in x_labels_major
+            if not (self.show_minor_x_labels or major): continue
             guides = self.svg.node(axis, class_='guides')
             end = self.view((r, theta))
             self.svg.node(
                 guides, 'path',
                 d='M%s L%s' % (format_(center), format_(end)),
-                class_='line')
+                class_='%sline'%('major ' if major else ''))
             r_txt = (1 - self._box.__class__.margin) * self._box.ymax
             pos_text = self.view((r_txt, theta))
             text = self.svg.node(
                 guides, 'text',
                 x=pos_text[0],
-                y=pos_text[1])
+                y=pos_text[1],
+                class_='major' if major else '')
             text.text = label
             angle = - theta + pi / 2
             if cos(angle) < 0:
