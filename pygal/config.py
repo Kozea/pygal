@@ -143,12 +143,12 @@ class Config(object):
     x_labels_major = Key(
         None, list, "Label",
         "X labels that will be marked major.",
-        str)
+        subtype=str)
 
     x_labels_major_every = Key(
         None, int, "Label",
         "Mark every n-th x label as major.")
-    
+
     x_labels_major_count = Key(
         None, int, "Label",
         "Mark n evenly distributed labels as major.")
@@ -209,7 +209,7 @@ class Config(object):
         "No data", str, "Text", "Text to display when no data is given")
 
     label_font_size = Key(10, int, "Text", "Label font size")
-    
+
     major_label_font_size = Key(10, int, "Text", "Major label font size")
 
     value_font_size = Key(8, int, "Text", "Value font size")
