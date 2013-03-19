@@ -143,13 +143,14 @@ class Graph(BaseGraph):
                 x_labels_major = [label[0] for label in self._x_labels]
             else:
                 x_labels_major = [self._x_labels[
-                    int(i * (label_count - 1) / (major_count - 1))][0]  
+                    int(i * (label_count - 1) / (major_count - 1))][0]
                     for i in xrange(major_count)]
         else:
             x_labels_major = []
         for label, position in self._x_labels:
             major = label in x_labels_major
-            if not (self.show_minor_x_labels or major): continue
+            if not (self.show_minor_x_labels or major):
+                continue
             guides = self.svg.node(axis, class_='guides')
             x = self.view.x(position)
             y = self.view.height + 5
@@ -180,7 +181,8 @@ class Graph(BaseGraph):
                 self.nodes['plot'], class_="axis x x2")
             for label, position in self._x_2nd_labels:
                 major = label in x_labels_major
-                if not (self.show_minor_x_labels or major): continue
+                if not (self.show_minor_x_labels or major):
+                    continue
                 # it is needed, to have the same structure as primary axis
                 guides = self.svg.node(secondary_ax, class_='guides')
                 x = self.view.x(position)
@@ -216,7 +218,8 @@ class Graph(BaseGraph):
             ))
             x = -5
             y = self.view.y(position)
-            if not y: continue
+            if not y:
+                continue
             if draw_axes:
                 self.svg.node(
                     guides, 'path',
@@ -348,10 +351,13 @@ class Graph(BaseGraph):
     def _title(self):
         """Make the title"""
         if self.title:
+            title_node = self.svg.node(
+                self.nodes['graph'],
+                class_="titles")
             for i, title_line in enumerate(self.title, 1):
                 self.svg.node(
-                    self.nodes['graph'], 'text', class_='title',
-                    x=self.margin.left + self.view.width / 2,
+                    title_node, 'text', class_='title',
+                    x=self.width / 2,
                     y=i * (self.title_font_size + 10)
                 ).text = title_line
 
