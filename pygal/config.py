@@ -240,8 +240,8 @@ class Config(object):
 
     ############ Misc ############
     js = Key(
-        ('https://raw.github.com/Kozea/pygal.js/master/svg.jquery.js',
-         'https://raw.github.com/Kozea/pygal.js/master/pygal-tooltips.js'),
+        ('http://kozea.github.com/pygal.js/javascripts/svg.jquery.js',
+         'http://kozea.github.com/pygal.js/javascripts/pygal-tooltips.js'),
         list, "Misc", "List of js file",
         "It can be a filepath or an external link",
         str)

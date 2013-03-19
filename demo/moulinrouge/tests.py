@@ -54,7 +54,7 @@ def get_test_routes(app):
     @app.route('/test/long_title')
     def test_long_title():
         bar = Bar()
-        bar.add('Loooooooooooooooooooooooooooooooooool', [2, None, 12])
+        bar.add('Looooooooooooooooooooooooooooooooooong', [2, None, 12])
         bar.title = (
             '1 12 123 1234 12345 123456 1234567 12345678 123456789 1234567890 '
             '12345678901 123456789012 1234567890123 12345678901234 '
@@ -62,7 +62,17 @@ def get_test_routes(app):
             '123456789012345678 1234567890123456789 12345678901234567890 '
             '123456789012345 1234567890123456 12345678901234567 '
             '12345678901 123456789012 1234567890123 12345678901234 '
-            '1 12 123 1234 12345 123456 1234567 12345678 123456789 1234567890 ')
+            '1 12 123 1234 12345 123456 1234567 12345678 123456789 1234567890')
+        return bar.render_response()
+
+    @app.route('/test/long_labels')
+    def test_long_labels():
+        bar = Bar()
+        bar.add('Long', [2, None, 12])
+        bar.title = (
+            '1 12 123 1234 12345 123456 1234567 12345678 123456789 1234567890')
+        bar.x_labels = 'a' * 100, 'b ' * 50, 'cc ! ' * 20
+        bar.x_label_rotation = 45
         return bar.render_response()
 
     @app.route('/test/none')
