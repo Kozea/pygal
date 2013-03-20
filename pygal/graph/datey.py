@@ -22,8 +22,18 @@
 DateY graph
 
 Example :
+import pygal
+from datetime import datetime,timedelta
 
-
+def jour(n) :
+    return datetime(year=2013,month=1,day=1)+timedelta(days=n)
+    
+x=(1,20,35,54,345,898)
+x=tuple(map(jour,x))
+y=(1,3,4,2,3,1)
+graph=pygal.DateY(x_label_rotation=20)
+graph.add("graph1",list(zip(x,y))+[None,None])
+graph.render_in_browser()   
 """
 
 
