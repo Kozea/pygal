@@ -333,7 +333,7 @@ def prepare_values(raw, config, cls):
             else:
                 value = raw_value
 
-            if cls.__name__ == 'XY':
+            if cls.__name__ == 'XY' or cls.__name__ == 'DateY':
                 if value is None:
                     value = (None, None)
                 elif not hasattr(value, '__iter__'):
