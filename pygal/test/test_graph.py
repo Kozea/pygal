@@ -64,7 +64,7 @@ def test_render_to_png(Chart, datas):
 
 def test_metadata(Chart):
     chart = Chart()
-    v = range(1, 8)
+    v = range(7)
     if Chart == pygal.XY:
         v = map(lambda x: (x, x + 1), v)
 
@@ -86,7 +86,11 @@ def test_metadata(Chart):
             'Five', 'http://7.example.com/', 'Seven'):
         assert md in cut(q('desc'), 'text')
 
-    assert len(v) == len(q('.tooltip-trigger').siblings('.value'))
+    if Chart == pygal.Pie:
+        # Slices with value 0 are not rendered
+        assert len(v) - 1 == len(q('.tooltip-trigger').siblings('.value'))
+    else:
+        assert len(v) == len(q('.tooltip-trigger').siblings('.value'))
 
 
 def test_empty_lists(Chart):
