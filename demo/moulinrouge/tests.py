@@ -2,7 +2,7 @@
 # This file is part of pygal
 from pygal import (
     Bar, Gauge, Pyramid, Funnel, Dot, StackedBar, XY,
-    CHARTS_BY_NAME, Config, Line)
+    CHARTS_BY_NAME, Config, Line, DateY)
 from pygal.style import styles
 
 
@@ -247,5 +247,18 @@ def get_test_routes(app):
         stacked.add('1', [1, 2, 3])
         stacked.add('2', [4, 5, 6])
         return stacked.render_response()
+
+    @app.route('/test/datey')
+    def test_datey():
+        from datetime import datetime
+        datey = DateY(show_dots=False)
+        datey.add('1', [
+            (datetime(2011, 12, 21), 10),
+            (datetime(2013, 4, 8), 12),
+            (datetime(2010, 2, 28), 2)
+        ])
+        datey.add('2', [(12, 4), (219, 8), (928, 6)])
+        datey.x_label_rotation = 25
+        return datey.render_response()
 
     return filter(lambda x: x.startswith('test'), locals())

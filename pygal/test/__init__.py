@@ -19,6 +19,7 @@
 
 import pygal
 from pygal.util import cut
+from datetime import datetime
 
 
 def get_data(i):
@@ -43,8 +44,16 @@ def pytest_generate_tests(metafunc):
 
 
 def make_data(chart, datas, secondary=False):
+    def get(data):
+        if isinstance(chart, pygal.XY):
+            if isinstance(chart, pygal.DateY):
+                # Convert to a credible datetime
+                return datetime.fromtimestamp(1360000000 + data * 987654)
+            return data
+        return cut(data)
+
     for data in datas:
         chart.add(data[0],
-                  data[1] if chart.__class__ == pygal.XY else cut(data[1]),
+                  get(data[1]),
                   secondary=secondary)
     return chart

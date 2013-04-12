@@ -20,6 +20,8 @@
 Value adapters to use when a chart doesn't accept all value types
 
 """
+import datetime
+from numbers import Number
 
 
 def positive(x):
@@ -38,3 +40,14 @@ def not_zero(x):
 
 def none_to_zero(x):
     return x or 0
+
+
+def date(x):
+    # Make int work for date graphs by counting days number from now
+    if isinstance(x, Number):
+        try:
+            d = datetime.date.today() + datetime.timedelta(days=x)
+            return datetime.datetime.combine(d, datetime.time(0, 0, 0))
+        except OverflowError:
+            return None
+    return x

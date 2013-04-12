@@ -27,46 +27,52 @@ from datetime import datetime,timedelta
 
 def jour(n) :
     return datetime(year=2013,month=1,day=1)+timedelta(days=n)
-    
+
 x=(1,20,35,54,345,898)
 x=tuple(map(jour,x))
 y=(1,3,4,2,3,1)
 graph=pygal.DateY(x_label_rotation=20)
 graph.add("graph1",list(zip(x,y))+[None,None])
-graph.render_in_browser()   
+graph.render_in_browser()
 """
 
-
+from pygal.adapters import date
 from pygal.util import compute_scale
-from pygal.graph.line import Line
-from pygal.graph.xy import XY 
+from pygal.graph.xy import XY
 import datetime
+
 
 class DateY(XY):
     """ DateY Graph """
-    _offset=datetime.datetime(year=2000,month=1,day=1)
-    def _todate(self, d) :
-        """ Converts  a number to a date """
-        return str(self._offset+datetime.timedelta(seconds=d))
-    def _tonumber(self,d) :
+    _offset = datetime.datetime(year=2000, month=1, day=1)
+    _adapters = [date]
+
+    def _todate(self, d):
+        """ Converts a number to a date """
+        return str(self._offset + datetime.timedelta(seconds=d))
+
+    def _tonumber(self, d):
         """ Converts a date to a number """
-        if d==None: return None
-        return  (d-self._offset).total_seconds()
+        if d is None:
+            return None
+        return  (d - self._offset).total_seconds()
 
     def _get_value(self, values, i):
-        return 'x=%s, y=%s' % (self._todate(values[i][0]),self._format(values[i][1]))
+        return 'x=%s, y=%s' % (
+            self._todate(values[i][0]), self._format(values[i][1]))
 
     def _compute(self):
         # Approximatively the same code as in XY.
         # The only difference is the transformation of dates to numbers
-        # (beginning) and the reversed transforamtion to dates (end)
+        # (beginning) and the reversed transformation to dates (end)
         self._offset = min([val[0]
-                 for serie in self.series
-                 for val in serie.values
-                 if val[0] is not None])
-        for serie in self.series :
-            serie.values=[(self._tonumber(v[0]),v[1]) for v in serie.values]
-        
+                            for serie in self.series
+                            for val in serie.values
+                            if val[0] is not None]
+                           or [datetime.datetime.fromtimestamp(0)])
+        for serie in self.series:
+            serie.values = [(self._tonumber(v[0]), v[1]) for v in serie.values]
+
         xvals = [val[0]
                  for serie in self.series
                  for val in serie.values
@@ -86,7 +92,8 @@ class DateY(XY):
             serie.points = serie.values
             if self.interpolate and rng:
                 vals = list(zip(*sorted(
-                    [t for t in serie.points if None not in t], key=lambda x: x[0])))
+                    [t for t in serie.points if None not in t],
+                    key=lambda x: x[0])))
                 serie.interpolated = self._interpolate(
                     vals[1], vals[0], xy=True, xy_xmin=xmin, xy_rng=rng)
 
