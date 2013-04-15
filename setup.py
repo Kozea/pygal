@@ -32,7 +32,7 @@ setup(
     author="Kozea",
     url="http://pygal.org/",
     author_email="florian.mounier@kozea.fr",
-    license="GNU LGPL v3",
+    license="GNU LGPL v3+",
     platforms="Any",
     packages=find_packages(),
     provides=['pygal'],
@@ -48,7 +48,7 @@ setup(
         "Environment :: Console",
         "Intended Audience :: End Users/Desktop",
         "License :: OSI Approved :: "
-        "GNU Library or Lesser General Public License (LGPL)",
+        "GNU Lesser General Public License v3 or later (LGPLv3+)",
         "Operating System :: OS Independent",
         "Programming Language :: Python :: 2",
         "Programming Language :: Python :: 3",
