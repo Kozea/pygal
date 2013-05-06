@@ -267,7 +267,7 @@ class Graph(BaseGraph):
             x = self.margin.left + 10
             y = (self.margin.top + self.view.height +
                  self._x_labels_height + 10)
-            cols = ceil(sqrt(self._order))
+            cols = ceil(sqrt(self._order)) or 1
 
             if not truncation:
                 available_space = self.view.width / cols - (
