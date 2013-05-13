@@ -109,4 +109,28 @@ text.no_data {
   fill: {{ style.foreground_light }};
 }
 
+.country {
+  fill: {{ style.primary }};
+  stroke: {{ style.primary }};
+  fill-opacity: .1;
+  opacity: {{ style.opacity }};
+}
+
+.country:hover {
+  opacity: {{ style.opacity_hover }};
+}
+
+.lake {
+  fill: {{ style.foreground_dark }};
+}
+
+.borders {
+  fill: none;
+  stroke: {{ style.foreground_light }};
+  stroke-width: 0.3;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
 {{ style.colors }}
+

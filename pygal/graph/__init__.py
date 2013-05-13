@@ -36,5 +36,6 @@ CHARTS_NAMES = [
     'VerticalPyramid',
     'Dot',
     'Gauge',
-    'DateY'
+    'DateY',
+    'Worldmap'
 ]

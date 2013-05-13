@@ -40,7 +40,7 @@ setup(
     keywords=[
         "svg", "chart", "graph", "diagram", "plot", "histogram", "kiviat"],
     tests_require=["pytest", "pyquery", "flask", "cairosvg"],
-    package_data={'pygal': ['css/*', 'js/*']},
+    package_data={'pygal': ['css/*', 'graph/worldmap.svg']},
     install_requires=['lxml'],
     use_2to3=True,
     classifiers=[

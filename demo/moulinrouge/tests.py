@@ -2,7 +2,7 @@
 # This file is part of pygal
 from pygal import (
     Bar, Gauge, Pyramid, Funnel, Dot, StackedBar, XY,
-    CHARTS_BY_NAME, Config, Line, DateY)
+    CHARTS_BY_NAME, Config, Line, DateY, Worldmap)
 from pygal.style import styles
 
 
@@ -260,5 +260,14 @@ def get_test_routes(app):
         datey.add('2', [(12, 4), (219, 8), (928, 6)])
         datey.x_label_rotation = 25
         return datey.render_response()
+
+    @app.route('/test/worldmap')
+    def test_worldmap():
+        map = Worldmap()
+        map.add('fr', [13])
+        map.add('us', [10])
+        map.add('jp', [1])
+        map.add('ru', [7])
+        return map.render_response()
 
     return filter(lambda x: x.startswith('test'), locals())
