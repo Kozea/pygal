@@ -39,8 +39,10 @@ def interpolation(x, y, kind):
     if len(y) < len(x):
         x = x[:len(y)]
 
-    x, y = zip(*filter(lambda t: None not in t, zip(x, y)))
-
+    pack = zip(*filter(lambda t: None not in t, zip(x, y)))
+    if len(pack) == 0:
+        return ident
+    x, y = pack
     if len(x) < 2:
         return ident
     if isinstance(kind, int):
