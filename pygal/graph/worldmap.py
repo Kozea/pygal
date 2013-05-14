@@ -74,7 +74,7 @@ class Worldmap(Graph):
                 if max_ == min_:
                     ratio = 1
                 else:
-                    ratio = .3 + .7 * value / (max_ - min_)
+                    ratio = .3 + .7 * (value - min_) / (max_ - min_)
                 country = map.find('.//*[@id="%s"]' % country_code)
                 if country is None:
                     continue
