@@ -266,8 +266,23 @@ def get_test_routes(app):
         import random
         map = Worldmap(style=random.choice(styles.values()))
 
-        map.add('1st', [('fr', 13), ('us', 10)])
-        map.add('2nd', [('jp', 1), ('ru', 7)])
+        map.add('1st', [('fr', 100), ('us', 10)])
+        map.add('2nd', [('jp', 1), ('ru', 7), ('uk', 0)])
+        map.add('3rd', ['ch', 'cz', 'ca', 'cn'])
+        map.add('4th', {'br': 12, 'bo': 1, 'bu': 23})
+        map.add('5th', [{
+            'value': ('tw', 10),
+            'label': 'First label',
+            'xlink': 'http://google.com?q=tw'
+        }, {
+            'value': ('bw', 20),
+            'label': 'Second one',
+            'xlink': 'http://google.com?q=bw'
+        }, {
+            'value': ('mw', 40),
+            'label': 'Last'
+        }])
+        map.add('6th', [3, 5, 34, 12])
         return map.render_response()
 
     return filter(lambda x: x.startswith('test'), locals())

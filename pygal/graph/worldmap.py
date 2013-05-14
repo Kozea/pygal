@@ -22,9 +22,10 @@ Worldmap chart
 """
 
 from __future__ import division
-from pygal.util import cut, cached_property
+from pygal.util import cut, cached_property, decorate
 from pygal.graph.graph import Graph
-from pygal.adapters import positive, none_to_zero
+from pygal.i18n import COUNTRIES
+from pygal.adapters import int_to_country
 from lxml import etree
 import os
 
@@ -37,6 +38,9 @@ with open(os.path.join(
 class Worldmap(Graph):
     """Worldmap graph"""
     _dual = True
+    x_labels = COUNTRIES.keys()
+    country_names = COUNTRIES
+    _adapters = [int_to_country]
 
     @cached_property
     def countries(self):
@@ -59,22 +63,42 @@ class Worldmap(Graph):
         map.set('height', str(self.view.height))
 
         for i, serie in enumerate(self.series):
-            min_ = min(cut(serie.values, 1))
-            max_ = max(cut(serie.values, 1))
-            for country, value in serie.values:
+            safe_vals = filter(lambda x: x is not None, cut(serie.values, 1))
+            if not safe_vals:
+                continue
+            min_ = min(safe_vals)
+            max_ = max(safe_vals)
+            for j, (country_code, value) in enumerate(serie.values):
                 if value is None:
                     continue
-                ratio = value / (max_ - min_)
-                country = map.find('.//*[@id="%s"]' % country)
+                if max_ == min_:
+                    ratio = 1
+                else:
+                    ratio = .3 + .7 * value / (max_ - min_)
+                country = map.find('.//*[@id="%s"]' % country_code)
                 if country is None:
                     continue
                 cls = country.get('class', '').split(' ')
                 cls.append('color-%d' % i)
+                cls.append('tooltip-trigger')
+                cls.append('reactive')
                 country.set('class', ' '.join(cls))
                 country.set(
                     'style', 'fill-opacity: %f' % (
                         ratio))
-                title = country[0]
-                title.text = (title.text or '?') + ': %d' % value
+
+                metadata = serie.metadata.get(j)
+                if metadata:
+                    parent = country.getparent()
+                    node = decorate(self.svg, country, metadata)
+                    if node != country:
+                        country.remove(node)
+                        index = parent.index(country)
+                        parent.remove(country)
+                        node.append(country)
+                        parent.insert(index, node)
+
+                self.svg.node(country, 'title').text = '%s: %d' % (
+                    self.country_names[country_code], value)
 
         self.nodes['plot'].append(map)

@@ -22,6 +22,7 @@ Value adapters to use when a chart doesn't accept all value types
 """
 import datetime
 from numbers import Number
+from pygal.i18n import COUNTRIES
 
 
 def positive(x):
@@ -40,6 +41,18 @@ def not_zero(x):
 
 def none_to_zero(x):
     return x or 0
+
+
+def int_to_country(x):
+    # This is used for test compatibility
+    if isinstance(x, Number):
+        try:
+            x = int(x)
+        except:
+            return x
+        if x >= 0 and x < len(COUNTRIES):
+            return COUNTRIES.keys()[x]
+    return x
 
 
 def date(x):

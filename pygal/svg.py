@@ -49,11 +49,13 @@ class Svg(object):
                 'xlink': 'http://www.w3.org/1999/xlink',
             })
         self.root.append(
-            etree.Comment(u'Generated with pygal %s ©Kozea 2012 on %s' % (
+            etree.Comment(u'Generated with pygal %s ©Kozea 2011-2013 on %s' % (
                 __version__, date.today().isoformat())))
         self.root.append(etree.Comment(u'http://pygal.org'))
         self.root.append(etree.Comment(u'http://github.com/Kozea/pygal'))
         self.defs = self.node(tag='defs')
+        self.title = self.node(tag='title')
+        self.title.text = graph.title or 'Pygal'
 
     def add_styles(self):
         """Add the css to the svg"""

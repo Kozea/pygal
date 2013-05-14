@@ -208,6 +208,7 @@ def decorate(svg, node, metadata):
         if not isinstance(xlink, dict):
             xlink = {'href': xlink, 'target': '_blank'}
         node = svg.node(node, 'a', **xlink)
+
     for key, value in metadata.items():
         if key == 'xlink' and isinstance(value, dict):
             value = value.get('href', value)
@@ -298,6 +299,11 @@ from pygal.serie import Serie
 def prepare_values(raw, config, cls):
     """Prepare the values to start with sane values"""
     from pygal.graph.datey import DateY
+    from pygal.graph.worldmap import Worldmap
+    if config.x_labels is None and hasattr(cls, 'x_labels'):
+        config.x_labels = cls.x_labels
+    if config.zero == 0 and issubclass(cls, Worldmap):
+        config.zero = 1
 
     if not raw:
         return
@@ -317,14 +323,16 @@ def prepare_values(raw, config, cls):
         metadata = {}
         values = []
         if isinstance(raw_values, dict):
-            value_list = [None] * width
-            for k, v in raw_values.items():
-                if k in config.x_labels:
-                    value_list[config.x_labels.index(k)] = v
-            raw_values = value_list
+            if issubclass(cls, Worldmap):
+                raw_values = raw_values.items()
+            else:
+                value_list = [None] * width
+                for k, v in raw_values.items():
+                    if k in config.x_labels:
+                        value_list[config.x_labels.index(k)] = v
+                raw_values = value_list
         else:
             raw_values = list(raw_values)
-
         for index, raw_value in enumerate(
                 raw_values + (
                     (width - len(raw_values)) * [None]  # aligning values
@@ -340,7 +348,7 @@ def prepare_values(raw, config, cls):
                     value = (None, None)
                 elif not hasattr(value, '__iter__'):
                     value = (value, config.zero)
-                if issubclass(cls, DateY):
+                if issubclass(cls, DateY) or issubclass(cls, Worldmap):
                     value = (adapter(value[0]), value[1])
                 else:
                     value = map(adapter, value)

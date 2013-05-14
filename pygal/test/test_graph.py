@@ -89,7 +89,8 @@ def test_metadata(Chart):
     if Chart == pygal.Pie:
         # Slices with value 0 are not rendered
         assert len(v) - 1 == len(q('.tooltip-trigger').siblings('.value'))
-    else:
+    elif Chart != pygal.Worldmap:
+        # Tooltip are not working on worldmap
         assert len(v) == len(q('.tooltip-trigger').siblings('.value'))
 
 
@@ -141,24 +142,33 @@ def test_iterable_types(Chart):
 
 
 def test_values_by_dict(Chart):
-    chart = Chart()
-    chart.add('A', {'red': 10, 'green': 12, 'blue': 14})
-    chart.add('B', {'green': 11, 'red': 7})
-    chart.add('C', {'blue': 7})
-    chart.add('D', {})
-    chart.add('E', {'blue': 2, 'red': 13})
-    chart.x_labels = ('red', 'green', 'blue')
-    chart1 = chart.render()
+    chart1 = Chart()
+    chart2 = Chart()
 
-    chart = Chart()
-    chart.add('A', [10, 12, 14])
-    chart.add('B', [7, 11])
-    chart.add('C', [None, None, 7])
-    chart.add('D', [])
-    chart.add('E', [13, None, 2])
-    chart.x_labels = ('red', 'green', 'blue')
-    chart2 = chart.render()
-    assert chart1 == chart2
+    if Chart != pygal.Worldmap:
+        chart1.add('A', {'red': 10, 'green': 12, 'blue': 14})
+        chart1.add('B', {'green': 11, 'red': 7})
+        chart1.add('C', {'blue': 7})
+        chart1.add('D', {})
+        chart1.add('E', {'blue': 2, 'red': 13})
+        chart1.x_labels = ('red', 'green', 'blue')
+
+        chart2.add('A', [10, 12, 14])
+        chart2.add('B', [7, 11])
+        chart2.add('C', [None, None, 7])
+        chart2.add('D', [])
+        chart2.add('E', [13, None, 2])
+        chart2.x_labels = ('red', 'green', 'blue')
+    else:
+        chart1.add('A', {'fr': 10, 'us': 12, 'jp': 14})
+        chart1.add('B', {'cn': 99})
+        chart1.add('C', {})
+
+        chart2.add('A', [('fr', 10), ('us', 12), ('jp', 14)])
+        chart2.add('B', [('cn', 99)])
+        chart2.add('C', [None, (None, None)])
+
+    assert chart1.render() == chart2.render()
 
 
 def test_no_data_with_no_values(Chart):

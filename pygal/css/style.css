@@ -122,6 +122,7 @@ text.no_data {
 
 .country:hover {
   opacity: 1;
+  stroke-width: 10;
 }
 
 {{ style.colors }}
