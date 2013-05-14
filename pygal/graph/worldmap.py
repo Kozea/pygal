@@ -80,8 +80,6 @@ class Worldmap(Graph):
                     continue
                 cls = country.get('class', '').split(' ')
                 cls.append('color-%d' % i)
-                cls.append('tooltip-trigger')
-                cls.append('reactive')
                 country.set('class', ' '.join(cls))
                 country.set(
                     'style', 'fill-opacity: %f' % (
@@ -98,7 +96,15 @@ class Worldmap(Graph):
                         node.append(country)
                         parent.insert(index, node)
 
-                self.svg.node(country, 'title').text = '%s: %d' % (
+                last_node = len(country) > 0 and country[-1]
+                if last_node is not None and last_node.tag == 'title':
+                    title_node = last_node
+                    text = title_node.text + '\n'
+                else:
+                    title_node = self.svg.node(country, 'title')
+                    text = ''
+                title_node.text = text + '[%s] %s: %d' % (
+                    serie.title,
                     self.country_names[country_code], value)
 
         self.nodes['plot'].append(map)
