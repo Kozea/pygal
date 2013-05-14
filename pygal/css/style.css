@@ -110,27 +110,20 @@ text.no_data {
 }
 
 .country {
-  fill: {{ style.primary }};
-  stroke: {{ style.primary }};
-  fill-opacity: .1;
-  opacity: {{ style.opacity }};
+  fill: {{ style.foreground }};
+  stroke: {{ style.plot_background }} !important;
+  opacity: .9;
+  stroke-width: 3;
+  -webkit-transition: 250ms;
+  -moz-transition: 250ms;
+  -o-transition: 250ms;
+  transition: 250ms;
 }
 
 .country:hover {
-  opacity: {{ style.opacity_hover }};
-}
-
-.lake {
-  fill: {{ style.foreground_dark }};
-}
-
-.borders {
-  fill: none;
-  stroke: {{ style.foreground_light }};
-  stroke-width: 0.3;
-  stroke-linecap: round;
-  stroke-linejoin: round;
+  opacity: 1;
 }
 
 {{ style.colors }}
+
 

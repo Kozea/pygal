@@ -28,6 +28,7 @@ from pygal.graph.line import Line
 
 class XY(Line):
     """XY Line graph"""
+    _dual = True
 
     @cached_property
     def xvals(self):

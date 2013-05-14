@@ -22,7 +22,7 @@ Worldmap chart
 """
 
 from __future__ import division
-from pygal.util import cut
+from pygal.util import cut, cached_property
 from pygal.graph.graph import Graph
 from pygal.adapters import positive, none_to_zero
 from lxml import etree
@@ -36,25 +36,45 @@ with open(os.path.join(
 
 class Worldmap(Graph):
     """Worldmap graph"""
-    _adapters = [positive, none_to_zero]
+    _dual = True
+
+    @cached_property
+    def countries(self):
+        return [val[0]
+                for serie in self.all_series
+                for val in serie.values
+                if val[0] is not None]
+
+    @cached_property
+    def _values(self):
+        """Getter for series values (flattened)"""
+        return [val[1]
+                for serie in self.series
+                for val in serie.values
+                if val[1] is not None]
 
     def _plot(self):
         map = etree.fromstring(MAP)
         map.set('width', str(self.view.width))
         map.set('height', str(self.view.height))
-        sum_ = sum(cut(cut(self.series, 'values')))
 
         for i, serie in enumerate(self.series):
-            ratio = serie.values[0] / self._max
-            perc = serie.values[0] / sum_ if sum_ != 0 else 0
-            country = map.find('.//*[@id="%s"]' % serie.title)
-            if country is None:
-                continue
-            country.set(
-                'style', 'fill-opacity: %f' % (
-                    ratio))
-            title = country[0]
-            title.text = (title.text or '?') + ': %d (%s)' % (
-                serie.values[0], '{0:.2%}'.format(perc))
+            min_ = min(cut(serie.values, 1))
+            max_ = max(cut(serie.values, 1))
+            for country, value in serie.values:
+                if value is None:
+                    continue
+                ratio = value / (max_ - min_)
+                country = map.find('.//*[@id="%s"]' % country)
+                if country is None:
+                    continue
+                cls = country.get('class', '').split(' ')
+                cls.append('color-%d' % i)
+                country.set('class', ' '.join(cls))
+                country.set(
+                    'style', 'fill-opacity: %f' % (
+                        ratio))
+                title = country[0]
+                title.text = (title.text or '?') + ': %d' % value
 
         self.nodes['plot'].append(map)

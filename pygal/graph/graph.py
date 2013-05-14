@@ -33,6 +33,7 @@ from itertools import repeat, izip, chain
 
 class Graph(BaseGraph):
     """Graph super class containing generic common functions"""
+    _dual = False
 
     def _decorate(self):
         """Draw all decorations"""
@@ -50,7 +51,7 @@ class Graph(BaseGraph):
     def _set_view(self):
         """Assign a view to current graph"""
         if self.logarithmic:
-            if self.__class__.__name__ == 'XY':
+            if self._dual:
                 view_class = XYLogView
             else:
                 view_class = LogView

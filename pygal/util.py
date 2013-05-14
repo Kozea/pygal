@@ -297,7 +297,6 @@ from pygal.serie import Serie
 
 def prepare_values(raw, config, cls):
     """Prepare the values to start with sane values"""
-    from pygal.graph.xy import XY
     from pygal.graph.datey import DateY
 
     if not raw:
@@ -336,7 +335,7 @@ def prepare_values(raw, config, cls):
             else:
                 value = raw_value
 
-            if issubclass(cls, XY):
+            if cls._dual:
                 if value is None:
                     value = (None, None)
                 elif not hasattr(value, '__iter__'):

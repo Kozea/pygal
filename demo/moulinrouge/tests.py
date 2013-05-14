@@ -167,7 +167,7 @@ def get_test_routes(app):
     @app.route('/test/logarithmic/<chart>')
     def test_logarithmic_for(chart):
         graph = CHARTS_BY_NAME[chart](logarithmic=True)
-        if graph.__class__.__name__ == 'XY':
+        if isinstance(graph, CHARTS_BY_NAME['XY']):
             graph.add('xy', [
                 (.1, .234), (10, 243), (.001, 2), (1000000, 1231)])
         else:
@@ -263,11 +263,11 @@ def get_test_routes(app):
 
     @app.route('/test/worldmap')
     def test_worldmap():
-        map = Worldmap()
-        map.add('fr', [13])
-        map.add('us', [10])
-        map.add('jp', [1])
-        map.add('ru', [7])
+        import random
+        map = Worldmap(style=random.choice(styles.values()))
+
+        map.add('1st', [('fr', 13), ('us', 10)])
+        map.add('2nd', [('jp', 1), ('ru', 7)])
         return map.render_response()
 
     return filter(lambda x: x.startswith('test'), locals())

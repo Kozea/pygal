@@ -48,7 +48,6 @@ class Style(object):
         self.opacity_hover = opacity_hover
         self.transition = transition
         self._colors = colors
-        self.primary = colors[0]
 
     @property
     def colors(self):
