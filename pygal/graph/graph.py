@@ -432,8 +432,10 @@ class Graph(BaseGraph):
             serie.points = [
                 (x_pos[i], v)
                 for i, v in enumerate(serie.values)]
-            if self.interpolate:
+            if serie.points and self.interpolate:
                 serie.interpolated = self._interpolate(serie.values, x_pos)
+            else:
+                serie.interpolated = []
 
     def _compute_secondary(self):
         # secondary y axis support

@@ -152,11 +152,20 @@ def test_interpolation(Chart):
     assert len(q(".legend")) == 2
 
 
+def test_no_data_interpolation(Chart):
+    chart = Chart(interpolate='cubic')
+    q = chart.render_pyquery()
+    assert q(".text-overlay text").text() == "No data"
+
+
+def test_no_data_with_empty_serie_interpolation(Chart):
+    chart = Chart(interpolate='cubic')
+    chart.add('Serie', [])
+    q = chart.render_pyquery()
+    assert q(".text-overlay text").text() == "No data"
+
+
 def test_logarithmic_bad_interpolation():
-    try:
-        import scipy
-    except ImportError:
-        return
     line = Line(logarithmic=True, interpolate='cubic')
     line.add('_', [.001, .00000001, 1])
     q = line.render_pyquery()
