@@ -21,10 +21,12 @@ Various utils
 
 """
 from __future__ import division
+from pygal._compat import to_str
 import re
 from decimal import Decimal
 from math import floor, pi, log, log10, ceil
 from itertools import cycle
+from functools import reduce
 from pygal.adapters import not_zero, positive
 ORDERS = u"yzafpnµm kMGTPEZY"
 
@@ -78,7 +80,7 @@ def cut(list_, index=0):
         cut_ = lambda x: x[index]
     else:
         cut_ = lambda x: getattr(x, index)
-    return map(cut_, list_)
+    return list(map(cut_, list_))
 
 
 def rad(degrees):
@@ -213,10 +215,7 @@ def decorate(svg, node, metadata):
         if key == 'xlink' and isinstance(value, dict):
             value = value.get('href', value)
         if value:
-            if isinstance(value, unicode):
-                svg.node(node, 'desc', class_=key).text = value
-            else:
-                svg.node(node, 'desc', class_=key).text = str(value)
+            svg.node(node, 'desc', class_=key).text = to_str(value)
     return node
 
 
@@ -225,7 +224,7 @@ def cycle_fill(short_list, max_len):
     short_list = list(short_list)
     list_cycle = cycle(short_list)
     while len(short_list) < max_len:
-        short_list.append(list_cycle.next())
+        short_list.append(next(list_cycle))
     return short_list
 
 
@@ -305,6 +304,9 @@ def prepare_values(raw, config, cls):
     if config.zero == 0 and issubclass(cls, Worldmap):
         config.zero = 1
 
+    for key in ('x_labels', 'y_labels'):
+        if getattr(config, key):
+            setattr(config, key, list(getattr(config, key)))
     if not raw:
         return
 
@@ -316,6 +318,12 @@ def prepare_values(raw, config, cls):
         adapters = adapters + [positive, not_zero]
     adapter = reduce(compose, adapters) if not config.strict else ident
     series = []
+
+    raw = [(
+        title,
+        list(raw_values) if not isinstance(raw_values, dict) else raw_values
+    ) for title, raw_values in raw]
+
     width = max([len(values) for _, values in raw] +
                 [len(config.x_labels or [])])
 
@@ -324,15 +332,14 @@ def prepare_values(raw, config, cls):
         values = []
         if isinstance(raw_values, dict):
             if issubclass(cls, Worldmap):
-                raw_values = raw_values.items()
+                raw_values = list(raw_values.items())
             else:
                 value_list = [None] * width
                 for k, v in raw_values.items():
                     if k in config.x_labels:
                         value_list[config.x_labels.index(k)] = v
                 raw_values = value_list
-        else:
-            raw_values = list(raw_values)
+
         for index, raw_value in enumerate(
                 raw_values + (
                     (width - len(raw_values)) * [None]  # aligning values
@@ -351,7 +358,7 @@ def prepare_values(raw, config, cls):
                 if issubclass(cls, DateY) or issubclass(cls, Worldmap):
                     value = (adapter(value[0]), value[1])
                 else:
-                    value = map(adapter, value)
+                    value = list(map(adapter, value))
             else:
                 value = adapter(value)
 

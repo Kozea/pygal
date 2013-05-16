@@ -51,7 +51,7 @@ def int_to_country(x):
         except:
             return x
         if x >= 0 and x < len(COUNTRIES):
-            return COUNTRIES.keys()[x]
+            return list(COUNTRIES.keys())[x]
     return x
 
 

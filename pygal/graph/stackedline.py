@@ -46,7 +46,7 @@ class StackedLine(Line):
         for series_group in (self.series, self.secondary_series):
             accumulation = [0] * self._len
             for serie in series_group:
-                accumulation = map(sum, zip(accumulation, serie.values))
+                accumulation = list(map(sum, zip(accumulation, serie.values)))
                 serie.points = [
                     (x_pos[i], v)
                     for i, v in enumerate(accumulation)]

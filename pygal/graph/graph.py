@@ -28,7 +28,7 @@ from pygal.view import View, LogView, XYLogView
 from pygal.util import (
     is_major, truncate, reverse_text_len, get_texts_box, cut, rad)
 from math import isnan, pi, sqrt, ceil, cos
-from itertools import repeat, izip, chain
+from itertools import repeat, chain
 
 
 class Graph(BaseGraph):
@@ -296,13 +296,13 @@ class Graph(BaseGraph):
             # l - label
             # tf - whether it is secondary label
             gen = enumerate(enumerate(chain(
-                izip(self._legends, repeat(False)),
-                izip(self._secondary_legends, repeat(True)))))
+                zip(self._legends, repeat(False)),
+                zip(self._secondary_legends, repeat(True)))))
             secondary_legends = legends  # svg node is the same
         else:
             gen = enumerate(chain(
-                enumerate(izip(self._legends, repeat(False))),
-                enumerate(izip(self._secondary_legends, repeat(True)))))
+                enumerate(zip(self._legends, repeat(False))),
+                enumerate(zip(self._secondary_legends, repeat(True)))))
 
             # draw secondary axis on right
             x = self.margin.left + self.view.width + 10

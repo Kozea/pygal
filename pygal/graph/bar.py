@@ -100,9 +100,9 @@ class Bar(Graph):
             self._box.ymin, self._box.ymax, self.logarithmic, self.order_min
         ) if not self.y_labels else map(float, self.y_labels)
 
-        self._x_labels = self.x_labels and zip(self.x_labels, [
-            (i + .5) / self._len for i in range(self._len)])
-        self._y_labels = zip(map(self._format, y_pos), y_pos)
+        self._x_labels = self.x_labels and list(zip(self.x_labels, [
+            (i + .5) / self._len for i in range(self._len)]))
+        self._y_labels = list(zip(map(self._format, y_pos), y_pos))
 
     def _compute_secondary(self):
         if self.secondary_series:

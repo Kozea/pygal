@@ -66,7 +66,7 @@ def test_metadata(Chart):
     chart = Chart()
     v = range(7)
     if Chart == pygal.XY:
-        v = map(lambda x: (x, x + 1), v)
+        v = list(map(lambda x: (x, x + 1), v))
 
     chart.add('Serie with metadata', [
         v[0],

@@ -38,7 +38,7 @@ with open(os.path.join(
 class Worldmap(Graph):
     """Worldmap graph"""
     _dual = True
-    x_labels = COUNTRIES.keys()
+    x_labels = list(COUNTRIES.keys())
     country_names = COUNTRIES
     _adapters = [int_to_country]
 
@@ -63,7 +63,8 @@ class Worldmap(Graph):
         map.set('height', str(self.view.height))
 
         for i, serie in enumerate(self.series):
-            safe_vals = filter(lambda x: x is not None, cut(serie.values, 1))
+            safe_vals = list(filter(
+                lambda x: x is not None, cut(serie.values, 1)))
             if not safe_vals:
                 continue
             min_ = min(safe_vals)

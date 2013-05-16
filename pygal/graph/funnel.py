@@ -87,9 +87,10 @@ class Funnel(Graph):
             self._box.ymin, self._box.ymax, self.logarithmic, self.order_min
         ) if not self.y_labels else map(float, self.y_labels)
 
-        self._x_labels = zip(cut(self.series, 'title'),
-                             map(lambda x: x - 1 / (2 * self._order), x_pos))
-        self._y_labels = zip(map(self._format, y_pos), y_pos)
+        self._x_labels = list(
+            zip(cut(self.series, 'title'),
+                map(lambda x: x - 1 / (2 * self._order), x_pos)))
+        self._y_labels = list(zip(map(self._format, y_pos), y_pos))
 
     def _plot(self):
         for index, serie in enumerate(self.series):

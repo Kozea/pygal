@@ -39,7 +39,7 @@ class Dot(Graph):
 
     def dot(self, serie_node, serie, r_max):
         """Draw a dot line"""
-        view_values = map(self.view, serie.points)
+        view_values = list(map(self.view, serie.points))
         for i, value in safe_enumerate(serie.values):
             x, y = view_values[i]
             size = r_max * value
@@ -69,8 +69,9 @@ class Dot(Graph):
                 (x_pos[i], y_pos[j])
                 for i in range(x_len)]
 
-        self._x_labels = self.x_labels and zip(self.x_labels, x_pos)
-        self._y_labels = zip(self.y_labels or cut(self.series, 'title'), y_pos)
+        self._x_labels = self.x_labels and list(zip(self.x_labels, x_pos))
+        self._y_labels = list(zip(
+            self.y_labels or cut(self.series, 'title'), y_pos))
 
     def _plot(self):
         r_max = min(

@@ -65,7 +65,7 @@ class Line(Graph):
                 for x, y in serie.points]
         else:
             points = serie.points
-        view_values = map(self.view, points)
+        view_values = list(map(self.view, points))
         if self.show_dots:
             for i, (x, y) in enumerate(view_values):
                 if None in (x, y):
@@ -95,7 +95,7 @@ class Line(Graph):
 
         if self.stroke:
             if self.interpolate:
-                view_values = map(self.view, serie.interpolated)
+                view_values = list(map(self.view, serie.interpolated))
             if self.fill:
                 view_values = self._fill(view_values)
             self.svg.line(
@@ -111,7 +111,7 @@ class Line(Graph):
         self._points(x_pos)
 
         if self.x_labels:
-            self._x_labels = zip(self.x_labels, x_pos)
+            self._x_labels = list(zip(self.x_labels, x_pos))
         else:
             self._x_labels = None
 
@@ -127,7 +127,7 @@ class Line(Graph):
             self._box.ymin, self._box.ymax, self.logarithmic, self.order_min
         ) if not self.y_labels else map(float, self.y_labels)
 
-        self._y_labels = zip(map(self._format, y_pos), y_pos)
+        self._y_labels = list(zip(map(self._format, y_pos), y_pos))
 
     def _plot(self):
         for index, serie in enumerate(self.series):

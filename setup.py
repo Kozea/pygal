@@ -42,7 +42,6 @@ setup(
     tests_require=["pytest", "pyquery", "flask", "cairosvg"],
     package_data={'pygal': ['css/*', 'graph/worldmap.svg']},
     install_requires=['lxml'],
-    use_2to3=True,
     classifiers=[
         "Development Status :: 4 - Beta",
         "Environment :: Console",

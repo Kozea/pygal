@@ -22,6 +22,7 @@ Svg helper
 """
 
 from __future__ import division
+from pygal._compat import urlparse, to_str
 import io
 import os
 import json
@@ -29,7 +30,6 @@ from datetime import date
 from numbers import Number
 from lxml import etree
 from math import cos, sin, pi
-from urlparse import urlparse
 from pygal.util import template, coord_format, minify_css
 from pygal import __version__
 
@@ -109,12 +109,12 @@ class Svg(object):
                 if in_attrib_and_number(pos):
                     attrib[pos] = attrib[pos] - attrib[dim]
 
-        for key, value in attrib.items():
+        for key, value in dict(attrib).items():
             if value is None:
                 del attrib[key]
-            elif not isinstance(value, basestring):
-                attrib[key] = str(value)
-            elif key.endswith('_'):
+
+            attrib[key] = to_str(value)
+            if key.endswith('_'):
                 attrib[key.rstrip('_')] = attrib[key]
                 del attrib[key]
             elif key == 'href':

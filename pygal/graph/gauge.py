@@ -112,7 +112,7 @@ class Gauge(Graph):
         x_pos = compute_scale(
             self.min_, self.max_, self.logarithmic, self.order_min
         )
-        self._x_labels = zip(map(self._format, x_pos), x_pos)
+        self._x_labels = list(zip(map(self._format, x_pos), x_pos))
 
     def _plot(self):
         for index, serie in enumerate(self.series):

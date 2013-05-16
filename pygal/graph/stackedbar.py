@@ -55,8 +55,8 @@ class StackedBar(Bar):
         self._compute_box(positive_vals, negative_vals)
 
         if self.logarithmic:
-            positive_vals = filter(lambda x: x > 0, positive_vals)
-            negative_vals = filter(lambda x: x > 0, negative_vals)
+            positive_vals = list(filter(lambda x: x > 0, positive_vals))
+            negative_vals = list(filter(lambda x: x > 0, negative_vals))
 
         positive_vals = positive_vals or [self.zero]
         negative_vals = negative_vals or [self.zero]
@@ -71,9 +71,9 @@ class StackedBar(Bar):
         ) if not self.y_labels else map(float, self.y_labels)
         self._x_ranges = zip(x_pos, x_pos[1:])
 
-        self._x_labels = self.x_labels and zip(self.x_labels, [
-            sum(x_range) / 2 for x_range in self._x_ranges])
-        self._y_labels = zip(map(self._format, y_pos), y_pos)
+        self._x_labels = self.x_labels and list(zip(self.x_labels, [
+            sum(x_range) / 2 for x_range in self._x_ranges]))
+        self._y_labels = list(zip(map(self._format, y_pos), y_pos))
 
         self.negative_cumulation = [0] * self._len
         self.positive_cumulation = [0] * self._len

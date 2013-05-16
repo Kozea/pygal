@@ -58,10 +58,10 @@ class BaseGraph(object):
             else:
                 get = lambda x: x
 
-            positive_values = filter(
+            positive_values = list(filter(
                 lambda x: x > 0,
                 [get(val)
-                 for serie in self.series for val in serie.safe_values])
+                 for serie in self.series for val in serie.safe_values]))
 
             self.zero = min(positive_values) if positive_values else 0
         self._draw()

@@ -166,8 +166,8 @@ class Radar(Line):
             max_scale=8
         ) if not self.y_labels else map(int, self.y_labels)
 
-        self._x_labels = self.x_labels and zip(self.x_labels, x_pos)
-        self._y_labels = zip(map(self._format, y_pos), y_pos)
+        self._x_labels = self.x_labels and list(zip(self.x_labels, x_pos))
+        self._y_labels = list(zip(map(self._format, y_pos), y_pos))
 
         self.x_pos = x_pos
         self._self_close = True

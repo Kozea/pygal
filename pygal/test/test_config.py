@@ -190,12 +190,12 @@ def test_human_readable():
     line = Line()
     line.add('_', [10 ** 4, 10 ** 5, 23 * 10 ** 4])
     q = line.render_pyquery()
-    assert q(".axis.y text").map(texts) == map(
-        str, map(float, range(20000, 240000, 20000)))
+    assert q(".axis.y text").map(texts) == list(map(
+        str, map(float, range(20000, 240000, 20000))))
     line.human_readable = True
     q = line.render_pyquery()
-    assert q(".axis.y text").map(texts) == map(
-        lambda x: '%dk' % x, range(20, 240, 20))
+    assert q(".axis.y text").map(texts) == list(map(
+        lambda x: '%dk' % x, range(20, 240, 20)))
 
 
 def test_show_legend():

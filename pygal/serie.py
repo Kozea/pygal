@@ -32,7 +32,7 @@ class Serie(object):
 
     @cached_property
     def safe_values(self):
-        return filter(lambda x: x is not None, self.values)
+        return list(filter(lambda x: x is not None, self.values))
 
 
 class Label(object):

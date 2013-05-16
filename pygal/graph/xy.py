@@ -72,9 +72,9 @@ class XY(Line):
         for serie in self.all_series:
             serie.points = serie.values
             if self.interpolate and xrng:
-                vals = zip(*sorted(
+                vals = list(zip(*sorted(
                     filter(lambda t: None not in t,
-                           serie.points), key=lambda x: x[0]))
+                           serie.points), key=lambda x: x[0])))
                 serie.interpolated = self._interpolate(
                     vals[1], vals[0], xy=True, xy_xmin=xmin, xy_rng=xrng)
 
@@ -102,5 +102,5 @@ class XY(Line):
         y_pos = compute_scale(
             self._box.ymin, self._box.ymax, self.logarithmic, self.order_min)
 
-        self._x_labels = zip(map(self._format, x_pos), x_pos)
-        self._y_labels = zip(map(self._format, y_pos), y_pos)
+        self._x_labels = list(zip(map(self._format, x_pos), x_pos))
+        self._y_labels = list(zip(map(self._format, y_pos), y_pos))

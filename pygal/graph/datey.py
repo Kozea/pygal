@@ -36,10 +36,10 @@ graph.add("graph1",list(zip(x,y))+[None,None])
 graph.render_in_browser()
 """
 
+from pygal._compat import total_seconds
 from pygal.adapters import date
 from pygal.util import compute_scale
 from pygal.graph.xy import XY
-from pygal.compat import total_seconds
 import datetime
 
 

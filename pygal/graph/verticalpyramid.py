@@ -43,11 +43,11 @@ class VerticalPyramid(StackedBar):
         negative_vals = zip(*[serie.safe_values
                               for index, serie in enumerate(series)
                               if not index % 2])
-        return positive_vals, negative_vals
+        return list(positive_vals), list(negative_vals)
 
     def _compute_box(self, positive_vals, negative_vals):
-        positive_sum = map(sum, positive_vals) or [self.zero]
-        negative_sum = map(sum, negative_vals) or [self.zero]
+        positive_sum = list(map(sum, positive_vals)) or [self.zero]
+        negative_sum = list(map(sum, negative_vals)) or [self.zero]
         self._box.ymax = max(max(positive_sum), max(negative_sum))
         self._box.ymin = - self._box.ymax
 
