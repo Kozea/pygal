@@ -2,7 +2,7 @@
 # This file is part of pygal
 #
 # A python svg graph plotting library
-# Copyright © 2012 Kozea
+# Copyright © 2012-2013 Kozea
 #
 # This library is free software: you can redistribute it and/or modify it under
 # the terms of the GNU Lesser General Public License as published by the Free
@@ -84,20 +84,21 @@ class Radar(Line):
                 x_labels_major = [label[0] for label in self._x_labels]
             else:
                 x_labels_major = [self._x_labels[
-                    int(i * label_count / major_count)][0]  
+                    int(i * label_count / major_count)][0]
                     for i in xrange(major_count)]
         else:
             x_labels_major = []
-        
+
         for label, theta in self._x_labels:
             major = label in x_labels_major
-            if not (self.show_minor_x_labels or major): continue
+            if not (self.show_minor_x_labels or major):
+                continue
             guides = self.svg.node(axis, class_='guides')
             end = self.view((r, theta))
             self.svg.node(
                 guides, 'path',
                 d='M%s L%s' % (format_(center), format_(end)),
-                class_='%sline'%('major ' if major else ''))
+                class_='%sline' % ('major ' if major else ''))
             r_txt = (1 - self._box.__class__.margin) * self._box.ymax
             pos_text = self.view((r_txt, theta))
             text = self.svg.node(

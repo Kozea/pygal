@@ -2,7 +2,7 @@
 # This file is part of pygal
 #
 # A python svg graph plotting library
-# Copyright © 2012 Kozea
+# Copyright © 2012-2013 Kozea
 #
 # This library is free software: you can redistribute it and/or modify it under
 # the terms of the GNU Lesser General Public License as published by the Free

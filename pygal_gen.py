@@ -3,7 +3,7 @@
 # This file is part of pygal
 #
 # A python svg graph plotting library
-# Copyright © 2012 Kozea
+# Copyright © 2012-2013 Kozea
 #
 # This library is free software: you can redistribute it and/or modify it under
 # the terms of the GNU Lesser General Public License as published by the Free
@@ -39,7 +39,7 @@ for key, val in pygal.config.Config.__dict__.items():
     if not key.startswith('_') and not hasattr(val, '__call__'):
         opt_name = key
         opts = {'type': str}
-        if val != None:
+        if val is not None:
             opts['type'] = type(val)
         elif 'labels' in key:
             opts['nargs'] = '+'

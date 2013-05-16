@@ -2,7 +2,7 @@
 # This file is part of pygal
 #
 # A python svg graph plotting library
-# Copyright © 2012 Kozea
+# Copyright © 2012-2013 Kozea
 #
 # This library is free software: you can redistribute it and/or modify it under
 # the terms of the GNU Lesser General Public License as published by the Free
@@ -17,7 +17,6 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with pygal. If not, see <http://www.gnu.org/licenses/>.
 from flask import Flask, render_template
-from logging import getLogger, INFO, DEBUG
 import pygal
 from pygal.config import Config
 from pygal.util import cut
@@ -35,8 +34,7 @@ def random_label():
     chars = string.letters + string.digits + u' àéèçêâäëï'
     return ''.join(
         [random.choice(chars)
-         for i in range(
-                 random.randrange(4, 30))])
+         for i in range(random.randrange(4, 30))])
 
 
 def random_value(min=0, max=15):
@@ -56,8 +54,8 @@ def create_app():
         for i in range(random.randrange(1, 10)):
             values = [(
                 random_value((-max, min)[random.randrange(0, 2)], max),
-                random_value((-max, min)[random.randrange(0, 2)], max))
-                      for i in range(data)]
+                random_value((-max, min)[random.randrange(0, 2)], max)
+            ) for i in range(data)]
             series.append((random_label(), values))
         return series
 
