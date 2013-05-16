@@ -38,7 +38,7 @@ def to_str(string):
 
 def u(s):
     if sys.version_info[0] == 2:
-        return unicode(s, "unicode_escape")
+        return s.decode('utf-8')
     return s
 
 
