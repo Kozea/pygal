@@ -17,6 +17,7 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with pygal. If not, see <http://www.gnu.org/licenses/>.
 from pygal import Line, Dot, Pie, Radar, Config
+from pygal._compat import u
 from pygal.test.utils import texts
 from pygal.test import pytest_generate_tests, make_data
 
@@ -222,6 +223,6 @@ def test_no_data():
     line = Line()
     q = line.render_pyquery()
     assert q(".text-overlay text").text() == "No data"
-    line.no_data_text = u"þæ®þæ€€&ĳ¿’€"
+    line.no_data_text = u("þæ®þæ€€&ĳ¿’€")
     q = line.render_pyquery()
-    assert q(".text-overlay text").text() == u"þæ®þæ€€&ĳ¿’€"
+    assert q(".text-overlay text").text() == u("þæ®þæ€€&ĳ¿’€")
