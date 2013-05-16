@@ -22,7 +22,7 @@ Svg helper
 """
 
 from __future__ import division
-from pygal._compat import urlparse, to_str
+from pygal._compat import urlparse, to_str, u
 import io
 import os
 import json
@@ -41,7 +41,7 @@ class Svg(object):
     def __init__(self, graph):
         self.graph = graph
         self.processing_instructions = [
-            etree.PI(u'xml', u"version='1.0' encoding='utf-8'")]
+            etree.PI(u('xml'), u("version='1.0' encoding='utf-8'"))]
         self.root = etree.Element(
             "{%s}svg" % self.ns,
             nsmap={
@@ -49,10 +49,11 @@ class Svg(object):
                 'xlink': 'http://www.w3.org/1999/xlink',
             })
         self.root.append(
-            etree.Comment(u'Generated with pygal %s ©Kozea 2011-2013 on %s' % (
-                __version__, date.today().isoformat())))
-        self.root.append(etree.Comment(u'http://pygal.org'))
-        self.root.append(etree.Comment(u'http://github.com/Kozea/pygal'))
+            etree.Comment(u(
+                'Generated with pygal %s ©Kozea 2011-2013 on %s' % (
+                __version__, date.today().isoformat()))))
+        self.root.append(etree.Comment(u('http://pygal.org')))
+        self.root.append(etree.Comment(u('http://github.com/Kozea/pygal')))
         self.defs = self.node(tag='defs')
         self.title = self.node(tag='title')
         self.title.text = graph.title or 'Pygal'
@@ -63,7 +64,7 @@ class Svg(object):
             if urlparse(css).scheme:
                 self.processing_instructions.append(
                     etree.PI(
-                        u'xml-stylesheet', u'href="%s"' % css))
+                        u('xml-stylesheet'), u('href="%s"' % css)))
             else:
                 if not os.path.exists(css):
                     css = os.path.join(

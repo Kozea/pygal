@@ -16,6 +16,7 @@
 #
 # You should have received a copy of the GNU Lesser General Public License
 # along with pygal. If not, see <http://www.gnu.org/licenses/>.
+from pystil._compat import u
 from pygal.util import (
     round_to_int, round_to_float, _swap_curly, template, humanize,
     is_major, truncate, minify_css)
@@ -46,9 +47,9 @@ def test_round_to_float():
 def test_swap_curly():
     for str in (
             'foo',
-            u'foo foo foo bar',
+            u('foo foo foo bar'),
             'foo béè b¡ð/ĳə˘©þß®~¯æ',
-            u'foo béè b¡ð/ĳə˘©þß®~¯æ'):
+            u('foo béè b¡ð/ĳə˘©þß®~¯æ')):
         assert _swap_curly(str) == str
     assert _swap_curly('foo{bar}baz') == 'foo{{bar}}baz'
     assert _swap_curly('foo{{bar}}baz') == 'foo{bar}baz'
@@ -94,12 +95,12 @@ def test_humanize():
     assert humanize(0.001) == '1m'
     assert humanize(0.002) == '2m'
     assert humanize(0.0025) == '2.5m'
-    assert humanize(0.0001) == u'100µ'
-    assert humanize(0.000123) == u'123µ'
-    assert humanize(0.00001) == u'10µ'
-    assert humanize(0.000001) == u'1µ'
-    assert humanize(0.0000001) == u'100n'
-    assert humanize(0.0000000001) == u'100p'
+    assert humanize(0.0001) == u('100µ')
+    assert humanize(0.000123) == u('123µ')
+    assert humanize(0.00001) == u('10µ')
+    assert humanize(0.000001) == u('1µ')
+    assert humanize(0.0000001) == u('100n')
+    assert humanize(0.0000000001) == u('100p')
 
     assert humanize(0) == '0'
     assert humanize(0.) == '0'
@@ -116,9 +117,9 @@ def test_is_major():
 
 def test_truncate():
     assert truncate('1234567890', 50) == '1234567890'
-    assert truncate('1234567890', 5) == u'1234…'
-    assert truncate('1234567890', 1) == u'…'
-    assert truncate('1234567890', 9) == u'12345678…'
+    assert truncate('1234567890', 5) == u('1234…')
+    assert truncate('1234567890', 1) == u('…')
+    assert truncate('1234567890', 9) == u('12345678…')
     assert truncate('1234567890', 10) == '1234567890'
     assert truncate('1234567890', 0) == '1234567890'
     assert truncate('1234567890', -1) == '1234567890'

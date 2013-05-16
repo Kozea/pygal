@@ -36,6 +36,12 @@ def to_str(string):
     return string
 
 
+def u(s):
+    if sys.version_info[0] == 2:
+        return unicode(s, "unicode_escape")
+    return s
+
+
 def total_seconds(td):
     if sys.version_info[:2] == (2, 6):
         return (

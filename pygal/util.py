@@ -21,14 +21,14 @@ Various utils
 
 """
 from __future__ import division
-from pygal._compat import to_str
+from pygal._compat import to_str, u
 import re
 from decimal import Decimal
 from math import floor, pi, log, log10, ceil
 from itertools import cycle
 from functools import reduce
 from pygal.adapters import not_zero, positive
-ORDERS = u"yzafpnµm kMGTPEZY"
+ORDERS = u("yzafpnµm kMGTPEZY")
 
 
 def float_format(number):
@@ -231,7 +231,7 @@ def cycle_fill(short_list, max_len):
 def truncate(string, index):
     """Truncate a string at index and add ..."""
     if len(string) > index and index > 0:
-        string = string[:index - 1] + u'…'
+        string = string[:index - 1] + u('…')
     return string
 
 
