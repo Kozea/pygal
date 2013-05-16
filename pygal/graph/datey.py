@@ -39,6 +39,7 @@ graph.render_in_browser()
 from pygal.adapters import date
 from pygal.util import compute_scale
 from pygal.graph.xy import XY
+from pygal.compat import total_seconds
 import datetime
 
 
@@ -55,7 +56,7 @@ class DateY(XY):
         """ Converts a date to a number """
         if d is None:
             return None
-        return  (d - self._offset).total_seconds()
+        return total_seconds(d - self._offset)
 
     def _get_value(self, values, i):
         return 'x=%s, y=%s' % (
