@@ -16,7 +16,7 @@
 #
 # You should have received a copy of the GNU Lesser General Public License
 # along with pygal. If not, see <http://www.gnu.org/licenses/>.
-from pystil._compat import u
+from pygal._compat import u
 from pygal.util import (
     round_to_int, round_to_float, _swap_curly, template, humanize,
     is_major, truncate, minify_css)
