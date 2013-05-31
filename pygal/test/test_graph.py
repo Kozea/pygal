@@ -19,7 +19,9 @@
 import os
 import pygal
 import uuid
+import sys
 from pygal.util import cut
+from pygal._compat import u
 from pygal.test import pytest_generate_tests, make_data
 
 
@@ -212,3 +214,67 @@ def test_no_data_with_lists_of_nones(Chart):
     chart.add('Serie2', [None, None, None])
     q = chart.render_pyquery()
     assert q(".text-overlay text").text() == "No data"
+
+
+def test_unicode_labels_decode(Chart):
+    chart = Chart()
+    chart.add(u('Série1'), [{
+        'value': 1,
+        'xlink': 'http://1/',
+        'label': u('{\}Â°ĳæð©&×&<—×€¿_…\{_…')
+    }, {
+        'value': 2,
+        'xlink': {
+            'href': 'http://6.example.com/'
+        },
+        'label': u('æÂ°€≠|€æÂ°€əæ')
+    }, {
+        'value': 3,
+        'label': 'unicode <3'
+    }])
+    chart.x_labels = [u('&œ'), u('¿?'), u('††††††††'), 'unicode <3']
+    q = chart.render_pyquery()
+
+
+def test_unicode_labels_python2(Chart):
+    if sys.version_info[0] == 3:
+        return
+    chart = Chart()
+    chart.add(u('Série1'), [{
+        'value': 1,
+        'xlink': 'http://1/',
+        'label': eval("u'{\}Â°ĳæð©&×&<—×€¿_…\{_…'")
+    }, {
+        'value': 2,
+        'xlink': {
+            'href': 'http://6.example.com/'
+        },
+        'label': eval("u'æÂ°€≠|€æÂ°€əæ'")
+    }, {
+        'value': 3,
+        'label': eval("'unicode <3'")
+    }])
+    chart.x_labels = eval("[u'&œ', u'¿?', u'††††††††', 'unicode <3']")
+    q = chart.render_pyquery()
+
+
+def test_unicode_labels_python3(Chart):
+    if sys.version_info[0] == 2:
+        return
+    chart = Chart()
+    chart.add(u('Série1'), [{
+        'value': 1,
+        'xlink': 'http://1/',
+        'label': eval("'{\}Â°ĳæð©&×&<—×€¿_…\{_…'")
+    }, {
+        'value': 2,
+        'xlink': {
+            'href': 'http://6.example.com/'
+        },
+        'label': eval("'æÂ°€≠|€æÂ°€əæ'")
+    }, {
+        'value': 3,
+        'label': eval("b'unicode <3'")
+    }])
+    chart.x_labels = eval("['&œ', '¿?', '††††††††', 'unicode <3']")
+    q = chart.render_pyquery()
