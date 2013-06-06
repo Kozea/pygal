@@ -15,8 +15,8 @@ menu:
       link: /support/
   - Download:
       link: /download/
-  
-ribbon: 
+
+ribbon:
   url: http://github.com/Kozea/pygal
 
 project (git):
@@ -31,7 +31,6 @@ code browser (github):
   project name: Kozea/pygal
 
 bug tracker (github):
-  base url: http://github.com/Kozea/pygal/issues
   project name: Kozea/pygal
 
 continuous integration (jenkins):

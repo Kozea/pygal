@@ -1,0 +1,55 @@
+Pygal 1.0.0
+===========
+
+
+Time to become 1.0 !
+
+Get it via `PyPi <http://pypi.python.org/pypi/pygal/>`_.
+
+
+Changelog
+---------
+
+- pygal is now python 2.6, 2.7, 3.2, 3.3 fully compatible without the use of `2to3`.
+
+- `Secondary axes <basic_customizations/#two-y-axes>`_
+
+.. pygal-code::
+
+  chart = pygal.Line(title=u'Some different points')
+  chart.add('line', [.0002, .0005, .00035])
+  chart.add('other line', [1000, 2000, 7000], secondary=True)
+
+
+- New graph types:
+
+  + `DateY </chart_types/#datey>`_ for date indexed XY charts
+  + `Worldmap </chart_types/#worldmap-charts>`_ for a beautifull worldmap
+
+
+.. pygal-code::
+
+  worldmap_chart = pygal.Worldmap()
+  worldmap_chart.title = 'Minimum deaths by capital punishement (source: Amnesty International)'
+  worldmap_chart.add('In 2012', {
+    'af': 14,
+    'bd': 1,
+    'by': 3,
+    'cn': 1000,
+    'gm': 9,
+    'in': 1,
+    'ir': 314,
+    'iq': 129,
+    'jp': 7,
+    'kp': 6,
+    'pk': 1,
+    'ps': 6,
+    'sa': 79,
+    'so': 6,
+    'sd': 5,
+    'tw': 6,
+    'ae': 1,
+    'us': 43,
+    'ye': 28
+  })
+

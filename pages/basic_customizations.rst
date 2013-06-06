@@ -111,6 +111,27 @@ You may want to always have the absissa in your graph:
   chart.add('line', [.0002, .0005, .00035])
 
 
+``range``
+
+You may also want to explicitly set a range, `range` takes a tuple containing min and max:
+
+.. pygal-code::
+
+  chart = pygal.Line(range=(.0001, .001))
+  chart.add('line', [.0002, .0005, .00035])
+
+
+``order_min``
+
+Finaly you can tell at which precision pygal should stop scaling (in log10):
+
+.. pygal-code::
+
+  chart = pygal.Line(order_min=-4)
+  chart.add('line', [.0002, .0005, .00035])
+
+
+
 Title
 -----
 
@@ -124,8 +145,25 @@ You can add a title to the chart by setting the `title` option:
   chart.add('line', [.0002, .0005, .00035])
 
 
+Two y axes
+----------
+
+``secondary``
+
+You can plot your values to 2 separate axes, thanks to `wiktorn <https://github.com/wiktorn>`_
+
+.. pygal-code::
+
+  chart = pygal.Line(title=u'Some different points')
+  chart.add('line', [.0002, .0005, .00035])
+  chart.add('other line', [1000, 2000, 7000], secondary=True)
+
+
 Labels
 ------
+
+Add labels
+^^^^^^^^^^
 
 ``x_labels, y_labels``
 
@@ -137,6 +175,65 @@ You can specify x labels and y labels, depending on the graph type:
   chart.x_labels = 'Red', 'Blue', 'Green'
   chart.y_labels = .0001, .0003, .0004, .00045, .0005
   chart.add('line', [.0002, .0005, .00035])
+
+
+Rotate labels
+^^^^^^^^^^^^^
+
+``x_label_rotation, y_label_rotation``
+
+
+Allow label rotation (in degrees) to avoid axis cluttering:
+
+.. pygal-code::
+
+  chart = pygal.Line()
+  chart.x_labels = ['This is the first point !', 'This is the second point !', 'This is the third point !', 'This is the fourth point !']
+  chart.add('line', [0, .0002, .0005, .00035])
+
+
+.. pygal-code::
+
+  chart = pygal.Line(x_label_rotation=20)
+  chart.x_labels = ['This is the first point !', 'This is the second point !', 'This is the third point !', 'This is the fourth point !']
+  chart.add('line', [0, .0002, .0005, .00035])
+
+
+Change minor/major labels
+^^^^^^^^^^^^^^^^^^^^^^^^^
+
+``x_labels_major, x_labels_major_every, x_labels_major_count, show_minor_x_labels``
+
+You can alter major minor behaviour for the abscissa thanks to `Arjen Stolk <https://github.com/simplyarjen>`_
+
+.. pygal-code::
+
+  chart = pygal.Line(x_label_rotation=20)
+  chart.x_labels = ['This is the first point !', 'This is the second point !', 'This is the third point !', 'This is the fourth point !']
+  chart.x_labels_major = ['This is the first point !', 'This is the fourth point !']
+  chart.add('line', [0, .0002, .0005, .00035])
+
+
+.. pygal-code::
+
+  chart = pygal.Line(x_label_rotation=20, x_labels_major_every=3)
+  chart.x_labels = ['This is the first point !', 'This is the second point !', 'This is the third point !', 'This is the fourth point !']
+  chart.add('line', [0, .0002, .0005, .00035])
+
+
+.. pygal-code::
+
+  chart = pygal.Line(x_label_rotation=20, x_labels_major_count=3)
+  chart.x_labels = ['This is the first point !', 'This is the second point !', 'This is the third point !', 'This is the fourth point !']
+  chart.add('line', [0, .0002, .0005, .00035])
+
+
+.. pygal-code::
+
+  chart = pygal.Line(x_label_rotation=20, show_minor_x_labels=False)
+  chart.x_labels = ['This is the first point !', 'This is the second point !', 'This is the third point !', 'This is the fourth point !']
+  chart.x_labels_major = ['This is the first point !', 'This is the fourth point !']
+  chart.add('line', [0, .0002, .0005, .00035])
 
 
 Display
@@ -210,28 +307,6 @@ Set the various font size
 .. pygal-code::
 
   chart = pygal.Line(label_font_size=34, legend_font_size=8)
-  chart.add('line', [0, .0002, .0005, .00035])
-
-
-Label rotation
---------------
-
-``x_label_rotation, y_label_rotation``
-
-
-Allow label rotation (in degrees) to avoid axis cluttering:
-
-.. pygal-code::
-
-  chart = pygal.Line()
-  chart.x_labels = ['This is the first point !', 'This is the second point !', 'This is the third point !', 'This is the fourth point !']
-  chart.add('line', [0, .0002, .0005, .00035])
-
-
-.. pygal-code::
-
-  chart = pygal.Line(x_label_rotation=20)
-  chart.x_labels = ['This is the first point !', 'This is the second point !', 'This is the third point !', 'This is the fourth point !']
   chart.add('line', [0, .0002, .0005, .00035])
 
 

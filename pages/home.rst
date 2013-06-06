@@ -5,11 +5,11 @@
 Presentation
 ============
 
-pygal is a dynamic SVG charting library.
+pygal 1.0 is a dynamic SVG charting library.
 
 
 .. class:: thumbs
-.. compound:: 
+.. compound::
 
   .. pygal:: 300 200
 
@@ -60,6 +60,8 @@ It features various graph types:
 
 - `Gauge charts </chart_types/#gauge-charts>`_
 
+- `Worldmap charts </chart_types/#worldmap-charts>`_
+
 
 
 Python/Css styling with some packaged themes (`default </styles/#default>`_,
@@ -83,7 +85,7 @@ More information in the `download page </download>`_
 Technical Description
 =====================
 
-As of now pygal is known to work for python 2.6, 2.7 and 3.2.
+As of now pygal is known to work for python 2.6, 2.7 and 3.2, 3.3.
 
 
 Needed dependencies
