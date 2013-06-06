@@ -34,7 +34,7 @@ class Line(Graph):
 
     @cached_property
     def _values(self):
-        return  [
+        return [
             val[1]
             for serie in self.series
             for val in (serie.interpolated
@@ -43,7 +43,7 @@ class Line(Graph):
 
     @cached_property
     def _secondary_values(self):
-        return  [
+        return [
             val[1]
             for serie in self.secondary_series
             for val in (serie.interpolated
