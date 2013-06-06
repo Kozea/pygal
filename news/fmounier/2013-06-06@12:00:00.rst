@@ -12,7 +12,11 @@ Changelog
 
 - pygal is now python 2.6, 2.7, 3.2, 3.3 fully compatible without the use of `2to3`.
 
-- `Secondary axes <basic_customizations/#two-y-axes>`_
+
+- pygal-js is now served from `kozea.github.com/pygal.js` to avoid mime type problems. (Remember to mirror these files on your server to speed up graph generation by setting the ``js`` config)
+
+
+- `Secondary axes </basic_customizations/#two-y-axes>`_
 
 .. pygal-code::
 
