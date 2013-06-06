@@ -117,8 +117,8 @@ class Line(Graph):
 
         if self.include_x_axis:
         # Y Label
-            self._box.ymin = min(self._min, 0)
-            self._box.ymax = max(self._max, 0)
+            self._box.ymin = min(self._min or 0, 0)
+            self._box.ymax = max(self._max or 0, 0)
         else:
             self._box.ymin = self._min
             self._box.ymax = self._max
