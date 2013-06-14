@@ -143,17 +143,15 @@ class Radar(Line):
                 (v, x_pos[i])
                 for i, v in enumerate(serie.values)]
             if self.interpolate:
-                extend = 2
                 extended_x_pos = (
-                    [.5 * pi + i * delta for i in range(-extend, 0)] +
-                    x_pos +
-                    [.5 * pi + i * delta for i in range(
-                        self._len + 1, self._len + 1 + extend)])
-                extended_vals = (serie.values[-extend:] +
-                                 serie.values +
-                                 serie.values[:extend])
-                serie.interpolated = self._interpolate(
-                    extended_vals, extended_x_pos, polar=True)
+                    [.5 * pi - delta] + x_pos)
+                extended_vals = (serie.values[-1:] +
+                                 serie.values)
+                serie.interpolated = list(
+                    map(tuple,
+                        map(reversed,
+                            self._interpolate(
+                                extended_x_pos, extended_vals))))
 
         # x labels space
         self._box.margin *= 2

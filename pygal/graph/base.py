@@ -216,7 +216,7 @@ class BaseGraph(object):
 
     @cached_property
     def _order(self):
-        """Getter for the maximum series value"""
+        """Getter for the number of series"""
         return len(self.all_series)
 
     def _draw(self):

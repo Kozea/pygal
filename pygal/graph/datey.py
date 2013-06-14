@@ -95,8 +95,7 @@ class DateY(XY):
                 vals = list(zip(*sorted(
                     [t for t in serie.points if None not in t],
                     key=lambda x: x[0])))
-                serie.interpolated = self._interpolate(
-                    vals[1], vals[0], xy=True, xy_xmin=xmin, xy_rng=rng)
+                serie.interpolated = self._interpolate(vals[0], vals[1])
 
         if self.interpolate and rng:
             xvals = [val[0]

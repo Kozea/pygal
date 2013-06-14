@@ -31,6 +31,16 @@ def test_config_behaviours():
     line1.add('_', [1, 2, 3])
     l1 = line1.render()
 
+    q = line1.render_pyquery()
+    assert len(q(".axis.x")) == 1
+    assert len(q(".axis.y")) == 1
+    assert len(q(".plot .series path")) == 1
+    assert len(q(".legend")) == 0
+    assert len(q(".x.axis .guides")) == 3
+    assert len(q(".y.axis .guides")) == 21
+    assert len(q(".dots")) == 3
+    assert q(".axis.x text").map(texts) == ['a', 'b', 'c']
+
     line2 = Line(
         show_legend=False,
         fill=True,
@@ -55,6 +65,17 @@ def test_config_behaviours():
     line4.add('_', [1, 2, 3])
     l4 = line4.render()
     assert l1 == l4
+
+    line_config = Config()
+    line_config.show_legend = False
+    line_config.fill = True
+    line_config.pretty_print = True
+    line_config.x_labels = ['a', 'b', 'c']
+
+    line5 = Line(line_config)
+    line5.add('_', [1, 2, 3])
+    l5 = line5.render()
+    assert l1 == l5
 
 
 def test_config_alterations_class():

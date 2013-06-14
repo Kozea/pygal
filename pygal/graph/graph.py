@@ -22,7 +22,7 @@ Commmon graphing functions
 """
 
 from __future__ import division
-from pygal.interpolate import interpolation
+from pygal.interpolate import cubic_interpolate
 from pygal.graph.base import BaseGraph
 from pygal.view import View, LogView, XYLogView
 from pygal.util import (
@@ -375,29 +375,16 @@ class Graph(BaseGraph):
                 self.nodes['text_overlay'],
                 class_='series serie-%d color-%d' % (serie, serie % 16)))
 
-    def _interpolate(
-            self, ys, xs,
-            polar=False, xy=False, xy_xmin=None, xy_rng=None):
+    def _interpolate(self, xs, ys):
         """Make the interpolation"""
-        interpolate = interpolation(
-            xs, ys, kind=self.interpolate)
-        p = self.interpolation_precision
-        xmin = min(xs)
-        xmax = max(xs)
-        interpolateds = []
-        for i in range(int(p + 1)):
-            x = i / p
-            if polar:
-                x = .5 * pi + 2 * pi * x
-            elif xy:
-                x = xy_xmin + xy_rng * x
-            interpolated = float(interpolate(x))
-            if not isnan(interpolated) and xmin <= x <= xmax:
-                coord = (x, interpolated)
-                if polar:
-                    coord = tuple(reversed(coord))
-                interpolateds.append(coord)
-        return interpolateds
+        x = []
+        y = []
+        for i in range(len(ys)):
+            if ys[i] is not None:
+                x.append(xs[i])
+                y.append(ys[i])
+
+        return list(cubic_interpolate(x, y, self.interpolation_precision))
 
     def _tooltip_data(self, node, value, x, y, classes=None):
         self.svg.node(node, 'desc', class_="value").text = value
@@ -433,7 +420,7 @@ class Graph(BaseGraph):
                 (x_pos[i], v)
                 for i, v in enumerate(serie.values)]
             if serie.points and self.interpolate:
-                serie.interpolated = self._interpolate(serie.values, x_pos)
+                serie.interpolated = self._interpolate(x_pos, serie.values)
             else:
                 serie.interpolated = []
 

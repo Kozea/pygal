@@ -51,10 +51,11 @@ else:
     app.logger.debug('HTTPServer monkey patched for url %s' % url)
 
 try:
-    import wdb
+    from wdb.ext import WdbMiddleware, add_w_builtin
 except ImportError:
     pass
 else:
-    app.wsgi_app = wdb.Wdb(app.wsgi_app, start_disabled=True)
+    add_w_builtin()
+    app.wsgi_app = WdbMiddleware(app.wsgi_app, start_disabled=True)
 
 app.run(debug=True, threaded=True, host='0.0.0.0', port=21112)
