@@ -180,11 +180,8 @@ class Config(object):
         False, bool, "Value", "Display values in logarithmic scale")
 
     interpolate = Key(
-        None, str, "Value", "Interpolation. ",
-        "May be any of 'linear', 'nearest', 'zero', 'slinear', 'quadratic,"
-        "'cubic', 'krogh', 'barycentric', 'univariate',"
-        "or an integer specifying the order"
-        "of the spline interpolator")
+        None, str, "Value", "Interpolation",
+        "May be 'quadratic' or 'cubic'")
 
     interpolation_precision = Key(
         250, int, "Value", "Number of interpolated points between two values")

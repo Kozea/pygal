@@ -18,16 +18,46 @@
 # along with pygal. If not, see <http://www.gnu.org/licenses/>.
 """
 Interpolation
+
+TODO: Implement more interpolations (cosine, lagrange...)
+
 """
 from __future__ import division
 
 
-def cubic_interpolate(x, a, precision=250):
-    """Takes a list of (x, a) and returns an iterator over
+def quadratic_interpolate(x, y, precision=250):
+    n = len(x) - 1
+    delta_x = [x2 - x1 for x1, x2 in zip(x, x[1:])]
+    delta_y = [y2 - y1 for y1, y2 in zip(y, y[1:])]
+    slope = [delta_y[i] / delta_x[i] if delta_x[i] else 1 for i in range(n)]
+
+    # Quadratic spline: a + bx + cx²
+    a = y
+    b = [0] * (n + 1)
+    c = [0] * (n + 1)
+
+    for i in range(1, n):
+        b[i] = 2 * slope[i - 1] - b[i - 1]
+
+    c = [(slope[i] - b[i]) / delta_x[i] for i in range(n)]
+
+    for i in range(n + 1):
+        yield x[i], a[i]
+        if i == n or delta_x[i] == 0:
+            continue
+        for s in range(1, precision):
+            X = s * delta_x[i] / precision
+            X2 = X * X
+            yield x[i] + X, a[i] + b[i] * X + c[i] * X2
+
+
+def cubic_interpolate(x, y, precision=250):
+    """Takes a list of (x, y) and returns an iterator over
     the natural cubic spline of points with `precision` points between them"""
     n = len(x) - 1
     # Spline equation is a + bx + cx² + dx³
     # ie: Spline part i equation is a[i] + b[i]x + c[i]x² + d[i]x³
+    a = y
     b = [0] * (n + 1)
     c = [0] * (n + 1)
     d = [0] * (n + 1)
@@ -60,3 +90,13 @@ def cubic_interpolate(x, a, precision=250):
             X2 = X * X
             X3 = X2 * X
             yield x[i] + X, a[i] + b[i] * X + c[i] * X2 + d[i] * X3
+
+
+if __name__ == '__main__':
+    from pygal import XY
+    points = [(.1, 7), (.3, -4), (.6, 10), (.9, 8), (1.4, 3), (1.7, 1)]
+    xy = XY(show_dots=False)
+    xy.add('normal', points)
+    xy.add('quadratic', quadratic_interpolate(*zip(*points)))
+    xy.add('cubic', cubic_interpolate(*zip(*points)))
+    xy.render_in_browser()

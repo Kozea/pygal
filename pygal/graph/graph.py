@@ -22,12 +22,13 @@ Commmon graphing functions
 """
 
 from __future__ import division
-from pygal.interpolate import cubic_interpolate
+from pygal.interpolate import (
+    quadratic_interpolate, cubic_interpolate)
 from pygal.graph.base import BaseGraph
 from pygal.view import View, LogView, XYLogView
 from pygal.util import (
     is_major, truncate, reverse_text_len, get_texts_box, cut, rad)
-from math import isnan, pi, sqrt, ceil, cos
+from math import sqrt, ceil, cos
 from itertools import repeat, chain
 
 
@@ -384,7 +385,11 @@ class Graph(BaseGraph):
                 x.append(xs[i])
                 y.append(ys[i])
 
-        return list(cubic_interpolate(x, y, self.interpolation_precision))
+        interpolate = cubic_interpolate
+        if self.interpolate == 'quadratic':
+            interpolate = quadratic_interpolate
+
+        return list(interpolate(x, y, self.interpolation_precision))
 
     def _tooltip_data(self, node, value, x, y, classes=None):
         self.svg.node(node, 'desc', class_="value").text = value
