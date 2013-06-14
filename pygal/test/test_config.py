@@ -191,7 +191,7 @@ def test_logarithmic_bad_interpolation():
     line = Line(logarithmic=True, interpolate='cubic')
     line.add('_', [.001, .00000001, 1])
     q = line.render_pyquery()
-    assert len(q(".y.axis .guides")) == 40
+    assert len(q(".y.axis .guides")) == 41
 
 
 def test_logarithmic_big_scale():
