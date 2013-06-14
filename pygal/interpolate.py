@@ -92,6 +92,38 @@ def cubic_interpolate(x, y, precision=250):
             yield x[i] + X, a[i] + b[i] * X + c[i] * X2 + d[i] * X3
 
 
+def hermite_interpolate(x, y, precision=250):
+    n = len(x) - 1
+    m = [1] * (n + 1)
+    c = 0
+    delta_x = [x2 - x1 for x1, x2 in zip(x, x[1:])]
+
+    for i in range(1, n):
+        m[i] = (1 - c) * (y[i + 1] - y[i - 1]) / (x[i + 1] - x[i - 1])
+
+    def p(i, x_):
+        t = (x_ - x[i]) / delta_x[i]
+        t2 = t * t
+        t3 = t2 * t
+
+        h00 = 2 * t3 - 3 * t2 + 1
+        h10 = t3 - 2 * t2 + t
+        h01 = - 2 * t3 + 3 * t2
+        h11 = t3 - t2
+
+        return (h00 * y[i] +
+                h10 * m[i] * delta_x[i] +
+                h01 * y[i + 1] +
+                h11 * m[i + 1] * delta_x[i])
+
+    for i in range(n + 1):
+        yield x[i], y[i]
+        if i == n or delta_x[i] == 0:
+            continue
+        for s in range(1, precision):
+            X = x[i] + s * delta_x[i] / precision
+            yield X, p(i, X)
+
 if __name__ == '__main__':
     from pygal import XY
     points = [(.1, 7), (.3, -4), (.6, 10), (.9, 8), (1.4, 3), (1.7, 1)]

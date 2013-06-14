@@ -23,7 +23,7 @@ Commmon graphing functions
 
 from __future__ import division
 from pygal.interpolate import (
-    quadratic_interpolate, cubic_interpolate)
+    quadratic_interpolate, cubic_interpolate, hermite_interpolate)
 from pygal.graph.base import BaseGraph
 from pygal.view import View, LogView, XYLogView
 from pygal.util import (
@@ -388,6 +388,8 @@ class Graph(BaseGraph):
         interpolate = cubic_interpolate
         if self.interpolate == 'quadratic':
             interpolate = quadratic_interpolate
+        elif self.interpolate == 'hermite':
+            interpolate = hermite_interpolate
 
         return list(interpolate(x, y, self.interpolation_precision))
 

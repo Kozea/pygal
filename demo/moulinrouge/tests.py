@@ -159,7 +159,7 @@ def get_test_routes(app):
 
     @app.route('/test/interpolate/<chart>')
     def test_interpolate_for(chart):
-        graph = CHARTS_BY_NAME[chart](interpolate='cubic')
+        graph = CHARTS_BY_NAME[chart](interpolate='hermite')
         graph.add('1', [1, 3, 12, 3, 4])
         graph.add('2', [7, -4, 10, None, 8, 3, 1])
         return graph.render_response()
