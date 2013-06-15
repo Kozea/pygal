@@ -104,6 +104,14 @@ class Config(object):
         None, str, "Look",
         "Graph title.", "Leave it to None to disable title.")
 
+    xtitle = Key(
+        None, str, "Look",
+        "Graph X-Axis title.", "Leave it to None to disable X-Axis title.")
+
+    ytitle = Key(
+        None, str, "Look",
+        "Graph Y-Axis title.", "Leave it to None to disable Y-Axis title.")
+
     width = Key(
         800, int, "Look", "Graph width")
 

@@ -43,6 +43,8 @@ class Graph(BaseGraph):
         self._axes()
         self._legend()
         self._title()
+        self._x_title()
+        self._y_title()
 
     def _axes(self):
         """Draw axes"""
@@ -362,6 +364,34 @@ class Graph(BaseGraph):
                     x=self.width / 2,
                     y=i * (self.title_font_size + 10)
                 ).text = title_line
+
+    def _x_title(self):
+        """Make the X-Axis title"""
+        if self.xtitle:
+            title_node = self.svg.node(
+                self.nodes['graph'],
+                class_="titles")
+            self.svg.node(
+                title_node, 'text', class_='title',
+                x= (self.width / 2) + 80,
+                y= self.height + 10
+                ).text = self.xtitle
+
+    def _y_title(self):
+        """Make the Y-Axis title"""
+        if self.ytitle:
+            title_node = self.svg.node(
+                self.nodes['graph'],
+                class_="titles")
+            text = self.svg.node(
+                title_node, 'text', class_='title',
+                x= 40,
+                y= self.height / 2,
+                
+                )
+            text.text = self.ytitle
+            text.attrib['transform'] = "rotate(%d %f %f)" % (
+                -90, 40, self.height / 2)
 
     def _serie(self, serie):
         """Make serie node"""
