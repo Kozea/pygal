@@ -167,11 +167,33 @@ def create_app():
         order = random.randrange(1, 10)
         series = b64encode(pickle.dumps(_random_series(type, data, order)))
         svgs = []
-        for interpolation in (
-                'linear', 'slinear', 'nearest', 'zero', 'quadratic', 'cubic',
-                'krogh', 'barycentric', 'univariate', 4, 5, 6, 7, 8):
+        for interpolation in 'quadratic', 'cubic', 'lagrange', 'trigonometric':
             config.title = "%s interpolation" % interpolation
             config.interpolate = interpolation
+            svgs.append({'type': 'StackedLine',
+                         'series': series,
+                         'config': b64encode(pickle.dumps(config))})
+
+        for params in [
+                {'type': 'catmull_rom'},
+                {'type': 'finite_difference'},
+                {'type': 'cardinal', 'c': .25},
+                {'type': 'cardinal', 'c': .5},
+                {'type': 'cardinal', 'c': .75},
+                {'type': 'cardinal', 'c': 1.5},
+                {'type': 'cardinal', 'c': 2},
+                {'type': 'cardinal', 'c': 5},
+                {'type': 'kochanek_bartels', 'b': 1, 'c': 1, 't': 1},
+                {'type': 'kochanek_bartels', 'b': -1, 'c': 1, 't': 1},
+                {'type': 'kochanek_bartels', 'b': 1, 'c': -1, 't': 1},
+                {'type': 'kochanek_bartels', 'b': 1, 'c': 1, 't': -1},
+                {'type': 'kochanek_bartels', 'b': -1, 'c': 1, 't': -1},
+                {'type': 'kochanek_bartels', 'b': -1, 'c': -1, 't': 1},
+                {'type': 'kochanek_bartels', 'b': -1, 'c': -1, 't': -1}
+        ]:
+            config.title = "Hermite interpolation with params %r" % params
+            config.interpolate = 'hermite'
+            config.interpolation_parameters = params
             svgs.append({'type': 'StackedLine',
                          'series': series,
                          'config': b64encode(pickle.dumps(config))})

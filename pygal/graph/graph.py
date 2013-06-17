@@ -416,7 +416,9 @@ class Graph(BaseGraph):
 
         interpolate = INTERPOLATIONS[self.interpolate]
 
-        return list(interpolate(x, y, self.interpolation_precision))
+        return list(interpolate(
+            x, y, self.interpolation_precision,
+            **self.interpolation_parameters))
 
     def _tooltip_data(self, node, value, x, y, classes=None):
         self.svg.node(node, 'desc', class_="value").text = value

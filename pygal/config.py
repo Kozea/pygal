@@ -194,6 +194,11 @@ class Config(object):
     interpolation_precision = Key(
         250, int, "Value", "Number of interpolated points between two values")
 
+    interpolation_parameters = Key(
+        {}, dict, "Value", "Various parameters for parametric interpolations",
+        "ie: For hermite interpolation, you can set the cardinal tension with"
+        "{'type': 'cardinal', 'c': .5}")
+
     order_min = Key(
         None, int, "Value", "Minimum order of scale, defaults to None")
 

@@ -19,14 +19,12 @@
 """
 Interpolation
 
-TODO: Implement more interpolations (cosine, lagrange...)
-
 """
 from __future__ import division
 from math import sin
 
 
-def quadratic_interpolate(x, y, precision=250):
+def quadratic_interpolate(x, y, precision=250, **kwargs):
     n = len(x) - 1
     delta_x = [x2 - x1 for x1, x2 in zip(x, x[1:])]
     delta_y = [y2 - y1 for y1, y2 in zip(y, y[1:])]
@@ -52,9 +50,7 @@ def quadratic_interpolate(x, y, precision=250):
             yield x[i] + X, a[i] + b[i] * X + c[i] * X2
 
 
-def cubic_interpolate(x, y, precision=250):
-    """Takes a list of (x, y) and returns an iterator over
-    the natural cubic spline of points with `precision` points between them"""
+def cubic_interpolate(x, y, precision=250, **kwargs):
     n = len(x) - 1
     # Spline equation is a + bx + cx² + dx³
     # ie: Spline part i equation is a[i] + b[i]x + c[i]x² + d[i]x³
@@ -93,14 +89,36 @@ def cubic_interpolate(x, y, precision=250):
             yield x[i] + X, a[i] + b[i] * X + c[i] * X2 + d[i] * X3
 
 
-def hermite_interpolate(x, y, precision=250):
+def hermite_interpolate(x, y, precision=250,
+                        type='cardinal', c=None, b=None, t=None):
     n = len(x) - 1
     m = [1] * (n + 1)
-    c = 0
+    w = [1] * (n + 1)
     delta_x = [x2 - x1 for x1, x2 in zip(x, x[1:])]
+    if type == 'catmull_rom':
+        type = 'cardinal'
+        c = 0
+    if type == 'finite_difference':
+        for i in range(1, n):
+            m[i] = w[i] = .5 * (
+                (y[i + 1] - y[i]) / (x[i + 1] - x[i]) +
+                (y[i] - y[i - 1]) / (x[i] - x[i - 1]))
 
-    for i in range(1, n):
-        m[i] = (1 - c) * (y[i + 1] - y[i - 1]) / (x[i + 1] - x[i - 1])
+    elif type == 'kochanek_bartels':
+        c = c or 0
+        b = b or 0
+        t = t or 0
+        for i in range(1, n):
+            m[i] = .5 * ((1 - t) * (1 + b) * (1 + c) * (y[i] - y[i - 1]) +
+                         (1 - t) * (1 - b) * (1 - c) * (y[i + 1] - y[i]))
+            w[i] = .5 * ((1 - t) * (1 + b) * (1 - c) * (y[i] - y[i - 1]) +
+                         (1 - t) * (1 - b) * (1 + c) * (y[i + 1] - y[i]))
+
+    if type == 'cardinal':
+        c = c or 0
+        for i in range(1, n):
+            m[i] = w[i] = (1 - c) * (
+                y[i + 1] - y[i - 1]) / (x[i + 1] - x[i - 1])
 
     def p(i, x_):
         t = (x_ - x[i]) / delta_x[i]
@@ -115,7 +133,7 @@ def hermite_interpolate(x, y, precision=250):
         return (h00 * y[i] +
                 h10 * m[i] * delta_x[i] +
                 h01 * y[i + 1] +
-                h11 * m[i + 1] * delta_x[i])
+                h11 * w[i + 1] * delta_x[i])
 
     for i in range(n + 1):
         yield x[i], y[i]
@@ -126,8 +144,29 @@ def hermite_interpolate(x, y, precision=250):
             yield X, p(i, X)
 
 
-def trigonometric_interpolate(x, y, precision=250):
-    """ As per http://en.wikipedia.org/wiki/Trigonometric_interpolation"""
+def lagrange_interpolate(x, y, precision=250, **kwargs):
+    n = len(x) - 1
+    delta_x = [x2 - x1 for x1, x2 in zip(x, x[1:])]
+    for i in range(n + 1):
+        yield x[i], y[i]
+        if i == n or delta_x[i] == 0:
+            continue
+
+        for s in range(1, precision):
+            X = x[i] + s * delta_x[i] / precision
+            s = 0
+            for k in range(n + 1):
+                p = 1
+                for m in range(n + 1):
+                    if m == k:
+                        continue
+                    p *= (X - x[m]) / (x[k] - x[m])
+                s += y[k] * p
+            yield X, s
+
+
+def trigonometric_interpolate(x, y, precision=250, **kwargs):
+    """As per http://en.wikipedia.org/wiki/Trigonometric_interpolation"""
     n = len(x) - 1
     delta_x = [x2 - x1 for x1, x2 in zip(x, x[1:])]
     for i in range(n + 1):
@@ -147,11 +186,17 @@ def trigonometric_interpolate(x, y, precision=250):
                 s += y[k] * p
             yield X, s
 
+"""
+These functions takes two lists of points x and y and
+returns an iterator over the interpolation between all these points
+with `precision` interpolated points between each of them
 
+"""
 INTERPOLATIONS = {
     'quadratic': quadratic_interpolate,
     'cubic': cubic_interpolate,
     'hermite': hermite_interpolate,
+    'lagrange': lagrange_interpolate,
     'trigonometric': trigonometric_interpolate
 }
 
