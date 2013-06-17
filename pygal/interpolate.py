@@ -23,6 +23,7 @@ TODO: Implement more interpolations (cosine, lagrange...)
 
 """
 from __future__ import division
+from math import sin
 
 
 def quadratic_interpolate(x, y, precision=250):
@@ -123,6 +124,37 @@ def hermite_interpolate(x, y, precision=250):
         for s in range(1, precision):
             X = x[i] + s * delta_x[i] / precision
             yield X, p(i, X)
+
+
+def trigonometric_interpolate(x, y, precision=250):
+    """ As per http://en.wikipedia.org/wiki/Trigonometric_interpolation"""
+    n = len(x) - 1
+    delta_x = [x2 - x1 for x1, x2 in zip(x, x[1:])]
+    for i in range(n + 1):
+        yield x[i], y[i]
+        if i == n or delta_x[i] == 0:
+            continue
+
+        for s in range(1, precision):
+            X = x[i] + s * delta_x[i] / precision
+            s = 0
+            for k in range(n + 1):
+                p = 1
+                for m in range(n + 1):
+                    if m == k:
+                        continue
+                    p *= sin(0.5 * (X - x[m])) / sin(0.5 * (x[k] - x[m]))
+                s += y[k] * p
+            yield X, s
+
+
+INTERPOLATIONS = {
+    'quadratic': quadratic_interpolate,
+    'cubic': cubic_interpolate,
+    'hermite': hermite_interpolate,
+    'trigonometric': trigonometric_interpolate
+}
+
 
 if __name__ == '__main__':
     from pygal import XY
