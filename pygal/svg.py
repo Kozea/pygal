@@ -192,7 +192,7 @@ class Svg(object):
         self.add_styles()
         self.add_scripts()
         self.root.set(
-            'viewBox', '0 0 %d %d' % (self.graph.width, self.graph.height + 20))
+            'viewBox', '0 0 %d %d' % (self.graph.width, self.graph.height))
         if self.graph.explicit_size:
             self.root.set('width', str(self.graph.width))
             self.root.set('height', str(self.graph.height))

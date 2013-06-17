@@ -143,6 +143,21 @@ def get_test_routes(app):
         graph.x_labels = 'a',
         return graph.render_response()
 
+    @app.route('/test/xytitles/<chart>')
+    def test_xy_titles_for(chart):
+        graph = CHARTS_BY_NAME[chart]()
+        graph.title = 'My global title'
+        graph.x_title = 'My X title'
+        graph.y_title = 'My Y title'
+        graph.add('My number 1 serie', [1, 3, 12])
+        graph.add('My number 2 serie', [7, -4, 10])
+        graph.add('A', [17, -14, 11], secondary=True)
+        graph.x_label_rotation = 25
+        graph.legend_at_bottom = not True
+        graph.x_labels = (
+            'First point', 'Second point', 'Third point')
+        return graph.render_response()
+
     @app.route('/test/no_data/<chart>')
     def test_no_data_for(chart):
         graph = CHARTS_BY_NAME[chart]()

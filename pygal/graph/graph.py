@@ -86,6 +86,9 @@ class Graph(BaseGraph):
                       x=0, y=0,
                       width=self.view.width,
                       height=self.view.height)
+        self.nodes['title'] = self.svg.node(
+            self.nodes['graph'],
+            class_="titles")
         self.nodes['overlay'] = self.svg.node(
             self.nodes['graph'], class_="plot overlay",
             transform="translate(%d, %d)" % (
@@ -138,7 +141,7 @@ class Graph(BaseGraph):
         if self.x_labels_major:
             x_labels_major = self.x_labels_major
         elif self.x_labels_major_every:
-            x_labels_major = [self._x_labels[i][0] for i in xrange(
+            x_labels_major = [self._x_labels[i][0] for i in range(
                 0, len(self._x_labels), self.x_labels_major_every)]
         elif self.x_labels_major_count:
             label_count = len(self._x_labels)
@@ -148,7 +151,7 @@ class Graph(BaseGraph):
             else:
                 x_labels_major = [self._x_labels[
                     int(i * (label_count - 1) / (major_count - 1))][0]
-                    for i in xrange(major_count)]
+                    for i in range(major_count)]
         else:
             x_labels_major = []
         for label, position in self._x_labels:
@@ -270,6 +273,7 @@ class Graph(BaseGraph):
         if self.legend_at_bottom:
             x = self.margin.left + 10
             y = (self.margin.top + self.view.height +
+                 self._x_title_height +
                  self._x_labels_height + 10)
             cols = ceil(sqrt(self._order)) or 1
 
@@ -355,43 +359,39 @@ class Graph(BaseGraph):
     def _title(self):
         """Make the title"""
         if self.title:
-            title_node = self.svg.node(
-                self.nodes['graph'],
-                class_="titles")
             for i, title_line in enumerate(self.title, 1):
                 self.svg.node(
-                    title_node, 'text', class_='title',
+                    self.nodes['title'], 'text', class_='title',
                     x=self.width / 2,
                     y=i * (self.title_font_size + 10)
                 ).text = title_line
 
     def _x_title(self):
         """Make the X-Axis title"""
-        if self.xtitle:
-            title_node = self.svg.node(
-                self.nodes['graph'],
-                class_="titles")
-            self.svg.node(
-                title_node, 'text', class_='title',
-                x= (self.width / 2) + 80,
-                y= self.height + 10
-                ).text = self.xtitle
+        y = (self.height - self.margin.bottom +
+             self._x_labels_height)
+        if self.x_title:
+            for i, title_line in enumerate(self.x_title, 1):
+                text = self.svg.node(
+                    self.nodes['title'], 'text', class_='title',
+                    x=self.margin.left + self.view.width / 2,
+                    y=y + i * (self.title_font_size + 10)
+                )
+                text.text = title_line
 
     def _y_title(self):
         """Make the Y-Axis title"""
-        if self.ytitle:
-            title_node = self.svg.node(
-                self.nodes['graph'],
-                class_="titles")
-            text = self.svg.node(
-                title_node, 'text', class_='title',
-                x= 40,
-                y= self.height / 2,
-                
+        if self.y_title:
+            yc = self.margin.top + self.view.height / 2
+            for i, title_line in enumerate(self.y_title, 1):
+                text = self.svg.node(
+                    self.nodes['title'], 'text', class_='title',
+                    x=self._legend_at_left_width,
+                    y=i * (self.title_font_size + 10) + yc
                 )
-            text.text = self.ytitle
-            text.attrib['transform'] = "rotate(%d %f %f)" % (
-                -90, 40, self.height / 2)
+                text.attrib['transform'] = "rotate(%d %f %f)" % (
+                    -90, self._legend_at_left_width, yc)
+                text.text = title_line
 
     def _serie(self, serie):
         """Make serie node"""

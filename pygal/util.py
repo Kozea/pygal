@@ -365,3 +365,20 @@ def prepare_values(raw, config, cls):
             values.append(value)
         series.append(Serie(title, values, metadata))
     return series
+
+
+def split_title(title, width, title_fs):
+    titles = []
+    if not title:
+        return titles
+    size = reverse_text_len(width, title_fs * 1.1)
+    title = title.strip()
+    while len(title) > size:
+        title_part = title[:size]
+        i = title_part.rfind(' ')
+        if i == -1:
+            i = len(title_part)
+        titles.append(title_part[:i])
+        title = title[i:].strip()
+    titles.append(title)
+    return titles
