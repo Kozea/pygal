@@ -122,10 +122,35 @@ LightSolarizedStyle = Style(
     transition='500ms ease-in',
     colors=solarized_colors)
 
+AnaeleStyle = Style(
+    background='#c3c4c6',
+    plot_background='#e6e7e9',
+    foreground='rgba(0, 0, 0, 0.9)',
+    foreground_light='rgba(0, 0, 0, 0.9)',
+    foreground_dark='rgba(0, 0, 0, 0.5)',
+    opacity='.6',
+    opacity_hover='.9',
+    colors=(
+        '#d94e4c', '#e5884f', '#39929a', '#3c6368',
+        '#b73a3b', '#b73a3b', '#b73a3b', '#234547'))
+
+
+DarkColorizedStyle = Style(
+    background='#3a2d3f',
+    plot_background='#4c3c53',
+    foreground='rgba(255, 255, 255, 0.9)',
+    foreground_light='rgba(255, 255, 255, 0.9)',
+    foreground_dark='rgba(255, 255, 255, 0.5)',
+    opacity='.6',
+    opacity_hover='.9',
+    colors=(
+        '#02b8ff', '#d801ff'))
 
 styles = {'default': DefaultStyle,
           'light': LightStyle,
           'neon': NeonStyle,
           'clean': CleanStyle,
+          'anaele': AnaeleStyle,
           'dark_solarized': DarkSolarizedStyle,
-          'light_solarized': LightSolarizedStyle}
+          'light_solarized': LightSolarizedStyle,
+          'dark_colorized': DarkColorizedStyle }
