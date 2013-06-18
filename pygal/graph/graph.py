@@ -109,7 +109,9 @@ class Graph(BaseGraph):
         a = self.svg.node(self.nodes['tooltip'], 'a')
         self.svg.node(a, 'rect',
                       id="tooltip-box",
-                      rx=5, ry=5, width=0, height=0)
+                      rx=self.tooltip_border_radius,
+                      ry=self.tooltip_border_radius,
+                      width=0, height=0)
         text = self.svg.node(a, 'text', class_='text')
         self.svg.node(text, 'tspan', class_='label')
         self.svg.node(text, 'tspan', class_='value')
