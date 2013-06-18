@@ -141,6 +141,14 @@ class Config(object):
     rounded_bars = Key(
         None, int, "Look", "Set this to the desired radius in px")
 
+    spacing = Key(
+        10, int, "Look",
+        "Space between titles/legend/axes")
+
+    margin = Key(
+        20, int, "Look",
+        "Margin around chart")
+
     ############ Label ############
     x_labels = Key(
         None, list, "Label",
@@ -168,6 +176,9 @@ class Config(object):
         None, list, "Label",
         "You can specify explicit y labels",
         "Must be a list of numbers", float)
+
+    show_y_labels = Key(
+        True, bool, "Label", "Set to false to hide y-labels")
 
     x_label_rotation = Key(
         0, int, "Label", "Specify x labels rotation angles", "in degrees")

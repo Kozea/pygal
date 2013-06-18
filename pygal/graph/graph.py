@@ -206,7 +206,7 @@ class Graph(BaseGraph):
 
     def _y_axis(self, draw_axes=True):
         """Make the y axis: labels and guides"""
-        if not self._y_labels:
+        if not self._y_labels or not self.show_y_labels:
             return
 
         axis = self.svg.node(self.nodes['plot'], class_="axis y")
@@ -270,10 +270,10 @@ class Graph(BaseGraph):
             return
         truncation = self.truncate_legend
         if self.legend_at_bottom:
-            x = self.margin.left + 10
+            x = self.margin.left + self.spacing
             y = (self.margin.top + self.view.height +
                  self._x_title_height +
-                 self._x_labels_height + 10)
+                 self._x_labels_height + self.spacing)
             cols = ceil(sqrt(self._order)) or 1
 
             if not truncation:
@@ -282,8 +282,8 @@ class Graph(BaseGraph):
                 truncation = reverse_text_len(
                     available_space, self.legend_font_size)
         else:
-            x = 10
-            y = self.margin.top + 10
+            x = self.spacing
+            y = self.margin.top + self.spacing
             cols = 1
             if not truncation:
                 truncation = 15
@@ -311,13 +311,13 @@ class Graph(BaseGraph):
                 enumerate(zip(self._secondary_legends, repeat(True)))))
 
             # draw secondary axis on right
-            x = self.margin.left + self.view.width + 10
+            x = self.margin.left + self.view.width + self.spacing
             if self._y_2nd_labels:
                 h, w = get_texts_box(
                     cut(self._y_2nd_labels), self.label_font_size)
-                x += 10 + max(w * cos(rad(self.y_label_rotation)), h)
+                x += self.spacing + max(w * cos(rad(self.y_label_rotation)), h)
 
-            y = self.margin.top + 10
+            y = self.margin.top + self.spacing
 
             secondary_legends = self.svg.node(
                 self.nodes['graph'], class_='legends',
@@ -362,7 +362,7 @@ class Graph(BaseGraph):
                 self.svg.node(
                     self.nodes['title'], 'text', class_='title',
                     x=self.width / 2,
-                    y=i * (self.title_font_size + 10)
+                    y=i * (self.title_font_size + self.spacing)
                 ).text = title_line
 
     def _x_title(self):
@@ -374,7 +374,7 @@ class Graph(BaseGraph):
                 text = self.svg.node(
                     self.nodes['title'], 'text', class_='title',
                     x=self.margin.left + self.view.width / 2,
-                    y=y + i * (self.title_font_size + 10)
+                    y=y + i * (self.title_font_size + self.spacing)
                 )
                 text.text = title_line
 
@@ -386,7 +386,7 @@ class Graph(BaseGraph):
                 text = self.svg.node(
                     self.nodes['title'], 'text', class_='title',
                     x=self._legend_at_left_width,
-                    y=i * (self.title_font_size + 10) + yc
+                    y=i * (self.title_font_size + self.spacing) + yc
                 )
                 text.attrib['transform'] = "rotate(%d %f %f)" % (
                     -90, self._legend_at_left_width, yc)

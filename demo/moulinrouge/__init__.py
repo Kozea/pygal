@@ -16,7 +16,7 @@
 #
 # You should have received a copy of the GNU Lesser General Public License
 # along with pygal. If not, see <http://www.gnu.org/licenses/>.
-from flask import Flask, render_template
+from flask import Flask, render_template, Response
 import pygal
 from pygal.config import Config
 from pygal.util import cut
@@ -93,6 +93,13 @@ def create_app():
         for title, values in pickle.loads(b64decode(str(series))):
             graph.add(title, values)
         return graph.render_response()
+
+    @app.route("/sparkline/<style>")
+    def sparkline(style):
+        line = pygal.Line(style=styles[style])
+        line.add('_', [random.randrange(0, 10) for _ in range(25)])
+        return Response(
+            line.render_sparkline(height=40), mimetype='image/svg+xml')
 
     @app.route("/all")
     @app.route("/all/style=<style>")

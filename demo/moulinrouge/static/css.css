@@ -3,7 +3,18 @@ html, body, section, figure {
   padding: 0;
 }
 
+li {
+  display: block;
+  overflow: auto;
+  font-size: 1.5em;
+}
+
+li a {
+  vertical-align: super;
+}
+
 figure {
+  display: block;
   float: left;
   border: 1px solid #ccc;
 }

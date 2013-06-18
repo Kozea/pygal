@@ -1,12 +1,15 @@
 {% extends '_layout.jinja2' %}
 
 {% block section %}
-  <dl>
-    <dt>All types</dt>
+  <h1>Moulin Rouge</h1>
+  <ul>
     {% for style in styles %}
-      <dd><a href="{{ url_for('all', style=style) }}">{{ style }}</a></dd>
+      <li>
+        <embed src="{{ url_for('sparkline', style=style) }}" type="image/svg+xml" />
+        <a href="{{ url_for('all', style=style) }}">{{ style | title }}</a>
+      </li>
     {% endfor %}
-  </dl>
+  </ul>
   <a href="{{ url_for('interpolation') }}">Interpolation</a>
   <a href="{{ url_for('rotation') }}">Rotations test</a>
   <hr />

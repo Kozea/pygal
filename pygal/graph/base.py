@@ -47,7 +47,7 @@ class BaseGraph(object):
         self._x_2nd_labels = None
         self._y_2nd_labels = None
         self.nodes = {}
-        self.margin = Margin(*([20] * 4))
+        self.margin = Margin(*([self.margin] * 4))
         self._box = Box()
         self.view = None
         if self.logarithmic and self.zero == 0:
@@ -100,15 +100,16 @@ class BaseGraph(object):
                     self.legend_font_size)
                 if self.legend_at_bottom:
                     h_max = max(h, self.legend_box_size)
-                    self.margin.bottom += 10 + h_max * round(
+                    self.margin.bottom += self.spacing + h_max * round(
                         sqrt(self._order) - 1) * 1.5 + h_max
                 else:
                     if series_group is self.series:
-                        legend_width = 10 + w + self.legend_box_size
+                        legend_width = self.spacing + w + self.legend_box_size
                         self.margin.left += legend_width
                         self._legend_at_left_width += legend_width
                     else:
-                        self.margin.right += 10 + w + self.legend_box_size
+                        self.margin.right += (
+                            self.spacing + w + self.legend_box_size)
 
         for xlabels in (self._x_labels, self._x_2nd_labels):
             if xlabels:
@@ -116,7 +117,7 @@ class BaseGraph(object):
                     map(lambda x: truncate(x, self.truncate_label or 25),
                         cut(xlabels)),
                     self.label_font_size)
-                self._x_labels_height = 10 + max(
+                self._x_labels_height = self.spacing + max(
                     w * sin(rad(self.x_label_rotation)), h)
                 if xlabels is self._x_labels:
                     self.margin.bottom += self._x_labels_height
@@ -129,23 +130,24 @@ class BaseGraph(object):
         if not self._x_labels:
             self._x_labels_height = 0
 
-        for ylabels in (self._y_labels, self._y_2nd_labels):
-            if ylabels:
-                h, w = get_texts_box(
-                    cut(ylabels), self.label_font_size)
-                if ylabels is self._y_labels:
-                    self.margin.left += 10 + max(
-                        w * cos(rad(self.y_label_rotation)), h)
-                else:
-                    self.margin.right += 10 + max(
-                        w * cos(rad(self.y_label_rotation)), h)
+        if self.show_y_labels:
+            for ylabels in (self._y_labels, self._y_2nd_labels):
+                if ylabels:
+                    h, w = get_texts_box(
+                        cut(ylabels), self.label_font_size)
+                    if ylabels is self._y_labels:
+                        self.margin.left += self.spacing + max(
+                            w * cos(rad(self.y_label_rotation)), h)
+                    else:
+                        self.margin.right += self.spacing + max(
+                            w * cos(rad(self.y_label_rotation)), h)
 
         self.title = split_title(
             self.title, self.width, self.title_font_size)
 
         if self.title:
             h, _ = get_text_box(self.title[0], self.title_font_size)
-            self.margin.top += len(self.title) * (10 + h)
+            self.margin.top += len(self.title) * (self.spacing + h)
 
         self.x_title = split_title(
             self.x_title, self.width - self.margin.x, self.title_font_size)
@@ -153,9 +155,9 @@ class BaseGraph(object):
         self._x_title_height = 0
         if self.x_title:
             h, _ = get_text_box(self.x_title[0], self.title_font_size)
-            height = len(self.x_title) * (10 + h)
+            height = len(self.x_title) * (self.spacing + h)
             self.margin.bottom += height
-            self._x_title_height = height + 10
+            self._x_title_height = height + self.spacing
 
         self.y_title = split_title(
             self.y_title, self.height - self.margin.y, self.title_font_size)
@@ -163,9 +165,9 @@ class BaseGraph(object):
         self._y_title_height = 0
         if self.y_title:
             h, _ = get_text_box(self.y_title[0], self.title_font_size)
-            height = len(self.y_title) * (10 + h)
+            height = len(self.y_title) * (self.spacing + h)
             self.margin.left += height
-            self._y_title_height = height + 10
+            self._y_title_height = height + self.spacing
 
     @cached_property
     def _legends(self):
@@ -247,7 +249,7 @@ class BaseGraph(object):
             map(len, map(lambda s: s.safe_values, self.series))) != 0 and (
                 sum(map(abs, self._values)) != 0)
 
-    def render(self, is_unicode):
+    def render(self, is_unicode=False):
         """Render the graph, and return the svg string"""
         return self.svg.render(
             is_unicode=is_unicode, pretty_print=self.pretty_print)
