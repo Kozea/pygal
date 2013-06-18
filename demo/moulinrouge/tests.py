@@ -26,14 +26,14 @@ def get_test_routes(app):
     @app.route('/test/bar_links')
     def test_bar_links():
         bar = Bar(style=styles['neon'])
-        # bar.js = ('http://l:2343/svg.jquery.js',
-                  # 'http://l:2343/pygal-tooltips.js')
+        bar.js = ('http://l:2343/svg.jquery.js',
+                  'http://l:2343/pygal-tooltips.js')
         bar.add('1234', [
             {'value': 10,
              'label': 'Ten',
              'xlink': 'http://google.com?q=10'},
             {'value': 20,
-             'label': 'Twenty',
+             'tooltip': 'Twenty',
              'xlink': 'http://google.com?q=20'},
             30,
             {'value': 40,
@@ -117,7 +117,6 @@ def get_test_routes(app):
     def test_dot():
         dot = Dot()
         dot.x_labels = map(str, range(4))
-
         dot.add('a', [1, lnk(3, 'Foo'), 5, 3])
         dot.add('b', [2, 2, 0, 2])
         dot.add('c', [5, 1, 5, lnk(3, 'Bar')])

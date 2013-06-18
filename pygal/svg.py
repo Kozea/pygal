@@ -60,6 +60,7 @@ class Svg(object):
 
     def add_styles(self):
         """Add the css to the svg"""
+        all_css = []
         for css in ['base.css'] + list(self.graph.css):
             if urlparse(css).scheme:
                 self.processing_instructions.append(
@@ -76,8 +77,9 @@ class Svg(object):
                         font_sizes=self.graph.font_sizes())
                     if not self.graph.pretty_print:
                         css_text = minify_css(css_text)
-                    self.node(
-                        self.defs, 'style', type='text/css').text = css_text
+                all_css.append(css_text)
+        self.node(
+            self.defs, 'style', type='text/css').text = '\n'.join(all_css)
 
     def add_scripts(self):
         """Add the js to the svg"""

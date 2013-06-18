@@ -149,6 +149,8 @@ class Config(object):
         20, int, "Look",
         "Margin around chart")
 
+    tooltip_border_radius = Key(0, int, "Look", "Tooltip border radius")
+
     ############ Label ############
     x_labels = Key(
         None, list, "Label",
@@ -235,7 +237,7 @@ class Config(object):
 
     value_font_size = Key(8, int, "Text", "Value font size")
 
-    tooltip_font_size = Key(20, int, "Text", "Tooltip font size")
+    tooltip_font_size = Key(16, int, "Text", "Tooltip font size")
 
     title_font_size = Key(16, int, "Text", "Title font size")
 

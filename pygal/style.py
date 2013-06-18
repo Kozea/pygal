@@ -19,7 +19,30 @@
 """
 Charts styling
 """
+from __future__ import division
 from pygal.util import cycle_fill
+from colorsys import rgb_to_hls, hls_to_rgb
+
+
+def darken(color, percent):
+    assert color[0] == '#', '#rrggbb and #rgb format are supported'
+    color = color[1:]
+    assert len(color) in (3, 6), '#rrggbb and #rgb format are supported'
+    if len(color) == 3:
+        color = [a for b in zip(color, color) for a in b]
+
+    return '#%02x%02x%02x' % tuple(
+        map(lambda x: 255 * x,
+            hls_to_rgb(*(
+                lambda h, l, s: (h, max(0, min(1, l - percent / 100)), s))(
+                    *rgb_to_hls(*map(
+                        lambda x: int(''.join(x), 16) / 255,
+                        zip(color[::2], color[1::2])))
+                ))))
+
+
+def lighten(color, percent):
+    return darken(color, -percent)
 
 
 class Style(object):

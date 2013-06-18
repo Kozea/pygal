@@ -96,7 +96,7 @@ def create_app():
 
     @app.route("/sparkline/<style>")
     def sparkline(style):
-        line = pygal.Line(style=styles[style])
+        line = pygal.Line(style=styles[style], pretty_print=True)
         line.add('_', [random.randrange(0, 10) for _ in range(25)])
         return Response(
             line.render_sparkline(height=40), mimetype='image/svg+xml')

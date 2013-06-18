@@ -52,7 +52,7 @@ class Dot(Graph):
             self.svg.node(dots, 'circle', cx=x, cy=y, r=size,
                           class_='dot reactive tooltip-trigger')
 
-            self._tooltip_data(dots, value, x, y)
+            self._tooltip_data(dots, value, x, y, classes='centered')
             self._static_value(serie_node, value, x, y)
 
     def _compute(self):
