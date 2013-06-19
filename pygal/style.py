@@ -145,35 +145,110 @@ LightSolarizedStyle = Style(
     transition='500ms ease-in',
     colors=solarized_colors)
 
-AnaeleStyle = Style(
-    background='#c3c4c6',
-    plot_background='#e6e7e9',
+RedBlueStyle = Style(
+    background=lighten('#e6e7e9', 7),
+    plot_background=lighten('#e6e7e9', 10),
     foreground='rgba(0, 0, 0, 0.9)',
     foreground_light='rgba(0, 0, 0, 0.9)',
     foreground_dark='rgba(0, 0, 0, 0.5)',
     opacity='.6',
     opacity_hover='.9',
     colors=(
-        '#d94e4c', '#e5884f', '#39929a', '#3c6368',
-        '#b73a3b', '#b73a3b', '#b73a3b', '#234547'))
+        '#d94e4c', '#e5884f', '#39929a',
+        lighten('#d94e4c', 10),  darken('#39929a', 15), lighten('#e5884f', 17),
+        darken('#d94e4c', 10), '#234547'))
 
+LightColorizedStyle = Style (
+    background='#f8f8f8',
+    plot_background= lighten('#f8f8f8', 3),
+    foreground='#333',
+    foreground_light='#666',
+    foreground_dark='rgba(255, 255 , 255, 0.5)',
+    opacity='.5',
+    opacity_hover='.9',
+    transition='250ms ease-in',
+    colors=(
+        '#fe9592', '#534f4c', '#3ac2c0', '#a2a7a1',
+        darken('#fe9592', 15), lighten('#534f4c', 15), lighten('#3ac2c0', 15),
+        lighten('#a2a7a1', 15), lighten('#fe9592', 15), darken('#3ac2c0', 10)))
 
 DarkColorizedStyle = Style(
-    background='#3a2d3f',
-    plot_background='#4c3c53',
+    background=darken('#3a2d3f', 5),
+    plot_background=lighten('#3a2d3f',2),
     foreground='rgba(255, 255, 255, 0.9)',
     foreground_light='rgba(255, 255, 255, 0.9)',
-    foreground_dark='rgba(255, 255, 255, 0.5)',
+    foreground_dark='rgba(255, 255 , 255, 0.5)',
+    opacity='.2',
+    opacity_hover='.7',
+    transition='250ms ease-in',
+    colors=(
+        '#c900fe', '#01b8fe', '#59f500', '#ff00e4', '#f9fa00',
+        darken('#c900fe', 20), darken('#01b8fe', 15), darken('#59f500', 20),
+        darken('#ff00e4', 15), lighten('#f9fa00', 20)))
+
+TurquoiseStyle = Style(
+    background=darken('#1b8088', 15),
+    plot_background=darken('#1b8088', 17),
+    foreground='rgba(255, 255, 255, 0.9)',
+    foreground_light='rgba(255, 255, 255, 0.9)',
+    foreground_dark='rgba(255, 255 , 255, 0.5)',
+    opacity='.5',
+    opacity_hover='.9',
+    transition='250ms ease-in',
+    colors=(
+        '#93d2d9', '#ef940f', '#8C6243', '#fff',
+        darken('#93d2d9', 20),  lighten('#ef940f', 15), lighten('#8c6243', 15),'#1b8088'))
+
+
+GreenLightStyle = Style(
+    background= lighten('#f3f3f3', 3),
+    plot_background='#fff',
+    foreground='#333333',
+    foreground_light='#666',
+    foreground_dark='#222222',
+    opacity='.5',
+    opacity_hover='.9',
+    transition='250ms ease-in',
+    colors=(
+        '#7dcf30', '#247fab', lighten('#7dcf30', 10), '#ccc',
+        darken('#7dcf30', 15), '#ddd', lighten('#247fab', 10), darken('#247fab', 15)))
+
+
+GreenDarkStyle = Style(
+    background=darken('#251e01', 3),
+    plot_background=darken('#251e01',1),
+    foreground='rgba(255, 255, 255, 0.9)',
+    foreground_light='rgba(255, 255, 255, 0.9)',
+    foreground_dark='rgba(255, 255, 255, 0.6)',
     opacity='.6',
     opacity_hover='.9',
+    transition='250ms ease-in',
     colors=(
-        '#02b8ff', '#d801ff'))
+        '#adde09', '#6e8c06', '#4a5e04', '#fcd202', '#C1E34D',
+        lighten('#fcd202', 25)))
+
+GreenBlueDarkStyle = Style(
+    background= '#000',
+    plot_background=lighten('#000', 8),
+    foreground='rgba(255, 255, 255, 0.9)',
+    foreground_light='rgba(255, 255, 255, 0.9)',
+    foreground_dark='rgba(255, 255, 255, 0.6)',
+    opacity='.55',
+    opacity_hover='.9',
+    transition='250ms ease-in',
+    colors=(lighten('#34B8F7', 15), '#7dcf30', '#247fab',  darken('#7dcf30', 10),
+            lighten('#247fab', 10),  lighten('#7dcf30', 10), darken('#247fab', 10), '#fff'))
 
 styles = {'default': DefaultStyle,
           'light': LightStyle,
           'neon': NeonStyle,
           'clean': CleanStyle,
-          'anaele': AnaeleStyle,
+          'light_red_blue': RedBlueStyle,
           'dark_solarized': DarkSolarizedStyle,
           'light_solarized': LightSolarizedStyle,
-          'dark_colorized': DarkColorizedStyle }
+          'dark_colorized': DarkColorizedStyle,
+          'light_colorized': LightColorizedStyle,
+          'turquoise': TurquoiseStyle,
+          'green': GreenLightStyle,
+          'dark_green': GreenDarkStyle,
+          'dark_green_blue': GreenBlueDarkStyle}
