@@ -257,12 +257,19 @@ parametric_styles = {}
 for op in ('lighten', 'darken', 'saturate', 'desaturate', 'rotate'):
     name = op.capitalize() + 'Style'
 
-    def get_style_for(op_):
-        operation = getattr(colors, op_)
+    def get_style_for(op_name):
+        operation = getattr(colors, op_name)
 
         def parametric_style(color, step=10, max_=None, **kwargs):
             if max_ is None:
-                max__ = 50 if op_ != 'rotate' else 360
+                violency = {
+                    'darken': 50,
+                    'lighten': 50,
+                    'saturate': 100,
+                    'desaturate': 100,
+                    'rotate': 360
+                }
+                max__ = violency[op_name]
             else:
                 max__ = max_
 
