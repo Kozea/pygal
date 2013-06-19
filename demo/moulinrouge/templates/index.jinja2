@@ -3,11 +3,21 @@
 {% block section %}
   <h1>Moulin Rouge</h1>
   <ul>
+    <li>Styles</li>
     {% for style in styles %}
       <li>
         <embed src="{{ url_for('sparkline', style=style) }}" type="image/svg+xml" />
         <a href="{{ url_for('all', style=style) }}">{{ style | title }}</a>
       </li>
+    {% endfor %}
+    <li>Parametric Styles</li>
+    {% for color in parametric_colors %}
+      <li><embed src="{{ url_for('sparkline', style='RotateStyle', color=color) }}" type="image/svg+xml" /></li>
+      {% for style in parametric_styles %}
+        <li>
+          <a href="{{ url_for('all', style=style, color=color) }}">{{ style }} for {{ color }}</a>
+        </li>
+      {% endfor %}
     {% endfor %}
   </ul>
   <a href="{{ url_for('interpolation') }}">Interpolation</a>

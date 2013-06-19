@@ -21,7 +21,7 @@ import pygal
 from pygal.config import Config
 from pygal.util import cut
 from pygal.graph import CHARTS_NAMES
-from pygal.style import styles
+from pygal.style import styles, parametric_styles
 from base64 import (
     urlsafe_b64encode as b64encode,
     urlsafe_b64decode as b64decode)
@@ -84,7 +84,9 @@ def create_app():
     @app.route("/")
     def index():
         return render_template(
-            'index.jinja2', styles=styles,
+            'index.jinja2', styles=styles, parametric_styles=parametric_styles,
+            parametric_colors=(
+                '#ff5995', '#b6e354', '#feed6c', '#8cedff', '#9e6ffe'),
             links=links, charts_name=CHARTS_NAMES)
 
     @app.route("/svg/<type>/<series>/<config>")
@@ -95,19 +97,30 @@ def create_app():
         return graph.render_response()
 
     @app.route("/sparkline/<style>")
-    def sparkline(style):
-        line = pygal.Line(style=styles[style], pretty_print=True)
+    @app.route("/sparkline/parameric/<style>/<color>")
+    def sparkline(style, color=None):
+        if color is None:
+            style = styles[style]
+        else:
+            style = parametric_styles[style](color)
+
+        line = pygal.Line(style=style, pretty_print=True)
         line.add('_', [random.randrange(0, 10) for _ in range(25)])
         return Response(
             line.render_sparkline(height=40), mimetype='image/svg+xml')
 
     @app.route("/all")
-    @app.route("/all/style=<style>")
+    @app.route("/all/<style>")
+    @app.route("/all/<style>/<color>")
     @app.route("/all/interpolate=<interpolate>")
-    def all(style='default', interpolate=None):
+    def all(style='default', color=None, interpolate=None):
         width, height = 600, 400
         data = random.randrange(1, 10)
         order = random.randrange(1, 10)
+        if color is None:
+            style = styles[style]
+        else:
+            style = parametric_styles[style](color)
         xy_series = _random(data, order)
         other_series = []
         for title, values in xy_series:
@@ -121,7 +134,7 @@ def create_app():
         config.fill = bool(random.randrange(0, 2))
         config.human_readable = True
         config.interpolate = interpolate
-        config.style = styles[style]
+        config.style = style
         config.x_labels = [random_label() for i in range(data)]
         svgs = []
         for chart in pygal.CHARTS:

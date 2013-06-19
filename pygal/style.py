@@ -21,6 +21,8 @@ Charts styling
 """
 from __future__ import division
 from pygal.util import cycle_fill
+from pygal import colors
+import sys
 
 
 class Style(object):
@@ -130,3 +132,30 @@ styles = {'default': DefaultStyle,
           'clean': CleanStyle,
           'dark_solarized': DarkSolarizedStyle,
           'light_solarized': LightSolarizedStyle}
+
+
+parametric_styles = {}
+for op in ('lighten', 'darken', 'saturate', 'desaturate', 'rotate'):
+    name = op.capitalize() + 'Style'
+
+    def get_style_for(op_):
+        operation = getattr(colors, op_)
+
+        def parametric_style(color, step=10, max_=None, **kwargs):
+            if max_ is None:
+                max__ = 50 if op_ != 'rotate' else 360
+            else:
+                max__ = max_
+
+            def modifier(index):
+                percent = max__ * index / (step - 1)
+                return operation(color, percent)
+
+            colors = list(map(modifier, range(0, max(2, step))))
+            return Style(colors=colors, **kwargs)
+
+        return parametric_style
+
+    style = get_style_for(op)
+    parametric_styles[name] = style
+    setattr(sys.modules[__name__], name, style)
