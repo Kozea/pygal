@@ -21,6 +21,28 @@ Charts styling
 """
 from __future__ import division
 from pygal.util import cycle_fill
+from colorsys import rgb_to_hls, hls_to_rgb
+
+
+def darken(color, percent):
+    assert color[0] == '#', '#rrggbb and #rgb format are supported'
+    color = color[1:]
+    assert len(color) in (3, 6), '#rrggbb and #rgb format are supported'
+    if len(color) == 3:
+        color = [a for b in zip(color, color) for a in b]
+
+    return '#%02x%02x%02x' % tuple(
+        map(lambda x: 255 * x,
+            hls_to_rgb(*(
+                lambda h, l, s: (h, max(0, min(1, l - percent / 100)), s))(
+                    *rgb_to_hls(*map(
+                        lambda x: int(''.join(x), 16) / 255,
+                        zip(color[::2], color[1::2])))
+                ))))
+
+
+def lighten(color, percent):
+    return darken(color, -percent)
 
 
 class Style(object):
@@ -217,6 +239,18 @@ GreenBlueDarkStyle = Style(
     colors=(lighten('#34B8F7', 15), '#7dcf30', '#247fab',  darken('#7dcf30', 10),
             lighten('#247fab', 10),  lighten('#7dcf30', 10), darken('#247fab', 10), '#fff'))
 
+BlueStyle = Style(
+    background=darken('#f8f8f8', 3),
+    plot_background='#f8f8f8',
+    foreground='rgba(0, 0, 0, 0.9)',
+    foreground_light='rgba(0, 0, 0, 0.9)',
+    foreground_dark='rgba(0, 0, 0, 0.6)',
+    opacity='.5',
+    opacity_hover='.9',
+    transition='250ms ease-in',
+    colors=('#00b2f0', '#43d9be', '#0662ab', '#ffd541', lighten('#43d9be', 20),
+            lighten('#7dcf30', 10), darken('#0662ab', 15), '#7dcf30', darken('#ffd541', 20)))
+
 styles = {'default': DefaultStyle,
           'light': LightStyle,
           'neon': NeonStyle,
@@ -229,4 +263,5 @@ styles = {'default': DefaultStyle,
           'turquoise': TurquoiseStyle,
           'green': GreenLightStyle,
           'dark_green': GreenDarkStyle,
-          'dark_green_blue': GreenBlueDarkStyle}
+          'dark_green_blue': GreenBlueDarkStyle,
+          'blue_colorized': BlueStyle}
