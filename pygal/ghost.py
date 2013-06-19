@@ -122,7 +122,7 @@ class Ghost(object):
             return u('')
 
         chart = u('')
-        values = map(lambda x: max(x, 0), values)
+        values = list(map(lambda x: max(x, 0), values))
 
         vmax = max(values)
         if relative_to is None:
