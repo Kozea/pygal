@@ -19,7 +19,7 @@
 from pygal._compat import u
 from pygal.util import (
     round_to_int, round_to_float, _swap_curly, template, humanize,
-    is_major, truncate, minify_css, rgb_to_hsl, hsl_to_rgb)
+    is_major, truncate, minify_css)
 from pytest import raises
 
 
