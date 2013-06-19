@@ -179,6 +179,12 @@ def test_no_data_with_no_values(Chart):
     assert q(".text-overlay text").text() == "No data"
 
 
+def test_no_data_with_no_values_with_include_x_axis(Chart):
+    chart = Chart(include_x_axis=True)
+    q = chart.render_pyquery()
+    assert q(".text-overlay text").text() == "No data"
+
+
 def test_no_data_with_empty_serie(Chart):
     chart = Chart()
     chart.add('Serie', [])

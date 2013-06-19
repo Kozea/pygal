@@ -23,27 +23,40 @@ from pygal._compat import u
 def test_basic_sparktext():
     chart = Line()
     chart.add('_', [1, 5, 22, 13, 53])
-    chart.render_sparktext() == u('▁▁▃▂▇')
+    assert chart.render_sparktext() == u('▁▁▃▂█')
+
+
+def test_all_sparktext():
+    chart = Line()
+    chart.add('_', range(8))
+    assert chart.render_sparktext() == u('▁▂▃▄▅▆▇█')
+
+
+def test_shifted_sparktext():
+    chart = Line()
+    chart.add('_', list(map(lambda x: x + 10000, range(8))))
+    assert chart.render_sparktext() == u('▁▂▃▄▅▆▇█')
+    assert chart.render_sparktext(relative_to=0) == u('▇▇▇▇▇▇▇█')
 
 
 def test_another_sparktext():
     chart = Line()
     chart.add('_', [0, 30, 55, 80, 33, 150])
-    chart.render_sparktext() == u('▁▂▃▅▂▇')
-    chart.render_sparktext() == chart.render_sparktext()
+    assert chart.render_sparktext() == u('▁▂▃▄▂█')
+    assert chart.render_sparktext() == chart.render_sparktext()
     chart2 = Bar()
     chart2.add('_', [0, 30, 55, 80, 33, 150])
-    chart2.render_sparktext() == chart.render_sparktext()
+    assert chart2.render_sparktext() == chart.render_sparktext()
 
 
 def test_negative_and_float_and_no_data_sparktext():
     chart = Line()
     chart.add('_', [0.1, 0.2, 0.9, -0.5])
-    chart.render_sparktext() == u('▄▅█▁')
+    assert chart.render_sparktext() == u('▁▂█▁')
 
     chart2 = Line()
     chart2.add('_', [])
-    chart2.render_sparktext() == u('')
+    assert chart2.render_sparktext() == u('')
 
     chart3 = Line()
-    chart3.render_sparktext() == u('')
+    assert chart3.render_sparktext() == u('')

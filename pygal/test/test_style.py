@@ -16,7 +16,7 @@
 #
 # You should have received a copy of the GNU Lesser General Public License
 # along with pygal. If not, see <http://www.gnu.org/licenses/>.
-from pygal.style import Style, darken, lighten
+from pygal.style import Style
 
 
 def test_colors():
@@ -102,21 +102,3 @@ def test_colors():
   fill: rgb(12, 231, 3);
 }
 '''
-
-
-def test_darken():
-    assert darken('#800', 20) == '#220000'
-    assert darken('#ffffff', 10) == '#e6e6e6'
-    assert darken('#f3148a', 25) == '#810747'
-    assert darken('#121212', 1) == '#0f0f0f'
-    assert darken('#999999', 100) == '#000000'
-    assert darken('#1479ac', 8) == '#105f87'
-
-
-def test_lighten():
-    assert lighten('#800', 20) == '#ee0000'
-    assert lighten('#ffffff', 10) == '#ffffff'
-    assert lighten('#f3148a', 25) == '#f98dc6'
-    assert lighten('#121212', 1) == '#151515'
-    assert lighten('#999999', 100) == '#ffffff'
-    assert lighten('#1479ac', 8) == '#1893d1'

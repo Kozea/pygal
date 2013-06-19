@@ -23,6 +23,7 @@ It is used to delegate rendering to real objects but keeping config in place
 
 """
 
+from __future__ import division
 import io
 import sys
 from pygal.config import Config
@@ -111,7 +112,7 @@ class Ghost(object):
         return cairosvg.svg2png(
             bytestring=self.render(), write_to=filename, dpi=dpi)
 
-    def render_sparktext(self):
+    def render_sparktext(self, relative_to=None):
         """Make a mini text sparkline from chart"""
         bars = u('▁▂▃▄▅▆▇█')
         if len(self.raw_series) == 0:
@@ -121,23 +122,30 @@ class Ghost(object):
             return u('')
 
         chart = u('')
+        values = list(map(lambda x: max(x, 0), values))
+
         vmax = max(values)
-        divisions = len(bars)
+        if relative_to is None:
+            relative_to = min(values)
+        divisions = len(bars) - 1
         for value in values:
-            chart += bars[int(divisions * min(value, 0) / vmax)]
+            chart += bars[int(divisions *
+                              (value - relative_to) / (vmax - relative_to))]
         return chart
 
-    def render_sparkline(self, width=200, height=50):
-        return self.make_instance(dict(
-            width=width,
-            height=height,
+    def render_sparkline(self, **kwargs):
+        spark_options = dict(
+            width=200,
+            height=50,
             show_dots=False,
             show_legend=False,
             show_y_labels=False,
             spacing=0,
             margin=5,
             explicit_size=True
-        )).render()
+        )
+        spark_options.update(kwargs)
+        return self.make_instance(spark_options).render()
 
     def _repr_png_(self):
         """Display png in IPython notebook"""
