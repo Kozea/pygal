@@ -34,7 +34,7 @@ def test_all_sparktext():
 
 def test_shifted_sparktext():
     chart = Line()
-    chart.add('_', map(lambda x: x + 10000, range(8)))
+    chart.add('_', list(map(lambda x: x + 10000, range(8))))
     assert chart.render_sparktext() == u('▁▂▃▄▅▆▇█')
     assert chart.render_sparktext(relative_to=0) == u('▇▇▇▇▇▇▇█')
 
