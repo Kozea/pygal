@@ -260,7 +260,8 @@ for op in ('lighten', 'darken', 'saturate', 'desaturate', 'rotate'):
     def get_style_for(op_name):
         operation = getattr(colors, op_name)
 
-        def parametric_style(color, step=10, max_=None, **kwargs):
+        def parametric_style(color, step=10, max_=None,
+                             base_style=None, **kwargs):
             if max_ is None:
                 violency = {
                     'darken': 50,
@@ -278,7 +279,12 @@ for op in ('lighten', 'darken', 'saturate', 'desaturate', 'rotate'):
                 return operation(color, percent)
 
             colors = list(map(modifier, range(0, max(2, step))))
-            return Style(colors=colors, **kwargs)
+            if base_style is None:
+                return Style(colors=colors, **kwargs)
+
+            base_style.__dict__.update(kwargs)
+            base_style._colors = colors
+            return base_style
 
         return parametric_style
 

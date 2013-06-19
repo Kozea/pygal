@@ -112,15 +112,17 @@ def create_app():
     @app.route("/all")
     @app.route("/all/<style>")
     @app.route("/all/<style>/<color>")
+    @app.route("/all/<style>/<color>/<base_style>")
     @app.route("/all/interpolate=<interpolate>")
-    def all(style='default', color=None, interpolate=None):
+    def all(style='default', color=None, interpolate=None, base_style=None):
         width, height = 600, 400
         data = random.randrange(1, 10)
         order = random.randrange(1, 10)
         if color is None:
             style = styles[style]
         else:
-            style = parametric_styles[style](color)
+            style = parametric_styles[style](
+                color, base_style=styles[base_style or 'default'])
         xy_series = _random(data, order)
         other_series = []
         for title, values in xy_series:
