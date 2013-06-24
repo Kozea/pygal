@@ -106,12 +106,12 @@ class Bar(Graph):
 
     def _compute_secondary(self):
         if self.secondary_series:
-            y_pos = zip(*self._y_labels)[1]
+            y_pos = list(zip(*self._y_labels))[1]
             ymin = self._secondary_min
             ymax = self._secondary_max
 
-            min_0_ratio = (self.zero - self._box.ymin) / self._box.height
-            max_0_ratio = (self._box.ymax - self.zero) / self._box.height
+            min_0_ratio = (self.zero - self._box.ymin) / self._box.height or 1
+            max_0_ratio = (self._box.ymax - self.zero) / self._box.height or 1
 
             new_ymax = (self.zero - ymin) * (1 / min_0_ratio - 1)
             new_ymin = -(ymax - self.zero) * (1 / max_0_ratio - 1)

@@ -54,7 +54,7 @@ class VerticalPyramid(StackedBar):
     def _compute_secondary(self):
         # Need refactoring
         if self.secondary_series:
-            y_pos = zip(*self._y_labels)[1]
+            y_pos = list(zip(*self._y_labels))[1]
             positive_vals, negative_vals = self._get_separated_values(True)
             positive_sum = map(sum, positive_vals) or [self.zero]
             negative_sum = map(sum, negative_vals) or [self.zero]

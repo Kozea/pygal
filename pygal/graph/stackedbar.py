@@ -85,10 +85,10 @@ class StackedBar(Bar):
 
             # In case of pyramids
             sum_ = lambda x: sum(x) if isinstance(x, tuple) else x
-            self._secondary_min = negative_vals and min(
-                sum_(min(negative_vals)), self.zero)
-            self._secondary_max = positive_vals and max(
-                sum_(max(positive_vals)), self.zero)
+            self._secondary_min = (negative_vals and min(
+                sum_(min(negative_vals)), self.zero)) or self.zero
+            self._secondary_max = (positive_vals and max(
+                sum_(max(positive_vals)), self.zero)) or self.zero
 
     def _bar(self, parent, x, y, index, i, zero, shift=False, secondary=False):
         if secondary:
