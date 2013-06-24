@@ -247,8 +247,9 @@ BlueStyle = Style(
     opacity='.5',
     opacity_hover='.9',
     transition='250ms ease-in',
-    colors=('#00b2f0', '#43d9be', '#0662ab', '#ffd541', lighten('#43d9be', 20),
-            lighten('#7dcf30', 10), darken('#0662ab', 15), '#7dcf30', darken('#ffd541', 20)))
+    colors=('#00b2f0', '#43d9be', '#0662ab', darken('#00b2f0', 20),
+            lighten('#43d9be', 20), lighten('#7dcf30', 10), darken('#0662ab', 15),
+            '#ffd541', '#7dcf30', lighten('#00b2f0', 15), darken('#ffd541', 20)))
 
 
 styles = {'default': DefaultStyle,
@@ -274,8 +275,7 @@ for op in ('lighten', 'darken', 'saturate', 'desaturate', 'rotate'):
     def get_style_for(op_name):
         operation = getattr(colors, op_name)
 
-        def parametric_style(color, step=10, max_=None,
-                             base_style=None, **kwargs):
+        def parametric_style(color, step=10, max_=None, **kwargs):
             if max_ is None:
                 violency = {
                     'darken': 50,
@@ -293,12 +293,7 @@ for op in ('lighten', 'darken', 'saturate', 'desaturate', 'rotate'):
                 return operation(color, percent)
 
             colors = list(map(modifier, range(0, max(2, step))))
-            if base_style is None:
-                return Style(colors=colors, **kwargs)
-
-            base_style.__dict__.update(kwargs)
-            base_style._colors = colors
-            return base_style
+            return Style(colors=colors, **kwargs)
 
         return parametric_style
 
