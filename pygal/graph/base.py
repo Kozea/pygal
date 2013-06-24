@@ -35,8 +35,9 @@ class BaseGraph(object):
 
     _adapters = []
 
-    def __init__(self, config, series, secondary_series):
+    def __init__(self, config, series, secondary_series, uuid):
         """Init the graph"""
+        self.uuid = uuid
         self.config = config
         self.series = series or []
         self.secondary_series = secondary_series or []

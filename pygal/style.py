@@ -51,20 +51,19 @@ class Style(object):
         self.opacity = opacity
         self.opacity_hover = opacity_hover
         self.transition = transition
-        self._colors = colors
+        self.colors = colors
 
-    @property
-    def colors(self):
+    def get_colors(self, prefix):
         """Get the css color list"""
 
         def color(tupl):
             """Make a color css"""
-            return (
-                '.color-{0} {{\n'
+            return ((
+                '%s.color-{0} {{\n'
                 '  stroke: {1};\n'
                 '  fill: {1};\n'
-                '}}\n'.format(*tupl))
-        return '\n'.join(map(color, enumerate(cycle_fill(self._colors, 16))))
+                '}}\n') % prefix).format(*tupl)
+        return '\n'.join(map(color, enumerate(cycle_fill(self.colors, 16))))
 
     def to_dict(self):
         config = {}
@@ -248,7 +247,8 @@ BlueStyle = Style(
     opacity_hover='.9',
     transition='250ms ease-in',
     colors=('#00b2f0', '#43d9be', '#0662ab', '#ffd541', lighten('#43d9be', 20),
-            lighten('#7dcf30', 10), darken('#0662ab', 15), '#7dcf30', darken('#ffd541', 20)))
+            lighten('#7dcf30', 10), darken('#0662ab', 15),
+            '#7dcf30', darken('#ffd541', 20)))
 
 
 styles = {'default': DefaultStyle,
@@ -297,7 +297,7 @@ for op in ('lighten', 'darken', 'saturate', 'desaturate', 'rotate'):
                 return Style(colors=colors, **kwargs)
 
             base_style.__dict__.update(kwargs)
-            base_style._colors = colors
+            base_style.colors = colors
             return base_style
 
         return parametric_style

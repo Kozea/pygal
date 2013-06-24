@@ -22,94 +22,98 @@
  * Styles from config
  */
 
-svg {
+{{ id }}{
   background-color: {{ style.background }};
 }
 
-svg path, svg line, svg rect, svg circle {
+{{ id }}path,
+{{ id }}line,
+{{ id }}rect,
+{{ id }}circle {
   -webkit-transition: {{ style.transition }};
   -moz-transition: {{ style.transition }};
   transition: {{ style.transition }};
 }
 
-.graph > .background {
+{{ id }}.graph > .background {
   fill: {{ style.background }};
 }
 
-.plot > .background {
+{{ id }}.plot > .background {
   fill: {{ style.plot_background }};
 }
 
-.graph {
+{{ id }}.graph {
   fill: {{ style.foreground }};
 }
 
-text.no_data {
+{{ id }}text.no_data {
   fill: {{ style.foreground_light }};
 }
 
-.title {
+{{ id }}.title {
   fill: {{ style.foreground_light }};
 }
 
-.legends .legend text {
+{{ id }}.legends .legend text {
   fill: {{ style.foreground }};
 }
 
-.legends .legend:hover text {
+{{ id }}.legends .legend:hover text {
   fill: {{ style.foreground_light }};
 }
 
-.axis .line {
+{{ id }}.axis .line {
   stroke: {{ style.foreground_light }};
 }
 
-.axis .guide.line {
+{{ id }}.axis .guide.line {
   stroke: {{ style.foreground_dark }};
 }
 
-.axis .major.line {
+{{ id }}.axis .major.line {
   stroke: {{ style.foreground }};
 }
 
-.axis text.major {
+{{ id }}.axis text.major {
   stroke: {{ style.foreground_light }};
   fill: {{ style.foreground_light }};
 }
 
-.axis.y .guides:hover .guide.line,
-.line-graph .axis.x .guides:hover .guide.line,
-.stackedline-graph .axis.x .guides:hover .guide.line,
-.xy-graph .axis.x .guides:hover .guide.line {
+{{ id }}.axis.y .guides:hover .guide.line,
+{{ id }}.line-graph .axis.x .guides:hover .guide.line,
+{{ id }}.stackedline-graph .axis.x .guides:hover .guide.line,
+{{ id }}.xy-graph .axis.x .guides:hover .guide.line {
   stroke: {{ style.foreground_light }};
 }
 
-.axis .guides:hover text {
+{{ id }}.axis .guides:hover text {
   fill: {{ style.foreground_light }};
 }
 
-.reactive {
+{{ id }}.reactive {
   fill-opacity: {{ style.opacity }};
 }
 
-.reactive.active, .active .reactive {
+{{ id }}.reactive.active,
+{{ id }}.active .reactive {
   fill-opacity:  {{ style.opacity_hover }};
 }
 
-.series text {
+{{ id }}.series text {
   fill: {{ style.foreground_light }};
 }
 
-#tooltip rect {
+{{ id }}#tooltip rect {
   fill: {{ style.plot_background }};
   stroke: {{ style.foreground_light }};
 }
 
-#tooltip text {
+{{ id }}#tooltip text {
   fill: {{ style.foreground_light }};
 }
 
-.country {
+{{ id }}.country {
   fill: {{ style.foreground }};
   stroke: {{ style.plot_background }} !important;
   opacity: .9;
@@ -120,11 +124,11 @@ text.no_data {
   transition: 250ms;
 }
 
-.country:hover {
+{{ id }}.country:hover {
   opacity: 1;
   stroke-width: 10;
 }
 
-{{ style.colors }}
+{{ colors }}
 
 

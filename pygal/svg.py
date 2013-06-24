@@ -40,6 +40,10 @@ class Svg(object):
 
     def __init__(self, graph):
         self.graph = graph
+        if not graph.no_prefix:
+            self.id = '#chart-%s ' % graph.uuid
+        else:
+            self.id = ''
         self.processing_instructions = [
             etree.PI(u('xml'), u("version='1.0' encoding='utf-8'"))]
         self.root = etree.Element(
@@ -48,6 +52,8 @@ class Svg(object):
                 None: self.ns,
                 'xlink': 'http://www.w3.org/1999/xlink',
             })
+        self.root.attrib['id'] = self.id.lstrip('#').rstrip()
+        self.root.attrib['class'] = 'pygal-chart'
         self.root.append(
             etree.Comment(u(
                 'Generated with pygal %s ©Kozea 2011-2013 on %s' % (
@@ -60,6 +66,7 @@ class Svg(object):
 
     def add_styles(self):
         """Add the css to the svg"""
+        colors = self.graph.style.get_colors(self.id)
         all_css = []
         for css in ['base.css'] + list(self.graph.css):
             if urlparse(css).scheme:
@@ -74,7 +81,9 @@ class Svg(object):
                     css_text = template(
                         f.read(),
                         style=self.graph.style,
-                        font_sizes=self.graph.font_sizes())
+                        colors=colors,
+                        font_sizes=self.graph.font_sizes(),
+                        id=self.id)
                     if not self.graph.pretty_print:
                         css_text = minify_css(css_text)
                 all_css.append(css_text)

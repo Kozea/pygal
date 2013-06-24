@@ -27,6 +27,7 @@ def test_config_behaviours():
     line1.show_legend = False
     line1.fill = True
     line1.pretty_print = True
+    line1.no_prefix = True
     line1.x_labels = ['a', 'b', 'c']
     line1.add('_', [1, 2, 3])
     l1 = line1.render()
@@ -45,6 +46,7 @@ def test_config_behaviours():
         show_legend=False,
         fill=True,
         pretty_print=True,
+        no_prefix=True,
         x_labels=['a', 'b', 'c'])
     line2.add('_', [1, 2, 3])
     l2 = line2.render()
@@ -54,6 +56,7 @@ def test_config_behaviours():
         show_legend = False
         fill = True
         pretty_print = True
+        no_prefix = True
         x_labels = ['a', 'b', 'c']
 
     line3 = Line(LineConfig)
@@ -70,6 +73,7 @@ def test_config_behaviours():
     line_config.show_legend = False
     line_config.fill = True
     line_config.pretty_print = True
+    line_config.no_prefix = True
     line_config.x_labels = ['a', 'b', 'c']
 
     line5 = Line(line_config)
@@ -80,6 +84,7 @@ def test_config_behaviours():
 
 def test_config_alterations_class():
     class LineConfig(Config):
+        no_prefix = True
         show_legend = False
         fill = True
         pretty_print = True
@@ -101,6 +106,7 @@ def test_config_alterations_class():
 
 def test_config_alterations_instance():
     class LineConfig(Config):
+        no_prefix = True
         show_legend = False
         fill = True
         pretty_print = True
@@ -123,6 +129,7 @@ def test_config_alterations_instance():
 
 def test_config_alterations_kwargs():
     class LineConfig(Config):
+        no_prefix = True
         show_legend = False
         fill = True
         pretty_print = True

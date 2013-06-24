@@ -224,4 +224,21 @@ def create_app():
                                svgs=svgs,
                                width=width,
                                height=height)
+
+    @app.route("/raw_svgs/")
+    def raw_svgs():
+        svgs = []
+        for color in styles['neon'].colors:
+            chart = pygal.Pie(style=parametric_styles['RotateStyle'](color))
+            chart.title = color
+            chart.disable_xml_declaration = True
+            chart.explicit_size = True
+            chart.js = [
+                'http://l:2343/svg.jquery.js',
+                'http://l:2343/pygal-tooltips.js']
+            for i in range(6):
+                chart.add(str(i), 2 ** i)
+            svgs.append(chart.render())
+        return render_template('raw_svgs.jinja2', svgs=svgs)
+
     return app

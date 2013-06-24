@@ -115,12 +115,12 @@ def test_empty_lists_with_nones(Chart):
 
 
 def test_non_iterable_value(Chart):
-    chart = Chart()
+    chart = Chart(no_prefix=True)
     chart.add('A', 1)
     chart.add('B', 2)
     chart.x_labels = ('red', 'green', 'blue')
     chart1 = chart.render()
-    chart = Chart()
+    chart = Chart(no_prefix=True)
     chart.add('A', [1])
     chart.add('B', [2])
     chart.x_labels = ('red', 'green', 'blue')
@@ -129,13 +129,13 @@ def test_non_iterable_value(Chart):
 
 
 def test_iterable_types(Chart):
-    chart = Chart()
+    chart = Chart(no_prefix=True)
     chart.add('A', [1, 2])
     chart.add('B', [])
     chart.x_labels = ('red', 'green', 'blue')
     chart1 = chart.render()
 
-    chart = Chart()
+    chart = Chart(no_prefix=True)
     chart.add('A', (1, 2))
     chart.add('B', tuple())
     chart.x_labels = ('red', 'green', 'blue')
@@ -144,8 +144,8 @@ def test_iterable_types(Chart):
 
 
 def test_values_by_dict(Chart):
-    chart1 = Chart()
-    chart2 = Chart()
+    chart1 = Chart(no_prefix=True)
+    chart2 = Chart(no_prefix=True)
 
     if Chart != pygal.Worldmap:
         chart1.add('A', {'red': 10, 'green': 12, 'blue': 14})

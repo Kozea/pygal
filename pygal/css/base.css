@@ -22,37 +22,37 @@
  * Font-sizes from config, override with care
  */
 
-.title {
+{{ id }}.title {
   font-family: monospace;
   font-size: {{ font_sizes.title }};
 }
 
-.legends .legend text {
+{{ id }}.legends .legend text {
   font-family: monospace;
   font-size: {{ font_sizes.legend }};
 }
 
-.axis text {
+{{ id }}.axis text {
   font-family: monospace;
   font-size: {{ font_sizes.label }};
 }
 
-.axis text.major {
+{{ id }}.axis text.major {
   font-family: monospace;
   font-size: {{ font_sizes.major_label }};
 }
 
-.series text {
+{{ id }}.series text {
   font-family: monospace;
   font-size: {{ font_sizes.value }};
 }
 
-#tooltip text {
+{{ id }}#tooltip text {
   font-family: monospace;
   font-size: {{ font_sizes.tooltip }};
 }
 
-text.no_data {
+{{ id }}text.no_data {
   font-size: {{ font_sizes.no_data }};
 }
 

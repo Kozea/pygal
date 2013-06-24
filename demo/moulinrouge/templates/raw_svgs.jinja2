@@ -1,0 +1,15 @@
+{% extends '_layout.jinja2' %}
+
+{% block js %}
+  <script type="text/javascript" src="http://l:2343/svg.jquery.js"></script>
+  <script type="text/javascript" src="http://l:2343/pygal-tooltips.js"></script>
+{% endblock js %}
+
+{% block section %}
+  {% for svg in svgs %}
+    <figure>
+      {{ svg | safe }}
+      <figcaption></figcaption>
+    </figure>
+  {% endfor %}
+{% endblock section %}

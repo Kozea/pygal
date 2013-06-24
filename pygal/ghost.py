@@ -30,6 +30,7 @@ from pygal.config import Config
 from pygal._compat import u
 from pygal.graph import CHARTS_NAMES
 from pygal.util import prepare_values
+from uuid import uuid4
 
 
 REAL_CHARTS = {}
@@ -46,6 +47,7 @@ class Ghost(object):
         """Init config"""
         name = self.__class__.__name__
         self.cls = REAL_CHARTS[name]
+        self.uuid = str(uuid4())
         if config and isinstance(config, type):
             config = config()
 
@@ -76,7 +78,8 @@ class Ghost(object):
         self.config.__dict__.update(overrides)
         series = self.make_series(self.raw_series)
         secondary_series = self.make_series(self.raw_series2)
-        self._last__inst = self.cls(self.config, series, secondary_series)
+        self._last__inst = self.cls(
+            self.config, series, secondary_series, self.uuid)
         return self._last__inst
 
     # Rendering

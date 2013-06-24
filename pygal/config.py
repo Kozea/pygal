@@ -284,6 +284,10 @@ class Config(object):
         False, bool, "Misc",
         "If True don't try to adapt / filter wrong values")
 
+    no_prefix = Key(
+        False, bool, "Misc",
+        "Don't prefix css")
+
     def __init__(self, **kwargs):
         """Can be instanciated with config kwargs"""
         for k in dir(self):

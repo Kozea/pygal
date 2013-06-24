@@ -18,110 +18,110 @@
  * along with pygal. If not, see <http://www.gnu.org/licenses/>.
 */
 
-text.no_data {
+{{ id }}text.no_data {
   text-anchor: middle;
 }
 
-.guide.line {
+{{ id }}.guide.line {
   fill-opacity: 0;
 }
 
-.centered {
+{{ id }}.centered {
   text-anchor: middle;
 }
 
-.title {
+{{ id }}.title {
   text-anchor: middle;
 }
 
-.legends .legend text {
+{{ id }}.legends .legend text {
   fill-opacity: 1;
 }
 
-.axis.x text {
+{{ id }}.axis.x text {
   text-anchor: middle;
 }
 
-.axis.x:not(.web) text[transform] {
+{{ id }}.axis.x:not(.web) text[transform] {
   text-anchor: start;
 }
 
-.axis.y text {
+{{ id }}.axis.y text {
   text-anchor: end;
 }
-.axis.y2 text {
+{{ id }}.axis.y2 text {
   text-anchor: start;
 }
 
-.axis.y .logarithmic text:not(.major) ,
-.axis.y2 .logarithmic text:not(.major) {
+{{ id }}.axis.y .logarithmic text:not(.major) ,
+{{ id }}.axis.y2 .logarithmic text:not(.major) {
   font-size: 50%;
 }
 
-.axis .guide.line {
+{{ id }}.axis .guide.line {
   stroke-dasharray: 4,4;
 }
 
-.axis .major.guide.line {
+{{ id }}.axis .major.guide.line {
   stroke-dasharray: 6,6;
 }
-.axis text.major {
+{{ id }}.axis text.major {
   stroke-width: 0.5px;
 }
 
-.horizontal .axis.y .guide.line,
-.horizontal .axis.y2 .guide.line,
-.vertical .axis.x .guide.line {
+{{ id }}.horizontal .axis.y .guide.line,
+{{ id }}.horizontal .axis.y2 .guide.line,
+{{ id }}.vertical .axis.x .guide.line {
   opacity: 0;
 }
 
-.axis.y .guides:hover .guide.line,
-.axis.y2 .guides:hover .guide.line,
-.line-graph .axis.x .guides:hover .guide.line,
-.gauge-graph .axis.x .guides:hover .guide.line,
-.stackedline-graph .axis.x .guides:hover .guide.line,
-.xy-graph .axis.x .guides:hover .guide.line {
+{{ id }}.axis.y .guides:hover .guide.line,
+{{ id }}.axis.y2 .guides:hover .guide.line,
+{{ id }}.line-graph .axis.x .guides:hover .guide.line,
+{{ id }}.gauge-graph .axis.x .guides:hover .guide.line,
+{{ id }}.stackedline-graph .axis.x .guides:hover .guide.line,
+{{ id }}.xy-graph .axis.x .guides:hover .guide.line {
   opacity: 1;
 }
 
-.axis .guides:hover text {
+{{ id }}.axis .guides:hover text {
   opacity: 1;
 }
 
-.nofill {
+{{ id }}.nofill {
   fill: none;
 }
 
-.dot {
+{{ id }}.dot {
   stroke-width: 1px;
   fill-opacity: 1;
 }
 
-.dot.active {
+{{ id }}.dot.active {
   stroke-width: 5px;
 }
 
-.series text {
+{{ id }}.series text {
   stroke: none;
 }
 
-.series text.active {
+{{ id }}.series text.active {
   opacity: 1;
 }
 
-#tooltip rect {
+{{ id }}#tooltip rect {
   fill-opacity: 0.8;
 }
 
-#tooltip text {
+{{ id }}#tooltip text {
   fill-opacity: 1;
 }
 
-#tooltip text tspan.label {
+{{ id }}#tooltip text tspan.label {
   fill-opacity: .8;
 }
 
-a:visited {
+{{ id }}a:visited {
   fill: none;
 }
 

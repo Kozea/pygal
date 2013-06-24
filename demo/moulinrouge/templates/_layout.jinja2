@@ -2,8 +2,10 @@
 <html>
   <head>
     <title>Moulin rouge - pygal test platform</title>
-    <script src="http://code.jquery.com/jquery.min.js" type="text/javascript"></script>
-    <script type="text/javascript" src="{{ url_for('static', filename='js.js') }}"></script>
+    {% block js %}
+      <script src="http://code.jquery.com/jquery.min.js" type="text/javascript"></script>
+      <script type="text/javascript" src="{{ url_for('static', filename='js.js') }}"></script>
+    {% endblock js %}
     <link rel="stylesheet" href="{{ url_for('static', filename='css.css') }}" type="text/css" />
   </head>
   <body>
