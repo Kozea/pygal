@@ -22,7 +22,6 @@ Pyramid chart
 """
 
 from __future__ import division
-from pygal.util import compute_scale, safe_enumerate
 from pygal.adapters import positive
 from pygal.graph.stackedbar import StackedBar
 
@@ -33,7 +32,8 @@ class VerticalPyramid(StackedBar):
     _adapters = [positive]
 
     def _format(self, value):
-        return super(VerticalPyramid, self)._format(abs(value))
+        value = value and abs(value)
+        return super(VerticalPyramid, self)._format(value)
 
     def _get_separated_values(self, secondary=False):
         series = self.secondary_series if secondary else self.series

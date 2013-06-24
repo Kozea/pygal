@@ -63,7 +63,7 @@ class Bar(Graph):
         if rescale and self.secondary_series:
             points = [
                 (x, self._scale_diff + (y - self._scale_min_2nd) * self._scale)
-                for x, y in serie.points]
+                for x, y in serie.points if y is not None]
         else:
             points = serie.points
 
@@ -121,7 +121,7 @@ class Bar(Graph):
                 ymax = new_ymax
 
             left_range = abs(self._box.ymax - self._box.ymin)
-            right_range = abs(ymax - ymin)
+            right_range = abs(ymax - ymin) or 1
             self._scale = left_range / right_range
             self._scale_diff = self._box.ymin
             self._scale_min_2nd = ymin

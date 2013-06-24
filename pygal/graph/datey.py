@@ -50,7 +50,7 @@ class DateY(XY):
 
     def _todate(self, d):
         """ Converts a number to a date """
-        return str(self._offset + datetime.timedelta(seconds=d))
+        return str(self._offset + datetime.timedelta(seconds=d or 0))
 
     def _tonumber(self, d):
         """ Converts a date to a number """
@@ -71,7 +71,7 @@ class DateY(XY):
                             for val in serie.values
                             if val[0] is not None]
                            or [datetime.datetime.fromtimestamp(0)])
-        for serie in self.series:
+        for serie in self.all_series:
             serie.values = [(self._tonumber(v[0]), v[1]) for v in serie.values]
 
         xvals = [val[0]
@@ -89,7 +89,7 @@ class DateY(XY):
         else:
             rng = None
 
-        for serie in self.series:
+        for serie in self.all_series:
             serie.points = serie.values
             if self.interpolate and rng:
                 vals = list(zip(*sorted(
@@ -99,10 +99,10 @@ class DateY(XY):
 
         if self.interpolate and rng:
             xvals = [val[0]
-                     for serie in self.series
+                     for serie in self.all_series
                      for val in serie.interpolated]
             yvals = [val[1]
-                     for serie in self.series
+                     for serie in self.all_series
                      for val in serie.interpolated]
             if xvals:
                 xmin = min(xvals)

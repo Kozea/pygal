@@ -60,11 +60,9 @@ class Line(Graph):
     def line(self, serie_node, serie, rescale=False):
         """Draw the line serie"""
         if rescale and self.secondary_series:
-            points = []
-            for x, y in serie.points:
-                if y is not None:
-                    y = self._scale_diff + (y - self._scale_min_2nd) * self._scale
-                points.append((x, y))
+            points = [
+                (x, self._scale_diff + (y - self._scale_min_2nd) * self._scale)
+                for x, y in serie.points if y is not None]
         else:
             points = serie.points
         view_values = list(map(self.view, points))
