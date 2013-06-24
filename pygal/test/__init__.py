@@ -43,7 +43,7 @@ def pytest_generate_tests(metafunc):
             ])
 
 
-def make_data(chart, datas, secondary=False):
+def make_data(chart, datas):
     def get(data):
         if isinstance(chart, pygal.XY):
             if isinstance(chart, pygal.DateY):
@@ -52,8 +52,8 @@ def make_data(chart, datas, secondary=False):
             return data
         return cut(data)
 
-    for data in datas:
+    for i, data in enumerate(datas):
         chart.add(data[0],
                   get(data[1]),
-                  secondary=secondary)
+                  secondary=bool(i % 2))
     return chart
