@@ -49,9 +49,7 @@ for key, val in pygal.config.Config.__dict__.items():
             if val:
                 opt_name = 'no-' + opt_name
         if key == 'interpolate':
-            opts['choices'] = [
-                'linear', 'nearest', 'zero', 'slinear', 'quadratic',
-                'cubic', 'krogh', 'barycentric', 'univariate']
+            opts['choices'] = ['quadratic', 'cubic']
         parser.add_argument(
             '--%s' % opt_name, dest=key, default=val, **opts)
 
