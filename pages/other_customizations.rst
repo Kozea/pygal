@@ -112,3 +112,11 @@ this option disables the xml prolog in the output.
 Since no encoding is declared, the result will be in unicode instead of bytes.
 
 
+
+No prefix
+---------
+
+``no_prefix``
+
+Normally pygal set an unique id to the chart and use it to style each chart to avoid collisions when svg are directly embedded in html. This can be a problem if you use external styling overriding the prefixed css. You can set this to True in order to prevent that behaviour.
+

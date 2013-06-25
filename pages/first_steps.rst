@@ -64,3 +64,5 @@ And finally add a title and some labels:
   bar_chart.add('Fibonacci', [0, 1, 1, 2, 3, 5, 8, 13, 21, 34, 55])
   bar_chart.add('Padovan', [1, 1, 1, 2, 2, 3, 4, 5, 7, 9, 12])
 
+
+Next: `Charts types </chart_types>`_

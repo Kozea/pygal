@@ -28,7 +28,7 @@ Links
 -----
 
 Basic
-^^^^^
+~~~~~
 
 You can also add hyper links:
 
@@ -58,7 +58,7 @@ You can also add hyper links:
 
 
 Advanced
-^^^^^^^^
+~~~~~~~~
 
 You can specify a dictionary to xlink with all links attributes:
 
@@ -96,4 +96,4 @@ You can specify a dictionary to xlink with all links attributes:
     }])
 
 
-
+Next: `Other customizations </other_customizations>`_

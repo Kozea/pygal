@@ -14,7 +14,7 @@ Line charts
 -----------
 
 Basic
-^^^^^
+~~~~~
 
 Basic simple line graph:
 
@@ -29,7 +29,7 @@ Basic simple line graph:
   line_chart.add('Others',  [14.2, 15.4, 15.3,  8.9,    9, 10.4,  8.9,  5.8,  6.7,  6.8,  7.5])
 
 Stacked
-^^^^^^^
+~~~~~~~
 
 Same graph but with stacked values and filled rendering:
 
@@ -48,7 +48,7 @@ Bar charts / Histograms
 -----------------------
 
 Basic
-^^^^^
+~~~~~
 
 Basic simple bar graph:
 
@@ -64,7 +64,7 @@ Basic simple bar graph:
 
 
 Stacked
-^^^^^^^
+~~~~~~~
 
 Same graph but with stacked values:
 
@@ -80,7 +80,7 @@ Same graph but with stacked values:
 
 
 Horizontal
-^^^^^^^^^^
+~~~~~~~~~~
 
 Horizontal bar diagram:
 
@@ -99,7 +99,7 @@ XY charts
 ---------
 
 Basic
-^^^^^
+~~~~~
 
 Basic XY lines, drawing cosinus:
 
@@ -117,7 +117,7 @@ Basic XY lines, drawing cosinus:
 
 
 Scatter Plot
-^^^^^^^^^^^^
+~~~~~~~~~~~~
 
 Disabling stroke make a good scatter plot
 
@@ -131,7 +131,7 @@ Disabling stroke make a good scatter plot
 
 
 DateY
-^^^^^
+~~~~~
 You can index values by dates (Thanks to `Snarkturne <https://github.com/snarkturne>`_)
 
 .. pygal-code::
@@ -151,7 +151,7 @@ Pies
 ----
 
 Basic
-^^^^^
+~~~~~
 
 Simple pie:
 
@@ -168,7 +168,7 @@ Simple pie:
 
 
 Multi-series pie
-^^^^^^^^^^^^^^^^
+~~~~~~~~~~~~~~~~
 
 Same pie but divided in sub category:
 
@@ -187,7 +187,7 @@ Radar charts
 ------------
 
 Basic
-^^^^^
+~~~~~
 
 Simple Kiviat diagram:
 
@@ -206,7 +206,7 @@ Dot charts
 ----------
 
 Basic
-^^^^^
+~~~~~
 
 Punch card like chart:
 
@@ -225,7 +225,7 @@ Funnel charts
 -------------
 
 Basic
-^^^^^
+~~~~~
 
 Funnel chart:
 
@@ -243,7 +243,7 @@ Gauge charts
 ------------
 
 Basic
-^^^^^
+~~~~~
 
 Simple gauge chart:
 
@@ -263,7 +263,7 @@ Pyramid charts
 --------------
 
 Basic
-^^^^^
+~~~~~
 
 Population pyramid:
 
@@ -294,7 +294,7 @@ Worldmap charts
 ---------------
 
 Basic
-^^^^^
+~~~~~
 
 Highlight some countries:
 
@@ -524,3 +524,6 @@ The following countries are supported:
     - `za`: South Africa
     - `zm`: Zambia
     - `zw`: Zimbabwe
+
+
+Next: `Styles </styles>`_

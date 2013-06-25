@@ -74,3 +74,6 @@ You can change the resolution of the interpolation with the help of `interpolati
 
   chart = pygal.Line(interpolate='krogh', interpolation_precision=50)
   chart.add('line', [1, 5, 17, 12, 5, 10])
+
+
+Next: `Sparklines </sparklines>`_

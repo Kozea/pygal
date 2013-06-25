@@ -11,11 +11,7 @@ User documentation
 - `Styles </styles>`_ - change the style.
 - `Basic customizations </basic_customizations>`_ - start to improve your charts.
 - `Interpolations </interpolations>`_ - smooth your lines.
+- `Sparklines </sparks>`_ - create simple sparklines.
 - `Metadata </metadata>`_ - enrich your graph.
 - `Other customizations </other_customizations>`_ - customize all the things.
-
-
-Developer documentation
-=======================
-
-- `Create a chart type </chart_creation>`_ - extend pygal.
+- `Embedding in a web page </web>`_ - see several ways to use pygal on the intertubes.

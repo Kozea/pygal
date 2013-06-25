@@ -30,7 +30,7 @@ pygal is customized with the help of the `Config` class (see `config.py <https:/
 
 
 By instanciating it
-^^^^^^^^^^^^^^^^^^^
+~~~~~~~~~~~~~~~~~~~
 
 Just import the `Config` class and instanciate it:
 
@@ -48,7 +48,7 @@ Just import the `Config` class and instanciate it:
   ...
 
 By inheriting it
-^^^^^^^^^^^^^^^^
+~~~~~~~~~~~~~~~~
 
 Import the `Config` class and override it:
 
@@ -68,7 +68,7 @@ Import the `Config` class and override it:
 
 
 Using keyword args
-^^^^^^^^^^^^^^^^^^
+~~~~~~~~~~~~~~~~~~
 
 As a shorthand for a one shot config, you can specify all config arguments as keyword args:
 
@@ -95,6 +95,33 @@ It indicates the desired size of the svg.
   chart.add('2', 2)
 
 You can also set `explicit_size` to True to add size attributes to the svg tag.
+
+
+Spacing
+-------
+
+``spacing, margin``
+
+Spacing determines the space between all elements:
+
+.. pygal-code::
+
+  chart = pygal.Bar(spacing=50)
+  chart.x_labels = u'αβγδ'
+  chart.add('line 1', [5, 15, 10, 8])
+  chart.add('line 2', [15, 20, 8, 11])
+
+
+Margin is the external chart margin:
+
+.. pygal-code::
+
+  chart = pygal.Bar(margin=50)
+  chart.x_labels = u'αβγδ'
+  chart.add('line 1', [5, 15, 10, 8])
+  chart.add('line 2', [15, 20, 8, 11])
+
+
 
 Scaling
 -------
@@ -132,8 +159,11 @@ Finaly you can tell at which precision pygal should stop scaling (in log10):
 
 
 
-Title
------
+Titles
+------
+
+Chart title
+~~~~~~~~~~~
 
 ``title``
 
@@ -142,6 +172,280 @@ You can add a title to the chart by setting the `title` option:
 .. pygal-code::
 
   chart = pygal.Line(title=u'Some points')
+  chart.add('line', [.0002, .0005, .00035])
+
+
+X title
+~~~~~~~
+
+``x_title``
+
+You can add a title to the x axis by setting the `x_title` option:
+
+.. pygal-code::
+
+  chart = pygal.Line(title=u'Some points', x_title='X Axis')
+  chart.add('line', [.0002, .0005, .00035])
+
+
+Y title
+~~~~~~~
+
+``y_title``
+
+You can add a title to the y axis by setting the `y_title` option:
+
+.. pygal-code::
+
+  chart = pygal.Line(title=u'Some points', y_title='Y Axis')
+  chart.add('line', [.0002, .0005, .00035])
+
+
+Font size
+~~~~~~~~~
+
+``title_font_size``
+
+.. pygal-code::
+
+  chart = pygal.Line(title=u'Some points', x_title='X Axis', y_title='Y Axis',
+       title_font_size=24)
+  chart.add('line', [.0002, .0005, .00035])
+
+
+Labels
+------
+
+Add labels
+~~~~~~~~~~
+
+``x_labels, y_labels``
+
+You can specify x labels and y labels, depending on the graph type:
+
+.. pygal-code::
+
+  chart = pygal.Line()
+  chart.x_labels = 'Red', 'Blue', 'Green'
+  chart.y_labels = .0001, .0003, .0004, .00045, .0005
+  chart.add('line', [.0002, .0005, .00035])
+
+
+Remove y labels
+~~~~~~~~~~~~~~~
+
+``show_y_labels``
+
+Set this to False to deactivate y labels:
+
+.. pygal-code::
+
+  chart = pygal.Line(show_y_labels=False)
+  chart.add('line', [.0002, .0005, .00035])
+
+
+Rotate labels
+~~~~~~~~~~~~~
+
+``x_label_rotation, y_label_rotation``
+
+
+Allow label rotation (in degrees) to avoid axis cluttering:
+
+.. pygal-code::
+
+  chart = pygal.Line()
+  chart.x_labels = [
+      'This is the first point !',
+      'This is the second point !',
+      'This is the third point !',
+      'This is the fourth point !']
+  chart.add('line', [0, .0002, .0005, .00035])
+
+
+.. pygal-code::
+
+  chart = pygal.Line(x_label_rotation=20)
+  chart.x_labels = [
+      'This is the first point !',
+      'This is the second point !',
+      'This is the third point !',
+      'This is the fourth point !']
+  chart.add('line', [0, .0002, .0005, .00035])
+
+
+Change minor/major labels
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+``x_labels_major, x_labels_major_every, x_labels_major_count, show_minor_x_labels``
+
+You can alter major minor behaviour for the abscissa thanks to `Arjen Stolk <https://github.com/simplyarjen>`_
+
+.. pygal-code::
+
+  chart = pygal.Line(x_label_rotation=20)
+  chart.x_labels = [
+      'This is the first point !',
+      'This is the second point !',
+      'This is the third point !',
+      'This is the fourth point !']
+  chart.x_labels_major = ['This is the first point !', 'This is the fourth point !']
+  chart.add('line', [0, .0002, .0005, .00035])
+
+
+.. pygal-code::
+
+  chart = pygal.Line(x_label_rotation=20, x_labels_major_every=3)
+  chart.x_labels = [
+      'This is the first point !',
+      'This is the second point !',
+      'This is the third point !',
+      'This is the fourth point !']
+  chart.add('line', [0, .0002, .0005, .00035])
+
+
+.. pygal-code::
+
+  chart = pygal.Line(x_label_rotation=20, x_labels_major_count=3)
+  chart.x_labels = [
+      'This is the first point !',
+      'This is the second point !',
+      'This is the third point !',
+      'This is the fourth point !']
+  chart.add('line', [0, .0002, .0005, .00035])
+
+
+.. pygal-code::
+
+  chart = pygal.Line(x_label_rotation=20, show_minor_x_labels=False)
+  chart.x_labels = [
+      'This is the first point !',
+      'This is the second point !',
+      'This is the third point !',
+      'This is the fourth point !']
+  chart.x_labels_major = ['This is the first point !', 'This is the fourth point !']
+  chart.add('line', [0, .0002, .0005, .00035])
+
+
+Font size
+~~~~~~~~~
+
+``label_font_size, major_label_font_size``
+
+.. pygal-code::
+
+  chart = pygal.Line(x_label_rotation=20, label_font_size=8, major_label_font_size=12)
+  chart.x_labels = [
+      'This is the first point !',
+      'This is the second point !',
+      'This is the third point !',
+      'This is the fourth point !']
+  chart.x_labels_major = ['This is the first point !', 'This is the fourth point !']
+  chart.add('line', [0, .0002, .0005, .00035])
+
+
+Dots
+----
+
+Removing
+~~~~~~~~
+
+``show_dots``
+
+You can remove dots by setting `show_dots` at `False`
+
+
+.. pygal-code::
+
+  chart = pygal.Line(show_dots=False)
+  chart.add('line', [.0002, .0005, .00035])
+
+Size
+~~~~
+
+``dots_size``
+
+.. pygal-code::
+
+  chart = pygal.Line(dots_size=5)
+  chart.add('line', [.0002, .0005, .00035])
+
+
+Legends
+-------
+
+Removing
+~~~~~~~~
+
+``show_legend``
+
+You can remove legend by setting these at `False`
+
+.. pygal-code::
+
+  chart = pygal.Line(show_legend=False)
+  chart.add('line', [.0002, .0005, .00035])
+
+
+Legend at bottom
+~~~~~~~~~~~~~~~~
+
+``legend_at_bottom``
+
+You can put legend at bottom by setting `legend_at_bottom` at True:
+
+
+.. pygal-code::
+
+  chart = pygal.Line(legend_at_bottom=True)
+  chart.add('line', [.0002, .0005, .00035])
+
+
+Legend box size
+~~~~~~~~~~~~~~~
+
+``legend_box_size``
+
+.. pygal-code::
+
+  chart = pygal.Line(legend_box_size=18)
+  chart.add('line', [.0002, .0005, .00035])
+
+
+Font size
+~~~~~~~~~
+
+``legend_font_size``
+
+.. pygal-code::
+
+  chart = pygal.Line(legend_font_size=20)
+  chart.add('line', [.0002, .0005, .00035])
+
+
+Tooltip
+-------
+
+Rounded corner
+~~~~~~~~~~~~~~
+
+``tooltip_border_radius``
+
+.. pygal-code::
+
+  chart = pygal.Line(tooltip_border_radius=10)
+  chart.add('line', [.0002, .0005, .00035])
+
+
+Font size
+~~~~~~~~~
+
+``tooltip_font_size``
+
+
+.. pygal-code::
+
+  chart = pygal.Line(tooltip_font_size=24)
   chart.add('line', [.0002, .0005, .00035])
 
 
@@ -157,116 +461,6 @@ You can plot your values to 2 separate axes, thanks to `wiktorn <https://github.
   chart = pygal.Line(title=u'Some different points')
   chart.add('line', [.0002, .0005, .00035])
   chart.add('other line', [1000, 2000, 7000], secondary=True)
-
-
-Labels
-------
-
-Add labels
-^^^^^^^^^^
-
-``x_labels, y_labels``
-
-You can specify x labels and y labels, depending on the graph type:
-
-.. pygal-code::
-
-  chart = pygal.Line()
-  chart.x_labels = 'Red', 'Blue', 'Green'
-  chart.y_labels = .0001, .0003, .0004, .00045, .0005
-  chart.add('line', [.0002, .0005, .00035])
-
-
-Rotate labels
-^^^^^^^^^^^^^
-
-``x_label_rotation, y_label_rotation``
-
-
-Allow label rotation (in degrees) to avoid axis cluttering:
-
-.. pygal-code::
-
-  chart = pygal.Line()
-  chart.x_labels = ['This is the first point !', 'This is the second point !', 'This is the third point !', 'This is the fourth point !']
-  chart.add('line', [0, .0002, .0005, .00035])
-
-
-.. pygal-code::
-
-  chart = pygal.Line(x_label_rotation=20)
-  chart.x_labels = ['This is the first point !', 'This is the second point !', 'This is the third point !', 'This is the fourth point !']
-  chart.add('line', [0, .0002, .0005, .00035])
-
-
-Change minor/major labels
-^^^^^^^^^^^^^^^^^^^^^^^^^
-
-``x_labels_major, x_labels_major_every, x_labels_major_count, show_minor_x_labels``
-
-You can alter major minor behaviour for the abscissa thanks to `Arjen Stolk <https://github.com/simplyarjen>`_
-
-.. pygal-code::
-
-  chart = pygal.Line(x_label_rotation=20)
-  chart.x_labels = ['This is the first point !', 'This is the second point !', 'This is the third point !', 'This is the fourth point !']
-  chart.x_labels_major = ['This is the first point !', 'This is the fourth point !']
-  chart.add('line', [0, .0002, .0005, .00035])
-
-
-.. pygal-code::
-
-  chart = pygal.Line(x_label_rotation=20, x_labels_major_every=3)
-  chart.x_labels = ['This is the first point !', 'This is the second point !', 'This is the third point !', 'This is the fourth point !']
-  chart.add('line', [0, .0002, .0005, .00035])
-
-
-.. pygal-code::
-
-  chart = pygal.Line(x_label_rotation=20, x_labels_major_count=3)
-  chart.x_labels = ['This is the first point !', 'This is the second point !', 'This is the third point !', 'This is the fourth point !']
-  chart.add('line', [0, .0002, .0005, .00035])
-
-
-.. pygal-code::
-
-  chart = pygal.Line(x_label_rotation=20, show_minor_x_labels=False)
-  chart.x_labels = ['This is the first point !', 'This is the second point !', 'This is the third point !', 'This is the fourth point !']
-  chart.x_labels_major = ['This is the first point !', 'This is the fourth point !']
-  chart.add('line', [0, .0002, .0005, .00035])
-
-
-Display
--------
-
-``show_legend, show dots``
-
-You can remove legend and dots by setting these at `False`
-
-.. pygal-code::
-
-  chart = pygal.Line(show_legend=False)
-  chart.add('line', [.0002, .0005, .00035])
-
-
-.. pygal-code::
-
-  chart = pygal.Line(show_dots=False)
-  chart.add('line', [.0002, .0005, .00035])
-
-
-Legend at bottom
-----------------
-
-``legend_at_bottom``
-
-You can put legend at bottom by setting `legend_at_bottom` at True:
-
-
-.. pygal-code::
-
-  chart = pygal.Line(legend_at_bottom=True)
-  chart.add('line', [.0002, .0005, .00035])
 
 
 Rendering
@@ -299,7 +493,7 @@ To fill to an other reference than zero:
 Font sizes
 ----------
 
-``label_font_size, value_font_size, tooltip_font_size, title_font_size, legend_font_size``
+``value_font_size, tooltip_font_size``
 
 
 Set the various font size
@@ -323,7 +517,11 @@ You can override that by setting truncation lenght with `truncate_legend` and `t
 .. pygal-code::
 
   chart = pygal.Line(truncate_legend=3, truncate_label=17)
-  chart.x_labels = ['This is the first point !', 'This is the second point !', 'This is the third point !', 'This is the fourth point !']
+  chart.x_labels = [
+      'This is the first point !',
+      'This is the second point !',
+      'This is the third point !',
+      'This is the fourth point !']
   chart.add('line', [0, .0002, .0005, .00035])
 
 
@@ -361,3 +559,6 @@ Text to display instead of the graph when no data is supplied:
 
   chart = pygal.Line(no_data_text='No result found')
   chart.add('line', [])
+
+
+Next: `Interpolations </interpolations>`_

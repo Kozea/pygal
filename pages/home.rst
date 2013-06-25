@@ -64,23 +64,25 @@ It features various graph types:
 
 
 
-Python/Css styling with some packaged themes (`default </styles/#default>`_,
-`light </styles/#light>`_,
-`neon </styles/#neon>`_,
-`clean </styles/#clean>`_,
-`dark_solarized </styles/#dark-solarized>`_,
-`light_solarized </styles/#light-solarized>`_)
+Python/Css styling with some pre-defined themes. See `styling </styles/>`_.
 
-`And a lot of options to customize the charts. </basic_customizations>`_
+And a lot of options to `customize the charts. </basic_customizations>`_
 
 
 Get it !
 ========
 
-- `Get the package on pypi <http://pypi.python.org/pypi/pygal/>`_
-- `Fork me on github <http://github.com/Kozea/pygal>`_
+- Get the package on `pypi <http://pypi.python.org/pypi/pygal/>`_
+- Fork me on `github <http://github.com/Kozea/pygal>`_
 
 More information in the `download page </download>`_
+
+
+Get started
+===========
+
+Start `here </first_steps/>`_ to make your first steps.
+
 
 Technical Description
 =====================
