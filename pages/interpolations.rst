@@ -35,8 +35,8 @@ With cubic interpolation:
   chart = pygal.Line(interpolate='cubic')
   chart.add('line', [1, 5, 17, 12, 5, 10])
 
-With krogh interpolation:
--------------------------
+With quadratic interpolation:
+-----------------------------
 
 ``interpolate``
 
