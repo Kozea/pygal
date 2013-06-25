@@ -9,8 +9,7 @@ Interpolations
 
 .. contents::
 
-Interpolations need the `scipy python module <http://www.scipy.org/>`_.
-To enable it just specify the interpolation type to:
+To enable interpolation, just specify the interpolation type to:
 
 - quadratic
 - cubic

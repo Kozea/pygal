@@ -101,8 +101,6 @@ Optional dependencies
 PNG output requires `CairoSVG <http://cairosvg.org/>`_, `tinycss <http://packages.python.org/tinycss/>`_ and `cssselect <http://packages.python.org/cssselect/>`_.
 Install those with ``pip install CairoSVG tinycss cssselect``.
 
-Interpolations need the `scipy <http://www.scipy.org/>`_ python module.
-
 Unit testing needs `py.test <http://pytest.org/latest/>`_ or `nosetests <http://readthedocs.org/docs/nose/en/latest/>`_.
 
 Visual testing is based on `flask <http://flask.pocoo.org/>`_.
