@@ -194,7 +194,7 @@ TurquoiseStyle = Style(
         lighten('#8c6243', 15), '#1b8088'))
 
 
-GreenLightStyle = Style(
+LightGreenStyle = Style(
     background=lighten('#f3f3f3', 3),
     plot_background='#fff',
     foreground='#333333',
@@ -209,7 +209,7 @@ GreenLightStyle = Style(
         darken('#247fab', 15)))
 
 
-GreenDarkStyle = Style(
+DarkGreenStyle = Style(
     background=darken('#251e01', 3),
     plot_background=darken('#251e01', 1),
     foreground='rgba(255, 255, 255, 0.9)',
@@ -223,7 +223,7 @@ GreenDarkStyle = Style(
         lighten('#fcd202', 25)))
 
 
-GreenBlueDarkStyle = Style(
+DarkGreenBlueStyle = Style(
     background='#000',
     plot_background=lighten('#000', 8),
     foreground='rgba(255, 255, 255, 0.9)',
@@ -262,10 +262,10 @@ styles = {'default': DefaultStyle,
           'dark_colorized': DarkColorizedStyle,
           'light_colorized': LightColorizedStyle,
           'turquoise': TurquoiseStyle,
-          'green': GreenLightStyle,
-          'dark_green': GreenDarkStyle,
-          'dark_green_blue': GreenBlueDarkStyle,
-          'blue_colorized': BlueStyle}
+          'green': LightGreenStyle,
+          'dark_green': DarkGreenStyle,
+          'dark_green_blue': DarkGreenBlueStyle,
+          'blue': BlueStyle}
 
 
 parametric_styles = {}
@@ -275,7 +275,8 @@ for op in ('lighten', 'darken', 'saturate', 'desaturate', 'rotate'):
     def get_style_for(op_name):
         operation = getattr(colors, op_name)
 
-        def parametric_style(color, step=10, max_=None, **kwargs):
+        def parametric_style(color, step=10, max_=None, base_style=None,
+                             **kwargs):
             if max_ is None:
                 violency = {
                     'darken': 50,
@@ -296,10 +297,10 @@ for op in ('lighten', 'darken', 'saturate', 'desaturate', 'rotate'):
 
             if base_style is None:
                 return Style(colors=colors, **kwargs)
-
-            base_style.__dict__.update(kwargs)
-            base_style.colors = colors
-            return base_style
+            opts = dict(base_style.__dict__)
+            opts.update({'colors': colors})
+            opts.update(kwargs)
+            return Style(**opts)
 
         return parametric_style
 
