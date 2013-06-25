@@ -61,7 +61,7 @@ You can change the resolution of the interpolation with the help of `interpolati
 
 .. pygal-code::
 
-  chart = pygal.Line(interpolate='quadratic', interpolation_precision=50)
+  chart = pygal.Line(interpolate='quadratic', interpolation_precision=3)
   chart.add('line', [1, 5, 17, 12, 5, 10])
 
 
