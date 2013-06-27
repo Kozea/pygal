@@ -35,23 +35,25 @@ parser.add_argument('-o', '--output', dest='filename', default='pygal_out.svg',
 parser.add_argument('-s', '--serie', dest='series', nargs='+', action='append',
                     help='Add a serie in the form (title val1 val2...)')
 
-for key, val in pygal.config.Config.__dict__.items():
-    if not key.startswith('_') and not hasattr(val, '__call__'):
-        opt_name = key
-        opts = {'type': str}
-        if val is not None:
-            opts['type'] = type(val)
-        elif 'labels' in key:
-            opts['nargs'] = '+'
-        if opts['type'] == bool:
-            del opts['type']
-            opts['action'] = 'store_true' if not val else 'store_false'
-            if val:
-                opt_name = 'no-' + opt_name
-        if key == 'interpolate':
-            opts['choices'] = ['quadratic', 'cubic']
-        parser.add_argument(
-            '--%s' % opt_name, dest=key, default=val, **opts)
+for key in pygal.config.CONFIG_ITEMS:
+    opt_name = key.name
+    val = key.value
+    opts = {}
+    if key.type == list:
+        opts['type'] = key.subtype
+        opts['nargs'] = '+'
+    else:
+        opts['type'] = key.type
+
+    if opts['type'] == bool:
+        del opts['type']
+        opts['action'] = 'store_true' if not val else 'store_false'
+        if val:
+            opt_name = 'no-' + opt_name
+    if key.name == 'interpolate':
+        opts['choices'] = list(pygal.interpolate.INTERPOLATIONS.keys())
+    parser.add_argument(
+        '--%s' % opt_name, dest=key.name, default=val, **opts)
 
 config = parser.parse_args()
 

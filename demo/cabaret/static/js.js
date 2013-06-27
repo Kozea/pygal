@@ -15,13 +15,13 @@ function resend() {
         }
     });
     if(interpolation) {
-        opts['interpolate'] = interpolation;
+        opts.interpolate = interpolation;
     }
     $('.data .controls').each(function () {
         var label = $(this).find('.serie-label').val(),
             values = $(this).find('.serie-value').val(),
             lst = [label, values.split(',').map(function (v) { return parseFloat(v); })];
-        if (values != "") {
+        if (values !== '') {
             vals.push(lst);
         }
     });

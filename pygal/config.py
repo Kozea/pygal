@@ -22,6 +22,7 @@ Config module with all options
 """
 from copy import deepcopy
 from pygal.style import Style, DefaultStyle
+from pygal.interpolate import INTERPOLATIONS
 
 
 class FontSizes(object):
@@ -63,6 +64,10 @@ class Key(object):
         return self.type == str
 
     @property
+    def is_dict(self):
+        return self.type == dict
+
+    @property
     def is_list(self):
         return self.type == list
 
@@ -74,6 +79,17 @@ class Key(object):
                 map(
                     self.subtype, map(
                         lambda x: x.strip(), value.split(','))))
+        elif self.type == dict:
+            rv = {}
+            for pair in value.split(','):
+                key, val = pair.split(':')
+                key = key.strip()
+                val = val.strip()
+                try:
+                    rv[key] = self.subtype(val)
+                except:
+                    rv[key] = val
+            return rv
         return self.type(value)
 
 
@@ -202,7 +218,7 @@ class Config(object):
 
     interpolate = Key(
         None, str, "Value", "Interpolation",
-        "May be 'quadratic' or 'cubic'")
+        "May be %s" % ' or '.join(INTERPOLATIONS))
 
     interpolation_precision = Key(
         250, int, "Value", "Number of interpolated points between two values")
@@ -210,7 +226,7 @@ class Config(object):
     interpolation_parameters = Key(
         {}, dict, "Value", "Various parameters for parametric interpolations",
         "ie: For hermite interpolation, you can set the cardinal tension with"
-        "{'type': 'cardinal', 'c': .5}")
+        "{'type': 'cardinal', 'c': .5}", int)
 
     order_min = Key(
         None, int, "Value", "Minimum order of scale, defaults to None")

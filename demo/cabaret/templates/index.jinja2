@@ -22,7 +22,7 @@
               </select>
             </div>
           </div>
-          
+
           <div class="control-group data tt" title="Enter the chart data">
             <label class="control-label" for="data">Data</label>
             <div class="controls form-inline">
@@ -71,12 +71,14 @@
                   </div>
                 {% else %}
                   <label class="control-label" for="c-{{ key.name }}" > {{ key.name.replace('_', ' ') | title }}</label>
-                  
+
                   <div class="controls">
                     {% if key.is_numeric %}
                       <input type="number" id="c-{{ key.name }}" class="c-opts" value="{{ key.value or ''}}" />
                     {% elif key.is_string %}
                       <input type="text" id="c-{{ key.name }}" class="c-opts" value="{{ key.value or ''}}" />
+                    {% elif key.is_dict %}
+                      <input type="text" id="c-{{ key.name }}" class="c-opts dict-of-{{ key.subtype }}" value="{{ key.value or ''}}" placeholder="key1: value1, key2: value2, ..." />
                     {% elif key.is_list %}
                       <input type="text" id="c-{{ key.name }}" class="c-opts list-of-{{ key.subtype }}" placeholder="value1, value2{{ ', ...' if key.name != 'range' }}" value="{{ key.value or ''}}" />
                     {% endif %}

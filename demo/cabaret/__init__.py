@@ -20,7 +20,7 @@ from flask import Flask, render_template, request, jsonify
 from pygal import CHARTS_BY_NAME
 from pygal.graph import CHARTS_NAMES
 from pygal.config import CONFIG_ITEMS
-from pygal.interpolate import KINDS
+from pygal.interpolate import INTERPOLATIONS
 from pygal.style import styles
 from json import loads
 from time import time
@@ -35,7 +35,7 @@ def create_app():
     def index():
         return render_template(
             'index.jinja2', charts_names=CHARTS_NAMES, configs=CONFIG_ITEMS,
-            interpolations=KINDS, styles_names=styles.keys())
+            interpolations=INTERPOLATIONS, styles_names=styles.keys())
 
     @app.route("/svg", methods=('POST',))
     def svg():
