@@ -146,6 +146,7 @@ COUNTRIES = {
     'sa': 'Saudi Arabia',
     'sc': 'Seychelles',
     'sd': 'Sudan',
+    'se': 'Sweden',
     'sg': 'Singapore',
     'sh': 'Saint Helena, Ascension and Tristan da Cunha',
     'si': 'Slovenia',
@@ -183,3 +184,8 @@ COUNTRIES = {
     'zm': 'Zambia',
     'zw': 'Zimbabwe'
 }
+
+
+def set_countries(countries):
+    global COUNTRIES
+    COUNTRIES = countries
