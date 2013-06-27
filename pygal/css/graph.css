@@ -75,15 +75,17 @@
   opacity: 0;
 }
 
-{{ id }}.axis.y .guides:hover .guide.line,
-{{ id }}.axis.y2 .guides:hover .guide.line,
-{{ id }}.line-graph .axis.x .guides:hover .guide.line,
-{{ id }}.gauge-graph .axis.x .guides:hover .guide.line,
-{{ id }}.stackedline-graph .axis.x .guides:hover .guide.line,
-{{ id }}.xy-graph .axis.x .guides:hover .guide.line {
-  opacity: 1;
+{{ id }}.horizontal .axis.always_show .guide.line,
+{{ id }}.vertical .axis.always_show .guide.line {
+  opacity: 1 !important;
 }
 
+{{ id }}.axis.y .guides:hover .guide.line,
+{{ id }}.axis.y2 .guides:hover .guide.line,
+{{ id }}.axis.x .guides:hover .guide.line {
+  opacity: 1;
+}
+I
 {{ id }}.axis .guides:hover text {
   opacity: 1;
 }

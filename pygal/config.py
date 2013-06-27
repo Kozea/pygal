@@ -57,7 +57,7 @@ class Key(object):
 
     @property
     def is_numeric(self):
-        return self.type == int
+        return self.type in (int, float)
 
     @property
     def is_string(self):
@@ -133,6 +133,12 @@ class Config(object):
 
     height = Key(
         600, int, "Look", "Graph height")
+
+    show_x_guides = Key(False, bool, "Look",
+                        "Set to true to always show x guide lines")
+
+    show_y_guides = Key(True, bool, "Look",
+                        "Set to false to hide y guide lines")
 
     show_dots = Key(True, bool, "Look", "Set to false to remove dots")
 

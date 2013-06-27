@@ -32,10 +32,10 @@ class Dot(Graph):
 
     _adapters = [positive]
 
-    def _axes(self):
-        """Draw axes"""
-        self._x_axis(False)
-        self._y_axis(False)
+    # def _axes(self):
+    #     """Draw axes"""
+    #     self._x_axis(False)
+    #     self._y_axis(False)
 
     def dot(self, serie_node, serie, r_max):
         """Draw a dot line"""
