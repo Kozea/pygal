@@ -18,11 +18,6 @@
 # along with pygal. If not, see <http://www.gnu.org/licenses/>.
 import sys
 
-try:
-    from urllib.parse import urlparse
-except ImportError:
-    from urlparse import urlparse
-
 
 def to_str(string):
     if sys.version_info[0] == 3:

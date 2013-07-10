@@ -22,7 +22,7 @@ Svg helper
 """
 
 from __future__ import division
-from pygal._compat import urlparse, to_str, u
+from pygal._compat import to_str, u
 import io
 import os
 import json
@@ -57,7 +57,7 @@ class Svg(object):
         self.root.append(
             etree.Comment(u(
                 'Generated with pygal %s ©Kozea 2011-2013 on %s' % (
-                __version__, date.today().isoformat()))))
+                    __version__, date.today().isoformat()))))
         self.root.append(etree.Comment(u('http://pygal.org')))
         self.root.append(etree.Comment(u('http://github.com/Kozea/pygal')))
         self.defs = self.node(tag='defs')
@@ -69,7 +69,7 @@ class Svg(object):
         colors = self.graph.style.get_colors(self.id)
         all_css = []
         for css in ['base.css'] + list(self.graph.css):
-            if urlparse(css).scheme:
+            if '://' in css:
                 self.processing_instructions.append(
                     etree.PI(
                         u('xml-stylesheet'), u('href="%s"' % css)))
@@ -97,7 +97,7 @@ class Svg(object):
             ("window.config", json.dumps(self.graph.config.to_dict())))
 
         for js in self.graph.js:
-            if urlparse(js).scheme:
+            if '://' in js:
                 self.node(
                     self.defs, 'script', type='text/javascript', href=js)
             else:
