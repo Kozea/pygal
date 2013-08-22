@@ -26,7 +26,7 @@ from pygal.interpolate import INTERPOLATIONS
 from pygal.graph.base import BaseGraph
 from pygal.view import View, LogView, XYLogView
 from pygal.util import (
-    is_major, truncate, reverse_text_len, get_texts_box, cut, rad)
+    is_major, truncate, reverse_text_len, get_texts_box, cut, rad, decorate)
 from math import sqrt, ceil, cos
 from itertools import repeat, chain
 
@@ -349,17 +349,31 @@ class Graph(BaseGraph):
                 height=self.legend_box_size,
                 class_="color-%d reactive" % (global_serie_number % 16)
             )
-            truncated = truncate(title, truncation)
-            # Serious magical numbers here
-            self.svg.node(
-                legend, 'text',
-                x=col * x_step + self.legend_box_size + 5,
-                y=1.5 * row * h
-                + .5 * h
-                + .3 * self.legend_font_size
-            ).text = truncated
-            if truncated != title:
-                self.svg.node(legend, 'title').text = title
+            if isinstance(title, dict):
+                truncated = truncate(title['title'], truncation)
+                a = decorate(self.svg, legend, title)
+                legend_ = self.svg.node(
+                    a, 'text',
+                    x=col * x_step + self.legend_box_size + 5,
+                    y=1.5 * row * h
+                    + .5 * h
+                    + .3 * self.legend_font_size
+                ).text = truncated
+                #as <a> is decorated with title I do not think we need title here
+                #if truncated != title['title']:
+                #    self.svg.node(legend, 'title').text = title['title']
+            else:
+                truncated = truncate(title, truncation)
+                # Serious magical numbers here
+                self.svg.node(
+                    legend, 'text',
+                    x=col * x_step + self.legend_box_size + 5,
+                    y=1.5 * row * h
+                    + .5 * h
+                    + .3 * self.legend_font_size
+                ).text = truncated
+                if truncated != title:
+                    self.svg.node(legend, 'title').text = title
 
     def _title(self):
         """Make the title"""
