@@ -22,7 +22,22 @@ Horizontal bar graph
 """
 from pygal.graph.horizontal import HorizontalGraph
 from pygal.graph.bar import Bar
-
+from pygal.util import cached_property
 
 class HorizontalBar(HorizontalGraph, Bar):
     """Horizontal Bar graph"""
+
+    @cached_property
+    def _legends(self):
+        """Getter for series title"""
+        return [serie.title for serie in self.series][::-1]
+
+
+    def _plot(self):
+        for index, serie in enumerate(self.series):
+            num = len(self.series) - index - 1
+            self.bar(self._serie(num), serie, index)
+        for index, serie in enumerate(self.secondary_series, len(self.series)):
+            #XXX
+            self.bar(self._serie(index), serie, index, True)
+
