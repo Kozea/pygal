@@ -16,7 +16,8 @@
 #
 # You should have received a copy of the GNU Lesser General Public License
 # along with pygal. If not, see <http://www.gnu.org/licenses/>.
-from pygal import Line, Dot, Pie, Radar, Config
+from pygal import (
+    Line, Dot, Pie, Radar, Config, Bar, Funnel, Worldmap, Histogram, Gauge)
 from pygal._compat import u
 from pygal.test.utils import texts
 from pygal.test import pytest_generate_tests, make_data
@@ -254,3 +255,25 @@ def test_no_data():
     line.no_data_text = u("þæ®þæ€€&ĳ¿’€")
     q = line.render_pyquery()
     assert q(".text-overlay text").text() == u("þæ®þæ€€&ĳ¿’€")
+
+
+def test_include_x_axis(Chart):
+    chart = Chart()
+    if Chart in (Pie, Radar, Funnel, Dot, Gauge, Worldmap, Histogram):
+        return
+    if not chart.cls._dual:
+        data = 100, 200, 150
+    else:
+        data = (1, 100), (3, 200), (2, 150)
+    chart.add('_', data)
+    q = chart.render_pyquery()
+    # Ghost thing
+    yaxis = ".axis.%s .guides text" % (
+        'y' if not chart._last__inst.horizontal else 'x')
+    if not issubclass(chart.cls, Bar().cls):
+        assert '0.0' not in q(yaxis).map(texts)
+    else:
+        assert '0.0' in q(yaxis).map(texts)
+    chart.include_x_axis = True
+    q = chart.render_pyquery()
+    assert '0.0' in q(yaxis).map(texts)

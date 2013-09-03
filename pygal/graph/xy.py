@@ -62,6 +62,11 @@ class XY(Line):
         if self.yvals:
             ymin = min(self.yvals)
             ymax = max(self.yvals)
+
+            if self.include_x_axis:
+                ymin = min(ymin or 0, 0)
+                ymax = max(ymax or 0, 0)
+
             yrng = (ymax - ymin)
         else:
             yrng = None

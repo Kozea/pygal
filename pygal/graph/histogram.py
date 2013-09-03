@@ -31,7 +31,6 @@ class Histogram(Graph):
 
     _dual = True
     _series_margin = 0
-    _serie_margin = 0
 
     @cached_property
     def _values(self):

@@ -89,6 +89,13 @@ class DateY(XY):
         else:
             rng = None
 
+        if yvals:
+            ymin = min(yvals)
+            ymax = max(yvals)
+            if self.include_x_axis:
+                ymin = min(ymin or 0, 0)
+                ymax = max(ymax or 0, 0)
+
         for serie in self.all_series:
             serie.points = serie.values
             if self.interpolate and rng:
@@ -112,8 +119,8 @@ class DateY(XY):
                 rng = None
 
         if rng:
-            self._box.xmin, self._box.xmax = min(xvals), max(xvals)
-            self._box.ymin, self._box.ymax = min(yvals), max(yvals)
+            self._box.xmin, self._box.xmax = xmin, xmax
+            self._box.ymin, self._box.ymax = ymin, ymax
 
         x_pos = compute_scale(
             self._box.xmin, self._box.xmax, self.logarithmic, self.order_min)
