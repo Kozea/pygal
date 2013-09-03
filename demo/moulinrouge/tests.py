@@ -2,7 +2,7 @@
 # This file is part of pygal
 from pygal import (
     Bar, Gauge, Pyramid, Funnel, Dot, StackedBar, XY,
-    CHARTS_BY_NAME, Config, Line, DateY, Worldmap)
+    CHARTS_BY_NAME, Config, Line, DateY, Worldmap, Histogram)
 from pygal.style import styles
 
 
@@ -216,6 +216,18 @@ def get_test_routes(app):
         bar.add('1', [1, 2, 3])
         bar.add('2', [4, 5, 6])
         return bar.render_response()
+
+    @app.route('/test/histogram')
+    def test_histogram():
+        hist = Histogram(style=styles['neon'])
+        hist.add('1', [
+            (2, 0, 1),
+            (4, 1, 3),
+            (3, 3.5, 5),
+            (1.5, 5, 10)
+        ])
+        hist.add('2', [(2, 2, 8)])
+        return hist.render_response()
 
     @app.route('/test/secondary/<chart>')
     def test_secondary_for(chart):

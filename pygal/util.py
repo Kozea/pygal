@@ -298,6 +298,7 @@ from pygal.serie import Serie
 def prepare_values(raw, config, cls):
     """Prepare the values to start with sane values"""
     from pygal.graph.datey import DateY
+    from pygal.graph.histogram import Histogram
     from pygal.graph.worldmap import Worldmap
     if config.x_labels is None and hasattr(cls, 'x_labels'):
         config.x_labels = cls.x_labels
@@ -350,7 +351,14 @@ def prepare_values(raw, config, cls):
             else:
                 value = raw_value
 
-            if cls._dual:
+            # Fix this by doing this in charts class methods
+            if issubclass(cls, Histogram):
+                if value is None:
+                    value = (None, None, None)
+                elif not hasattr(value, '__iter__'):
+                    value = (value, config.zero, config.zero)
+                value = list(map(adapter, value))
+            elif cls._dual:
                 if value is None:
                     value = (None, None)
                 elif not hasattr(value, '__iter__'):

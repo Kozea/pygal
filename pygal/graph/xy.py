@@ -51,9 +51,6 @@ class XY(Line):
                 sum(map(abs, self.xvals)) != 0,
                 sum(map(abs, self.yvals)) != 0))
 
-    def _get_value(self, values, i):
-        return 'x=%s, y=%s' % tuple(map(self._format, values[i]))
-
     def _compute(self):
         if self.xvals:
             xmin = min(self.xvals)
@@ -92,9 +89,9 @@ class XY(Line):
                 xrng = None
 
         if xrng:
-            self._box.xmin, self._box.xmax = min(self.xvals), max(self.xvals)
+            self._box.xmin, self._box.xmax = xmin, xmax
         if yrng:
-            self._box.ymin, self._box.ymax = min(self.yvals), max(self.yvals)
+            self._box.ymin, self._box.ymax = ymin, ymax
 
         x_pos = compute_scale(
             self._box.xmin, self._box.xmax, self.logarithmic, self.order_min)

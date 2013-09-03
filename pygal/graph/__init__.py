@@ -37,5 +37,6 @@ CHARTS_NAMES = [
     'Dot',
     'Gauge',
     'DateY',
-    'Worldmap'
+    'Worldmap',
+    'Histogram'
 ]
