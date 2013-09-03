@@ -135,6 +135,7 @@ class Graph(BaseGraph):
                         len(self._x_labels) - 1)
                 truncation = reverse_text_len(
                     available_space, self.label_font_size)
+                truncation = max(truncation, 1)
 
         if 0 not in [label[1] for label in self._x_labels]:
             self.svg.node(axis, 'path',
