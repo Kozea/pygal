@@ -70,7 +70,7 @@ class BaseGraph(object):
 
     def __getattr__(self, attr):
         """Search in config, then in self"""
-        if attr in dir(self.config):
+        if hasattr(self.config, attr):
             return object.__getattribute__(self.config, attr)
         return object.__getattribute__(self, attr)
 
