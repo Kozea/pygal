@@ -43,7 +43,10 @@ def test_render_to_file(Chart, datas):
     chart.render_to_file(file_name)
     with open(file_name) as f:
         assert 'pygal' in f.read()
-    os.remove(file_name)
+    if Chart == pygal.HorizontalBar:
+        pass
+    else:
+        os.remove(file_name)
 
 
 def test_render_to_png(Chart, datas):
