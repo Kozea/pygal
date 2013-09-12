@@ -178,9 +178,15 @@ class Graph(BaseGraph):
                 y=y,
                 class_='major' if major else ''
             )
-            text.text = truncate(label, truncation)
+            if isinstance(label, dict):
+                text.text = truncate(label['title'], truncation)
+            else:
+                text.text = truncate(label, truncation)
             if text.text != label:
-                self.svg.node(guides, 'title').text = label
+                if isinstance(label, dict):
+                    self.svg.node(guides, 'title').text = label['title']
+                else:
+                    self.svg.node(guides, 'title').text = label
             if self.x_label_rotation:
                 text.attrib['transform'] = "rotate(%d %f %f)" % (
                     self.x_label_rotation, x, y)
@@ -245,7 +251,10 @@ class Graph(BaseGraph):
                 y=y + .35 * self.label_font_size,
                 class_='major' if major else ''
             )
-            text.text = label
+            if isinstance(label, dict):
+                text.text = label['title']
+            else:
+                text.text = label
             if self.y_label_rotation:
                 text.attrib['transform'] = "rotate(%d %f %f)" % (
                     self.y_label_rotation, x, y)
@@ -352,7 +361,7 @@ class Graph(BaseGraph):
             if isinstance(title, dict):
                 truncated = truncate(title['title'], truncation)
                 a = decorate(self.svg, legend, title)
-                legend_ = self.svg.node(
+                self.svg.node(
                     a, 'text',
                     x=col * x_step + self.legend_box_size + 5,
                     y=1.5 * row * h
