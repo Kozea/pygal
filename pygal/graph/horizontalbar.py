@@ -22,7 +22,6 @@ Horizontal bar graph
 """
 from pygal.graph.horizontal import HorizontalGraph
 from pygal.graph.bar import Bar
-from pygal.util import cached_property
 
 class HorizontalBar(HorizontalGraph, Bar):
     """Horizontal Bar graph"""

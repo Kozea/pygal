@@ -369,8 +369,8 @@ class Graph(BaseGraph):
                     + .3 * self.legend_font_size
                 ).text = truncated
                 #as <a> is decorated with title I do not think we need title here
-                #if truncated != title['title']:
-                #    self.svg.node(legend, 'title').text = title['title']
+                if truncated != title['title']:
+                    self.svg.node(legend, 'title').text = title['title']
             else:
                 truncated = truncate(title, truncation)
                 # Serious magical numbers here
