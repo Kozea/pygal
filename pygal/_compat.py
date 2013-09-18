@@ -19,13 +19,15 @@
 import sys
 
 
+if sys.version_info[0] == 3:
+    base = (str, bytes)
+    coerce = str
+else:
+    base = basestring
+    coerce = unicode
+
+
 def to_str(string):
-    if sys.version_info[0] == 3:
-        base = (str, bytes)
-        coerce = str
-    else:
-        base = basestring
-        coerce = unicode
     if not isinstance(string, base):
         return coerce(string)
     return string

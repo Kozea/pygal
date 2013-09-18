@@ -78,7 +78,6 @@ class Line(Graph):
                 if y > self.view.height / 2:
                     classes.append('top')
                 classes = ' '.join(classes)
-
                 dots = decorate(
                     self.svg,
                     self.svg.node(serie_node['overlay'], class_="dots"),
@@ -132,5 +131,6 @@ class Line(Graph):
     def _plot(self):
         for index, serie in enumerate(self.series):
             self.line(self._serie(index), serie)
+
         for index, serie in enumerate(self.secondary_series, len(self.series)):
             self.line(self._serie(index), serie, True)

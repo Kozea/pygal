@@ -66,7 +66,7 @@ class Svg(object):
 
     def add_styles(self):
         """Add the css to the svg"""
-        colors = self.graph.style.get_colors(self.id)
+        colors = self.graph.config.style.get_colors(self.id)
         all_css = []
         for css in ['base.css'] + list(self.graph.css):
             if '://' in css:
@@ -80,9 +80,9 @@ class Svg(object):
                 with io.open(css, encoding='utf-8') as f:
                     css_text = template(
                         f.read(),
-                        style=self.graph.style,
+                        style=self.graph.config.style,
                         colors=colors,
-                        font_sizes=self.graph.font_sizes(),
+                        font_sizes=self.graph.config.font_sizes(),
                         id=self.id)
                     if not self.graph.pretty_print:
                         css_text = minify_css(css_text)

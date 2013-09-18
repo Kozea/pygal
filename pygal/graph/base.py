@@ -38,6 +38,7 @@ class BaseGraph(object):
     def __init__(self, config, series, secondary_series, uuid):
         """Init the graph"""
         self.uuid = uuid
+        self.__dict__.update(config.to_dict())
         self.config = config
         self.series = series or []
         self.secondary_series = secondary_series or []
@@ -67,12 +68,6 @@ class BaseGraph(object):
             self.zero = min(positive_values) if positive_values else 0
         self._draw()
         self.svg.pre_render()
-
-    def __getattr__(self, attr):
-        """Search in config, then in self"""
-        if hasattr(self.config, attr):
-            return object.__getattribute__(self.config, attr)
-        return object.__getattribute__(self, attr)
 
     @property
     def all_series(self):

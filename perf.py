@@ -42,8 +42,47 @@ def prt(s):
     sys.stdout.write(s)
     sys.stdout.flush()
 
-charts = CHARTS_NAMES if '--all' in sys.argv else 'Line',
 
+if '--profile' in sys.argv:
+    import cProfile
+    c = perf('Line', 500, 500)
+    cProfile.run("c.render()")
+    sys.exit(0)
+
+if '--mem' in sys.argv:
+    _TWO_20 = float(2 ** 20)
+    import os
+    import psutil
+    import linecache
+    pid = os.getpid()
+    process = psutil.Process(pid)
+    import gc
+    gc.set_debug(gc.DEBUG_UNCOLLECTABLE | gc.DEBUG_INSTANCES | gc.DEBUG_OBJECTS)
+    def print_mem():
+        mem = process.get_memory_info()[0] / _TWO_20
+        f = sys._getframe(1)
+        line = linecache.getline(f.f_code.co_filename, f.f_lineno - 1).replace('\n', '')
+        print('%s:%d \t| %.6f \t| %s' % (
+            f.f_code.co_name, f.f_lineno, mem, line))
+
+    c = perf('Line', 100, 500)
+    print_mem()
+    a = c.render()
+    print_mem()
+    import objgraph
+    objgraph.show_refs([c], filename='sample-graph.png')
+    gc.collect()
+    print_mem()
+    print(gc.garbage)
+    print_mem()
+    del a
+    print_mem()
+    del c
+    print_mem()
+
+    sys.exit(0)
+
+charts = CHARTS_NAMES if '--all' in sys.argv else 'Line',
 
 for chart in charts:
     prt('%s\n' % chart)
