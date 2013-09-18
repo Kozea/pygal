@@ -25,7 +25,6 @@ from __future__ import division
 from pygal.util import cut, cached_property, decorate
 from pygal.graph.graph import Graph
 from pygal.i18n import COUNTRIES
-from pygal.adapters import int_to_country
 from lxml import etree
 import os
 
@@ -40,7 +39,6 @@ class Worldmap(Graph):
     _dual = True
     x_labels = list(COUNTRIES.keys())
     country_names = COUNTRIES
-    _adapters = [int_to_country]
 
     @cached_property
     def countries(self):

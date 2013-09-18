@@ -43,18 +43,6 @@ def none_to_zero(x):
     return x or 0
 
 
-def int_to_country(x):
-    # This is used for test compatibility
-    if isinstance(x, Number):
-        try:
-            x = int(x)
-        except:
-            return x
-        if x >= 0 and x < len(COUNTRIES):
-            return list(COUNTRIES.keys())[x]
-    return x
-
-
 def date(x):
     # Make int work for date graphs by counting days number from now
     if isinstance(x, Number):

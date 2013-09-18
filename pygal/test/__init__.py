@@ -20,6 +20,8 @@
 import pygal
 from pygal.util import cut
 from datetime import datetime
+from pygal.i18n import COUNTRIES
+COUNTRY_KEYS = list(COUNTRIES.keys())
 
 
 def get_data(i):
@@ -44,12 +46,21 @@ def pytest_generate_tests(metafunc):
 
 
 def adapt(chart, data):
+    if isinstance(chart, pygal.DateY):
+        # Convert to a credible datetime
+        return list(map(
+            lambda t:
+            (datetime.fromtimestamp(1360000000 + t[0] * 987654)
+             if t[0] is not None else None, t[1]), data))
+
     if isinstance(chart, pygal.XY):
-        if isinstance(chart, pygal.DateY):
-            # Convert to a credible datetime
-            return datetime.fromtimestamp(1360000000 + data * 987654)
         return data
-    return cut(data)
+
+    data = cut(data)
+    if isinstance(chart, pygal.Worldmap):
+        return list(map(lambda x: COUNTRY_KEYS[x % len(COUNTRIES)]
+                        if x is not None else None, data))
+    return data
 
 
 def make_data(chart, datas):
