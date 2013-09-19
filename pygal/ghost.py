@@ -63,7 +63,7 @@ class Ghost(object):
 
     def add(self, title, values, secondary=False):
         """Add a serie to this graph"""
-        if not is_list_like(values):
+        if not is_list_like(values) and not isinstance(values, dict):
             values = [values]
         if secondary:
             self.raw_series2.append((title, values))
