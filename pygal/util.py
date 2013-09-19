@@ -346,7 +346,7 @@ def prepare_values(raw, config, cls):
                     (width - len(raw_values)) * [None]  # aligning values
                     if len(raw_values) < width else [])):
             if isinstance(raw_value, dict):
-                value = raw_value.pop('value')
+                value = raw_value.pop('value', None)
                 metadata[index] = raw_value
             else:
                 value = raw_value
