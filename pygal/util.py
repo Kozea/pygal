@@ -21,7 +21,7 @@ Various utils
 
 """
 from __future__ import division
-from pygal._compat import to_str, u
+from pygal._compat import to_str, u, is_list_like
 import re
 from decimal import Decimal
 from math import floor, pi, log, log10, ceil
@@ -355,13 +355,13 @@ def prepare_values(raw, config, cls):
             if issubclass(cls, Histogram):
                 if value is None:
                     value = (None, None, None)
-                elif not hasattr(value, '__iter__'):
+                elif not is_list_like(value):
                     value = (value, config.zero, config.zero)
                 value = list(map(adapter, value))
             elif cls._dual:
                 if value is None:
                     value = (None, None)
-                elif not hasattr(value, '__iter__'):
+                elif not is_list_like(value):
                     value = (value, config.zero)
                 if issubclass(cls, DateY) or issubclass(cls, Worldmap):
                     value = (adapter(value[0]), value[1])
@@ -369,7 +369,6 @@ def prepare_values(raw, config, cls):
                     value = list(map(adapter, value))
             else:
                 value = adapter(value)
-
             values.append(value)
         series.append(Serie(title, values, metadata))
     return series

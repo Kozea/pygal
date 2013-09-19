@@ -27,7 +27,7 @@ from __future__ import division
 import io
 import sys
 from pygal.config import Config
-from pygal._compat import u
+from pygal._compat import u, is_list_like
 from pygal.graph import CHARTS_NAMES
 from pygal.util import prepare_values
 from uuid import uuid4
@@ -63,7 +63,7 @@ class Ghost(object):
 
     def add(self, title, values, secondary=False):
         """Add a serie to this graph"""
-        if not hasattr(values, '__iter__') and not isinstance(values, dict):
+        if not is_list_like(values):
             values = [values]
         if secondary:
             self.raw_series2.append((title, values))

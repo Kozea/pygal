@@ -17,7 +17,7 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with pygal. If not, see <http://www.gnu.org/licenses/>.
 import sys
-
+from collections import Iterable
 
 if sys.version_info[0] == 3:
     base = (str, bytes)
@@ -27,8 +27,16 @@ else:
     coerce = unicode
 
 
+def is_list_like(value):
+    return isinstance(value, Iterable) and not isinstance(value, (base, dict))
+
+
+def is_str(string):
+    return isinstance(string, base)
+
+
 def to_str(string):
-    if not isinstance(string, base):
+    if not is_str(string):
         return coerce(string)
     return string
 
