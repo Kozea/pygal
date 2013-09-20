@@ -185,6 +185,19 @@ COUNTRIES = {
     'zw': 'Zimbabwe'
 }
 
+EUROPE = ['bg', 'cs', 'da', 'de', 'et', 'el', 'en', 'es', 'fr', 'ga', 'hr',
+          'it', 'lt', 'lv', 'hu', 'mt', 'nl', 'pl', 'pt', 'ro', 'sk', 'sl',
+          'fi', 'sv']
+
+OECD = ['au', 'at', 'be', 'ca', 'cl', 'cz', 'dk', 'ee', 'fi', 'fr', 'de', 'gr',
+        'hu', 'is', 'ie', 'il', 'it', 'jp', 'kr', 'lu', 'mx', 'nl', 'nz', 'no',
+        'pl', 'pt', 'sk', 'si', 'es', 'se', 'ch', 'tr', 'gb', 'us']
+
+NAFTA = ['ca', 'mx', 'us']
+
+
+SUPRANATIONAL = {'europe': EUROPE, 'oecd': OECD, 'nafta': NAFTA}
+
 
 def set_countries(countries):
     global COUNTRIES
