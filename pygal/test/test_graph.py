@@ -20,6 +20,7 @@ import os
 import pygal
 import uuid
 import sys
+from pygal import i18n
 from pygal.util import cut
 from pygal._compat import u
 from pygal.test import pytest_generate_tests, make_data
@@ -69,6 +70,8 @@ def test_metadata(Chart):
     v = range(7)
     if Chart == pygal.XY:
         v = list(map(lambda x: (x, x + 1), v))
+    elif Chart == pygal.Worldmap:
+        v = list(map(lambda x: x, i18n.COUNTRIES))
 
     chart.add('Serie with metadata', [
         v[0],
