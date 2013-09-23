@@ -173,6 +173,10 @@ class Config(object):
 
     tooltip_border_radius = Key(0, int, "Look", "Tooltip border radius")
 
+    inner_radius = Key(
+        0, float, "Look", "Piechart inner radius (donut), must be <.9")
+
+
     ############ Label ############
     x_labels = Key(
         None, list, "Label",

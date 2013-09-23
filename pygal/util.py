@@ -197,7 +197,13 @@ def get_text_box(text, fs):
 
 def get_texts_box(texts, fs):
     """Approximation of multiple texts bounds"""
-    max_len = max(map(len, texts))
+    def get_text_title(texts):
+        for text in texts:
+            if isinstance(text, dict):
+                yield text['title']
+            else:
+                yield text
+    max_len = max(map(len, get_text_title(texts)))
     return (fs, text_len(max_len, fs))
 
 
