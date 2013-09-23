@@ -300,10 +300,9 @@ def prepare_values(raw, config, cls):
     from pygal.graph.datey import DateY
     from pygal.graph.histogram import Histogram
     from pygal.graph.worldmap import Worldmap
-    from pygal.graph.supranationalworldmap import SupranationalWorldmap
     if config.x_labels is None and hasattr(cls, 'x_labels'):
         config.x_labels = cls.x_labels
-    if config.zero == 0 and issubclass(cls, (Worldmap, SupranationalWorldmap)):
+    if config.zero == 0 and issubclass(cls, Worldmap):
         config.zero = 1
 
     for key in ('x_labels', 'y_labels'):
@@ -333,7 +332,7 @@ def prepare_values(raw, config, cls):
         metadata = {}
         values = []
         if isinstance(raw_values, dict):
-            if issubclass(cls, (Worldmap, SupranationalWorldmap)):
+            if issubclass(cls, Worldmap):
                 raw_values = list(raw_values.items())
             else:
                 value_list = [None] * width
@@ -365,9 +364,8 @@ def prepare_values(raw, config, cls):
                     value = (None, None)
                 elif not is_list_like(value):
                     value = (value, config.zero)
-                if issubclass(cls, DateY) or issubclass(
-                        cls, (Worldmap, SupranationalWorldmap)):
-                            value = (adapter(value[0]), value[1])
+                if issubclass(cls, DateY) or issubclass(cls, Worldmap):
+                    value = (adapter(value[0]), value[1])
                 else:
                     value = list(map(adapter, value))
             else:

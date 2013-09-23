@@ -38,6 +38,5 @@ CHARTS_NAMES = [
     'Gauge',
     'DateY',
     'Worldmap',
-    'SupranationalWorldmap',
     'Histogram'
 ]
