@@ -70,7 +70,7 @@ def test_metadata(Chart):
     v = range(7)
     if Chart == pygal.XY:
         v = list(map(lambda x: (x, x + 1), v))
-    elif Chart == pygal.Worldmap:
+    elif Chart == pygal.Worldmap or Chart == pygal.SupranationalWorldmap:
         v = list(map(lambda x: x, i18n.COUNTRIES))
 
     chart.add('Serie with metadata', [
@@ -94,7 +94,7 @@ def test_metadata(Chart):
     if Chart == pygal.Pie:
         # Slices with value 0 are not rendered
         assert len(v) - 1 == len(q('.tooltip-trigger').siblings('.value'))
-    elif Chart != pygal.Worldmap:
+    elif Chart != pygal.Worldmap and Chart != pygal.SupranationalWorldmap:
         # Tooltip are not working on worldmap
         assert len(v) == len(q('.tooltip-trigger').siblings('.value'))
 
