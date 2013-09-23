@@ -29,7 +29,6 @@ import sys
 from pygal.config import Config
 from pygal._compat import u, is_list_like
 from pygal.graph import CHARTS_NAMES
-from pygal.i18n import SUPRANATIONAL
 from pygal.util import prepare_values
 from uuid import uuid4
 
@@ -66,28 +65,10 @@ class Ghost(object):
         """Add a serie to this graph"""
         if not is_list_like(values) and not isinstance(values, dict):
             values = [values]
-        values = self.replace_supranationals(values)
         if secondary:
             self.raw_series2.append((title, values))
         else:
             self.raw_series.append((title, values))
-
-    def replace_supranationals(self, values):
-        """Replaces the values if it contains a supranational code."""
-        from pygal import Worldmap
-        if not isinstance(self, Worldmap):
-            return values
-        for suprakey in SUPRANATIONAL.keys():
-            if suprakey in values:
-                if not isinstance(values, dict):
-                    del values[values.index(suprakey)]
-                    values.extend(SUPRANATIONAL[suprakey])
-                else:
-                    values.update(
-                        dict([(code, values[suprakey])
-                              for code in SUPRANATIONAL[suprakey]]))
-                    del values[suprakey]
-        return values
 
     def make_series(self, series):
         return prepare_values(series, self.config, self.cls)
