@@ -185,9 +185,12 @@ COUNTRIES = {
     'zw': 'Zimbabwe'
 }
 
-EUROPE = ['bg', 'cs', 'da', 'de', 'et', 'el', 'en', 'es', 'fr', 'ga', 'hr',
-          'it', 'lt', 'lv', 'hu', 'mt', 'nl', 'pl', 'pt', 'ro', 'sk', 'sl',
-          'fi', 'sv']
+EUROPE = ['at', 'be', 'bg', 'hr', 'cy', 'cz', 'dk', 'ee', 'fi', 'fr', 'de',
+          'gr', 'hu', 'ie', 'it', 'lv', 'lt', 'lu', 'mt', 'nl', 'pl', 'pt',
+          'ro', 'sk', 'si', 'es', 'se', 'gb']
+
+EUR = ['be', 'de', 'ie', 'gr', 'es', 'fr', 'it', 'cy', 'lu', 'mt', 'nl', 'at',
+       'pt', 'si', 'sk', 'fi', 'ee']
 
 OECD = ['au', 'at', 'be', 'ca', 'cl', 'cz', 'dk', 'ee', 'fi', 'fr', 'de', 'gr',
         'hu', 'is', 'ie', 'il', 'it', 'jp', 'kr', 'lu', 'mx', 'nl', 'nz', 'no',
@@ -196,7 +199,7 @@ OECD = ['au', 'at', 'be', 'ca', 'cl', 'cz', 'dk', 'ee', 'fi', 'fr', 'de', 'gr',
 NAFTA = ['ca', 'mx', 'us']
 
 
-SUPRANATIONAL = {'europe': EUROPE, 'oecd': OECD, 'nafta': NAFTA}
+SUPRANATIONAL = {'europe': EUROPE, 'oecd': OECD, 'nafta': NAFTA, 'eur': EUR}
 
 
 def set_countries(countries):
