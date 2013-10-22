@@ -278,7 +278,8 @@ styles = {'default': DefaultStyle,
           'green': LightGreenStyle,
           'dark_green': DarkGreenStyle,
           'dark_green_blue': DarkGreenBlueStyle,
-          'blue': BlueStyle}
+          'blue': BlueStyle,
+          'solid_color': SolidColorStyle}
 
 
 parametric_styles = {}
