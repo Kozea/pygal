@@ -252,6 +252,19 @@ BlueStyle = Style(
         '#ffd541', '#7dcf30', lighten('#00b2f0', 15), darken('#ffd541', 20)))
 
 
+SolidColorStyle = Style(
+    background='#FFFFFF',
+    plot_background='#FFFFFF',
+    foreground='#000000',
+    foreground_light='#000000',
+    foreground_dark='#828282',
+    opacity='.8',
+    opacity_hover='.9',
+    transition='400ms ease-in',
+    colors=('#FF9900', '#DC3912', '#4674D1', '#109618', '#990099',
+            '#0099C6', '#DD4477', '#74B217', '#B82E2E', '#316395', '#994499'))
+
+
 styles = {'default': DefaultStyle,
           'light': LightStyle,
           'neon': NeonStyle,
@@ -265,7 +278,8 @@ styles = {'default': DefaultStyle,
           'green': LightGreenStyle,
           'dark_green': DarkGreenStyle,
           'dark_green_blue': DarkGreenBlueStyle,
-          'blue': BlueStyle}
+          'blue': BlueStyle,
+          'solid_color': SolidColorStyle}
 
 
 parametric_styles = {}
