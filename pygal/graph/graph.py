@@ -132,7 +132,7 @@ class Graph(BaseGraph):
                 last_label_position = self.view.x(self._x_labels[-1][1])
                 available_space = (
                     last_label_position - first_label_position) / (
-                        len(self._x_labels) - 1)
+                    len(self._x_labels) - 1)
                 truncation = reverse_text_len(
                     available_space, self.label_font_size)
                 truncation = max(truncation, 1)
@@ -179,15 +179,13 @@ class Graph(BaseGraph):
                 y=y,
                 class_='major' if major else ''
             )
+
             if isinstance(label, dict):
-                text.text = truncate(label['title'], truncation)
-            else:
-                text.text = truncate(label, truncation)
+                label = label['title']
+
+            text.text = truncate(label, truncation)
             if text.text != label:
-                if isinstance(label, dict):
-                    self.svg.node(guides, 'title').text = label['title']
-                else:
-                    self.svg.node(guides, 'title').text = label
+                self.svg.node(guides, 'title').text = label
             if self.x_label_rotation:
                 text.attrib['transform'] = "rotate(%d %f %f)" % (
                     self.x_label_rotation, x, y)
@@ -252,10 +250,11 @@ class Graph(BaseGraph):
                 y=y + .35 * self.label_font_size,
                 class_='major' if major else ''
             )
+
             if isinstance(label, dict):
-                text.text = label['title']
-            else:
-                text.text = label
+                label = label['title']
+            text.text = label
+
             if self.y_label_rotation:
                 text.attrib['transform'] = "rotate(%d %f %f)" % (
                     self.y_label_rotation, x, y)
@@ -359,31 +358,22 @@ class Graph(BaseGraph):
                 height=self.legend_box_size,
                 class_="color-%d reactive" % (global_serie_number % 16)
             )
+
             if isinstance(title, dict):
-                truncated = truncate(title['title'], truncation)
-                a = decorate(self.svg, legend, title)
-                self.svg.node(
-                    a, 'text',
-                    x=col * x_step + self.legend_box_size + 5,
-                    y=1.5 * row * h
-                    + .5 * h
-                    + .3 * self.legend_font_size
-                ).text = truncated
-                #as <a> is decorated with title I do not think we need title here
-                if truncated != title['title']:
-                    self.svg.node(legend, 'title').text = title['title']
+                node = decorate(self.svg, legend, title)
+                title = title['title']
             else:
-                truncated = truncate(title, truncation)
-                # Serious magical numbers here
-                self.svg.node(
-                    legend, 'text',
-                    x=col * x_step + self.legend_box_size + 5,
-                    y=1.5 * row * h
-                    + .5 * h
-                    + .3 * self.legend_font_size
-                ).text = truncated
-                if truncated != title:
-                    self.svg.node(legend, 'title').text = title
+                node = legend
+
+            truncated = truncate(title, truncation)
+            self.svg.node(
+                node, 'text',
+                x=col * x_step + self.legend_box_size + 5,
+                y=1.5 * row * h + .5 * h + .3 * self.legend_font_size
+            ).text = truncated
+
+            if truncated != title:
+                self.svg.node(legend, 'title').text = title
 
     def _title(self):
         """Make the title"""

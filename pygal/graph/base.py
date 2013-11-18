@@ -243,7 +243,7 @@ class BaseGraph(object):
         """Check if there is any data"""
         return sum(
             map(len, map(lambda s: s.safe_values, self.series))) != 0 and (
-                sum(map(abs, self._values)) != 0)
+            sum(map(abs, self._values)) != 0)
 
     def render(self, is_unicode=False):
         """Render the graph, and return the svg string"""

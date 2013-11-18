@@ -67,8 +67,8 @@ class Histogram(Graph):
         """Check if there is any data"""
         return sum(
             map(len, map(lambda s: s.safe_values, self.series))) != 0 and any((
-                sum(map(abs, self.xvals)) != 0,
-                sum(map(abs, self.yvals)) != 0))
+            sum(map(abs, self.xvals)) != 0,
+            sum(map(abs, self.yvals)) != 0))
 
     def _bar(self, parent, x0, x1, y, index, i, zero, secondary=False):
         x, y = self.view((x0, y))

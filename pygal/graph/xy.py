@@ -48,8 +48,8 @@ class XY(Line):
         """Check if there is any data"""
         return sum(
             map(len, map(lambda s: s.safe_values, self.series))) != 0 and any((
-                sum(map(abs, self.xvals)) != 0,
-                sum(map(abs, self.yvals)) != 0))
+            sum(map(abs, self.xvals)) != 0,
+            sum(map(abs, self.yvals)) != 0))
 
     def _compute(self):
         if self.xvals:

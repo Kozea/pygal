@@ -150,7 +150,7 @@ def test_values_by_dict(Chart):
     chart1 = Chart(no_prefix=True)
     chart2 = Chart(no_prefix=True)
 
-    if Chart != pygal.Worldmap:
+    if not issubclass(Chart, pygal.Worldmap):
         chart1.add('A', {'red': 10, 'green': 12, 'blue': 14})
         chart1.add('B', {'green': 11, 'red': 7})
         chart1.add('C', {'blue': 7})
@@ -242,7 +242,7 @@ def test_unicode_labels_decode(Chart):
         'label': 'unicode <3'
     }])
     chart.x_labels = [u('&œ'), u('¿?'), u('††††††††'), 'unicode <3']
-    q = chart.render_pyquery()
+    chart.render_pyquery()
 
 
 def test_unicode_labels_python2(Chart):
@@ -264,7 +264,7 @@ def test_unicode_labels_python2(Chart):
         'label': eval("'unicode <3'")
     }])
     chart.x_labels = eval("[u'&œ', u'¿?', u'††††††††', 'unicode <3']")
-    q = chart.render_pyquery()
+    chart.render_pyquery()
 
 
 def test_unicode_labels_python3(Chart):
@@ -286,47 +286,55 @@ def test_unicode_labels_python3(Chart):
         'label': eval("b'unicode <3'")
     }])
     chart.x_labels = eval("['&œ', '¿?', '††††††††', 'unicode <3']")
-    q = chart.render_pyquery()
+    chart.render_pyquery()
+
 
 def test_labels_with_links(Chart):
     chart = Chart()
-    #link on chart and label
-    chart.add({'title':'Red','xlink':
-        {'href': 'http://en.wikipedia.org/wiki/Red'}},
-        [{
+    # link on chart and label
+    chart.add({
+        'title': 'Red', 'xlink': {'href': 'http://en.wikipedia.org/wiki/Red'}
+    }, [{
         'value': 2,
         'label': 'This is red',
         'xlink': {'href': 'http://en.wikipedia.org/wiki/Red'}}])
-    #link on chart only
+
+    # link on chart only
     chart.add('Green', [{
-      'value': 4,
-      'label': 'This is green',
-      'xlink': {
-        'href': 'http://en.wikipedia.org/wiki/Green',
-        'target': '_top'}
-    }])
-    #link on label only opens in new tab
+        'value': 4,
+        'label': 'This is green',
+        'xlink': {
+            'href': 'http://en.wikipedia.org/wiki/Green',
+            'target': '_top'}}])
+
+    # link on label only opens in new tab
     chart.add({'title': 'Yellow', 'xlink': {
         'href': 'http://en.wikipedia.org/wiki/Yellow',
         'target': '_blank'}}, 7)
-    #link on chart only
+
+    # link on chart only
     chart.add('Blue', [{
-      'value': 5,
-      'xlink': {
-        'href': 'http://en.wikipedia.org/wiki/Blue',
-        'target': '_blank'}
-    }])
-    #link on label and chart with diffrent behaviours
-    chart.add({'title': 'Violet',
-        'xlink': 'http://en.wikipedia.org/wiki/Violet_(color)'},
-        [{
-          'value': 3,
-          'label': 'This is violet',
-          'xlink': {
+        'value': 5,
+        'xlink': {
+            'href': 'http://en.wikipedia.org/wiki/Blue',
+            'target': '_blank'}}])
+
+    # link on label and chart with diffrent behaviours
+    chart.add({
+        'title': 'Violet',
+        'xlink': 'http://en.wikipedia.org/wiki/Violet_(color)'
+    }, [{
+        'value': 3,
+        'label': 'This is violet',
+        'xlink': {
             'href': 'http://en.wikipedia.org/wiki/Violet_(color)',
-            'target': '_self'}
-    }])
+            'target': '_self'}}])
+
     q = chart.render_pyquery()
     links = q('a')
-    assert(len(links) == 8) # 7 links and 1 tooltip
 
+    if issubclass(chart.cls, pygal.graph.worldmap.Worldmap):
+        # No country is found in this case so:
+        assert len(links) == 4  # 3 links and 1 tooltip
+    else:
+        assert len(links) == 8  # 7 links and 1 tooltip

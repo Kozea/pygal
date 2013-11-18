@@ -176,7 +176,6 @@ class Config(object):
     inner_radius = Key(
         0, float, "Look", "Piechart inner radius (donut), must be <.9")
 
-
     ############ Label ############
     x_labels = Key(
         None, list, "Label",

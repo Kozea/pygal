@@ -20,6 +20,7 @@ import os
 import uuid
 from pygal import Pie
 
+
 def test_donut():
     file_name = '/tmp/test_graph-%s.svg' % uuid.uuid4()
     if os.path.exists(file_name):
@@ -35,6 +36,7 @@ def test_donut():
     with open(file_name) as f:
         assert 'pygal' in f.read()
     os.remove(file_name)
+
 
 def test_multiseries_donut():
     #this just demos that the multiseries pie does not respect the inner_radius
@@ -52,6 +54,3 @@ def test_multiseries_donut():
     with open(file_name) as f:
         assert 'pygal' in f.read()
     os.remove(file_name)
-
-
-

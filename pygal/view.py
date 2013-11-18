@@ -214,7 +214,7 @@ class PolarLogView(View):
             return super(PolarLogView, self).__call__((0, 0))
         rho = (self.box._rmax - self.box._rmin) * (
             log10(rho) - self.log10_rmin) / (
-                self.log10_rmax - self.log10_rmin)
+            self.log10_rmax - self.log10_rmin)
         return super(PolarLogView, self).__call__(
             (rho * cos(theta), rho * sin(theta)))
 
@@ -242,7 +242,7 @@ class PolarThetaView(View):
             start = 3 * pi / 2 + aperture / 2
             theta = start + (2 * pi - aperture) * (
                 theta - self.box._tmin) / (
-                    self.box._tmax - self.box._tmin)
+                self.box._tmax - self.box._tmin)
         return super(PolarThetaView, self).__call__(
             (rho * cos(theta), rho * sin(theta)))
 
@@ -269,7 +269,7 @@ class PolarThetaLogView(View):
             return super(PolarThetaLogView, self).__call__((0, 0))
         theta = self.box._tmin + (self.box._tmax - self.box._tmin) * (
             log10(theta) - self.log10_tmin) / (
-                self.log10_tmax - self.log10_tmin)
+            self.log10_tmax - self.log10_tmin)
         aperture = pi / 3
         if theta > self.box._tmax:
             theta = (3 * pi - aperture / 2) / 2
@@ -279,7 +279,7 @@ class PolarThetaLogView(View):
             start = 3 * pi / 2 + aperture / 2
             theta = start + (2 * pi - aperture) * (
                 theta - self.box._tmin) / (
-                    self.box._tmax - self.box._tmin)
+                self.box._tmax - self.box._tmin)
 
         return super(PolarThetaLogView, self).__call__(
             (rho * cos(theta), rho * sin(theta)))
