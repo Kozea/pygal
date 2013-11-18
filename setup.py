@@ -19,10 +19,17 @@
 # along with pygal. If not, see <http://www.gnu.org/licenses/>.
 import os
 import re
+import sys
 from setuptools import setup, find_packages
 
 ROOT = os.path.dirname(__file__)
-with open(os.path.join(ROOT, 'pygal', '__init__.py')) as fd:
+
+# Explicitly specify the encoding of pygal/__init__.py if we're on py3.
+kwargs = {}
+if sys.version_info[0] == 3:
+    kwargs['encoding'] = 'utf-8'
+
+with open(os.path.join(ROOT, 'pygal', '__init__.py'), **kwargs) as fd:
     __version__ = re.search("__version__ = '([^']+)'", fd.read()).group(1)
 
 setup(
