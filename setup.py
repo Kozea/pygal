@@ -17,7 +17,8 @@
 #
 # You should have received a copy of the GNU Lesser General Public License
 # along with pygal. If not, see <http://www.gnu.org/licenses/>.
-import os, sys
+import os
+import sys
 import re
 
 from setuptools import setup, find_packages
@@ -29,6 +30,7 @@ class PyTest(TestCommand):
         TestCommand.finalize_options(self)
         self.test_args = []
         self.test_suite = True
+
     def run_tests(self):
         #import here, cause outside the eggs aren't loaded
         import pytest
@@ -37,7 +39,13 @@ class PyTest(TestCommand):
 
 
 ROOT = os.path.dirname(__file__)
-with open(os.path.join(ROOT, 'pygal', '__init__.py')) as fd:
+
+# Explicitly specify the encoding of pygal/__init__.py if we're on py3.
+kwargs = {}
+if sys.version_info[0] == 3:
+    kwargs['encoding'] = 'utf-8'
+
+with open(os.path.join(ROOT, 'pygal', '__init__.py'), **kwargs) as fd:
     __version__ = re.search("__version__ = '([^']+)'", fd.read()).group(1)
 
 setup(
@@ -55,7 +63,7 @@ setup(
     keywords=[
         "svg", "chart", "graph", "diagram", "plot", "histogram", "kiviat"],
     tests_require=["pytest", "pyquery", "flask", "cairosvg"],
-    cmdclass = {'test': PyTest},
+    cmdclass={'test': PyTest},
     package_data={'pygal': ['css/*', 'graph/worldmap.svg']},
     install_requires=['lxml'],
     classifiers=[
