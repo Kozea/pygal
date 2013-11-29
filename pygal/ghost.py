@@ -60,6 +60,7 @@ class Ghost(object):
         self.config = config
         self.raw_series = []
         self.raw_series2 = []
+        self.xml_filters = []
 
     def add(self, title, values, secondary=False):
         """Add a serie to this graph"""
@@ -70,6 +71,9 @@ class Ghost(object):
         else:
             self.raw_series.append((title, values))
 
+    def add_xml_filter(self, callback):
+        self.xml_filters.append(callback)
+        
     def make_series(self, series):
         return prepare_values(series, self.config, self.cls)
 
@@ -79,7 +83,8 @@ class Ghost(object):
         series = self.make_series(self.raw_series)
         secondary_series = self.make_series(self.raw_series2)
         self._last__inst = self.cls(
-            self.config, series, secondary_series, self.uuid)
+            self.config, series, secondary_series, self.uuid,
+            self.xml_filters)
         return self._last__inst
 
     # Rendering

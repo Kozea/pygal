@@ -217,6 +217,8 @@ class Svg(object):
 
     def render(self, is_unicode=False, pretty_print=False):
         """Last thing to do before rendering"""
+        for f in self.graph.xml_filters:
+            self.root = f(self.root)
         svg = etree.tostring(
             self.root, pretty_print=pretty_print,
             xml_declaration=False,

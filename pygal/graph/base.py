@@ -35,13 +35,14 @@ class BaseGraph(object):
 
     _adapters = []
 
-    def __init__(self, config, series, secondary_series, uuid):
+    def __init__(self, config, series, secondary_series, uuid, xml_filters):
         """Init the graph"""
         self.uuid = uuid
         self.__dict__.update(config.to_dict())
         self.config = config
         self.series = series or []
         self.secondary_series = secondary_series or []
+        self.xml_filters = xml_filters or []
         self.horizontal = getattr(self, 'horizontal', False)
         self.svg = Svg(self)
         self._x_labels = None
@@ -252,4 +253,7 @@ class BaseGraph(object):
 
     def render_tree(self):
         """Render the graph, and return lxml tree"""
-        return self.svg.root
+        svg = self.svg.root
+        for f in self.xml_filters:
+            svg = f(svg)
+        return svg
