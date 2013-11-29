@@ -23,6 +23,9 @@ You can also download `the development snapshot from github <http://github.com/K
 Linux Distribution Packages
 ===========================
 
-*Not packaged yet.*
+Pygal has been packaged for:
+
+- `Fedora <https://admin.fedoraproject.org/pkgdb/acls/name/python-pygal>`_ by ralph
+- `Gentoo <http://packages.gentoo.org/package/dev-python/pygal>`_ by Ben de Groot
 
 If you are interested in creating packages for Linux distributions, `contact us </support/>`_.

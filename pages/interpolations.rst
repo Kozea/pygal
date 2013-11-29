@@ -9,22 +9,6 @@ Interpolations
 
 .. contents::
 
-Interpolations need the `scipy python module <http://www.scipy.org/>`_.
-To enable it just specify the interpolation type to:
-
-- linear
-- nearest
-- zero
-- slinear
-- quadratic
-- cubic
-- krogh
-- barycentric
-- univariate
-- or an integer representing the order of the spline interpolator
-
-For more info see `interp1d definition on scipy <http://docs.scipy.org/doc/scipy/reference/generated/scipy.interpolate.interp1d.html#scipy.interpolate.interp1d>`_
-
 
 Without interpolation:
 ----------------------
@@ -46,15 +30,72 @@ With cubic interpolation:
   chart = pygal.Line(interpolate='cubic')
   chart.add('line', [1, 5, 17, 12, 5, 10])
 
-With krogh interpolation:
--------------------------
+
+With quadratic interpolation:
+-----------------------------
 
 ``interpolate``
 
 .. pygal-code::
 
-  chart = pygal.Line(interpolate='krogh')
+  chart = pygal.Line(interpolate='quadratic')
   chart.add('line', [1, 5, 17, 12, 5, 10])
+
+
+With lagrange interpolation:
+----------------------------
+
+``interpolate``
+
+.. pygal-code::
+
+  chart = pygal.Line(interpolate='lagrange')
+  chart.add('line', [1, 5, 17, 12, 5, 10])
+
+
+With trigonometric interpolation:
+---------------------------------
+
+``interpolate``
+
+.. pygal-code::
+
+  chart = pygal.Line(interpolate='trigonometric')
+  chart.add('line', [1, 5, 17, 12, 5, 10])
+
+
+With hermite interpolation:
+---------------------------
+
+``interpolate``
+
+.. pygal-code::
+
+  chart = pygal.Line(interpolate='hermite')
+  chart.add('line', [1, 5, 17, 12, 5, 10])
+
+
+For hermite you can also pass additionnal parameters to configure tangent behaviour:
+
+
+.. pygal-code::
+
+  chart = pygal.Line(interpolate='hermite', interpolation_parameters={'type': 'finite_difference'})
+  chart.add('line', [1, 5, 17, 12, 5, 10])
+
+
+.. pygal-code::
+
+  chart = pygal.Line(interpolate='hermite', interpolation_parameters={'type': 'cardinal', 'c': .75})
+  chart.add('line', [1, 5, 17, 12, 5, 10])
+
+
+.. pygal-code::
+
+  chart = pygal.Line(interpolate='hermite', interpolation_parameters={'type': 'kochanek_bartels', 'b': -1, 'c': 1, 't': 1})
+  chart.add('line', [1, 5, 17, 12, 5, 10])
+
+For more information see the `wikipedia article <http://en.wikipedia.org/wiki/Cubic_Hermite_spline#Finite_difference>`_
 
 
 Interpolation precision
@@ -67,12 +108,12 @@ You can change the resolution of the interpolation with the help of `interpolati
 
 .. pygal-code::
 
-  chart = pygal.Line(interpolate='krogh', interpolation_precision=15)
+  chart = pygal.Line(interpolate='quadratic')
   chart.add('line', [1, 5, 17, 12, 5, 10])
 
 .. pygal-code::
 
-  chart = pygal.Line(interpolate='krogh', interpolation_precision=50)
+  chart = pygal.Line(interpolate='quadratic', interpolation_precision=3)
   chart.add('line', [1, 5, 17, 12, 5, 10])
 
 
