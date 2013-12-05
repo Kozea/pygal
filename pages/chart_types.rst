@@ -488,6 +488,7 @@ The following countries are supported:
     - `sa`: Saudi Arabia
     - `sc`: Seychelles
     - `sd`: Sudan
+    - `se`: Sweden
     - `sg`: Singapore
     - `sh`: Saint Helena, Ascension and Tristan da Cunha
     - `si`: Slovenia

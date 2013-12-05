@@ -117,4 +117,4 @@ You can change the resolution of the interpolation with the help of `interpolati
   chart.add('line', [1, 5, 17, 12, 5, 10])
 
 
-Next: `Sparklines </sparklines>`_
+Next: `Sparklines </sparks>`_
