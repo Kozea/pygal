@@ -6,7 +6,7 @@
 Chart types
 ===========
 
-pygal provides 10 kind of charts:
+pygal provides 10 kinds of charts:
 
 .. contents::
 
