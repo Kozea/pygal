@@ -51,6 +51,30 @@ def get_test_routes(app):
         bar.zero = 1
         return bar.render_response()
 
+    @app.route('/test/xy_links')
+    def test_xy_links():
+        xy = XY(style=styles['neon'])
+        xy.add('1234', [
+            {'value': (10, 5),
+             'label': 'Ten',
+             'xlink': 'http://google.com?q=10'},
+            {'value': (20, 20),
+             'tooltip': 'Twenty',
+             'xlink': 'http://google.com?q=20'},
+            (30, 15),
+            {'value': (40, -5),
+             'label': 'Forty',
+             'xlink': 'http://google.com?q=40'}
+        ])
+
+        xy.add('4321', [(40, 10), {
+            'value': (30, 3),
+            'label': 'Thirty',
+            'xlink': 'http://google.com?q=30'
+        }, (20, 10), (10, 21)])
+        xy.x_labels = map(str, range(1, 5))
+        return xy.render_response()
+
     @app.route('/test/long_title')
     def test_long_title():
         bar = Bar()

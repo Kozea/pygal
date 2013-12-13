@@ -111,15 +111,15 @@ I
   opacity: 1;
 }
 
-{{ id }}#tooltip rect {
+{{ id }}.tooltip rect {
   fill-opacity: 0.8;
 }
 
-{{ id }}#tooltip text {
+{{ id }}.tooltip text {
   fill-opacity: 1;
 }
 
-{{ id }}#tooltip text tspan.label {
+{{ id }}.tooltip text tspan.label {
   fill-opacity: .8;
 }
 

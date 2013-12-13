@@ -102,16 +102,16 @@ class Graph(BaseGraph):
                 self.margin.left, self.margin.top))
         self.nodes['tooltip'] = self.svg.node(
             self.nodes['tooltip_overlay'],
-            id="tooltip",
             transform='translate(0 0)',
-            style="opacity: 0")
+            style="opacity: 0",
+            **{'class': 'tooltip'})
 
         a = self.svg.node(self.nodes['tooltip'], 'a')
         self.svg.node(a, 'rect',
-                      id="tooltip-box",
                       rx=self.tooltip_border_radius,
                       ry=self.tooltip_border_radius,
-                      width=0, height=0)
+                      width=0, height=0,
+                      **{'class': 'tooltip-box'})
         text = self.svg.node(a, 'text', class_='text')
         self.svg.node(text, 'tspan', class_='label')
         self.svg.node(text, 'tspan', class_='value')

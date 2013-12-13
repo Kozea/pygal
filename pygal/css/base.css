@@ -47,7 +47,7 @@
   font-size: {{ font_sizes.value }};
 }
 
-{{ id }}#tooltip text {
+{{ id }}.tooltip text {
   font-family: monospace;
   font-size: {{ font_sizes.tooltip }};
 }

@@ -229,7 +229,8 @@ def create_app():
     def raw_svgs():
         svgs = []
         for color in styles['neon'].colors:
-            chart = pygal.Pie(style=parametric_styles['RotateStyle'](color))
+            chart = pygal.Pie(style=parametric_styles['RotateStyle'](color),
+                              width=400, height=300)
             chart.title = color
             chart.disable_xml_declaration = True
             chart.explicit_size = True

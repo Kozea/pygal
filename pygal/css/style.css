@@ -104,12 +104,12 @@
   fill: {{ style.foreground_light }};
 }
 
-{{ id }}#tooltip rect {
+{{ id }}.tooltip rect {
   fill: {{ style.plot_background }};
   stroke: {{ style.foreground_light }};
 }
 
-{{ id }}#tooltip text {
+{{ id }}.tooltip text {
   fill: {{ style.foreground_light }};
 }
 
