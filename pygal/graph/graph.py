@@ -495,10 +495,9 @@ class Graph(BaseGraph):
             self._y_2nd_labels = [(self._format(ymin + i * scale), pos)
                                   for i, pos in enumerate(y_pos)]
 
-            min_2nd = float(self._y_2nd_labels[0][0])
             self._scale = left_range / right_range
             self._scale_diff = y_pos[0]
-            self._scale_min_2nd = min_2nd
+            self._scale_min_2nd = ymin
 
     def _post_compute(self):
         pass
