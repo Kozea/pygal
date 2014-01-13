@@ -213,6 +213,9 @@ class Config(object):
     y_label_rotation = Key(
         0, int, "Label", "Specify y labels rotation angles", "in degrees")
 
+    x_label_format = Key(
+        "%Y-%m-%d %H:%M:%S.%f", str, "Label", "Date format for strftime to display the DateY X labels")
+
     ############ Value ############
     human_readable = Key(
         False, bool, "Value", "Display values in human readable format",
