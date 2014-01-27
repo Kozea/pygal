@@ -77,7 +77,7 @@ class BaseGraph(object):
     @property
     def _format(self):
         """Return the value formatter for this graph"""
-        return self.value_formatter or (
+        return self.config.value_formatter or (
             humanize if self.human_readable else str)
 
     def _compute(self):

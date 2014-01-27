@@ -210,6 +210,15 @@ def test_logarithmic_big_scale():
     assert len(q(".y.axis .guides")) == 41
 
 
+def test_value_formatter():
+    line = Line(value_formatter=lambda x: str(x) + '‰')
+    line.add('_', [10 ** 4, 10 ** 5, 23 * 10 ** 4])
+    q = line.render_pyquery()
+    assert len(q(".y.axis .guides")) == 11
+    assert q(".axis.y text").map(texts) == list(map(
+        lambda x: str(x) + '‰', map(float, range(20000, 240000, 20000))))
+
+
 def test_logarithmic_small_scale():
     line = Line(logarithmic=True)
     line.add('_', [1 + 10 ** 10, 3 + 10 ** 10, 2 + 10 ** 10])
