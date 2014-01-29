@@ -23,6 +23,7 @@ Box plot
 from __future__ import division
 from pygal.graph.graph import Graph
 from pygal.util import compute_scale, decorate
+from math import floor
 
 
 class Box(Graph):
@@ -123,23 +124,44 @@ class Box(Graph):
     @staticmethod
     def _box_points(values):
         """
-        Return a 5-tuple of Q1 - 1.5 * IQR, Q1, Median, Q3, and Q3 + 1.5 * IQR for a list of numeric values
+        Return a 5-tuple of Q1 - 1.5 * IQR, Q1, Median, Q3, and Q3 + 1.5 * IQR for a list of numeric values.
+
+        The iterator values may include None values.
 
         Uses quartile definition from  Mendenhall, W. and Sincich, T. L. Statistics for Engineering and the
         Sciences, 4th ed. Prentice-Hall, 1995.
         """
-        n = len(values)
+        def median(seq):
+            n = len(seq)
+            if n % 2 == 0:  # seq has an even length
+                return (seq[n // 2] + s[n // 2 - 1]) / 2
+            else:  # seq has an odd length
+                return seq[n // 2]
+
+        # sort the copy in case the originals must stay in original order
+        s = sorted([x for x in values if x is not None])
+        n = len(s)
         if not n:
             return 0, 0, 0, 0, 0
         else:
-            s = sorted(values)  # sort the copy in case the originals must stay in original order
-            if n % 2 == 0:  # n is even
-                q2 = (values[n // 2] + values[n // 2 + 1]) / 2
-            else:
-                q2 = values[(n + 1) // 2]
+            q2 = median(s)
+            # See 'Method 3' in http://en.wikipedia.org/wiki/Quartile
+            if n % 2 == 0:  # even
+                q1 = median(s[:n // 2])
+                q3 = median(s[n // 2:])
+            else:  # odd
+                if n == 1:  # special case
+                    q1 = s[0]
+                    q3 = s[0]
+                elif n % 4 == 1:  # n is of form 4n + 1 where n >= 1
+                    m = (n - 1) // 4
+                    q1 = 0.25 * s[m-1] + 0.75 * s[m]
+                    q3 = 0.75 * s[3*m] + 0.25 * s[3*m + 1]
+                else:  # n is of form 4n + 3 where n >= 1
+                    m = (n - 3) // 4
+                    q1 = 0.75 * s[m] + 0.25 * s[m+1]
+                    q3 = 0.25 * s[3*m+1] + 0.75 * s[3*m+2]
 
-            q1 = values[int(round((n + 1) / 4))]
-            q3 = values[int(round((3 * n + 3) / 4))]
             iqr = q3 - q1
             q0 = q1 - 1.5 * iqr
             q4 = q3 + 1.5 * iqr
