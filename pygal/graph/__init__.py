@@ -39,5 +39,6 @@ CHARTS_NAMES = [
     'DateY',
     'Worldmap',
     'SupranationalWorldmap',
-    'Histogram'
+    'Histogram',
+    'Box'
 ]
