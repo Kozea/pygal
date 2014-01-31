@@ -68,7 +68,9 @@ def test_render_to_png(Chart, datas):
 def test_metadata(Chart):
     chart = Chart()
     v = range(7)
-    if Chart == pygal.XY:
+    if Chart in (pygal.Box,):
+        return  # summary charts cannot display per-value metadata
+    elif Chart == pygal.XY:
         v = list(map(lambda x: (x, x + 1), v))
     elif Chart == pygal.Worldmap or Chart == pygal.SupranationalWorldmap:
         v = list(map(lambda x: x, i18n.COUNTRIES))
