@@ -31,7 +31,7 @@ import pickle
 
 
 def random_label():
-    chars = string.letters + string.digits + u' àéèçêâäëï'
+    chars = string.ascii_letters + string.digits + u' àéèçêâäëï'
     return ''.join(
         [random.choice(chars)
          for i in range(random.randrange(4, 30))])

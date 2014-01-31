@@ -2,7 +2,7 @@
 # This file is part of pygal
 from pygal import (
     Bar, Gauge, Pyramid, Funnel, Dot, StackedBar, XY,
-    CHARTS_BY_NAME, Config, Line, DateY, Worldmap, Histogram)
+    CHARTS_BY_NAME, Config, Line, DateY, Worldmap, Histogram, Box)
 from pygal.style import styles
 
 
@@ -275,6 +275,17 @@ def get_test_routes(app):
         chart.add(10 * '1b', [(4, 12), (5, 8), (6, 4)], secondary=True)
         chart.add(10 * '2b', [(3, 24), (0, 17), (12, 9)], secondary=True)
         chart.add(10 * '2', [(8, 23), (21, 1), (5, 0)])
+        return chart.render_response()
+
+    @app.route('/test/box')
+    def test_box():
+        chart = Box()
+        chart.add('One', [15, 8, 2, -12, 9, 23])
+        chart.add('Two', [5, 8, 2, -9, 23, 12])
+        chart.add('Three', [8, -2, 12, -5, 9, 3])
+        chart.add('Four', [5, 8, 2, -9, -3, 12])
+        chart.add('Five', [8, 12, 12, -9, 5, 13])
+        chart.x_labels = map(str, range(5))
         return chart.render_response()
 
     @app.route('/test/stacked')

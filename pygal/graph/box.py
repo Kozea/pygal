@@ -23,13 +23,14 @@ Box plot
 from __future__ import division
 from pygal.graph.graph import Graph
 from pygal.util import compute_scale, decorate
-from math import floor
 
 
+# TODO: Implement tooltip
 class Box(Graph):
     """
     Box plot
-    For each series, shows the median value, the 25th and 75th percentiles, and the values within
+    For each series, shows the median value, the 25th and 75th percentiles,
+    and the values within
     1.5 times the interquartile range of the 25th and 75th percentiles.
 
     See http://en.wikipedia.org/wiki/Box_plot
@@ -41,9 +42,12 @@ class Box(Graph):
 
     def _compute(self):
         """
-        Compute parameters necessary for later steps within the rendering process
+        Compute parameters necessary for later steps
+        within the rendering process
         """
-        # Note: this code was copied from Bar graph
+        for serie in self.series:
+            serie.values = self._box_points(serie.values)
+
         if self._min:
             self._box.ymin = min(self._min, self.zero)
         if self._max:
@@ -60,7 +64,7 @@ class Box(Graph):
         ) if not self.y_labels else map(float, self.y_labels)
 
         self._x_labels = self.x_labels and list(zip(self.x_labels, [
-            (i + .5) / self._len for i in range(self._len)]))
+            (i + .5) / self._order for i in range(self._order)]))
         self._y_labels = list(zip(map(self._format, y_pos), y_pos))
 
     def _plot(self):
@@ -74,9 +78,10 @@ class Box(Graph):
         """
         For a specific series, draw the box plot.
         """
-        # Note: q0 and q4 do not literally mean the zero-th quartile and the fourth quartile, but rather
-        # the distance from 1.5 times the inter-quartile range to Q1 and Q3, respectively.
-        q0, q1, q2, q3, q4 = self._box_points(serie.values)
+        # Note: q0 and q4 do not literally mean the zero-th quartile
+        # and the fourth quartile, but rather the distance from 1.5 times
+        # the inter-quartile range to Q1 and Q3, respectively.
+        q0, q1, q2, q3, q4 = serie.values
         boxes = self.svg.node(serie_node['plot'], class_="boxes")
 
         metadata = serie.metadata.get(0)
@@ -89,56 +94,64 @@ class Box(Graph):
 
         x_center, y_center = self._draw_box(box, (q0, q1, q2, q3, q4), index)
         self._tooltip_data(box, val, x_center, y_center, classes="centered")
-        #print(val)
-        #self._static_value(box, val, x_center, y_center)
 
     def _draw_box(self, parent_node, quartiles, box_index):
         """
-        Return the center of a bounding box defined by a box plot. Draws a box plot on self.svg.
+        Return the center of a bounding box defined by a box plot.
+        Draws a box plot on self.svg.
         """
-        width = (self.view.x(1) - self.view.x(0)) / self._len
-        #x, y = self.view((x, y))
+        width = (self.view.x(1) - self.view.x(0)) / self._order
         series_margin = width * self._series_margin
-        #x += series_margin
+        left_edge = self.view.x(0) + width * box_index + series_margin
         width -= 2 * series_margin
-        #height = self.view.y(y_zero) - y
-        left_edge = self.view.x(0) + width * box_index
 
         # draw lines for whiskers - bottom, median, and top
-        for whisker in (quartiles[0], quartiles[2], quartiles[4]):
-            self.svg.line(parent_node,
-                          coords=[(left_edge, self.view.y(whisker)), (left_edge + width, self.view.y(whisker))],
-                          attrib={'stroke-width': 3})
+        for i, whisker in enumerate(
+                (quartiles[0], quartiles[2], quartiles[4])):
+            whisker_width = width if i == 1 else width / 2
+            shift = (width - whisker_width) / 2
+            xs = left_edge + shift
+            xe = left_edge + width - shift
+            self.svg.line(
+                parent_node,
+                coords=[(xs, self.view.y(whisker)),
+                        (xe, self.view.y(whisker))],
+                attrib={'stroke-width': 3})
 
         # draw lines connecting whiskers to box (Q1 and Q3)
-        self.svg.line(parent_node,
-                      coords=[(left_edge + width / 2, self.view.y(quartiles[0])),
-                              (left_edge + width / 2, self.view.y(quartiles[1]))],
-                      attrib={'stroke-width': 2})
-        self.svg.line(parent_node,
-                      coords=[(left_edge + width / 2, self.view.y(quartiles[4])),
-                              (left_edge + width / 2, self.view.y(quartiles[3]))],
-                      attrib={'stroke-width': 2})
+        self.svg.line(
+            parent_node,
+            coords=[(left_edge + width / 2, self.view.y(quartiles[0])),
+                    (left_edge + width / 2, self.view.y(quartiles[1]))],
+            attrib={'stroke-width': 2})
+        self.svg.line(
+            parent_node,
+            coords=[(left_edge + width / 2, self.view.y(quartiles[4])),
+                    (left_edge + width / 2, self.view.y(quartiles[3]))],
+            attrib={'stroke-width': 2})
 
         # box, bounded by Q1 and Q3
-        self.svg.node(parent_node,
-                      tag='rect',
-                      x=left_edge,
-                      y=self.view.y(quartiles[1]),
-                      height=self.view.y(quartiles[3]) - self.view.y(quartiles[1]),
-                      width=width,
-                      attrib={'fill-opacity': 0.25})
+        self.svg.node(
+            parent_node,
+            tag='rect',
+            x=left_edge,
+            y=self.view.y(quartiles[1]),
+            height=self.view.y(quartiles[3]) - self.view.y(quartiles[1]),
+            width=width,
+            attrib={'fill-opacity': 0.25})
 
         return (left_edge + width / 2, self.view.height / 2)
 
     @staticmethod
     def _box_points(values):
         """
-        Return a 5-tuple of Q1 - 1.5 * IQR, Q1, Median, Q3, and Q3 + 1.5 * IQR for a list of numeric values.
+        Return a 5-tuple of Q1 - 1.5 * IQR, Q1, Median, Q3,
+        and Q3 + 1.5 * IQR for a list of numeric values.
 
         The iterator values may include None values.
 
-        Uses quartile definition from  Mendenhall, W. and Sincich, T. L. Statistics for Engineering and the
+        Uses quartile definition from  Mendenhall, W. and
+        Sincich, T. L. Statistics for Engineering and the
         Sciences, 4th ed. Prentice-Hall, 1995.
         """
         def median(seq):

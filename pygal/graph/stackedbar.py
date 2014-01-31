@@ -34,7 +34,7 @@ class StackedBar(Bar):
 
     def _get_separated_values(self, secondary=False):
         series = self.secondary_series if secondary else self.series
-        transposed = zip(*[serie.values for serie in series])
+        transposed = list(zip(*[serie.values for serie in series]))
         positive_vals = [sum([
             val for val in vals
             if val is not None and val >= self.zero])
