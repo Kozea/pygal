@@ -26,7 +26,7 @@ import pygal
 from datetime import datetime,timedelta
 
 def jour(n) :
-    return datetime(year=2013,month=1,day=1)+timedelta(days=n)
+    return datetime(year=2014,month=1,day=1)+timedelta(days=n)
 
 x=(1,20,35,54,345,898)
 x=tuple(map(jour,x))

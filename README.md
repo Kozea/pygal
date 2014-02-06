@@ -50,7 +50,7 @@ You can also support the project:
 
 ## License
 
-Copyright © 2012-2013 Kozea
+Copyright © 2012-2014 Kozea
 LGPLv3:
 
     This program is free software: you can redistribute it and/or modify

@@ -2,7 +2,7 @@
 # This file is part of pygal
 #
 # A python svg graph plotting library
-# Copyright © 2012-2013 Kozea
+# Copyright © 2012-2014 Kozea
 #
 # This library is free software: you can redistribute it and/or modify it under
 # the terms of the GNU Lesser General Public License as published by the Free
@@ -56,7 +56,7 @@ class Svg(object):
         self.root.attrib['class'] = 'pygal-chart'
         self.root.append(
             etree.Comment(u(
-                'Generated with pygal %s ©Kozea 2011-2013 on %s' % (
+                'Generated with pygal %s ©Kozea 2011-2014 on %s' % (
                     __version__, date.today().isoformat()))))
         self.root.append(etree.Comment(u('http://pygal.org')))
         self.root.append(etree.Comment(u('http://github.com/Kozea/pygal')))

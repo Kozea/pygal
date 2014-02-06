@@ -2,7 +2,7 @@
 # This file is part of pygal
 #
 # A python svg graph plotting library
-# Copyright © 2012-2013 Kozea
+# Copyright © 2012-2014 Kozea
 #
 # This library is free software: you can redistribute it and/or modify it under
 # the terms of the GNU Lesser General Public License as published by the Free
@@ -73,7 +73,7 @@ class Ghost(object):
 
     def add_xml_filter(self, callback):
         self.xml_filters.append(callback)
-        
+
     def make_series(self, series):
         return prepare_values(series, self.config, self.cls)
 

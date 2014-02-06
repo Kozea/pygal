@@ -320,7 +320,7 @@ def get_test_routes(app):
         datey = DateY(show_dots=False)
         datey.add('1', [
             (datetime(2011, 12, 21), 10),
-            (datetime(2013, 4, 8), 12),
+            (datetime(2014, 4, 8), 12),
             (datetime(2010, 2, 28), 2)
         ])
         datey.add('2', [(12, 4), (219, 8), (928, 6)])
