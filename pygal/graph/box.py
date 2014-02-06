@@ -23,9 +23,9 @@ Box plot
 from __future__ import division
 from pygal.graph.graph import Graph
 from pygal.util import compute_scale, decorate
+from pygal._compat import is_list_like
 
 
-# TODO: Implement tooltip
 class Box(Graph):
     """
     Box plot
@@ -39,6 +39,19 @@ class Box(Graph):
 
     def __init__(self, *args, **kwargs):
         super(Box, self).__init__(*args, **kwargs)
+
+    @property
+    def _format(self):
+        """Return the value formatter for this graph"""
+        sup = super(Box, self)._format
+
+        def format_maybe_quartile(x):
+            if is_list_like(x):
+                if len(x) == 5:
+                    return 'Q1: %s Q2: %s Q3: %s' % tuple(map(sup, x[1:4]))
+            else:
+                return sup(x)
+        return format_maybe_quartile
 
     def _compute(self):
         """
@@ -81,7 +94,6 @@ class Box(Graph):
         # Note: q0 and q4 do not literally mean the zero-th quartile
         # and the fourth quartile, but rather the distance from 1.5 times
         # the inter-quartile range to Q1 and Q3, respectively.
-        q0, q1, q2, q3, q4 = serie.values
         boxes = self.svg.node(serie_node['plot'], class_="boxes")
 
         metadata = serie.metadata.get(0)
@@ -90,10 +102,11 @@ class Box(Graph):
             self.svg,
             self.svg.node(boxes, class_='box'),
             metadata)
-        val = self._format(q2)
+        val = self._format(serie.values)
 
-        x_center, y_center = self._draw_box(box, (q0, q1, q2, q3, q4), index)
+        x_center, y_center = self._draw_box(box, serie.values, index)
         self._tooltip_data(box, val, x_center, y_center, classes="centered")
+        self._static_value(serie_node, val, x_center, y_center)
 
     def _draw_box(self, parent_node, quartiles, box_index):
         """
@@ -116,6 +129,7 @@ class Box(Graph):
                 parent_node,
                 coords=[(xs, self.view.y(whisker)),
                         (xe, self.view.y(whisker))],
+                class_='reactive tooltip-trigger',
                 attrib={'stroke-width': 3})
 
         # draw lines connecting whiskers to box (Q1 and Q3)
@@ -123,11 +137,13 @@ class Box(Graph):
             parent_node,
             coords=[(left_edge + width / 2, self.view.y(quartiles[0])),
                     (left_edge + width / 2, self.view.y(quartiles[1]))],
+            class_='reactive tooltip-trigger',
             attrib={'stroke-width': 2})
         self.svg.line(
             parent_node,
             coords=[(left_edge + width / 2, self.view.y(quartiles[4])),
                     (left_edge + width / 2, self.view.y(quartiles[3]))],
+            class_='reactive tooltip-trigger',
             attrib={'stroke-width': 2})
 
         # box, bounded by Q1 and Q3
@@ -138,9 +154,10 @@ class Box(Graph):
             y=self.view.y(quartiles[1]),
             height=self.view.y(quartiles[3]) - self.view.y(quartiles[1]),
             width=width,
-            attrib={'fill-opacity': 0.25})
+            class_='subtle-fill reactive tooltip-trigger')
 
-        return (left_edge + width / 2, self.view.height / 2)
+        return (left_edge + width / 2, self.view.y(
+            sum(quartiles) / len(quartiles)))
 
     @staticmethod
     def _box_points(values):
@@ -157,7 +174,7 @@ class Box(Graph):
         def median(seq):
             n = len(seq)
             if n % 2 == 0:  # seq has an even length
-                return (seq[n // 2] + s[n // 2 - 1]) / 2
+                return (seq[n // 2] + seq[n // 2 - 1]) / 2
             else:  # seq has an odd length
                 return seq[n // 2]
 

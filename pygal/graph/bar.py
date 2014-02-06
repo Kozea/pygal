@@ -98,7 +98,7 @@ class Bar(Graph):
 
         y_pos = compute_scale(
             self._box.ymin, self._box.ymax, self.logarithmic, self.order_min
-        ) if not self.y_labels else map(float, self.y_labels)
+        ) if not self.y_labels else list(map(float, self.y_labels))
 
         self._x_labels = self.x_labels and list(zip(self.x_labels, [
             (i + .5) / self._len for i in range(self._len)]))

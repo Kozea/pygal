@@ -85,13 +85,17 @@
 {{ id }}.axis.x .guides:hover .guide.line {
   opacity: 1;
 }
-I
+
 {{ id }}.axis .guides:hover text {
   opacity: 1;
 }
 
 {{ id }}.nofill {
   fill: none;
+}
+
+{{ id }}.subtle-fill {
+  fill-opacity: .2;
 }
 
 {{ id }}.dot {
