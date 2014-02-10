@@ -59,10 +59,10 @@ class Style(object):
         def color(tupl):
             """Make a color css"""
             return ((
-                '%s.color-{0} {{\n'
+                '%s.color-{0}, %s.color-{0} a:visited {{\n'
                 '  stroke: {1};\n'
                 '  fill: {1};\n'
-                '}}\n') % prefix).format(*tupl)
+                '}}\n') % (prefix, prefix)).format(*tupl)
         return '\n'.join(map(color, enumerate(cycle_fill(self.colors, 16))))
 
     def to_dict(self):
@@ -154,7 +154,7 @@ LightColorizedStyle = Style(
     plot_background=lighten('#f8f8f8', 3),
     foreground='#333',
     foreground_light='#666',
-    foreground_dark='rgba(255, 255 , 255, 0.5)',
+    foreground_dark='rgba(0, 0 , 0, 0.5)',
     opacity='.5',
     opacity_hover='.9',
     transition='250ms ease-in',

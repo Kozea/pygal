@@ -126,8 +126,3 @@
 {{ id }}.tooltip text tspan.label {
   fill-opacity: .8;
 }
-
-{{ id }}a:visited {
-  fill: none;
-}
-
