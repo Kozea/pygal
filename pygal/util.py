@@ -47,9 +47,23 @@ def humanize(number):
         human_readable[int(order) - int(order > 0)])
 
 
-def majorize(s):
+def majorize(values):
     """Filter s sequence te return only major considered numbers"""
-    return []
+    sorted_values = sorted(values)
+    if len(values) <= 3 or (
+            abs(2 * sorted_values[1] - sorted_values[0] - sorted_values[2]) >
+            abs(1.5 * (sorted_values[1] - sorted_values[0]))):
+        return []
+    step = 10 ** int(log10(sorted_values[-1] - sorted_values[0]))
+    if step == sorted_values[1] - sorted_values[0]:
+        step *= 10
+    if sorted_values[-1] < 2 * step:
+        step *= .5
+    elif sorted_values[-1] >= 5 * step:
+        step *= 5
+    major_values = [
+        value for value in values if value / step == round(value / step)]
+    return [value for value in sorted_values if value in major_values]
 
 
 def round_to_int(number, precision):
