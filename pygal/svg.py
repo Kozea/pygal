@@ -74,18 +74,21 @@ class Svg(object):
                     etree.PI(
                         u('xml-stylesheet'), u('href="%s"' % css)))
             else:
-                if not os.path.exists(css):
-                    css = os.path.join(
-                        os.path.dirname(__file__), 'css', css)
-                with io.open(css, encoding='utf-8') as f:
-                    css_text = template(
-                        f.read(),
-                        style=self.graph.config.style,
-                        colors=colors,
-                        font_sizes=self.graph.config.font_sizes(),
-                        id=self.id)
-                    if not self.graph.pretty_print:
-                        css_text = minify_css(css_text)
+                if css.startswith('inline:'):
+                    css_text = css[len('inline:'):]
+                else:
+                    if not os.path.exists(css):
+                        css = os.path.join(
+                            os.path.dirname(__file__), 'css', css)
+                    with io.open(css, encoding='utf-8') as f:
+                        css_text = template(
+                            f.read(),
+                            style=self.graph.config.style,
+                            colors=colors,
+                            font_sizes=self.graph.config.font_sizes(),
+                            id=self.id)
+                if not self.graph.pretty_print:
+                    css_text = minify_css(css_text)
                 all_css.append(css_text)
         self.node(
             self.defs, 'style', type='text/css').text = '\n'.join(all_css)

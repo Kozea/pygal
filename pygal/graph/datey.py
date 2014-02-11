@@ -51,7 +51,7 @@ class DateY(XY):
     def _todate(self, d):
         """ Converts a number to a date """
         currDateTime = self._offset + datetime.timedelta(seconds=d or 0)
-        return currDateTime.strftime( self.x_label_format )
+        return currDateTime.strftime(self.x_label_format)
 
     def _tonumber(self, d):
         """ Converts a date to a number """

@@ -288,3 +288,29 @@ def test_include_x_axis(Chart):
     chart.include_x_axis = True
     q = chart.render_pyquery()
     assert '0.0' in q(yaxis).map(texts)
+
+
+def test_css(Chart):
+    css = "{{ id }}text { fill: #bedead; }\n"
+    css_file = '/tmp/pygal_custom_style.css'
+    with open(css_file, 'w') as f:
+        f.write(css)
+
+    config = Config()
+    config.css.append(css_file)
+
+    chart = Chart(config)
+    chart.add('/', [10, 1, 5])
+    svg = chart.render().decode('utf-8')
+    assert '#bedead' in svg
+
+
+def test_inline_css(Chart):
+    css = "{{ id }}text { fill: #bedead; }\n"
+
+    config = Config()
+    config.css.append('inline:' + css)
+    chart = Chart(config)
+    chart.add('/', [10, 1, 5])
+    svg = chart.render().decode('utf-8')
+    assert '#bedead' in svg
