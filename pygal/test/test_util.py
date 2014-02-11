@@ -19,7 +19,7 @@
 from pygal._compat import u
 from pygal.util import (
     round_to_int, round_to_float, _swap_curly, template, humanize,
-    is_major, truncate, minify_css)
+    truncate, minify_css, majorize)
 from pytest import raises
 
 
@@ -108,13 +108,6 @@ def test_humanize():
     assert humanize(-.000000042) == '-42n'
 
 
-def test_is_major():
-    for n in (0, 1, 1000, 10., 0.1, 0.000001, -10, -.001000, -100.):
-        assert is_major(n)
-    for n in (2, 10002., 100000.0003, -200, -0.0005):
-        assert not is_major(n)
-
-
 def test_truncate():
     assert truncate('1234567890', 50) == '1234567890'
     assert truncate('1234567890', 5) == u('1234…')
@@ -144,3 +137,13 @@ def test_minify_css():
     assert minify_css(css) == (
         '.title{font-family:sans;font-size:12}'
         '.legends .legend text{font-family:monospace;font-size:14}')
+
+
+def test_major():
+    assert majorize((0, .1, .2, .3, .4, .5, .6, .7, .8, .9, 1)) == [0, .5, 1]
+    assert majorize((0, .2, .4, .6, .8, 1)) == [0, 1]
+    assert majorize((0, .2, .4, .6, .8, 1, 1.2, 1.4, 1.6, 1.8, 2)) == [0, 1, 2]
+    assert majorize((0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110, 120)) == [0, 50, 100]
+    assert majorize((0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30, 32, 34, 36)) == [0, 10, 20, 30]
+    assert majorize((0, 1, 2, 3, 4, 5)) == [0, 5]
+    assert majorize((1, 10, 100, 1000, 10000, 100000)) == []

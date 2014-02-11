@@ -25,7 +25,7 @@ from __future__ import division
 from pygal.graph.line import Line
 from pygal.adapters import positive, none_to_zero
 from pygal.view import PolarView, PolarLogView
-from pygal.util import deg, cached_property, compute_scale, is_major
+from pygal.util import deg, cached_property, compute_scale, majorize, cut
 from math import cos, pi
 
 
@@ -118,9 +118,12 @@ class Radar(Line):
             return
 
         axis = self.svg.node(self.nodes['plot'], class_="axis y web")
+        majors = majorize(
+            cut(self._y_labels, 1)
+        ) if self.y_labels_use_major else []
 
         for label, r in reversed(self._y_labels):
-            major = is_major(r)
+            major = r in majors
             guides = self.svg.node(axis, class_='guides')
             self.svg.line(
                 guides, [self.view((r, theta)) for theta in self.x_pos],

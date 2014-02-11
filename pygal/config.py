@@ -204,6 +204,10 @@ class Config(object):
         "You can specify explicit y labels",
         "Must be a list of numbers", float)
 
+    y_labels_use_major = Key(
+        True, bool, "Label",
+        "Whether to promote some labels majors.")
+
     show_y_labels = Key(
         True, bool, "Label", "Set to false to hide y-labels")
 

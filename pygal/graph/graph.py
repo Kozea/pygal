@@ -26,7 +26,7 @@ from pygal.interpolate import INTERPOLATIONS
 from pygal.graph.base import BaseGraph
 from pygal.view import View, LogView, XYLogView
 from pygal.util import (
-    is_major, truncate, reverse_text_len, get_texts_box, cut, rad, decorate)
+    majorize, truncate, reverse_text_len, get_texts_box, cut, rad, decorate)
 from math import sqrt, ceil, cos
 from itertools import repeat, chain
 
@@ -228,8 +228,11 @@ class Graph(BaseGraph):
                 d='M%f %f h%f' % (0, self.view.height, self.view.width),
                 class_='line'
             )
+        majors = majorize(
+            cut(self._y_labels, 1)
+        ) if self.y_labels_use_major else []
         for label, position in self._y_labels:
-            major = is_major(position)
+            major = position in majors
             guides = self.svg.node(axis, class_='%sguides' % (
                 'logarithmic ' if self.logarithmic else ''
             ))
@@ -262,8 +265,11 @@ class Graph(BaseGraph):
         if self._y_2nd_labels:
             secondary_ax = self.svg.node(
                 self.nodes['plot'], class_="axis y2")
+            majors = majorize(
+                cut(self._y_2nd_labels, 1)
+            ) if self.y_labels_use_major else []
             for label, position in self._y_2nd_labels:
-                major = is_major(position)
+                major = position in majors
                 # it is needed, to have the same structure as primary axis
                 guides = self.svg.node(secondary_ax, class_='guides')
                 x = self.view.width + 5

@@ -47,9 +47,9 @@ def humanize(number):
         human_readable[int(order) - int(order > 0)])
 
 
-def is_major(number):
-    """Returns True if number is a round order: 1, 100, 0.001"""
-    return not number or 10 ** floor(log10(abs(number))) == abs(number)
+def majorize(s):
+    """Filter s sequence te return only major considered numbers"""
+    return []
 
 
 def round_to_int(number, precision):
