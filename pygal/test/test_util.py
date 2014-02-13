@@ -167,3 +167,7 @@ def test_major():
     assert majorize((-6, -5, -4, -3, -2, -1, 0, 1, 2, 3)) == [-5, 0]
     assert majorize((-6, -5, -4, -3)) == [-5]
     assert majorize((1, 10, 100, 1000, 10000, 100000)) == []
+    assert majorize(range(30, 70, 5)) == [30, 40, 50, 60]
+    assert majorize(range(20, 55, 2)) == [20, 30, 40, 50]
+    assert majorize(range(21, 83, 3)) == [30, 45, 60, 75]
+    assert majorize(range(20, 83, 3)) == [20, 35, 50, 65, 80]

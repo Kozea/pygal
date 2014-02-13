@@ -75,7 +75,7 @@ class Radar(Line):
         if self.x_labels_major:
             x_labels_major = self.x_labels_major
         elif self.x_labels_major_every:
-            x_labels_major = [self._x_labels[i][0] for i in xrange(
+            x_labels_major = [self._x_labels[i][0] for i in range(
                 0, len(self._x_labels), self.x_labels_major_every)]
         elif self.x_labels_major_count:
             label_count = len(self._x_labels)
@@ -85,7 +85,7 @@ class Radar(Line):
             else:
                 x_labels_major = [self._x_labels[
                     int(i * label_count / major_count)][0]
-                    for i in xrange(major_count)]
+                    for i in range(major_count)]
         else:
             x_labels_major = []
 
@@ -118,12 +118,29 @@ class Radar(Line):
             return
 
         axis = self.svg.node(self.nodes['plot'], class_="axis y web")
-        majors = majorize(
-            cut(self._y_labels, 1)
-        ) if self.y_labels_use_major else []
 
+        if self.y_labels_major:
+            y_labels_major = self.y_labels_major
+        elif self.y_labels_major_every:
+            y_labels_major = [self._y_labels[i][1] for i in range(
+                0, len(self._y_labels), self.y_labels_major_every)]
+        elif self.y_labels_major_count:
+            label_count = len(self._y_labels)
+            major_count = self.y_labels_major_count
+            if (major_count >= label_count):
+                y_labels_major = [label[1] for label in self._y_labels]
+            else:
+                y_labels_major = [self._y_labels[
+                    int(i * (label_count - 1) / (major_count - 1))][1]
+                    for i in range(major_count)]
+        else:
+            y_labels_major = majorize(
+                cut(self._y_labels, 1)
+            )
         for label, r in reversed(self._y_labels):
-            major = r in majors
+            major = r in y_labels_major
+            if not (self.show_minor_y_labels or major):
+                continue
             guides = self.svg.node(axis, class_='guides')
             self.svg.line(
                 guides, [self.view((r, theta)) for theta in self.x_pos],

@@ -204,9 +204,21 @@ class Config(object):
         "You can specify explicit y labels",
         "Must be a list of numbers", float)
 
-    y_labels_use_major = Key(
-        True, bool, "Label",
-        "Whether to promote some labels majors.")
+    y_labels_major = Key(
+        None, list, "Label",
+        "Y labels that will be marked major. Default: auto",
+        subtype=str)
+
+    y_labels_major_every = Key(
+        None, int, "Label",
+        "Mark every n-th y label as major.")
+
+    y_labels_major_count = Key(
+        None, int, "Label",
+        "Mark n evenly distributed y labels as major.")
+
+    show_minor_y_labels = Key(
+        True, bool, "Label", "Set to false to hide y-labels not marked major")
 
     show_y_labels = Key(
         True, bool, "Label", "Set to false to hide y-labels")

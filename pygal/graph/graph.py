@@ -158,6 +158,7 @@ class Graph(BaseGraph):
                     for i in range(major_count)]
         else:
             x_labels_major = []
+
         for label, position in self._x_labels:
             major = label in x_labels_major
             if not (self.show_minor_x_labels or major):
@@ -228,11 +229,29 @@ class Graph(BaseGraph):
                 d='M%f %f h%f' % (0, self.view.height, self.view.width),
                 class_='line'
             )
-        majors = majorize(
-            cut(self._y_labels, 1)
-        ) if self.y_labels_use_major else []
+
+        if self.y_labels_major:
+            y_labels_major = self.y_labels_major
+        elif self.y_labels_major_every:
+            y_labels_major = [self._y_labels[i][1] for i in range(
+                0, len(self._y_labels), self.y_labels_major_every)]
+        elif self.y_labels_major_count:
+            label_count = len(self._y_labels)
+            major_count = self.y_labels_major_count
+            if (major_count >= label_count):
+                y_labels_major = [label[1] for label in self._y_labels]
+            else:
+                y_labels_major = [self._y_labels[
+                    int(i * (label_count - 1) / (major_count - 1))][1]
+                    for i in range(major_count)]
+        else:
+            y_labels_major = majorize(
+                cut(self._y_labels, 1)
+            )
         for label, position in self._y_labels:
-            major = position in majors
+            major = position in y_labels_major
+            if not (self.show_minor_y_labels or major):
+                continue
             guides = self.svg.node(axis, class_='%sguides' % (
                 'logarithmic ' if self.logarithmic else ''
             ))
@@ -265,11 +284,10 @@ class Graph(BaseGraph):
         if self._y_2nd_labels:
             secondary_ax = self.svg.node(
                 self.nodes['plot'], class_="axis y2")
-            majors = majorize(
-                cut(self._y_2nd_labels, 1)
-            ) if self.y_labels_use_major else []
             for label, position in self._y_2nd_labels:
-                major = position in majors
+                major = position in y_labels_major
+                if not (self.show_minor_x_labels or major):
+                    continue
                 # it is needed, to have the same structure as primary axis
                 guides = self.svg.node(secondary_ax, class_='guides')
                 x = self.view.width + 5
