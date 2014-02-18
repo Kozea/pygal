@@ -18,7 +18,7 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with pygal. If not, see <http://www.gnu.org/licenses/>.
 from cabaret import create_app
-from flup.server.fcgi import WSGIServer
+from flipflop import WSGIServer
 import logging
 app = create_app()
 
