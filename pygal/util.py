@@ -48,18 +48,24 @@ def humanize(number):
 
 
 def majorize(values):
-    """Filter s sequence te return only major considered numbers"""
+    """Filter sequence to return only major considered numbers"""
     sorted_values = sorted(values)
     if len(values) <= 3 or (
             abs(2 * sorted_values[1] - sorted_values[0] - sorted_values[2]) >
             abs(1.5 * (sorted_values[1] - sorted_values[0]))):
         return []
-    step = 10 ** int(log10(sorted_values[-1] - sorted_values[0]))
-    if step == sorted_values[1] - sorted_values[0]:
+    values_step = sorted_values[1] - sorted_values[0]
+    full_range = sorted_values[-1] - sorted_values[0]
+    step = 10 ** int(log10(full_range))
+    if step == values_step:
         step *= 10
-    if sorted_values[-1] < 2 * step:
+    step_factor = 10 ** (int(log10(step)) + 1)
+    if round(step * step_factor) % (round(values_step * step_factor) or 1):
+        # TODO: Find lower common multiple instead
+        step *= values_step
+    if full_range <= 2 * step:
         step *= .5
-    elif sorted_values[-1] >= 5 * step:
+    elif full_range >= 5 * step:
         step *= 5
     major_values = [
         value for value in values if value / step == round(value / step)]
