@@ -115,7 +115,7 @@
 
 {{ id }}.map-element {
   fill: {{ style.foreground }};
-  stroke: {{ style.plot_background }} !important;
+  stroke: {{ style.foreground_dark }} !important;
   opacity: .9;
   stroke-width: 3;
   -webkit-transition: 250ms;
