@@ -2,8 +2,11 @@
 # This file is part of pygal
 from pygal import (
     Bar, Gauge, Pyramid, Funnel, Dot, StackedBar, XY,
-    CHARTS_BY_NAME, Config, Line, DateY, Worldmap, Histogram, Box)
+    CHARTS_BY_NAME, Config, Line, DateY, Worldmap, Histogram, Box,
+    FrenchMap_Departments, FrenchMap_Regions)
 from pygal.style import styles
+from pygal.graph.frenchmap import DEPARTMENTS, REGIONS
+from random import randint, choice
 
 
 def get_test_routes(app):
@@ -329,14 +332,13 @@ def get_test_routes(app):
 
     @app.route('/test/worldmap')
     def test_worldmap():
-        import random
-        map = Worldmap(style=random.choice(styles.values()))
+        wmap = Worldmap(style=choice(list(styles.values())))
 
-        map.add('1st', [('fr', 100), ('us', 10)])
-        map.add('2nd', [('jp', 1), ('ru', 7), ('uk', 0)])
-        map.add('3rd', ['ch', 'cz', 'ca', 'cn'])
-        map.add('4th', {'br': 12, 'bo': 1, 'bu': 23, 'fr': 34})
-        map.add('5th', [{
+        wmap.add('1st', [('fr', 100), ('us', 10)])
+        wmap.add('2nd', [('jp', 1), ('ru', 7), ('uk', 0)])
+        wmap.add('3rd', ['ch', 'cz', 'ca', 'cn'])
+        wmap.add('4th', {'br': 12, 'bo': 1, 'bu': 23, 'fr': 34})
+        wmap.add('5th', [{
             'value': ('tw', 10),
             'label': 'First label',
             'xlink': 'http://google.com?q=tw'
@@ -348,8 +350,47 @@ def get_test_routes(app):
             'value': ('mw', 40),
             'label': 'Last'
         }])
-        map.add('6th', [3, 5, 34, 12])
-        map.title = 'World Map !!'
-        return map.render_response()
+        wmap.add('6th', [3, 5, 34, 12])
+        wmap.title = 'World Map !!'
+        return wmap.render_response()
+
+    @app.route('/test/frenchmapdepartments')
+    def test_frenchmapdepartments():
+        fmap = FrenchMap_Departments(style=choice(list(styles.values())))
+        for i in range(10):
+            fmap.add('s%d' % i, [
+                (choice(list(DEPARTMENTS.keys())), randint(0, 100)) for _ in range(randint(1, 5))])
+
+        fmap.add('links', [{
+            'value': ('69', 10),
+            'label': '\o/',
+            'xlink': 'http://google.com?q=69'
+        }, {
+            'value': ('42', 20),
+            'label': 'Y',
+        }])
+        fmap.add('6th', [3, 5, 34, 12])
+        fmap.title = 'French map'
+        return fmap.render_response()
+
+    @app.route('/test/frenchmapregions')
+    def test_frenchmapregions():
+        fmap = FrenchMap_Regions(style=choice(list(styles.values())))
+        for i in range(10):
+            fmap.add('s%d' % i, [
+                (choice(list(REGIONS.keys())), randint(0, 100))
+                for _ in range(randint(1, 5))])
+
+        fmap.add('links', [{
+            'value': ('02', 10),
+            'label': '\o/',
+            'xlink': 'http://google.com?q=69'
+        }, {
+            'value': ('72', 20),
+            'label': 'Y',
+        }])
+        fmap.add('6th', [91, 2, 41])
+        fmap.title = 'French map'
+        return fmap.render_response()
 
     return filter(lambda x: x.startswith('test'), locals())

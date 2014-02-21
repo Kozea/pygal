@@ -113,7 +113,7 @@
   fill: {{ style.foreground_light }};
 }
 
-{{ id }}.country {
+{{ id }}.map-element {
   fill: {{ style.foreground }};
   stroke: {{ style.plot_background }} !important;
   opacity: .9;
@@ -124,7 +124,7 @@
   transition: 250ms;
 }
 
-{{ id }}.country:hover {
+{{ id }}.map-element:hover {
   opacity: 1;
   stroke-width: 10;
 }

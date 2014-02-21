@@ -40,5 +40,6 @@ CHARTS_NAMES = [
     'Worldmap',
     'SupranationalWorldmap',
     'Histogram',
-    'Box'
+    'Box',
+    'FrenchMap'
 ]

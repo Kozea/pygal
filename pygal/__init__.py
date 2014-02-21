@@ -24,17 +24,17 @@ Pygal -  A python svg graph plotting library
 __version__ = '1.3.1'
 import sys
 from pygal.config import Config
-from pygal.ghost import Ghost
-from pygal.graph import CHARTS_NAMES
+from pygal.ghost import Ghost, REAL_CHARTS
 
 CHARTS = []
 CHARTS_BY_NAME = {}
 
-for NAME in CHARTS_NAMES:
+for NAME in REAL_CHARTS.keys():
     _CHART = type(NAME, (Ghost,), {})
     CHARTS.append(_CHART)
     CHARTS_BY_NAME[NAME] = _CHART
     setattr(sys.modules[__name__], NAME, _CHART)
 
 
-__all__ = CHARTS_NAMES + [Config.__name__, 'CHARTS', 'CHARTS_BY_NAME']
+__all__ = list(CHARTS_BY_NAME.keys()) + [
+    Config.__name__, 'CHARTS', 'CHARTS_BY_NAME']
