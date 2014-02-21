@@ -21,7 +21,7 @@ Pygal -  A python svg graph plotting library
 
 """
 
-__version__ = '1.3.1'
+__version__ = '1.4.0'
 import sys
 from pygal.config import Config
 from pygal.ghost import Ghost, REAL_CHARTS
