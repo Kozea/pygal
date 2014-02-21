@@ -277,9 +277,9 @@ Allow label rotation (in degrees) to avoid axis cluttering:
 Change minor/major labels
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
-``x_labels_major, x_labels_major_every, x_labels_major_count, show_minor_x_labels``
+``x_labels_major, x_labels_major_every, x_labels_major_count, show_minor_x_labels, y_labels_major, y_labels_major_every, y_labels_major_count, show_minor_y_labels``
 
-You can alter major minor behaviour for the abscissa thanks to `Arjen Stolk <https://github.com/simplyarjen>`_
+You can alter major minor behaviour of axes thanks to `Arjen Stolk <https://github.com/simplyarjen>`_
 
 .. pygal-code::
 
@@ -324,6 +324,38 @@ You can alter major minor behaviour for the abscissa thanks to `Arjen Stolk <htt
       'This is the third point !',
       'This is the fourth point !']
   chart.x_labels_major = ['This is the first point !', 'This is the fourth point !']
+  chart.add('line', [0, .0002, .0005, .00035])
+
+
+.. pygal-code::
+
+  chart = pygal.Line(y_label_rotation=-20)
+  chart.y_labels_major = []
+  chart.add('line', [0, .0002, .0005, .00035])
+
+
+.. pygal-code::
+
+  chart = pygal.Line()
+  chart.y_labels_major = [.0001, .0004]
+  chart.add('line', [0, .0002, .0005, .00035])
+
+
+.. pygal-code::
+
+  chart = pygal.Line(y_label_rotation=20, y_labels_major_every=3)
+  chart.add('line', [0, .0002, .0005, .00035])
+
+
+.. pygal-code::
+
+  chart = pygal.Line(y_labels_major_count=3)
+  chart.add('line', [0, .0002, .0005, .00035])
+
+
+.. pygal-code::
+
+  chart = pygal.Line(y_labels_major_every=2, show_minor_y_labels=False)
   chart.add('line', [0, .0002, .0005, .00035])
 
 

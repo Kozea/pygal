@@ -5,7 +5,7 @@
 Presentation
 ============
 
-pygal 1.3.0 is a dynamic SVG charting library.
+pygal 1.4.0 is a dynamic SVG charting library.
 
 
 .. class:: thumbs
@@ -64,6 +64,8 @@ It features various graph types:
 
 - `Worldmap charts </chart_types/#idworldmap-charts>`_
 
+- `Country charts </chart_types/#country-charts>`_
+
 
 
 Python/Css styling with some pre-defined themes. See `styling </styles/>`_.
@@ -96,6 +98,7 @@ Needed dependencies
 -------------------
 
 pygal uses `lxml <http://lxml.de/>`_ to generate the svg, this is the only needed dependency.
+
 
 Optional dependencies
 ---------------------
