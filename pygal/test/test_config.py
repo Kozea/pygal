@@ -23,6 +23,7 @@ from pygal import (
 from pygal._compat import u
 from pygal.test.utils import texts
 from pygal.test import pytest_generate_tests, make_data
+from uuid import uuid4
 
 
 def test_config_behaviours():
@@ -272,7 +273,7 @@ def test_include_x_axis(Chart):
     chart = Chart()
     if Chart in (Pie, Radar, Funnel, Dot, Gauge, Worldmap,
                  SupranationalWorldmap, Histogram, Box,
-                FrenchMap_Regions, FrenchMap_Departments):
+                 FrenchMap_Regions, FrenchMap_Departments):
         return
     if not chart.cls._dual:
         data = 100, 200, 150
@@ -294,7 +295,7 @@ def test_include_x_axis(Chart):
 
 def test_css(Chart):
     css = "{{ id }}text { fill: #bedead; }\n"
-    css_file = '/tmp/pygal_custom_style.css'
+    css_file = '/tmp/pygal_custom_style-%s.css' % uuid4()
     with open(css_file, 'w') as f:
         f.write(css)
 
