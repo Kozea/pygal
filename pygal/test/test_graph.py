@@ -21,6 +21,7 @@ import pygal
 import uuid
 import sys
 from pygal import i18n
+from pygal.graph.frenchmap import DEPARTMENTS, REGIONS
 from pygal.util import cut
 from pygal._compat import u
 from pygal.test import pytest_generate_tests, make_data
@@ -73,7 +74,11 @@ def test_metadata(Chart):
     elif Chart == pygal.XY:
         v = list(map(lambda x: (x, x + 1), v))
     elif Chart == pygal.Worldmap or Chart == pygal.SupranationalWorldmap:
-        v = list(map(lambda x: x, i18n.COUNTRIES))
+        v = [(i, k) for k, i in enumerate(i18n.COUNTRIES.keys())]
+    elif Chart == pygal.FrenchMap_Regions:
+        v = [(i, k) for k, i in enumerate(REGIONS.keys())]
+    elif Chart == pygal.FrenchMap_Departments:
+        v = [(i, k) for k, i in enumerate(DEPARTMENTS.keys())]
 
     chart.add('Serie with metadata', [
         v[0],
@@ -96,8 +101,10 @@ def test_metadata(Chart):
     if Chart == pygal.Pie:
         # Slices with value 0 are not rendered
         assert len(v) - 1 == len(q('.tooltip-trigger').siblings('.value'))
-    elif Chart != pygal.Worldmap and Chart != pygal.SupranationalWorldmap:
-        # Tooltip are not working on worldmap
+    elif Chart not in (
+            pygal.Worldmap, pygal.SupranationalWorldmap,
+            pygal.FrenchMap_Regions, pygal.FrenchMap_Departments):
+        # Tooltip are not working on maps
         assert len(v) == len(q('.tooltip-trigger').siblings('.value'))
 
 
@@ -335,7 +342,9 @@ def test_labels_with_links(Chart):
     q = chart.render_pyquery()
     links = q('a')
 
-    if issubclass(chart.cls, pygal.graph.worldmap.Worldmap):
+    if issubclass(chart.cls,
+                  (pygal.graph.worldmap.Worldmap,
+                   pygal.graph.frenchmap.FrenchMapDepartments)):
         # No country is found in this case so:
         assert len(links) == 4  # 3 links and 1 tooltip
     else:
