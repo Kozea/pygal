@@ -225,6 +225,7 @@ class FrenchMapDepartments(Graph):
                 areae = map.xpath(
                     "//*[contains(concat(' ', normalize-space(@class), ' '),"
                     " ' %s%s ')]" % (self.area_prefix, area_code))
+
                 if not areae:
                     continue
                 for area in areae:
@@ -251,9 +252,9 @@ class FrenchMapDepartments(Graph):
                     else:
                         title_node = self.svg.node(area, 'title')
                         text = ''
-                    title_node.text = text + '[%s] %s: %d' % (
+                    title_node.text = text + '[%s] %s: %s' % (
                         serie.title,
-                        self.area_names[area_code], value)
+                        self.area_names[area_code], self._format(value))
 
         self.nodes['plot'].append(map)
 
@@ -378,6 +379,8 @@ DEPARTMENTS_REGIONS = {
 
 
 def aggregate_regions(values):
+    if isinstance(values, dict):
+        values = values.items()
     regions = defaultdict(int)
     for department, value in values:
         regions[DEPARTMENTS_REGIONS[department]] += value
