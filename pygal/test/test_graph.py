@@ -159,7 +159,10 @@ def test_values_by_dict(Chart):
     chart1 = Chart(no_prefix=True)
     chart2 = Chart(no_prefix=True)
 
-    if not issubclass(Chart, pygal.Worldmap):
+    if not issubclass(Chart, (
+            pygal.Worldmap,
+            pygal.FrenchMap_Departments,
+            pygal.FrenchMap_Regions)):
         chart1.add('A', {'red': 10, 'green': 12, 'blue': 14})
         chart1.add('B', {'green': 11, 'red': 7})
         chart1.add('C', {'blue': 7})
