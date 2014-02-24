@@ -687,14 +687,14 @@ You can do the same with regions:
   fr_chart.add('DOM COM', ['01', '02', '03', '04'])
 
 
-You can also specify an number for a region and use a department to region aggregation:
+You can also specify a number for a region and use a department to region aggregation:
 
 
 .. pygal-code::
 
   from pygal.graph.frenchmap import aggregate_regions
   fr_chart = pygal.FrenchMap_Regions(human_readable=True)
-  fr_chart.title = 'Population by department'
+  fr_chart.title = 'Population by region'
   fr_chart.add('In 2011', aggregate_regions({
     '01': 603827,
     '02': 541302,
