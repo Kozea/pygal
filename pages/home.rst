@@ -5,7 +5,7 @@
 Presentation
 ============
 
-pygal 1.4.0 is a dynamic SVG charting library.
+pygal 1.4.1 is a dynamic SVG charting library.
 
 
 .. class:: thumbs
