@@ -1,3 +1,6 @@
+V 1.4.1
+	Fix value formatting in maps
+
 V 1.4.0
 	Finally a changelog !
 	Hopefully fix weird major scale algorithm
