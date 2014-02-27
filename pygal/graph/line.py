@@ -110,7 +110,14 @@ class Line(Graph):
         self._points(x_pos)
 
         if self.x_labels:
-            self._x_labels = list(zip(self.x_labels, x_pos))
+            label_len = len(self.x_labels)
+            if label_len != self._len:
+                label_pos = [0.5] if label_len == 1 else [
+                    x / (label_len - 1) for x in range(label_len)
+                ]
+                self._x_labels = list(zip(self.x_labels, label_pos))
+            else:
+                self._x_labels = list(zip(self.x_labels, x_pos))
         else:
             self._x_labels = None
 
