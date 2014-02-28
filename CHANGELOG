@@ -1,3 +1,6 @@
+V 1.4.3
+	Allow arbitrary number of x-labels on line plot (thanks nsmgr8)
+
 V 1.4.2
 	Fix broken tests
 

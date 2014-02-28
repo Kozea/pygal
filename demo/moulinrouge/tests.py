@@ -393,4 +393,11 @@ def get_test_routes(app):
         fmap.title = 'French map'
         return fmap.render_response()
 
+    @app.route('/test/labels')
+    def test_labels():
+        line = Line()
+        line.add('test1', range(100))
+        line.x_labels = map(str, range(11))
+        return line.render_response()
+
     return filter(lambda x: x.startswith('test'), locals())
