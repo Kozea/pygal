@@ -203,5 +203,5 @@ SUPRANATIONAL = {'europe': EUROPE, 'oecd': OECD, 'nafta': NAFTA, 'eur': EUR}
 
 
 def set_countries(countries):
-    global COUNTRIES
-    COUNTRIES = countries
+    COUNTRIES.clear()
+    COUNTRIES.update(countries)
