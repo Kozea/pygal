@@ -146,6 +146,11 @@ class Ghost(object):
         vmax = max(values)
         if relative_to is None:
             relative_to = min(values)
+
+        if (vmax - relative_to) == 0:
+            chart = bars[0] * len(values)
+            return chart
+
         divisions = len(bars) - 1
         for value in values:
             chart += bars[int(divisions *
