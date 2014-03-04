@@ -101,10 +101,8 @@ class MetaConfig(type):
         return type.__new__(mcs, classname, bases, classdict)
 
 
-class Config(object):
+class Config(MetaConfig('ConfigBase', (object,), {})):
     """Class holding config values"""
-
-    __metaclass__ = MetaConfig
 
     style = Key(
         DefaultStyle, Style, "Style", "Style holding values injected in css")
@@ -230,7 +228,8 @@ class Config(object):
         0, int, "Label", "Specify y labels rotation angles", "in degrees")
 
     x_label_format = Key(
-        "%Y-%m-%d %H:%M:%S.%f", str, "Label", "Date format for strftime to display the DateY X labels")
+        "%Y-%m-%d %H:%M:%S.%f", str, "Label",
+        "Date format for strftime to display the DateY X labels")
 
     ############ Value ############
     human_readable = Key(

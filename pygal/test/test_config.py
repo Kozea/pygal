@@ -317,3 +317,8 @@ def test_inline_css(Chart):
     chart.add('/', [10, 1, 5])
     svg = chart.render().decode('utf-8')
     assert '#bedead' in svg
+
+
+def test_meta_config():
+    from pygal.config import CONFIG_ITEMS
+    assert all(c.name != 'Unbound' for c in CONFIG_ITEMS)

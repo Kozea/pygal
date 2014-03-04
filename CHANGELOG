@@ -1,3 +1,8 @@
+V 1.4.4
+	Fix division by zero in spark text (thanks laserpony)
+	Fix config metaclass problem in python 3
+	Fix --version in pygal_gen
+
 V 1.4.3
 	Allow arbitrary number of x-labels on line plot (thanks nsmgr8)
 
