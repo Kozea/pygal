@@ -1,3 +1,6 @@
+V 1.4.5
+	Fix y_labels map iterator exhaustion in python 3
+
 V 1.4.4
 	Fix division by zero in spark text (thanks laserpony)
 	Fix config metaclass problem in python 3

@@ -256,6 +256,16 @@ def get_test_routes(app):
         hist.add('2', [(2, 2, 8)])
         return hist.render_response()
 
+
+    @app.route('/test/ylabels')
+    def test_ylabels():
+        chart = Line()
+        chart.x_labels = 'Red', 'Blue', 'Green'
+        chart.y_labels = .0001, .0003, .0004, .00045, .0005
+        chart.add('line', [.0002, .0005, .00035])
+        return chart.render_response()
+
+
     @app.route('/test/secondary/<chart>')
     def test_secondary_for(chart):
         chart = CHARTS_BY_NAME[chart](fill=True)
