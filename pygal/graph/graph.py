@@ -404,7 +404,7 @@ class Graph(BaseGraph):
         if self.title:
             for i, title_line in enumerate(self.title, 1):
                 self.svg.node(
-                    self.nodes['title'], 'text', class_='title',
+                    self.nodes['title'], 'text', class_='title plot_title',
                     x=self.width / 2,
                     y=i * (self.title_font_size + self.spacing)
                 ).text = title_line
