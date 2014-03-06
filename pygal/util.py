@@ -408,13 +408,14 @@ def split_title(title, width, title_fs):
     if not title:
         return titles
     size = reverse_text_len(width, title_fs * 1.1)
-    title = title.strip()
-    while len(title) > size:
-        title_part = title[:size]
-        i = title_part.rfind(' ')
-        if i == -1:
-            i = len(title_part)
-        titles.append(title_part[:i])
-        title = title[i:].strip()
-    titles.append(title)
+    title_lines = title.split("\n")
+    for title_line in title_lines:
+        while len(title_line) > size:
+            title_part = title_line[:size]
+            i = title_part.rfind(' ')
+            if i == -1:
+                i = len(title_part)
+            titles.append(title_part[:i])
+            title_line = title_line[i:].strip()
+        titles.append(title_line)
     return titles
