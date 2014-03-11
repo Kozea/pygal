@@ -92,6 +92,15 @@ def get_test_routes(app):
             '1 12 123 1234 12345 123456 1234567 12345678 123456789 1234567890')
         return bar.render_response()
 
+    @app.route('/test/multiline_title')
+    def test_multiline_title():
+        bar = Bar()
+        bar.add('Looooooooooooooooooooooooooooooooooong', [2, None, 12])
+        bar.title = (
+            'First line \n Second line \n Third line'
+        )
+        return bar.render_response()
+
     @app.route('/test/long_labels')
     def test_long_labels():
         bar = Bar()
