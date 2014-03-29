@@ -30,8 +30,12 @@ def jour(n) :
 
 x=(1,20,35,54,345,898)
 x=tuple(map(jour,x))
+x_label=(0,100,200,300,400,500,600,700,800,900,1000)
+x_label=map(jour,x_label)
 y=(1,3,4,2,3,1)
 graph=pygal.DateY(x_label_rotation=20)
+graph.x_label_format = "%Y-%m-%d"
+graph.x_labels = x_label
 graph.add("graph1",list(zip(x,y))+[None,None])
 graph.render_in_browser()
 """
@@ -119,12 +123,29 @@ class DateY(XY):
             else:
                 rng = None
 
-        if rng:
+        #Calculate/prcoess the x_labels
+        if self.x_labels:
+            #Process the given x_labels
+            x_labels_num = []
+            for label in self.x_labels:
+                x_labels_num.append(self._tonumber(label))
+            x_pos = x_labels_num
+            
+            #Update the xmin/xmax to fit all of the x_labels and the data
+            xmin = min( xmin, min(x_pos) )
+            xmax = max( xmax, max(x_pos) )
             self._box.xmin, self._box.xmax = xmin, xmax
             self._box.ymin, self._box.ymax = ymin, ymax
+            
+        else:
+            #Automatically generate the x_labels
+            if rng:
+                self._box.xmin, self._box.xmax = xmin, xmax
+                self._box.ymin, self._box.ymax = ymin, ymax
 
-        x_pos = compute_scale(
-            self._box.xmin, self._box.xmax, self.logarithmic, self.order_min)
+            x_pos = compute_scale(
+                self._box.xmin, self._box.xmax, self.logarithmic, self.order_min)
+        #Always auto-generate the y labels
         y_pos = compute_scale(
             self._box.ymin, self._box.ymax, self.logarithmic, self.order_min)
 
