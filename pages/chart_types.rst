@@ -145,7 +145,26 @@ You can index values by dates (Thanks to `Snarkturne <https://github.com/snarktu
       (datetime(2013, 2, 22), 672)
   ])
 
+The x axis and tool tip x labels can be specified using `x_label_format`. This uses the formatting string for strftime from `here <http://docs.python.org/2/library/time.html#time.strftime>`_
 
+The x labels can also be specified, using an array of datetime objects.
+
+.. pygal-code::
+
+  from datetime import datetime, timedelta
+  datey = pygal.DateY(x_label_rotation=20)
+  datey.add("Visits", [
+      (datetime(2013, 1, 2), 300),
+      (datetime(2013, 1, 12), 412),
+      (datetime(2013, 2, 2), 823),
+      (datetime(2013, 2, 22), 672)
+  ])
+  datey.x_label_format = "%Y-%m-%d"
+  datey.x_labels = [
+	datetime(2013, 1, 1),
+	datetime(2013, 2, 1),
+	datetime(2013, 3, 1)
+  ]
 
 Pies
 ----
