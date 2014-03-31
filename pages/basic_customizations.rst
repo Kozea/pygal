@@ -480,6 +480,21 @@ Font size
   chart = pygal.Line(tooltip_font_size=24)
   chart.add('line', [.0002, .0005, .00035])
 
+Precision
+~~~~~~~~~
+
+``value_formatter``
+
+You can specifiy how the values are displayed on the tooltip using a lambda function.
+The code below shows the values to 2 decimal places.
+
+.. pygal-code::
+
+  chart = pygal.Line(range=(0, 5))
+  chart.add('line', [.070106781, 1.414213562, 3.141592654])
+  chart.value_formatter = lambda x: "%.2f" % x
+
+The datey graph shows the tooltip as "x=? y=?", where the x format is the same as the x_label_format, and the y format is specified via the value_formatter.
 
 Two y axes
 ----------
