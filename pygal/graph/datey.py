@@ -94,12 +94,12 @@ class DateY(XY):
         else:
             rng = None
 
-        if yvals:
-            ymin = min(yvals)
-            ymax = max(yvals)
+        if self.yvals:
+            ymin = self._min
+            ymax = self._max
             if self.include_x_axis:
-                ymin = min(ymin or 0, 0)
-                ymax = max(ymax or 0, 0)
+                ymin = min(self._min or 0, 0)
+                ymax = max(self._max or 0, 0)
 
         for serie in self.all_series:
             serie.points = serie.values
