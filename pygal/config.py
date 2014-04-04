@@ -140,6 +140,10 @@ class Config(MetaConfig('ConfigBase', (object,), {})):
 
     show_dots = Key(True, bool, "Look", "Set to false to remove dots")
 
+    show_only_major_dots = Key(
+        False, bool, "Look",
+        "Set to true to show only major dots according to their majored label")
+
     dots_size = Key(2.5, float, "Look", "Radius of the dots")
 
     stroke = Key(
