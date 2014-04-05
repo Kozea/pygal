@@ -53,9 +53,17 @@ class Line(Graph):
     def _fill(self, values):
         """Add extra values to fill the line"""
         zero = self.view.y(min(max(self.zero, self._box.ymin), self._box.ymax))
+        
+        #Check to see if the data has been padded with "none's"
+        #Fill doesn't work correctly otherwise
+        numRows = len( values )
+        for i, (x, y) in enumerate( reversed(values) ):
+            if x is not None:
+                finishingIdx = -1-i
+                break
         return ([(values[0][0], zero)] +
                 values +
-                [(values[-1][0], zero)])
+                [(values[finishingIdx][0], zero)])
 
     def line(self, serie_node, serie, rescale=False):
         """Draw the line serie"""
@@ -65,6 +73,7 @@ class Line(Graph):
                 for x, y in serie.points if y is not None]
         else:
             points = serie.points
+        
         view_values = list(map(self.view, points))
         if self.show_dots:
             if self.show_only_major_dots:
@@ -111,7 +120,6 @@ class Line(Graph):
                     serie_node, val,
                     x + self.value_font_size,
                     y + self.value_font_size)
-
         if self.stroke:
             if self.interpolate:
                 view_values = list(map(self.view, serie.interpolated))
