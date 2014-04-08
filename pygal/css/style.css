@@ -131,4 +131,25 @@
 
 {{ colors }}
 
+/* Add the different types of dashes
+  dashed-0 - same length dash and gap, short
+  dashed-1 - same length dash and gap, long
+  dashed-2 - different length dashes, short and long, with a short gap
+  dashed-3 - dots (very small dashes) with longer gaps
+*/
 
+{{ id }}.dashed-0 {
+  stroke-dasharray:5,5
+}
+
+{{ id }}.dashed-1 {
+  stroke-dasharray:10,10
+}
+
+{{ id }}.dashed-2 {
+  stroke-dasharray:5,5,10,5
+}
+
+{{ id }}.dashed-3 {
+  stroke-dasharray:1,5
+}

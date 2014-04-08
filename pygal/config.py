@@ -149,6 +149,10 @@ class Config(MetaConfig('ConfigBase', (object,), {})):
     stroke = Key(
         True, bool, "Look",
         "Line dots (set it to false to get a scatter plot)")
+    
+    dashed_line = Key(
+        None, list, "Look",
+        "Sets if the line is dashed or not, using either a single value for the predefined dashed types, or a string specifying your own dash type")
 
     fill = Key(
         False, bool, "Look", "Fill areas under lines")

@@ -125,9 +125,24 @@ class Line(Graph):
                 view_values = list(map(self.view, serie.interpolated))
             if self.fill:
                 view_values = self._fill(view_values)
+            #Work out the dashed string - if necessary
+            if self.dashed_line is None:
+                dashed_class_str = ''
+            else:
+                if isinstance( self.dashed_line, int ):
+                    dashed_class_str = ' dashed-' + str(self.dashed_line)
+                    strokeDashArray = {'stroke-dasharray':None}
+                elif len( self.dashed_line ) is 1:
+                    #A single element list
+                    dashed_class_str = ' dashed-' + str(self.dashed_line[0])
+                    strokeDashArray = {'stroke-dasharray':None}
+                else:
+                    dashed_class_str = ''
+                    strokeDashArray = {'stroke-dasharray':','.join(str(i) for i in self.dashed_line) }
             self.svg.line(
                 serie_node['plot'], view_values, close=self._self_close,
-                class_='line reactive' + (' nofill' if not self.fill else ''))
+                class_='line reactive' + (' nofill' if not self.fill else '') + dashed_class_str,
+                **strokeDashArray)
 
     def _compute(self):
         # X Labels
