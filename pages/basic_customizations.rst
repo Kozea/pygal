@@ -392,6 +392,19 @@ You can remove dots by setting `show_dots` at `False`
   chart = pygal.Line(show_dots=False)
   chart.add('line', [.0002, .0005, .00035])
 
+
+``show_only_major_dots``
+
+You can remove minor x-labelled dots by setting `show_only_major_dots` at `True`
+
+.. pygal-code::
+
+  chart = pygal.Line(show_only_major_dots=True)
+  chart.add('line', range(12))
+  chart.x_labels = map(str, range(12))
+  chart.x_labels_major = ['2', '4', '8', '11']
+
+
 Size
 ~~~~
 
