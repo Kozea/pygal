@@ -67,10 +67,30 @@ class Line(Graph):
             points = serie.points
         view_values = list(map(self.view, points))
         if self.show_dots:
-            for i, (x, y) in enumerate(view_values):
-                if None in (x, y):
-                    continue
+            if self.show_only_major_dots:
+                major_dots_index = []
+                if self.x_labels:
+                    if self.x_labels_major:
+                        major_dots_index = []
+                        for major in self.x_labels_major:
+                            start = -1
+                            while True:
+                                try:
+                                    index = self.x_labels.index(
+                                        major, start + 1)
+                                except ValueError:
+                                    break
+                                else:
+                                    major_dots_index.append(index)
+                                    start = index
+                    elif self.x_labels_major_every:
+                        major_dots_index = range(
+                            0, len(self.x_labels), self.x_labels_major_every)
 
+            for i, (x, y) in enumerate(view_values):
+                if None in (x, y) or (self.show_only_major_dots
+                                      and i not in major_dots_index):
+                    continue
                 metadata = serie.metadata.get(i)
                 classes = []
                 if x > self.view.width / 2:
@@ -110,7 +130,14 @@ class Line(Graph):
         self._points(x_pos)
 
         if self.x_labels:
-            self._x_labels = list(zip(self.x_labels, x_pos))
+            label_len = len(self.x_labels)
+            if label_len != self._len:
+                label_pos = [0.5] if label_len == 1 else [
+                    x / (label_len - 1) for x in range(label_len)
+                ]
+                self._x_labels = list(zip(self.x_labels, label_pos))
+            else:
+                self._x_labels = list(zip(self.x_labels, x_pos))
         else:
             self._x_labels = None
 
@@ -124,7 +151,7 @@ class Line(Graph):
 
         y_pos = compute_scale(
             self._box.ymin, self._box.ymax, self.logarithmic, self.order_min
-        ) if not self.y_labels else map(float, self.y_labels)
+        ) if not self.y_labels else list(map(float, self.y_labels))
 
         self._y_labels = list(zip(map(self._format, y_pos), y_pos))
 

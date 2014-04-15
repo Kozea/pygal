@@ -81,3 +81,22 @@ def test_no_dot():
 def test_no_dot_at_all():
     q = Line().render_pyquery()
     assert q(".text-overlay text").text() == 'No data'
+
+
+def test_not_equal_x_labels():
+    line = Line()
+    line.add('test1', range(100))
+    line.x_labels = map(str, range(11))
+    q = line.render_pyquery()
+    assert len(q(".dots")) == 100
+    assert len(q(".axis.x")) == 1
+    assert q(".axis.x text").map(texts) == ['0', '1', '2', '3', '4', '5', '6',
+                                            '7', '8', '9', '10']
+
+
+def test_only_major_dots():
+    line = Line(show_only_major_dots=True, x_labels_major_every=3)
+    line.add('test', range(12))
+    line.x_labels = map(str, range(12))
+    q = line.render_pyquery()
+    assert len(q(".dots")) == 4

@@ -202,6 +202,7 @@ NAFTA = ['ca', 'mx', 'us']
 SUPRANATIONAL = {'europe': EUROPE, 'oecd': OECD, 'nafta': NAFTA, 'eur': EUR}
 
 
-def set_countries(countries):
-    global COUNTRIES
-    COUNTRIES = countries
+def set_countries(countries, clear=False):
+    if clear:
+        COUNTRIES.clear()
+    COUNTRIES.update(countries)

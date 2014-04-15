@@ -60,3 +60,13 @@ def test_negative_and_float_and_no_data_sparktext():
 
     chart3 = Line()
     assert chart3.render_sparktext() == u('')
+
+
+def test_same_max_and_relative_values_sparktext():
+    chart = Line()
+    chart.add('_', [0, 0, 0, 0, 0])
+    assert chart.render_sparktext() == u('▁▁▁▁▁')
+
+    chart2 = Line()
+    chart2.add('_', [1, 1, 1, 1, 1])
+    assert chart2.render_sparktext(relative_to=1) == u('▁▁▁▁▁')

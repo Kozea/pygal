@@ -64,7 +64,7 @@ setup(
         "svg", "chart", "graph", "diagram", "plot", "histogram", "kiviat"],
     tests_require=["pytest", "pyquery", "flask", "cairosvg"],
     cmdclass={'test': PyTest},
-    package_data={'pygal': ['css/*', 'graph/worldmap.svg']},
+    package_data={'pygal': ['css/*', 'graph/*.svg']},
     install_requires=['lxml'],
     classifiers=[
         "Development Status :: 4 - Beta",

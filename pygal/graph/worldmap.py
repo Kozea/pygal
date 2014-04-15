@@ -102,8 +102,8 @@ class Worldmap(Graph):
                 else:
                     title_node = self.svg.node(country, 'title')
                     text = ''
-                title_node.text = text + '[%s] %s: %d' % (
+                title_node.text = text + '[%s] %s: %s' % (
                     serie.title,
-                    self.country_names[country_code], value)
+                    self.country_names[country_code], self._format(value))
 
         self.nodes['plot'].append(map)

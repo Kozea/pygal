@@ -22,8 +22,7 @@ import pygal
 
 parser = argparse.ArgumentParser(
     description='Generate pygal chart in command line',
-    prog='pygal_gen',
-    version=pygal.__version__)
+    prog='pygal_gen')
 
 parser.add_argument('-t', '--type', dest='type', default='Line',
                     choices=map(lambda x: x.__name__, pygal.CHARTS),
@@ -34,6 +33,9 @@ parser.add_argument('-o', '--output', dest='filename', default='pygal_out.svg',
 
 parser.add_argument('-s', '--serie', dest='series', nargs='+', action='append',
                     help='Add a serie in the form (title val1 val2...)')
+
+parser.add_argument('--version', action='version',
+                    version='pygal %s' % pygal.__version__)
 
 for key in pygal.config.CONFIG_ITEMS:
     opt_name = key.name

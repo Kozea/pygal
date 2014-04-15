@@ -1,9 +1,30 @@
-TO BE RELEASED: V 1.4.0
+V 1.4.6 -- UNRELEASED
+	Add support for \n separated multiline titles (thanks sirlark)
+
+V 1.4.5
+	Fix y_labels map iterator exhaustion in python 3
+
+V 1.4.4
+	Fix division by zero in spark text (thanks laserpony)
+	Fix config metaclass problem in python 3
+	Fix --version in pygal_gen
+
+V 1.4.3
+	Allow arbitrary number of x-labels on line plot (thanks nsmgr8)
+
+V 1.4.2
+	Fix broken tests
+
+V 1.4.1
+	Fix value formatting in maps
+
+V 1.4.0
 	Finally a changelog !
 	Hopefully fix weird major scale algorithm
 	Add options to customize major labels (y_labels_major, y_labels_major_every, y_labels_major_count)
 	Css can now be inline with the "inline:" prefix
 	Visited links bug fixed
+	Add french maps by department and region (This will be externalized in an extension later)
 
 V 1.3.x
 	Whisker Box Plot

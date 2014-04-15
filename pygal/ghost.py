@@ -33,12 +33,23 @@ from pygal.util import prepare_values
 from uuid import uuid4
 
 
+class ChartCollection(object):
+    pass
+
+
 REAL_CHARTS = {}
 for NAME in CHARTS_NAMES:
     mod_name = 'pygal.graph.%s' % NAME.lower()
     __import__(mod_name)
     mod = sys.modules[mod_name]
-    REAL_CHARTS[NAME] = getattr(mod, NAME)
+    chart = getattr(mod, NAME)
+    if issubclass(chart, ChartCollection):
+        for name, chart in chart.__dict__.items():
+            if name.startswith('_'):
+                continue
+            REAL_CHARTS['%s_%s' % (NAME, name)] = chart
+    else:
+        REAL_CHARTS[NAME] = chart
 
 
 class Ghost(object):
@@ -135,6 +146,11 @@ class Ghost(object):
         vmax = max(values)
         if relative_to is None:
             relative_to = min(values)
+
+        if (vmax - relative_to) == 0:
+            chart = bars[0] * len(values)
+            return chart
+
         divisions = len(bars) - 1
         for value in values:
             chart += bars[int(divisions *

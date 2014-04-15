@@ -18,10 +18,12 @@
 # along with pygal. If not, see <http://www.gnu.org/licenses/>.
 from pygal import (
     Line, Dot, Pie, Radar, Config, Bar, Funnel, Worldmap,
-    SupranationalWorldmap, Histogram, Gauge, Box)
+    SupranationalWorldmap, Histogram, Gauge, Box,
+    FrenchMap_Regions, FrenchMap_Departments)
 from pygal._compat import u
 from pygal.test.utils import texts
 from pygal.test import pytest_generate_tests, make_data
+from uuid import uuid4
 
 
 def test_config_behaviours():
@@ -270,7 +272,8 @@ def test_no_data():
 def test_include_x_axis(Chart):
     chart = Chart()
     if Chart in (Pie, Radar, Funnel, Dot, Gauge, Worldmap,
-                 SupranationalWorldmap, Histogram, Box):
+                 SupranationalWorldmap, Histogram, Box,
+                 FrenchMap_Regions, FrenchMap_Departments):
         return
     if not chart.cls._dual:
         data = 100, 200, 150
@@ -292,7 +295,7 @@ def test_include_x_axis(Chart):
 
 def test_css(Chart):
     css = "{{ id }}text { fill: #bedead; }\n"
-    css_file = '/tmp/pygal_custom_style.css'
+    css_file = '/tmp/pygal_custom_style-%s.css' % uuid4()
     with open(css_file, 'w') as f:
         f.write(css)
 
@@ -314,3 +317,8 @@ def test_inline_css(Chart):
     chart.add('/', [10, 1, 5])
     svg = chart.render().decode('utf-8')
     assert '#bedead' in svg
+
+
+def test_meta_config():
+    from pygal.config import CONFIG_ITEMS
+    assert all(c.name != 'Unbound' for c in CONFIG_ITEMS)
