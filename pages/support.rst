@@ -3,13 +3,6 @@
 =========
 
 
-IRC
-===
-
-For fast support, try our irc channel `##kozea <irc://chat.freenode.net/##kozea>`_ on 
-`Freenode <http://freenode.net/>`_.
-
-
 Github
 ======
 

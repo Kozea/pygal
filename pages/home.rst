@@ -5,7 +5,7 @@
 Presentation
 ============
 
-pygal 1.1.0 is a dynamic SVG charting library.
+pygal 1.4.2 is a dynamic SVG charting library.
 
 
 .. class:: thumbs
@@ -42,25 +42,29 @@ pygal 1.1.0 is a dynamic SVG charting library.
 
 It features various graph types:
 
-- `Bar charts </chart_types/#bar-charts-histograms>`_
+- `Bar charts </chart_types/#idbar-charts-histograms>`_
 
-- `Line charts </chart_types/#line-charts>`_
+- `Line charts </chart_types/#idline-charts>`_
 
-- `XY charts </chart_types/#xy-charts>`_
+- `XY charts </chart_types/#idxy-charts>`_
 
-- `Pie charts </chart_types/#pies>`_
+- `Pie charts </chart_types/#idpies>`_
 
-- `Radar charts </chart_types/#radar-charts>`_
+- `Radar charts </chart_types/#idradar-charts>`_
 
-- `Dot charts </chart_types/#dot-charts>`_
+- `Box plot </chart_types/#idbox-plot>`_
 
-- `Pyramid charts </chart_types/#pyramid-charts>`_
+- `Dot charts </chart_types/#iddot-charts>`_
 
-- `Funnel charts </chart_types/#funnel-charts>`_
+- `Pyramid charts </chart_types/#idpyramid-charts>`_
 
-- `Gauge charts </chart_types/#gauge-charts>`_
+- `Funnel charts </chart_types/#idfunnel-charts>`_
 
-- `Worldmap charts </chart_types/#worldmap-charts>`_
+- `Gauge charts </chart_types/#idgauge-charts>`_
+
+- `Worldmap charts </chart_types/#idworldmap-charts>`_
+
+- `Country charts </chart_types/#country-charts>`_
 
 
 
@@ -94,6 +98,7 @@ Needed dependencies
 -------------------
 
 pygal uses `lxml <http://lxml.de/>`_ to generate the svg, this is the only needed dependency.
+
 
 Optional dependencies
 ---------------------

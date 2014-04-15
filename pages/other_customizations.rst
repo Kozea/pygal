@@ -72,7 +72,7 @@ You can add a round effect to bar diagrams with `rounded_bars`:
 .. pygal-code::
 
   chart = pygal.Bar(rounded_bars=20)
-  chart.add('rounded', [3, 10, 7, 2, 9, 7])
+  chart.add('values', [3, 10, 7, 2, 9, 7])
 
 
 Pretty print
@@ -85,7 +85,7 @@ You can enable pretty print if you want to edit the source at hand (look at this
 .. pygal-code::
 
   chart = pygal.Bar(pretty_print=True)
-  chart.add('rounded', [3, 10, 7, 2, 9, 7])
+  chart.add('values', [3, 10, 7, 2, 9, 7])
 
 
 Static options
