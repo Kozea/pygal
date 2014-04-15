@@ -87,7 +87,7 @@ Start `here </first_steps/>`_ to make your first steps.
 Technical Description
 =====================
 
-As of now pygal is known to work for python 2.6, 2.7 and 3.2, 3.3.
+As of now pygal is known to work for python 2.6, 2.7 and 3.2, 3.3, 3.4.
 
 
 Needed dependencies
