@@ -21,14 +21,16 @@ Little helpers for series
 
 """
 from pygal.util import cached_property
+from pygal.lineconfig import LineConfig
 
 
 class Serie(object):
-    """Serie containing title, values and the graph serie index"""
-    def __init__(self, title, values, metadata=None):
+    """Serie containing title, values and the graph serie index, also the Line Config"""
+    def __init__(self, title, values, metadata=None, lineConfig = LineConfig()):
         self.title = title
         self.values = values
         self.metadata = metadata or {}
+        self.lineConfig = lineConfig
 
     @cached_property
     def safe_values(self):

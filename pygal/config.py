@@ -21,6 +21,7 @@
 Config module with all options
 """
 from copy import deepcopy
+from pygal.lineconfig import LineConfig
 from pygal.style import Style, DefaultStyle
 from pygal.interpolate import INTERPOLATIONS
 

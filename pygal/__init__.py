@@ -24,6 +24,7 @@ Pygal -  A python svg graph plotting library
 __version__ = '1.4.6'
 import sys
 from pygal.config import Config
+from pygal.lineconfig import LineConfig
 from pygal.ghost import Ghost, REAL_CHARTS
 
 CHARTS = []
@@ -37,4 +38,4 @@ for NAME in REAL_CHARTS.keys():
 
 
 __all__ = list(CHARTS_BY_NAME.keys()) + [
-    Config.__name__, 'CHARTS', 'CHARTS_BY_NAME']
+    Config.__name__, LineConfig.__name__, 'CHARTS', 'CHARTS_BY_NAME']

@@ -27,6 +27,7 @@ from __future__ import division
 import io
 import sys
 from pygal.config import Config
+from pygal.lineconfig import LineConfig
 from pygal._compat import u, is_list_like
 from pygal.graph import CHARTS_NAMES
 from pygal.util import prepare_values
@@ -73,14 +74,16 @@ class Ghost(object):
         self.raw_series2 = []
         self.xml_filters = []
 
-    def add(self, title, values, secondary=False):
+    def add(self, title, values, secondary=False, lineConfig=None):
         """Add a serie to this graph"""
         if not is_list_like(values) and not isinstance(values, dict):
             values = [values]
+        if lineConfig is None:
+            lineConfig = LineConfig()
         if secondary:
-            self.raw_series2.append((title, values))
+            self.raw_series2.append((title, values, lineConfig))
         else:
-            self.raw_series.append((title, values))
+            self.raw_series.append((title, values, lineConfig))
 
     def add_xml_filter(self, callback):
         self.xml_filters.append(callback)
