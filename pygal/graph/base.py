@@ -202,26 +202,26 @@ class BaseGraph(object):
     @cached_property
     def _secondary_min(self):
         """Getter for the minimum series value"""
-        return (self.range and self.range[0]) or (
-            min(self._secondary_values) if self._secondary_values else None)
+        return (self.range[0] if (self.range and self.range[0] is not None)
+            else (min(self._secondary_values) if self._secondary_values else None))
 
     @cached_property
     def _min(self):
         """Getter for the minimum series value"""
-        return (self.range and self.range[0]) or (
-            min(self._values) if self._values else None)
+        return (self.range[0] if (self.range and self.range[0] is not None) 
+            else (min(self._values) if self._values else None))
 
     @cached_property
     def _max(self):
         """Getter for the maximum series value"""
-        return (self.range and self.range[1]) or (
-            max(self._values) if self._values else None)
+        return (self.range[1] if (self.range and self.range[1] is not None)
+            else (max(self._values) if self._values else None))
 
     @cached_property
     def _secondary_max(self):
         """Getter for the maximum series value"""
-        return (self.range and self.range[1]) or (
-            max(self._secondary_values) if self._secondary_values else None)
+        return (self.range[1] if (self.range and self.range[1] is not None)
+            else (max(self._secondary_values) if self._secondary_values else None))
 
     @cached_property
     def _order(self):

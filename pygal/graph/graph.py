@@ -441,13 +441,16 @@ class Graph(BaseGraph):
         return dict(
             plot=self.svg.node(
                 self.nodes['plot'],
-                class_='series serie-%d color-%d' % (serie, serie % 16)),
+                class_='series serie-%d color-%d' % (
+                    serie, serie % len(self.style['colors']))),
             overlay=self.svg.node(
                 self.nodes['overlay'],
-                class_='series serie-%d color-%d' % (serie, serie % 16)),
+                class_='series serie-%d color-%d' % (
+                    serie, serie % len(self.style['colors']))),
             text_overlay=self.svg.node(
                 self.nodes['text_overlay'],
-                class_='series serie-%d color-%d' % (serie, serie % 16)))
+                class_='series serie-%d color-%d' % (
+                    serie, serie % len(self.style['colors']))))
 
     def _interpolate(self, xs, ys):
         """Make the interpolation"""
