@@ -3,8 +3,9 @@
 from pygal import (
     Bar, Gauge, Pyramid, Funnel, Dot, StackedBar, XY,
     CHARTS_BY_NAME, Config, Line, DateY, Worldmap, Histogram, Box,
-    FrenchMap_Departments, FrenchMap_Regions)
-from pygal.style import styles
+    FrenchMap_Departments, FrenchMap_Regions, Pie)
+from pygal.style import styles, Style
+from pygal.colors import rotate
 from pygal.graph.frenchmap import DEPARTMENTS, REGIONS
 from random import randint, choice
 
@@ -378,7 +379,8 @@ def get_test_routes(app):
         fmap = FrenchMap_Departments(style=choice(list(styles.values())))
         for i in range(10):
             fmap.add('s%d' % i, [
-                (choice(list(DEPARTMENTS.keys())), randint(0, 100)) for _ in range(randint(1, 5))])
+                (choice(list(DEPARTMENTS.keys())), randint(0, 100))
+                for _ in range(randint(1, 5))])
 
         fmap.add('links', [{
             'value': ('69', 10),
@@ -418,5 +420,13 @@ def get_test_routes(app):
         line.add('test1', range(100))
         line.x_labels = map(str, range(11))
         return line.render_response()
+
+    @app.route('/test/64colors')
+    def test_64_colors():
+        colors = [rotate('#ff0000', i * 360 / 64) for i in range(64)]
+        pie = Pie(style=Style(colors=colors))
+        for i in range(64):
+            pie.add(str(i), 1)
+        return pie.render_response()
 
     return filter(lambda x: x.startswith('test'), locals())

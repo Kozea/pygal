@@ -63,7 +63,9 @@ class Style(object):
                 '  stroke: {1};\n'
                 '  fill: {1};\n'
                 '}}\n') % (prefix, prefix)).format(*tupl)
-        return '\n'.join(map(color, enumerate(cycle_fill(self.colors, 16))))
+
+        return '\n'.join(map(color, enumerate(
+            cycle_fill(self.colors, max(len(self.colors), 16)))))
 
     def to_dict(self):
         config = {}
