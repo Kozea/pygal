@@ -429,4 +429,14 @@ def get_test_routes(app):
             pie.add(str(i), 1)
         return pie.render_response()
 
+    @app.route('/test/major_dots')
+    def test_major_dots():
+        line = Line(x_labels_major_every=3, show_only_major_dots=True)
+        line.add('test', range(12))
+        line.x_labels = [
+            'lol', 'lol1', 'lol2', 'lol3', 'lol4', 'lol5',
+            'lol6', 'lol7', 'lol8', 'lol9', 'lol10', 'lol11']
+        line.x_labels_major = ['lol3']
+        return line.render_response()
+
     return filter(lambda x: x.startswith('test'), locals())
