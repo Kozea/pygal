@@ -327,6 +327,7 @@ def prepare_values(raw, config, cls):
     from pygal.graph.histogram import Histogram
     from pygal.graph.worldmap import Worldmap
     from pygal.graph.frenchmap import FrenchMapDepartments
+    from pygal.lineconfig import LineConfig
     if config.x_labels is None and hasattr(cls, 'x_labels'):
         config.x_labels = cls.x_labels
     if config.zero == 0 and issubclass(cls, (Worldmap, FrenchMapDepartments)):
@@ -349,13 +350,14 @@ def prepare_values(raw, config, cls):
 
     raw = [(
         title,
-        list(raw_values) if not isinstance(raw_values, dict) else raw_values
-    ) for title, raw_values in raw]
+        list(raw_values) if not isinstance(raw_values, dict) else raw_values,
+        lineConfig
+    ) for title, raw_values, lineConfig in raw]
 
-    width = max([len(values) for _, values in raw] +
+    width = max([len(values) for _, values, _ in raw] +
                 [len(config.x_labels or [])])
 
-    for title, raw_values in raw:
+    for title, raw_values, lineConfig in raw:
         metadata = {}
         values = []
         if isinstance(raw_values, dict):
@@ -399,7 +401,12 @@ def prepare_values(raw, config, cls):
             else:
                 value = adapter(value)
             values.append(value)
-        series.append(Serie(title, values, metadata))
+        
+        #Process the lineConfig to generate the "plotting" config
+        #This uses the values from "config" unless they have been updated in lineConfig
+        lineConfig = lineConfig.populateDefault(config)
+        
+        series.append(Serie(title, values, metadata, lineConfig))
     return series
 
 

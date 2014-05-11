@@ -97,7 +97,7 @@ class Svg(object):
         """Add the js to the svg"""
         common_script = self.node(self.defs, 'script', type='text/javascript')
         common_script.text = " = ".join(
-            ("window.config", json.dumps(self.graph.config.to_dict())))
+            ("window.config", json.dumps(self.graph.config.to_dict(), cls=DateTimeEncoder) ) )
 
         for js in self.graph.js:
             if '://' in js:
@@ -235,3 +235,14 @@ class Svg(object):
         if self.graph.disable_xml_declaration or is_unicode:
             svg = svg.decode('utf-8')
         return svg
+
+#Create a class to handle the datetime objects to JSON serialise
+#From: https://stackoverflow.com/questions/11875770/how-to-overcome-datetime-datetime-not-json-serializable-in-python/18006338#18006338
+class DateTimeEncoder(json.JSONEncoder):
+    def default(self, obj):
+        import datetime
+        if isinstance(obj, datetime.datetime):
+            encoded_object = list(obj.timetuple())[0:7]
+        else:
+            encoded_object =json.JSONEncoder.default(self, obj)
+        return encoded_object

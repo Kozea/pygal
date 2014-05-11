@@ -44,6 +44,16 @@ class XY(Line):
                 for val in serie.values
                 if val[1] is not None]
 
+    @cached_property
+    def _min(self):
+        return (self.range[0] if (self.range and self.range[0] is not None)
+            else (min(self.yvals) if self.yvals else None))
+    
+    @cached_property
+    def _max(self):
+        return (self.range[1] if (self.range and self.range[1] is not None)
+            else (max(self.yvals) if self.yvals else None))
+    
     def _has_data(self):
         """Check if there is any data"""
         return sum(
@@ -60,12 +70,12 @@ class XY(Line):
             xrng = None
 
         if self.yvals:
-            ymin = min(self.yvals)
-            ymax = max(self.yvals)
+            ymin = self._min
+            ymax = self._max
 
             if self.include_x_axis:
-                ymin = min(ymin or 0, 0)
-                ymax = max(ymax or 0, 0)
+                ymin = min(self._min or 0, 0)
+                ymax = max(self._max or 0, 0)
 
             yrng = (ymax - ymin)
         else:

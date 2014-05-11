@@ -23,6 +23,7 @@ Line chart
 from __future__ import division
 from pygal.graph.graph import Graph
 from pygal.util import cached_property, compute_scale, decorate
+from pygal.lineconfig import LineConfig
 
 
 class Line(Graph):
@@ -53,9 +54,17 @@ class Line(Graph):
     def _fill(self, values):
         """Add extra values to fill the line"""
         zero = self.view.y(min(max(self.zero, self._box.ymin), self._box.ymax))
+        
+        #Check to see if the data has been padded with "none's"
+        #Fill doesn't work correctly otherwise
+        numRows = len( values )
+        for i, (x, y) in enumerate( reversed(values) ):
+            if x is not None:
+                finishingIdx = -1-i
+                break
         return ([(values[0][0], zero)] +
                 values +
-                [(values[-1][0], zero)])
+                [(values[finishingIdx][0], zero)])
 
     def line(self, serie_node, serie, rescale=False):
         """Draw the line serie"""
@@ -65,9 +74,11 @@ class Line(Graph):
                 for x, y in serie.points if y is not None]
         else:
             points = serie.points
+        
+        lineConfig = serie.lineConfig
         view_values = list(map(self.view, points))
-        if self.show_dots:
-            if self.show_only_major_dots:
+        if lineConfig.show_dots:
+            if lineConfig.show_only_major_dots:
                 major_dots_index = []
                 if self.x_labels:
                     if self.x_labels_major:
@@ -88,7 +99,7 @@ class Line(Graph):
                             0, len(self.x_labels), self.x_labels_major_every)
 
             for i, (x, y) in enumerate(view_values):
-                if None in (x, y) or (self.show_only_major_dots
+                if None in (x, y) or (lineConfig.show_only_major_dots
                                       and i not in major_dots_index):
                     continue
                 metadata = serie.metadata.get(i)
@@ -111,15 +122,30 @@ class Line(Graph):
                     serie_node, val,
                     x + self.value_font_size,
                     y + self.value_font_size)
-
-        if self.stroke:
+        if lineConfig.stroke:
             if self.interpolate:
                 view_values = list(map(self.view, serie.interpolated))
-            if self.fill:
+            if lineConfig.fill:
                 view_values = self._fill(view_values)
+            #Work out the dashed string - if necessary
+            if lineConfig.dashed_line is None:
+                dashed_class_str = ''
+                strokeDashArray = {'stroke-dasharray':None}
+            else:
+                if isinstance( lineConfig.dashed_line, int ):
+                    dashed_class_str = ' dashed-' + str(lineConfig.dashed_line)
+                    strokeDashArray = {'stroke-dasharray':None}
+                elif len( lineConfig.dashed_line ) is 1:
+                    #A single element list
+                    dashed_class_str = ' dashed-' + str(lineConfig.dashed_line[0])
+                    strokeDashArray = {'stroke-dasharray':None}
+                else:
+                    dashed_class_str = ''
+                    strokeDashArray = {'stroke-dasharray':','.join(str(i) for i in lineConfig.dashed_line) }
             self.svg.line(
                 serie_node['plot'], view_values, close=self._self_close,
-                class_='line reactive' + (' nofill' if not self.fill else ''))
+                class_='line reactive' + (' nofill' if not lineConfig.fill else '') + dashed_class_str,
+                **strokeDashArray)
 
     def _compute(self):
         # X Labels
