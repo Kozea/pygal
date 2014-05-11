@@ -16,15 +16,10 @@
 #
 # You should have received a copy of the GNU Lesser General Public License
 # along with pygal. If not, see <http://www.gnu.org/licenses/>.
-import os
-import uuid
 from pygal import Pie
 
 
 def test_donut():
-    file_name = '/tmp/test_graph-%s.svg' % uuid.uuid4()
-    if os.path.exists(file_name):
-        os.remove(file_name)
     chart = Pie(inner_radius=.3, pretty_print=True)
     chart.title = 'Browser usage in February 2012 (in %)'
     chart.add('IE', 19.5)
@@ -32,17 +27,12 @@ def test_donut():
     chart.add('Chrome', 36.3)
     chart.add('Safari', 4.5)
     chart.add('Opera', 2.3)
-    chart.render_to_file(file_name)
-    with open(file_name) as f:
-        assert 'pygal' in f.read()
-    os.remove(file_name)
+    assert chart.render()
 
 
 def test_multiseries_donut():
-    #this just demos that the multiseries pie does not respect the inner_radius
-    file_name = '/tmp/test_graph-%s.svg' % uuid.uuid4()
-    if os.path.exists(file_name):
-        os.remove(file_name)
+    # this just demos that the multiseries pie does not respect
+    # the inner_radius
     chart = Pie(inner_radius=.3, pretty_print=True)
     chart.title = 'Browser usage by version in February 2012 (in %)'
     chart.add('IE', [5.7, 10.2, 2.6, 1])
@@ -50,7 +40,21 @@ def test_multiseries_donut():
     chart.add('Chrome', [.3, .9, 17.1, 15.3, .6, .5, 1.6])
     chart.add('Safari', [4.4, .1])
     chart.add('Opera', [.1, 1.6, .1, .5])
-    chart.render_to_file(file_name)
-    with open(file_name) as f:
-        assert 'pygal' in f.read()
-    os.remove(file_name)
+    assert chart.render()
+
+
+def test_half_pie():
+    pie = Pie()
+    pie.add('IE', 19.5)
+    pie.add('Firefox', 36.6)
+    pie.add('Chrome', 36.3)
+    pie.add('Safari', 4.5)
+    pie.add('Opera', 2.3)
+
+    half = Pie(half_pie=True)
+    half.add('IE', 19.5)
+    half.add('Firefox', 36.6)
+    half.add('Chrome', 36.3)
+    half.add('Safari', 4.5)
+    half.add('Opera', 2.3)
+    assert pie.render() != half.render()

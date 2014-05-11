@@ -1,5 +1,6 @@
 V 1.5.0 UNRELEASED
 	Add per serie configuration
+	Add half pie (thanks philt2001)
 
 V 1.4.6
 	Add support for \n separated multiline titles (thanks sirlark)

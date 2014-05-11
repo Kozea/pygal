@@ -41,12 +41,20 @@ class Pie(Graph):
         serie_angle = 0
         total_perc = 0
         original_start_angle = start_angle
-        center = ((self.width - self.margin.x) / 2.,
-                  (self.height - self.margin.y) / 2.)
+        if self.half_pie:
+            center = ((self.width - self.margin.x) / 2.,
+                      (self.height - self.margin.y) / 1.25)
+        else:
+            center = ((self.width - self.margin.x) / 2.,
+                      (self.height - self.margin.y) / 2.)
+
         radius = min(center)
         for i, val in enumerate(serie.values):
             perc = val / total
-            angle = 2 * pi * perc
+            if self.half_pie:
+                angle = 2 * pi * perc / 2
+            else:
+                angle = 2 * pi * perc
             serie_angle += angle
             val = '{0:.2%}'.format(perc)
             metadata = serie.metadata.get(i)
@@ -77,7 +85,13 @@ class Pie(Graph):
 
     def _plot(self):
         total = sum(map(sum, map(lambda x: x.values, self.series)))
-        current_angle = 0
+        if total == 0:
+            return
+        if self.half_pie:
+            current_angle = 3*pi/2
+        else:
+            current_angle = 0
+
         for index, serie in enumerate(self.series):
             angle = self.slice(
                 self._serie(index), current_angle, serie, total)

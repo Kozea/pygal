@@ -479,6 +479,14 @@ def get_test_routes(app):
 
         return pie.render_response()
 
+    @app.route('/test/half_pie')
+    def test_half_pie():
+        pie = Pie(half_pie=True)
+        for i in range(10):
+            pie.add(str(i), i, inner_radius=.1)
+
+        return pie.render_response()
+
     @app.route('/test/legend_at_bottom/<chart>')
     def test_legend_at_bottom_for(chart):
         graph = CHARTS_BY_NAME[chart]()
