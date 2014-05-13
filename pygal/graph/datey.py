@@ -30,8 +30,12 @@ def jour(n) :
 
 x=(1,20,35,54,345,898)
 x=tuple(map(jour,x))
+x_label=(0,100,200,300,400,500,600,700,800,900,1000)
+x_label=map(jour,x_label)
 y=(1,3,4,2,3,1)
 graph=pygal.DateY(x_label_rotation=20)
+graph.x_label_format = "%Y-%m-%d"
+graph.x_labels = x_label
 graph.add("graph1",list(zip(x,y))+[None,None])
 graph.render_in_browser()
 """
@@ -75,27 +79,19 @@ class DateY(XY):
         for serie in self.all_series:
             serie.values = [(self._tonumber(v[0]), v[1]) for v in serie.values]
 
-        xvals = [val[0]
-                 for serie in self.series
-                 for val in serie.values
-                 if val[0] is not None]
-        yvals = [val[1]
-                 for serie in self.series
-                 for val in serie.values
-                 if val[1] is not None]
-        if xvals:
-            xmin = min(xvals)
-            xmax = max(xvals)
+        if self.xvals:
+            xmin = min(self.xvals)
+            xmax = max(self.xvals)
             rng = (xmax - xmin)
         else:
             rng = None
 
-        if yvals:
-            ymin = min(yvals)
-            ymax = max(yvals)
+        if self.yvals:
+            ymin = self._min
+            ymax = self._max
             if self.include_x_axis:
-                ymin = min(ymin or 0, 0)
-                ymax = max(ymax or 0, 0)
+                ymin = min(self._min or 0, 0)
+                ymax = max(self._max or 0, 0)
 
         for serie in self.all_series:
             serie.points = serie.values
@@ -106,25 +102,46 @@ class DateY(XY):
                 serie.interpolated = self._interpolate(vals[0], vals[1])
 
         if self.interpolate and rng:
-            xvals = [val[0]
-                     for serie in self.all_series
-                     for val in serie.interpolated]
-            yvals = [val[1]
-                     for serie in self.all_series
-                     for val in serie.interpolated]
-            if xvals:
-                xmin = min(xvals)
-                xmax = max(xvals)
+            self.xvals = [val[0]
+                          for serie in self.all_series
+                          for val in serie.interpolated]
+            self.yvals = [val[1]
+                          for serie in self.all_series
+                          for val in serie.interpolated]
+            if self.xvals:
+                xmin = min(self.xvals)
+                xmax = max(self.xvals)
                 rng = (xmax - xmin)
             else:
                 rng = None
 
-        if rng:
+        # Calculate/prcoess the x_labels
+        if self.x_labels and all(
+                map(lambda x: isinstance(
+                    x, (datetime.datetime, datetime.date)), self.x_labels)):
+            # Process the given x_labels
+            x_labels_num = []
+            for label in self.x_labels:
+                x_labels_num.append(self._tonumber(label))
+            x_pos = x_labels_num
+
+            # Update the xmin/xmax to fit all of the x_labels and the data
+            xmin = min(xmin, min(x_pos))
+            xmax = max(xmax, max(x_pos))
+
             self._box.xmin, self._box.xmax = xmin, xmax
             self._box.ymin, self._box.ymax = ymin, ymax
+        else:
+            # Automatically generate the x_labels
+            if rng:
+                self._box.xmin, self._box.xmax = xmin, xmax
+                self._box.ymin, self._box.ymax = ymin, ymax
 
-        x_pos = compute_scale(
-            self._box.xmin, self._box.xmax, self.logarithmic, self.order_min)
+            x_pos = compute_scale(
+                self._box.xmin, self._box.xmax, self.logarithmic,
+                self.order_min)
+
+        # Always auto-generate the y labels
         y_pos = compute_scale(
             self._box.ymin, self._box.ymax, self.logarithmic, self.order_min)
 

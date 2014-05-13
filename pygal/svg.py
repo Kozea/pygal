@@ -26,7 +26,7 @@ from pygal._compat import to_str, u
 import io
 import os
 import json
-from datetime import date
+from datetime import date, datetime
 from numbers import Number
 from lxml import etree
 from math import cos, sin, pi
@@ -97,7 +97,12 @@ class Svg(object):
         """Add the js to the svg"""
         common_script = self.node(self.defs, 'script', type='text/javascript')
         common_script.text = " = ".join(
-            ("window.config", json.dumps(self.graph.config.to_dict())))
+            ("window.config", json.dumps(
+                self.graph.config.to_dict(),
+                default=lambda o: (
+                    o.isoformat() if isinstance(o, (datetime, date))
+                    else json.JSONEncoder().default(o))
+            )))
 
         for js in self.graph.js:
             if '://' in js:
