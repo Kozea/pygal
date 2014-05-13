@@ -22,6 +22,7 @@ Line chart
 """
 from __future__ import division
 from pygal.graph.graph import Graph
+from pygal.serie import NestedSerie
 from pygal.util import cached_property, compute_scale, decorate
 
 
@@ -120,6 +121,17 @@ class Line(Graph):
             self.svg.line(
                 serie_node['plot'], view_values, close=self._self_close,
                 class_='line reactive' + (' nofill' if not self.fill else ''))
+
+        for i, (x, y) in enumerate(points):
+            x = self.view.x(x)
+            errors_node = self.svg.node(serie_node['overlay'],
+                                        class_="errors_marks")
+            nested = serie.values[i] if isinstance(serie.values[i],
+                                                   NestedSerie) else None
+            if nested:
+                error_coords = (self.view.y(nested.min),
+                                self.view.y(nested.max))
+                self._draw_error_marks(errors_node, x, error_coords, 0, i)
 
     def _compute(self):
         # X Labels

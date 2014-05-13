@@ -1,4 +1,4 @@
- # -*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 # This file is part of pygal
 #
 # A python svg graph plotting library
@@ -24,7 +24,8 @@ Base for pygal charts
 from __future__ import division
 from pygal.view import Margin, Box
 from pygal.util import (
-    get_text_box, get_texts_box, cut, rad, humanize, truncate, split_title)
+    get_text_box, get_texts_box, cut, rad, humanize, truncate,
+    split_title)
 from pygal.svg import Svg
 from pygal.util import cached_property
 from math import sin, cos, sqrt
@@ -203,25 +204,29 @@ class BaseGraph(object):
     def _secondary_min(self):
         """Getter for the minimum series value"""
         return (self.range[0] if (self.range and self.range[0] is not None)
-            else (min(self._secondary_values) if self._secondary_values else None))
+                else (min(serie.min for serie in self.secondary_series)
+                      if self._secondary_values else None))
 
     @cached_property
     def _min(self):
         """Getter for the minimum series value"""
-        return (self.range[0] if (self.range and self.range[0] is not None) 
-            else (min(self._values) if self._values else None))
+        return (self.range[0] if (self.range and self.range[0] is not None)
+                else (min(serie.min for serie in self.series)
+                      if self._values else None))
 
     @cached_property
     def _max(self):
         """Getter for the maximum series value"""
         return (self.range[1] if (self.range and self.range[1] is not None)
-            else (max(self._values) if self._values else None))
+                else (max(serie.max for serie in self.series)
+                      if self._values else None))
 
     @cached_property
     def _secondary_max(self):
         """Getter for the maximum series value"""
         return (self.range[1] if (self.range and self.range[1] is not None)
-            else (max(self._secondary_values) if self._secondary_values else None))
+                else (max(serie.max for serie in self.secondary_series)
+                      if self._secondary_values else None))
 
     @cached_property
     def _order(self):
@@ -245,6 +250,7 @@ class BaseGraph(object):
         return sum(
             map(len, map(lambda s: s.safe_values, self.series))) != 0 and (
             sum(map(abs, self._values)) != 0)
+        return any(map(lambda s: s.has_data, self.series))
 
     def render(self, is_unicode=False):
         """Render the graph, and return the svg string"""

@@ -40,6 +40,7 @@ from pygal._compat import total_seconds
 from pygal.adapters import date
 from pygal.util import compute_scale
 from pygal.graph.xy import XY
+from pygal.serie import NestedSerie
 import datetime
 
 
@@ -67,21 +68,25 @@ class DateY(XY):
         # Approximatively the same code as in XY.
         # The only difference is the transformation of dates to numbers
         # (beginning) and the reversed transformation to dates (end)
-        self._offset = min([val[0]
-                            for serie in self.series
-                            for val in serie.values
-                            if val[0] is not None]
-                           or [datetime.datetime.fromtimestamp(0)])
+        self._offset = min([s.min for s in self.series]
+                          or [datetime.datetime.fromtimestamp(0)])
+        # self._offset = min(
+        #     [val[0].min if isinstance(val[0], NestedSerie)
+        #      else val[0]
+        #      for serie in self.series
+        #      for val in serie._values
+        #      if val[0] is not None]
+        #     or [datetime.datetime.fromtimestamp(0)])
         for serie in self.all_series:
-            serie.values = [(self._tonumber(v[0]), v[1]) for v in serie.values]
+            serie._values = [(self._tonumber(v[0]), v[1]) for v in serie._values]
 
         xvals = [val[0]
                  for serie in self.series
-                 for val in serie.values
+                 for val in serie._values
                  if val[0] is not None]
         yvals = [val[1]
                  for serie in self.series
-                 for val in serie.values
+                 for val in serie._values
                  if val[1] is not None]
         if xvals:
             xmin = min(xvals)

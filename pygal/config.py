@@ -126,6 +126,8 @@ class Config(MetaConfig('ConfigBase', (object,), {})):
         None, str, "Look",
         "Graph Y-Axis title.", "Leave it to None to disable Y-Axis title.")
 
+    y_errors = Key(False, bool, "Look", "Set to True to display y-errors.")
+
     width = Key(
         800, int, "Look", "Graph width")
 

@@ -44,7 +44,7 @@ class Worldmap(Graph):
     def countries(self):
         return [val[0]
                 for serie in self.all_series
-                for val in serie.values
+                for val in serie._values
                 if val[0] is not None]
 
     @cached_property
@@ -52,7 +52,7 @@ class Worldmap(Graph):
         """Getter for series values (flattened)"""
         return [val[1]
                 for serie in self.series
-                for val in serie.values
+                for val in serie._values
                 if val[1] is not None]
 
     def _plot(self):
@@ -62,12 +62,12 @@ class Worldmap(Graph):
 
         for i, serie in enumerate(self.series):
             safe_vals = list(filter(
-                lambda x: x is not None, cut(serie.values, 1)))
+                lambda x: x is not None, cut(serie._values, 1)))
             if not safe_vals:
                 continue
             min_ = min(safe_vals)
             max_ = max(safe_vals)
-            for j, (country_code, value) in enumerate(serie.values):
+            for j, (country_code, value) in enumerate(serie._values):
                 if value is None:
                     continue
                 if max_ == min_:

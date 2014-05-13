@@ -235,3 +235,32 @@ class Svg(object):
         if self.graph.disable_xml_declaration or is_unicode:
             svg = svg.decode('utf-8')
         return svg
+
+    def draw_errors(self, parent_node, transpose, x, y_coords):
+        """Draws the chart errors aka confidence level."""
+        width = (
+            self.graph.view.x(1) - self.graph.view.x(0)) / self.graph._len
+        series_margin = width * getattr(self.graph, '_series_margin', 1)
+        width -= 2 * series_margin
+        y_begin = y_coords[0]
+        y_end = y_coords[1]
+        line_edges = transpose((x, y_begin)), transpose((x, y_end))
+        line_feet = (transpose((x - width / 4, y_begin)),
+                     transpose((x + width / 4, y_begin)))
+        line_hat = (transpose((x - width / 4, y_end)),
+                    transpose((x + width / 4, y_end)))
+        self.line(
+            parent_node,
+            coords=[line_edges[0], line_edges[1]],
+            class_='errors'
+        )
+        self.line(
+            parent_node,
+            coords=[line_feet[0], line_feet[1]],
+            class_='errors'
+        )
+        self.line(
+            parent_node,
+            coords=[line_hat[0], line_hat[1]],
+            class_='errors'
+        )

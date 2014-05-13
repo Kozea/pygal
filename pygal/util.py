@@ -318,7 +318,7 @@ def safe_enumerate(iterable):
         if v is not None:
             yield i, v
 
-from pygal.serie import Serie
+from pygal.serie import Serie, NestedSerie
 
 
 def prepare_values(raw, config, cls):
@@ -376,6 +376,12 @@ def prepare_values(raw, config, cls):
                 raw_value = dict(raw_value)
                 value = raw_value.pop('value', None)
                 metadata[index] = raw_value
+            elif is_list_like(raw_value) and not cls._dual:
+                value = NestedSerie(title, raw_value, metadata)
+            elif (is_list_like(raw_value) and cls._dual and
+                  len(raw_value) > 1 and is_list_like(raw_value[1])):
+                value = (raw_value[0],
+                         NestedSerie(title, raw_value[1], metadata))
             else:
                 value = raw_value
 
@@ -399,7 +405,11 @@ def prepare_values(raw, config, cls):
             else:
                 value = adapter(value)
             values.append(value)
-        series.append(Serie(title, values, metadata))
+        serie = Serie(title, values, metadata, dual=cls._dual)
+        for v in serie.values:
+            if isinstance(v, NestedSerie):
+                v.parent = serie
+        series.append(serie)
     return series
 
 

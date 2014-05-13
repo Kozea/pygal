@@ -129,6 +129,10 @@
   stroke-width: 10;
 }
 
+{{ id }}.err_marks .errors {
+  stroke: {{ style.foreground_dark }};
+}
+
 {{ colors }}
 
 

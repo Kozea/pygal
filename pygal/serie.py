@@ -20,19 +20,94 @@
 Little helpers for series
 
 """
-from pygal.util import cached_property
+from pygal.util import cached_property, cut
+from math import fsum, sqrt
 
 
 class Serie(object):
     """Serie containing title, values and the graph serie index"""
-    def __init__(self, title, values, metadata=None):
+    def __init__(self, title, values, metadata=None, parent=None, dual=False):
         self.title = title
-        self.values = values
+        self._values = values
         self.metadata = metadata or {}
+        self.parent = parent
+        self.dual = dual
+
+
+    @cached_property
+    def values(self):
+        if self.dual:
+            return cut(self._values)
+        return self._values
 
     @cached_property
     def safe_values(self):
         return list(filter(lambda x: x is not None, self.values))
+
+    @cached_property
+    def min(self):
+        """Returns the lowest value of the serie."""
+        return min([val.min if isinstance(val, NestedSerie) else val
+                    for val in self.values if val is not None] or [None])
+
+    @cached_property
+    def max(self):
+        """Returns the lowest value of the serie."""
+        return max([val.max if isinstance(val, NestedSerie) else val
+                    for val in self.values if val is not None] or [None])
+
+    @cached_property
+    def length(self):
+        """Returns the serie size."""
+        return len(self.values)
+
+    @cached_property
+    def has_data(self):
+        """True if data is provided."""
+        datalen = len(self.safe_values)
+        total = 0
+        for v in self.safe_values:
+            if v:
+                if isinstance(v, NestedSerie):
+                    total += v.abs
+                elif isinstance(v, tuple):
+                    total += any([abs(v[0] or 0) != 0, abs(v[1] or 0) != 0])
+                else:
+                    total += abs(v)
+        return datalen and total != 0
+
+
+class NestedSerie(Serie):
+    """Class that handles nested series."""
+    @cached_property
+    def mean(self):
+        """Returns the average on the serie (mean)."""
+        return fsum([v for v in self.values]) / self.length
+
+    @cached_property
+    def variance(self):
+        """Returns the variance for the serie."""
+        return 1/self.length * fsum((v-self.mean) ** 2 for v in self.values)
+
+    @cached_property
+    def deviation(self):
+        """Returns the deviation for the serie."""
+        return sqrt(self.variance)
+
+    @cached_property
+    def min(self):
+        """Returns the lowest value of the serie."""
+        return self.mean - self.deviation
+
+    @cached_property
+    def max(self):
+        """Returns the lowest value of the serie."""
+        return self.mean + self.deviation
+
+    @cached_property
+    def abs(self):
+        """Returns the absolute value of the serie."""
+        return abs(self.mean)
 
 
 class Label(object):

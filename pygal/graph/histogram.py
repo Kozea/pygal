@@ -37,7 +37,7 @@ class Histogram(Graph):
         """Getter for secondary series values (flattened)"""
         return [val[0]
                 for serie in self.series
-                for val in serie.values
+                for val in serie._values
                 if val[0] is not None]
 
     @cached_property
@@ -45,14 +45,14 @@ class Histogram(Graph):
         """Getter for secondary series values (flattened)"""
         return [val[0]
                 for serie in self.secondary_series
-                for val in serie.values
+                for val in serie._values
                 if val[0] is not None]
 
     @cached_property
     def xvals(self):
         return [val
                 for serie in self.all_series
-                for dval in serie.values
+                for dval in serie._values
                 for val in dval[1:3]
                 if val is not None]
 
@@ -60,7 +60,7 @@ class Histogram(Graph):
     def yvals(self):
         return [val[0]
                 for serie in self.series
-                for val in serie.values
+                for val in serie._values
                 if val[0] is not None]
 
     def _has_data(self):
@@ -92,7 +92,7 @@ class Histogram(Graph):
         bars = self.svg.node(serie_node['plot'], class_="histbars")
         points = serie.points
 
-        for i, (y, x0, x1) in enumerate(points):
+        for i, (y, x0, x1) in enumerate(serie._values):
             if None in (x0, x1, y) or (self.logarithmic and y <= 0):
                 continue
             metadata = serie.metadata.get(i)
@@ -101,7 +101,7 @@ class Histogram(Graph):
                 self.svg,
                 self.svg.node(bars, class_='histbar'),
                 metadata)
-            val = self._format(serie.values[i][0])
+            val = self._format(serie._values[i][0])
 
             x_center, y_center = self._bar(
                 bar, x0, x1, y, index, i, self.zero, secondary=rescale)

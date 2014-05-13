@@ -23,7 +23,8 @@ Bar chart
 
 from __future__ import division
 from pygal.graph.graph import Graph
-from pygal.util import swap, ident, compute_scale, decorate
+from pygal.util import compute_scale, decorate
+from pygal.serie import NestedSerie
 
 
 class Bar(Graph):
@@ -36,8 +37,10 @@ class Bar(Graph):
         self._x_ranges = None
         super(Bar, self).__init__(*args, **kwargs)
 
-    def _bar(self, parent, x, y, index, i, zero, shift=True, secondary=False):
+    def _bar(self, parent, x, y, index, i, zero, errors_node, shift=True,
+             secondary=False, nested=None):
         width = (self.view.x(1) - self.view.x(0)) / self._len
+
         x, y = self.view((x, y))
         series_margin = width * self._series_margin
         x += series_margin
@@ -54,12 +57,17 @@ class Bar(Graph):
             parent, 'rect',
             x=x, y=y, rx=r, ry=r, width=width, height=height,
             class_='rect reactive tooltip-trigger')
-        transpose = swap if self.horizontal else ident
-        return transpose((x + width / 2, y + height / 2))
+        transpose = self._transpose()
+        centers = transpose((x + width / 2, y + height / 2))
+        if nested:
+            error_coords = (self.view.y(nested.min), self.view.y(nested.max))
+            self._draw_error_marks(errors_node, x, error_coords, width, index)
+        return centers
 
     def bar(self, serie_node, serie, index, rescale=False):
         """Draw a bar graph for a serie"""
         bars = self.svg.node(serie_node['plot'], class_="bars")
+        errors_node = self.svg.node(serie_node['plot'], class_="errors_marks")
         if rescale and self.secondary_series:
             points = [
                 (x, self._scale_diff + (y - self._scale_min_2nd) * self._scale)
@@ -76,10 +84,12 @@ class Bar(Graph):
                 self.svg,
                 self.svg.node(bars, class_='bar'),
                 metadata)
-            val = self._format(serie.values[i])
-
+            val = self._get_value(points, i)
+            nested = serie.values[i] if isinstance(serie.values[i],
+                                                   NestedSerie) else None
             x_center, y_center = self._bar(
-                bar, x, y, index, i, self.zero, secondary=rescale)
+                bar, x, y, index, i, self.zero, errors_node,
+                secondary=rescale, nested=nested)
             self._tooltip_data(
                 bar, val, x_center, y_center, classes="centered")
             self._static_value(serie_node, val, x_center, y_center)

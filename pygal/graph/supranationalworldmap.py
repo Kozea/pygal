@@ -43,13 +43,13 @@ class SupranationalWorldmap(Worldmap):
 
         for i, serie in enumerate(self.series):
             safe_vals = list(filter(
-                lambda x: x is not None, cut(serie.values, 1)))
+                lambda x: x is not None, cut(serie._values, 1)))
             if not safe_vals:
                 continue
             min_ = min(safe_vals)
             max_ = max(safe_vals)
-            serie.values = self.replace_supranationals(serie.values)
-            for j, (country_code, value) in enumerate(serie.values):
+            serie.values = self.replace_supranationals(serie._values)
+            for j, (country_code, value) in enumerate(serie._values):
                 if value is None:
                     continue
                 if max_ == min_:

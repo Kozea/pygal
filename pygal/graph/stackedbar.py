@@ -90,7 +90,8 @@ class StackedBar(Bar):
             self._secondary_max = (positive_vals and max(
                 sum_(max(positive_vals)), self.zero)) or self.zero
 
-    def _bar(self, parent, x, y, index, i, zero, shift=False, secondary=False):
+    def _bar(self, parent, x, y, index, i, zero, errors_node, shift=False,
+             secondary=False, nested=None):
         if secondary:
             cumulation = (self.secondary_negative_cumulation
                           if y < self.zero else
@@ -124,4 +125,7 @@ class StackedBar(Bar):
             x=x, y=y, rx=r, ry=r, width=width, height=height,
             class_='rect reactive tooltip-trigger')
         transpose = swap if self.horizontal else ident
+        if nested:
+            error_coords = (self.view.y(nested.min), self.view.y(nested.max))
+            self._draw_error_marks(errors_node, x, error_coords, width, index)
         return transpose((x + width / 2, y + height / 2))

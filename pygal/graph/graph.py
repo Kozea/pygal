@@ -24,9 +24,11 @@ Commmon graphing functions
 from __future__ import division
 from pygal.interpolate import INTERPOLATIONS
 from pygal.graph.base import BaseGraph
+from pygal.serie import NestedSerie
 from pygal.view import View, LogView, XYLogView
 from pygal.util import (
-    majorize, truncate, reverse_text_len, get_texts_box, cut, rad, decorate)
+    majorize, truncate, reverse_text_len, get_texts_box, cut, rad, decorate,
+    swap, ident)
 from math import sqrt, ceil, cos
 from itertools import repeat, chain
 
@@ -493,12 +495,13 @@ class Graph(BaseGraph):
 
     def _get_value(self, values, i):
         """Get the value formatted for tooltip"""
-        return self._format(values[i][1])
+        return self._format(values[i][1].mean if isinstance(
+            values[i][1], NestedSerie) else values[i][1])
 
     def _points(self, x_pos):
         for serie in self.all_series:
             serie.points = [
-                (x_pos[i], v)
+                (x_pos[i], v.mean if isinstance(v, NestedSerie) else v)
                 for i, v in enumerate(serie.values)]
             if serie.points and self.interpolate:
                 serie.interpolated = self._interpolate(x_pos, serie.values)
@@ -528,3 +531,12 @@ class Graph(BaseGraph):
 
     def _post_compute(self):
         pass
+
+    def _transpose(self):
+        return swap if self.horizontal else ident
+
+    def _draw_error_marks(self, node, x, error_coords, width, index):
+        """Draw error marks using std deviation."""
+        error_node = node
+        x = x + width / 2
+        self.svg.draw_errors(error_node, self._transpose(), x, error_coords)

@@ -24,6 +24,7 @@ XY Line graph
 from __future__ import division
 from pygal.util import compute_scale, cached_property
 from pygal.graph.line import Line
+from pygal.serie import NestedSerie
 
 
 class XY(Line):
@@ -32,16 +33,16 @@ class XY(Line):
 
     @cached_property
     def xvals(self):
-        return [val[0]
+        return [val[0].mean if isinstance(val[0], NestedSerie) else val[0]
                 for serie in self.all_series
-                for val in serie.values
+                for val in serie._values
                 if val[0] is not None]
 
     @cached_property
     def yvals(self):
-        return [val[1]
+        return [val[1].mean if isinstance(val[1], NestedSerie) else val[1]
                 for serie in self.series
-                for val in serie.values
+                for val in serie._values
                 if val[1] is not None]
 
     def _has_data(self):

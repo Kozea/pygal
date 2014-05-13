@@ -198,7 +198,7 @@ class FrenchMapDepartments(Graph):
         """Getter for series values (flattened)"""
         return [val[1]
                 for serie in self.series
-                for val in serie.values
+                for val in serie._values
                 if val[1] is not None]
 
     def _plot(self):
@@ -208,12 +208,12 @@ class FrenchMapDepartments(Graph):
 
         for i, serie in enumerate(self.series):
             safe_vals = list(filter(
-                lambda x: x is not None, cut(serie.values, 1)))
+                lambda x: x is not None, cut(serie._values, 1)))
             if not safe_vals:
                 continue
             min_ = min(safe_vals)
             max_ = max(safe_vals)
-            for j, (area_code, value) in enumerate(serie.values):
+            for j, (area_code, value) in enumerate(serie._values):
                 if isinstance(area_code, Number):
                     area_code = '%2d' % area_code
                 if value is None:
