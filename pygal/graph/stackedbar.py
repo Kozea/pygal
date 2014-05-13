@@ -90,7 +90,8 @@ class StackedBar(Bar):
             self._secondary_max = (positive_vals and max(
                 sum_(max(positive_vals)), self.zero)) or self.zero
 
-    def _bar(self, parent, x, y, index, i, zero, shift=False, secondary=False):
+    def _bar(self, parent, x, y, index, i, zero,
+             shift=False, secondary=False, rounded=False):
         if secondary:
             cumulation = (self.secondary_negative_cumulation
                           if y < self.zero else
@@ -118,7 +119,7 @@ class StackedBar(Bar):
             x += serie_margin
             width -= 2 * serie_margin
         height = self.view.y(zero) - y
-        r = self.rounded_bars * 1 if self.rounded_bars else 0
+        r = rounded * 1 if rounded else 0
         self.svg.transposable_node(
             parent, 'rect',
             x=x, y=y, rx=r, ry=r, width=width, height=height,

@@ -36,7 +36,8 @@ class Bar(Graph):
         self._x_ranges = None
         super(Bar, self).__init__(*args, **kwargs)
 
-    def _bar(self, parent, x, y, index, i, zero, shift=True, secondary=False):
+    def _bar(self, parent, x, y, index, i, zero,
+             shift=True, secondary=False, rounded=False):
         width = (self.view.x(1) - self.view.x(0)) / self._len
         x, y = self.view((x, y))
         series_margin = width * self._series_margin
@@ -49,7 +50,7 @@ class Bar(Graph):
             x += serie_margin
             width -= 2 * serie_margin
         height = self.view.y(zero) - y
-        r = self.rounded_bars * 1 if self.rounded_bars else 0
+        r = rounded * 1 if rounded else 0
         self.svg.transposable_node(
             parent, 'rect',
             x=x, y=y, rx=r, ry=r, width=width, height=height,
@@ -79,7 +80,8 @@ class Bar(Graph):
             val = self._format(serie.values[i])
 
             x_center, y_center = self._bar(
-                bar, x, y, index, i, self.zero, secondary=rescale)
+                bar, x, y, index, i, self.zero, secondary=rescale,
+                rounded=serie.rounded_bars)
             self._tooltip_data(
                 bar, val, x_center, y_center, classes="centered")
             self._static_value(serie_node, val, x_center, y_center)

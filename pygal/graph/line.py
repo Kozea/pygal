@@ -66,8 +66,8 @@ class Line(Graph):
         else:
             points = serie.points
         view_values = list(map(self.view, points))
-        if self.show_dots:
-            if self.show_only_major_dots:
+        if serie.show_dots:
+            if serie.show_only_major_dots:
                 major_dots_index = []
                 if self.x_labels:
                     if self.x_labels_major:
@@ -88,7 +88,7 @@ class Line(Graph):
                             0, len(self.x_labels), self.x_labels_major_every)
 
             for i, (x, y) in enumerate(view_values):
-                if None in (x, y) or (self.show_only_major_dots
+                if None in (x, y) or (serie.show_only_major_dots
                                       and i not in major_dots_index):
                     continue
                 metadata = serie.metadata.get(i)
@@ -103,7 +103,7 @@ class Line(Graph):
                     self.svg.node(serie_node['overlay'], class_="dots"),
                     metadata)
                 val = self._get_value(serie.points, i)
-                self.svg.node(dots, 'circle', cx=x, cy=y, r=self.dots_size,
+                self.svg.node(dots, 'circle', cx=x, cy=y, r=serie.dots_size,
                               class_='dot reactive tooltip-trigger')
                 self._tooltip_data(
                     dots, val, x, y)
@@ -112,14 +112,14 @@ class Line(Graph):
                     x + self.value_font_size,
                     y + self.value_font_size)
 
-        if self.stroke:
+        if serie.stroke:
             if self.interpolate:
                 view_values = list(map(self.view, serie.interpolated))
-            if self.fill:
+            if serie.fill:
                 view_values = self._fill(view_values)
             self.svg.line(
                 serie_node['plot'], view_values, close=self._self_close,
-                class_='line reactive' + (' nofill' if not self.fill else ''))
+                class_='line reactive' + (' nofill' if not serie.fill else ''))
 
     def _compute(self):
         # X Labels

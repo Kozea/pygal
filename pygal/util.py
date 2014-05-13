@@ -318,11 +318,11 @@ def safe_enumerate(iterable):
         if v is not None:
             yield i, v
 
-from pygal.serie import Serie
-
 
 def prepare_values(raw, config, cls):
     """Prepare the values to start with sane values"""
+    from pygal.serie import Serie
+    from pygal.config import SerieConfig
     from pygal.graph.datey import DateY
     from pygal.graph.histogram import Histogram
     from pygal.graph.worldmap import Worldmap
@@ -349,13 +349,14 @@ def prepare_values(raw, config, cls):
 
     raw = [(
         title,
-        list(raw_values) if not isinstance(raw_values, dict) else raw_values
-    ) for title, raw_values in raw]
+        list(raw_values) if not isinstance(raw_values, dict) else raw_values,
+        serie_config_kwargs
+    ) for title, raw_values, serie_config_kwargs in raw]
 
-    width = max([len(values) for _, values in raw] +
+    width = max([len(values) for _, values, _ in raw] +
                 [len(config.x_labels or [])])
 
-    for title, raw_values in raw:
+    for title, raw_values, serie_config_kwargs in raw:
         metadata = {}
         values = []
         if isinstance(raw_values, dict):
@@ -399,7 +400,10 @@ def prepare_values(raw, config, cls):
             else:
                 value = adapter(value)
             values.append(value)
-        series.append(Serie(title, values, metadata))
+        serie_config = SerieConfig()
+        serie_config(**config.to_dict())
+        serie_config(**serie_config_kwargs)
+        series.append(Serie(title, values, serie_config, metadata))
     return series
 
 

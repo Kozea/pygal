@@ -46,7 +46,7 @@ class Key(object):
         self.subdoc = subdoc
         self.subtype = subtype
         self.name = "Unbound"
-        if not category in self._categories:
+        if category not in self._categories:
             self._categories.append(category)
 
         CONFIG_ITEMS.append(self)
@@ -101,7 +101,84 @@ class MetaConfig(type):
         return type.__new__(mcs, classname, bases, classdict)
 
 
-class Config(MetaConfig('ConfigBase', (object,), {})):
+class BaseConfig(MetaConfig('ConfigBase', (object,), {})):
+
+    def __init__(self, **kwargs):
+        """Can be instanciated with config kwargs"""
+        for k in dir(self):
+            v = getattr(self, k)
+            if (k not in self.__dict__ and not
+                    k.startswith('_') and not
+                    hasattr(v, '__call__')):
+                if isinstance(v, Key):
+                    if v.is_list and v.value is not None:
+                        v = list(v.value)
+                    else:
+                        v = v.value
+                setattr(self, k, v)
+        self._update(kwargs)
+
+    def __call__(self, **kwargs):
+        """Can be updated with kwargs"""
+        self._update(kwargs)
+
+    def _update(self, kwargs):
+        self.__dict__.update(
+            dict([(k, v) for (k, v) in kwargs.items()
+                  if not k.startswith('_') and k in dir(self)]))
+
+    def font_sizes(self, with_unit=True):
+        """Getter for all font size configs"""
+        fs = FontSizes()
+        for name in dir(self):
+            if name.endswith('_font_size'):
+                setattr(
+                    fs,
+                    name.replace('_font_size', ''),
+                    ('%dpx' % getattr(self, name))
+                    if with_unit else getattr(self, name))
+        return fs
+
+    def to_dict(self):
+        config = {}
+        for attr in dir(self):
+            if not attr.startswith('__'):
+                value = getattr(self, attr)
+                if hasattr(value, 'to_dict'):
+                    config[attr] = value.to_dict()
+                elif not hasattr(value, '__call__'):
+                    config[attr] = value
+        return config
+
+    def copy(self):
+        return deepcopy(self)
+
+
+class CommonConfig(BaseConfig):
+    stroke = Key(
+        True, bool, "Look",
+        "Line dots (set it to false to get a scatter plot)")
+
+    show_dots = Key(True, bool, "Look", "Set to false to remove dots")
+
+    show_only_major_dots = Key(
+        False, bool, "Look",
+        "Set to true to show only major dots according to their majored label")
+
+    dots_size = Key(2.5, float, "Look", "Radius of the dots")
+
+    fill = Key(
+        False, bool, "Look", "Fill areas under lines")
+
+    rounded_bars = Key(
+        None, int, "Look",
+        "Set this to the desired radius in px (for Bar-like charts)")
+
+    inner_radius = Key(
+        0, float, "Look", "Piechart inner radius (donut), must be <.9")
+
+
+class Config(CommonConfig):
     """Class holding config values"""
 
     style = Key(
@@ -113,7 +190,7 @@ class Config(MetaConfig('ConfigBase', (object,), {})):
         "It can be an absolute file path or an external link",
         str)
 
-    ############ Look ############
+    # Look #
     title = Key(
         None, str, "Look",
         "Graph title.", "Leave it to None to disable title.")
@@ -138,21 +215,6 @@ class Config(MetaConfig('ConfigBase', (object,), {})):
     show_y_guides = Key(True, bool, "Look",
                         "Set to false to hide y guide lines")
 
-    show_dots = Key(True, bool, "Look", "Set to false to remove dots")
-
-    show_only_major_dots = Key(
-        False, bool, "Look",
-        "Set to true to show only major dots according to their majored label")
-
-    dots_size = Key(2.5, float, "Look", "Radius of the dots")
-
-    stroke = Key(
-        True, bool, "Look",
-        "Line dots (set it to false to get a scatter plot)")
-
-    fill = Key(
-        False, bool, "Look", "Fill areas under lines")
-
     show_legend = Key(
         True, bool, "Look", "Set to false to remove legend")
 
@@ -161,9 +223,6 @@ class Config(MetaConfig('ConfigBase', (object,), {})):
 
     legend_box_size = Key(
         12, int, "Look", "Size of legend boxes")
-
-    rounded_bars = Key(
-        None, int, "Look", "Set this to the desired radius in px")
 
     spacing = Key(
         10, int, "Look",
@@ -175,10 +234,7 @@ class Config(MetaConfig('ConfigBase', (object,), {})):
 
     tooltip_border_radius = Key(0, int, "Look", "Tooltip border radius")
 
-    inner_radius = Key(
-        0, float, "Look", "Piechart inner radius (donut), must be <.9")
-
-    ############ Label ############
+    # Label #
     x_labels = Key(
         None, list, "Label",
         "X labels, must have same len than data.",
@@ -235,7 +291,7 @@ class Config(MetaConfig('ConfigBase', (object,), {})):
         "%Y-%m-%d %H:%M:%S.%f", str, "Label",
         "Date format for strftime to display the DateY X labels")
 
-    ############ Value ############
+    # Value #
     human_readable = Key(
         False, bool, "Value", "Display values in human readable format",
         "(ie: 12.4M)")
@@ -274,7 +330,7 @@ class Config(MetaConfig('ConfigBase', (object,), {})):
         "Set the ordinate zero value",
         "Useful for filling to another base than abscissa")
 
-    ############ Text ############
+    # Text #
     no_data_text = Key(
         "No data", str, "Text", "Text to display when no data is given")
 
@@ -308,7 +364,7 @@ class Config(MetaConfig('ConfigBase', (object,), {})):
         None, int, "Text",
         "Label string length truncation threshold", "None = auto")
 
-    ############ Misc ############
+    # Misc #
     js = Key(
         ('http://kozea.github.com/pygal.js/javascripts/svg.jquery.js',
          'http://kozea.github.com/pygal.js/javascripts/pygal-tooltips.js'),
@@ -335,52 +391,10 @@ class Config(MetaConfig('ConfigBase', (object,), {})):
         False, bool, "Misc",
         "Don't prefix css")
 
-    def __init__(self, **kwargs):
-        """Can be instanciated with config kwargs"""
-        for k in dir(self):
-            v = getattr(self, k)
-            if (k not in self.__dict__ and not
-                    k.startswith('_') and not
-                    hasattr(v, '__call__')):
-                if isinstance(v, Key):
-                    v = v.value
-                setattr(self, k, v)
 
-        self.css = list(self.css)
-        self.js = list(self.js)
-        self._update(kwargs)
+class SerieConfig(CommonConfig):
+    """Class holding serie config values"""
 
-    def __call__(self, **kwargs):
-        """Can be updated with kwargs"""
-        self._update(kwargs)
-
-    def _update(self, kwargs):
-        self.__dict__.update(
-            dict([(k, v) for (k, v) in kwargs.items()
-                  if not k.startswith('_') and k in dir(self)]))
-
-    def font_sizes(self, with_unit=True):
-        """Getter for all font size configs"""
-        fs = FontSizes()
-        for name in dir(self):
-            if name.endswith('_font_size'):
-                setattr(
-                    fs,
-                    name.replace('_font_size', ''),
-                    ('%dpx' % getattr(self, name))
-                    if with_unit else getattr(self, name))
-        return fs
-
-    def to_dict(self):
-        config = {}
-        for attr in dir(self):
-            if not attr.startswith('__'):
-                value = getattr(self, attr)
-                if hasattr(value, 'to_dict'):
-                    config[attr] = value.to_dict()
-                elif not hasattr(value, '__call__'):
-                    config[attr] = value
-        return config
-
-    def copy(self):
-        return deepcopy(self)
+    secondary = Key(
+        False, bool, "Misc",
+        "Set it to put the serie in a second axis")

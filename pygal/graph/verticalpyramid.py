@@ -81,8 +81,9 @@ class VerticalPyramid(StackedBar):
                  y)
                 for y in y_pos]
 
-    def _bar(self, parent, x, y, index, i, zero, shift=True, secondary=False):
+    def _bar(self, parent, x, y, index, i, zero,
+             shift=True, secondary=False, rounded=False):
         if index % 2:
             y = -y
         return super(VerticalPyramid, self)._bar(
-            parent, x, y, index, i, zero, False, secondary)
+            parent, x, y, index, i, zero, False, secondary, rounded)

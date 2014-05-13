@@ -67,10 +67,11 @@ class Histogram(Graph):
         """Check if there is any data"""
         return sum(
             map(len, map(lambda s: s.safe_values, self.series))) != 0 and any((
-            sum(map(abs, self.xvals)) != 0,
-            sum(map(abs, self.yvals)) != 0))
+                sum(map(abs, self.xvals)) != 0,
+                sum(map(abs, self.yvals)) != 0))
 
-    def _bar(self, parent, x0, x1, y, index, i, zero, secondary=False):
+    def _bar(self, parent, x0, x1, y, index, i, zero,
+             secondary=False, rounded=False):
         x, y = self.view((x0, y))
         x1, _ = self.view((x1, y))
         width = x1 - x
@@ -104,7 +105,8 @@ class Histogram(Graph):
             val = self._format(serie.values[i][0])
 
             x_center, y_center = self._bar(
-                bar, x0, x1, y, index, i, self.zero, secondary=rescale)
+                bar, x0, x1, y, index, i, self.zero, secondary=rescale,
+                rounded=serie.rounded_bars)
             self._tooltip_data(
                 bar, val, x_center, y_center, classes="centered")
             self._static_value(serie_node, val, x_center, y_center)

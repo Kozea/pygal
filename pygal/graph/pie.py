@@ -59,7 +59,7 @@ class Pie(Graph):
                 big_radius = radius
             else:
                 big_radius = radius * .9
-                small_radius = radius * self.config.inner_radius
+                small_radius = radius * serie.inner_radius
 
             self.svg.slice(
                 serie_node, slice_, big_radius, small_radius,
