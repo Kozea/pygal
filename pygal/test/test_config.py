@@ -24,6 +24,7 @@ from pygal import (
 from pygal._compat import u
 from pygal.test.utils import texts
 from pygal.test import pytest_generate_tests, make_data
+from tempfile import NamedTemporaryFile
 from uuid import uuid4
 
 
@@ -296,17 +297,17 @@ def test_include_x_axis(Chart):
 
 def test_css(Chart):
     css = "{{ id }}text { fill: #bedead; }\n"
-    css_file = '/tmp/pygal_custom_style-%s.css' % uuid4()
-    with open(css_file, 'w') as f:
+    with NamedTemporaryFile('w') as f:
         f.write(css)
+        f.flush()
 
-    config = Config()
-    config.css.append(css_file)
+        config = Config()
+        config.css.append(f.name)
 
-    chart = Chart(config)
-    chart.add('/', [10, 1, 5])
-    svg = chart.render().decode('utf-8')
-    assert '#bedead' in svg
+        chart = Chart(config)
+        chart.add('/', [10, 1, 5])
+        svg = chart.render().decode('utf-8')
+        assert '#bedead' in svg
 
 
 def test_inline_css(Chart):
