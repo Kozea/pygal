@@ -103,14 +103,20 @@ class Line(Graph):
                     self.svg.node(serie_node['overlay'], class_="dots"),
                     metadata)
                 val = self._get_value(serie.points, i)
-                self.svg.node(dots, 'circle', cx=x, cy=y, r=serie.dots_size,
-                              class_='dot reactive tooltip-trigger')
+                self.svg.node(dots, 'circle', cx=x, cy=y,
+                                    r=serie.dots_size,
+                                    class_='dot reactive tooltip-trigger')
                 self._tooltip_data(
                     dots, val, x, y)
                 self._static_value(
                     serie_node, val,
                     x + self.value_font_size,
                     y + self.value_font_size)
+
+                errors = metadata.get('errors') if metadata else None
+                if errors:
+                    error_node = self.svg.node(dots, class_='errors')
+                    self.svg.draw_errors(error_node, errors, x)
 
         if serie.stroke:
             if self.interpolate:

@@ -24,7 +24,7 @@ from __future__ import division
 from pygal._compat import to_str, u, is_list_like
 import re
 from decimal import Decimal
-from math import floor, pi, log, log10, ceil
+from math import floor, pi, log, log10, ceil, fsum, sqrt
 from itertools import cycle
 from functools import reduce
 from pygal.adapters import not_zero, positive
@@ -228,7 +228,7 @@ def get_texts_box(texts, fs):
 
 
 def decorate(svg, node, metadata):
-    """Add metedata next to a node"""
+    """Add metadata next to a node"""
     if not metadata:
         return node
     xlink = metadata.get('xlink')
@@ -376,6 +376,13 @@ def prepare_values(raw, config, cls):
             if isinstance(raw_value, dict):
                 raw_value = dict(raw_value)
                 value = raw_value.pop('value', None)
+                if not value:
+                    stdd = raw_value.pop('stdd', None)
+                    errors = raw_value.pop('errors', None)
+                    if stdd and is_list_like(stdd):
+                        value = mean(stdd)
+                        if not errors:
+                            raw_value.update(dict(errors=compute_errors(stdd)))
                 metadata[index] = raw_value
             else:
                 value = raw_value
@@ -423,3 +430,25 @@ def split_title(title, width, title_fs):
             title_line = title_line[i:].strip()
         titles.append(title_line)
     return titles
+
+
+def mean(values):
+    """Return the mean of a serie of values."""
+    return fsum(values) / len(values)
+
+
+def variance(values):
+    """Return the variance of a serie of values."""
+    values_mean = mean(values)
+    return fsum((v-values_mean) ** 2 for v in values) / len(values)
+
+
+def std_deviation(values):
+    """Returns the standard deviation of values."""
+    return sqrt(variance(values))
+
+
+def compute_errors(values):
+    m = mean(values)
+    stdd = std_deviation(values)
+    return dict(mean=m, min=m-stdd, max=m+stdd)

@@ -82,6 +82,18 @@ class Bar(Graph):
             x_center, y_center = self._bar(
                 bar, x, y, index, i, self.zero, secondary=rescale,
                 rounded=serie.rounded_bars)
+
+            errors = metadata.get('errors') if metadata else None
+            if errors:
+                error_node = self.svg.node(bar, class_='errors')
+                base_x = x_center
+                transpose = ident
+                if self.horizontal:
+                    transpose = swap
+                    base_x = y_center
+                self.svg.draw_errors(error_node, errors, base_x,
+                                     transpose=transpose)
+
             self._tooltip_data(
                 bar, val, x_center, y_center, classes="centered")
             self._static_value(serie_node, val, x_center, y_center)

@@ -30,7 +30,7 @@ from datetime import date, datetime
 from numbers import Number
 from lxml import etree
 from math import cos, sin, pi
-from pygal.util import template, coord_format, minify_css
+from pygal.util import template, coord_format, minify_css, ident
 from pygal import __version__
 
 
@@ -240,3 +240,33 @@ class Svg(object):
         if self.graph.disable_xml_declaration or is_unicode:
             svg = svg.decode('utf-8')
         return svg
+
+    def draw_errors(self, node, errors, base_x, transpose=None):
+        """Draws the confidence level for a given point."""
+        if not transpose:
+            transpose = ident
+        width = (self.graph.view.x(1) - self.graph.view.x(0)) / self.graph._len
+        series_margin = width * getattr(self.graph, '_series_margin', 0)
+        width -= 2 * series_margin
+        offset = (width - width / 2) / 2
+
+        lower_tip = transpose((base_x, self.graph.view.y(errors.get('min'))))
+        upper_tip = transpose((base_x, self.graph.view.y(errors.get('max'))))
+
+        lower_left_tip = transpose((base_x - offset,
+                                   self.graph.view.y(errors.get('min'))))
+        lower_right_tip = transpose((base_x + offset,
+                                    self.graph.view.y(errors.get('min'))))
+
+        upper_left_tip = transpose((base_x - offset,
+                                   self.graph.view.y(errors.get('max'))))
+        upper_right_tip = transpose((base_x + offset,
+                                    self.graph.view.y(errors.get('max'))))
+
+        # base line
+        self.line(node, coords=[lower_tip, upper_tip], class_='error')
+        # hat/foot
+        self.line(node, coords=[lower_left_tip, lower_right_tip],
+                  class_='error')
+        self.line(node, coords=[upper_left_tip, upper_right_tip],
+                  class_='error')
