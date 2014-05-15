@@ -82,13 +82,13 @@ class StackedBar(Bar):
             positive_vals, negative_vals = self._get_separated_values(True)
             self.secondary_negative_cumulation = [0] * self._len
             self.secondary_positive_cumulation = [0] * self._len
+            self._pre_compute_secondary(positive_vals, negative_vals)
 
-            # In case of pyramids
-            sum_ = lambda x: sum(x) if isinstance(x, tuple) else x
-            self._secondary_min = (negative_vals and min(
-                sum_(min(negative_vals)), self.zero)) or self.zero
-            self._secondary_max = (positive_vals and max(
-                sum_(max(positive_vals)), self.zero)) or self.zero
+    def _pre_compute_secondary(self, positive_vals, negative_vals):
+        self._secondary_min = (negative_vals and min(
+            min(negative_vals), self.zero)) or self.zero
+        self._secondary_max = (positive_vals and max(
+            max(positive_vals), self.zero)) or self.zero
 
     def _bar(self, parent, x, y, index, i, zero,
              shift=False, secondary=False, rounded=False):
@@ -109,6 +109,7 @@ class StackedBar(Bar):
 
         width = (self.view.x(1) - self.view.x(0)) / self._len
         x, y = self.view((x, y))
+        y = y or 0
         series_margin = width * self._series_margin
         x += series_margin
         width -= 2 * series_margin

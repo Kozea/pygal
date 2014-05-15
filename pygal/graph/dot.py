@@ -76,6 +76,6 @@ class Dot(Graph):
     def _plot(self):
         r_max = min(
             self.view.x(1) - self.view.x(0),
-            self.view.y(0) - self.view.y(1)) / (2 * (self._max or 1) * 1.05)
+            (self.view.y(0) or 0) - self.view.y(1)) / (2 * (self._max or 1) * 1.05)
         for index, serie in enumerate(self.series):
             self.dot(self._serie(index), serie, r_max)

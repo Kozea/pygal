@@ -55,9 +55,8 @@ class BaseGraph(object):
         self.view = None
         if self.logarithmic and self.zero == 0:
             # Explicit min to avoid interpolation dependency
-            from pygal.graph.xy import XY
-            if isinstance(self, XY):
-                get = lambda x: x[1]
+            if self._dual:
+                get = lambda x: x[1] or 1
             else:
                 get = lambda x: x
 
@@ -66,7 +65,7 @@ class BaseGraph(object):
                 [get(val)
                  for serie in self.series for val in serie.safe_values]))
 
-            self.zero = min(positive_values) if positive_values else 0
+            self.zero = min(positive_values or 1,) or 1
         self._draw()
         self.svg.pre_render()
 

@@ -128,8 +128,8 @@ class Graph(BaseGraph):
             if self.x_label_rotation or len(self._x_labels) <= 1:
                 truncation = 25
             else:
-                first_label_position = self.view.x(self._x_labels[0][1])
-                last_label_position = self.view.x(self._x_labels[-1][1])
+                first_label_position = self.view.x(self._x_labels[0][1]) or 0
+                last_label_position = self.view.x(self._x_labels[-1][1]) or 0
                 available_space = (
                     last_label_position - first_label_position) / (
                     len(self._x_labels) - 1)
@@ -169,7 +169,7 @@ class Graph(BaseGraph):
             last_guide = (self._y_2nd_labels and label == lastlabel)
             self.svg.node(
                 guides, 'path',
-                d='M%f %f v%f' % (x, 0, self.view.height),
+                d='M%f %f v%f' % (x or 0, 0, self.view.height),
                 class_='%s%sline' % (
                     'major ' if major else '',
                     'guide ' if position != 0 and not last_guide else ''))

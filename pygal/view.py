@@ -288,7 +288,6 @@ class PolarThetaLogView(View):
 class LogView(View):
     """Logarithmic projection """
     # Do not want to call the parent here
-    # pylint: disable-msg=W0231
     def __init__(self, width, height, box):
         self.width = width
         self.height = height
@@ -297,11 +296,10 @@ class LogView(View):
         self.log10_ymin = log10(self.box.ymin) if self.box.ymin > 0 else 0
         self.box.fix(False)
 
-    # pylint: enable-msg=W0231
     def y(self, y):
         """Project y"""
         if y is None or y <= 0 or self.log10_ymax - self.log10_ymin == 0:
-            return None
+            return 0
         return (self.height - self.height *
                 (log10(y) - self.log10_ymin)
                 / (self.log10_ymax - self.log10_ymin))
@@ -310,16 +308,14 @@ class LogView(View):
 class XLogView(View):
     """Logarithmic projection """
     # Do not want to call the parent here
-    # pylint: disable-msg=W0231
     def __init__(self, width, height, box):
         self.width = width
         self.height = height
         self.box = box
-        self.log10_xmax = log10(self.box.xmax)
-        self.log10_xmin = log10(self.box.xmin)
+        self.log10_xmax = log10(self.box.xmax) if self.box.xmax > 0 else 0
+        self.log10_xmin = log10(self.box.xmin) if self.box.xmin > 0 else 0
         self.box.fix(False)
 
-    # pylint: enable-msg=W0231
     def x(self, x):
         """Project x"""
         if x is None or x <= 0 or self.log10_xmax - self.log10_xmin == 0:
@@ -334,24 +330,23 @@ class XYLogView(XLogView, LogView):
         self.width = width
         self.height = height
         self.box = box
-        self.log10_ymax = log10(self.box.ymax)
-        self.log10_ymin = log10(self.box.ymin)
-        self.log10_xmax = log10(self.box.xmax)
-        self.log10_xmin = log10(self.box.xmin)
+        self.log10_ymax = log10(self.box.ymax) if self.box.ymax > 0 else 0
+        self.log10_ymin = log10(self.box.ymin) if self.box.ymin > 0 else 0
+        self.log10_xmax = log10(self.box.xmax) if self.box.xmax > 0 else 0
+        self.log10_xmin = log10(self.box.xmin) if self.box.xmin > 0 else 0
         self.box.fix(False)
 
 
 class HorizontalLogView(XLogView):
     """Logarithmic projection """
     # Do not want to call the parent here
-    # pylint: disable-msg=W0231
     def __init__(self, width, height, box):
         self._force_vertical = None
         self.width = width
         self.height = height
         self.box = box
-        self.log10_xmax = log10(self.box.ymax)
-        self.log10_xmin = log10(self.box.ymin)
+        self.log10_xmax = log10(self.box.ymax) if self.box.ymax > 0 else 0
+        self.log10_xmin = log10(self.box.ymin) if self.box.ymin > 0 else 0
         self.box.fix(False)
         self.box.swap()
 

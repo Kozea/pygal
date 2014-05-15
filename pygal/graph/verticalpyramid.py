@@ -37,49 +37,24 @@ class VerticalPyramid(StackedBar):
 
     def _get_separated_values(self, secondary=False):
         series = self.secondary_series if secondary else self.series
-        positive_vals = zip(*[serie.safe_values
-                              for index, serie in enumerate(series)
-                              if index % 2])
-        negative_vals = zip(*[serie.safe_values
-                              for index, serie in enumerate(series)
-                              if not index % 2])
+        positive_vals = map(sum, zip(
+            *[serie.safe_values
+              for index, serie in enumerate(series)
+              if index % 2]))
+        negative_vals = map(sum, zip(
+            *[serie.safe_values
+              for index, serie in enumerate(series)
+              if not index % 2]))
         return list(positive_vals), list(negative_vals)
 
     def _compute_box(self, positive_vals, negative_vals):
-        positive_sum = list(map(sum, positive_vals)) or [self.zero]
-        negative_sum = list(map(sum, negative_vals)) or [self.zero]
-        self._box.ymax = max(max(positive_sum), max(negative_sum))
+        self._box.ymax = max(max(positive_vals or [self.zero]),
+                             max(negative_vals or [self.zero]))
         self._box.ymin = - self._box.ymax
 
-    def _compute_secondary(self):
-        # Need refactoring
-        if self.secondary_series:
-            y_pos = list(zip(*self._y_labels))[1]
-            positive_vals, negative_vals = self._get_separated_values(True)
-            positive_sum = map(sum, positive_vals) or [self.zero]
-            negative_sum = map(sum, negative_vals) or [self.zero]
-            ymax = max(max(positive_sum), max(negative_sum))
-            ymin = -ymax
-
-            min_0_ratio = (self.zero - self._box.ymin) / self._box.height
-            max_0_ratio = (self._box.ymax - self.zero) / self._box.height
-
-            new_ymax = (self.zero - ymin) * (1 / min_0_ratio - 1)
-            new_ymin = -(ymax - self.zero) * (1 / max_0_ratio - 1)
-            if ymax > self._box.ymax:
-                ymin = new_ymin
-            else:
-                ymax = new_ymax
-
-            left_range = abs(self._box.ymax - self._box.ymin)
-            right_range = abs(ymax - ymin)
-            self._scale = left_range / right_range
-            self._scale_diff = self._box.ymin
-            self._scale_min_2nd = ymin
-            self._y_2nd_labels = [
-                (self._format(self._box.xmin + y * right_range / left_range),
-                 y)
-                for y in y_pos]
+    def _pre_compute_secondary(self, positive_vals, negative_vals):
+        self._secondary_max = max(max(positive_vals), max(negative_vals))
+        self._secondary_min = - self._secondary_max
 
     def _bar(self, parent, x, y, index, i, zero,
              shift=True, secondary=False, rounded=False):
