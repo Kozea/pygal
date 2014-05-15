@@ -437,6 +437,24 @@ def get_test_routes(app):
         line.x_labels_major = ['lol3']
         return line.render_response()
 
+    @app.route('/test/x_major_labels/<chart>')
+    def test_x_major_labels_for(chart):
+        chart = CHARTS_BY_NAME[chart]()
+        chart.add('test', range(12))
+        chart.x_labels = map(str, range(12))
+        chart.x_labels_major_count = 4
+        # chart.x_labels_major = ['1', '5', '11', '1.0', '5.0', '11.0']
+        return chart.render_response()
+
+    @app.route('/test/y_major_labels/<chart>')
+    def test_y_major_labels_for(chart):
+        chart = CHARTS_BY_NAME[chart]()
+        chart.add('test', zip(*[range(12), range(12)]))
+        chart.y_labels = range(12)
+        # chart.y_labels_major_count = 4
+        chart.y_labels_major = [1.0, 5.0, 11.0]
+        return chart.render_response()
+
     @app.route('/test/stroke_config')
     def test_stroke_config():
         line = Line()

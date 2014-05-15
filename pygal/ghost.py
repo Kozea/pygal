@@ -28,7 +28,7 @@ import io
 import sys
 from pygal._compat import u, is_list_like
 from pygal.graph import CHARTS_NAMES
-from pygal.config import Config, SerieConfig
+from pygal.config import Config, CONFIG_ITEMS
 from pygal.util import prepare_values
 from uuid import uuid4
 
@@ -89,6 +89,12 @@ class Ghost(object):
         return prepare_values(series, self.config, self.cls)
 
     def make_instance(self, overrides=None):
+        for conf_key in CONFIG_ITEMS:
+            if conf_key.is_list:
+                if getattr(self, conf_key.name, None):
+                    setattr(self, conf_key.name,
+                            list(getattr(self, conf_key.name)))
+
         self.config(**self.__dict__)
         self.config.__dict__.update(overrides or {})
         series = self.make_series(self.raw_series)

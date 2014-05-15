@@ -47,8 +47,7 @@ class Box(Graph):
 
         def format_maybe_quartile(x):
             if is_list_like(x):
-                if len(x) == 5:
-                    return 'Q1: %s Q2: %s Q3: %s' % tuple(map(sup, x[1:4]))
+                return 'Q1: %s Q2: %s Q3: %s' % tuple(map(sup, x[1:4]))
             else:
                 return sup(x)
         return format_maybe_quartile

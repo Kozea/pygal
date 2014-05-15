@@ -108,12 +108,10 @@ class DateY(XY):
             self.yvals = [val[1]
                           for serie in self.all_series
                           for val in serie.interpolated]
-            if self.xvals:
-                xmin = min(self.xvals)
-                xmax = max(self.xvals)
-                rng = (xmax - xmin)
-            else:
-                rng = None
+
+            xmin = min(self.xvals)
+            xmax = max(self.xvals)
+            rng = (xmax - xmin)
 
         # Calculate/prcoess the x_labels
         if self.x_labels and all(

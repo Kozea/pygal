@@ -66,9 +66,6 @@ class Gauge(Graph):
             self._static_value(serie_node, value, x, y)
 
     def _x_axis(self, draw_axes=True):
-        if not self._x_labels:
-            return
-
         axis = self.svg.node(self.nodes['plot'], class_="axis x gauge")
 
         for i, (label, theta) in enumerate(self._x_labels):

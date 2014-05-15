@@ -19,7 +19,8 @@
 
 from pygal import (
     Line, Dot, Pie, Radar, Config, Bar, Funnel, Worldmap,
-    SupranationalWorldmap, Histogram, Gauge, Box,
+    SupranationalWorldmap, Histogram, Gauge, Box, XY,
+    Pyramid, DateY, HorizontalBar, HorizontalStackedBar,
     FrenchMap_Regions, FrenchMap_Departments)
 from pygal._compat import u
 from pygal.test.utils import texts
@@ -326,13 +327,14 @@ def test_meta_config():
 
 
 def test_label_rotation(Chart):
-    chart = Chart(x_label_rotation=28)
+    chart = Chart(x_label_rotation=28, y_label_rotation=76)
     chart.add('1', [4, -5, 123, 59, 38])
     chart.add('2', [89, 0, 8, .12, 8])
     chart.x_labels = ['one', 'twoooooooooooooooooooooo', 'three', '4']
     q = chart.render_pyquery()
     if Chart in (Line, Bar):
-        assert len(q('.guides text[transform^="rotate(28"]')) == 4
+        assert len(q('.axis.x text[transform^="rotate(28"]')) == 4
+        assert len(q('.axis.y text[transform^="rotate(76"]')) == 13
 
 
 def test_legend_at_bottom(Chart):
@@ -354,3 +356,95 @@ def test_x_y_title(Chart):
     chart.x_labels = ['one', 'twoooooooooooooooooooooo', 'three', '4']
     q = chart.render_pyquery()
     assert len(q('.titles .title')) == 3
+
+
+def test_x_label_major(Chart):
+    if Chart in (
+            Pie, Radar, Funnel, Dot, Gauge, Worldmap,
+            SupranationalWorldmap, Histogram, Box,
+            FrenchMap_Regions, FrenchMap_Departments,
+            Pyramid, DateY):
+        return
+    chart = Chart()
+    chart.add('test', range(12))
+    chart.x_labels = map(str, range(12))
+
+    q = chart.render_pyquery()
+    assert len(q(".axis.x text.major")) == 0
+
+    chart.x_labels_major = ['1', '5', '11', '1.0', '5.0', '11.0']
+    q = chart.render_pyquery()
+    assert len(q(".axis.x text.major")) == 3
+    assert len(q(".axis.x text")) == 12
+
+    chart.show_minor_x_labels = False
+    q = chart.render_pyquery()
+    assert len(q(".axis.x text.major")) == 3
+    assert len(q(".axis.x text")) == 3
+
+    chart.show_minor_x_labels = True
+    chart.x_labels_major = None
+    chart.x_labels_major_every = 2
+    q = chart.render_pyquery()
+    assert len(q(".axis.x text.major")) == 6
+    assert len(q(".axis.x text")) == 12
+
+    chart.x_labels_major_every = None
+    chart.x_labels_major_count = 4
+    q = chart.render_pyquery()
+    assert len(q(".axis.x text.major")) == 4
+    assert len(q(".axis.x text")) == 12
+
+    chart.x_labels_major_every = None
+    chart.x_labels_major_count = 78
+    q = chart.render_pyquery()
+    assert len(q(".axis.x text.major")) == 12
+    assert len(q(".axis.x text")) == 12
+
+
+def test_y_label_major(Chart):
+    if Chart in (
+            Pie, Radar, Funnel, Dot, Gauge, Worldmap,
+            SupranationalWorldmap, Histogram, Box,
+            FrenchMap_Regions, FrenchMap_Departments,
+            HorizontalBar, HorizontalStackedBar,
+            Pyramid, DateY):
+        return
+    chart = Chart()
+    data = range(12)
+    if Chart == XY:
+        data = list(zip(*[range(12), range(12)]))
+    chart.add('test', data)
+    chart.y_labels = range(12)
+
+    q = chart.render_pyquery()
+    assert len(q(".axis.y text.major")) == 3
+
+    chart.y_labels_major = [1.0, 5.0, 11.0]
+    q = chart.render_pyquery()
+    assert len(q(".axis.y text.major")) == 3
+    assert len(q(".axis.y text")) == 12
+
+    chart.show_minor_y_labels = False
+    q = chart.render_pyquery()
+    assert len(q(".axis.y text.major")) == 3
+    assert len(q(".axis.y text")) == 3
+
+    chart.show_minor_y_labels = True
+    chart.y_labels_major = None
+    chart.y_labels_major_every = 2
+    q = chart.render_pyquery()
+    assert len(q(".axis.y text.major")) == 6
+    assert len(q(".axis.y text")) == 12
+
+    chart.y_labels_major_every = None
+    chart.y_labels_major_count = 4
+    q = chart.render_pyquery()
+    assert len(q(".axis.y text.major")) == 4
+    assert len(q(".axis.y text")) == 12
+
+    chart.y_labels_major_every = None
+    chart.y_labels_major_count = 78
+    q = chart.render_pyquery()
+    assert len(q(".axis.y text.major")) == 12
+    assert len(q(".axis.y text")) == 12

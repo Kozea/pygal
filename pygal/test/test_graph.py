@@ -37,6 +37,8 @@ except ImportError:
 def test_multi_render(Chart, datas):
     chart = Chart()
     chart = make_data(chart, datas)
+    chart.x_labels = (str(a) for a in 'labels')
+    chart.y_labels = (str(a) for a in range(6))
     svg = chart.render()
     for i in range(2):
         assert svg == chart.render()

@@ -142,7 +142,7 @@ class Line(Graph):
             self._x_labels = None
 
         if self.include_x_axis:
-        # Y Label
+            # Y Label
             self._box.ymin = min(self._min or 0, 0)
             self._box.ymax = max(self._max or 0, 0)
         else:
