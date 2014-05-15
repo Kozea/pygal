@@ -266,7 +266,6 @@ def get_test_routes(app):
         hist.add('2', [(2, 2, 8)])
         return hist.render_response()
 
-
     @app.route('/test/ylabels')
     def test_ylabels():
         chart = Line()
@@ -274,7 +273,6 @@ def get_test_routes(app):
         chart.y_labels = .0001, .0003, .0004, .00045, .0005
         chart.add('line', [.0002, .0005, .00035])
         return chart.render_response()
-
 
     @app.route('/test/secondary/<chart>')
     def test_secondary_for(chart):
@@ -463,4 +461,15 @@ def get_test_routes(app):
 
         return pie.render_response()
 
-    return filter(lambda x: x.startswith('test'), locals())
+    @app.route('/test/legend_at_bottom/<chart>')
+    def test_legend_at_bottom_for(chart):
+        graph = CHARTS_BY_NAME[chart]()
+        graph.add('1', [1, 3, 12, 3, 4, None, 9])
+        graph.add('2', [7, -4, 10, None, 8, 3, 1])
+        graph.add('3', [7, -14, -10, None, 8, 3, 1])
+        graph.add('4', [7, 4, -10, None, 8, 3, 1])
+        graph.x_labels = ('a', 'b', 'c', 'd', 'e', 'f', 'g')
+        graph.legend_at_bottom = True
+        return graph.render_response()
+
+    return list(filter(lambda x: x.startswith('test'), locals()))

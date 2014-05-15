@@ -255,8 +255,8 @@ class PolarThetaLogView(View):
         if not hasattr(box, '_tmin') or not hasattr(box, '_tmax'):
             raise Exception(
                 'Box must be set with set_polar_box for polar charts')
-        self.log10_tmax = log10(self.box._tmax)
-        self.log10_tmin = log10(self.box._tmin)
+        self.log10_tmax = log10(self.box._tmax) if self.box._tmax > 0 else 0
+        self.log10_tmin = log10(self.box._tmin) if self.box._tmin > 0 else 0
 
     def __call__(self, rhotheta):
         """Project rho and theta"""

@@ -56,3 +56,9 @@ def test_date():
         '2013-02-01',
         '2013-03-01'
     ]
+
+
+def test_date_overflow():
+    datey = DateY(truncate_label=1000)
+    datey.add('dates', [1, 2, -1000000, 5, 100000000])
+    assert datey.render_pyquery()

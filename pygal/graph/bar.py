@@ -37,18 +37,17 @@ class Bar(Graph):
         super(Bar, self).__init__(*args, **kwargs)
 
     def _bar(self, parent, x, y, index, i, zero,
-             shift=True, secondary=False, rounded=False):
+             secondary=False, rounded=False):
         width = (self.view.x(1) - self.view.x(0)) / self._len
         x, y = self.view((x, y))
         series_margin = width * self._series_margin
         x += series_margin
         width -= 2 * series_margin
-        if shift:
-            width /= self._order
-            x += index * width
-            serie_margin = width * self._serie_margin
-            x += serie_margin
-            width -= 2 * serie_margin
+        width /= self._order
+        x += index * width
+        serie_margin = width * self._serie_margin
+        x += serie_margin
+        width -= 2 * serie_margin
         height = self.view.y(zero) - y
         r = rounded * 1 if rounded else 0
         self.svg.transposable_node(
@@ -115,12 +114,10 @@ class Bar(Graph):
             min_0_ratio = (self.zero - self._box.ymin) / self._box.height or 1
             max_0_ratio = (self._box.ymax - self.zero) / self._box.height or 1
 
-            new_ymax = (self.zero - ymin) * (1 / min_0_ratio - 1)
-            new_ymin = -(ymax - self.zero) * (1 / max_0_ratio - 1)
             if ymax > self._box.ymax:
-                ymin = new_ymin
+                ymin = -(ymax - self.zero) * (1 / max_0_ratio - 1)
             else:
-                ymax = new_ymax
+                ymax = (self.zero - ymin) * (1 / min_0_ratio - 1)
 
             left_range = abs(self._box.ymax - self._box.ymin)
             right_range = abs(ymax - ymin) or 1

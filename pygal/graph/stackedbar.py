@@ -80,6 +80,8 @@ class StackedBar(Bar):
 
         if self.secondary_series:
             positive_vals, negative_vals = self._get_separated_values(True)
+            positive_vals = positive_vals or [self.zero]
+            negative_vals = negative_vals or [self.zero]
             self.secondary_negative_cumulation = [0] * self._len
             self.secondary_positive_cumulation = [0] * self._len
             self._pre_compute_secondary(positive_vals, negative_vals)
@@ -91,7 +93,7 @@ class StackedBar(Bar):
             max(positive_vals), self.zero)) or self.zero
 
     def _bar(self, parent, x, y, index, i, zero,
-             shift=False, secondary=False, rounded=False):
+             secondary=False, rounded=False):
         if secondary:
             cumulation = (self.secondary_negative_cumulation
                           if y < self.zero else

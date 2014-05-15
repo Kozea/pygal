@@ -88,9 +88,9 @@ class Ghost(object):
     def make_series(self, series):
         return prepare_values(series, self.config, self.cls)
 
-    def make_instance(self, overrides={}):
+    def make_instance(self, overrides=None):
         self.config(**self.__dict__)
-        self.config.__dict__.update(overrides)
+        self.config.__dict__.update(overrides or {})
         series = self.make_series(self.raw_series)
         secondary_series = self.make_series(self.raw_series2)
         self._last__inst = self.cls(
@@ -99,8 +99,10 @@ class Ghost(object):
         return self._last__inst
 
     # Rendering
-    def render(self, is_unicode=False):
-        return self.make_instance().render(is_unicode=is_unicode)
+    def render(self, is_unicode=False, **kwargs):
+        return (self
+                .make_instance(overrides=kwargs)
+                .render(is_unicode=is_unicode))
 
     def render_tree(self):
         return self.make_instance().render_tree()
@@ -170,6 +172,10 @@ class Ghost(object):
         )
         spark_options.update(kwargs)
         return self.make_instance(spark_options).render()
+
+    def _repr_svg_(self):
+        """Display svg in IPython notebook"""
+        return self.render(disable_xml_declaration=True)
 
     def _repr_png_(self):
         """Display png in IPython notebook"""

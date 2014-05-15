@@ -100,3 +100,19 @@ def test_only_major_dots():
     line.x_labels = map(str, range(12))
     q = line.render_pyquery()
     assert len(q(".dots")) == 4
+
+
+def test_line_secondary():
+    line = Line()
+    rng = [8, 12, 23, 73, 39, 57]
+    line.add('First serie', rng)
+    line.add('Secondary serie',
+             map(lambda x: x * 2, rng),
+             secondary=True)
+    line.title = "One serie"
+    q = line.render_pyquery()
+    assert len(q(".axis.x")) == 0
+    assert len(q(".axis.y")) == 1
+    assert len(q(".plot .series path")) == 2
+    assert len(q(".x.axis .guides")) == 0
+    assert len(q(".y.axis .guides")) == 7

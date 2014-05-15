@@ -323,3 +323,34 @@ def test_inline_css(Chart):
 def test_meta_config():
     from pygal.config import CONFIG_ITEMS
     assert all(c.name != 'Unbound' for c in CONFIG_ITEMS)
+
+
+def test_label_rotation(Chart):
+    chart = Chart(x_label_rotation=28)
+    chart.add('1', [4, -5, 123, 59, 38])
+    chart.add('2', [89, 0, 8, .12, 8])
+    chart.x_labels = ['one', 'twoooooooooooooooooooooo', 'three', '4']
+    q = chart.render_pyquery()
+    if Chart in (Line, Bar):
+        assert len(q('.guides text[transform^="rotate(28"]')) == 4
+
+
+def test_legend_at_bottom(Chart):
+    chart = Chart(legend_at_bottom=True)
+    chart.add('1', [4, -5, 123, 59, 38])
+    chart.add('2', [89, 0, 8, .12, 8])
+    chart.x_labels = ['one', 'twoooooooooooooooooooooo', 'three', '4']
+    lab = chart.render()
+    chart.legend_at_bottom = False
+    assert lab != chart.render()
+
+
+def test_x_y_title(Chart):
+    chart = Chart(title='I Am A Title',
+                  x_title="I am a x title",
+                  y_title="I am a y title")
+    chart.add('1', [4, -5, 123, 59, 38])
+    chart.add('2', [89, 0, 8, .12, 8])
+    chart.x_labels = ['one', 'twoooooooooooooooooooooo', 'three', '4']
+    q = chart.render_pyquery()
+    assert len(q('.titles .title')) == 3

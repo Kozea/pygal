@@ -21,11 +21,17 @@ import os
 import pygal
 import uuid
 import sys
+import pytest
 from pygal import i18n
 from pygal.graph.frenchmap import DEPARTMENTS, REGIONS
 from pygal.util import cut
 from pygal._compat import u
 from pygal.test import pytest_generate_tests, make_data
+
+try:
+    import cairosvg
+except ImportError:
+    cairosvg = None
 
 
 def test_multi_render(Chart, datas):
@@ -49,12 +55,8 @@ def test_render_to_file(Chart, datas):
     os.remove(file_name)
 
 
+@pytest.mark.skipif(not cairosvg, reason="CairoSVG not installed")
 def test_render_to_png(Chart, datas):
-    try:
-        import cairosvg
-    except ImportError:
-        return
-
     file_name = '/tmp/test_graph-%s.png' % uuid.uuid4()
     if os.path.exists(file_name):
         os.remove(file_name)
@@ -62,8 +64,10 @@ def test_render_to_png(Chart, datas):
     chart = Chart()
     chart = make_data(chart, datas)
     chart.render_to_png(file_name)
+    png = chart._repr_png_()
+
     with open(file_name, 'rb') as f:
-        assert f.read()
+        assert png == f.read()
     os.remove(file_name)
 
 
@@ -353,3 +357,25 @@ def test_labels_with_links(Chart):
         assert len(links) == 4  # 3 links and 1 tooltip
     else:
         assert len(links) == 8  # 7 links and 1 tooltip
+
+
+def test_sparkline(Chart, datas):
+    chart = Chart()
+    chart = make_data(chart, datas)
+    assert chart.render_sparkline()
+
+
+def test_secondary(Chart):
+    chart = Chart()
+    rng = [83, .12, -34, 59]
+    chart.add('First serie', rng)
+    chart.add('Secondary serie',
+              map(lambda x: x * 2, rng),
+              secondary=True)
+    assert chart.render_pyquery()
+
+
+def test_ipython_notebook(Chart, datas):
+    chart = Chart()
+    chart = make_data(chart, datas)
+    assert chart._repr_svg_()

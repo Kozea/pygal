@@ -518,7 +518,7 @@ class Graph(BaseGraph):
             steps = len(y_pos)
             left_range = abs(y_pos[-1] - y_pos[0])
             right_range = abs(ymax - ymin) or 1
-            scale = right_range / (steps - 1)
+            scale = right_range / ((steps - 1) or 1)
             self._y_2nd_labels = [(self._format(ymin + i * scale), pos)
                                   for i, pos in enumerate(y_pos)]
 
