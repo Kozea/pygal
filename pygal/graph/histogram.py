@@ -32,13 +32,6 @@ class Histogram(Graph):
     _dual = True
     _series_margin = 0
 
-    @cached_property
-    def _values(self):
-        """Getter for secondary series values (flattened)"""
-        return [val[0]
-                for serie in self.series
-                for val in serie.values
-                if val[0] is not None]
 
     @cached_property
     def _secondary_values(self):

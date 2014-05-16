@@ -94,12 +94,37 @@ def test_not_equal_x_labels():
                                             '7', '8', '9', '10']
 
 
-def test_only_major_dots():
+def test_only_major_dots_every():
     line = Line(show_only_major_dots=True, x_labels_major_every=3)
     line.add('test', range(12))
     line.x_labels = map(str, range(12))
     q = line.render_pyquery()
     assert len(q(".dots")) == 4
+
+
+def test_only_major_dots_no_labels():
+    line = Line(show_only_major_dots=True)
+    line.add('test', range(12))
+    q = line.render_pyquery()
+    assert len(q(".dots")) == 12
+
+
+def test_only_major_dots_count():
+    line = Line(show_only_major_dots=True)
+    line.add('test', range(12))
+    line.x_labels = map(str, range(12))
+    line.x_labels_major_count = 2
+    q = line.render_pyquery()
+    assert len(q(".dots")) == 2
+
+
+def test_only_major_dots():
+    line = Line(show_only_major_dots=True,)
+    line.add('test', range(12))
+    line.x_labels = map(str, range(12))
+    line.x_labels_major = ['1', '5', '11']
+    q = line.render_pyquery()
+    assert len(q(".dots")) == 3
 
 
 def test_line_secondary():

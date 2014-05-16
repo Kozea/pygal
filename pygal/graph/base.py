@@ -26,7 +26,7 @@ from pygal.view import Margin, Box
 from pygal.util import (
     get_text_box, get_texts_box, cut, rad, humanize, truncate, split_title)
 from pygal.svg import Svg
-from pygal.util import cached_property
+from pygal.util import cached_property, majorize
 from math import sin, cos, sqrt
 
 
@@ -226,6 +226,48 @@ class BaseGraph(object):
     def _order(self):
         """Getter for the number of series"""
         return len(self.all_series)
+
+    @cached_property
+    def _x_major_labels(self):
+        """Getter for the x major label"""
+        if self.x_labels_major:
+            return self.x_labels_major
+        if self.x_labels_major_every:
+            return [self._x_labels[i][0] for i in range(
+                0, len(self._x_labels), self.x_labels_major_every)]
+        if self.x_labels_major_count:
+            label_count = len(self._x_labels)
+            major_count = self.x_labels_major_count
+            if (major_count >= label_count):
+                return [label[0] for label in self._x_labels]
+
+            return [self._x_labels[
+                    int(i * (label_count - 1) / (major_count - 1))][0]
+                    for i in range(major_count)]
+
+        return []
+
+    @cached_property
+    def _y_major_labels(self):
+        """Getter for the y major label"""
+        if self.y_labels_major:
+            return self.y_labels_major
+        if self.y_labels_major_every:
+            return [self._y_labels[i][1] for i in range(
+                0, len(self._y_labels), self.y_labels_major_every)]
+        if self.y_labels_major_count:
+            label_count = len(self._y_labels)
+            major_count = self.y_labels_major_count
+            if (major_count >= label_count):
+                return [label[1] for label in self._y_labels]
+
+            return [self._y_labels[
+                int(i * (label_count - 1) / (major_count - 1))][1]
+                for i in range(major_count)]
+
+        return majorize(
+            cut(self._y_labels, 1)
+        )
 
     def _draw(self):
         """Draw all the things"""

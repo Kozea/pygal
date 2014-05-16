@@ -26,7 +26,7 @@ from pygal.interpolate import INTERPOLATIONS
 from pygal.graph.base import BaseGraph
 from pygal.view import View, LogView, XYLogView
 from pygal.util import (
-    majorize, truncate, reverse_text_len, get_texts_box, cut, rad, decorate)
+    truncate, reverse_text_len, get_texts_box, cut, rad, decorate)
 from math import sqrt, ceil, cos
 from itertools import repeat, chain
 
@@ -142,25 +142,9 @@ class Graph(BaseGraph):
                           d='M%f %f v%f' % (0, 0, self.view.height),
                           class_='line')
         lastlabel = self._x_labels[-1][0]
-        if self.x_labels_major:
-            x_labels_major = self.x_labels_major
-        elif self.x_labels_major_every:
-            x_labels_major = [self._x_labels[i][0] for i in range(
-                0, len(self._x_labels), self.x_labels_major_every)]
-        elif self.x_labels_major_count:
-            label_count = len(self._x_labels)
-            major_count = self.x_labels_major_count
-            if (major_count >= label_count):
-                x_labels_major = [label[0] for label in self._x_labels]
-            else:
-                x_labels_major = [self._x_labels[
-                    int(i * (label_count - 1) / (major_count - 1))][0]
-                    for i in range(major_count)]
-        else:
-            x_labels_major = []
 
         for label, position in self._x_labels:
-            major = label in x_labels_major
+            major = label in self._x_major_labels
             if not (self.show_minor_x_labels or major):
                 continue
             guides = self.svg.node(axis, class_='guides')
@@ -197,7 +181,7 @@ class Graph(BaseGraph):
                     ' always_show' if self.show_x_guides else ''
                 ))
             for label, position in self._x_2nd_labels:
-                major = label in x_labels_major
+                major = label in self._x_major_labels
                 if not (self.show_minor_x_labels or major):
                     continue
                 # it is needed, to have the same structure as primary axis
@@ -230,26 +214,8 @@ class Graph(BaseGraph):
                 class_='line'
             )
 
-        if self.y_labels_major:
-            y_labels_major = self.y_labels_major
-        elif self.y_labels_major_every:
-            y_labels_major = [self._y_labels[i][1] for i in range(
-                0, len(self._y_labels), self.y_labels_major_every)]
-        elif self.y_labels_major_count:
-            label_count = len(self._y_labels)
-            major_count = self.y_labels_major_count
-            if (major_count >= label_count):
-                y_labels_major = [label[1] for label in self._y_labels]
-            else:
-                y_labels_major = [self._y_labels[
-                    int(i * (label_count - 1) / (major_count - 1))][1]
-                    for i in range(major_count)]
-        else:
-            y_labels_major = majorize(
-                cut(self._y_labels, 1)
-            )
         for label, position in self._y_labels:
-            major = position in y_labels_major
+            major = position in self._y_major_labels
             if not (self.show_minor_y_labels or major):
                 continue
             guides = self.svg.node(axis, class_='%sguides' % (
@@ -285,7 +251,7 @@ class Graph(BaseGraph):
             secondary_ax = self.svg.node(
                 self.nodes['plot'], class_="axis y2")
             for label, position in self._y_2nd_labels:
-                major = position in y_labels_major
+                major = position in self._y_major_labels
                 if not (self.show_minor_x_labels or major):
                     continue
                 # it is needed, to have the same structure as primary axis
