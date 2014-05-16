@@ -77,9 +77,6 @@ class Pie(Graph):
 
     def _plot(self):
         total = sum(map(sum, map(lambda x: x.values, self.series)))
-
-        if total == 0:
-            return
         current_angle = 0
         for index, serie in enumerate(self.series):
             angle = self.slice(

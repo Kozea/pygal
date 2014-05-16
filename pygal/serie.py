@@ -35,10 +35,3 @@ class Serie(object):
     @cached_property
     def safe_values(self):
         return list(filter(lambda x: x is not None, self.values))
-
-
-class Label(object):
-    """A label with his position"""
-    def __init__(self, label, pos):
-        self.label = label
-        self.pos = pos

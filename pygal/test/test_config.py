@@ -360,7 +360,7 @@ def test_x_y_title(Chart):
 
 def test_x_label_major(Chart):
     if Chart in (
-            Pie, Radar, Funnel, Dot, Gauge, Worldmap,
+            Pie, Funnel, Dot, Gauge, Worldmap,
             SupranationalWorldmap, Histogram, Box,
             FrenchMap_Regions, FrenchMap_Departments,
             Pyramid, DateY):
@@ -404,7 +404,7 @@ def test_x_label_major(Chart):
 
 def test_y_label_major(Chart):
     if Chart in (
-            Pie, Radar, Funnel, Dot, Gauge, Worldmap,
+            Pie, Funnel, Dot, Gauge, Worldmap,
             SupranationalWorldmap, Histogram, Box,
             FrenchMap_Regions, FrenchMap_Departments,
             HorizontalBar, HorizontalStackedBar,
@@ -448,3 +448,18 @@ def test_y_label_major(Chart):
     q = chart.render_pyquery()
     assert len(q(".axis.y text.major")) == 12
     assert len(q(".axis.y text")) == 12
+
+
+def test_no_y_labels(Chart):
+    chart = Chart()
+    chart.y_labels = []
+    chart.add('_', [1, 2, 3])
+    chart.add('?', [10, 21, 5])
+    assert chart.render_pyquery()
+
+
+def test_fill(Chart):
+    chart = Chart(fill=True)
+    chart.add('_', [1, 2, 3])
+    chart.add('?', [10, 21, 5])
+    assert chart.render_pyquery()

@@ -21,7 +21,6 @@ from pygal.test import pytest_generate_tests, make_data
 
 
 def test_all_logarithmic(Chart):
-    print(repr(Chart))
     chart = Chart(logarithmic=True)
     chart.add('1', [1, 30, 8, 199, -23])
     chart.add('2', [87, 42, .9, 189, 81])

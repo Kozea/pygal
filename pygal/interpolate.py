@@ -38,7 +38,7 @@ def quadratic_interpolate(x, y, precision=250, **kwargs):
     for i in range(1, n):
         b[i] = 2 * slope[i - 1] - b[i - 1]
 
-    c = [(slope[i] - b[i]) / delta_x[i] for i in range(n)]
+    c = [(slope[i] - b[i]) / delta_x[i] if delta_x[i] else 0 for i in range(n)]
 
     for i in range(n + 1):
         yield x[i], a[i]
@@ -67,7 +67,7 @@ def cubic_interpolate(x, y, precision=250, **kwargs):
 
     for i in range(1, n):
         j = i - 1
-        l = 1 / (2 * (x[i + 1] - x[j]) - h[j] * m[j])
+        l = 1 / (2 * (x[i + 1] - x[j]) - h[j] * m[j]) if x[i + 1] - x[j] else 0
         m[i] = h[i] * l
         z[i] = (3 * (g[i] - g[j]) - h[j] * z[j]) * l
 
@@ -102,7 +102,9 @@ def hermite_interpolate(x, y, precision=250,
         for i in range(1, n):
             m[i] = w[i] = .5 * (
                 (y[i + 1] - y[i]) / (x[i + 1] - x[i]) +
-                (y[i] - y[i - 1]) / (x[i] - x[i - 1]))
+                (y[i] - y[i - 1]) / (
+                    x[i] - x[i - 1])
+            ) if x[i + 1] - x[i] and x[i] - x[i - 1] else 0
 
     elif type == 'kochanek_bartels':
         c = c or 0
@@ -118,7 +120,8 @@ def hermite_interpolate(x, y, precision=250,
         c = c or 0
         for i in range(1, n):
             m[i] = w[i] = (1 - c) * (
-                y[i + 1] - y[i - 1]) / (x[i + 1] - x[i - 1])
+                y[i + 1] - y[i - 1]) / (
+                    x[i + 1] - x[i - 1]) if x[i + 1] - x[i - 1] else 0
 
     def p(i, x_):
         t = (x_ - x[i]) / delta_x[i]
@@ -160,7 +163,8 @@ def lagrange_interpolate(x, y, precision=250, **kwargs):
                 for m in range(n + 1):
                     if m == k:
                         continue
-                    p *= (X - x[m]) / (x[k] - x[m])
+                    if x[k] - x[m]:
+                        p *= (X - x[m]) / (x[k] - x[m])
                 s += y[k] * p
             yield X, s
 
@@ -182,7 +186,8 @@ def trigonometric_interpolate(x, y, precision=250, **kwargs):
                 for m in range(n + 1):
                     if m == k:
                         continue
-                    p *= sin(0.5 * (X - x[m])) / sin(0.5 * (x[k] - x[m]))
+                    if sin(0.5 * (x[k] - x[m])):
+                        p *= sin(0.5 * (X - x[m])) / sin(0.5 * (x[k] - x[m]))
                 s += y[k] * p
             yield X, s
 
