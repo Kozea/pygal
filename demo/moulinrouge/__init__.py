@@ -96,6 +96,13 @@ def create_app():
             graph.add(title, values)
         return graph.render_response()
 
+    @app.route("/table/<type>/<series>/<config>")
+    def table(type, series, config):
+        graph = getattr(pygal, type)(pickle.loads(b64decode(str(config))))
+        for title, values in pickle.loads(b64decode(str(series))):
+            graph.add(title, values)
+        return graph.render_table()
+
     @app.route("/sparkline/<style>")
     @app.route("/sparkline/parameric/<style>/<color>")
     def sparkline(style, color=None):
@@ -108,6 +115,51 @@ def create_app():
         line.add('_', [random.randrange(0, 10) for _ in range(25)])
         return Response(
             line.render_sparkline(height=40), mimetype='image/svg+xml')
+
+    @app.route("/with/table/<type>")
+    def with_table(type):
+        chart = pygal.StackedBar(
+            disable_xml_declaration=True,
+            x_label_rotation=35)
+        chart.title = (
+            'What Linux distro do you primarily use'
+            ' on your server computers? (Desktop'
+            ' users vs Server Users)')
+
+        if type == 'series':
+            chart.add('Debian', [1775, 82])
+            chart.add('Ubuntu', [1515, 80])
+            chart.add('CentOS', [807, 60])
+            chart.add('Arch Linux', [549, 12])
+            chart.add('Red Hat Enterprise Linux', [247, 10])
+            chart.add('Gentoo', [129, 7])
+            chart.add('Fedora', [91, 6])
+            chart.add('Amazon Linux', [60, 0])
+            chart.add('OpenSUSE', [58, 0])
+            chart.add('Slackware', [50, 3])
+            chart.add('Xubuntu', [38, 1])
+            chart.add('Rasbian', [33, 4])
+            chart.add('SUSE Linux Enterprise Server', [33, 1])
+            chart.add('Linux Mint', [30, 4])
+            chart.add('Scientific Linux', [32, 0])
+            chart.add('Other', [187, 5])
+
+        elif type == 'labels':
+            chart.x_labels = [
+                'Debian', 'Ubuntu', 'CentOS', 'Arch Linux',
+                'Red Hat Enterprise Linux', 'Gentoo', 'Fedora', 'Amazon Linux',
+                'OpenSUSE', 'Slackware', 'Xubuntu', 'Rasbian',
+                'SUSE Linux Enterprise Server', 'Linux Mint',
+                'Scientific Linux', 'Other']
+            chart.add('Desktop Users', [
+                1775, 1515, 807, 549, 247, 129, 91, 60, 58, 50, 38, 33, 33,
+                30, 32, 187
+            ])
+            chart.add('Server Users', [
+                82, 80, 60, 12, 10, 7, 6, 0, 0, 3, 1, 4, 1, 4, 0, 5
+            ])
+
+        return render_template('table.jinja2', chart=chart)
 
     @app.route("/all")
     @app.route("/all/<style>")

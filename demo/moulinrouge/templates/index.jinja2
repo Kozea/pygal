@@ -2,15 +2,46 @@
 
 {% block section %}
   <h1>Moulin Rouge</h1>
+
+  <a href="{{ url_for('interpolation') }}">Interpolation</a>
+  <a href="{{ url_for('rotation') }}">Rotations test</a>
+  <a href="{{ url_for('raw_svgs') }}">Raw svgs</a>
+  {% for kind in ('series', 'labels') %}
+    <a href="{{ url_for('with_table', type=kind) }}">Chart with HTML table ({{ kind }})</a>
+  {% endfor %}
+
+  <hr />
+  <h3>Quick tests</h3>
+  <dl>
+    {% for link in links %}
+      {% if link.endswith('_for') %}
+        <dd>{{ link.replace('test_', '').replace('_for', '').replace('_', ' ') | title }}
+          <small>
+            {% for chart_name in charts_name %}
+              <a href="{{ url_for(link, chart=chart_name) }}">{{ chart_name | title }}</a>
+            {% endfor %}
+          </small>
+        </dd>
+      {% else %}
+        <dd><a href="{{ url_for(link) }}">{{ link.replace('test_', '').replace('_', ' ') | title }}</a></dd>
+      {% endif %}
+    {% endfor %}
+  </dl>
+
+  <hr />
+  <h3>Styles</h3>
   <ul>
-    <li>Styles</li>
     {% for style in styles %}
       <li>
         <embed src="{{ url_for('sparkline', style=style) }}" type="image/svg+xml" />
         <a href="{{ url_for('all', style=style) }}">{{ style | title }}</a>
       </li>
     {% endfor %}
-    <li>Parametric Styles</li>
+  </ul>
+
+  <hr />
+  <h3>Parametric Styles</h3>
+  <ul>
     {% for color in parametric_colors %}
       <li><embed src="{{ url_for('sparkline', style='RotateStyle', color=color) }}" type="image/svg+xml" /></li>
       {% for style in parametric_styles %}
@@ -20,24 +51,4 @@
       {% endfor %}
     {% endfor %}
   </ul>
-  <a href="{{ url_for('interpolation') }}">Interpolation</a>
-  <a href="{{ url_for('rotation') }}">Rotations test</a>
-  <a href="{{ url_for('raw_svgs') }}">Raw svgs</a>
-  <hr />
-  <h3>Quick tests</h3>
-  <dl>
-    {% for link in links %}
-      {% if link.endswith('_for') %}
-        <dd>{{ link.replace('test_', '').replace('_for', '').replace('_', ' ') | title }}
-          <small>
-        {% for chart_name in charts_name %}
-          <a href="{{ url_for(link, chart=chart_name) }}">{{ chart_name | title }}</a>
-        {% endfor %}
-          </small>
-        </dd>
-      {% else %}
-        <dd><a href="{{ url_for(link) }}">{{ link.replace('test_', '').replace('_', ' ') | title }}</a></dd>
-    {% endif %}
-    {% endfor %}
-  </dl>
 {% endblock section %}

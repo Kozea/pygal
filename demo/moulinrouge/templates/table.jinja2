@@ -1,0 +1,18 @@
+{% extends '_layout.jinja2' %}
+
+{% block section %}
+  <h3>Normal</h3>
+  {{ chart.render_table() }}
+
+  <h3>Total</h3>
+  {{ chart.render_table(total=True) }}
+
+  <h3>Transposed</h3>
+  {{ chart.render_table(transpose=True) }}
+
+  <h3>Transposed + total</h3>
+  {{ chart.render_table(transpose=True, total=True) }}
+
+  <h3>Chart</h3>
+  {{ chart.render() }}
+{% endblock section %}

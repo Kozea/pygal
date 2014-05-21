@@ -30,6 +30,7 @@ from pygal._compat import u, is_list_like
 from pygal.graph import CHARTS_NAMES
 from pygal.config import Config, CONFIG_ITEMS
 from pygal.util import prepare_values
+from pygal.table import Table
 from uuid import uuid4
 
 
@@ -112,6 +113,12 @@ class Ghost(object):
 
     def render_tree(self):
         return self.make_instance().render_tree()
+
+    def render_table(self, **kwargs):
+        real_cls, self.cls = self.cls, Table
+        rv = self.make_instance().render(**kwargs)
+        self.cls = real_cls
+        return rv
 
     def render_pyquery(self):
         """Render the graph, and return a pyquery wrapped tree"""
