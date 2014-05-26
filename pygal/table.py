@@ -22,7 +22,9 @@ Table maker
 """
 
 from pygal.graph.base import BaseGraph
+from pygal.util import template
 from lxml.html import builder, tostring
+import uuid
 
 
 class HTML(object):
@@ -42,26 +44,30 @@ class Table(BaseGraph):
         self.__dict__.update(config.to_dict())
         self.config = config
 
-    def render(self, total=False, transpose=False):
+    def render(self, total=False, transpose=False, style=False):
         html = HTML()
+        attrs = {}
+
+        if style:
+            attrs['id'] = 'table-%s' % uuid.uuid4()
+
         table = []
 
         _ = lambda x: x if x is not None else ''
 
-        table.append([None])
-        labels = []
         if self.x_labels:
-            labels += self.x_labels
-        if len(labels) < self._len:
-            labels += [None] * (self._len - len(labels))
-        if len(labels) > self._len:
-            labels = labels[:self._len]
-
-        for label in labels:
-            table[0].append(label)
+            labels = list(self.x_labels)
+            if len(labels) < self._len:
+                labels += [None] * (self._len - len(labels))
+            if len(labels) > self._len:
+                labels = labels[:self._len]
+            table.append(labels)
 
         if total:
-            table[0].append('Total')
+            if len(table):
+                table[0].append('Total')
+            else:
+                table.append([None] * (self._len + 1) + ['Total'])
             acc = [0] * (self._len + 1)
 
         for i, serie in enumerate(self.series):
@@ -96,15 +102,63 @@ class Table(BaseGraph):
         if not transpose:
             table = list(zip(*table))
 
-        table = tostring(
-            html.table(
+        thead = []
+        tbody = []
+        tfoot = []
+
+        if not transpose or self.x_labels:
+            # There's always series title but not always x_labels
+            thead = [table[0]]
+            tbody = table[1:]
+        else:
+            tbody = table
+
+        parts = []
+        if thead:
+            parts.append(
+                html.thead(
+                    *[html.tr(
+                        *[html.th(_(col)) for col in r]
+                    ) for r in thead]
+                )
+            )
+        if tbody:
+            parts.append(
                 html.tbody(
                     *[html.tr(
                         *[html.td(_(col)) for col in r]
-                    ) for r in table]
+                    ) for r in tbody]
                 )
             )
+        if tfoot:
+            parts.append(
+                html.tfoot(
+                    *[html.tr(
+                        *[html.th(_(col)) for col in r]
+                    ) for r in tfoot]
+                )
+            )
+
+        table = tostring(
+            html.table(
+                *parts, **attrs
+            )
         )
+        if style:
+            if style is True:
+                css = '''
+                  #{{ id }}{
+                    width: 100%;
+                  }
+                  #{{ id }} tbody tr:nth-child(odd) td {
+                    background-color: #f9f9f9;
+                  }
+                '''
+            else:
+                css = style
+            table = tostring(html.style(
+                template(css, **attrs),
+                scoped='scoped')) + table
         if self.disable_xml_declaration:
             table = table.decode('utf-8')
         return table
