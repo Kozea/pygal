@@ -346,7 +346,8 @@ class Graph(BaseGraph):
                 ) / 2,
                 width=self.legend_box_size,
                 height=self.legend_box_size,
-                class_="color-%d reactive" % (global_serie_number % 16)
+                class_="color-%d reactive" % (
+                    global_serie_number % len(self.style['colors']))
             )
 
             if isinstance(title, dict):
