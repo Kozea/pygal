@@ -22,6 +22,7 @@ from pygal.util import cut
 from datetime import datetime
 from pygal.i18n import COUNTRIES
 from pygal.graph.frenchmap import DEPARTMENTS, REGIONS
+from pygal._compat import etree
 
 
 def get_data(i):

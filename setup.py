@@ -32,7 +32,7 @@ class PyTest(TestCommand):
         self.test_suite = True
 
     def run_tests(self):
-        #import here, cause outside the eggs aren't loaded
+        # import here, cause outside the eggs aren't loaded
         import pytest
         errno = pytest.main(self.test_args)
         sys.exit(errno)
@@ -65,7 +65,11 @@ setup(
     tests_require=["pytest", "pyquery", "flask", "cairosvg"],
     cmdclass={'test': PyTest},
     package_data={'pygal': ['css/*', 'graph/*.svg']},
-    install_requires=['lxml'],
+    extra_requires={
+        'lxml': ['lxml'],
+        'png': ['cairosvg']
+
+    },
     classifiers=[
         "Development Status :: 4 - Beta",
         "Environment :: Console",

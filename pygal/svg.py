@@ -22,13 +22,12 @@ Svg helper
 """
 
 from __future__ import division
-from pygal._compat import to_str, u
+from pygal._compat import to_str, u, etree
 import io
 import os
 import json
 from datetime import date, datetime
 from numbers import Number
-from lxml import etree
 from math import cos, sin, pi
 from pygal.util import template, coord_format, minify_css
 from pygal import __version__
@@ -37,6 +36,7 @@ from pygal import __version__
 class Svg(object):
     """Svg object"""
     ns = 'http://www.w3.org/2000/svg'
+    xlink_ns = 'http://www.w3.org/1999/xlink'
 
     def __init__(self, graph):
         self.graph = graph
@@ -45,19 +45,30 @@ class Svg(object):
         else:
             self.id = ''
         self.processing_instructions = [
-            etree.PI(u('xml'), u("version='1.0' encoding='utf-8'"))]
-        self.root = etree.Element(
-            "{%s}svg" % self.ns,
-            nsmap={
-                None: self.ns,
-                'xlink': 'http://www.w3.org/1999/xlink',
-            })
+            etree.ProcessingInstruction(
+                u('xml'), u("version='1.0' encoding='utf-8'"))]
+        if etree.lxml:
+            attrs = {
+                'nsmap': {
+                    None: self.ns,
+                    'xlink': self.xlink_ns
+                }
+            }
+        else:
+            attrs = {
+                'xmlns': self.ns
+            }
+            etree.register_namespace('xlink', self.xlink_ns)
+
+        self.root = etree.Element('svg', **attrs)
         self.root.attrib['id'] = self.id.lstrip('#').rstrip()
         self.root.attrib['class'] = 'pygal-chart'
         self.root.append(
             etree.Comment(u(
-                'Generated with pygal %s ©Kozea 2011-2014 on %s' % (
-                    __version__, date.today().isoformat()))))
+                'Generated with pygal %s (%s) ©Kozea 2011-2014 on %s' % (
+                    __version__,
+                    'lxml' if etree.lxml else 'etree',
+                    date.today().isoformat()))))
         self.root.append(etree.Comment(u('http://pygal.org')))
         self.root.append(etree.Comment(u('http://github.com/Kozea/pygal')))
         self.defs = self.node(tag='defs')
@@ -227,14 +238,17 @@ class Svg(object):
         """Last thing to do before rendering"""
         for f in self.graph.xml_filters:
             self.root = f(self.root)
+        args = {
+            'encoding': 'utf-8'
+        }
+        if etree.lxml:
+            args['pretty_print'] = pretty_print
         svg = etree.tostring(
-            self.root, pretty_print=pretty_print,
-            xml_declaration=False,
-            encoding='utf-8')
+            self.root, **args)
         if not self.graph.disable_xml_declaration:
             svg = b'\n'.join(
                 [etree.tostring(
-                    pi, encoding='utf-8', pretty_print=pretty_print)
+                    pi, **args)
                  for pi in self.processing_instructions]
             ) + b'\n' + svg
         if self.graph.disable_xml_declaration or is_unicode:

@@ -18,7 +18,7 @@
 # along with pygal. If not, see <http://www.gnu.org/licenses/>.
 
 
-from pygal import CHARTS_NAMES, CHARTS_BY_NAME
+from pygal import CHARTS, CHARTS_BY_NAME
 from pygal.test import adapt
 from random import sample
 
@@ -82,7 +82,7 @@ if '--mem' in sys.argv:
 
     sys.exit(0)
 
-charts = CHARTS_NAMES if '--all' in sys.argv else 'Line',
+charts = CHARTS if '--all' in sys.argv else 'Line',
 
 for chart in charts:
     prt('%s\n' % chart)

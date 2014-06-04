@@ -293,7 +293,7 @@ class BaseGraph(object):
             is_unicode=is_unicode, pretty_print=self.pretty_print)
 
     def render_tree(self):
-        """Render the graph, and return lxml tree"""
+        """Render the graph, and return (l)xml etree"""
         svg = self.svg.root
         for f in self.xml_filters:
             svg = f(svg)

@@ -16,8 +16,19 @@
 #
 # You should have received a copy of the GNU Lesser General Public License
 # along with pygal. If not, see <http://www.gnu.org/licenses/>.
+import os
 import sys
 from collections import Iterable
+
+try:
+    if os.getenv('NO_LXML', None):
+        raise ImportError('Explicit lxml bypass')
+    from lxml import etree
+    etree.lxml = True
+except ImportError:
+    from xml.etree import ElementTree as etree
+    etree.lxml = False
+
 
 if sys.version_info[0] == 3:
     base = (str, bytes)
@@ -38,6 +49,12 @@ def is_str(string):
 def to_str(string):
     if not is_str(string):
         return coerce(string)
+    return string
+
+
+def to_unicode(string):
+    if not isinstance(string, coerce):
+        return string.decode('utf-8')
     return string
 
 

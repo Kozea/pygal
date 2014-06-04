@@ -25,7 +25,7 @@ from __future__ import division
 from pygal.util import cut, cached_property, decorate
 from pygal.graph.graph import Graph
 from pygal.i18n import COUNTRIES
-from lxml import etree
+from pygal._compat import etree
 import os
 
 with open(os.path.join(
@@ -86,14 +86,13 @@ class Worldmap(Graph):
 
                 metadata = serie.metadata.get(j)
                 if metadata:
-                    parent = country.getparent()
                     node = decorate(self.svg, country, metadata)
                     if node != country:
                         country.remove(node)
-                        index = parent.index(country)
-                        parent.remove(country)
+                        index = list(map).index(country)
+                        map.remove(country)
                         node.append(country)
-                        parent.insert(index, node)
+                        map.insert(index, node)
 
                 last_node = len(country) > 0 and country[-1]
                 if last_node is not None and last_node.tag == 'title':

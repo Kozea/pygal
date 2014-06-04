@@ -26,9 +26,8 @@ from collections import defaultdict
 from pygal.ghost import ChartCollection
 from pygal.util import cut, cached_property, decorate
 from pygal.graph.graph import Graph
-from pygal._compat import u
+from pygal._compat import u, etree
 from numbers import Number
-from lxml import etree
 import os
 
 
@@ -190,6 +189,7 @@ class FrenchMapDepartments(Graph):
     x_labels = list(DEPARTMENTS.keys())
     area_names = DEPARTMENTS
     area_prefix = 'z'
+    kind = 'departement'
     svg_map = DPT_MAP
 
 
@@ -222,9 +222,10 @@ class FrenchMapDepartments(Graph):
                     ratio = 1
                 else:
                     ratio = .3 + .7 * (value - min_) / (max_ - min_)
-                areae = map.xpath(
-                    "//*[contains(concat(' ', normalize-space(@class), ' '),"
-                    " ' %s%s ')]" % (self.area_prefix, area_code))
+                areae = map.findall(
+                    ".//*[@class='%s%s %s map-element']" % (
+                        self.area_prefix, area_code,
+                        self.kind))
 
                 if not areae:
                     continue
@@ -236,14 +237,16 @@ class FrenchMapDepartments(Graph):
 
                     metadata = serie.metadata.get(j)
                     if metadata:
-                        parent = area.getparent()
                         node = decorate(self.svg, area, metadata)
                         if node != area:
                             area.remove(node)
-                            index = parent.index(area)
-                            parent.remove(area)
-                            node.append(area)
-                            parent.insert(index, node)
+                            for g in map:
+                                if area not in g:
+                                    continue
+                                index = list(g).index(area)
+                                g.remove(area)
+                                node.append(area)
+                                g.insert(index, node)
 
                     last_node = len(area) > 0 and area[-1]
                     if last_node is not None and last_node.tag == 'title':
@@ -265,6 +268,7 @@ class FrenchMapRegions(FrenchMapDepartments):
     area_names = REGIONS
     area_prefix = 'a'
     svg_map = REG_MAP
+    kind = 'region'
 
 
 class FrenchMap(ChartCollection):

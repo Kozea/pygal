@@ -21,7 +21,7 @@ Various utils
 
 """
 from __future__ import division
-from pygal._compat import to_str, u, is_list_like
+from pygal._compat import u, is_list_like, to_unicode
 import re
 from decimal import Decimal
 from math import floor, pi, log, log10, ceil
@@ -241,7 +241,7 @@ def decorate(svg, node, metadata):
         if key == 'xlink' and isinstance(value, dict):
             value = value.get('href', value)
         if value:
-            svg.node(node, 'desc', class_=key).text = to_str(value)
+            svg.node(node, 'desc', class_=key).text = to_unicode(value)
     return node
 
 
@@ -328,7 +328,7 @@ def prepare_values(raw, config, cls):
     from pygal.graph.worldmap import Worldmap
     from pygal.graph.frenchmap import FrenchMapDepartments
     if config.x_labels is None and hasattr(cls, 'x_labels'):
-        config.x_labels = cls.x_labels
+        config.x_labels = list(map(to_unicode, cls.x_labels))
     if config.zero == 0 and issubclass(cls, (Worldmap, FrenchMapDepartments)):
         config.zero = 1
 

@@ -123,7 +123,7 @@ class Ghost(object):
     def render_pyquery(self):
         """Render the graph, and return a pyquery wrapped tree"""
         from pyquery import PyQuery as pq
-        return pq(self.render_tree())
+        return pq(self.render(), parser='html')
 
     def render_in_browser(self):
         """Render the graph, open it in your browser with black magic"""
