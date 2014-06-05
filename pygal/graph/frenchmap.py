@@ -26,7 +26,8 @@ from collections import defaultdict
 from pygal.ghost import ChartCollection
 from pygal.util import cut, cached_property, decorate
 from pygal.graph.graph import Graph
-from pygal._compat import u, etree
+from pygal._compat import u
+from pygal.etree import etree
 from numbers import Number
 import os
 

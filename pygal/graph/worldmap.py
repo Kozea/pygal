@@ -25,7 +25,7 @@ from __future__ import division
 from pygal.util import cut, cached_property, decorate
 from pygal.graph.graph import Graph
 from pygal.i18n import COUNTRIES
-from pygal._compat import etree
+from pygal.etree import etree
 import os
 
 with open(os.path.join(

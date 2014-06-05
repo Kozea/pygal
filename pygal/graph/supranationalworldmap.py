@@ -25,7 +25,7 @@ from __future__ import division
 from pygal.graph.worldmap import Worldmap
 from pygal.i18n import SUPRANATIONAL
 from pygal.util import cut, decorate
-from pygal._compat import etree
+from pygal.etree import etree
 import os
 
 with open(os.path.join(

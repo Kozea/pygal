@@ -22,7 +22,8 @@ Svg helper
 """
 
 from __future__ import division
-from pygal._compat import to_str, u, etree
+from pygal._compat import to_str, u
+from pygal.etree import etree
 import io
 import os
 import json

@@ -16,18 +16,8 @@
 #
 # You should have received a copy of the GNU Lesser General Public License
 # along with pygal. If not, see <http://www.gnu.org/licenses/>.
-import os
 import sys
 from collections import Iterable
-
-try:
-    if os.getenv('NO_LXML', None):
-        raise ImportError('Explicit lxml bypass')
-    from lxml import etree
-    etree.lxml = True
-except ImportError:
-    from xml.etree import ElementTree as etree
-    etree.lxml = False
 
 
 if sys.version_info[0] == 3:
