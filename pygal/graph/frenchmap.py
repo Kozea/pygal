@@ -223,13 +223,22 @@ class FrenchMapDepartments(Graph):
                     ratio = 1
                 else:
                     ratio = .3 + .7 * (value - min_) / (max_ - min_)
-                areae = map.findall(
-                    ".//*[@class='%s%s %s map-element']" % (
-                        self.area_prefix, area_code,
-                        self.kind))
+                try:
+                    areae = map.findall(
+                        ".//*[@class='%s%s %s map-element']" % (
+                            self.area_prefix, area_code,
+                            self.kind))
+                except SyntaxError:
+                    # Python 2.6 (you'd better install lxml)
+                    areae = []
+                    for e in map:
+                        if '%s%s' % (
+                                self.area_prefix, area_code) in e['class']:
+                            areae.append(e)
 
                 if not areae:
                     continue
+
                 for area in areae:
                     cls = area.get('class', '').split(' ')
                     cls.append('color-%d' % i)
