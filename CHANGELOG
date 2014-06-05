@@ -2,7 +2,7 @@ V 1.5.0 UNRELEASED
 	Add per serie configuration
 	Add half pie (thanks philt2001)
 	Add render_table (WIP)
-	Make lxml an optionnal dependency
+	Make lxml an optionnal dependency (huge speed boost in pypy)
 
 V 1.4.6
 	Add support for \n separated multiline titles (thanks sirlark)

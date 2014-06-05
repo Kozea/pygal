@@ -30,7 +30,6 @@ from pygal._compat import u, is_list_like
 from pygal.graph import CHARTS_NAMES
 from pygal.config import Config, CONFIG_ITEMS
 from pygal.util import prepare_values
-from pygal.table import Table
 from uuid import uuid4
 
 
@@ -115,6 +114,8 @@ class Ghost(object):
         return self.make_instance().render_tree()
 
     def render_table(self, **kwargs):
+        # Import here to avoid lxml import
+        from pygal.table import Table
         real_cls, self.cls = self.cls, Table
         rv = self.make_instance().render(**kwargs)
         self.cls = real_cls
