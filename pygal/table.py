@@ -56,11 +56,11 @@ class Table(BaseGraph):
         _ = lambda x: x if x is not None else ''
 
         if self.x_labels:
-            labels = list(self.x_labels)
+            labels = [None] + list(self.x_labels)
             if len(labels) < self._len:
-                labels += [None] * (self._len - len(labels))
-            if len(labels) > self._len:
-                labels = labels[:self._len]
+                labels += [None] * (self._len + 1 - len(labels))
+            if len(labels) > self._len + 1:
+                labels = labels[:self._len + 1]
             table.append(labels)
 
         if total:
@@ -113,6 +113,10 @@ class Table(BaseGraph):
         else:
             tbody = table
 
+        if total:
+            tfoot = [tbody[-1]]
+            tbody = tbody[:-1]
+
         parts = []
         if thead:
             parts.append(
@@ -147,12 +151,35 @@ class Table(BaseGraph):
         if style:
             if style is True:
                 css = '''
-                  #{{ id }}{
-                    width: 100%;
-                  }
-                  #{{ id }} tbody tr:nth-child(odd) td {
-                    background-color: #f9f9f9;
-                  }
+                #{{ id }} {
+                    border-collapse: collapse;
+                    border-spacing: 0;
+                    empty-cells: show;
+                    border: 1px solid #cbcbcb;
+                }
+                #{{ id }} td, #{{ id }} th {
+                    border-left: 1px solid #cbcbcb;
+                    border-width: 0 0 0 1px;
+                    margin: 0;
+                    padding: 0.5em 1em;
+                }
+                #{{ id }} td:first-child, #{{ id }} th:first-child {
+                    border-left-width: 0;
+                }
+                #{{ id }} thead, #{{ id }} tfoot {
+                    color: #000;
+                    text-align: left;
+                    vertical-align: bottom;
+                }
+                #{{ id }} thead {
+                    background: #e0e0e0;
+                }
+                #{{ id }} tfoot {
+                    background: #ededed;
+                }
+                #{{ id }} tr:nth-child(2n-1) td {
+                    background-color: #f2f2f2;
+                }
                 '''
             else:
                 css = style
