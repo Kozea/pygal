@@ -17,7 +17,7 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with pygal. If not, see <http://www.gnu.org/licenses/>.
 
-from pygal.test import pytest_generate_tests, make_data
+from pygal.test import make_data
 
 
 def test_cubic(Chart, datas):

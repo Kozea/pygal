@@ -26,7 +26,7 @@ from pygal import i18n
 from pygal.graph.frenchmap import DEPARTMENTS, REGIONS
 from pygal.util import cut
 from pygal._compat import u
-from pygal.test import pytest_generate_tests, make_data
+from pygal.test import make_data
 
 try:
     import cairosvg

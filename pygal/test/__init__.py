@@ -33,18 +33,6 @@ def get_data(i):
         [(3, 2), (2, 1), (1, 1)]][i]
 
 
-def pytest_generate_tests(metafunc):
-    if "Chart" in metafunc.funcargnames:
-        metafunc.parametrize("Chart", pygal.CHARTS)
-    if "datas" in metafunc.funcargnames:
-        metafunc.parametrize(
-            "datas",
-            [
-                [("Serie %d" % i, get_data(i)) for i in range(s)]
-                for s in (5, 1, 0)
-            ])
-
-
 def adapt(chart, data):
     if isinstance(chart, pygal.DateY):
         # Convert to a credible datetime

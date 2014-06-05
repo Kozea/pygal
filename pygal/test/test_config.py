@@ -24,7 +24,6 @@ from pygal import (
     FrenchMap_Regions, FrenchMap_Departments)
 from pygal._compat import u
 from pygal.test.utils import texts
-from pygal.test import pytest_generate_tests
 from tempfile import NamedTemporaryFile
 
 

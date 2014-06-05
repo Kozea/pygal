@@ -17,11 +17,31 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with pygal. If not, see <http://www.gnu.org/licenses/>.
 
-from pygal.test import make_data
+import pytest
+import pygal
+from pygal.etree import etree
+from . import get_data
 
 
-def test_all_logarithmic(Chart):
-    chart = Chart(logarithmic=True)
-    chart.add('1', [1, 30, 8, 199, -23])
-    chart.add('2', [87, 42, .9, 189, 81])
-    assert chart.render()
+@pytest.fixture
+def etreefx(request):
+    if request.param == 'etree':
+        etree.to_etree()
+    if request.param == 'lxml':
+        etree.to_lxml()
+
+
+def pytest_generate_tests(metafunc):
+    if etree._lxml_etree:
+        metafunc.fixturenames.append('etreefx')
+        metafunc.parametrize('etreefx', ['lxml', 'etree'], indirect=True)
+
+    if "Chart" in metafunc.funcargnames:
+        metafunc.parametrize("Chart", pygal.CHARTS)
+    if "datas" in metafunc.funcargnames:
+        metafunc.parametrize(
+            "datas",
+            [
+                [("Serie %d" % i, get_data(i)) for i in range(s)]
+                for s in (5, 1, 0)
+            ])
