@@ -231,10 +231,12 @@ class FrenchMapDepartments(Graph):
                 except SyntaxError:
                     # Python 2.6 (you'd better install lxml)
                     areae = []
-                    for e in map:
-                        if '%s%s' % (
-                                self.area_prefix, area_code) in e['class']:
-                            areae.append(e)
+                    for g in map:
+                        for e in g:
+                            if '%s%s' % (
+                                    self.area_prefix, area_code
+                            ) in e.attrib.get('class', ''):
+                                areae.append(e)
 
                 if not areae:
                     continue

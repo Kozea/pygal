@@ -74,7 +74,16 @@ class Worldmap(Graph):
                     ratio = 1
                 else:
                     ratio = .3 + .7 * (value - min_) / (max_ - min_)
-                country = map.find('.//*[@id="%s"]' % country_code)
+
+                try:
+                    country = map.find('.//*[@id="%s"]' % country_code)
+                except SyntaxError:
+                    # Python 2.6 (you'd better install lxml)
+                    country = None
+                    for e in map:
+                        if e.attrib.get('id', '') == country_code:
+                            country = e
+
                 if country is None:
                     continue
                 cls = country.get('class', '').split(' ')
