@@ -16,11 +16,12 @@
 #
 # You should have received a copy of the GNU Lesser General Public License
 # along with pygal. If not, see <http://www.gnu.org/licenses/>.
-from flask import Flask, render_template, Response
+from flask import Flask, render_template, Response, request
 import pygal
 from pygal.config import Config
 from pygal.util import cut
 from pygal.graph import CHARTS_NAMES
+from pygal.etree import etree
 from pygal.style import styles, parametric_styles
 from base64 import (
     urlsafe_b64encode as b64encode,
@@ -45,6 +46,13 @@ def create_app():
     """Creates the pygal test web app"""
 
     app = Flask(__name__)
+
+    @app.before_request
+    def before_request():
+        if request.args.get('etree'):
+            etree.to_etree()
+        else:
+            etree.to_lxml()
 
     def _random(data, order):
         max = 10 ** order

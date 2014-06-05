@@ -59,7 +59,10 @@ class Svg(object):
             attrs = {
                 'xmlns': self.ns
             }
-            etree.register_namespace('xlink', self.xlink_ns)
+            if hasattr(etree, 'register_namespace'):
+                etree.register_namespace('xlink', self.xlink_ns)
+            else:
+                etree._namespace_map[self.xlink_ns] = 'xlink'
 
         self.root = etree.Element('svg', **attrs)
         self.root.attrib['id'] = self.id.lstrip('#').rstrip()
@@ -150,7 +153,8 @@ class Svg(object):
                 attrib[key.rstrip('_')] = attrib[key]
                 del attrib[key]
             elif key == 'href':
-                attrib['{http://www.w3.org/1999/xlink}' + key] = attrib[key]
+                attrib[etree.QName(
+                    'http://www.w3.org/1999/xlink',  key)] = attrib[key]
                 del attrib[key]
         return etree.SubElement(parent, tag, attrib)
 
