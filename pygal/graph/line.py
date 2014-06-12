@@ -53,9 +53,17 @@ class Line(Graph):
     def _fill(self, values):
         """Add extra values to fill the line"""
         zero = self.view.y(min(max(self.zero, self._box.ymin), self._box.ymax))
+
+        # Check to see if the data has been padded with "none's"
+        # Fill doesn't work correctly otherwise
+        for i, (x, y) in enumerate(reversed(values)):
+            if x is not None:
+                end = -1 - i
+                break
+
         return ([(values[0][0], zero)] +
                 values +
-                [(values[-1][0], zero)])
+                [(values[end][0], zero)])
 
     def line(self, serie_node, serie, rescale=False):
         """Draw the line serie"""
