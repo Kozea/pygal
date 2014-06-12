@@ -20,11 +20,14 @@
 
 from pygal import CHARTS, CHARTS_BY_NAME
 from pygal.test import adapt
+from pygal.etree import etree
 from random import sample
 
 import timeit
 import sys
 
+
+sizes = (1, 5, 10, 50, 100, 500, 1000)
 
 rands = list(zip(
     sample(range(1000), 1000),
@@ -37,11 +40,21 @@ def perf(chart_name, length, series):
         chart.add('s %d' % i, adapt(chart, rands[:length]))
     return chart
 
+if '--bench' in sys.argv:
+    bench = True
+    def prt(s):
+        pass
 
-def prt(s):
-    sys.stdout.write(s)
-    sys.stdout.flush()
+    def cht(s):
+        sys.stdout.write(s)
+else:
+    bench = False
+    def prt(s):
+        sys.stdout.write(s)
+        sys.stdout.flush()
 
+    def cht(s):
+        pass
 
 if '--profile' in sys.argv:
     import cProfile
@@ -57,11 +70,14 @@ if '--mem' in sys.argv:
     pid = os.getpid()
     process = psutil.Process(pid)
     import gc
-    gc.set_debug(gc.DEBUG_UNCOLLECTABLE | gc.DEBUG_INSTANCES | gc.DEBUG_OBJECTS)
+    gc.set_debug(
+        gc.DEBUG_UNCOLLECTABLE | gc.DEBUG_INSTANCES | gc.DEBUG_OBJECTS)
+
     def print_mem():
         mem = process.get_memory_info()[0] / _TWO_20
         f = sys._getframe(1)
-        line = linecache.getline(f.f_code.co_filename, f.f_lineno - 1).replace('\n', '')
+        line = linecache.getline(
+            f.f_code.co_filename, f.f_lineno - 1).replace('\n', '')
         print('%s:%d \t| %.6f \t| %s' % (
             f.f_code.co_name, f.f_lineno, mem, line))
 
@@ -82,20 +98,42 @@ if '--mem' in sys.argv:
 
     sys.exit(0)
 
+
 charts = CHARTS if '--all' in sys.argv else 'Line',
 
-for chart in charts:
-    prt('%s\n' % chart)
-    prt('s\\l\t1\t10\t100')
+for impl in ['lxml', 'etree']:
+    if impl == 'lxml':
+        etree.to_lxml()
+    else:
+        etree.to_etree()
 
-    for series in (1, 10, 100):
-        prt('\n%d\t' % series)
-        for length in (1, 10, 100):
-            times = []
-            time = timeit.timeit(
-                "c.render()",
-                setup="from __main__ import perf; c = perf('%s', %d, %d)" % (
-                    chart, length, series),
-                number=10)
-            prt('%d\t' % (1000 * time))
-    prt('\n')
+    for chart in charts:
+        prt('%s\n' % chart)
+        prt('s\\l\t1\t10\t100')
+        v = sys.version.split(' ')[0]
+        if hasattr(sys, 'subversion'):
+            v += ' ' + sys.subversion[0]
+        v += ' ' + impl
+
+        if len(charts) > 1:
+            v += ' ' + chart
+
+        cht('bench.add("%s", ' % v)
+        diag = []
+        for series in sizes:
+            prt('\n%d\t' % series)
+            for length in sizes:
+                times = []
+                if series == length or not bench:
+                    time = timeit.timeit(
+                        "c.render()",
+                        setup="from __main__ import perf; "
+                        "c = perf('%s', %d, %d)" % (
+                            chart, length, series),
+                        number=10)
+                    if series == length:
+                        diag.append(1000 * time)
+                prt('%d\t' % (1000 * time))
+        cht(repr(diag))
+        cht(')\n')
+        prt('\n')

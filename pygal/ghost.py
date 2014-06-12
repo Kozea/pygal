@@ -115,7 +115,10 @@ class Ghost(object):
 
     def render_table(self, **kwargs):
         # Import here to avoid lxml import
-        from pygal.table import Table
+        try:
+            from pygal.table import Table
+        except ImportError:
+            raise ImportError('You must install lxml to use render table')
         real_cls, self.cls = self.cls, Table
         rv = self.make_instance().render(**kwargs)
         self.cls = real_cls
@@ -128,7 +131,10 @@ class Ghost(object):
 
     def render_in_browser(self):
         """Render the graph, open it in your browser with black magic"""
-        from lxml.html import open_in_browser
+        try:
+            from lxml.html import open_in_browser
+        except ImportError:
+            raise ImportError('You must install lxml to use render in browser')
         open_in_browser(self.render_tree(), encoding='utf-8')
 
     def render_response(self):
