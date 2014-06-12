@@ -56,6 +56,7 @@ class Line(Graph):
 
         # Check to see if the data has been padded with "none's"
         # Fill doesn't work correctly otherwise
+        end = -1
         for i, (x, y) in enumerate(reversed(values)):
             if x is not None:
                 end = -1 - i
