@@ -3,7 +3,7 @@
 from pygal import (
     Bar, Gauge, Pyramid, Funnel, Dot, StackedBar, StackedLine, XY,
     CHARTS_BY_NAME, Config, Line, DateY, Worldmap, Histogram, Box,
-    FrenchMap_Departments, FrenchMap_Regions, Pie)
+    FrenchMap_Departments, FrenchMap_Regions, Pie, Treemap)
 from pygal.style import styles, Style
 from pygal.colors import rotate
 from pygal.graph.frenchmap import DEPARTMENTS, REGIONS
@@ -117,6 +117,14 @@ def get_test_routes(app):
         bar = Bar()
         bar.add('Lol', [2, None, 12])
         return bar.render_response()
+
+    @app.route('/test/treemap')
+    def test_treemap():
+        treemap = Treemap()
+        treemap.add('A', [2])
+        treemap.add('B', [4])
+        treemap.add('C', [3])
+        return treemap.render_response()
 
     @app.route('/test/gauge')
     def test_gauge():
@@ -505,4 +513,4 @@ def get_test_routes(app):
         graph.legend_at_bottom = True
         return graph.render_response()
 
-    return list(filter(lambda x: x.startswith('test'), locals()))
+    return list(sorted(filter(lambda x: x.startswith('test'), locals())))
