@@ -4,7 +4,7 @@ from pygal import (
     Bar, Gauge, Pyramid, Funnel, Dot, StackedBar, StackedLine, XY,
     CHARTS_BY_NAME, Config, Line, DateY, Worldmap, Histogram, Box,
     FrenchMap_Departments, FrenchMap_Regions, Pie, Treemap)
-from pygal.style import styles, Style
+from pygal.style import styles, Style, RotateStyle
 from pygal.colors import rotate
 from pygal.graph.frenchmap import DEPARTMENTS, REGIONS
 from random import randint, choice
@@ -120,10 +120,17 @@ def get_test_routes(app):
 
     @app.route('/test/treemap')
     def test_treemap():
-        treemap = Treemap()
-        treemap.add('A', [2])
-        treemap.add('B', [4])
-        treemap.add('C', [3])
+        treemap = Treemap(style=RotateStyle('#ff5995', opacity=.6))
+        treemap.title = 'Binary TreeMap'
+        treemap.add('A', [2, 1, 12, 4, 2, 1, 1, 3, 12, 3, 4, None, 9])
+        treemap.add('B', [4, 2, 5, 10, 3, 4, 2, 7, 4, -10, None, 8, 3, 1])
+        treemap.add('C', [3, 8, 3, 3, 5, 3, 3, 5, 4, 12])
+        treemap.add('D', [23, 18])
+        treemap.add('E', [1, 2, 1, 2, 3, 3, 1, 2, 3,
+                          4, 3, 1, 2, 1, 1, 1, 1, 1])
+        treemap.add('F', [31])
+        treemap.add('G', [5, 9.3, 8.1, 12, 4, 3, 2])
+        treemap.add('H', [12, 3, 3])
         return treemap.render_response()
 
     @app.route('/test/gauge')

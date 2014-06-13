@@ -22,7 +22,7 @@ Treemap chart
 """
 
 from __future__ import division
-from pygal.util import decorate
+from pygal.util import decorate, cut
 from pygal.graph.graph import Graph
 from pygal.adapters import positive, none_to_zero
 
@@ -32,70 +32,86 @@ class Treemap(Graph):
 
     _adapters = [positive, none_to_zero]
 
-    def _rect(self, serie, x, y, w, h):
+    def _rect(self, serie, serie_node, rects, val, x, y, w, h, i):
         rx, ry = self.view((x, y))
         rw, rh = self.view((x + w, y + h))
         rw -= rx
         rh -= ry
 
-        serie_node = self._serie(serie._index)
-        rects = self.svg.node(serie_node['plot'], class_="rects")
-        # metadata = serie.metadata.get(i)
-        # value = self._format(serie.values[i])
+        metadata = serie.metadata.get(i)
+        value = self._format(val)
 
-        # rect = decorate(
-        #     self.svg,
-        #     self.svg.node(rects, class_="rect"),
-        #     metadata)
+        rect = decorate(
+            self.svg,
+            self.svg.node(rects, class_="rect"),
+            metadata)
 
-        self.svg.node(rects, 'rect',
+        self.svg.node(rect, 'rect',
                       x=rx,
                       y=ry,
                       width=rw,
                       height=rh,
                       class_='rect reactive tooltip-trigger')
 
-        # self._tooltip_data(rect, value,
-        #                    self.view.x(acc + w / 2),
-        #                    self.view.y(.5),
-        #                    classes='centered')
-        # self._static_value(serie_node, value,
-        #                    self.view.x(acc + w / 2),
-        #                    self.view.y(.5))
+        self._tooltip_data(rect, value,
+                           rx + rw / 2,
+                           ry + rh / 2,
+                           classes='centered')
+        self._static_value(serie_node, value,
+                           rx + rw / 2,
+                           ry + rh / 2)
 
-    def _binary_tree(self, series, total, x, y, w, h):
-        if len(series) == 1:
-            self._rect(series[0], x, y, w, h)
+    def _binary_tree(self, data, total, x, y, w, h, parent=None):
+        if total == 0:
+            return
+        if len(data) == 1:
+            if parent:
+                i, datum = data[0]
+                serie, serie_node, rects = parent
+                self._rect(serie, serie_node, rects, datum, x, y, w, h, i)
+            else:
+                datum = data[0]
+                serie_node = self._serie(datum._index)
+                self._binary_tree(
+                    list(enumerate(datum.values)),
+                    total, x, y, w, h,
+                    (datum, serie_node,
+                     self.svg.node(serie_node['plot'], class_="rects")))
             return
 
         midpoint = total / 2
         pivot_index = 1
         running_sum = 0
-        for serie in series:
+        for i, elt in enumerate(data):
             if running_sum >= midpoint:
-                pivot_index = serie._index
+                pivot_index = i
                 break
 
-            running_sum += sum(serie.values)
+            running_sum += elt[1] if parent else sum(elt.values)
 
-        half1 = series[:pivot_index]
-        half2 = series[pivot_index:]
+        half1 = data[:pivot_index]
+        half2 = data[pivot_index:]
 
-        half1_sum = sum(map(sum, map(lambda x: x.values, half1)))
-        half2_sum = sum(map(sum, map(lambda x: x.values, half2)))
+        if parent:
+            half1_sum = sum(cut(half1, 1))
+            half2_sum = sum(cut(half2, 1))
+        else:
+            half1_sum = sum(map(sum, map(lambda x: x.values, half1)))
+            half2_sum = sum(map(sum, map(lambda x: x.values, half2)))
         pivot_pct = half1_sum / total
+
         if h > w:
             y_pivot = pivot_pct * h
             self._binary_tree(
-                half1, half1_sum, x, y, w, y_pivot)
+                half1, half1_sum, x, y, w, y_pivot, parent)
             self._binary_tree(
-                half2, half2_sum, x, y + y_pivot, w, h - y_pivot)
+                half2, half2_sum, x, y + y_pivot, w, h - y_pivot, parent)
         else:
             x_pivot = pivot_pct * w
             self._binary_tree(
-                half1, half1_sum, x, y, x_pivot, h)
+                half1, half1_sum, x, y, x_pivot, h, parent)
             self._binary_tree(
-                half2, half2_sum, x + x_pivot, y, w - x_pivot, h)
+                half2, half2_sum, x + x_pivot, y, w - x_pivot, h, parent)
 
     def _plot(self):
         total = sum(map(sum, map(lambda x: x.values, self.series)))
