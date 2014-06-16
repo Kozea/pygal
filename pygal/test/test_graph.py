@@ -105,7 +105,7 @@ def test_metadata(Chart):
             'Five', 'http://7.example.com/', 'Seven'):
         assert md in cut(q('desc'), 'text')
 
-    if Chart == pygal.Pie:
+    if Chart in (pygal.Pie, pygal.Treemap):
         # Slices with value 0 are not rendered
         assert len(v) - 1 == len(q('.tooltip-trigger').siblings('.value'))
     elif Chart not in (
