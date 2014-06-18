@@ -85,8 +85,8 @@ class Ghost(object):
     def add_xml_filter(self, callback):
         self.xml_filters.append(callback)
 
-    def make_series(self, series):
-        return prepare_values(series, self.config, self.cls)
+    def make_series(self, series, offset=0):
+        return prepare_values(series, self.config, self.cls, offset)
 
     def make_instance(self, overrides=None):
         for conf_key in CONFIG_ITEMS:
@@ -98,7 +98,7 @@ class Ghost(object):
         self.config(**self.__dict__)
         self.config.__dict__.update(overrides or {})
         series = self.make_series(self.raw_series)
-        secondary_series = self.make_series(self.raw_series2)
+        secondary_series = self.make_series(self.raw_series2, len(series))
         self._last__inst = self.cls(
             self.config, series, secondary_series, self.uuid,
             self.xml_filters)

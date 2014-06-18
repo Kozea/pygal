@@ -319,7 +319,7 @@ def safe_enumerate(iterable):
             yield i, v
 
 
-def prepare_values(raw, config, cls):
+def prepare_values(raw, config, cls, offset=0):
     """Prepare the values to start with sane values"""
     from pygal.serie import Serie
     from pygal.config import SerieConfig
@@ -404,7 +404,7 @@ def prepare_values(raw, config, cls):
         serie_config(**config.to_dict())
         serie_config(**serie_config_kwargs)
         series.append(
-            Serie(len(series), title, values, serie_config, metadata))
+            Serie(offset + len(series), title, values, serie_config, metadata))
     return series
 
 
