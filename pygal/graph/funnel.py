@@ -35,9 +35,9 @@ class Funnel(Graph):
     def _format(self, value):
         return super(Funnel, self)._format(abs(value))
 
-    def funnel(self, serie_node, serie, index):
+    def funnel(self, serie):
         """Draw a dot line"""
-
+        serie_node = self.svg.serie(serie)
         fmt = lambda x: '%f %f' % x
         for i, poly in enumerate(serie.points):
             metadata = serie.metadata.get(i)
@@ -54,7 +54,7 @@ class Funnel(Graph):
                 class_='funnel reactive tooltip-trigger')
 
             x, y = self.view((
-                self._x_labels[index][1],  # Poly center from label
+                self._x_labels[serie.index][1],  # Poly center from label
                 sum([point[1] for point in poly]) / len(poly)))
             self._tooltip_data(funnels, value, x, y, classes='centered')
             self._static_value(serie_node, value, x, y)
@@ -93,6 +93,5 @@ class Funnel(Graph):
         self._y_labels = list(zip(map(self._format, y_pos), y_pos))
 
     def _plot(self):
-        for index, serie in enumerate(self.series):
-            self.funnel(
-                self._serie(index), serie, index)
+        for serie in self.series:
+            self.funnel(serie)

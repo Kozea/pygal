@@ -33,8 +33,9 @@ class Pie(Graph):
 
     _adapters = [positive, none_to_zero]
 
-    def slice(self, serie_node, start_angle, serie, total):
+    def slice(self, serie, start_angle, total):
         """Make a serie slice"""
+        serie_node = self.svg.serie(serie)
         dual = self._len > 1 and not self._order == 1
 
         slices = self.svg.node(serie_node['plot'], class_="slices")
@@ -93,6 +94,5 @@ class Pie(Graph):
             current_angle = 0
 
         for index, serie in enumerate(self.series):
-            angle = self.slice(
-                self._serie(index), current_angle, serie, total)
+            angle = self.slice(serie, current_angle, total)
             current_angle += angle

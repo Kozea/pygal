@@ -83,13 +83,14 @@ class Box(Graph):
         """
         Plot the series data
         """
-        for index, serie in enumerate(self.series):
-            self._boxf(self._serie(index), serie, index)
+        for serie in self.series:
+            self._boxf(serie)
 
-    def _boxf(self, serie_node, serie, index):
+    def _boxf(self, serie):
         """
         For a specific series, draw the box plot.
         """
+        serie_node = self.svg.serie(serie)
         # Note: q0 and q4 do not literally mean the zero-th quartile
         # and the fourth quartile, but rather the distance from 1.5 times
         # the inter-quartile range to Q1 and Q3, respectively.
@@ -103,7 +104,7 @@ class Box(Graph):
             metadata)
         val = self._format(serie.values)
 
-        x_center, y_center = self._draw_box(box, serie.values, index)
+        x_center, y_center = self._draw_box(box, serie.values, serie.index)
         self._tooltip_data(box, val, x_center, y_center, classes="centered")
         self._static_value(serie_node, val, x_center, y_center)
 

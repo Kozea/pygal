@@ -28,9 +28,7 @@ class HorizontalBar(HorizontalGraph, Bar):
     """Horizontal Bar graph"""
 
     def _plot(self):
-        for index, serie in enumerate(self.series[::-1]):
-            num = len(self.series) - index - 1
-            self.bar(self._serie(num), serie, index)
-        for index, serie in enumerate(self.secondary_series[::-1]):
-            num = len(self.secondary_series) + len(self.series) - index - 1
-            self.bar(self._serie(num), serie, index + len(self.series), True)
+        for serie in self.series[::-1]:
+            self.bar(serie)
+        for serie in self.secondary_series[::-1]:
+            self.bar(serie, True)

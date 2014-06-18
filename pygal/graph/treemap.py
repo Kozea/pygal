@@ -71,7 +71,7 @@ class Treemap(Graph):
                 self._rect(serie, serie_node, rects, datum, x, y, w, h, i)
             else:
                 datum = data[0]
-                serie_node = self._serie(datum._index)
+                serie_node = self.svg.serie(datum)
                 self._binary_tree(
                     list(enumerate(datum.values)),
                     total, x, y, w, h,
@@ -125,8 +125,5 @@ class Treemap(Graph):
         self.view.box.xmax = w = (total * gw / gh) ** .5
         self.view.box.ymax = h = total / w
         self.view.box.fix()
-
-        for index, serie in enumerate(self.series):
-            serie._index = index
 
         self._binary_tree(self.series, total, x, y, w, h)

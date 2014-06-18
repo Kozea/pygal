@@ -32,8 +32,9 @@ class Dot(Graph):
 
     _adapters = [positive]
 
-    def dot(self, serie_node, serie, r_max):
+    def dot(self, serie, r_max):
         """Draw a dot line"""
+        serie_node = self.svg.serie(serie)
         view_values = list(map(self.view, serie.points))
         for i, value in safe_enumerate(serie.values):
             x, y = view_values[i]
@@ -72,5 +73,5 @@ class Dot(Graph):
         r_max = min(
             self.view.x(1) - self.view.x(0),
             (self.view.y(0) or 0) - self.view.y(1)) / (2 * (self._max or 1) * 1.05)
-        for index, serie in enumerate(self.series):
-            self.dot(self._serie(index), serie, r_max)
+        for serie in self.series:
+            self.dot(serie, r_max)

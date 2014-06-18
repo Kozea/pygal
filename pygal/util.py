@@ -403,7 +403,8 @@ def prepare_values(raw, config, cls):
         serie_config = SerieConfig()
         serie_config(**config.to_dict())
         serie_config(**serie_config_kwargs)
-        series.append(Serie(title, values, serie_config, metadata))
+        series.append(
+            Serie(len(series), title, values, serie_config, metadata))
     return series
 
 

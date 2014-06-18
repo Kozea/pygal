@@ -41,7 +41,8 @@ class Gauge(Graph):
             self.height - self.margin.y,
             self._box)
 
-    def needle(self, serie_node, serie):
+    def needle(self, serie):
+        serie_node = self.svg.serie(serie)
         for i, theta in enumerate(serie.values):
             if theta is None:
                 continue
@@ -112,6 +113,5 @@ class Gauge(Graph):
         self._x_labels = list(zip(map(self._format, x_pos), x_pos))
 
     def _plot(self):
-        for index, serie in enumerate(self.series):
-            self.needle(
-                self._serie(index), serie)
+        for serie in self.series:
+            self.needle(serie)

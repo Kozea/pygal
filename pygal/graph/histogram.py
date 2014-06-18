@@ -63,8 +63,7 @@ class Histogram(Graph):
                 sum(map(abs, self.xvals)) != 0,
                 sum(map(abs, self.yvals)) != 0))
 
-    def _bar(self, parent, x0, x1, y, index, i, zero,
-             secondary=False, rounded=False):
+    def _bar(self, serie, parent, x0, x1, y, i, zero, secondary=False):
         x, y = self.view((x0, y))
         x1, _ = self.view((x1, y))
         width = x1 - x
@@ -73,7 +72,7 @@ class Histogram(Graph):
         x += series_margin
         width -= 2 * series_margin
 
-        r = self.rounded_bars * 1 if self.rounded_bars else 0
+        r = serie.rounded_bars * 1 if serie.rounded_bars else 0
         self.svg.transposable_node(
             parent, 'rect',
             x=x, y=y, rx=r, ry=r, width=width, height=height,
@@ -81,8 +80,9 @@ class Histogram(Graph):
         transpose = swap if self.horizontal else ident
         return transpose((x + width / 2, y + height / 2))
 
-    def bar(self, serie_node, serie, index, rescale=False):
+    def bar(self, serie, rescale=False):
         """Draw a bar graph for a serie"""
+        serie_node = self.svg.serie(serie)
         bars = self.svg.node(serie_node['plot'], class_="histbars")
         points = serie.points
 
@@ -98,8 +98,7 @@ class Histogram(Graph):
             val = self._format(serie.values[i][0])
 
             x_center, y_center = self._bar(
-                bar, x0, x1, y, index, i, self.zero, secondary=rescale,
-                rounded=serie.rounded_bars)
+                serie, bar, x0, x1, y, i, self.zero, secondary=rescale)
             self._tooltip_data(
                 bar, val, x_center, y_center, classes="centered")
             self._static_value(serie_node, val, x_center, y_center)
@@ -136,7 +135,7 @@ class Histogram(Graph):
         self._y_labels = list(zip(map(self._format, y_pos), y_pos))
 
     def _plot(self):
-        for index, serie in enumerate(self.series):
-            self.bar(self._serie(index), serie, index)
-        for index, serie in enumerate(self.secondary_series, len(self.series)):
-            self.bar(self._serie(index), serie, index, True)
+        for serie in self.series:
+            self.bar(serie)
+        for serie in self.secondary_series:
+            self.bar(serie, True)

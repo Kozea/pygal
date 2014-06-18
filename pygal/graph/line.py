@@ -66,8 +66,9 @@ class Line(Graph):
                 values +
                 [(values[end][0], zero)])
 
-    def line(self, serie_node, serie, rescale=False):
+    def line(self, serie, rescale=False):
         """Draw the line serie"""
+        serie_node = self.svg.serie(serie)
         if rescale and self.secondary_series:
             points = [
                 (x, self._scale_diff + (y - self._scale_min_2nd) * self._scale)
@@ -149,8 +150,8 @@ class Line(Graph):
         self._y_labels = list(zip(map(self._format, y_pos), y_pos))
 
     def _plot(self):
-        for index, serie in enumerate(self.series):
-            self.line(self._serie(index), serie)
+        for serie in self.series:
+            self.line(serie)
 
-        for index, serie in enumerate(self.secondary_series, len(self.series)):
-            self.line(self._serie(index), serie, True)
+        for serie in self.secondary_series:
+            self.line(serie, True)

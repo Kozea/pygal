@@ -167,6 +167,25 @@ class Svg(object):
                 extras[key1], extras[key2] = attr2, attr1
         return self.node(parent, tag, attrib, **extras)
 
+    def serie(self, serie):
+        """Make serie node"""
+        return dict(
+            plot=self.node(
+                self.graph.nodes['plot'],
+                class_='series serie-%d color-%d' % (
+                    serie.index, serie.index % len(
+                        self.graph.style['colors']))),
+            overlay=self.node(
+                self.graph.nodes['overlay'],
+                class_='series serie-%d color-%d' % (
+                    serie.index, serie.index % len(
+                        self.graph.style['colors']))),
+            text_overlay=self.node(
+                self.graph.nodes['text_overlay'],
+                class_='series serie-%d color-%d' % (
+                    serie.index, serie.index % len(
+                        self.graph.style['colors']))))
+
     def line(self, node, coords, close=False, **kwargs):
         """Draw a svg line"""
         line_len = len(coords)
