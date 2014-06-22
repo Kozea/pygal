@@ -159,10 +159,15 @@ class Box(Graph):
             sum(quartiles) / len(quartiles)))
 
     @staticmethod
-    def _box_points(values):
+    def _box_points(values, mode='1.5IQR'):
         """
-        Return a 5-tuple of Q1 - 1.5 * IQR, Q1, Median, Q3,
+        Default mode: (mode='1.5IQR' or unset)
+            Return a 5-tuple of Q1 - 1.5 * IQR, Q1, Median, Q3,
         and Q3 + 1.5 * IQR for a list of numeric values.
+        Extremes mode: (mode='extremes')
+            Return a 5-tuple of minimum, Q1, Median, Q3,
+        and maximum for a list of numeric values.
+
 
         The iterator values may include None values.
 
@@ -202,6 +207,10 @@ class Box(Graph):
                     q3 = 0.25 * s[3*m+1] + 0.75 * s[3*m+2]
 
             iqr = q3 - q1
-            q0 = q1 - 1.5 * iqr
-            q4 = q3 + 1.5 * iqr
+            if mode == 'extremes':
+                q0 = min(s)
+                q4 = max(s)
+            else:
+                q0 = q1 - 1.5 * iqr
+                q4 = q3 + 1.5 * iqr
             return q0, q1, q2, q3, q4
