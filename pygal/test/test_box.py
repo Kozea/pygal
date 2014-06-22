@@ -49,6 +49,35 @@ def test_quartiles():
     assert q3 == 4
     assert q4 == 4
 
+def test_quartiles_min_extremes():
+    a = [-2.0, 3.0, 4.0, 5.0, 8.0]  # odd test data
+    q0, q1, q2, q3, q4 = Box._box_points(a, mode='extremes')
+
+    assert q1 == 7.0 / 4.0
+    assert q2 == 4.0
+    assert q3 == 23 / 4.0
+    assert q0 == -2.0  # min
+    assert q4 == 8.0  # max
+
+    b = [1.0, 4.0, 6.0, 8.0]  # even test data
+    q0, q1, q2, q3, q4 = Box._box_points(b, mode='extremes')
+
+    assert q2 == 5.0
+
+    c = [2.0, None, 4.0, 6.0, None]  # odd with None elements
+    q0, q1, q2, q3, q4 = Box._box_points(c, mode='extremes')
+
+    assert q2 == 4.0
+
+    d = [4]
+    q0, q1, q2, q3, q4 = Box._box_points(d, mode='extremes')
+
+    assert q0 == 4
+    assert q1 == 4
+    assert q2 == 4
+    assert q3 == 4
+    assert q4 == 4
+
 
 def test_simple_box():
     box = ghostedBox()
