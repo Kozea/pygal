@@ -47,7 +47,10 @@ class Box(Graph):
 
         def format_maybe_quartile(x):
             if is_list_like(x):
-                return 'Q1: %s Q2: %s Q3: %s' % tuple(map(sup, x[1:4]))
+                if self.mode == "extremes":
+                    return 'Min: %s Q1: %s Q2: %s Q3: %s Max: %s' % tuple(map(sup, x))
+                else:
+                    return 'Q1: %s Q2: %s Q3: %s' % tuple(map(sup, x[1:4]))
             else:
                 return sup(x)
         return format_maybe_quartile
@@ -58,7 +61,7 @@ class Box(Graph):
         within the rendering process
         """
         for serie in self.series:
-            serie.values = self._box_points(serie.values)
+            serie.values = self._box_points(serie.values, self.mode)
 
         if self._min:
             self._box.ymin = min(self._min, self.zero)
