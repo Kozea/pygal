@@ -35,6 +35,7 @@ class Style(object):
             foreground='#999',
             foreground_light='#eee',
             foreground_dark='#555',
+            font_family='monospace',
             opacity='.8',
             opacity_hover='.9',
             transition='250ms',
