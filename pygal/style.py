@@ -35,7 +35,7 @@ class Style(object):
             foreground='#999',
             foreground_light='#eee',
             foreground_dark='#555',
-            font_family='monospace',
+            font_family='monospace',  # Monospaced font is highly encouraged
             opacity='.8',
             opacity_hover='.9',
             transition='250ms',
@@ -49,6 +49,7 @@ class Style(object):
         self.foreground = foreground
         self.foreground_light = foreground_light
         self.foreground_dark = foreground_dark
+        self.font_family = font_family
         self.opacity = opacity
         self.opacity_hover = opacity_hover
         self.transition = transition
