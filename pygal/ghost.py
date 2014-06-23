@@ -98,7 +98,8 @@ class Ghost(object):
         self.config(**self.__dict__)
         self.config.__dict__.update(overrides or {})
         series = self.make_series(self.raw_series)
-        secondary_series = self.make_series(self.raw_series2, len(series))
+        secondary_series = self.make_series(
+            self.raw_series2, len(series or []))
         self._last__inst = self.cls(
             self.config, series, secondary_series, self.uuid,
             self.xml_filters)
