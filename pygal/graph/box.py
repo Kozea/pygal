@@ -47,7 +47,10 @@ class Box(Graph):
 
         def format_maybe_quartile(x):
             if is_list_like(x):
-                return 'Q1: %s Q2: %s Q3: %s' % tuple(map(sup, x[1:4]))
+                if self.mode == "extremes":
+                    return 'Min: %s Q1: %s Q2: %s Q3: %s Max: %s' % tuple(map(sup, x))
+                else:
+                    return 'Q1: %s Q2: %s Q3: %s' % tuple(map(sup, x[1:4]))
             else:
                 return sup(x)
         return format_maybe_quartile
@@ -58,7 +61,7 @@ class Box(Graph):
         within the rendering process
         """
         for serie in self.series:
-            serie.values = self._box_points(serie.values)
+            serie.values = self._box_points(serie.values, self.mode)
 
         if self._min:
             self._box.ymin = min(self._min, self.zero)
@@ -160,10 +163,15 @@ class Box(Graph):
             sum(quartiles) / len(quartiles)))
 
     @staticmethod
-    def _box_points(values):
+    def _box_points(values, mode='1.5IQR'):
         """
-        Return a 5-tuple of Q1 - 1.5 * IQR, Q1, Median, Q3,
+        Default mode: (mode='1.5IQR' or unset)
+            Return a 5-tuple of Q1 - 1.5 * IQR, Q1, Median, Q3,
         and Q3 + 1.5 * IQR for a list of numeric values.
+        Extremes mode: (mode='extremes')
+            Return a 5-tuple of minimum, Q1, Median, Q3,
+        and maximum for a list of numeric values.
+
 
         The iterator values may include None values.
 
@@ -203,6 +211,10 @@ class Box(Graph):
                     q3 = 0.25 * s[3*m+1] + 0.75 * s[3*m+2]
 
             iqr = q3 - q1
-            q0 = q1 - 1.5 * iqr
-            q4 = q3 + 1.5 * iqr
+            if mode == 'extremes':
+                q0 = min(s)
+                q4 = max(s)
+            else:
+                q0 = q1 - 1.5 * iqr
+                q4 = q3 + 1.5 * iqr
             return q0, q1, q2, q3, q4

@@ -320,6 +320,10 @@ class Config(CommonConfig):
         "ie: For hermite interpolation, you can set the cardinal tension with"
         "{'type': 'cardinal', 'c': .5}", int)
 
+    mode = Key(
+        None, str, "Value", "Sets the mode to be used. (Currently only supported on box plot)",
+        "May be %s" % ' or '.join(["1.5IQR", "extremes"]))
+
     order_min = Key(
         None, int, "Value", "Minimum order of scale, defaults to None")
 
