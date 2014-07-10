@@ -1,21 +1,55 @@
+from __future__ import division
+
 from pygal.colors import (
+    parse_color, unparse_color,
     rgb_to_hsl, hsl_to_rgb, darken, lighten, saturate, desaturate, rotate)
 
 
+def test_parse_color():
+    assert parse_color('#123') == (17, 34, 51, 1., '#rgb')
+    assert parse_color('#cdf') == (204, 221, 255, 1., '#rgb')
+    assert parse_color('#a3d7') == (170, 51, 221, 119 / 255, '#rgba')
+    assert parse_color('#584b4f') == (88, 75, 79, 1., '#rrggbb')
+    assert parse_color('#8cbe22') == (140, 190, 34, 1., '#rrggbb')
+    assert parse_color('#16cbf055') == (22, 203, 240, 1 / 3, '#rrggbbaa')
+    assert parse_color('rgb(134, 67, 216)') == (134, 67, 216, 1., 'rgb')
+    assert parse_color('rgb(0, 111, 222)') == (0, 111, 222, 1., 'rgb')
+    assert parse_color('rgba(237, 83, 48, .8)') == (237, 83, 48, .8, 'rgba')
+    assert parse_color('rgba(0, 1, 0, 0.1223)') == (0, 1, 0, .1223, 'rgba')
+
+
+def test_unparse_color():
+    assert unparse_color(17, 34, 51, 1., '#rgb') == '#123'
+    assert unparse_color(204, 221, 255, 1., '#rgb') == '#cdf'
+    assert unparse_color(170, 51, 221, 119 / 255, '#rgba') == '#a3d7'
+    assert unparse_color(88, 75, 79, 1., '#rrggbb') == '#584b4f'
+    assert unparse_color(140, 190, 34, 1., '#rrggbb') == '#8cbe22'
+    assert unparse_color(22, 203, 240, 1 / 3, '#rrggbbaa') == '#16cbf055'
+    assert unparse_color(134, 67, 216, 1., 'rgb') == 'rgb(134, 67, 216)'
+    assert unparse_color(0, 111, 222, 1., 'rgb') == 'rgb(0, 111, 222)'
+    assert unparse_color(237, 83, 48, .8, 'rgba') == 'rgba(237, 83, 48, 0.8)'
+    assert unparse_color(0, 1, 0, .1223, 'rgba') == 'rgba(0, 1, 0, 0.1223)'
+
+
 def test_darken():
-    assert darken('#800', 20) == '#220000'
-    assert darken('#800', 0) == '#880000'
+    assert darken('#800', 20) == '#200'
+    assert darken('#800e', 20) == '#200e'
+    assert darken('#800', 0) == '#800'
     assert darken('#ffffff', 10) == '#e6e6e6'
     assert darken('#000000', 10) == '#000000'
     assert darken('#f3148a', 25) == '#810747'
+    assert darken('#f3148aab', 25) == '#810747ab'
     assert darken('#121212', 1) == '#0f0f0f'
     assert darken('#999999', 100) == '#000000'
+    assert darken('#99999999', 100) == '#00000099'
     assert darken('#1479ac', 8) == '#105f87'
+    assert darken('rgb(136, 0, 0)', 20) == 'rgb(34, 0, 0)'
+    assert darken('rgba(20, 121, 172, .13)', 8) == 'rgba(16, 95, 135, 0.13)'
 
 
 def test_lighten():
-    assert lighten('#800', 20) == '#ee0000'
-    assert lighten('#800', 0) == '#880000'
+    assert lighten('#800', 20) == '#e00'
+    assert lighten('#800', 0) == '#800'
     assert lighten('#ffffff', 10) == '#ffffff'
     assert lighten('#000000', 10) == '#1a1a1a'
     assert lighten('#f3148a', 25) == '#f98dc6'
@@ -25,26 +59,26 @@ def test_lighten():
 
 
 def test_saturate():
-    assert saturate('#000', 20) == '#000000'
-    assert saturate('#fff', 20) == '#ffffff'
-    assert saturate('#8a8', 100) == '#33ff33'
+    assert saturate('#000', 20) == '#000'
+    assert saturate('#fff', 20) == '#fff'
+    assert saturate('#8a8', 100) == '#3f3'
     assert saturate('#855', 20) == '#9e3f3f'
 
 
 def test_desaturate():
-    assert desaturate('#000', 20) == '#000000'
-    assert desaturate('#fff', 20) == '#ffffff'
-    assert desaturate('#8a8', 100) == '#999999'
+    assert desaturate('#000', 20) == '#000'
+    assert desaturate('#fff', 20) == '#fff'
+    assert desaturate('#8a8', 100) == '#999'
     assert desaturate('#855', 20) == '#726b6b'
 
 
 def test_rotate():
-    assert rotate('#000', 45) == '#000000'
-    assert rotate('#fff', 45) == '#ffffff'
+    assert rotate('#000', 45) == '#000'
+    assert rotate('#fff', 45) == '#fff'
     assert rotate('#811', 45) == '#886a11'
-    assert rotate('#8a8', 360) == '#88aa88'
-    assert rotate('#8a8', 0) == '#88aa88'
-    assert rotate('#8a8', -360) == '#88aa88'
+    assert rotate('#8a8', 360) == '#8a8'
+    assert rotate('#8a8', 0) == '#8a8'
+    assert rotate('#8a8', -360) == '#8a8'
 
 
 def test_hsl_to_rgb_part_0():

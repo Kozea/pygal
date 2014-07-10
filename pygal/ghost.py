@@ -111,8 +111,8 @@ class Ghost(object):
                 .make_instance(overrides=kwargs)
                 .render(is_unicode=is_unicode))
 
-    def render_tree(self):
-        return self.make_instance().render_tree()
+    def render_tree(self, **kwargs):
+        return self.make_instance(overrides=kwargs).render_tree()
 
     def render_table(self, **kwargs):
         # Import here to avoid lxml import
@@ -130,29 +130,29 @@ class Ghost(object):
         from pyquery import PyQuery as pq
         return pq(self.render(), parser='html')
 
-    def render_in_browser(self):
+    def render_in_browser(self, **kwargs):
         """Render the graph, open it in your browser with black magic"""
         try:
             from lxml.html import open_in_browser
         except ImportError:
             raise ImportError('You must install lxml to use render in browser')
-        open_in_browser(self.render_tree(), encoding='utf-8')
+        open_in_browser(self.render_tree(**kwargs), encoding='utf-8')
 
-    def render_response(self):
+    def render_response(self, **kwargs):
         """Render the graph, and return a Flask response"""
         from flask import Response
-        return Response(self.render(), mimetype='image/svg+xml')
+        return Response(self.render(**kwargs), mimetype='image/svg+xml')
 
-    def render_to_file(self, filename):
+    def render_to_file(self, filename, **kwargs):
         """Render the graph, and write it to filename"""
         with io.open(filename, 'w', encoding='utf-8') as f:
-            f.write(self.render(is_unicode=True))
+            f.write(self.render(is_unicode=True, **kwargs))
 
-    def render_to_png(self, filename=None, dpi=72):
+    def render_to_png(self, filename=None, dpi=72, **kwargs):
         """Render the graph, convert it to png and write it to filename"""
         import cairosvg
         return cairosvg.svg2png(
-            bytestring=self.render(), write_to=filename, dpi=dpi)
+            bytestring=self.render(**kwargs), write_to=filename, dpi=dpi)
 
     def render_sparktext(self, relative_to=None):
         """Make a mini text sparkline from chart"""

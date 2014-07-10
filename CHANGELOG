@@ -3,6 +3,7 @@ V 1.5.0 UNRELEASED
 	Add half pie (thanks philt2001)
 	Make lxml an optionnal dependency (huge speed boost in pypy)
 	Add render_table (WIP)
+	Support colors in rgb / rgba for parametric styles
 
 V 1.4.6
 	Add support for \n separated multiline titles (thanks sirlark)

@@ -79,27 +79,78 @@ def hsl_to_rgb(h, s, l):
     return r, g, b
 
 
+def parse_color(color):
+    r = g = b = a = type = None
+    if color.startswith('#'):
+        color = color[1:]
+        if len(color) == 3:
+            type = '#rgb'
+            color = color + 'f'
+        if len(color) == 4:
+            type = type or '#rgba'
+            color = ''.join([c * 2 for c in color])
+        if len(color) == 6:
+            type = type or '#rrggbb'
+            color = color + 'ff'
+        assert len(color) == 8
+        type = type or '#rrggbbaa'
+        r, g, b, a = [
+            int(''.join(c), 16) for c in zip(color[::2], color[1::2])]
+        a /= 255
+    elif color.startswith('rgb('):
+        type = 'rgb'
+        color = color[4:-1]
+        r, g, b, a = [int(c) for c in color.split(',')] + [1]
+    elif color.startswith('rgba('):
+        type = 'rgba'
+        color = color[5:-1]
+        r, g, b, a = [int(c) for c in color.split(',')[:-1]] + [
+            float(color.split(',')[-1])]
+    return r, g, b, a, type
+
+
+def unparse_color(r, g, b, a, type):
+    if type == '#rgb':
+        # Don't lose precision on rgb shortcut
+        if r % 17 == 0 and g % 17 == 0 and b % 17 == 0:
+            return '#%x%x%x' % (r / 17, g / 17, b / 17)
+        type = '#rrggbb'
+
+    if type == '#rgba':
+        if r % 17 == 0 and g % 17 == 0 and b % 17 == 0:
+            return '#%x%x%x%x' % (r / 17, g / 17, b / 17, a * 15)
+        type = '#rrggbbaa'
+
+    if type == '#rrggbb':
+        return '#%02x%02x%02x' % (r, g, b)
+
+    if type == '#rrggbbaa':
+        return '#%02x%02x%02x%02x' % (r, g, b, a * 255)
+
+    if type == 'rgb':
+        return 'rgb(%d, %d, %d)' % (r, g, b)
+
+    if type == 'rgba':
+        return 'rgba(%d, %d, %d, %g)' % (r, g, b, a)
+
+
+_clamp = lambda x: max(0, min(100, x))
+
+
+def _adjust(hsl, attribute, percent):
+    hsl = list(hsl)
+    if attribute > 0:
+        hsl[attribute] = _clamp(hsl[attribute] + percent)
+    else:
+        hsl[attribute] += percent
+
+    return hsl
+
+
 def adjust(color, attribute, percent):
-    assert color[0] == '#', '#rrggbb and #rgb format are supported'
-    color = color[1:]
-    assert len(color) in (3, 6), '#rrggbb and #rgb format are supported'
-    if len(color) == 3:
-        color = [a for b in zip(color, color) for a in b]
-
-    bound = lambda x: max(0, min(100, x))
-
-    def _adjust(hsl):
-        hsl = list(hsl)
-        if attribute > 0:
-            hsl[attribute] = bound(hsl[attribute] + percent)
-        else:
-            hsl[attribute] += percent
-
-        return hsl
-    return '#%02x%02x%02x' % hsl_to_rgb(
-        *_adjust(
-            rgb_to_hsl(*map(lambda x: int(''.join(x), 16),
-                            zip(color[::2], color[1::2])))))
+    r, g, b, a, type = parse_color(color)
+    r, g, b = hsl_to_rgb(*_adjust(rgb_to_hsl(r, g, b), attribute, percent))
+    return unparse_color(r, g, b, a, type)
 
 
 def rotate(color, percent):
