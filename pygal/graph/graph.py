@@ -252,7 +252,7 @@ class Graph(BaseGraph):
                 self.nodes['plot'], class_="axis y2")
             for label, position in self._y_2nd_labels:
                 major = position in self._y_major_labels
-                if not (self.show_minor_x_labels or major):
+                if not (self.show_minor_y_labels or major):
                     continue
                 # it is needed, to have the same structure as primary axis
                 guides = self.svg.node(secondary_ax, class_='guides')
