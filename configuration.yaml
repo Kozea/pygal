@@ -3,6 +3,7 @@ description: A python svg graph plotting library
 license: LGPLv3
 public: true
 url: http://www.pygal.org/
+pystil: https://kozea.pystil.org/pystil.js
 
 menu:
   - Try it online:
@@ -16,8 +17,11 @@ menu:
   - Download:
       link: /download/
 
-ribbon:
-  url: http://github.com/Kozea/pygal
+footer:
+  - A Kozea Project:
+      link: http://community.kozea.fr/
+  - Optimized for Standards:
+      link: http://validator.w3.org/check?uri=referer
 
 project (git):
   url: git://github.com/Kozea/pygal.git
@@ -29,6 +33,7 @@ vcs (git):
 
 code browser (github):
   project name: Kozea/pygal
+  ribbon: Fork me on GitHub
 
 bug tracker (github):
   project name: Kozea/pygal
