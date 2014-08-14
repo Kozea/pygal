@@ -1,4 +1,4 @@
-V 1.5.0 UNRELEASED
+V 1.5.0
 	Add per serie configuration
 	Add half pie (thanks philt2001)
 	Make lxml an optionnal dependency (huge speed boost in pypy)
