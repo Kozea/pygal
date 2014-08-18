@@ -128,3 +128,9 @@ class StackedBar(Bar):
             class_='rect reactive tooltip-trigger')
         transpose = swap if self.horizontal else ident
         return transpose((x + width / 2, y + height / 2))
+
+    def _plot(self):
+        for serie in self.series[::-1 if self.stack_from_top else 1]:
+            self.bar(serie)
+        for serie in self.secondary_series[::-1 if self.stack_from_top else 1]:
+            self.bar(serie, True)

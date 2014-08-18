@@ -338,6 +338,13 @@ def get_test_routes(app):
         stacked.add('2', [4, 5, 6])
         return stacked.render_response()
 
+    @app.route('/test/stacked/reverse')
+    def test_stacked_reverse():
+        stacked = StackedBar(stack_from_top=True)
+        stacked.add('1', [1, 2, 3])
+        stacked.add('2', [4, 5, 6])
+        return stacked.render_response()
+
     @app.route('/test/show_dots')
     def test_show_dots():
         line = Line(show_dots=False)

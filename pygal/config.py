@@ -224,6 +224,13 @@ class Config(CommonConfig):
     legend_box_size = Key(
         12, int, "Look", "Size of legend boxes")
 
+    rounded_bars = Key(
+        None, int, "Look", "Set this to the desired radius in px")
+
+    stack_from_top = Key(
+        False, bool, "Look", "Stack from top to zero, this makes the stacked "
+                           "data match the legend order")
+
     spacing = Key(
         10, int, "Look",
         "Space between titles/legend/axes")

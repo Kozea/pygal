@@ -1,3 +1,6 @@
+V 1.5.1 - UNRELEASED
+	Add `stack_from_top` option to reverse stack graph data order
+
 V 1.5.0
 	Add per serie configuration
 	Add half pie (thanks philt2001)

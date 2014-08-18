@@ -28,6 +28,15 @@ def test_stacked_line():
         ('1', '2', '11', '14'))
 
 
+def test_stacked_line_reverse():
+    stacked = StackedLine(stack_from_top=True)
+    stacked.add('one_two', [1, 2])
+    stacked.add('ten_twelve', [10, 12])
+    q = stacked.render_pyquery()
+    assert set(q("desc.value").text().split(' ')) == set(
+        ('11', '14', '1', '2'))
+
+
 def test_stacked_line_log():
     stacked = StackedLine(logarithmic=True)
     stacked.add('one_two', [1, 2])
