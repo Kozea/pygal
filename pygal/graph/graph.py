@@ -229,7 +229,8 @@ class Graph(BaseGraph):
                 self.svg.node(
                     guides, 'path',
                     d='M%f %f h%f' % (0, y, self.view.width),
-                    class_='%s%sline' % (
+                    class_='%s%s%sline' % (
+                        'axis ' if label == "0" else '',
                         'major ' if major else '',
                         'guide ' if position != 0 else ''))
             text = self.svg.node(
