@@ -47,8 +47,8 @@ class Graph(BaseGraph):
 
     def _axes(self):
         """Draw axes"""
-        self._x_axis()
         self._y_axis()
+        self._x_axis()
 
     def _set_view(self):
         """Assign a view to current graph"""
