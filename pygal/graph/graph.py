@@ -154,7 +154,8 @@ class Graph(BaseGraph):
             self.svg.node(
                 guides, 'path',
                 d='M%f %f v%f' % (x or 0, 0, self.view.height),
-                class_='%s%sline' % (
+                class_='%s%s%sline' % (
+                    'axis ' if label == "0" else '',
                     'major ' if major else '',
                     'guide ' if position != 0 and not last_guide else ''))
             y += .5 * self.label_font_size + 5
