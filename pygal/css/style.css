@@ -100,6 +100,13 @@
   fill-opacity:  {{ style.opacity_hover }};
 }
 
+{{ id }}.series {
+  stroke-width: {{ style.stroke_width }};
+  stroke-linejoin: {{ style.stroke_style }};
+  stroke-linecap: {{ style.stroke_style }};
+  stroke-dasharray: {{ style.stroke_dasharray }};
+}
+
 {{ id }}.series text {
   fill: {{ style.foreground_light }};
 }
