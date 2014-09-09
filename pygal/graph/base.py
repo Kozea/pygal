@@ -65,7 +65,7 @@ class BaseGraph(object):
                 [get(val)
                  for serie in self.series for val in serie.safe_values]))
 
-            self.zero = min(positive_values or 1,) or 1
+            self.zero = min(positive_values or (1,)) or 1
         self._draw()
         self.svg.pre_render()
 
