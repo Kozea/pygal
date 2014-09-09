@@ -3,6 +3,7 @@ V 1.5.2 - UNRELEASED
 V 1.5.1
 	Add `stack_from_top` option to reverse stack graph data order
 	Minor fix for empty logarithmic chart
+	Reorders axes in SVG output. Fix #145 (thanks sirlark)
 
 V 1.5.0
 	Add per serie configuration
