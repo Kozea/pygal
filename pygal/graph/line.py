@@ -56,11 +56,21 @@ class Line(Graph):
 
         # Check to see if the data has been padded with "none's"
         # Fill doesn't work correctly otherwise
-        end = -1
-        for i, (x, y) in enumerate(reversed(values)):
-            if x is not None:
-                end = -1 - i
-                break
+        end = len(values)-1
+        while end > 0:
+            x, y = values[end]
+            if self.missing_value_fill_truncation == "either":
+                if x is not None and y is not None:
+                    break
+            elif self.missing_value_fill_truncation == "x":
+                if x is not None:
+                    break
+            elif self.missing_value_fill_truncation == "y":
+                if y is not None:
+                    break
+            else:
+                raise ValueError("Invalid value ({}) for config key 'missing_value_fill_truncation'; Use 'x', 'y' or 'either'".format(self.missing_value_fill_truncation))
+            end -= 1
 
         return ([(values[0][0], zero)] +
                 values +
