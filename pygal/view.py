@@ -364,3 +364,82 @@ class HorizontalLogView(XLogView):
         if self._force_vertical:
             return super(XLogView, self).y(y)
         return super(HorizontalLogView, self).x(y)
+        
+class CompleteLogView(XLogView, LogView):
+    def __init__(self, width, height, box, vertical = True, xlog = False, ylog = False):
+        self.vertical = vertical
+        self.width = width
+        self.height = height
+        self.box = box
+        self.xlog = False
+        self.ylog = False
+        if ylog > 0 and ylog is not False:
+            self.ylog = ylog
+            self.log_ymax = log(self.box.ymax, ylog) if self.box.ymax > 0 else 0
+            self.log_ymin = log(self.box.ymin, ylog) if self.box.ymin > 0 else 0
+        if xlog > 0 and xlog is not False:
+            self.xlog = xlog
+            self.log_xmax = log(self.box.xmax, xlog) if self.box.xmax > 0 else 0
+            self.log_xmin = log(self.box.xmin, xlog) if self.box.xmin > 0 else 0
+        self.box.fix(False)
+    
+    def x_or_y(self, x, y = False):
+        vertical_x_or_horizontal_y = self.vertical
+        if y:
+            vertical_x_or_horizontal_y = !self.vertical
+        if vertical_x_or_horizontal_y:
+            if self.xlog is False:
+                return self.width * (x - self.box.xmin) / self.box.width
+            else if x is None or x <= 0 or self.log_xmax - self.log_xmin == 0:
+                return 0
+            else:
+                return (self.width * (log(x, self.xlog) - self.log_xmin)/ (self.log_xmax - self.log_xmin))
+        else:
+            if self.xlog is False:
+                return (self.height - self.height * (x - self.box.ymin) / self.box.height)
+            else if x is None or x <= 0 or self.log_xmax - self.log_xmin == 0:
+                return 0
+            else:
+                self.height - self.height * (log(x, self.ylog) - self.log_ymin) / (self.log_ymax - self.log_ymin))
+                
+    
+    def xlog(self, xlog):
+        if xlog <= 0:
+            return False
+        self.xlog = xlog
+        if self.xlog is not False:
+            self.log_xmax = log(self.box.xmax, self.xlog) if self.box.xmax > 0 else 0
+            self.log_xmin = log(self.box.xmin, self.xlog) if self.box.xmin > 0 else 0
+        return True
+    
+    def xlog(self):
+        return self.xlog
+    
+    def ylog(self):
+        return self.ylog
+    
+    def orientation_swap(self):
+        self.box.swap()
+        self.vertical = !self.vertical
+    
+    def progression_swap(self):
+        self.ylog, self.xlog = self.xlog, self.ylog
+        if self.ylog is not False:
+            self.log_ymax = log(self.box.ymax, ylog) if self.box.ymax > 0 else 0
+            self.log_ymin = log(self.box.ymin, ylog) if self.box.ymin > 0 else 0
+        if self.xlog is not False:
+            self.log_xmax = log(self.box.xmax, xlog) if self.box.xmax > 0 else 0
+            self.log_xmin = log(self.box.xmin, xlog) if self.box.xmin > 0 else 0
+    
+    def full_swap:
+        self.orientation_swap()
+        self.log_swap()
+    
+    def ylog(self, ylog):
+        if ylog <= 0:
+            return False
+        self.ylog = ylog
+        if self.ylog is not False:
+            self.log_ymax = log(self.box.ymax, self.ylog) if self.box.ymax > 0 else 0
+            self.log_ymin = log(self.box.ymin, self.ylog) if self.box.ymin > 0 else 0
+        return True
