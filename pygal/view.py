@@ -365,29 +365,38 @@ class HorizontalLogView(XLogView):
             return super(XLogView, self).y(y)
         return super(HorizontalLogView, self).x(y)
         
-class CompleteLogView(XLogView, LogView):
+class CompleteLogView(object):#combines all of the functionality of the other six cartesian based view classes
     def __init__(self, width, height, box, vertical = True, xlog = False, ylog = False):
-        self.vertical = vertical
+        self.vertical = vertical #determines if this view will be vertical or horizontal
         self.width = width
         self.height = height
         self.box = box
-        self.xlog = False
-        self.ylog = False
-        if ylog > 0 and ylog is not False:
+        self.xlog = False #xlog determines if the x axis will be linear or logarithmic. It can even choose what base log will be used
+        self.ylog = False #ylog is like xlog except for the y axis.
+        #logarithimic bases have two invalid values: 0 and 1.
+        #xlog and ylog use those values to indicate other things.
+        #a 0 (a.k.a. False) will result in a linear progression for the axis
+        #a 1 (a.k.a. True) is a shortcut to base 10 logarithmic progression.
+        if ylog == true or ylog == 10:
+            self.ylog = ylog
+            self.log_ymax = log10(self.box.ymax) if self.box.ymax > 0 else 0
+            self.log_ymin = log10(self.box.ymin) if self.box.ymin > 0 else 0
+        elif ylog > 0 and ylog != False:
             self.ylog = ylog
             self.log_ymax = log(self.box.ymax, ylog) if self.box.ymax > 0 else 0
             self.log_ymin = log(self.box.ymin, ylog) if self.box.ymin > 0 else 0
-        if xlog > 0 and xlog is not False:
+        if xlog == true or xlog == 10:
+            self.xlog = xlog
+            self.log_xmax = log10(self.box.xmax) if self.box.xmax > 0 else 0
+            self.log_xmin = log10(self.box.xmin) if self.box.xmin > 0 else 0
+        elif xlog > 0 and xlog is not False:
             self.xlog = xlog
             self.log_xmax = log(self.box.xmax, xlog) if self.box.xmax > 0 else 0
             self.log_xmin = log(self.box.xmin, xlog) if self.box.xmin > 0 else 0
         self.box.fix(False)
     
     def x_or_y(self, x, y = False):
-        vertical_x_or_horizontal_y = self.vertical
-        if y:
-            vertical_x_or_horizontal_y = !self.vertical
-        if vertical_x_or_horizontal_y:
+        if y ^ self.vertical:
             if self.xlog is False:
                 return self.width * (x - self.box.xmin) / self.box.width
             else if x is None or x <= 0 or self.log_xmax - self.log_xmin == 0:
@@ -405,9 +414,13 @@ class CompleteLogView(XLogView, LogView):
     
     def xlog(self, xlog):
         if xlog <= 0:
+            self.xlog = False
             return False
         self.xlog = xlog
-        if self.xlog is not False:
+        if self.xlog == true or self.xlog == 10:
+            self.log_xmax = log10(self.box.xmax) if self.box.xmax > 0 else 0
+            self.log_xmin = log10(self.box.xmin) if self.box.xmin > 0 else 0
+        else:
             self.log_xmax = log(self.box.xmax, self.xlog) if self.box.xmax > 0 else 0
             self.log_xmin = log(self.box.xmin, self.xlog) if self.box.xmin > 0 else 0
         return True
@@ -424,10 +437,16 @@ class CompleteLogView(XLogView, LogView):
     
     def progression_swap(self):
         self.ylog, self.xlog = self.xlog, self.ylog
-        if self.ylog is not False:
+        if self.ylog == true or self.ylog == 10:
+            self.log_ymax = log10(self.box.ymax) if self.box.ymax > 0 else 0
+            self.log_ymin = log10(self.box.ymin) if self.box.ymin > 0 else 0
+        else if self.ylog is not False:
             self.log_ymax = log(self.box.ymax, ylog) if self.box.ymax > 0 else 0
             self.log_ymin = log(self.box.ymin, ylog) if self.box.ymin > 0 else 0
-        if self.xlog is not False:
+        if self.xlog == true or self.xlog == 10:
+            self.log_xmax = log10(self.box.xmax) if self.box.xmax > 0 else 0
+            self.log_xmin = log10(self.box.xmin) if self.box.xmin > 0 else 0
+        else if self.xlog is not False:
             self.log_xmax = log(self.box.xmax, xlog) if self.box.xmax > 0 else 0
             self.log_xmin = log(self.box.xmin, xlog) if self.box.xmin > 0 else 0
     
@@ -437,9 +456,13 @@ class CompleteLogView(XLogView, LogView):
     
     def ylog(self, ylog):
         if ylog <= 0:
+            self.ylog = False
             return False
         self.ylog = ylog
-        if self.ylog is not False:
+        if self.ylog == true or self.ylog == 10:
+            self.log_ymax = log10(self.box.ymax) if self.box.ymax > 0 else 0
+            self.log_ymin = log10(self.box.ymin) if self.box.ymin > 0 else 0
+        else:
             self.log_ymax = log(self.box.ymax, self.ylog) if self.box.ymax > 0 else 0
             self.log_ymin = log(self.box.ymin, self.ylog) if self.box.ymin > 0 else 0
         return True
