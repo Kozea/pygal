@@ -24,7 +24,7 @@ Commmon graphing functions
 from __future__ import division
 from pygal.interpolate import INTERPOLATIONS
 from pygal.graph.base import BaseGraph
-from pygal.view import View, LogView, XYLogView
+from pygal.view import View, LogView, XYLogView, CompleteLogView
 from pygal.util import (
     truncate, reverse_text_len, get_texts_box, cut, rad, decorate)
 from math import sqrt, ceil, cos
@@ -52,18 +52,29 @@ class Graph(BaseGraph):
 
     def _set_view(self):
         """Assign a view to current graph"""
+        xlog = False
+        ylog = False
         if self.logarithmic:
+            ylog = True
             if self._dual:
-                view_class = XYLogView
-            else:
-                view_class = LogView
-        else:
-            view_class = View
+                #view_class = XYLogView
+                xlog = True
+            #else:
+                #view_class = LogView
+        #else:
+            #view_class = View
 
-        self.view = view_class(
+        #self.view = view_class(
+        #    self.width - self.margin.x,
+        #    self.height - self.margin.y,
+        #    self._box)
+        self.view = CompleteLogView(
             self.width - self.margin.x,
             self.height - self.margin.y,
-            self._box)
+            self._box,
+            True,
+            xlog,
+            ylog)
 
     def _make_graph(self):
         """Init common graph svg structure"""
