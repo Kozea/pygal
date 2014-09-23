@@ -447,7 +447,7 @@ class CompleteLogView(object):#combines all of the functionality of the other si
     
     def orientation_swap(self):
         self.box.swap()
-        self.vertical = !self.vertical
+        self.vertical = not self.vertical
     
     def progression_swap(self):
         self.ylog, self.xlog = self.xlog, self.ylog
@@ -464,7 +464,7 @@ class CompleteLogView(object):#combines all of the functionality of the other si
             self.log_xmax = log(self.box.xmax, xlog) if self.box.xmax > 0 else 0
             self.log_xmin = log(self.box.xmin, xlog) if self.box.xmin > 0 else 0
     
-    def full_swap:
+    def full_swap(self):
         self.orientation_swap()
         self.log_swap()
     
