@@ -142,6 +142,11 @@ class Ghost(object):
         """Render the graph, and return a Flask response"""
         from flask import Response
         return Response(self.render(**kwargs), mimetype='image/svg+xml')
+        
+    def render_django_response(self, **kwargs):
+        """Render the graph, and return a Django response"""
+        from django.http import HttpResponse
+        return HttpResponse(self.render(**kwargs), mimetype='image/svg+xml')
 
     def render_to_file(self, filename, **kwargs):
         """Render the graph, and write it to filename"""
