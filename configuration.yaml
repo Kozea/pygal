@@ -27,10 +27,6 @@ project (git):
   url: git://github.com/Kozea/pygal.git
   path: pygal
 
-vcs (git):
-  url: git://github.com/Kozea/pygal.git
-  path: /var/db/git/pygal.git
-
 code browser (github):
   project name: Kozea/pygal
   ribbon: Fork me on GitHub
