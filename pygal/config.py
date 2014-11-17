@@ -303,6 +303,10 @@ class Config(CommonConfig):
         "%Y-%m-%d %H:%M:%S.%f", str, "Label",
         "Date format for strftime to display the DateY X labels")
 
+    missing_value_fill_truncation = Key(
+        "x", str, "Look",
+        "Filled series with missing x and/or y values at the end of a series are closed at the first value with a missing 'x' (default), 'y' or 'either'")
+
     # Value #
     human_readable = Key(
         False, bool, "Value", "Display values in human readable format",
@@ -382,8 +386,8 @@ class Config(CommonConfig):
 
     # Misc #
     js = Key(
-        ('http://kozea.github.com/pygal.js/javascripts/svg.jquery.js',
-         'http://kozea.github.com/pygal.js/javascripts/pygal-tooltips.js'),
+        ('http://kozea.github.io/pygal.js/javascripts/svg.jquery.js',
+         'http://kozea.github.io/pygal.js/javascripts/pygal-tooltips.js'),
         list, "Misc", "List of js file",
         "It can be a filepath or an external link",
         str)
