@@ -65,7 +65,7 @@ setup(
     tests_require=["pytest", "pyquery", "flask", "cairosvg"],
     cmdclass={'test': PyTest},
     package_data={'pygal': ['css/*', 'graph/*.svg']},
-    extra_requires={
+    extras_require={
         'lxml': ['lxml'],
         'png': ['cairosvg']
 
