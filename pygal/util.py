@@ -40,7 +40,7 @@ def humanize(number):
     """Format a number to engineer scale"""
     if is_list_like(number):
         return', '.join(map(humanize, number))
-    order = number and int(log10(abs(number)) / 3.0)
+    order = number and int(floor(log(abs(number)) / log(1000)))
     human_readable = ORDERS.split(" ")[int(order > 0)]
     if order == 0 or order > len(human_readable):
         return float_format(number / (1000 ** int(order)))
