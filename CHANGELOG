@@ -1,4 +1,4 @@
-V 1.5.2 - UNRELEASED
+V 1.6.0
 	Adds config option missing_value_fill_truncation. (thanks sirlark)
 	Avoid HTTP 301 Moved Permanently (thanks jean)
 	Add a Django response method (thanks inlanger)
