@@ -1,4 +1,13 @@
 V 1.5.2 - UNRELEASED
+	Adds config option missing_value_fill_truncation. (thanks sirlark)
+	Avoid HTTP 301 Moved Permanently (thanks jean)
+	Add a Django response method (thanks inlanger)
+	Fix setup.py (#170)
+	Fix format error on list like in table
+	Add legend_at_bottom_columns option to specify number of columns in legend when at bottom. (#157)
+	Fix secondary interpolation (#165)
+	Adds an extra class (axis) to horizontal guides if the label is "0" (#147) (thanks sirlark)
+	Add line stroke customization parameters to style.py (#154) (thanks blakev)
 
 V 1.5.1
 	Add `stack_from_top` option to reverse stack graph data order
