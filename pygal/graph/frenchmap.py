@@ -193,7 +193,6 @@ class FrenchMapDepartments(Graph):
     kind = 'departement'
     svg_map = DPT_MAP
 
-
     @cached_property
     def _values(self):
         """Getter for series values (flattened)"""

@@ -22,7 +22,7 @@ Value adapters to use when a chart doesn't accept all value types
 """
 import datetime
 from numbers import Number
-from pygal.i18n import COUNTRIES
+from decimal import Decimal
 
 
 def positive(x):
@@ -51,4 +51,10 @@ def date(x):
             return datetime.datetime.combine(d, datetime.time(0, 0, 0))
         except OverflowError:
             return None
+    return x
+
+
+def decimal_to_float(x):
+    if isinstance(x, Decimal):
+        return float(x)
     return x

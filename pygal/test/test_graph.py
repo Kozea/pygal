@@ -132,7 +132,6 @@ def test_empty_lists_with_nones(Chart):
     q = chart.render_pyquery()
     assert len(q(".legend")) == 2
 
-
 def test_non_iterable_value(Chart):
     chart = Chart(no_prefix=True)
     chart.add('A', 1)

@@ -27,7 +27,7 @@ from decimal import Decimal
 from math import floor, pi, log, log10, ceil
 from itertools import cycle
 from functools import reduce
-from pygal.adapters import not_zero, positive
+from pygal.adapters import not_zero, positive, decimal_to_float
 ORDERS = u("yzafpnµm kMGTPEZY")
 
 
@@ -346,6 +346,7 @@ def prepare_values(raw, config, cls, offset=0):
             if fun in adapters:
                 adapters.remove(fun)
         adapters = adapters + [positive, not_zero]
+    adapters = adapters + [decimal_to_float]
     adapter = reduce(compose, adapters) if not config.strict else ident
     series = []
 

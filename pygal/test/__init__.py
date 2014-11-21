@@ -22,15 +22,15 @@ from pygal.util import cut
 from datetime import datetime
 from pygal.i18n import COUNTRIES
 from pygal.graph.frenchmap import DEPARTMENTS, REGIONS
-
+from decimal import Decimal
 
 def get_data(i):
     return [
         [(-1, 1), (2, 0), (0, 4)],
         [(0, 1), (None, 2), (3, 2)],
         [(-3, 3), (1, 3), (1, 1)],
-        [(1, 1), (1, 1), (1, 1)],
-        [(3, 2), (2, 1), (1, 1)]][i]
+        [(1, 1), (Decimal('1.'), 1), (1, 1)],
+        [(3, 2), (2, 1), (1., 1)]][i]
 
 
 def adapt(chart, data):
@@ -46,14 +46,23 @@ def adapt(chart, data):
 
     data = cut(data)
     if isinstance(chart, pygal.Worldmap):
-        return list(map(lambda x: list(COUNTRIES.keys())[x % len(COUNTRIES)]
-                        if x is not None else None, data))
+        return list(
+            map(lambda x: list(
+                COUNTRIES.keys())[
+                    int(x) % len(COUNTRIES)]
+                if x is not None else None, data))
     elif isinstance(chart, pygal.FrenchMap_Regions):
-        return list(map(lambda x: list(REGIONS.keys())[x % len(REGIONS)]
-                    if x is not None else None, data))
+        return list(
+            map(lambda x: list(
+                REGIONS.keys())[
+                    int(x) % len(REGIONS)]
+                if x is not None else None, data))
     elif isinstance(chart, pygal.FrenchMap_Departments):
-        return list(map(lambda x: list(DEPARTMENTS.keys())[x % len(DEPARTMENTS)]
-                    if x is not None else None, data))
+        return list(
+            map(lambda x: list(
+                DEPARTMENTS.keys())[
+                    int(x) % len(DEPARTMENTS)]
+                if x is not None else None, data))
     return data
 
 
