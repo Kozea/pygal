@@ -5,7 +5,7 @@
 Presentation
 ============
 
-pygal 1.4.2 is a dynamic SVG charting library.
+pygal is a dynamic SVG charting library.
 
 
 .. class:: thumbs
@@ -76,10 +76,10 @@ And a lot of options to `customize the charts. </basic_customizations>`_
 Get it !
 ========
 
-- Get the package on `pypi <http://pypi.python.org/pypi/pygal/>`_
-- Fork me on `github <http://github.com/Kozea/pygal>`_
+- Get the package on `pypi <http://pypi.python.org/pypi/pygal/>`_.
+- Fork me on `github <http://github.com/Kozea/pygal>`_.
 
-More information in the `download page </download>`_
+More information in the `download page </download>`_.
 
 
 Get started
@@ -87,6 +87,10 @@ Get started
 
 Start `here </first_steps/>`_ to make your first steps.
 
+Changes
+=======
+
+You can see the changelog `here <https://raw.githubusercontent.com/Kozea/pygal/master/CHANGELOG>`_.
 
 Technical Description
 =====================
