@@ -221,6 +221,9 @@ class Config(CommonConfig):
     legend_at_bottom = Key(
         False, bool, "Look", "Set to true to position legend at bottom")
 
+    legend_at_bottom_columns = Key(
+        None, int, "Look", "Set to true to position legend at bottom")
+
     legend_box_size = Key(
         12, int, "Look", "Size of legend boxes")
 

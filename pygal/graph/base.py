@@ -27,7 +27,7 @@ from pygal.util import (
     get_text_box, get_texts_box, cut, rad, humanize, truncate, split_title)
 from pygal.svg import Svg
 from pygal.util import cached_property, majorize
-from math import sin, cos, sqrt
+from math import sin, cos, sqrt, ceil
 
 
 class BaseGraph(object):
@@ -93,8 +93,11 @@ class BaseGraph(object):
                     self.legend_font_size)
                 if self.legend_at_bottom:
                     h_max = max(h, self.legend_box_size)
+                    cols = (self._order // self.legend_at_bottom_columns
+                            if self.legend_at_bottom_columns
+                            else ceil(sqrt(self._order)) or 1)
                     self.margin.bottom += self.spacing + h_max * round(
-                        sqrt(self._order) - 1) * 1.5 + h_max
+                        cols - 1) * 1.5 + h_max
                 else:
                     if series_group is self.series:
                         legend_width = self.spacing + w + self.legend_box_size

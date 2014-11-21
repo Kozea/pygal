@@ -279,7 +279,8 @@ class Graph(BaseGraph):
             y = (self.margin.top + self.view.height +
                  self._x_title_height +
                  self._x_labels_height + self.spacing)
-            cols = ceil(sqrt(self._order)) or 1
+            cols = self.legend_at_bottom_columns or ceil(
+                sqrt(self._order)) or 1
 
             if not truncation:
                 available_space = self.view.width / cols - (

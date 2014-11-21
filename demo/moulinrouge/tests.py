@@ -511,9 +511,10 @@ def get_test_routes(app):
     @app.route('/test/half_pie')
     def test_half_pie():
         pie = Pie(half_pie=True)
-        for i in range(10):
+        for i in range(100):
             pie.add(str(i), i, inner_radius=.1)
-
+        pie.legend_at_bottom = True
+        pie.legend_at_bottom_columns = 4
         return pie.render_response()
 
     @app.route('/test/legend_at_bottom/<chart>')
