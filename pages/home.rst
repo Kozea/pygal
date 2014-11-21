@@ -90,7 +90,7 @@ Start `here </first_steps/>`_ to make your first steps.
 Changes
 =======
 
-You can see the changelog `here <https://raw.githubusercontent.com/Kozea/pygal/master/CHANGELOG>`_.
+You can see the `changelog here <https://raw.githubusercontent.com/Kozea/pygal/master/CHANGELOG>`_.
 
 Technical Description
 =====================
