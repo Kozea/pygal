@@ -61,9 +61,7 @@ class Bar(Graph):
         serie_node = self.svg.serie(serie)
         bars = self.svg.node(serie_node['plot'], class_="bars")
         if rescale and self.secondary_series:
-            points = [
-                (x, self._scale_diff + (y - self._scale_min_2nd) * self._scale)
-                for x, y in serie.points if y is not None]
+            points = self._rescale(serie.points)
         else:
             points = serie.points
 

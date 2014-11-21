@@ -419,6 +419,11 @@ class Graph(BaseGraph):
             x, y, self.interpolation_precision,
             **self.interpolation_parameters))
 
+    def _rescale(self, points):
+        return [
+            (x, self._scale_diff + (y - self._scale_min_2nd) * self._scale)
+            for x, y in points if y is not None]
+
     def _tooltip_data(self, node, value, x, y, classes=None):
         self.svg.node(node, 'desc', class_="value").text = value
         if classes is None:

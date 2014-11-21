@@ -517,6 +517,13 @@ def get_test_routes(app):
         pie.legend_at_bottom_columns = 4
         return pie.render_response()
 
+    @app.route('/test/interpolate/secondary')
+    def test_interpolate_secondary():
+        chart = Line(title=u'Some different points', interpolate='cubic')
+        chart.add('line', [1000, 2000, 7000])
+        chart.add('other line', [100, 500, 500], secondary=True)
+        return chart.render_response()
+
     @app.route('/test/legend_at_bottom/<chart>')
     def test_legend_at_bottom_for(chart):
         graph = CHARTS_BY_NAME[chart]()

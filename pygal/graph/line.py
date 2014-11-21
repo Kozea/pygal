@@ -69,7 +69,11 @@ class Line(Graph):
                 if y is not None:
                     break
             else:
-                raise ValueError("Invalid value ({}) for config key 'missing_value_fill_truncation'; Use 'x', 'y' or 'either'".format(self.missing_value_fill_truncation))
+                raise ValueError(
+                    "Invalid value ({}) for config key "
+                    "'missing_value_fill_truncation';"
+                    " Use 'x', 'y' or 'either'".format(
+                        self.missing_value_fill_truncation))
             end -= 1
 
         return ([(values[0][0], zero)] +
@@ -80,9 +84,7 @@ class Line(Graph):
         """Draw the line serie"""
         serie_node = self.svg.serie(serie)
         if rescale and self.secondary_series:
-            points = [
-                (x, self._scale_diff + (y - self._scale_min_2nd) * self._scale)
-                for x, y in serie.points if y is not None]
+            points = self._rescale(serie.points)
         else:
             points = serie.points
         view_values = list(map(self.view, points))
@@ -118,7 +120,10 @@ class Line(Graph):
 
         if serie.stroke:
             if self.interpolate:
-                view_values = list(map(self.view, serie.interpolated))
+                points = serie.interpolated
+                if rescale and self.secondary_series:
+                    points = self._rescale(points)
+                view_values = list(map(self.view, points))
             if serie.fill:
                 view_values = self._fill(view_values)
             self.svg.line(
