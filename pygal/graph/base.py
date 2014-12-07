@@ -50,7 +50,10 @@ class BaseGraph(object):
         self._x_2nd_labels = None
         self._y_2nd_labels = None
         self.nodes = {}
-        self.margin = Margin(*([self.margin] * 4))
+        self.margin = Margin(self.margin_top or self.margin,
+                             self.margin_right or self.margin,
+                             self.margin_bottom or self.margin,
+                             self.margin_left or self.margin)
         self._box = Box()
         self.view = None
         if self.logarithmic and self.zero == 0:
