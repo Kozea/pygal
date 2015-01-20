@@ -242,6 +242,22 @@ class Config(CommonConfig):
         20, int, "Look",
         "Margin around chart")
 
+    margin_top = Key(
+        20, int, "Look",
+        "Margin around top of chart")
+
+    margin_right = Key(
+        20, int, "Look",
+        "Margin around right of chart")
+
+    margin_bottom = Key(
+        20, int, "Look",
+        "Margin around bottom of chart")
+
+    margin_left = Key(
+        20, int, "Look",
+        "Margin around left of chart")
+
     tooltip_border_radius = Key(0, int, "Look", "Tooltip border radius")
 
     inner_radius = Key(
