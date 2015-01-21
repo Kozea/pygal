@@ -535,4 +535,17 @@ def get_test_routes(app):
         graph.legend_at_bottom = True
         return graph.render_response()
 
+    @app.route('/test/custom_metadata/<chart>')
+    def test_custom_metadata_for(chart):
+        c = CHARTS_BY_NAME[chart]()
+        c.add('1', [
+            {'style': 'fill: red', 'value': 1},
+            {'color': 'blue', 'value': 2},
+            {'style': 'fill: red; stroke: yellow', 'value': 3}])
+        c.add('2', [
+            {'value': 4},
+            {'color': 'green', 'value': 5},
+            6])
+        return c.render_response()
+
     return list(sorted(filter(lambda x: x.startswith('test'), locals())))

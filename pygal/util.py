@@ -239,11 +239,20 @@ def decorate(svg, node, metadata):
             xlink = {'href': xlink, 'target': '_blank'}
         node = svg.node(node, 'a', **xlink)
 
+    if 'color' in metadata:
+        color = metadata.pop('color')
+        node.attrib['style'] = 'fill: %s; stroke: %s' % (
+            color, color)
+
+    if 'style' in metadata:
+        node.attrib['style'] = metadata.pop('style')
+
     for key, value in metadata.items():
         if key == 'xlink' and isinstance(value, dict):
             value = value.get('href', value)
         if value:
             svg.node(node, 'desc', class_=key).text = to_unicode(value)
+
     return node
 
 
