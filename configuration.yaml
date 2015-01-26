@@ -33,7 +33,3 @@ code browser (github):
 
 bug tracker (github):
   project name: Kozea/pygal
-
-continuous integration (jenkins):
-  base url: http://jenkins.kozea.org/
-  project name: pygal
