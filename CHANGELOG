@@ -1,4 +1,9 @@
-V 1.6.1
+V 1.6.2
+	Add margin_top, margin_right, margin_bottom, margin_left options which defaults to margin. (thanks djt)
+	Update django mime parameter from mimetype to content_type. (thanks kswiat)
+	Allow a color and a style parameter to value metadata.
+
+	V 1.6.1
 	Fix Decimal incompatibility
 
 V 1.6.0
