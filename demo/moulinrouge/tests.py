@@ -305,9 +305,9 @@ def get_test_routes(app):
         chart.y_label_rotation = 50
         chart.add('1', [30, 20, -2])
         chart.add(10 * '1b', [-4, 50, 6], secondary=True)
-        chart.add(10 * '2b', [3, 30, -1], secondary=True)
+        chart.add(10 * '2b', [None, 10, 20], secondary=True)
         chart.add('2', [8, 21, -0])
-        chart.add('3', [1, 2, 3])
+        chart.add('3', [None, 20, 10])
         chart.add('3b', [-1, 2, -3], secondary=True)
         return chart.render_response()
 
@@ -547,5 +547,26 @@ def get_test_routes(app):
             {'color': 'green', 'value': 5},
             6])
         return c.render_response()
+
+    @app.route('/test/sparkline/<chart>')
+    def test_sparkline_for(chart):
+        graph = CHARTS_BY_NAME[chart](**dict(
+            width=200,
+            height=50,
+            show_dots=False,
+            show_legend=False,
+            show_y_labels=False,
+            show_x_labels=False,
+            spacing=0,
+            margin=5,
+            explicit_size=True
+        ))
+        graph.add('1', [1, 3, 12, 3, 4, None, 9])
+        graph.add('2', [7, -4, 10, None, 8, 3, 1])
+        graph.add('3', [7, -14, -10, None, 8, 3, 1])
+        graph.add('4', [7, 4, -10, None, 8, 3, 1])
+        graph.x_labels = ('a', 'b', 'c', 'd', 'e', 'f', 'g')
+        graph.legend_at_bottom = True
+        return graph.render_response()
 
     return list(sorted(filter(lambda x: x.startswith('test'), locals())))

@@ -1,3 +1,8 @@
+V 1.6.3 UNRELEASED
+	Add show_x_labels option to remove them and the x axis.
+	Set print_values to False by default.
+	Fix secondary serie text values when None in data. (#192)
+
 V 1.6.2
 	Add margin_top, margin_right, margin_bottom, margin_left options which defaults to margin. (thanks djt)
 	Update django mime parameter from mimetype to content_type. (thanks kswiat)

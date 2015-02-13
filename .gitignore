@@ -5,3 +5,6 @@ dist
 .coverage
 *.pyc
 *.egg-info
+.cov-py*
+coverage-py*
+junit-py*

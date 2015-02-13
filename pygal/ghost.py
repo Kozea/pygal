@@ -191,6 +191,7 @@ class Ghost(object):
             height=50,
             show_dots=False,
             show_legend=False,
+            show_x_labels=False,
             show_y_labels=False,
             spacing=0,
             margin=5,

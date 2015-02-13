@@ -285,6 +285,9 @@ class Config(CommonConfig):
         None, int, "Label",
         "Mark n evenly distributed labels as major.")
 
+    show_x_labels = Key(
+        True, bool, "Label", "Set to false to hide x-labels")
+
     show_minor_x_labels = Key(
         True, bool, "Label", "Set to false to hide x-labels not marked major")
 
@@ -324,7 +327,9 @@ class Config(CommonConfig):
 
     missing_value_fill_truncation = Key(
         "x", str, "Look",
-        "Filled series with missing x and/or y values at the end of a series are closed at the first value with a missing 'x' (default), 'y' or 'either'")
+        "Filled series with missing x and/or y values at the end of a series "
+        "are closed at the first value with a missing "
+        "'x' (default), 'y' or 'either'")
 
     # Value #
     human_readable = Key(
@@ -351,7 +356,8 @@ class Config(CommonConfig):
         "{'type': 'cardinal', 'c': .5}", int)
 
     mode = Key(
-        None, str, "Value", "Sets the mode to be used. (Currently only supported on box plot)",
+        None, str, "Value", "Sets the mode to be used. "
+        "(Currently only supported on box plot)",
         "May be %s" % ' or '.join(["1.5IQR", "extremes"]))
 
     order_min = Key(
@@ -388,7 +394,7 @@ class Config(CommonConfig):
     no_data_font_size = Key(64, int, "Text", "No data text font size")
 
     print_values = Key(
-        True, bool,
+        False, bool,
         "Text", "Print values when graph is in non interactive mode")
 
     print_zeroes = Key(

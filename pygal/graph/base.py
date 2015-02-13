@@ -110,24 +110,24 @@ class BaseGraph(object):
                         self.margin.right += (
                             self.spacing + w + self.legend_box_size)
 
-        for xlabels in (self._x_labels, self._x_2nd_labels):
-            if xlabels:
-                h, w = get_texts_box(
-                    map(lambda x: truncate(x, self.truncate_label or 25),
-                        cut(xlabels)),
-                    self.label_font_size)
-                self._x_labels_height = self.spacing + max(
-                    w * sin(rad(self.x_label_rotation)), h)
-                if xlabels is self._x_labels:
-                    self.margin.bottom += self._x_labels_height
-                else:
-                    self.margin.top += self._x_labels_height
-                if self.x_label_rotation:
-                    self.margin.right = max(
-                        w * cos(rad(self.x_label_rotation)),
-                        self.margin.right)
-        if not self._x_labels:
-            self._x_labels_height = 0
+        self._x_labels_height = 0
+        if (self._x_labels or self._x_2nd_labels) and self.show_x_labels:
+            for xlabels in (self._x_labels, self._x_2nd_labels):
+                if xlabels:
+                    h, w = get_texts_box(
+                        map(lambda x: truncate(x, self.truncate_label or 25),
+                            cut(xlabels)),
+                        self.label_font_size)
+                    self._x_labels_height = self.spacing + max(
+                        w * sin(rad(self.x_label_rotation)), h)
+                    if xlabels is self._x_labels:
+                        self.margin.bottom += self._x_labels_height
+                    else:
+                        self.margin.top += self._x_labels_height
+                    if self.x_label_rotation:
+                        self.margin.right = max(
+                            w * cos(rad(self.x_label_rotation)),
+                            self.margin.right)
 
         if self.show_y_labels:
             for ylabels in (self._y_labels, self._y_2nd_labels):

@@ -118,7 +118,7 @@ class Graph(BaseGraph):
 
     def _x_axis(self):
         """Make the x axis: labels and guides"""
-        if not self._x_labels:
+        if not self._x_labels or not self.show_x_labels:
             return
         axis = self.svg.node(self.nodes['plot'], class_="axis x%s" % (
             ' always_show' if self.show_x_guides else ''
@@ -423,8 +423,9 @@ class Graph(BaseGraph):
 
     def _rescale(self, points):
         return [
-            (x, self._scale_diff + (y - self._scale_min_2nd) * self._scale)
-            for x, y in points if y is not None]
+            (x, self._scale_diff + (y - self._scale_min_2nd) * self._scale
+             if y is not None else None)
+            for x, y in points]
 
     def _tooltip_data(self, node, value, x, y, classes=None):
         self.svg.node(node, 'desc', class_="value").text = value
