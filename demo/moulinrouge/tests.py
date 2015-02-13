@@ -8,6 +8,7 @@ from pygal.style import styles, Style, RotateStyle
 from pygal.colors import rotate
 from pygal.graph.frenchmap import DEPARTMENTS, REGIONS
 from random import randint, choice
+from datetime import datetime
 
 
 def get_test_routes(app):
@@ -216,6 +217,12 @@ def get_test_routes(app):
         graph.add('Empty 2', [])
         graph.x_labels = 'empty'
         graph.title = '123456789 ' * 30
+        return graph.render_response()
+
+    @app.route('/test/datey_single')
+    def test_datey_single():
+        graph = DateY(interpolate='cubic')
+        graph.add('Single', [(datetime.now(), 1)])
         return graph.render_response()
 
     @app.route('/test/no_data/at_all/<chart>')

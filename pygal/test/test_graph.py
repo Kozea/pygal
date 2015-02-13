@@ -132,6 +132,31 @@ def test_empty_lists_with_nones(Chart):
     q = chart.render_pyquery()
     assert len(q(".legend")) == 2
 
+
+def test_only_one_value(Chart):
+    chart = Chart()
+    chart.add('S', [1])
+    chart.x_labels = ('single')
+    q = chart.render_pyquery()
+    assert len(q(".legend")) == 1
+
+
+def test_only_one_value_log(Chart):
+    chart = Chart(logarithmic=True)
+    chart.add('S', [1])
+    chart.x_labels = ('single')
+    q = chart.render_pyquery()
+    assert len(q(".legend")) == 1
+
+
+def test_only_one_value_intrp(Chart):
+    chart = Chart(interpolate='cubic')
+    chart.add('S', [1])
+    chart.x_labels = ('single')
+    q = chart.render_pyquery()
+    assert len(q(".legend")) == 1
+
+
 def test_non_iterable_value(Chart):
     chart = Chart(no_prefix=True)
     chart.add('A', 1)
