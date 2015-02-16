@@ -63,7 +63,7 @@ def total_seconds(td):
     return td.total_seconds()
 
 
-def to_timestamp(x):
+def timestamp(x):
     if hasattr(x, 'timestamp'):
         return x.timestamp()
     else:

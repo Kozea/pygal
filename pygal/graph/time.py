@@ -22,12 +22,12 @@ Various datetime line plot
 
 from pygal.graph.xy import XY
 from datetime import datetime, date, time, timedelta
-from pygal._compat import to_timestamp
+from pygal._compat import timestamp, total_seconds
 
 
 def datetime_to_timestamp(x):
     if isinstance(x, datetime):
-        return to_timestamp(x)
+        return timestamp(x)
     return x
 
 
@@ -45,7 +45,7 @@ def time_to_datetime(x):
 
 def timedelta_to_seconds(x):
     if isinstance(x, timedelta):
-        return x.total_seconds()
+        return total_seconds(x)
     return x
 
 

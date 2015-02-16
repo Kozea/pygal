@@ -1,9 +1,9 @@
 V 2.0.0 UNRELEASED
-	Remove DateY and replace it by real XY datetime, date, time and timedelta support.
-	Introduce new XY configuration options: `xrange`, `x_value_formatter`
-	Rework the ghost mechanism to come back to a more object oriented behavior (WIP)
+	Rework the ghost mechanism to come back to a more object oriented behavior (Maybe)
 
-V 1.6.3
+V 1.7.0
+	Remove DateY and replace it by real XY datetime, date, time and timedelta support. (#188)
+	Introduce new XY configuration options: `xrange`, `x_value_formatter`.
 	Add show_x_labels option to remove them and the x axis.
 	Set print_values to False by default.
 	Fix secondary serie text values when None in data. (#192)

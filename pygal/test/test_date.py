@@ -19,6 +19,7 @@
 from pygal import DateLine, TimeLine, DateTimeLine, TimeDeltaLine
 from pygal.test.utils import texts
 from datetime import datetime, date, time, timedelta
+import sys
 
 
 def test_date():
@@ -96,9 +97,9 @@ def test_timedelta():
     ])
 
     q = timedelta_chart.render_pyquery()
-
     assert list(
-        q(".axis.x text").map(texts)) == [
+        t for t in q(".axis.x text").map(texts) if t != '0:00:00'
+    ) == [
             '1 day, 3:46:40',
             '2 days, 7:33:20',
             '3 days, 11:20:00',
