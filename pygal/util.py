@@ -27,7 +27,8 @@ from decimal import Decimal
 from math import floor, pi, log, log10, ceil
 from itertools import cycle
 from functools import reduce
-from pygal.adapters import not_zero, positive, decimal_to_float
+from pygal.adapters import (
+    not_zero, positive, decimal_to_float)
 ORDERS = u("yzafpnµm kMGTPEZY")
 
 
@@ -334,7 +335,7 @@ def prepare_values(raw, config, cls, offset=0):
     """Prepare the values to start with sane values"""
     from pygal.serie import Serie
     from pygal.config import SerieConfig
-    from pygal.graph.datey import DateY
+    from pygal.graph.time import DateY
     from pygal.graph.histogram import Histogram
     from pygal.graph.worldmap import Worldmap
     from pygal.graph.frenchmap import FrenchMapDepartments
@@ -357,6 +358,9 @@ def prepare_values(raw, config, cls, offset=0):
         adapters = adapters + [positive, not_zero]
     adapters = adapters + [decimal_to_float]
     adapter = reduce(compose, adapters) if not config.strict else ident
+    x_adapter = reduce(
+        compose, cls._x_adapters) if getattr(
+            cls, '_x_adapters', None) else None
     series = []
 
     raw = [(
@@ -404,13 +408,16 @@ def prepare_values(raw, config, cls, offset=0):
                     value = (None, None)
                 elif not is_list_like(value):
                     value = (value, config.zero)
-                if issubclass(cls, DateY) or issubclass(
+                if x_adapter:
+                    value = (x_adapter(value[0]), adapter(value[1]))
+                if issubclass(
                         cls, (Worldmap, FrenchMapDepartments)):
                     value = (adapter(value[0]), value[1])
                 else:
                     value = list(map(adapter, value))
             else:
                 value = adapter(value)
+
             values.append(value)
         serie_config = SerieConfig()
         serie_config(**config.to_dict())

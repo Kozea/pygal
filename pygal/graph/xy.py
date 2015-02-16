@@ -22,13 +22,15 @@ XY Line graph
 """
 
 from __future__ import division
-from pygal.util import compute_scale, cached_property
+from functools import reduce
+from pygal.util import compute_scale, cached_property, compose
 from pygal.graph.line import Line
 
 
 class XY(Line):
     """XY Line graph"""
     _dual = True
+    _x_adapters = []
 
     @cached_property
     def xvals(self):
@@ -63,8 +65,17 @@ class XY(Line):
 
     def _compute(self):
         if self.xvals:
-            xmin = min(self.xvals)
-            xmax = max(self.xvals)
+            if self.xrange:
+                x_adapter = reduce(
+                    compose, self._x_adapters) if getattr(
+                        self, '_x_adapters', None) else None
+
+                xmin = x_adapter(self.xrange[0])
+                xmax = x_adapter(self.xrange[1])
+
+            else:
+                xmin = min(self.xvals)
+                xmax = max(self.xvals)
             xrng = (xmax - xmin)
         else:
             xrng = None
@@ -83,13 +94,13 @@ class XY(Line):
 
         for serie in self.all_series:
             serie.points = serie.values
-            if self.interpolate and xrng:
+            if self.interpolate:
                 vals = list(zip(*sorted(
                     filter(lambda t: None not in t,
                            serie.points), key=lambda x: x[0])))
                 serie.interpolated = self._interpolate(vals[0], vals[1])
 
-        if self.interpolate and xrng:
+        if self.interpolate:
             self.xvals = [val[0]
                           for serie in self.all_series
                           for val in serie.interpolated]
@@ -109,9 +120,10 @@ class XY(Line):
             self._box.ymin, self._box.ymax = ymin, ymax
 
         x_pos = compute_scale(
-            self._box.xmin, self._box.xmax, self.logarithmic, self.order_min)
+            self._box.xmin, self._box.xmax, self.logarithmic,
+            self.order_min)
         y_pos = compute_scale(
             self._box.ymin, self._box.ymax, self.logarithmic, self.order_min)
 
-        self._x_labels = list(zip(map(self._format, x_pos), x_pos))
+        self._x_labels = list(zip(map(self._x_format, x_pos), x_pos))
         self._y_labels = list(zip(map(self._format, y_pos), y_pos))

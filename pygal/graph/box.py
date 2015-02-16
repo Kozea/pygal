@@ -89,6 +89,11 @@ class Box(Graph):
         for serie in self.series:
             self._boxf(serie)
 
+    @property
+    def _len(self):
+        """Len is always 5 here"""
+        return 5
+
     def _boxf(self, serie):
         """
         For a specific series, draw the box plot.

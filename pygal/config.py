@@ -232,7 +232,7 @@ class Config(CommonConfig):
 
     stack_from_top = Key(
         False, bool, "Look", "Stack from top to zero, this makes the stacked "
-                           "data match the legend order")
+        "data match the legend order")
 
     spacing = Key(
         10, int, "Look",
@@ -336,6 +336,11 @@ class Config(CommonConfig):
         False, bool, "Value", "Display values in human readable format",
         "(ie: 12.4M)")
 
+    x_value_formatter = Key(
+        None, type(lambda: 1), "Value",
+        "A function to convert abscissa numeric value to strings "
+        "(used in XY and Date charts)")
+
     value_formatter = Key(
         None, type(lambda: 1), "Value",
         "A function to convert numeric value to strings")
@@ -365,6 +370,11 @@ class Config(CommonConfig):
 
     range = Key(
         None, list, "Value", "Explicitly specify min and max of values",
+        "(ie: (0, 100))", int)
+
+    xrange = Key(
+        None, list, "Value", "Explicitly specify min and max of x values "
+        "(used in XY and Date charts)",
         "(ie: (0, 100))", int)
 
     include_x_axis = Key(

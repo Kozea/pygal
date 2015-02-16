@@ -37,9 +37,20 @@ class ChartCollection(object):
     pass
 
 
-REAL_CHARTS = {}
+REAL_CHARTS = {
+    'DateY': 'pygal.graph.time.DateY',
+    'DateTimeLine': 'pygal.graph.time.DateTimeLine',
+    'DateLine': 'pygal.graph.time.DateLine',
+    'TimeLine': 'pygal.graph.time.TimeLine',
+    'TimeDeltaLine': 'pygal.graph.time.TimeDeltaLine'
+}
+
 for NAME in CHARTS_NAMES:
-    mod_name = 'pygal.graph.%s' % NAME.lower()
+    if NAME in REAL_CHARTS:
+        mod_name = 'pygal.graph.time'
+    else:
+        mod_name = 'pygal.graph.%s' % NAME.lower()
+
     __import__(mod_name)
     mod = sys.modules[mod_name]
     chart = getattr(mod, NAME)

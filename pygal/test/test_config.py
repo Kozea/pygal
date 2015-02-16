@@ -21,7 +21,8 @@ from pygal import (
     Line, Dot, Pie, Treemap, Radar, Config, Bar, Funnel, Worldmap,
     SupranationalWorldmap, Histogram, Gauge, Box, XY,
     Pyramid, DateY, HorizontalBar, HorizontalStackedBar,
-    FrenchMap_Regions, FrenchMap_Departments)
+    FrenchMap_Regions, FrenchMap_Departments,
+    DateTimeLine, TimeLine, DateLine, TimeDeltaLine)
 from pygal._compat import u
 from pygal.test.utils import texts
 from tempfile import NamedTemporaryFile
@@ -362,7 +363,8 @@ def test_x_label_major(Chart):
             Pie, Treemap, Funnel, Dot, Gauge, Worldmap,
             SupranationalWorldmap, Histogram, Box,
             FrenchMap_Regions, FrenchMap_Departments,
-            Pyramid, DateY):
+            Pyramid, DateY, DateTimeLine, TimeLine, DateLine,
+            TimeDeltaLine):
         return
     chart = Chart()
     chart.add('test', range(12))
@@ -407,7 +409,8 @@ def test_y_label_major(Chart):
             SupranationalWorldmap, Histogram, Box,
             FrenchMap_Regions, FrenchMap_Departments,
             HorizontalBar, HorizontalStackedBar,
-            Pyramid, DateY):
+            Pyramid, DateTimeLine, TimeLine, DateLine,
+            TimeDeltaLine, DateY):
         return
     chart = Chart()
     data = range(12)

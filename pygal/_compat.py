@@ -18,6 +18,7 @@
 # along with pygal. If not, see <http://www.gnu.org/licenses/>.
 import sys
 from collections import Iterable
+import time
 
 
 if sys.version_info[0] == 3:
@@ -60,3 +61,14 @@ def total_seconds(td):
             (td.days * 86400 + td.seconds) * 10 ** 6 + td.microseconds
         ) / 10 ** 6
     return td.total_seconds()
+
+
+def to_timestamp(x):
+    if hasattr(x, 'timestamp'):
+        return x.timestamp()
+    else:
+        if hasattr(x, 'utctimetuple'):
+            t = x.utctimetuple()
+        else:
+            t = x.timetuple()
+        return time.mktime(t)

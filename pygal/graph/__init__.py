@@ -36,11 +36,15 @@ CHARTS_NAMES = [
     'VerticalPyramid',
     'Dot',
     'Gauge',
-    'DateY',
     'Worldmap',
     'SupranationalWorldmap',
     'Histogram',
     'Box',
     'FrenchMap',
-    'Treemap'
+    'Treemap',
+    'DateY',
+    'DateTimeLine',
+    'DateLine',
+    'TimeLine',
+    'TimeDeltaLine'
 ]

@@ -201,8 +201,11 @@ class PolarLogView(View):
         if not hasattr(box, '_rmin') or not hasattr(box, '_rmax'):
             raise Exception(
                 'Box must be set with set_polar_box for polar charts')
+
         self.log10_rmax = log10(self.box._rmax)
         self.log10_rmin = log10(self.box._rmin)
+        if self.log10_rmin == self.log10_rmax:
+            self.log10_rmax = self.log10_rmin + 1
 
     def __call__(self, rhotheta):
         """Project rho and theta"""
@@ -257,10 +260,11 @@ class PolarThetaLogView(View):
                 'Box must be set with set_polar_box for polar charts')
         self.log10_tmax = log10(self.box._tmax) if self.box._tmax > 0 else 0
         self.log10_tmin = log10(self.box._tmin) if self.box._tmin > 0 else 0
+        if self.log10_tmin == self.log10_tmax:
+            self.log10_tmax = self.log10_tmin + 1
 
     def __call__(self, rhotheta):
         """Project rho and theta"""
-
         if None in rhotheta:
             return None, None
         rho, theta = rhotheta
@@ -294,6 +298,8 @@ class LogView(View):
         self.box = box
         self.log10_ymax = log10(self.box.ymax) if self.box.ymax > 0 else 0
         self.log10_ymin = log10(self.box.ymin) if self.box.ymin > 0 else 0
+        if self.log10_ymin == self.log10_ymax:
+            self.log10_ymax = self.log10_ymin + 1
         self.box.fix(False)
 
     def y(self, y):
@@ -347,6 +353,8 @@ class HorizontalLogView(XLogView):
         self.box = box
         self.log10_xmax = log10(self.box.ymax) if self.box.ymax > 0 else 0
         self.log10_xmin = log10(self.box.ymin) if self.box.ymin > 0 else 0
+        if self.log10_xmin == self.log10_xmax:
+            self.log10_xmax = self.log10_xmin + 1
         self.box.fix(False)
         self.box.swap()
 

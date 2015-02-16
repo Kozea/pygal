@@ -3,7 +3,7 @@
 from pygal import (
     Bar, Gauge, Pyramid, Funnel, Dot, StackedBar, StackedLine, XY,
     CHARTS_BY_NAME, Config, Line, DateY, Worldmap, Histogram, Box,
-    FrenchMap_Departments, FrenchMap_Regions, Pie, Treemap)
+    FrenchMap_Departments, FrenchMap_Regions, Pie, Treemap, TimeLine, DateLine)
 from pygal.style import styles, Style, RotateStyle
 from pygal.colors import rotate
 from pygal.graph.frenchmap import DEPARTMENTS, REGIONS
@@ -58,7 +58,7 @@ def get_test_routes(app):
 
     @app.route('/test/xy_links')
     def test_xy_links():
-        xy = XY(style=styles['neon'])
+        xy = XY(style=styles['neon'], interpolate='cubic')
         xy.add('1234', [
             {'value': (10, 5),
              'label': 'Ten',
@@ -219,6 +219,12 @@ def get_test_routes(app):
         graph.title = '123456789 ' * 30
         return graph.render_response()
 
+    @app.route('/test/xy_single')
+    def test_xy_single():
+        graph = XY(interpolate='cubic')
+        graph.add('Single', [(1, 1)])
+        return graph.render_response()
+
     @app.route('/test/datey_single')
     def test_datey_single():
         graph = DateY(interpolate='cubic')
@@ -371,6 +377,19 @@ def get_test_routes(app):
         stacked.add('2', [4, 5, 6])
         return stacked.render_response()
 
+    @app.route('/test/dateline')
+    def test_dateline():
+        from datetime import date
+        datey = DateLine(show_dots=False)
+        datey.add('1', [
+            (datetime(2013, 1, 2), 300),
+            (datetime(2013, 1, 12), 412),
+            (datetime(2013, 2, 2), 823),
+            (datetime(2013, 2, 22), 672)
+        ])
+        datey.x_label_rotation = 25
+        return datey.render_response()
+
     @app.route('/test/datey')
     def test_datey():
         from datetime import datetime
@@ -381,6 +400,35 @@ def get_test_routes(app):
             (datetime(2010, 2, 28), 2)
         ])
         datey.add('2', [(12, 4), (219, 8), (928, 6)])
+        datey.x_label_rotation = 25
+        return datey.render_response()
+
+    @app.route('/test/datexy')
+    def test_datexy():
+        from datetime import datetime, date, timedelta
+        datey = DateY()
+        datey.add('1', [
+            (datetime(2011, 12, 21), 10),
+            (datetime(2014, 4, 8), 12),
+            (datetime(2010, 2, 28), 2)
+        ])
+        datey.add('2', map(
+            lambda t: (date.today() + timedelta(days=t[0]), t[1]),
+            [(12, 4), (219, 8), (928, 6)]))
+        datey.x_label_rotation = 25
+        return datey.render_response()
+
+    @app.route('/test/timexy')
+    def test_timexy():
+        from datetime import time
+        datey = TimeLine()
+        datey.add('1', [
+            (time(1, 12, 29), 2),
+            (time(21, 2, 29), 10),
+            (time(12, 30, 59), 7)
+        ])
+        datey.add('2',
+            [(time(12, 12, 12), 4), (time(), 8), (time(23, 59, 59), 6)])
         datey.x_label_rotation = 25
         return datey.render_response()
 

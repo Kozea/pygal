@@ -69,12 +69,20 @@ class BaseGraph(object):
                  for serie in self.series for val in serie.safe_values]))
 
             self.zero = min(positive_values or (1,)) or 1
+        if self._len < 3:
+            self.interpolate = None
         self._draw()
         self.svg.pre_render()
 
     @property
     def all_series(self):
         return self.series + self.secondary_series
+
+    @property
+    def _x_format(self):
+        """Return the value formatter for this graph"""
+        return self.config.x_value_formatter or (
+            humanize if self.human_readable else str)
 
     @property
     def _format(self):
