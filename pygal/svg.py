@@ -124,16 +124,16 @@ class Svg(object):
         common_script = self.node(self.defs, 'script', type='text/javascript')
 
         def get_js_dict():
-            return dict((k, getattr(self.graph, k)) for k in dir(self)
-                        if not k.startswith('_') and
-                        k in dir(self.graph.config))
+            return dict((k, getattr(self.graph.state, k))
+                        for k in dir(self.graph.config)
+                        if not k.startswith('_') and not hasattr(
+                                getattr(self.graph.config, k), '__call__'))
 
         def json_default(o):
             if isinstance(o, (datetime, date)):
                 return o.isoformat()
             if hasattr(o, 'to_dict'):
-                o = o.to_dict()
-            print(o)
+                return o.to_dict()
             return json.JSONEncoder().default(o)
 
         common_script.text = " = ".join(

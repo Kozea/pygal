@@ -21,7 +21,6 @@ Table maker
 
 """
 
-from pygal.graph.base import BaseGraph
 from pygal.util import template
 from lxml.html import builder, tostring
 import uuid
@@ -32,18 +31,17 @@ class HTML(object):
         return getattr(builder, attr.upper())
 
 
-class Table(BaseGraph):
+class Table(object):
     _dual = None
 
-    def __init__(self, chart, series, secondary_series, uuid, xml_filters):
+    def __init__(self, chart):
         "Init the table"
-        self.uuid = uuid
-        self.series = series or []
-        self.secondary_series = secondary_series or []
-        self.xml_filters = xml_filters or []
-        self.__dict__.update(chart.state)
+        self.chart = chart
 
     def render(self, total=False, transpose=False, style=False):
+        self.chart.setup()
+        ln = self.chart._len
+        fmt = self.chart._format
         html = HTML()
         attrs = {}
 
@@ -54,22 +52,22 @@ class Table(BaseGraph):
 
         _ = lambda x: x if x is not None else ''
 
-        if self.x_labels:
-            labels = [None] + list(self.x_labels)
-            if len(labels) < self._len:
-                labels += [None] * (self._len + 1 - len(labels))
-            if len(labels) > self._len + 1:
-                labels = labels[:self._len + 1]
+        if self.chart.x_labels:
+            labels = [None] + list(self.chart.x_labels)
+            if len(labels) < ln:
+                labels += [None] * (ln + 1 - len(labels))
+            if len(labels) > ln + 1:
+                labels = labels[:ln + 1]
             table.append(labels)
 
         if total:
             if len(table):
                 table[0].append('Total')
             else:
-                table.append([None] * (self._len + 1) + ['Total'])
-            acc = [0] * (self._len + 1)
+                table.append([None] * (ln + 1) + ['Total'])
+            acc = [0] * (ln + 1)
 
-        for i, serie in enumerate(self.series):
+        for i, serie in enumerate(self.chart.series):
             row = [serie.title]
             if total:
                 sum_ = 0
@@ -77,18 +75,18 @@ class Table(BaseGraph):
                 if total:
                     acc[j] += value
                     sum_ += value
-                row.append(self._format(value))
+                row.append(fmt(value))
             if total:
                 acc[-1] += sum_
-                row.append(self._format(sum_))
+                row.append(fmt(sum_))
             table.append(row)
 
-        width = self._len + 1
+        width = ln + 1
         if total:
             width += 1
             table.append(['Total'])
             for val in acc:
-                table[-1].append(self._format(val))
+                table[-1].append(fmt(val))
 
         # Align values
         len_ = max([len(r) for r in table] or [0])
@@ -105,7 +103,7 @@ class Table(BaseGraph):
         tbody = []
         tfoot = []
 
-        if not transpose or self.x_labels:
+        if not transpose or self.chart.x_labels:
             # There's always series title but not always x_labels
             thead = [table[0]]
             tbody = table[1:]
@@ -185,6 +183,7 @@ class Table(BaseGraph):
             table = tostring(html.style(
                 template(css, **attrs),
                 scoped='scoped')) + table
-        if self.disable_xml_declaration:
+        if self.chart.disable_xml_declaration:
             table = table.decode('utf-8')
+        self.chart.teardown()
         return table

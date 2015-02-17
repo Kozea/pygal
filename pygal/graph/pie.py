@@ -43,11 +43,11 @@ class Pie(Graph):
         total_perc = 0
         original_start_angle = start_angle
         if self.half_pie:
-            center = ((self.width - self.margin.x) / 2.,
-                      (self.height - self.margin.y) / 1.25)
+            center = ((self.width - self.margin_box.x) / 2.,
+                      (self.height - self.margin_box.y) / 1.25)
         else:
-            center = ((self.width - self.margin.x) / 2.,
-                      (self.height - self.margin.y) / 2.)
+            center = ((self.width - self.margin_box.x) / 2.,
+                      (self.height - self.margin_box.y) / 2.)
 
         radius = min(center)
         for i, val in enumerate(serie.values):

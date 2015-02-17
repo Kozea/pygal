@@ -118,8 +118,8 @@ class Treemap(Graph):
         if total == 0:
             return
 
-        gw = self.width - self.margin.x
-        gh = self.height - self.margin.y
+        gw = self.width - self.margin_box.x
+        gh = self.height - self.margin_box.y
 
         self.view.box.xmin = self.view.box.ymin = x = y = 0
         self.view.box.xmax = w = (total * gw / gh) ** .5

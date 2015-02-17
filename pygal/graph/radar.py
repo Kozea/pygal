@@ -60,8 +60,8 @@ class Radar(Line):
             view_class = PolarView
 
         self.view = view_class(
-            self.width - self.margin.x,
-            self.height - self.margin.y,
+            self.width - self.margin_box.x,
+            self.height - self.margin_box.y,
             self._box)
 
     def _x_axis(self, draw_axes=True):

@@ -23,6 +23,7 @@ Class holding state during render
 
 
 class State(object):
-    def __init__(self, graph):
+    def __init__(self, graph, **kwargs):
         self.__dict__.update(**graph.config.__dict__)
         self.__dict__.update(**graph.__dict__)
+        self.__dict__.update(**kwargs)

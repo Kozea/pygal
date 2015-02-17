@@ -63,8 +63,8 @@ class Graph(BaseGraph):
             view_class = View
 
         self.view = view_class(
-            self.width - self.margin.x,
-            self.height - self.margin.y,
+            self.width - self.margin_box.x,
+            self.height - self.margin_box.y,
             self._box)
 
     def _make_graph(self):
@@ -81,7 +81,7 @@ class Graph(BaseGraph):
         self.nodes['plot'] = self.svg.node(
             self.nodes['graph'], class_="plot",
             transform="translate(%d, %d)" % (
-                self.margin.left, self.margin.top))
+                self.margin_box.left, self.margin_box.top))
         self.svg.node(self.nodes['plot'], 'rect',
                       class_='background',
                       x=0, y=0,
@@ -93,15 +93,15 @@ class Graph(BaseGraph):
         self.nodes['overlay'] = self.svg.node(
             self.nodes['graph'], class_="plot overlay",
             transform="translate(%d, %d)" % (
-                self.margin.left, self.margin.top))
+                self.margin_box.left, self.margin_box.top))
         self.nodes['text_overlay'] = self.svg.node(
             self.nodes['graph'], class_="plot text-overlay",
             transform="translate(%d, %d)" % (
-                self.margin.left, self.margin.top))
+                self.margin_box.left, self.margin_box.top))
         self.nodes['tooltip_overlay'] = self.svg.node(
             self.nodes['graph'], class_="plot tooltip-overlay",
             transform="translate(%d, %d)" % (
-                self.margin.left, self.margin.top))
+                self.margin_box.left, self.margin_box.top))
         self.nodes['tooltip'] = self.svg.node(
             self.nodes['tooltip_overlay'],
             transform='translate(0 0)',
@@ -279,8 +279,8 @@ class Graph(BaseGraph):
             return
         truncation = self.truncate_legend
         if self.legend_at_bottom:
-            x = self.margin.left + self.spacing
-            y = (self.margin.top + self.view.height +
+            x = self.margin_box.left + self.spacing
+            y = (self.margin_box.top + self.view.height +
                  self._x_title_height +
                  self._x_labels_height + self.spacing)
             cols = self.legend_at_bottom_columns or ceil(
@@ -293,7 +293,7 @@ class Graph(BaseGraph):
                     available_space, self.legend_font_size)
         else:
             x = self.spacing
-            y = self.margin.top + self.spacing
+            y = self.margin_box.top + self.spacing
             cols = 1
             if not truncation:
                 truncation = 15
@@ -321,13 +321,13 @@ class Graph(BaseGraph):
                 enumerate(zip(self._secondary_legends, repeat(True)))))
 
             # draw secondary axis on right
-            x = self.margin.left + self.view.width + self.spacing
+            x = self.margin_box.left + self.view.width + self.spacing
             if self._y_2nd_labels:
                 h, w = get_texts_box(
                     cut(self._y_2nd_labels), self.label_font_size)
                 x += self.spacing + max(w * cos(rad(self.y_label_rotation)), h)
 
-            y = self.margin.top + self.spacing
+            y = self.margin_box.top + self.spacing
 
             secondary_legends = self.svg.node(
                 self.nodes['graph'], class_='legends',
@@ -383,13 +383,13 @@ class Graph(BaseGraph):
 
     def _make_x_title(self):
         """Make the X-Axis title"""
-        y = (self.height - self.margin.bottom +
+        y = (self.height - self.margin_box.bottom +
              self._x_labels_height)
         if self._x_title:
             for i, title_line in enumerate(self._x_title, 1):
                 text = self.svg.node(
                     self.nodes['title'], 'text', class_='title',
-                    x=self.margin.left + self.view.width / 2,
+                    x=self.margin_box.left + self.view.width / 2,
                     y=y + i * (self.title_font_size + self.spacing)
                 )
                 text.text = title_line
@@ -397,7 +397,7 @@ class Graph(BaseGraph):
     def _make_y_title(self):
         """Make the Y-Axis title"""
         if self._y_title:
-            yc = self.margin.top + self.view.height / 2
+            yc = self.margin_box.top + self.view.height / 2
             for i, title_line in enumerate(self._y_title, 1):
                 text = self.svg.node(
                     self.nodes['title'], 'text', class_='title',
@@ -524,15 +524,15 @@ class Graph(BaseGraph):
                     cols = (self._order // self.legend_at_bottom_columns
                             if self.legend_at_bottom_columns
                             else ceil(sqrt(self._order)) or 1)
-                    self.margin.bottom += self.spacing + h_max * round(
+                    self.margin_box.bottom += self.spacing + h_max * round(
                         cols - 1) * 1.5 + h_max
                 else:
                     if series_group is self.series:
                         legend_width = self.spacing + w + self.legend_box_size
-                        self.margin.left += legend_width
+                        self.margin_box.left += legend_width
                         self._legend_at_left_width += legend_width
                     else:
-                        self.margin.right += (
+                        self.margin_box.right += (
                             self.spacing + w + self.legend_box_size)
 
         self._x_labels_height = 0
@@ -546,13 +546,13 @@ class Graph(BaseGraph):
                     self._x_labels_height = self.spacing + max(
                         w * sin(rad(self.x_label_rotation)), h)
                     if xlabels is self._x_labels:
-                        self.margin.bottom += self._x_labels_height
+                        self.margin_box.bottom += self._x_labels_height
                     else:
-                        self.margin.top += self._x_labels_height
+                        self.margin_box.top += self._x_labels_height
                     if self.x_label_rotation:
-                        self.margin.right = max(
+                        self.margin_box.right = max(
                             w * cos(rad(self.x_label_rotation)),
-                            self.margin.right)
+                            self.margin_box.right)
 
         if self.show_y_labels:
             for ylabels in (self._y_labels, self._y_2nd_labels):
@@ -560,10 +560,10 @@ class Graph(BaseGraph):
                     h, w = get_texts_box(
                         cut(ylabels), self.label_font_size)
                     if ylabels is self._y_labels:
-                        self.margin.left += self.spacing + max(
+                        self.margin_box.left += self.spacing + max(
                             w * cos(rad(self.y_label_rotation)), h)
                     else:
-                        self.margin.right += self.spacing + max(
+                        self.margin_box.right += self.spacing + max(
                             w * cos(rad(self.y_label_rotation)), h)
 
         self._title = split_title(
@@ -571,27 +571,27 @@ class Graph(BaseGraph):
 
         if self.title:
             h, _ = get_text_box(self._title[0], self.title_font_size)
-            self.margin.top += len(self._title) * (self.spacing + h)
+            self.margin_box.top += len(self._title) * (self.spacing + h)
 
         self._x_title = split_title(
-            self.x_title, self.width - self.margin.x, self.title_font_size)
+            self.x_title, self.width - self.margin_box.x, self.title_font_size)
 
         self._x_title_height = 0
         if self._x_title:
             h, _ = get_text_box(self._x_title[0], self.title_font_size)
             height = len(self._x_title) * (self.spacing + h)
-            self.margin.bottom += height
+            self.margin_box.bottom += height
             self._x_title_height = height + self.spacing
 
         self._y_title = split_title(
-            self.y_title, self.height - self.margin.y,
+            self.y_title, self.height - self.margin_box.y,
             self.title_font_size)
 
         self._y_title_height = 0
         if self._y_title:
             h, _ = get_text_box(self._y_title[0], self.title_font_size)
             height = len(self._y_title) * (self.spacing + h)
-            self.margin.left += height
+            self.margin_box.left += height
             self._y_title_height = height + self.spacing
 
     @cached_property

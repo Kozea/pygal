@@ -34,6 +34,7 @@ from pygal.adapters import (
     not_zero, positive, decimal_to_float)
 from functools import reduce
 from uuid import uuid4
+import io
 
 
 class BaseGraph(object):
@@ -86,8 +87,6 @@ class BaseGraph(object):
     def prepare_values(self, raw, offset=0):
         """Prepare the values to start with sane values"""
         from pygal import Worldmap, FrenchMapDepartments, Histogram
-        if self.x_labels is not None:
-            self.x_labels = list(map(to_unicode, self.x_labels))
         if self.zero == 0 and isinstance(
                 self, (Worldmap, FrenchMapDepartments)):
             self.zero = 1
@@ -169,17 +168,22 @@ class BaseGraph(object):
 
                 values.append(value)
             serie_config = SerieConfig()
-            serie_config(**{k: v for k, v in self.state.__dict__.items()
-                            if k in dir(serie_config)})
+            serie_config(**dict((k, v) for k, v in self.state.__dict__.items()
+                              if k in dir(serie_config)))
             serie_config(**serie_config_kwargs)
             series.append(
                 Serie(offset + len(series),
                       title, values, serie_config, metadata))
         return series
 
-    def setup(self):
+    def setup(self, **kwargs):
         """Init the graph"""
-        self.state = State(self)
+        # Keep labels in case of map
+        if getattr(self, 'x_labels', None) is not None:
+            self.x_labels = list(map(to_unicode, self.x_labels))
+        if getattr(self, 'y_labels', None) is not None:
+            self.y_labels = list(self.y_labels)
+        self.state = State(self, **kwargs)
         self.series = self.prepare_values(
             self.raw_series) or []
         self.secondary_series = self.prepare_values(
@@ -191,7 +195,7 @@ class BaseGraph(object):
         self._x_2nd_labels = None
         self._y_2nd_labels = None
         self.nodes = {}
-        self.margin = Margin(
+        self.margin_box = Margin(
             self.margin_top or self.margin,
             self.margin_right or self.margin,
             self.margin_bottom or self.margin,
@@ -217,7 +221,7 @@ class BaseGraph(object):
 
     def render(self, is_unicode=False, **kwargs):
         """Render the graph, and return the svg string"""
-        self.setup()
+        self.setup(**kwargs)
         svg = self.svg.render(
             is_unicode=is_unicode, pretty_print=self.pretty_print)
         self.teardown()
@@ -225,9 +229,11 @@ class BaseGraph(object):
 
     def render_tree(self):
         """Render the graph, and return (l)xml etree"""
+        self.setup()
         svg = self.svg.root
         for f in self.xml_filters:
             svg = f(svg)
+        self.teardown()
         return svg
 
     def render_table(self, **kwargs):
@@ -264,7 +270,7 @@ class BaseGraph(object):
 
     def render_to_file(self, filename, **kwargs):
         """Render the graph, and write it to filename"""
-        with open(filename, 'w', encoding='utf-8') as f:
+        with io.open(filename, 'w', encoding='utf-8') as f:
             f.write(self.render(is_unicode=True, **kwargs))
 
     def render_to_png(self, filename=None, dpi=72, **kwargs):
@@ -312,7 +318,7 @@ class BaseGraph(object):
             explicit_size=True
         )
         spark_options.update(kwargs)
-        return self.make_instance(spark_options).render()
+        return self.render(**spark_options)
 
     def _repr_svg_(self):
         """Display svg in IPython notebook"""
@@ -320,3 +326,4 @@ class BaseGraph(object):
 
     def _repr_png_(self):
         """Display png in IPython notebook"""
+        return self.render_to_png()
