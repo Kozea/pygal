@@ -81,7 +81,7 @@ class Svg(object):
 
     def add_styles(self):
         """Add the css to the svg"""
-        colors = self.graph.config.style.get_colors(self.id)
+        colors = self.graph.style.get_colors(self.id)
         all_css = []
         for css in ['base.css'] + list(self.graph.css):
             if '://' in css:
@@ -95,12 +95,23 @@ class Svg(object):
                     if not os.path.exists(css):
                         css = os.path.join(
                             os.path.dirname(__file__), 'css', css)
+
+                    class FontSizes(object):
+                        """Container for font sizes"""
+                    fs = FontSizes()
+                    for name in dir(self.graph.state):
+                        if name.endswith('_font_size'):
+                            setattr(
+                                fs,
+                                name.replace('_font_size', ''),
+                                ('%dpx' % getattr(self.graph, name)))
+
                     with io.open(css, encoding='utf-8') as f:
                         css_text = template(
                             f.read(),
-                            style=self.graph.config.style,
+                            style=self.graph.style,
                             colors=colors,
-                            font_sizes=self.graph.config.font_sizes(),
+                            font_sizes=fs,
                             id=self.id)
                 if not self.graph.pretty_print:
                     css_text = minify_css(css_text)
@@ -111,13 +122,23 @@ class Svg(object):
     def add_scripts(self):
         """Add the js to the svg"""
         common_script = self.node(self.defs, 'script', type='text/javascript')
+
+        def get_js_dict():
+            return dict((k, getattr(self.graph, k)) for k in dir(self)
+                        if not k.startswith('_') and
+                        k in dir(self.graph.config))
+
+        def json_default(o):
+            if isinstance(o, (datetime, date)):
+                return o.isoformat()
+            if hasattr(o, 'to_dict'):
+                o = o.to_dict()
+            print(o)
+            return json.JSONEncoder().default(o)
+
         common_script.text = " = ".join(
             ("window.config", json.dumps(
-                self.graph.config.to_dict(),
-                default=lambda o: (
-                    o.isoformat() if isinstance(o, (datetime, date))
-                    else json.JSONEncoder().default(o))
-            )))
+                get_js_dict(), default=json_default)))
 
         for js in self.graph.js:
             if '://' in js:
@@ -174,17 +195,17 @@ class Svg(object):
                 self.graph.nodes['plot'],
                 class_='series serie-%d color-%d' % (
                     serie.index, serie.index % len(
-                        self.graph.style['colors']))),
+                        self.graph.style.colors))),
             overlay=self.node(
                 self.graph.nodes['overlay'],
                 class_='series serie-%d color-%d' % (
                     serie.index, serie.index % len(
-                        self.graph.style['colors']))),
+                        self.graph.style.colors))),
             text_overlay=self.node(
                 self.graph.nodes['text_overlay'],
                 class_='series serie-%d color-%d' % (
                     serie.index, serie.index % len(
-                        self.graph.style['colors']))))
+                        self.graph.style.colors))))
 
     def line(self, node, coords, close=False, **kwargs):
         """Draw a svg line"""

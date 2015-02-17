@@ -19,7 +19,6 @@
 
 import pygal
 from pygal.util import cut
-from datetime import datetime
 from pygal.i18n import COUNTRIES
 from pygal.graph.frenchmap import DEPARTMENTS, REGIONS
 from decimal import Decimal
@@ -34,12 +33,12 @@ def get_data(i):
 
 
 def adapt(chart, data):
-    if isinstance(chart, pygal.DateY):
-        # Convert to a credible datetime
-        return list(map(
-            lambda t:
-            (datetime.fromtimestamp(1360000000 + t[0] * 987654)
-             if t[0] is not None else None, t[1]), data))
+    # if isinstance(chart, pygal.DateY):
+    #     # Convert to a credible datetime
+    #     return list(map(
+    #         lambda t:
+    #         (datetime.fromtimestamp(1360000000 + t[0] * 987654)
+    #          if t[0] is not None else None, t[1]), data))
 
     if isinstance(chart, pygal.XY):
         return data
@@ -51,13 +50,13 @@ def adapt(chart, data):
                 COUNTRIES.keys())[
                     int(x) % len(COUNTRIES)]
                 if x is not None else None, data))
-    elif isinstance(chart, pygal.FrenchMap_Regions):
+    elif isinstance(chart, pygal.FrenchMapRegions):
         return list(
             map(lambda x: list(
                 REGIONS.keys())[
                     int(x) % len(REGIONS)]
                 if x is not None else None, data))
-    elif isinstance(chart, pygal.FrenchMap_Departments):
+    elif isinstance(chart, pygal.FrenchMapDepartments):
         return list(
             map(lambda x: list(
                 DEPARTMENTS.keys())[

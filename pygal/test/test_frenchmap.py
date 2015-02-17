@@ -18,7 +18,7 @@
 # along with pygal. If not, see <http://www.gnu.org/licenses/>.
 
 from pygal import (
-    FrenchMap_Regions, FrenchMap_Departments)
+    FrenchMapRegions, FrenchMapDepartments)
 from pygal.graph.frenchmap import REGIONS, DEPARTMENTS, aggregate_regions
 
 
@@ -27,14 +27,14 @@ def test_frenchmaps():
     for dept in DEPARTMENTS.keys():
         datas[dept] = int(''.join([x for x in dept if x.isdigit()])) * 10
 
-    fmap = FrenchMap_Departments()
+    fmap = FrenchMapDepartments()
     fmap.add('departements', datas)
     q = fmap.render_pyquery()
     assert len(
         q('#departements .departement,#dom-com .departement')
     ) == len(DEPARTMENTS)
 
-    fmap = FrenchMap_Regions()
+    fmap = FrenchMapRegions()
     fmap.add('regions', aggregate_regions(datas))
     q = fmap.render_pyquery()
     assert len(q('#regions .region,#dom-com .region')) == len(REGIONS)

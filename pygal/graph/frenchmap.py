@@ -23,7 +23,6 @@ Worldmap chart
 
 from __future__ import division
 from collections import defaultdict
-from pygal.ghost import ChartCollection
 from pygal.util import cut, cached_property, decorate
 from pygal.graph.graph import Graph
 from pygal._compat import u
@@ -280,11 +279,6 @@ class FrenchMapRegions(FrenchMapDepartments):
     area_prefix = 'a'
     svg_map = REG_MAP
     kind = 'region'
-
-
-class FrenchMap(ChartCollection):
-    Regions = FrenchMapRegions
-    Departments = FrenchMapDepartments
 
 
 DEPARTMENTS_REGIONS = {

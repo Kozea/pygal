@@ -22,12 +22,18 @@ Base for pygal charts
 """
 
 from __future__ import division
+from pygal._compat import u, is_list_like, to_unicode
 from pygal.view import Margin, Box
-from pygal.util import (
-    get_text_box, get_texts_box, cut, rad, humanize, truncate, split_title)
+from pygal.config import Config
+from pygal.state import State
+from pygal.util import compose, ident
 from pygal.svg import Svg
-from pygal.util import cached_property, majorize
-from math import sin, cos, sqrt, ceil
+from pygal.serie import Serie
+from pygal.config import SerieConfig
+from pygal.adapters import (
+    not_zero, positive, decimal_to_float)
+from functools import reduce
+from uuid import uuid4
 
 
 class BaseGraph(object):
@@ -35,14 +41,149 @@ class BaseGraph(object):
 
     _adapters = []
 
-    def __init__(self, config, series, secondary_series, uuid, xml_filters):
-        """Init the graph"""
-        self.uuid = uuid
-        self.__dict__.update(config.to_dict())
+    def __init__(self, config=None, **kwargs):
+        if config:
+            if isinstance(config, type):
+                config = config()
+            else:
+                config = config.copy()
+        else:
+            config = Config()
+
+        config(**kwargs)
         self.config = config
-        self.series = series or []
-        self.secondary_series = secondary_series or []
-        self.xml_filters = xml_filters or []
+        self.state = None
+        self.uuid = str(uuid4())
+        self.raw_series = []
+        self.raw_series2 = []
+        self.xml_filters = []
+
+    def __setattr__(self, name, value):
+        if name.startswith('__') or getattr(self, 'state', None) is None:
+            super(BaseGraph, self).__setattr__(name, value)
+        else:
+            setattr(self.state, name, value)
+
+    def __getattribute__(self, name):
+        if name.startswith('__') or name == 'state' or getattr(
+                self, 'state', None
+        ) is None or name not in self.state.__dict__:
+            return super(BaseGraph, self).__getattribute__(name)
+        return getattr(self.state, name)
+
+    def add(self, title, values, **kwargs):
+        """Add a serie to this graph"""
+        if not is_list_like(values) and not isinstance(values, dict):
+            values = [values]
+        if kwargs.get('secondary', False):
+            self.raw_series2.append((title, values, kwargs))
+        else:
+            self.raw_series.append((title, values, kwargs))
+
+    def add_xml_filter(self, callback):
+        self.xml_filters.append(callback)
+
+    def prepare_values(self, raw, offset=0):
+        """Prepare the values to start with sane values"""
+        from pygal import Worldmap, FrenchMapDepartments, Histogram
+        if self.x_labels is not None:
+            self.x_labels = list(map(to_unicode, self.x_labels))
+        if self.zero == 0 and isinstance(
+                self, (Worldmap, FrenchMapDepartments)):
+            self.zero = 1
+
+        for key in ('x_labels', 'y_labels'):
+            if getattr(self, key):
+                setattr(self, key, list(getattr(self, key)))
+        if not raw:
+            return
+
+        adapters = list(self._adapters) or [lambda x:x]
+        if self.logarithmic:
+            for fun in not_zero, positive:
+                if fun in adapters:
+                    adapters.remove(fun)
+            adapters = adapters + [positive, not_zero]
+        adapters = adapters + [decimal_to_float]
+        adapter = reduce(compose, adapters) if not self.strict else ident
+        x_adapter = reduce(
+            compose, self._x_adapters) if getattr(
+                self, '_x_adapters', None) else None
+        series = []
+
+        raw = [(
+            title,
+            list(raw_values) if not isinstance(
+                raw_values, dict) else raw_values,
+            serie_config_kwargs
+        ) for title, raw_values, serie_config_kwargs in raw]
+
+        width = max([len(values) for _, values, _ in raw] +
+                    [len(self.x_labels or [])])
+
+        for title, raw_values, serie_config_kwargs in raw:
+            metadata = {}
+            values = []
+            if isinstance(raw_values, dict):
+                if isinstance(self, (Worldmap, FrenchMapDepartments)):
+                    raw_values = list(raw_values.items())
+                else:
+                    value_list = [None] * width
+                    for k, v in raw_values.items():
+                        if k in self.x_labels:
+                            value_list[self.x_labels.index(k)] = v
+                    raw_values = value_list
+
+            for index, raw_value in enumerate(
+                    raw_values + (
+                        (width - len(raw_values)) * [None]  # aligning values
+                        if len(raw_values) < width else [])):
+                if isinstance(raw_value, dict):
+                    raw_value = dict(raw_value)
+                    value = raw_value.pop('value', None)
+                    metadata[index] = raw_value
+                else:
+                    value = raw_value
+
+                # Fix this by doing this in charts class methods
+                if isinstance(self, Histogram):
+                    if value is None:
+                        value = (None, None, None)
+                    elif not is_list_like(value):
+                        value = (value, self.zero, self.zero)
+                    value = list(map(adapter, value))
+                elif self._dual:
+                    if value is None:
+                        value = (None, None)
+                    elif not is_list_like(value):
+                        value = (value, self.zero)
+                    if x_adapter:
+                        value = (x_adapter(value[0]), adapter(value[1]))
+                    if isinstance(
+                            self, (Worldmap, FrenchMapDepartments)):
+                        value = (adapter(value[0]), value[1])
+                    else:
+                        value = list(map(adapter, value))
+                else:
+                    value = adapter(value)
+
+                values.append(value)
+            serie_config = SerieConfig()
+            serie_config(**{k: v for k, v in self.state.__dict__.items()
+                            if k in dir(serie_config)})
+            serie_config(**serie_config_kwargs)
+            series.append(
+                Serie(offset + len(series),
+                      title, values, serie_config, metadata))
+        return series
+
+    def setup(self):
+        """Init the graph"""
+        self.state = State(self)
+        self.series = self.prepare_values(
+            self.raw_series) or []
+        self.secondary_series = self.prepare_values(
+            self.raw_series2, len(self.series)) or []
         self.horizontal = getattr(self, 'horizontal', False)
         self.svg = Svg(self)
         self._x_labels = None
@@ -50,22 +191,18 @@ class BaseGraph(object):
         self._x_2nd_labels = None
         self._y_2nd_labels = None
         self.nodes = {}
-        self.margin = Margin(self.margin_top or self.margin,
-                             self.margin_right or self.margin,
-                             self.margin_bottom or self.margin,
-                             self.margin_left or self.margin)
+        self.margin = Margin(
+            self.margin_top or self.margin,
+            self.margin_right or self.margin,
+            self.margin_bottom or self.margin,
+            self.margin_left or self.margin)
         self._box = Box()
         self.view = None
         if self.logarithmic and self.zero == 0:
             # Explicit min to avoid interpolation dependency
-            if self._dual:
-                get = lambda x: x[1] or 1
-            else:
-                get = lambda x: x
-
             positive_values = list(filter(
                 lambda x: x > 0,
-                [get(val)
+                [val[1] or 1 if self._dual else val
                  for serie in self.series for val in serie.safe_values]))
 
             self.zero = min(positive_values or (1,)) or 1
@@ -74,237 +211,17 @@ class BaseGraph(object):
         self._draw()
         self.svg.pre_render()
 
-    @property
-    def all_series(self):
-        return self.series + self.secondary_series
+    def teardown(self):
+        del self.state
+        self.state = None
 
-    @property
-    def _x_format(self):
-        """Return the value formatter for this graph"""
-        return self.config.x_value_formatter or (
-            humanize if self.human_readable else str)
-
-    @property
-    def _format(self):
-        """Return the value formatter for this graph"""
-        return self.config.value_formatter or (
-            humanize if self.human_readable else str)
-
-    def _compute(self):
-        """Initial computations to draw the graph"""
-
-    def _compute_margin(self):
-        """Compute graph margins from set texts"""
-        self._legend_at_left_width = 0
-        for series_group in (self.series, self.secondary_series):
-            if self.show_legend and series_group:
-                h, w = get_texts_box(
-                    map(lambda x: truncate(x, self.truncate_legend or 15),
-                        cut(series_group, 'title')),
-                    self.legend_font_size)
-                if self.legend_at_bottom:
-                    h_max = max(h, self.legend_box_size)
-                    cols = (self._order // self.legend_at_bottom_columns
-                            if self.legend_at_bottom_columns
-                            else ceil(sqrt(self._order)) or 1)
-                    self.margin.bottom += self.spacing + h_max * round(
-                        cols - 1) * 1.5 + h_max
-                else:
-                    if series_group is self.series:
-                        legend_width = self.spacing + w + self.legend_box_size
-                        self.margin.left += legend_width
-                        self._legend_at_left_width += legend_width
-                    else:
-                        self.margin.right += (
-                            self.spacing + w + self.legend_box_size)
-
-        self._x_labels_height = 0
-        if (self._x_labels or self._x_2nd_labels) and self.show_x_labels:
-            for xlabels in (self._x_labels, self._x_2nd_labels):
-                if xlabels:
-                    h, w = get_texts_box(
-                        map(lambda x: truncate(x, self.truncate_label or 25),
-                            cut(xlabels)),
-                        self.label_font_size)
-                    self._x_labels_height = self.spacing + max(
-                        w * sin(rad(self.x_label_rotation)), h)
-                    if xlabels is self._x_labels:
-                        self.margin.bottom += self._x_labels_height
-                    else:
-                        self.margin.top += self._x_labels_height
-                    if self.x_label_rotation:
-                        self.margin.right = max(
-                            w * cos(rad(self.x_label_rotation)),
-                            self.margin.right)
-
-        if self.show_y_labels:
-            for ylabels in (self._y_labels, self._y_2nd_labels):
-                if ylabels:
-                    h, w = get_texts_box(
-                        cut(ylabels), self.label_font_size)
-                    if ylabels is self._y_labels:
-                        self.margin.left += self.spacing + max(
-                            w * cos(rad(self.y_label_rotation)), h)
-                    else:
-                        self.margin.right += self.spacing + max(
-                            w * cos(rad(self.y_label_rotation)), h)
-
-        self.title = split_title(
-            self.title, self.width, self.title_font_size)
-
-        if self.title:
-            h, _ = get_text_box(self.title[0], self.title_font_size)
-            self.margin.top += len(self.title) * (self.spacing + h)
-
-        self.x_title = split_title(
-            self.x_title, self.width - self.margin.x, self.title_font_size)
-
-        self._x_title_height = 0
-        if self.x_title:
-            h, _ = get_text_box(self.x_title[0], self.title_font_size)
-            height = len(self.x_title) * (self.spacing + h)
-            self.margin.bottom += height
-            self._x_title_height = height + self.spacing
-
-        self.y_title = split_title(
-            self.y_title, self.height - self.margin.y, self.title_font_size)
-
-        self._y_title_height = 0
-        if self.y_title:
-            h, _ = get_text_box(self.y_title[0], self.title_font_size)
-            height = len(self.y_title) * (self.spacing + h)
-            self.margin.left += height
-            self._y_title_height = height + self.spacing
-
-    @cached_property
-    def _legends(self):
-        """Getter for series title"""
-        return [serie.title for serie in self.series]
-
-    @cached_property
-    def _secondary_legends(self):
-        """Getter for series title on secondary y axis"""
-        return [serie.title for serie in self.secondary_series]
-
-    @cached_property
-    def _values(self):
-        """Getter for series values (flattened)"""
-        return [val
-                for serie in self.series
-                for val in serie.values
-                if val is not None]
-
-    @cached_property
-    def _secondary_values(self):
-        """Getter for secondary series values (flattened)"""
-        return [val
-                for serie in self.secondary_series
-                for val in serie.values
-                if val is not None]
-
-    @cached_property
-    def _len(self):
-        """Getter for the maximum series size"""
-        return max([
-            len(serie.values)
-            for serie in self.all_series] or [0])
-
-    @cached_property
-    def _secondary_min(self):
-        """Getter for the minimum series value"""
-        return (self.range[0] if (self.range and self.range[0] is not None)
-                else (min(self._secondary_values)
-                      if self._secondary_values else None))
-
-    @cached_property
-    def _min(self):
-        """Getter for the minimum series value"""
-        return (self.range[0] if (self.range and self.range[0] is not None)
-                else (min(self._values)
-                      if self._values else None))
-
-    @cached_property
-    def _max(self):
-        """Getter for the maximum series value"""
-        return (self.range[1] if (self.range and self.range[1] is not None)
-                else (max(self._values) if self._values else None))
-
-    @cached_property
-    def _secondary_max(self):
-        """Getter for the maximum series value"""
-        return (self.range[1] if (self.range and self.range[1] is not None)
-                else (max(self._secondary_values)
-                      if self._secondary_values else None))
-
-    @cached_property
-    def _order(self):
-        """Getter for the number of series"""
-        return len(self.all_series)
-
-    @cached_property
-    def _x_major_labels(self):
-        """Getter for the x major label"""
-        if self.x_labels_major:
-            return self.x_labels_major
-        if self.x_labels_major_every:
-            return [self._x_labels[i][0] for i in range(
-                0, len(self._x_labels), self.x_labels_major_every)]
-        if self.x_labels_major_count:
-            label_count = len(self._x_labels)
-            major_count = self.x_labels_major_count
-            if (major_count >= label_count):
-                return [label[0] for label in self._x_labels]
-
-            return [self._x_labels[
-                    int(i * (label_count - 1) / (major_count - 1))][0]
-                    for i in range(major_count)]
-
-        return []
-
-    @cached_property
-    def _y_major_labels(self):
-        """Getter for the y major label"""
-        if self.y_labels_major:
-            return self.y_labels_major
-        if self.y_labels_major_every:
-            return [self._y_labels[i][1] for i in range(
-                0, len(self._y_labels), self.y_labels_major_every)]
-        if self.y_labels_major_count:
-            label_count = len(self._y_labels)
-            major_count = self.y_labels_major_count
-            if (major_count >= label_count):
-                return [label[1] for label in self._y_labels]
-
-            return [self._y_labels[
-                int(i * (label_count - 1) / (major_count - 1))][1]
-                for i in range(major_count)]
-
-        return majorize(
-            cut(self._y_labels, 1)
-        )
-
-    def _draw(self):
-        """Draw all the things"""
-        self._compute()
-        self._compute_secondary()
-        self._post_compute()
-        self._compute_margin()
-        self._decorate()
-        if self.series and self._has_data():
-            self._plot()
-        else:
-            self.svg.draw_no_data()
-
-    def _has_data(self):
-        """Check if there is any data"""
-        return sum(
-            map(len, map(lambda s: s.safe_values, self.series))) != 0 and (
-            sum(map(abs, self._values)) != 0)
-
-    def render(self, is_unicode=False):
+    def render(self, is_unicode=False, **kwargs):
         """Render the graph, and return the svg string"""
-        return self.svg.render(
+        self.setup()
+        svg = self.svg.render(
             is_unicode=is_unicode, pretty_print=self.pretty_print)
+        self.teardown()
+        return svg
 
     def render_tree(self):
         """Render the graph, and return (l)xml etree"""
@@ -312,3 +229,94 @@ class BaseGraph(object):
         for f in self.xml_filters:
             svg = f(svg)
         return svg
+
+    def render_table(self, **kwargs):
+        # Import here to avoid lxml import
+        try:
+            from pygal.table import Table
+        except ImportError:
+            raise ImportError('You must install lxml to use render table')
+        return Table(self).render(**kwargs)
+
+    def render_pyquery(self):
+        """Render the graph, and return a pyquery wrapped tree"""
+        from pyquery import PyQuery as pq
+        return pq(self.render(), parser='html')
+
+    def render_in_browser(self, **kwargs):
+        """Render the graph, open it in your browser with black magic"""
+        try:
+            from lxml.html import open_in_browser
+        except ImportError:
+            raise ImportError('You must install lxml to use render in browser')
+        open_in_browser(self.render_tree(**kwargs), encoding='utf-8')
+
+    def render_response(self, **kwargs):
+        """Render the graph, and return a Flask response"""
+        from flask import Response
+        return Response(self.render(**kwargs), mimetype='image/svg+xml')
+
+    def render_django_response(self, **kwargs):
+        """Render the graph, and return a Django response"""
+        from django.http import HttpResponse
+        return HttpResponse(
+            self.render(**kwargs), content_type='image/svg+xml')
+
+    def render_to_file(self, filename, **kwargs):
+        """Render the graph, and write it to filename"""
+        with open(filename, 'w', encoding='utf-8') as f:
+            f.write(self.render(is_unicode=True, **kwargs))
+
+    def render_to_png(self, filename=None, dpi=72, **kwargs):
+        """Render the graph, convert it to png and write it to filename"""
+        import cairosvg
+        return cairosvg.svg2png(
+            bytestring=self.render(**kwargs), write_to=filename, dpi=dpi)
+
+    def render_sparktext(self, relative_to=None):
+        """Make a mini text sparkline from chart"""
+        bars = u('▁▂▃▄▅▆▇█')
+        if len(self.raw_series) == 0:
+            return u('')
+        values = list(self.raw_series[0][1])
+        if len(values) == 0:
+            return u('')
+
+        chart = u('')
+        values = list(map(lambda x: max(x, 0), values))
+
+        vmax = max(values)
+        if relative_to is None:
+            relative_to = min(values)
+
+        if (vmax - relative_to) == 0:
+            chart = bars[0] * len(values)
+            return chart
+
+        divisions = len(bars) - 1
+        for value in values:
+            chart += bars[int(divisions *
+                              (value - relative_to) / (vmax - relative_to))]
+        return chart
+
+    def render_sparkline(self, **kwargs):
+        spark_options = dict(
+            width=200,
+            height=50,
+            show_dots=False,
+            show_legend=False,
+            show_x_labels=False,
+            show_y_labels=False,
+            spacing=0,
+            margin=5,
+            explicit_size=True
+        )
+        spark_options.update(kwargs)
+        return self.make_instance(spark_options).render()
+
+    def _repr_svg_(self):
+        """Display svg in IPython notebook"""
+        return self.render(disable_xml_declaration=True)
+
+    def _repr_png_(self):
+        """Display png in IPython notebook"""

@@ -28,6 +28,7 @@ import re
 
 re_dasharray_delimiters = re.compile(r'[\.|,|x|\||\- ]+', re.I)
 
+
 class Style(object):
     """Styling class containing colors for the css generation"""
     def __init__(
@@ -42,7 +43,7 @@ class Style(object):
             opacity_hover='.9',
             stroke_width='1',
             stroke_style='round',
-            stroke_dasharray=(0,0),
+            stroke_dasharray=(0, 0),
             transition='250ms',
             colors=(
                 '#ff5995', '#b6e354', '#feed6c', '#8cedff', '#9e6ffe',
@@ -79,11 +80,12 @@ class Style(object):
             self.stroke_dasharray = '%d,%d' % self.stroke_dasharray
 
         if isinstance(self.stroke_dasharray, str):
-            self.stroke_dasharray = re.sub(re_dasharray_delimiters, ',', self.stroke_dasharray)
+            self.stroke_dasharray = re.sub(
+                re_dasharray_delimiters, ',', self.stroke_dasharray)
 
         if not isinstance(self.stroke_dasharray, str):
-            raise ValueError('stroke_dasharray not in proper form: tuple(int,int)')
-
+            raise ValueError(
+                'stroke_dasharray not in proper form: tuple(int, int)')
 
     def get_colors(self, prefix):
         """Get the css color list"""

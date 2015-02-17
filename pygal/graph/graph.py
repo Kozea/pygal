@@ -26,8 +26,10 @@ from pygal.interpolate import INTERPOLATIONS
 from pygal.graph.base import BaseGraph
 from pygal.view import View, LogView, XYLogView
 from pygal.util import (
-    truncate, reverse_text_len, get_texts_box, cut, rad, decorate)
-from math import sqrt, ceil, cos
+    cached_property, majorize, humanize, split_title,
+    truncate, reverse_text_len, get_text_box, get_texts_box, cut, rad,
+    decorate)
+from math import sqrt, ceil, cos, sin
 from itertools import repeat, chain
 
 
@@ -41,9 +43,9 @@ class Graph(BaseGraph):
         self._make_graph()
         self._axes()
         self._legend()
-        self._title()
-        self._x_title()
-        self._y_title()
+        self._make_title()
+        self._make_x_title()
+        self._make_y_title()
 
     def _axes(self):
         """Draw axes"""
@@ -350,7 +352,7 @@ class Graph(BaseGraph):
                 width=self.legend_box_size,
                 height=self.legend_box_size,
                 class_="color-%d reactive" % (
-                    global_serie_number % len(self.style['colors']))
+                    global_serie_number % len(self.style.colors))
             )
 
             if isinstance(title, dict):
@@ -369,22 +371,22 @@ class Graph(BaseGraph):
             if truncated != title:
                 self.svg.node(legend, 'title').text = title
 
-    def _title(self):
+    def _make_title(self):
         """Make the title"""
-        if self.title:
-            for i, title_line in enumerate(self.title, 1):
+        if self._title:
+            for i, title_line in enumerate(self._title, 1):
                 self.svg.node(
                     self.nodes['title'], 'text', class_='title plot_title',
                     x=self.width / 2,
                     y=i * (self.title_font_size + self.spacing)
                 ).text = title_line
 
-    def _x_title(self):
+    def _make_x_title(self):
         """Make the X-Axis title"""
         y = (self.height - self.margin.bottom +
              self._x_labels_height)
-        if self.x_title:
-            for i, title_line in enumerate(self.x_title, 1):
+        if self._x_title:
+            for i, title_line in enumerate(self._x_title, 1):
                 text = self.svg.node(
                     self.nodes['title'], 'text', class_='title',
                     x=self.margin.left + self.view.width / 2,
@@ -392,11 +394,11 @@ class Graph(BaseGraph):
                 )
                 text.text = title_line
 
-    def _y_title(self):
+    def _make_y_title(self):
         """Make the Y-Axis title"""
-        if self.y_title:
+        if self._y_title:
             yc = self.margin.top + self.view.height / 2
-            for i, title_line in enumerate(self.y_title, 1):
+            for i, title_line in enumerate(self._y_title, 1):
                 text = self.svg.node(
                     self.nodes['title'], 'text', class_='title',
                     x=self._legend_at_left_width,
@@ -488,3 +490,231 @@ class Graph(BaseGraph):
 
     def _post_compute(self):
         pass
+
+    @property
+    def all_series(self):
+        return self.series + self.secondary_series
+
+    @property
+    def _x_format(self):
+        """Return the value formatter for this graph"""
+        return self.x_value_formatter or (
+            humanize if self.human_readable else str)
+
+    @property
+    def _format(self):
+        """Return the value formatter for this graph"""
+        return self.value_formatter or (
+            humanize if self.human_readable else str)
+
+    def _compute(self):
+        """Initial computations to draw the graph"""
+
+    def _compute_margin(self):
+        """Compute graph margins from set texts"""
+        self._legend_at_left_width = 0
+        for series_group in (self.series, self.secondary_series):
+            if self.show_legend and series_group:
+                h, w = get_texts_box(
+                    map(lambda x: truncate(x, self.truncate_legend or 15),
+                        cut(series_group, 'title')),
+                    self.legend_font_size)
+                if self.legend_at_bottom:
+                    h_max = max(h, self.legend_box_size)
+                    cols = (self._order // self.legend_at_bottom_columns
+                            if self.legend_at_bottom_columns
+                            else ceil(sqrt(self._order)) or 1)
+                    self.margin.bottom += self.spacing + h_max * round(
+                        cols - 1) * 1.5 + h_max
+                else:
+                    if series_group is self.series:
+                        legend_width = self.spacing + w + self.legend_box_size
+                        self.margin.left += legend_width
+                        self._legend_at_left_width += legend_width
+                    else:
+                        self.margin.right += (
+                            self.spacing + w + self.legend_box_size)
+
+        self._x_labels_height = 0
+        if (self._x_labels or self._x_2nd_labels) and self.show_x_labels:
+            for xlabels in (self._x_labels, self._x_2nd_labels):
+                if xlabels:
+                    h, w = get_texts_box(
+                        map(lambda x: truncate(x, self.truncate_label or 25),
+                            cut(xlabels)),
+                        self.label_font_size)
+                    self._x_labels_height = self.spacing + max(
+                        w * sin(rad(self.x_label_rotation)), h)
+                    if xlabels is self._x_labels:
+                        self.margin.bottom += self._x_labels_height
+                    else:
+                        self.margin.top += self._x_labels_height
+                    if self.x_label_rotation:
+                        self.margin.right = max(
+                            w * cos(rad(self.x_label_rotation)),
+                            self.margin.right)
+
+        if self.show_y_labels:
+            for ylabels in (self._y_labels, self._y_2nd_labels):
+                if ylabels:
+                    h, w = get_texts_box(
+                        cut(ylabels), self.label_font_size)
+                    if ylabels is self._y_labels:
+                        self.margin.left += self.spacing + max(
+                            w * cos(rad(self.y_label_rotation)), h)
+                    else:
+                        self.margin.right += self.spacing + max(
+                            w * cos(rad(self.y_label_rotation)), h)
+
+        self._title = split_title(
+            self.title, self.width, self.title_font_size)
+
+        if self.title:
+            h, _ = get_text_box(self._title[0], self.title_font_size)
+            self.margin.top += len(self._title) * (self.spacing + h)
+
+        self._x_title = split_title(
+            self.x_title, self.width - self.margin.x, self.title_font_size)
+
+        self._x_title_height = 0
+        if self._x_title:
+            h, _ = get_text_box(self._x_title[0], self.title_font_size)
+            height = len(self._x_title) * (self.spacing + h)
+            self.margin.bottom += height
+            self._x_title_height = height + self.spacing
+
+        self._y_title = split_title(
+            self.y_title, self.height - self.margin.y,
+            self.title_font_size)
+
+        self._y_title_height = 0
+        if self._y_title:
+            h, _ = get_text_box(self._y_title[0], self.title_font_size)
+            height = len(self._y_title) * (self.spacing + h)
+            self.margin.left += height
+            self._y_title_height = height + self.spacing
+
+    @cached_property
+    def _legends(self):
+        """Getter for series title"""
+        return [serie.title for serie in self.series]
+
+    @cached_property
+    def _secondary_legends(self):
+        """Getter for series title on secondary y axis"""
+        return [serie.title for serie in self.secondary_series]
+
+    @cached_property
+    def _values(self):
+        """Getter for series values (flattened)"""
+        return [val
+                for serie in self.series
+                for val in serie.values
+                if val is not None]
+
+    @cached_property
+    def _secondary_values(self):
+        """Getter for secondary series values (flattened)"""
+        return [val
+                for serie in self.secondary_series
+                for val in serie.values
+                if val is not None]
+
+    @cached_property
+    def _len(self):
+        """Getter for the maximum series size"""
+        return max([
+            len(serie.values)
+            for serie in self.all_series] or [0])
+
+    @cached_property
+    def _secondary_min(self):
+        """Getter for the minimum series value"""
+        return (self.range[0] if (self.range and self.range[0] is not None)
+                else (min(self._secondary_values)
+                      if self._secondary_values else None))
+
+    @cached_property
+    def _min(self):
+        """Getter for the minimum series value"""
+        return (self.range[0] if (self.range and self.range[0] is not None)
+                else (min(self._values)
+                      if self._values else None))
+
+    @cached_property
+    def _max(self):
+        """Getter for the maximum series value"""
+        return (self.range[1] if (self.range and self.range[1] is not None)
+                else (max(self._values) if self._values else None))
+
+    @cached_property
+    def _secondary_max(self):
+        """Getter for the maximum series value"""
+        return (self.range[1] if (self.range and self.range[1] is not None)
+                else (max(self._secondary_values)
+                      if self._secondary_values else None))
+
+    @cached_property
+    def _order(self):
+        """Getter for the number of series"""
+        return len(self.all_series)
+
+    @cached_property
+    def _x_major_labels(self):
+        """Getter for the x major label"""
+        if self.x_labels_major:
+            return self.x_labels_major
+        if self.x_labels_major_every:
+            return [self._x_labels[i][0] for i in range(
+                0, len(self._x_labels), self.x_labels_major_every)]
+        if self.x_labels_major_count:
+            label_count = len(self._x_labels)
+            major_count = self.x_labels_major_count
+            if (major_count >= label_count):
+                return [label[0] for label in self._x_labels]
+
+            return [self._x_labels[
+                    int(i * (label_count - 1) / (major_count - 1))][0]
+                    for i in range(major_count)]
+
+        return []
+
+    @cached_property
+    def _y_major_labels(self):
+        """Getter for the y major label"""
+        if self.y_labels_major:
+            return self.y_labels_major
+        if self.y_labels_major_every:
+            return [self._y_labels[i][1] for i in range(
+                0, len(self._y_labels), self.y_labels_major_every)]
+        if self.y_labels_major_count:
+            label_count = len(self._y_labels)
+            major_count = self.y_labels_major_count
+            if (major_count >= label_count):
+                return [label[1] for label in self._y_labels]
+
+            return [self._y_labels[
+                int(i * (label_count - 1) / (major_count - 1))][1]
+                for i in range(major_count)]
+
+        return majorize(
+            cut(self._y_labels, 1)
+        )
+
+    def _draw(self):
+        """Draw all the things"""
+        self._compute()
+        self._compute_secondary()
+        self._post_compute()
+        self._compute_margin()
+        self._decorate()
+        if self.series and self._has_data():
+            self._plot()
+        else:
+            self.svg.draw_no_data()
+
+    def _has_data(self):
+        """Check if there is any data"""
+        return sum(
+            map(len, map(lambda s: s.safe_values, self.series))) != 0 and (
+            sum(map(abs, self._values)) != 0)

@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+ # -*- coding: utf-8 -*-
 # This file is part of pygal
 #
 # A python svg graph plotting library
@@ -17,22 +17,12 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with pygal. If not, see <http://www.gnu.org/licenses/>.
 """
-Little helpers for series
+Class holding state during render
 
 """
-from pygal.util import cached_property
 
 
-class Serie(object):
-    """Serie containing title, values and the graph serie index"""
-    def __init__(self, index, title, values, config, metadata=None):
-        self.index = index
-        self.title = title
-        self.values = values
-        self.config = config
-        self.__dict__.update(config.__dict__)
-        self.metadata = metadata or {}
-
-    @cached_property
-    def safe_values(self):
-        return list(filter(lambda x: x is not None, self.values))
+class State(object):
+    def __init__(self, graph):
+        self.__dict__.update(**graph.config.__dict__)
+        self.__dict__.update(**graph.__dict__)

@@ -82,9 +82,9 @@ def test_metadata(Chart):
         v = list(map(lambda x: (x, x + 1), v))
     elif Chart == pygal.Worldmap or Chart == pygal.SupranationalWorldmap:
         v = [(i, k) for k, i in enumerate(i18n.COUNTRIES.keys())]
-    elif Chart == pygal.FrenchMap_Regions:
+    elif Chart == pygal.FrenchMapRegions:
         v = [(i, k) for k, i in enumerate(REGIONS.keys())]
-    elif Chart == pygal.FrenchMap_Departments:
+    elif Chart == pygal.FrenchMapDepartments:
         v = [(i, k) for k, i in enumerate(DEPARTMENTS.keys())]
 
     chart.add('Serie with metadata', [
@@ -110,7 +110,7 @@ def test_metadata(Chart):
         assert len(v) - 1 == len(q('.tooltip-trigger').siblings('.value'))
     elif Chart not in (
             pygal.Worldmap, pygal.SupranationalWorldmap,
-            pygal.FrenchMap_Regions, pygal.FrenchMap_Departments):
+            pygal.FrenchMapRegions, pygal.FrenchMapDepartments):
         # Tooltip are not working on maps
         assert len(v) == len(q('.tooltip-trigger').siblings('.value'))
 
@@ -192,8 +192,8 @@ def test_values_by_dict(Chart):
 
     if not issubclass(Chart, (
             pygal.Worldmap,
-            pygal.FrenchMap_Departments,
-            pygal.FrenchMap_Regions)):
+            pygal.FrenchMapDepartments,
+            pygal.FrenchMapRegions)):
         chart1.add('A', {'red': 10, 'green': 12, 'blue': 14})
         chart1.add('B', {'green': 11, 'red': 7})
         chart1.add('C', {'blue': 7})
@@ -376,7 +376,7 @@ def test_labels_with_links(Chart):
     q = chart.render_pyquery()
     links = q('a')
 
-    if issubclass(chart.cls,
+    if isinstance(chart,
                   (pygal.graph.worldmap.Worldmap,
                    pygal.graph.frenchmap.FrenchMapDepartments)):
         # No country is found in this case so:

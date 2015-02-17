@@ -26,9 +26,6 @@ import re
 from decimal import Decimal
 from math import floor, pi, log, log10, ceil
 from itertools import cycle
-from functools import reduce
-from pygal.adapters import (
-    not_zero, positive, decimal_to_float)
 ORDERS = u("yzafpnµm kMGTPEZY")
 
 
@@ -272,21 +269,21 @@ def truncate(string, index):
         string = string[:index - 1] + u('…')
     return string
 
+cached_property = property
+# # Stolen from brownie http://packages.python.org/Brownie/
+# class cached_property(object):
+#     """Optimize a static property"""
+#     def __init__(self, getter, doc=None):
+#         self.getter = getter
+#         self.__module__ = getter.__module__
+#         self.__name__ = getter.__name__
+#         self.__doc__ = doc or getter.__doc__
 
-# Stolen from brownie http://packages.python.org/Brownie/
-class cached_property(object):
-    """Optimize a static property"""
-    def __init__(self, getter, doc=None):
-        self.getter = getter
-        self.__module__ = getter.__module__
-        self.__name__ = getter.__name__
-        self.__doc__ = doc or getter.__doc__
-
-    def __get__(self, obj, type_=None):
-        if obj is None:
-            return self
-        value = obj.__dict__[self.__name__] = self.getter(obj)
-        return value
+#     def __get__(self, obj, type_=None):
+#         if obj is None:
+#             return self
+#         value = obj.__dict__[self.__name__] = self.getter(obj)
+#         return value
 
 css_comments = re.compile(r'/\*.*?\*/', re.MULTILINE | re.DOTALL)
 
@@ -329,102 +326,6 @@ def safe_enumerate(iterable):
     for i, v in enumerate(iterable):
         if v is not None:
             yield i, v
-
-
-def prepare_values(raw, config, cls, offset=0):
-    """Prepare the values to start with sane values"""
-    from pygal.serie import Serie
-    from pygal.config import SerieConfig
-    from pygal.graph.time import DateY
-    from pygal.graph.histogram import Histogram
-    from pygal.graph.worldmap import Worldmap
-    from pygal.graph.frenchmap import FrenchMapDepartments
-    if config.x_labels is None and hasattr(cls, 'x_labels'):
-        config.x_labels = list(map(to_unicode, cls.x_labels))
-    if config.zero == 0 and issubclass(cls, (Worldmap, FrenchMapDepartments)):
-        config.zero = 1
-
-    for key in ('x_labels', 'y_labels'):
-        if getattr(config, key):
-            setattr(config, key, list(getattr(config, key)))
-    if not raw:
-        return
-
-    adapters = list(cls._adapters) or [lambda x:x]
-    if config.logarithmic:
-        for fun in not_zero, positive:
-            if fun in adapters:
-                adapters.remove(fun)
-        adapters = adapters + [positive, not_zero]
-    adapters = adapters + [decimal_to_float]
-    adapter = reduce(compose, adapters) if not config.strict else ident
-    x_adapter = reduce(
-        compose, cls._x_adapters) if getattr(
-            cls, '_x_adapters', None) else None
-    series = []
-
-    raw = [(
-        title,
-        list(raw_values) if not isinstance(raw_values, dict) else raw_values,
-        serie_config_kwargs
-    ) for title, raw_values, serie_config_kwargs in raw]
-
-    width = max([len(values) for _, values, _ in raw] +
-                [len(config.x_labels or [])])
-
-    for title, raw_values, serie_config_kwargs in raw:
-        metadata = {}
-        values = []
-        if isinstance(raw_values, dict):
-            if issubclass(cls, (Worldmap, FrenchMapDepartments)):
-                raw_values = list(raw_values.items())
-            else:
-                value_list = [None] * width
-                for k, v in raw_values.items():
-                    if k in config.x_labels:
-                        value_list[config.x_labels.index(k)] = v
-                raw_values = value_list
-
-        for index, raw_value in enumerate(
-                raw_values + (
-                    (width - len(raw_values)) * [None]  # aligning values
-                    if len(raw_values) < width else [])):
-            if isinstance(raw_value, dict):
-                raw_value = dict(raw_value)
-                value = raw_value.pop('value', None)
-                metadata[index] = raw_value
-            else:
-                value = raw_value
-
-            # Fix this by doing this in charts class methods
-            if issubclass(cls, Histogram):
-                if value is None:
-                    value = (None, None, None)
-                elif not is_list_like(value):
-                    value = (value, config.zero, config.zero)
-                value = list(map(adapter, value))
-            elif cls._dual:
-                if value is None:
-                    value = (None, None)
-                elif not is_list_like(value):
-                    value = (value, config.zero)
-                if x_adapter:
-                    value = (x_adapter(value[0]), adapter(value[1]))
-                if issubclass(
-                        cls, (Worldmap, FrenchMapDepartments)):
-                    value = (adapter(value[0]), value[1])
-                else:
-                    value = list(map(adapter, value))
-            else:
-                value = adapter(value)
-
-            values.append(value)
-        serie_config = SerieConfig()
-        serie_config(**config.to_dict())
-        serie_config(**serie_config_kwargs)
-        series.append(
-            Serie(offset + len(series), title, values, serie_config, metadata))
-    return series
 
 
 def split_title(title, width, title_fs):

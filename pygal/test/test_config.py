@@ -20,8 +20,8 @@
 from pygal import (
     Line, Dot, Pie, Treemap, Radar, Config, Bar, Funnel, Worldmap,
     SupranationalWorldmap, Histogram, Gauge, Box, XY,
-    Pyramid, DateY, HorizontalBar, HorizontalStackedBar,
-    FrenchMap_Regions, FrenchMap_Departments,
+    Pyramid, HorizontalBar, HorizontalStackedBar,
+    FrenchMapRegions, FrenchMapDepartments,
     DateTimeLine, TimeLine, DateLine, TimeDeltaLine)
 from pygal._compat import u
 from pygal.test.utils import texts
@@ -275,9 +275,9 @@ def test_include_x_axis(Chart):
     chart = Chart()
     if Chart in (Pie, Treemap, Radar, Funnel, Dot, Gauge, Worldmap,
                  SupranationalWorldmap, Histogram, Box,
-                 FrenchMap_Regions, FrenchMap_Departments):
+                 FrenchMapRegions, FrenchMapDepartments):
         return
-    if not chart.cls._dual:
+    if not chart._dual:
         data = 100, 200, 150
     else:
         data = (1, 100), (3, 200), (2, 150)
@@ -285,8 +285,8 @@ def test_include_x_axis(Chart):
     q = chart.render_pyquery()
     # Ghost thing
     yaxis = ".axis.%s .guides text" % (
-        'y' if not chart._last__inst.horizontal else 'x')
-    if not issubclass(chart.cls, Bar().cls):
+        'y' if not getattr(chart, 'horizontal', False) else 'x')
+    if not isinstance(chart, Bar):
         assert '0.0' not in q(yaxis).map(texts)
     else:
         assert '0.0' in q(yaxis).map(texts)
@@ -362,8 +362,8 @@ def test_x_label_major(Chart):
     if Chart in (
             Pie, Treemap, Funnel, Dot, Gauge, Worldmap,
             SupranationalWorldmap, Histogram, Box,
-            FrenchMap_Regions, FrenchMap_Departments,
-            Pyramid, DateY, DateTimeLine, TimeLine, DateLine,
+            FrenchMapRegions, FrenchMapDepartments,
+            Pyramid, DateTimeLine, TimeLine, DateLine,
             TimeDeltaLine):
         return
     chart = Chart()
@@ -407,10 +407,10 @@ def test_y_label_major(Chart):
     if Chart in (
             Pie, Treemap, Funnel, Dot, Gauge, Worldmap,
             SupranationalWorldmap, Histogram, Box,
-            FrenchMap_Regions, FrenchMap_Departments,
+            FrenchMapRegions, FrenchMapDepartments,
             HorizontalBar, HorizontalStackedBar,
             Pyramid, DateTimeLine, TimeLine, DateLine,
-            TimeDeltaLine, DateY):
+            TimeDeltaLine):
         return
     chart = Chart()
     data = range(12)

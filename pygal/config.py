@@ -25,9 +25,6 @@ from pygal.style import Style, DefaultStyle
 from pygal.interpolate import INTERPOLATIONS
 
 
-class FontSizes(object):
-    """Container for font sizes"""
-
 CONFIG_ITEMS = []
 
 
@@ -126,18 +123,6 @@ class BaseConfig(MetaConfig('ConfigBase', (object,), {})):
         self.__dict__.update(
             dict([(k, v) for (k, v) in kwargs.items()
                   if not k.startswith('_') and k in dir(self)]))
-
-    def font_sizes(self, with_unit=True):
-        """Getter for all font size configs"""
-        fs = FontSizes()
-        for name in dir(self):
-            if name.endswith('_font_size'):
-                setattr(
-                    fs,
-                    name.replace('_font_size', ''),
-                    ('%dpx' % getattr(self, name))
-                    if with_unit else getattr(self, name))
-        return fs
 
     def to_dict(self):
         config = {}
@@ -320,10 +305,6 @@ class Config(CommonConfig):
 
     y_label_rotation = Key(
         0, int, "Label", "Specify y labels rotation angles", "in degrees")
-
-    x_label_format = Key(
-        "%Y-%m-%d %H:%M:%S.%f", str, "Label",
-        "Date format for strftime to display the DateY X labels")
 
     missing_value_fill_truncation = Key(
         "x", str, "Look",

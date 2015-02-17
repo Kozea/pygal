@@ -57,8 +57,8 @@ class DateTimeLine(XY):
         """Return the value formatter for this graph"""
         def datetime_to_str(x):
             dt = datetime.fromtimestamp(x)
-            if self.config.x_value_formatter:
-                return self.config.x_value_formatter(dt)
+            if self.x_value_formatter:
+                return self.x_value_formatter(dt)
             return dt.isoformat()
         return datetime_to_str
 
@@ -70,8 +70,8 @@ class DateLine(DateTimeLine):
         """Return the value formatter for this graph"""
         def date_to_str(x):
             d = date.fromtimestamp(x)
-            if self.config.x_value_formatter:
-                return self.config.x_value_formatter(d)
+            if self.x_value_formatter:
+                return self.x_value_formatter(d)
             return d.isoformat()
         return date_to_str
 
@@ -84,8 +84,8 @@ class TimeLine(DateTimeLine):
         """Return the value formatter for this graph"""
         def date_to_str(x):
             t = datetime.fromtimestamp(x).time()
-            if self.config.x_value_formatter:
-                return self.config.x_value_formatter(t)
+            if self.x_value_formatter:
+                return self.x_value_formatter(t)
             return t.isoformat()
         return date_to_str
 
@@ -98,11 +98,8 @@ class TimeDeltaLine(XY):
         """Return the value formatter for this graph"""
         def timedelta_to_str(x):
             td = timedelta(seconds=x)
-            if self.config.x_value_formatter:
-                return self.config.x_value_formatter(td)
+            if self.x_value_formatter:
+                return self.x_value_formatter(td)
             return str(td)
 
         return timedelta_to_str
-
-# Old pygal compat
-DateY = DateTimeLine

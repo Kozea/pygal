@@ -2,8 +2,8 @@
 # This file is part of pygal
 from pygal import (
     Bar, Gauge, Pyramid, Funnel, Dot, StackedBar, StackedLine, XY,
-    CHARTS_BY_NAME, Config, Line, DateY, Worldmap, Histogram, Box,
-    FrenchMap_Departments, FrenchMap_Regions, Pie, Treemap, TimeLine, DateLine)
+    CHARTS_BY_NAME, Config, Line, Worldmap, Histogram, Box,
+    FrenchMapDepartments, FrenchMapRegions, Pie, Treemap, TimeLine, DateLine)
 from pygal.style import styles, Style, RotateStyle
 from pygal.colors import rotate
 from pygal.graph.frenchmap import DEPARTMENTS, REGIONS
@@ -225,12 +225,6 @@ def get_test_routes(app):
         graph.add('Single', [(1, 1)])
         return graph.render_response()
 
-    @app.route('/test/datey_single')
-    def test_datey_single():
-        graph = DateY(interpolate='cubic')
-        graph.add('Single', [(datetime.now(), 1)])
-        return graph.render_response()
-
     @app.route('/test/no_data/at_all/<chart>')
     def test_no_data_at_all_for(chart):
         graph = CHARTS_BY_NAME[chart]()
@@ -287,6 +281,7 @@ def get_test_routes(app):
         bar = Bar()
         bar.add('1', [1, 2, 3])
         bar.add('2', [4, 5, 6])
+        bar.x_labels = ['a']
         return bar.render_response()
 
     @app.route('/test/histogram')
@@ -390,35 +385,7 @@ def get_test_routes(app):
         datey.x_label_rotation = 25
         return datey.render_response()
 
-    @app.route('/test/datey')
-    def test_datey():
-        from datetime import datetime
-        datey = DateY(show_dots=False)
-        datey.add('1', [
-            (datetime(2011, 12, 21), 10),
-            (datetime(2014, 4, 8), 12),
-            (datetime(2010, 2, 28), 2)
-        ])
-        datey.add('2', [(12, 4), (219, 8), (928, 6)])
-        datey.x_label_rotation = 25
-        return datey.render_response()
-
-    @app.route('/test/datexy')
-    def test_datexy():
-        from datetime import datetime, date, timedelta
-        datey = DateY()
-        datey.add('1', [
-            (datetime(2011, 12, 21), 10),
-            (datetime(2014, 4, 8), 12),
-            (datetime(2010, 2, 28), 2)
-        ])
-        datey.add('2', map(
-            lambda t: (date.today() + timedelta(days=t[0]), t[1]),
-            [(12, 4), (219, 8), (928, 6)]))
-        datey.x_label_rotation = 25
-        return datey.render_response()
-
-    @app.route('/test/timexy')
+    @app.route('/test/timeline')
     def test_timexy():
         from datetime import time
         datey = TimeLine()
@@ -427,8 +394,8 @@ def get_test_routes(app):
             (time(21, 2, 29), 10),
             (time(12, 30, 59), 7)
         ])
-        datey.add('2',
-            [(time(12, 12, 12), 4), (time(), 8), (time(23, 59, 59), 6)])
+        datey.add(
+            '2', [(time(12, 12, 12), 4), (time(), 8), (time(23, 59, 59), 6)])
         datey.x_label_rotation = 25
         return datey.render_response()
 
@@ -458,7 +425,7 @@ def get_test_routes(app):
 
     @app.route('/test/frenchmapdepartments')
     def test_frenchmapdepartments():
-        fmap = FrenchMap_Departments(style=choice(list(styles.values())))
+        fmap = FrenchMapDepartments(style=choice(list(styles.values())))
         for i in range(10):
             fmap.add('s%d' % i, [
                 (choice(list(DEPARTMENTS.keys())), randint(0, 100))
@@ -478,7 +445,7 @@ def get_test_routes(app):
 
     @app.route('/test/frenchmapregions')
     def test_frenchmapregions():
-        fmap = FrenchMap_Regions(style=choice(list(styles.values())))
+        fmap = FrenchMapRegions(style=choice(list(styles.values())))
         for i in range(10):
             fmap.add('s%d' % i, [
                 (choice(list(REGIONS.keys())), randint(0, 100))

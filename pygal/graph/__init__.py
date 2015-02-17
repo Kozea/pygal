@@ -20,31 +20,3 @@
 Graph modules
 
 """
-
-CHARTS_NAMES = [
-    'Line',
-    'StackedLine',
-    'XY',
-    'Bar',
-    'HorizontalBar',
-    'StackedBar',
-    'HorizontalStackedBar',
-    'Pie',
-    'Radar',
-    'Funnel',
-    'Pyramid',
-    'VerticalPyramid',
-    'Dot',
-    'Gauge',
-    'Worldmap',
-    'SupranationalWorldmap',
-    'Histogram',
-    'Box',
-    'FrenchMap',
-    'Treemap',
-    'DateY',
-    'DateTimeLine',
-    'DateLine',
-    'TimeLine',
-    'TimeDeltaLine'
-]

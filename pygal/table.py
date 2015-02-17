@@ -35,14 +35,13 @@ class HTML(object):
 class Table(BaseGraph):
     _dual = None
 
-    def __init__(self, config, series, secondary_series, uuid, xml_filters):
+    def __init__(self, chart, series, secondary_series, uuid, xml_filters):
         "Init the table"
         self.uuid = uuid
         self.series = series or []
         self.secondary_series = secondary_series or []
         self.xml_filters = xml_filters or []
-        self.__dict__.update(config.to_dict())
-        self.config = config
+        self.__dict__.update(chart.state)
 
     def render(self, total=False, transpose=False, style=False):
         html = HTML()

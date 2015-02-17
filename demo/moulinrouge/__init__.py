@@ -20,7 +20,6 @@ from flask import Flask, render_template, Response, request
 import pygal
 from pygal.config import Config
 from pygal.util import cut
-from pygal.graph import CHARTS_NAMES
 from pygal.etree import etree
 from pygal.style import styles, parametric_styles
 from base64 import (
@@ -95,7 +94,7 @@ def create_app():
             'index.jinja2', styles=styles, parametric_styles=parametric_styles,
             parametric_colors=(
                 '#ff5995', '#b6e354', '#feed6c', '#8cedff', '#9e6ffe'),
-            links=links, charts_name=CHARTS_NAMES)
+            links=links, charts_name=pygal.CHARTS_NAMES)
 
     @app.route("/svg/<type>/<series>/<config>")
     def svg(type, series, config):

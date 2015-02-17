@@ -21,20 +21,36 @@ Pygal -  A python svg graph plotting library
 
 """
 
-__version__ = '1.7.0'
-import sys
+__version__ = '1.9.9'
+
+from pygal.graph.bar import Bar
+from pygal.graph.box import Box
+from pygal.graph.dot import Dot
+from pygal.graph.frenchmap import FrenchMapDepartments, FrenchMapRegions
+from pygal.graph.funnel import Funnel
+from pygal.graph.gauge import Gauge
+from pygal.graph.histogram import Histogram
+from pygal.graph.horizontalbar import HorizontalBar
+from pygal.graph.horizontalstackedbar import HorizontalStackedBar
+from pygal.graph.line import Line
+from pygal.graph.pie import Pie
+from pygal.graph.pyramid import Pyramid
+from pygal.graph.radar import Radar
+from pygal.graph.stackedbar import StackedBar
+from pygal.graph.stackedline import StackedLine
+from pygal.graph.supranationalworldmap import SupranationalWorldmap
+from pygal.graph.time import DateLine, DateTimeLine, TimeLine, TimeDeltaLine
+from pygal.graph.treemap import Treemap
+from pygal.graph.verticalpyramid import VerticalPyramid
+from pygal.graph.worldmap import Worldmap
+from pygal.graph.xy import XY
+from pygal.graph.graph import Graph
 from pygal.config import Config
-from pygal.ghost import Ghost, REAL_CHARTS
-
-CHARTS = []
-CHARTS_BY_NAME = {}
-
-for NAME in REAL_CHARTS.keys():
-    _CHART = type(NAME, (Ghost,), {})
-    CHARTS.append(_CHART)
-    CHARTS_BY_NAME[NAME] = _CHART
-    setattr(sys.modules[__name__], NAME, _CHART)
 
 
-__all__ = list(CHARTS_BY_NAME.keys()) + [
-    Config.__name__, 'CHARTS', 'CHARTS_BY_NAME']
+CHARTS_BY_NAME = dict(
+    [(k, v) for k, v in locals().items()
+     if isinstance(v, type) and issubclass(v, Graph) and v != Graph])
+
+CHARTS_NAMES = list(CHARTS_BY_NAME.keys())
+CHARTS = list(CHARTS_BY_NAME.values())
