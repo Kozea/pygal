@@ -372,3 +372,118 @@ class HorizontalLogView(XLogView):
         if self._force_vertical:
             return super(XLogView, self).y(y)
         return super(HorizontalLogView, self).x(y)
+        
+class CompleteLogView(object):#combines all of the functionality of the other six cartesian based view classes
+    def __init__(self, width, height, box, vertical = True, xlog = False, ylog = False):
+        self.vertical = vertical #determines if this view will be vertical or horizontal
+        self.width = width
+        self.height = height
+        self.box = box
+        self.xlog = False #xlog determines if the x axis will be linear or logarithmic. It can even choose what base log will be used
+        self.ylog = False #ylog is like xlog except for the y axis.
+        #logarithimic bases have two invalid values: 0 and 1.
+        #xlog and ylog use those values to indicate other things.
+        #a 0 (a.k.a. False) will result in a linear progression for the axis
+        #a 1 (a.k.a. True) is a shortcut to base 10 logarithmic progression.
+        if ylog == true or ylog == 10:
+            self.ylog = ylog
+            self.log_ymax = log10(self.box.ymax) if self.box.ymax > 0 else 0
+            self.log_ymin = log10(self.box.ymin) if self.box.ymin > 0 else 0
+        elif ylog > 0:
+            self.ylog = ylog
+            self.log_ymax = log(self.box.ymax, ylog) if self.box.ymax > 0 else 0
+            self.log_ymin = log(self.box.ymin, ylog) if self.box.ymin > 0 else 0
+        if xlog == true or xlog == 10:
+            self.xlog = xlog
+            self.log_xmax = log10(self.box.xmax) if self.box.xmax > 0 else 0
+            self.log_xmin = log10(self.box.xmin) if self.box.xmin > 0 else 0
+        elif xlog > 0:
+            self.xlog = xlog
+            self.log_xmax = log(self.box.xmax, xlog) if self.box.xmax > 0 else 0
+            self.log_xmin = log(self.box.xmin, xlog) if self.box.xmin > 0 else 0
+        self.box.fix(False)
+    
+    def vertical_x(self, x):
+         if self.xlog is False:
+            return self.width * (x - self.box.xmin) / self.box.width
+        else if x is None or x <= 0 or self.log_xmax - self.log_xmin == 0:
+            return 0
+        else if self.xlog == true or self.xlog == 10:
+            return (self.width * (log10(x) - self.log_xmin) / (self.log_xmax - self.log_xmin))
+        else:
+            return (self.width * (log(x, self.xlog) - self.log_xmin)/ (self.log_xmax - self.log_xmin))
+    
+    def horizontal_x(self, x):
+        if self.xlog is False:
+            return (self.height - self.height * (x - self.box.ymin) / self.box.height)
+        else if x is None or x <= 0 or self.log_xmax - self.log_xmin == 0:
+            return 0
+        else if self.ylog == true or self.ylog == 10:
+            return self.height - self.height * (log10(x) - self.log_ymin) / (self.log_ymax - self.log_ymin))
+        else:
+            return self.height - self.height * (log(x, self.ylog) - self.log_ymin) / (self.log_ymax - self.log_ymin))
+    
+    def y(self, y):
+        if self.vertical:
+            return horizontal_x(y)
+        else:
+            return vertical_x(y)
+    
+    def x(self, x):
+        if self.vertical:
+            return vertical_x(x)
+        else:
+            return horizontal_x(x)
+    
+    def xlog(self, xlog):
+        if xlog < 0:
+            return False
+        self.xlog = xlog
+        if self.xlog == true or self.xlog == 10:
+            self.log_xmax = log10(self.box.xmax) if self.box.xmax > 0 else 0
+            self.log_xmin = log10(self.box.xmin) if self.box.xmin > 0 else 0
+        else if xlog != 0:
+            self.log_xmax = log(self.box.xmax, self.xlog) if self.box.xmax > 0 else 0
+            self.log_xmin = log(self.box.xmin, self.xlog) if self.box.xmin > 0 else 0
+        return True
+    
+    def xlog(self):
+        return self.xlog
+    
+    def ylog(self):
+        return self.ylog
+    
+    def orientation_swap(self):
+        self.box.swap()
+        self.vertical = not self.vertical
+    
+    def progression_swap(self):
+        self.ylog, self.xlog = self.xlog, self.ylog
+        if self.ylog == true or self.ylog == 10:
+            self.log_ymax = log10(self.box.ymax) if self.box.ymax > 0 else 0
+            self.log_ymin = log10(self.box.ymin) if self.box.ymin > 0 else 0
+        else if self.ylog is not False:
+            self.log_ymax = log(self.box.ymax, ylog) if self.box.ymax > 0 else 0
+            self.log_ymin = log(self.box.ymin, ylog) if self.box.ymin > 0 else 0
+        if self.xlog == true or self.xlog == 10:
+            self.log_xmax = log10(self.box.xmax) if self.box.xmax > 0 else 0
+            self.log_xmin = log10(self.box.xmin) if self.box.xmin > 0 else 0
+        else if self.xlog is not False:
+            self.log_xmax = log(self.box.xmax, xlog) if self.box.xmax > 0 else 0
+            self.log_xmin = log(self.box.xmin, xlog) if self.box.xmin > 0 else 0
+    
+    def full_swap(self):
+        self.orientation_swap()
+        self.log_swap()
+    
+    def ylog(self, ylog):
+        if ylog < 0:
+            return False
+        self.ylog = ylog
+        if self.ylog == true or self.ylog == 10:
+            self.log_ymax = log10(self.box.ymax) if self.box.ymax > 0 else 0
+            self.log_ymin = log10(self.box.ymin) if self.box.ymin > 0 else 0
+        else if ylog != 0:
+            self.log_ymax = log(self.box.ymax, self.ylog) if self.box.ymax > 0 else 0
+            self.log_ymin = log(self.box.ymin, self.ylog) if self.box.ymin > 0 else 0
+        return True
