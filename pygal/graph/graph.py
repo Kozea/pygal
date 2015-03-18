@@ -24,7 +24,7 @@ Commmon graphing functions
 from __future__ import division
 from pygal.interpolate import INTERPOLATIONS
 from pygal.graph.base import BaseGraph
-from pygal.view import View, LogView, XYLogView
+from pygal.view import View, LogView, XYLogView, ReverseView
 from pygal.util import (
     truncate, reverse_text_len, get_texts_box, cut, rad, decorate)
 from math import sqrt, ceil, cos
@@ -58,7 +58,7 @@ class Graph(BaseGraph):
             else:
                 view_class = LogView
         else:
-            view_class = View
+            view_class = ReverseView if self.inverse_y_axis else View
 
         self.view = view_class(
             self.width - self.margin.x,
@@ -211,7 +211,9 @@ class Graph(BaseGraph):
                 self.show_y_guides):
             self.svg.node(
                 axis, 'path',
-                d='M%f %f h%f' % (0, self.view.height, self.view.width),
+                d='M%f %f h%f' % (
+                    0, 0 if self.inverse_y_axis else self.view.height,
+                    self.view.width),
                 class_='line'
             )
 

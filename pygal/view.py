@@ -155,6 +155,13 @@ class View(object):
         return (self.x(x), self.y(y))
 
 
+class ReverseView(View):
+    def y(self, y):
+        if y is None:
+            return None
+        return (self.height * (y - self.box.ymin) / self.box.height)
+
+
 class HorizontalView(View):
     def __init__(self, width, height, box):
         self._force_vertical = None

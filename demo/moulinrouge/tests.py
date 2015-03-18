@@ -379,7 +379,6 @@ def get_test_routes(app):
 
     @app.route('/test/dateline')
     def test_dateline():
-        from datetime import date
         datey = DateLine(show_dots=False)
         datey.add('1', [
             (datetime(2013, 1, 2), 300),
@@ -427,8 +426,8 @@ def get_test_routes(app):
             (time(21, 2, 29), 10),
             (time(12, 30, 59), 7)
         ])
-        datey.add('2',
-            [(time(12, 12, 12), 4), (time(), 8), (time(23, 59, 59), 6)])
+        datey.add(
+            '2', [(time(12, 12, 12), 4), (time(), 8), (time(23, 59, 59), 6)])
         datey.x_label_rotation = 25
         return datey.render_response()
 
@@ -622,6 +621,12 @@ def get_test_routes(app):
         graph.add('4', [7, 4, -10, None, 8, 3, 1])
         graph.x_labels = ('a', 'b', 'c', 'd', 'e', 'f', 'g')
         graph.legend_at_bottom = True
+        return graph.render_response()
+
+    @app.route('/test/inverse_y_axis/<chart>')
+    def test_inverse_y_axis(chart):
+        graph = CHARTS_BY_NAME[chart](**dict(inverse_y_axis=True))
+        graph.add('inverse', [1, 2, 3, 12, 24, 36])
         return graph.render_response()
 
     return list(sorted(filter(lambda x: x.startswith('test'), locals())))
