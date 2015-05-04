@@ -22,7 +22,6 @@ Worldmap chart
 """
 
 from __future__ import division
-from collections import defaultdict
 from pygal.ghost import ChartCollection
 from pygal.util import cut, cached_property, decorate
 from pygal.graph.graph import Graph
@@ -36,6 +35,7 @@ CANTONS = {
     'kt-zh': u("Zürich"),
     'kt-be': u("Bern"),
     'kt-lu': u("Luzern"),
+    'kt-ju': u("Jura"),
     'kt-ur': u("Uri"),
     'kt-sz': u("Schwyz"),
     'kt-ow': u("Obwalden"),
@@ -44,7 +44,7 @@ CANTONS = {
     'kt-zg': u("Zug"),
     'kt-fr': u("Freiburg"),
     'kt-so': u("Solothurn"),
-    'kt-bl': u("Basel-Stadt "),
+    'kt-bl': u("Basel-Stadt"),
     'kt-bs': u("Basle-Land"),
     'kt-sh': u("Schaffhausen"),
     'kt-ar': u("Appenzell Ausseroden"),
@@ -56,12 +56,9 @@ CANTONS = {
     'kt-ti': u("Tessin"),
     'kt-vd': u("Waadt"),
     'kt-vs': u("Wallis"),
-    'ke-ne': u("Neuenburg"),
-    'ke-ge': u("Genf"),
+    'kt-ne': u("Neuenburg"),
+    'kt-ge': u("Genf"),
 }
-
-
-
 
 
 with open(os.path.join(
@@ -165,9 +162,6 @@ class SwissMapCantons(SwissMapCantons):
     svg_map = CNT_MAP
     kind = 'canton'
 
+
 class SwissMap(ChartCollection):
     Cantons = SwissMapCantons
-
-
-
-
