@@ -58,7 +58,7 @@ CANTONS = {
 
 
 with open(os.path.join(
-        os.path.dirname(__file__),
+        os.path.dirname(__file__), 'maps',
         'ch.cantons.svg')) as file:
     CNT_MAP = file.read()
 

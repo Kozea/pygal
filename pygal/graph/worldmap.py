@@ -29,7 +29,7 @@ from pygal.etree import etree
 import os
 
 with open(os.path.join(
-        os.path.dirname(__file__),
+        os.path.dirname(__file__), 'maps',
         'worldmap.svg')) as file:
     WORLD_MAP = file.read()
 

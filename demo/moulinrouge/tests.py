@@ -447,7 +447,7 @@ def get_test_routes(app):
 
     @app.route('/test/swissmap')
     def test_swissmap():
-        smap = SwissMap_Cantons(style=choice(list(styles.values())))
+        smap = SwissMapCantons(style=choice(list(styles.values())))
         for i in range(10):
             smap.add('s%d' % i, [
                 (choice(list(CANTONS.keys())), randint(0, 100))

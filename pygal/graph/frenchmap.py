@@ -169,7 +169,7 @@ REGIONS = {
 
 
 with open(os.path.join(
-        os.path.dirname(__file__),
+        os.path.dirname(__file__), 'maps',
         'fr.departments.svg')) as file:
     DPT_MAP = file.read()
 
@@ -184,7 +184,7 @@ class FrenchMapDepartments(BaseMap):
 
 
 with open(os.path.join(
-        os.path.dirname(__file__),
+        os.path.dirname(__file__), 'maps',
         'fr.regions.svg')) as file:
     REG_MAP = file.read()
 
