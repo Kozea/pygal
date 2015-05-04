@@ -27,7 +27,6 @@ from pygal.graph.bar import Bar
 from pygal.graph.box import Box
 from pygal.graph.dot import Dot
 from pygal.graph.frenchmap import FrenchMapDepartments, FrenchMapRegions
-from pygal.graph.swissmap import SwissMapCantons
 from pygal.graph.funnel import Funnel
 from pygal.graph.gauge import Gauge
 from pygal.graph.histogram import Histogram
@@ -39,11 +38,11 @@ from pygal.graph.pyramid import Pyramid
 from pygal.graph.radar import Radar
 from pygal.graph.stackedbar import StackedBar
 from pygal.graph.stackedline import StackedLine
-from pygal.graph.supranationalworldmap import SupranationalWorldmap
+from pygal.graph.swissmap import SwissMapCantons
 from pygal.graph.time import DateLine, DateTimeLine, TimeLine, TimeDeltaLine
 from pygal.graph.treemap import Treemap
 from pygal.graph.verticalpyramid import VerticalPyramid
-from pygal.graph.worldmap import Worldmap
+from pygal.graph.worldmap import Worldmap, SupranationalWorldmap
 from pygal.graph.xy import XY
 from pygal.graph.graph import Graph
 from pygal.config import Config

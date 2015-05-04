@@ -23,22 +23,24 @@ Worldmap chart
 
 from __future__ import division
 from pygal.util import cut, cached_property, decorate
-from pygal.graph.graph import Graph
-from pygal.i18n import COUNTRIES
+from pygal.graph.map import BaseMap
+from pygal.i18n import COUNTRIES, SUPRANATIONAL
 from pygal.etree import etree
 import os
 
 with open(os.path.join(
         os.path.dirname(__file__),
         'worldmap.svg')) as file:
-    MAP = file.read()
+    WORLD_MAP = file.read()
 
 
-class Worldmap(Graph):
+class Worldmap(BaseMap):
     """Worldmap graph"""
-    _dual = True
     x_labels = list(COUNTRIES.keys())
-    country_names = COUNTRIES
+    area_names = COUNTRIES
+    area_prefix = ''
+    svg_map = WORLD_MAP
+    kind = 'country'
 
     @cached_property
     def countries(self):
@@ -55,63 +57,19 @@ class Worldmap(Graph):
                 for val in serie.values
                 if val[1] is not None]
 
-    def _plot(self):
-        map = etree.fromstring(MAP)
-        map.set('width', str(self.view.width))
-        map.set('height', str(self.view.height))
 
-        for i, serie in enumerate(self.series):
-            safe_vals = list(filter(
-                lambda x: x is not None, cut(serie.values, 1)))
-            if not safe_vals:
-                continue
-            min_ = min(safe_vals)
-            max_ = max(safe_vals)
-            for j, (country_code, value) in enumerate(serie.values):
-                if value is None:
-                    continue
-                if max_ == min_:
-                    ratio = 1
-                else:
-                    ratio = .3 + .7 * (value - min_) / (max_ - min_)
+class SupranationalWorldmap(Worldmap):
+    """SupranationalWorldmap graph"""
 
-                try:
-                    country = map.find('.//*[@id="%s"]' % country_code)
-                except SyntaxError:
-                    # Python 2.6 (you'd better install lxml)
-                    country = None
-                    for e in map:
-                        if e.attrib.get('id', '') == country_code:
-                            country = e
+    def get_values(self, serie):
+        return self.replace_supranationals(serie.values)
 
-                if country is None:
-                    continue
-                cls = country.get('class', '').split(' ')
-                cls.append('color-%d' % i)
-                country.set('class', ' '.join(cls))
-                country.set(
-                    'style', 'fill-opacity: %f' % (
-                        ratio))
-
-                metadata = serie.metadata.get(j)
-                if metadata:
-                    node = decorate(self.svg, country, metadata)
-                    if node != country:
-                        country.remove(node)
-                        index = list(map).index(country)
-                        map.remove(country)
-                        node.append(country)
-                        map.insert(index, node)
-
-                last_node = len(country) > 0 and country[-1]
-                if last_node is not None and last_node.tag == 'title':
-                    title_node = last_node
-                    text = title_node.text + '\n'
-                else:
-                    title_node = self.svg.node(country, 'title')
-                    text = ''
-                title_node.text = text + '[%s] %s: %s' % (
-                    serie.title,
-                    self.country_names[country_code], self._format(value))
-
-        self.nodes['plot'].append(map)
+    def replace_supranationals(self, values):
+        """Replaces the values if it contains a supranational code."""
+        for i, (code, value) in enumerate(values[:]):
+            for suprakey in SUPRANATIONAL.keys():
+                if suprakey == code:
+                    values.extend(
+                        [(country, value) for country in SUPRANATIONAL[code]])
+                    values.remove((code, value))
+        return values

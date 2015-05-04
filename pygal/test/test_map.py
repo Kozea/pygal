@@ -41,7 +41,7 @@ def test_worldmap():
     assert len(
         q('.country.color-0')
     ) == len(COUNTRIES)
-    assert 'France' in q('#fr').text()
+    assert 'France' in q('.country.fr').text()
 
 
 def test_worldmap_i18n():
@@ -57,7 +57,7 @@ def test_worldmap_i18n():
     assert len(
         q('.country.color-0')
     ) == len(COUNTRIES)
-    assert 'Francia' in q('#fr').text()
+    assert 'Francia' in q('.country.fr').text()
 
 
 def test_worldmap_i18n_clear():
@@ -69,7 +69,7 @@ def test_worldmap_i18n_clear():
     assert len(
         q('.country.color-0')
     ) == 1
-    assert 'Frankreich' in q('#fr').text()
+    assert 'Frankreich' in q('.country.fr').text()
 
 
 def test_supranationalworldmap():

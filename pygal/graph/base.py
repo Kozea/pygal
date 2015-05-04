@@ -86,11 +86,10 @@ class BaseGraph(object):
 
     def prepare_values(self, raw, offset=0):
         """Prepare the values to start with sane values"""
-        from pygal import (
-            Worldmap, FrenchMapDepartments, Histogram, SwissMapCantons)
-        # TODO: Generalize these conditions
-        if self.zero == 0 and isinstance(
-                self, (Worldmap, FrenchMapDepartments, SwissMapCantons)):
+        from pygal.graph.map import BaseMap
+        from pygal import Histogram
+
+        if self.zero == 0 and isinstance(self, BaseMap):
             self.zero = 1
 
         for key in ('x_labels', 'y_labels'):
@@ -126,8 +125,7 @@ class BaseGraph(object):
             metadata = {}
             values = []
             if isinstance(raw_values, dict):
-                if isinstance(self, (
-                        Worldmap, FrenchMapDepartments, SwissMapCantons)):
+                if isinstance(self, BaseMap):
                     raw_values = list(raw_values.items())
                 else:
                     value_list = [None] * width
@@ -161,10 +159,7 @@ class BaseGraph(object):
                         value = (value, self.zero)
                     if x_adapter:
                         value = (x_adapter(value[0]), adapter(value[1]))
-                    if isinstance(
-                            self, (
-                                Worldmap, FrenchMapDepartments,
-                                SwissMapCantons)):
+                    if isinstance(self, BaseMap):
                         value = (adapter(value[0]), value[1])
                     else:
                         value = list(map(adapter, value))
