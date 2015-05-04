@@ -21,7 +21,7 @@ from pygal import (
     Line, Dot, Pie, Treemap, Radar, Config, Bar, Funnel, Worldmap,
     SupranationalWorldmap, Histogram, Gauge, Box, XY,
     Pyramid, HorizontalBar, HorizontalStackedBar,
-    FrenchMapRegions, FrenchMapDepartments,
+    FrenchMapRegions, FrenchMapDepartments, SwissMapCantons,
     DateTimeLine, TimeLine, DateLine, TimeDeltaLine)
 from pygal._compat import u
 from pygal.test.utils import texts
@@ -275,7 +275,7 @@ def test_include_x_axis(Chart):
     chart = Chart()
     if Chart in (Pie, Treemap, Radar, Funnel, Dot, Gauge, Worldmap,
                  SupranationalWorldmap, Histogram, Box,
-                 FrenchMapRegions, FrenchMapDepartments):
+                 FrenchMapRegions, FrenchMapDepartments, SwissMapCantons):
         return
     if not chart._dual:
         data = 100, 200, 150
@@ -362,7 +362,7 @@ def test_x_label_major(Chart):
     if Chart in (
             Pie, Treemap, Funnel, Dot, Gauge, Worldmap,
             SupranationalWorldmap, Histogram, Box,
-            FrenchMapRegions, FrenchMapDepartments,
+            FrenchMapRegions, FrenchMapDepartments, SwissMapCantons,
             Pyramid, DateTimeLine, TimeLine, DateLine,
             TimeDeltaLine):
         return
@@ -407,7 +407,7 @@ def test_y_label_major(Chart):
     if Chart in (
             Pie, Treemap, Funnel, Dot, Gauge, Worldmap,
             SupranationalWorldmap, Histogram, Box,
-            FrenchMapRegions, FrenchMapDepartments,
+            FrenchMapRegions, FrenchMapDepartments, SwissMapCantons,
             HorizontalBar, HorizontalStackedBar,
             Pyramid, DateTimeLine, TimeLine, DateLine,
             TimeDeltaLine):

@@ -2,11 +2,14 @@
 # This file is part of pygal
 from pygal import (
     Bar, Gauge, Pyramid, Funnel, Dot, StackedBar, StackedLine, XY,
-    CHARTS_BY_NAME, Config, Line, Worldmap, Histogram, Box,
+    CHARTS_BY_NAME, Config, Line, Worldmap, Histogram, Box, SwissMapCantons,
     FrenchMapDepartments, FrenchMapRegions, Pie, Treemap, TimeLine, DateLine)
+
+
 from pygal.style import styles, Style, RotateStyle
 from pygal.colors import rotate
 from pygal.graph.frenchmap import DEPARTMENTS, REGIONS
+from pygal.graph.swissmap import CANTONS
 from random import randint, choice
 from datetime import datetime
 
@@ -374,7 +377,6 @@ def get_test_routes(app):
 
     @app.route('/test/dateline')
     def test_dateline():
-        from datetime import date
         datey = DateLine(show_dots=False)
         datey.add('1', [
             (datetime(2013, 1, 2), 300),
@@ -442,6 +444,26 @@ def get_test_routes(app):
         fmap.add('6th', [3, 5, 34, 12])
         fmap.title = 'French map'
         return fmap.render_response()
+
+    @app.route('/test/swissmap')
+    def test_swissmap():
+        smap = SwissMap_Cantons(style=choice(list(styles.values())))
+        for i in range(10):
+            smap.add('s%d' % i, [
+                (choice(list(CANTONS.keys())), randint(0, 100))
+                for _ in range(randint(1, 5))])
+
+        smap.add('links', [{
+            'value': ('kt-vs', 10),
+            'label': '\o/',
+            'xlink': 'http://google.com?q=69'
+        }, {
+            'value': ('bt', 20),
+            'label': 'Y',
+        }])
+        smap.add('6th', [3, 5, 34, 12])
+        smap.title = 'Swiss map'
+        return smap.render_response()
 
     @app.route('/test/frenchmapregions')
     def test_frenchmapregions():
@@ -589,6 +611,12 @@ def get_test_routes(app):
         graph.add('4', [7, 4, -10, None, 8, 3, 1])
         graph.x_labels = ('a', 'b', 'c', 'd', 'e', 'f', 'g')
         graph.legend_at_bottom = True
+        return graph.render_response()
+
+    @app.route('/test/inverse_y_axis/<chart>')
+    def test_inverse_y_axis_for(chart):
+        graph = CHARTS_BY_NAME[chart](**dict(inverse_y_axis=True))
+        graph.add('inverse', [1, 2, 3, 12, 24, 36])
         return graph.render_response()
 
     return list(sorted(filter(lambda x: x.startswith('test'), locals())))

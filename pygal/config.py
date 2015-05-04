@@ -427,6 +427,8 @@ class Config(CommonConfig):
         False, bool, "Misc",
         "Don't prefix css")
 
+    inverse_y_axis = Key(False, bool, "Misc", "Inverse Y axis direction")
+
 
 class SerieConfig(CommonConfig):
     """Class holding serie config values"""
