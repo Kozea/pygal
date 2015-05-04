@@ -339,9 +339,10 @@ def prepare_values(raw, config, cls, offset=0):
     from pygal.graph.histogram import Histogram
     from pygal.graph.worldmap import Worldmap
     from pygal.graph.frenchmap import FrenchMapDepartments
+    from pygal.graph.swissmap import SwissMapCantons
     if config.x_labels is None and hasattr(cls, 'x_labels'):
         config.x_labels = list(map(to_unicode, cls.x_labels))
-    if config.zero == 0 and issubclass(cls, (Worldmap, FrenchMapDepartments)):
+    if config.zero == 0 and issubclass(cls, (Worldmap, FrenchMapDepartments,SwissMapCantons)):
         config.zero = 1
 
     for key in ('x_labels', 'y_labels'):
@@ -376,7 +377,7 @@ def prepare_values(raw, config, cls, offset=0):
         metadata = {}
         values = []
         if isinstance(raw_values, dict):
-            if issubclass(cls, (Worldmap, FrenchMapDepartments)):
+            if issubclass(cls, (Worldmap, FrenchMapDepartments,SwissMapCantons)):
                 raw_values = list(raw_values.items())
             else:
                 value_list = [None] * width
@@ -411,7 +412,7 @@ def prepare_values(raw, config, cls, offset=0):
                 if x_adapter:
                     value = (x_adapter(value[0]), adapter(value[1]))
                 if issubclass(
-                        cls, (Worldmap, FrenchMapDepartments)):
+                        cls, (Worldmap, FrenchMapDepartments,SwissMapCantons)):
                     value = (adapter(value[0]), value[1])
                 else:
                     value = list(map(adapter, value))

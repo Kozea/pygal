@@ -41,6 +41,7 @@ CHARTS_NAMES = [
     'Histogram',
     'Box',
     'FrenchMap',
+    'SwissMap',
     'Treemap',
     'DateY',
     'DateTimeLine',
