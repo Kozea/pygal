@@ -1,5 +1,8 @@
 V 2.0.0 UNRELEASED
 	Rework the ghost mechanism to come back to a more object oriented behavior, storing all state in a state object which is created every render.
+	Refactor maps
+	Add swiss cantons map (thanks sergedroz)
+	Add inverse_y_axis options to reverse graph (#24)
 
 V 1.7.0
 	Remove DateY and replace it by real XY datetime, date, time and timedelta support. (#188)
