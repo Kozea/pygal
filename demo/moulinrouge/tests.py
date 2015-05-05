@@ -430,12 +430,14 @@ def get_test_routes(app):
     def test_supranational():
         wmap = SupranationalWorldmap(style=choice(list(styles.values())))
 
-        # wmap.add('1st', [('nafta', 100), ('oecd', 10)])
-        wmap.add('2nd', [{
-            'value': ('europe', 10),
-            'label': 'EUROP3',
-            'xlink': 'http://google.com?q=tw'
-        }])
+        wmap.add('Asia', [('asia', 1)])
+        wmap.add('Europe', [('europe', 1)])
+        wmap.add('Africa', [('africa', 1)])
+        wmap.add('North america', [('north_america', 1)])
+        wmap.add('South america', [('south_america', 1)])
+        wmap.add('Oceania', [('oceania', 1)])
+        wmap.add('Antartica', [('antartica', 1)])
+
         wmap.title = 'Supra World Map !!'
         return wmap.render_response()
 

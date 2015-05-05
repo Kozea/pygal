@@ -60,6 +60,7 @@ class Worldmap(BaseMap):
 
 class SupranationalWorldmap(Worldmap):
     """SupranationalWorldmap graph"""
+    x_labels = list(SUPRANATIONAL.keys())
 
     def enumerate_values(self, serie):
         """Replaces the values if it contains a supranational code."""

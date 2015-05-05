@@ -185,9 +185,6 @@ COUNTRIES = {
     'zw': 'Zimbabwe'
 }
 
-EUROPE = ['at', 'be', 'bg', 'hr', 'cy', 'cz', 'dk', 'ee', 'fi', 'fr', 'de',
-          'gr', 'hu', 'ie', 'it', 'lv', 'lt', 'lu', 'mt', 'nl', 'pl', 'pt',
-          'ro', 'sk', 'si', 'es', 'se', 'gb']
 
 EUR = ['be', 'de', 'ie', 'gr', 'es', 'fr', 'it', 'cy', 'lu', 'mt', 'nl', 'at',
        'pt', 'si', 'sk', 'fi', 'ee']
@@ -198,8 +195,63 @@ OECD = ['au', 'at', 'be', 'ca', 'cl', 'cz', 'dk', 'ee', 'fi', 'fr', 'de', 'gr',
 
 NAFTA = ['ca', 'mx', 'us']
 
+# Continents
 
-SUPRANATIONAL = {'europe': EUROPE, 'oecd': OECD, 'nafta': NAFTA, 'eur': EUR}
+ASIA = [
+    'af', 'am', 'az', 'bh', 'bd', 'bt', 'bn', 'mn', 'mm', 'kh', 'cn', 'cy',
+    'tl', 'ge', 'in', 'id', 'ir', 'iq', 'il', 'jp', 'jo', 'kz', 'kw', 'kg',
+    'la', 'lb', 'my', 'mv', 'mn', 'np', 'kp', 'om', 'pk', 'ps', 'ph', 'ru',
+    'sa', 'sg', 'lk', 'kr', 'sy', 'tw', 'tj', 'th', 'tr', 'tm', 'ae', 'uz',
+    'vn', 'ye', 'mo', 'hk'
+]
+
+EUROPE = [
+    'al', 'am', 'at', 'az', 'be', 'by', 'ba', 'bg', 'hr', 'cy', 'cz', 'dk',
+    'ee', 'fi', 'fr', 'ge', 'de', 'gr', 'hu', 'is', 'ie', 'it', 'kz', 'lv',
+    'li', 'lt', 'lu', 'mk', 'mt', 'md', 'mc', 'me', 'nl', 'no', 'pl', 'pt',
+    'ro', 'ru', 'sm', 'rs', 'sk', 'si', 'es', 'se', 'ch', 'tr', 'ua', 'gb',
+    'va'
+]
+
+AFRICA = [
+    'dz', 'eg', 'ly', 'ma', 'sd', 'tn', 'eh', 'dj', 'er', 'et', 'so', 'bi',
+    'ke', 'mg', 'mw', 'mu', 'yt', 'mz', 're', 'rw', 'sc', 'tz', 'ug', 'zm',
+    'zw', 'ao', 'cm', 'cf', 'td', 'cd', 'cg', 'gq', 'ga', 'st', 'bw', 'ls',
+    'na', 'za', 'sz', 'bj', 'bf', 'cv', 'gm', 'gh', 'gn', 'gw', 'ci', 'lr',
+    'ml', 'mr', 'ne', 'ng', 'sh', 'sn', 'sl', 'tg'
+]
+
+NORTH_AMERICA = [
+    'ca', 'mx', 'us', 'gl', 'cu', 'do', 'ht', 'jm', 'pr', 'bz', 'cr', 'sv',
+    'gt', 'hn', 'ni', 'pa'
+]
+
+SOUTH_AMERICA = [
+    'ar', 'bo', 'br', 'cl', 'co', 'ec', 'gf', 'gy', 'py', 'pe', 'sr', 'uy',
+    've'
+]
+
+OCEANIA = [
+    'au', 'nz', 'pg', 'gu',
+]
+
+ANTARTICA = [
+    'aq'
+]
+
+SUPRANATIONAL = {
+    'oecd': OECD,
+    'nafta': NAFTA,
+    'eur': EUR,
+
+    'asia': ASIA,
+    'europe': EUROPE,
+    'africa': AFRICA,
+    'north_america': NORTH_AMERICA,
+    'south_america': SOUTH_AMERICA,
+    'oceania': OCEANIA,
+    'antartica': ANTARTICA
+}
 
 
 def set_countries(countries, clear=False):
