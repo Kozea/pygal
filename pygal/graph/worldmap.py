@@ -22,11 +22,11 @@ Worldmap chart
 """
 
 from __future__ import division
-from pygal.util import cut, cached_property, decorate
+from pygal.util import cached_property
 from pygal.graph.map import BaseMap
 from pygal.i18n import COUNTRIES, SUPRANATIONAL
-from pygal.etree import etree
 import os
+
 
 with open(os.path.join(
         os.path.dirname(__file__), 'maps',
@@ -61,15 +61,8 @@ class Worldmap(BaseMap):
 class SupranationalWorldmap(Worldmap):
     """SupranationalWorldmap graph"""
 
-    def get_values(self, serie):
-        return self.replace_supranationals(serie.values)
-
-    def replace_supranationals(self, values):
+    def enumerate_values(self, serie):
         """Replaces the values if it contains a supranational code."""
-        for i, (code, value) in enumerate(values[:]):
-            for suprakey in SUPRANATIONAL.keys():
-                if suprakey == code:
-                    values.extend(
-                        [(country, value) for country in SUPRANATIONAL[code]])
-                    values.remove((code, value))
-        return values
+        for i, (code, value) in enumerate(serie.values):
+            for subcode in SUPRANATIONAL.get(code, []):
+                yield i, (subcode, value)

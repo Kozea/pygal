@@ -21,7 +21,6 @@ from __future__ import division
 from pygal.graph.graph import Graph
 from pygal.util import cut, cached_property, decorate
 from pygal.etree import etree
-from numbers import Number
 
 
 class BaseMap(Graph):
@@ -36,8 +35,11 @@ class BaseMap(Graph):
                 for val in serie.values
                 if val[1] is not None]
 
-    def get_values(self, serie):
-        return serie.values
+    def enumerate_values(self, serie):
+        return enumerate(serie.values)
+
+    def adapt_code(self, area_code):
+        return area_code
 
     def _plot(self):
         map = etree.fromstring(self.svg_map)
@@ -51,11 +53,8 @@ class BaseMap(Graph):
                 continue
             min_ = min(safe_vals)
             max_ = max(safe_vals)
-            for j, (area_code, value) in enumerate(self.get_values(serie)):
-                # TODO: Generalize
-                if isinstance(area_code, Number):
-                    area_code = '%2d' % area_code
-
+            for j, (area_code, value) in self.enumerate_values(serie):
+                area_code = self.adapt_code(area_code)
                 if value is None:
                     continue
                 if max_ == min_:

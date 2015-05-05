@@ -25,6 +25,8 @@ from __future__ import division
 from collections import defaultdict
 from pygal.graph.map import BaseMap
 from pygal._compat import u
+from numbers import Number
+
 import os
 
 
@@ -174,7 +176,17 @@ with open(os.path.join(
     DPT_MAP = file.read()
 
 
-class FrenchMapDepartments(BaseMap):
+class IntCodeMixin(object):
+    def adapt_code(self, area_code):
+        if isinstance(area_code, Number):
+            if area_code > 100:
+                return '%3d' % area_code
+
+            return '%2d' % area_code
+        return super(IntCodeMixin, self).adapt_code(area_code)
+
+
+class FrenchMapDepartments(IntCodeMixin, BaseMap):
     """French department map"""
     x_labels = list(DEPARTMENTS.keys())
     area_names = DEPARTMENTS
@@ -189,7 +201,7 @@ with open(os.path.join(
     REG_MAP = file.read()
 
 
-class FrenchMapRegions(BaseMap):
+class FrenchMapRegions(IntCodeMixin, BaseMap):
     """French regions map"""
     x_labels = list(REGIONS.keys())
     area_names = REGIONS

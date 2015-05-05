@@ -3,7 +3,8 @@
 from pygal import (
     Bar, Gauge, Pyramid, Funnel, Dot, StackedBar, StackedLine, XY,
     CHARTS_BY_NAME, Config, Line, Worldmap, Histogram, Box, SwissMapCantons,
-    FrenchMapDepartments, FrenchMapRegions, Pie, Treemap, TimeLine, DateLine)
+    FrenchMapDepartments, FrenchMapRegions, Pie, Treemap, TimeLine, DateLine,
+    SupranationalWorldmap)
 
 
 from pygal.style import styles, Style, RotateStyle
@@ -425,6 +426,19 @@ def get_test_routes(app):
         wmap.title = 'World Map !!'
         return wmap.render_response()
 
+    @app.route('/test/supranational')
+    def test_supranational():
+        wmap = SupranationalWorldmap(style=choice(list(styles.values())))
+
+        # wmap.add('1st', [('nafta', 100), ('oecd', 10)])
+        wmap.add('2nd', [{
+            'value': ('europe', 10),
+            'label': 'EUROP3',
+            'xlink': 'http://google.com?q=tw'
+        }])
+        wmap.title = 'Supra World Map !!'
+        return wmap.render_response()
+
     @app.route('/test/frenchmapdepartments')
     def test_frenchmapdepartments():
         fmap = FrenchMapDepartments(style=choice(list(styles.values())))
@@ -434,7 +448,7 @@ def get_test_routes(app):
                 for _ in range(randint(1, 5))])
 
         fmap.add('links', [{
-            'value': ('69', 10),
+            'value': (69, 10),
             'label': '\o/',
             'xlink': 'http://google.com?q=69'
         }, {
