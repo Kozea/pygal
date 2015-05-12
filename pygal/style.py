@@ -43,7 +43,7 @@ class Style(object):
             opacity_hover='.9',
             stroke_width='1',
             stroke_style='round',
-            stroke_dasharray=(0, 0),
+            stroke_dasharray=None,
             transition='250ms',
             colors=(
                 '#ff5995', '#b6e354', '#feed6c', '#8cedff', '#9e6ffe',
@@ -72,18 +72,18 @@ class Style(object):
 
         # stroke_style
         self.stroke_style = self.stroke_style.lower().strip()
-        if not self.stroke_style in ['round', 'bevel', 'miter']:
+        if self.stroke_style not in ['round', 'bevel', 'miter']:
             self.stroke_style = 'round'
 
         # stroke_dasharray
-        if isinstance(self.stroke_dasharray, (list, tuple)):
+        if self.stroke_dasharray is None:
+            self.stroke_dasharray = 'none'
+        elif isinstance(self.stroke_dasharray, (list, tuple)):
             self.stroke_dasharray = '%d,%d' % self.stroke_dasharray
-
-        if isinstance(self.stroke_dasharray, str):
+        elif isinstance(self.stroke_dasharray, str):
             self.stroke_dasharray = re.sub(
                 re_dasharray_delimiters, ',', self.stroke_dasharray)
-
-        if not isinstance(self.stroke_dasharray, str):
+        else:
             raise ValueError(
                 'stroke_dasharray not in proper form: tuple(int, int)')
 
