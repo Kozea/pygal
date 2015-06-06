@@ -27,6 +27,7 @@ from pygal.etree import etree
 import io
 import os
 import json
+import importlib
 from datetime import date, datetime
 from numbers import Number
 from math import cos, sin, pi
@@ -93,7 +94,9 @@ class Svg(object):
                 if type(css) == str and css.startswith('inline:'):
                     css_text = css[len('inline:'):]
                 else:
-                    if type(css) == str:
+                    if type(css) == str and css.startswith("!"):
+                        css_text = importlib.import_module(css[1:]).data
+                    elif type(css) == str:
                         if not os.path.exists(css):
                             css = os.path.join(
                                 os.path.dirname(__file__), 'css', css)
