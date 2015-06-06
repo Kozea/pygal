@@ -27,12 +27,7 @@ from pygal.graph.map import BaseMap
 from pygal.i18n import COUNTRIES, SUPRANATIONAL
 import os
 
-
-with open(os.path.join(
-        os.path.dirname(__file__), 'maps',
-        'worldmap.svg')) as file:
-    WORLD_MAP = file.read()
-
+from .maps.worldmap_svg import data as WORLD_MAP
 
 class Worldmap(BaseMap):
     """Worldmap graph"""

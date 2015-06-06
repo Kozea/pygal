@@ -1,3 +1,4 @@
+data="""\
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2000 1898">
   <g id="departements" transform="translate(-42.932808,96.039162)">
     <g class="z95 departement map-element">
@@ -326,3 +327,4 @@
     </g>
   </g>
 </svg>
+"""

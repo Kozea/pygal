@@ -32,6 +32,7 @@ from numbers import Number
 from math import cos, sin, pi
 from pygal.util import template, coord_format, minify_css
 from pygal import __version__
+from pygal.css import base_css
 
 
 class Svg(object):
@@ -83,36 +84,39 @@ class Svg(object):
         """Add the css to the svg"""
         colors = self.graph.style.get_colors(self.id)
         all_css = []
-        for css in ['base.css'] + list(self.graph.css):
-            if '://' in css:
+        for css in [base_css] + list(self.graph.css):
+            if type(css) == str and '://' in css:
                 self.processing_instructions.append(
                     etree.PI(
                         u('xml-stylesheet'), u('href="%s"' % css)))
             else:
-                if css.startswith('inline:'):
+                if type(css) == str and css.startswith('inline:'):
                     css_text = css[len('inline:'):]
                 else:
-                    if not os.path.exists(css):
-                        css = os.path.join(
-                            os.path.dirname(__file__), 'css', css)
+                    if type(css) == str:
+                        if not os.path.exists(css):
+                            css = os.path.join(
+                                os.path.dirname(__file__), 'css', css)
 
-                    class FontSizes(object):
-                        """Container for font sizes"""
-                    fs = FontSizes()
-                    for name in dir(self.graph.state):
-                        if name.endswith('_font_size'):
-                            setattr(
-                                fs,
-                                name.replace('_font_size', ''),
-                                ('%dpx' % getattr(self.graph, name)))
+                        class FontSizes(object):
+                            """Container for font sizes"""
+                        fs = FontSizes()
+                        for name in dir(self.graph.state):
+                            if name.endswith('_font_size'):
+                                setattr(
+                                    fs,
+                                    name.replace('_font_size', ''),
+                                    ('%dpx' % getattr(self.graph, name)))
 
-                    with io.open(css, encoding='utf-8') as f:
-                        css_text = template(
-                            f.read(),
-                            style=self.graph.style,
-                            colors=colors,
-                            font_sizes=fs,
-                            id=self.id)
+                        with io.open(css, encoding='utf-8') as f:
+                            css_text = template(
+                                f.read(),
+                                style=self.graph.style,
+                                colors=colors,
+                                font_sizes=fs,
+                                id=self.id)
+                    else:
+                        css_text = css.data
                 if not self.graph.pretty_print:
                     css_text = minify_css(css_text)
                 all_css.append(css_text)
