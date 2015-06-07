@@ -32,6 +32,15 @@ class Pie(Graph):
     """Pie graph"""
 
     _adapters = [positive, none_to_zero]
+    
+    @property
+    def _format(self):
+        """Return the value formatter for this graph"""
+        def percentage_formatter(y, self=self):
+            total = sum(map(sum, map(lambda x: x.values, self.series)))
+            perc = y/total
+            return '{0:.2%}'.format(perc)
+        return self.value_formatter or percentage_formatter
 
     def slice(self, serie, start_angle, total):
         """Make a serie slice"""
@@ -57,7 +66,7 @@ class Pie(Graph):
             else:
                 angle = 2 * pi * perc
             serie_angle += angle
-            val = '{0:.2%}'.format(perc)
+            val = self._format(val)
             metadata = serie.metadata.get(i)
             slice_ = decorate(
                 self.svg,
@@ -77,7 +86,7 @@ class Pie(Graph):
             total_perc += perc
 
         if dual:
-            val = '{0:.2%}'.format(total_perc)
+            val = self._format(total_perc*total)
             self.svg.slice(serie_node,
                            self.svg.node(slices, class_="big_slice"),
                            radius * .9, 0, serie_angle,
