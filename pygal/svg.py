@@ -95,31 +95,32 @@ class Svg(object):
                     css_text = css[len('inline:'):]
                 else:
                     if type(css) == str and css.startswith("!"):
-                        css_text = importlib.import_module(css[1:]).data
+                        css_raw = importlib.import_module(css[1:]).data
                     elif type(css) == str:
                         if not os.path.exists(css):
                             css = os.path.join(
                                 os.path.dirname(__file__), 'css', css)
-
-                        class FontSizes(object):
-                            """Container for font sizes"""
-                        fs = FontSizes()
-                        for name in dir(self.graph.state):
-                            if name.endswith('_font_size'):
-                                setattr(
-                                    fs,
-                                    name.replace('_font_size', ''),
-                                    ('%dpx' % getattr(self.graph, name)))
-
                         with io.open(css, encoding='utf-8') as f:
-                            css_text = template(
-                                f.read(),
-                                style=self.graph.style,
-                                colors=colors,
-                                font_sizes=fs,
-                                id=self.id)
+                            css_raw = f.read()
                     else:
-                        css_text = css.data
+                        css_raw = css.data
+
+                    class FontSizes(object):
+                        """Container for font sizes"""
+                    fs = FontSizes()
+                    for name in dir(self.graph.state):
+                        if name.endswith('_font_size'):
+                            setattr(
+                                fs,
+                                name.replace('_font_size', ''),
+                                ('%dpx' % getattr(self.graph, name)))
+
+                    css_text = template(
+                        css_raw,
+                        style=self.graph.style,
+                        colors=colors,
+                        font_sizes=fs,
+                        id=self.id)
                 if not self.graph.pretty_print:
                     css_text = minify_css(css_text)
                 all_css.append(css_text)

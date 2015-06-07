@@ -130,24 +130,31 @@ class Box(object):
 
 class View(object):
     """Projection base class"""
-    def __init__(self, width, height, box):
+    def __init__(self, width, height, box, preserve_aspect = False):
         self.width = width
         self.height = height
         self.box = box
         self.box.fix()
+        self.preserve_aspect = preserve_aspect
+        self.scalex = self.width / self.box.width
+        self.scaley = self.height / self.box.height
+        if preserve_aspect:
+            print("preserve aspect", self.scalex, self.scaley)
+            self.scalex = min(self.scalex, self.scaley)
+            self.scaley = self.scalex
+            print(" -> ", self.scalex, self.scaley)
 
     def x(self, x):
         """Project x"""
         if x is None:
             return None
-        return self.width * (x - self.box.xmin) / self.box.width
-
+        return self.scalex * (x - self.box.xmin)
+    
     def y(self, y):
         """Project y"""
         if y is None:
             return None
-        return (self.height - self.height *
-                (y - self.box.ymin) / self.box.height)
+        return self.height - self.scaley * (y - self.box.ymin)
 
     def __call__(self, xy):
         """Project x and y"""
@@ -159,18 +166,14 @@ class ReverseView(View):
     def y(self, y):
         if y is None:
             return None
-        return (self.height * (y - self.box.ymin) / self.box.height)
+        return self.scaley * (y - self.box.ymin)
 
 
 class HorizontalView(View):
-    def __init__(self, width, height, box):
+    def __init__(self, width, height, box, preserve_aspect = False):
         self._force_vertical = None
-        self.width = width
-        self.height = height
-
-        self.box = box
-        self.box.fix()
-        self.box.swap()
+        box.swap()
+        super(HorizontalView, self).__init__(width, height, box, preserve_aspect) 
 
     def x(self, x):
         """Project x"""
@@ -203,8 +206,8 @@ class PolarView(View):
 class PolarLogView(View):
     """Logarithmic polar projection"""
 
-    def __init__(self, width, height, box):
-        super(PolarLogView, self).__init__(width, height, box)
+    def __init__(self, width, height, box, preserve_aspect = False):
+        super(PolarLogView, self).__init__(width, height, box, preserve_aspect)
         if not hasattr(box, '_rmin') or not hasattr(box, '_rmax'):
             raise Exception(
                 'Box must be set with set_polar_box for polar charts')
@@ -232,8 +235,8 @@ class PolarLogView(View):
 class PolarThetaView(View):
     """Logarithmic polar projection"""
 
-    def __init__(self, width, height, box):
-        super(PolarThetaView, self).__init__(width, height, box)
+    def __init__(self, width, height, box, preserve_aspect = False):
+        super(PolarThetaView, self).__init__(width, height, box, preserve_aspect)
         if not hasattr(box, '_tmin') or not hasattr(box, '_tmax'):
             raise Exception(
                 'Box must be set with set_polar_box for polar charts')
@@ -260,8 +263,8 @@ class PolarThetaView(View):
 class PolarThetaLogView(View):
     """Logarithmic polar projection"""
 
-    def __init__(self, width, height, box):
-        super(PolarThetaLogView, self).__init__(width, height, box)
+    def __init__(self, width, height, box, preserve_aspect = False):
+        super(PolarThetaLogView, self).__init__(width, height, box, preserve_aspect)
         if not hasattr(box, '_tmin') or not hasattr(box, '_tmax'):
             raise Exception(
                 'Box must be set with set_polar_box for polar charts')
@@ -299,7 +302,7 @@ class PolarThetaLogView(View):
 class LogView(View):
     """Logarithmic projection """
     # Do not want to call the parent here
-    def __init__(self, width, height, box):
+    def __init__(self, width, height, box, preserve_aspect = False):
         self.width = width
         self.height = height
         self.box = box
@@ -321,7 +324,7 @@ class LogView(View):
 class XLogView(View):
     """Logarithmic projection """
     # Do not want to call the parent here
-    def __init__(self, width, height, box):
+    def __init__(self, width, height, box, preserve_aspect = False):
         self.width = width
         self.height = height
         self.box = box
@@ -339,7 +342,7 @@ class XLogView(View):
 
 
 class XYLogView(XLogView, LogView):
-    def __init__(self, width, height, box):
+    def __init__(self, width, height, box, preserve_aspect = False):
         self.width = width
         self.height = height
         self.box = box
@@ -353,7 +356,7 @@ class XYLogView(XLogView, LogView):
 class HorizontalLogView(XLogView):
     """Logarithmic projection """
     # Do not want to call the parent here
-    def __init__(self, width, height, box):
+    def __init__(self, width, height, box, preserve_aspect = False):
         self._force_vertical = None
         self.width = width
         self.height = height

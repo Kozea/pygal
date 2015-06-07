@@ -427,6 +427,10 @@ class Config(CommonConfig):
         "Don't prefix css")
 
     inverse_y_axis = Key(False, bool, "Misc", "Inverse Y axis direction")
+    
+    background_image = Key(None, str, "Misc", "Provide an optional background image to the plot")
+    
+    preserve_aspect = Key(False, bool, "Misc", "Preserve aspect ratio") 
 
 
 class SerieConfig(CommonConfig):

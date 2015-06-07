@@ -65,7 +65,8 @@ class Graph(BaseGraph):
         self.view = view_class(
             self.width - self.margin_box.x,
             self.height - self.margin_box.y,
-            self._box)
+            self._box,
+            self.preserve_aspect)
 
     def _make_graph(self):
         """Init common graph svg structure"""
@@ -87,6 +88,28 @@ class Graph(BaseGraph):
                       x=0, y=0,
                       width=self.view.width,
                       height=self.view.height)
+        if not self.background_image is None:
+            corners = list(map(self.view, ( (self._box.xmin,self._box.ymin), (self._box.xmax,self._box.ymax) ) ))
+            
+            x0 = min(corners[0][0], corners[1][0])
+            y0 = min(corners[0][1], corners[1][1])
+            x1 = max(corners[0][0], corners[1][0])
+            y1 = max(corners[0][1], corners[1][1])
+            w = x1-x0
+            h = y1-y0
+            x0 += self._box.margin*w
+            y0 += self._box.margin*h
+            w -= self._box.margin*2*w
+            h -= self._box.margin*2*h
+            self.nodes['bgimage'] = self.svg.node(
+                self.nodes['plot'],
+                tag='image',
+                attrib={'xlink:href' : self.background_image},
+                x=x0,
+                y=y0,
+                width=w,
+                height=h,
+                preserveAspectRatio="none")
         self.nodes['title'] = self.svg.node(
             self.nodes['graph'],
             class_="titles")
