@@ -1,3 +1,4 @@
+data = """\
 /*
  * This file is part of pygal
  *
@@ -55,3 +56,4 @@
 {{ id }}text.no_data {
   font-size: {{ font_sizes.no_data }};
 }
+"""

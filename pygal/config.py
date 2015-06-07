@@ -24,7 +24,6 @@ from copy import deepcopy
 from pygal.style import Style, DefaultStyle
 from pygal.interpolate import INTERPOLATIONS
 
-
 CONFIG_ITEMS = []
 
 
@@ -170,7 +169,7 @@ class Config(CommonConfig):
         DefaultStyle, Style, "Style", "Style holding values injected in css")
 
     css = Key(
-        ('style.css', 'graph.css'), list, "Style",
+        ("!pygal.css.style_css", "!pygal.css.graph_css"), list, "Style",
         "List of css file",
         "It can be an absolute file path or an external link",
         str)

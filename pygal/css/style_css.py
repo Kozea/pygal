@@ -1,3 +1,4 @@
+data="""\
 /*
  * This file is part of pygal
  *
@@ -139,3 +140,4 @@
 {{ colors }}
 
 
+"""
