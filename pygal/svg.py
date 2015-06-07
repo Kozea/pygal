@@ -127,7 +127,9 @@ class Svg(object):
             return dict((k, getattr(self.graph.state, k))
                         for k in dir(self.graph.config)
                         if not k.startswith('_') and not hasattr(
-                                getattr(self.graph.config, k), '__call__'))
+                                getattr(self.graph.config, k), '__call__')
+                                and not hasattr(getattr(self.graph.state, k), '__call__') 
+                                )
 
         def json_default(o):
             if isinstance(o, (datetime, date)):
