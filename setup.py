@@ -64,7 +64,7 @@ setup(
         "svg", "chart", "graph", "diagram", "plot", "histogram", "kiviat"],
     tests_require=["pytest", "pyquery", "flask", "cairosvg"],
     cmdclass={'test': PyTest},
-    package_data={'pygal': ['css/*', 'graph/maps/*.svg']},
+    #package_data={'pygal': ['css/*', 'graph/maps/*.svg']},
     extras_require={
         'lxml': ['lxml'],
         'png': ['cairosvg']
