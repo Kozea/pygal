@@ -22,10 +22,8 @@ Hungarian maps
 """
 
 from __future__ import division
-from collections import defaultdict
 from pygal.graph.map import BaseMap
 from pygal._compat import u
-from numbers import Number
 
 import os
 
@@ -56,7 +54,7 @@ COUNTIES = {
 }
 
 
-# TODO: NUTS-1 (country parts) and NUTS-2 (statistical regions)
+# XXX: NUTS-1 (country parts) and NUTS-2 (statistical regions)?
 
 
 with open(os.path.join(
