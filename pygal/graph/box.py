@@ -99,7 +99,7 @@ class Box(Graph):
 
     @property
     def _len(self):
-        """Len is always 5 here"""
+        """Len is always 7 here"""
         return 7
 
     def _boxf(self, serie):
