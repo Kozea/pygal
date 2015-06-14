@@ -55,6 +55,7 @@ class Box(Graph):
                     return 'Min: %s Lower Whisker: %s Q1: %s Q2: %s Q3: %s '\
                         'Upper Whisker: %s Max: %s' % tuple(map(sup, x))
                 else:
+                    # 1.5IQR mode
                     return 'Q1: %s Q2: %s Q3: %s' % tuple(map(sup, x[2:5]))
             else:
                 return sup(x)
@@ -240,6 +241,8 @@ class Box(Graph):
         n = len(s)
         if not n:
             return (0, 0, 0, 0, 0, 0, 0), []
+        elif n == 1:
+            return (s[0], s[0], s[0], s[0], s[0], s[0], s[0]), []
         else:
             q2 = median(s)
             # See 'Method 3' in http://en.wikipedia.org/wiki/Quartile
@@ -277,7 +280,6 @@ class Box(Graph):
             elif mode == 'stdev':
                 # one standard deviation above and below the mean of the data
                 sd = stdev(s)
-                print s, sd
                 b0 = bisect_left(s, q2 - sd)
                 b4 = bisect_right(s, q2 + sd)
                 q0 = s[b0]
@@ -287,13 +289,13 @@ class Box(Graph):
                 # one population standard deviation above and below
                 # the mean of the data
                 sdp = pstdev(s)
-                print s, sd
                 b0 = bisect_left(s, q2 - sdp)
                 b4 = bisect_right(s, q2 + sdp)
                 q0 = s[b0]
                 q4 = s[b4-1]
                 outliers = s[:b0] + s[b4:]
             else:
+                # 1.5IQR mode
                 q0 = q1 - 1.5 * iqr
                 q4 = q3 + 1.5 * iqr
             return (min_s, q0, q1, q2, q3, q4, max_s), outliers

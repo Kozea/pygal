@@ -138,6 +138,12 @@ def test_quartiles_stdev():
     assert q0 >= q2 - SD
     assert all(n in outliers for n in [6, 12, 16, 53, 54, 61, 75])
 
+    b = [5] # test for posible zero division
+    (min_s, q0, q1, q2, q3, q4, max_s), outliers = Box._box_points(
+        b, mode='stdev')
+    assert min_s == q0 == q1 == q2 == q3 == q4 == max_s == b[0]
+    assert outliers == []
+
 def test_simple_box():
     box = ghostedBox()
     box.add('test1', [-1, 2, 3, 3.1, 3.2, 4, 5])
