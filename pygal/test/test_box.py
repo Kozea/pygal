@@ -113,7 +113,7 @@ def test_quartiles_tukey():
     assert max_s == 75
     assert outliers == [75]
 
-    # one more outlier, -30
+    # one more outlier, 77
     c = [6, 7, 15, 36, 39, 40, 41, 42, 43, 47, 49, 75, 77]
     (min_s, q0, q1, q2, q3, q4, max_s), outliers = Box._box_points(
         c, mode='tukey')
@@ -125,6 +125,18 @@ def test_quartiles_tukey():
     assert 75 in outliers
     assert 77 in outliers
 
+def test_quartiles_stdev():
+    a = [35, 42, 35, 41, 36, 6, 12, 51, 33, 27, 46, 36, 44, 53, 75, 46, 16,\
+        51, 45, 29, 25, 26, 54, 61, 27, 40, 23, 34, 51, 37]
+    SD = 14.67
+    (min_s, q0, q1, q2, q3, q4, max_s), outliers = Box._box_points(
+        a, mode='stdev')
+    assert min_s == min(a)
+    assert max_s == max(a)
+    assert q2 == 36.5
+    assert q4 <= q2 + SD
+    assert q0 >= q2 - SD
+    assert all(n in outliers for n in [6, 12, 16, 53, 54, 61, 75])
 
 def test_simple_box():
     box = ghostedBox()

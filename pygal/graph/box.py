@@ -51,7 +51,7 @@ class Box(Graph):
                 if self.mode == "extremes":
                     return 'Min: %s Q1: %s Q2: %s Q3: %s Max: %s' \
                         % tuple(map(sup, x[1:6]))
-                elif self.mode == "tukey":
+                elif self.mode in ["tukey", "stdev", "pstdev"]:
                     return 'Min: %s Lower Whisker: %s Q1: %s Q2: %s Q3: %s '\
                         'Upper Whisker: %s Max: %s' % tuple(map(sup, x))
                 else:
@@ -195,8 +195,15 @@ class Box(Graph):
         Extremes mode: (mode='extremes')
             Return a 7-tuple of 2x minimum, Q1, Median, Q3,
         and 2x maximum for a list of numeric values.
-        Outliers (Tukey) mode: (mode='tukey')
+        Tukey mode: (mode='tukey')
             Return a 7-tuple of min, q[0..4], max and a list of outliers
+        Outliers are considered values x: x < q1 - IQR or x > q3 + IQR
+        SD mode: (mode='stdev')
+            Return a 7-tuple of min, q[0..4], max and a list of outliers
+        Outliers are considered values x: x < q2 - SD or x > q2 + SD
+        SDp mode: (mode='pstdev')
+            Return a 7-tuple of min, q[0..4], max and a list of outliers
+        Outliers are considered values x: x < q2 - SDp or x > q2 + SDp
 
 
         The iterator values may include None values.
@@ -211,6 +218,21 @@ class Box(Graph):
                 return (seq[n // 2] + seq[n // 2 - 1]) / 2
             else:  # seq has an odd length
                 return seq[n // 2]
+
+        def mean(seq):
+            return sum(seq) /len(seq)
+
+        def stdev(seq):
+            m = mean(seq)
+            l = len(seq)
+            v = sum((n - m)**2 for n in seq) / (l - 1) # variance
+            return v**0.5 # sqrt
+
+        def pstdev(seq):
+            m = mean(seq)
+            l = len(seq)
+            v = sum((n - m)**2 for n in seq) / l # variance
+            return v**0.5 # sqrt
 
         outliers = []
         # sort the copy in case the originals must stay in original order
@@ -252,7 +274,25 @@ class Box(Graph):
                 q0 = s[b0]
                 q4 = s[b4-1]
                 outliers = s[:b0] + s[b4:]
-
+            elif mode == 'stdev':
+                # one standard deviation above and below the mean of the data
+                sd = stdev(s)
+                print s, sd
+                b0 = bisect_left(s, q2 - sd)
+                b4 = bisect_right(s, q2 + sd)
+                q0 = s[b0]
+                q4 = s[b4-1]
+                outliers = s[:b0] + s[b4:]
+            elif mode == 'pstdev':
+                # one population standard deviation above and below
+                # the mean of the data
+                sdp = pstdev(s)
+                print s, sd
+                b0 = bisect_left(s, q2 - sdp)
+                b4 = bisect_right(s, q2 + sdp)
+                q0 = s[b0]
+                q4 = s[b4-1]
+                outliers = s[:b0] + s[b4:]
             else:
                 q0 = q1 - 1.5 * iqr
                 q4 = q3 + 1.5 * iqr
