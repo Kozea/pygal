@@ -212,8 +212,8 @@ class Box(Graph):
             else:  # seq has an odd length
                 return seq[n // 2]
 
-        # sort the copy in case the originals must stay in original order
         outliers = []
+        # sort the copy in case the originals must stay in original order
         s = sorted([x for x in values if x is not None])
         n = len(s)
         if not n:
@@ -252,8 +252,6 @@ class Box(Graph):
                 q0 = s[b0]
                 q4 = s[b4-1]
                 outliers = s[:b0] + s[b4:]
-                #print "Q: [%s,%s,%s,%s,%s] O: %s" \
-                #        % (q0, q1, q2, q3, q4, outliers)
 
             else:
                 q0 = q1 - 1.5 * iqr
