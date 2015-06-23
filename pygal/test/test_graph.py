@@ -81,7 +81,8 @@ def test_metadata(Chart):
     elif Chart == pygal.XY:
         v = list(map(lambda x: (x, x + 1), v))
     elif issubclass(Chart, BaseMap):
-        v = [(i, k) for k, i in enumerate(Chart.x_labels)]
+        v = [(k, i) for i, k in enumerate(Chart.x_labels) if k not in [
+            'oecd', 'nafta', 'eur']]
 
     chart.add('Serie with metadata', [
         v[0],
