@@ -27,6 +27,7 @@ from pygal.graph.bar import Bar
 from pygal.graph.box import Box
 from pygal.graph.dot import Dot
 from pygal.graph.frenchmap import FrenchMapDepartments, FrenchMapRegions
+from pygal.graph.hungarianmap import HungarianCountyMap
 from pygal.graph.funnel import Funnel
 from pygal.graph.gauge import Gauge
 from pygal.graph.histogram import Histogram
