@@ -633,7 +633,8 @@ class Graph(BaseGraph):
     @cached_property
     def _secondary_min(self):
         """Getter for the minimum series value"""
-        return (self.range[0] if (self.range and self.range[0] is not None)
+        return (self.secondary_range[0] if (
+            self.secondary_range and self.secondary_range[0] is not None)
                 else (min(self._secondary_values)
                       if self._secondary_values else None))
 
@@ -653,7 +654,8 @@ class Graph(BaseGraph):
     @cached_property
     def _secondary_max(self):
         """Getter for the maximum series value"""
-        return (self.range[1] if (self.range and self.range[1] is not None)
+        return (self.secondary_range[1] if (
+            self.secondary_range and self.secondary_range[1] is not None)
                 else (max(self._secondary_values)
                       if self._secondary_values else None))
 

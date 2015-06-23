@@ -354,6 +354,11 @@ class Config(CommonConfig):
         None, list, "Value", "Explicitly specify min and max of values",
         "(ie: (0, 100))", int)
 
+    secondary_range = Key(
+        None, list, "Value",
+        "Explicitly specify min and max of secondary values",
+        "(ie: (0, 100))", int)
+
     xrange = Key(
         None, list, "Value", "Explicitly specify min and max of x values "
         "(used in XY and Date charts)",

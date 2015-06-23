@@ -175,7 +175,7 @@ def get_test_routes(app):
         dot = Dot()
         dot.x_labels = map(str, range(4))
         dot.add('a', [1, lnk(3, 'Foo'), 5, 3])
-        dot.add('b', [2, 2, 0, 2])
+        dot.add('b', [2, 2, 0, 2, .1])
         dot.add('c', [5, 1, 5, lnk(3, 'Bar')])
         dot.add('d', [5, 5, lnk(0, 'Babar'), 3])
 
@@ -582,6 +582,8 @@ def get_test_routes(app):
         chart = Line(title=u'Some different points', interpolate='cubic')
         chart.add('line', [1000, 2000, 7000])
         chart.add('other line', [100, 500, 500], secondary=True)
+        chart.range = 0, 10000
+        chart.secondary_range = 0, 1000
         return chart.render_response()
 
     @app.route('/test/legend_at_bottom/<chart>')
