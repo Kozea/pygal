@@ -32,7 +32,7 @@ class Pie(Graph):
     """Pie graph"""
 
     _adapters = [positive, none_to_zero]
-    
+
     @property
     def _format(self):
         """Return the value formatter for this graph"""
