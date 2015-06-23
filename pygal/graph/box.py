@@ -24,6 +24,7 @@ from __future__ import division
 from pygal.graph.graph import Graph
 from pygal.util import compute_scale, decorate
 from pygal._compat import is_list_like
+from bisect import bisect_left, bisect_right
 
 
 class Box(Graph):
@@ -48,9 +49,14 @@ class Box(Graph):
         def format_maybe_quartile(x):
             if is_list_like(x):
                 if self.mode == "extremes":
-                    return 'Min: %s Q1: %s Q2: %s Q3: %s Max: %s' % tuple(map(sup, x))
+                    return 'Min: %s Q1: %s Q2: %s Q3: %s Max: %s' \
+                        % tuple(map(sup, x[1:6]))
+                elif self.mode in ["tukey", "stdev", "pstdev"]:
+                    return 'Min: %s Lower Whisker: %s Q1: %s Q2: %s Q3: %s '\
+                        'Upper Whisker: %s Max: %s' % tuple(map(sup, x))
                 else:
-                    return 'Q1: %s Q2: %s Q3: %s' % tuple(map(sup, x[1:4]))
+                    # 1.5IQR mode
+                    return 'Q1: %s Q2: %s Q3: %s' % tuple(map(sup, x[2:5]))
             else:
                 return sup(x)
         return format_maybe_quartile
@@ -61,7 +67,9 @@ class Box(Graph):
         within the rendering process
         """
         for serie in self.series:
-            serie.values = self._box_points(serie.values, self.mode)
+            serie.values, serie.outliers = \
+                self._box_points(serie.values, self.mode)
+
 
         if self._min:
             self._box.ymin = min(self._min, self.zero)
@@ -91,8 +99,8 @@ class Box(Graph):
 
     @property
     def _len(self):
-        """Len is always 5 here"""
-        return 5
+        """Len is always 7 here"""
+        return 7
 
     def _boxf(self, serie):
         """
@@ -112,11 +120,12 @@ class Box(Graph):
             metadata)
         val = self._format(serie.values)
 
-        x_center, y_center = self._draw_box(box, serie.values, serie.index)
+        x_center, y_center = self._draw_box(box, serie.values[1:6],
+                                            serie.outliers, serie.index)
         self._tooltip_data(box, val, x_center, y_center, classes="centered")
         self._static_value(serie_node, val, x_center, y_center)
 
-    def _draw_box(self, parent_node, quartiles, box_index):
+    def _draw_box(self, parent_node, quartiles, outliers, box_index):
         """
         Return the center of a bounding box defined by a box plot.
         Draws a box plot on self.svg.
@@ -164,6 +173,17 @@ class Box(Graph):
             width=width,
             class_='subtle-fill reactive tooltip-trigger')
 
+        # draw outliers
+        for o in outliers:
+            self.svg.node(
+                parent_node,
+                tag='circle',
+                cx=left_edge+width/2,
+                cy=self.view.y(o),
+                r=3,
+                class_='subtle-fill reactive tooltip-trigger')
+
+
         return (left_edge + width / 2, self.view.y(
             sum(quartiles) / len(quartiles)))
 
@@ -171,11 +191,20 @@ class Box(Graph):
     def _box_points(values, mode='1.5IQR'):
         """
         Default mode: (mode='1.5IQR' or unset)
-            Return a 5-tuple of Q1 - 1.5 * IQR, Q1, Median, Q3,
-        and Q3 + 1.5 * IQR for a list of numeric values.
+            Return a 7-tuple of min, Q1 - 1.5 * IQR, Q1, Median, Q3,
+        Q3 + 1.5 * IQR and max for a list of numeric values.
         Extremes mode: (mode='extremes')
-            Return a 5-tuple of minimum, Q1, Median, Q3,
-        and maximum for a list of numeric values.
+            Return a 7-tuple of 2x minimum, Q1, Median, Q3,
+        and 2x maximum for a list of numeric values.
+        Tukey mode: (mode='tukey')
+            Return a 7-tuple of min, q[0..4], max and a list of outliers
+        Outliers are considered values x: x < q1 - IQR or x > q3 + IQR
+        SD mode: (mode='stdev')
+            Return a 7-tuple of min, q[0..4], max and a list of outliers
+        Outliers are considered values x: x < q2 - SD or x > q2 + SD
+        SDp mode: (mode='pstdev')
+            Return a 7-tuple of min, q[0..4], max and a list of outliers
+        Outliers are considered values x: x < q2 - SDp or x > q2 + SDp
 
 
         The iterator values may include None values.
@@ -191,11 +220,29 @@ class Box(Graph):
             else:  # seq has an odd length
                 return seq[n // 2]
 
+        def mean(seq):
+            return sum(seq) /len(seq)
+
+        def stdev(seq):
+            m = mean(seq)
+            l = len(seq)
+            v = sum((n - m)**2 for n in seq) / (l - 1) # variance
+            return v**0.5 # sqrt
+
+        def pstdev(seq):
+            m = mean(seq)
+            l = len(seq)
+            v = sum((n - m)**2 for n in seq) / l # variance
+            return v**0.5 # sqrt
+
+        outliers = []
         # sort the copy in case the originals must stay in original order
         s = sorted([x for x in values if x is not None])
         n = len(s)
         if not n:
-            return 0, 0, 0, 0, 0
+            return (0, 0, 0, 0, 0, 0, 0), []
+        elif n == 1:
+            return (s[0], s[0], s[0], s[0], s[0], s[0], s[0]), []
         else:
             q2 = median(s)
             # See 'Method 3' in http://en.wikipedia.org/wiki/Quartile
@@ -209,17 +256,46 @@ class Box(Graph):
                 elif n % 4 == 1:  # n is of form 4n + 1 where n >= 1
                     m = (n - 1) // 4
                     q1 = 0.25 * s[m-1] + 0.75 * s[m]
-                    q3 = 0.75 * s[3*m] + 0.25 * s[3*m + 1]
+                    q3 = 0.75 * s[3*m] + 0.25 * s[3*m+1]
                 else:  # n is of form 4n + 3 where n >= 1
                     m = (n - 3) // 4
                     q1 = 0.75 * s[m] + 0.25 * s[m+1]
                     q3 = 0.25 * s[3*m+1] + 0.75 * s[3*m+2]
 
             iqr = q3 - q1
+            min_s = s[0]
+            max_s = s[-1]
             if mode == 'extremes':
-                q0 = min(s)
-                q4 = max(s)
+                q0 = min_s
+                q4 = max_s
+            elif mode == 'tukey':
+                # the lowest datum still within 1.5 IQR of the lower quartile,
+                # and the highest datum still within 1.5 IQR of the upper
+                # quartile [Tukey box plot, Wikipedia ]
+                b0 = bisect_left(s, q1 - 1.5 * iqr)
+                b4 = bisect_right(s, q3 + 1.5 * iqr)
+                q0 = s[b0]
+                q4 = s[b4-1]
+                outliers = s[:b0] + s[b4:]
+            elif mode == 'stdev':
+                # one standard deviation above and below the mean of the data
+                sd = stdev(s)
+                b0 = bisect_left(s, q2 - sd)
+                b4 = bisect_right(s, q2 + sd)
+                q0 = s[b0]
+                q4 = s[b4-1]
+                outliers = s[:b0] + s[b4:]
+            elif mode == 'pstdev':
+                # one population standard deviation above and below
+                # the mean of the data
+                sdp = pstdev(s)
+                b0 = bisect_left(s, q2 - sdp)
+                b4 = bisect_right(s, q2 + sdp)
+                q0 = s[b0]
+                q4 = s[b4-1]
+                outliers = s[:b0] + s[b4:]
             else:
+                # 1.5IQR mode
                 q0 = q1 - 1.5 * iqr
                 q4 = q3 + 1.5 * iqr
-            return q0, q1, q2, q3, q4
+            return (min_s, q0, q1, q2, q3, q4, max_s), outliers

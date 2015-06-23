@@ -344,7 +344,8 @@ class Config(CommonConfig):
     mode = Key(
         None, str, "Value", "Sets the mode to be used. "
         "(Currently only supported on box plot)",
-        "May be %s" % ' or '.join(["1.5IQR", "extremes"]))
+        "May be %s" % ' or '.join(["1.5IQR", "extremes", "tukey", "stdev",\
+            "pstdev"]))
 
     order_min = Key(
         None, int, "Value", "Minimum order of scale, defaults to None")
