@@ -1,3 +1,4 @@
+data="""\
 <svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 2475 1388">
   <g id="countries">
     <g class="ad country map-element">
@@ -2408,3 +2409,4 @@
 </g>
 </g>
 </svg>
+"""

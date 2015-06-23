@@ -169,12 +169,7 @@ REGIONS = {
     '06': u("Mayotte")
 }
 
-
-with open(os.path.join(
-        os.path.dirname(__file__), 'maps',
-        'fr.departments.svg')) as file:
-    DPT_MAP = file.read()
-
+from .maps.fr_departments_svg import data as DPT_MAP
 
 class IntCodeMixin(object):
     def adapt_code(self, area_code):
@@ -194,12 +189,7 @@ class FrenchMapDepartments(IntCodeMixin, BaseMap):
     kind = 'departement'
     svg_map = DPT_MAP
 
-
-with open(os.path.join(
-        os.path.dirname(__file__), 'maps',
-        'fr.regions.svg')) as file:
-    REG_MAP = file.read()
-
+from .maps.fr_regions_svg import data as REG_MAP
 
 class FrenchMapRegions(IntCodeMixin, BaseMap):
     """French regions map"""

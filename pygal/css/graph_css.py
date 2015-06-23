@@ -1,3 +1,4 @@
+data="""\
 /*
  * This file is part of pygal
  *
@@ -126,3 +127,4 @@
 {{ id }}.tooltip text tspan.label {
   fill-opacity: .8;
 }
+"""

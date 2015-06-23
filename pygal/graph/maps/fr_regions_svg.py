@@ -1,3 +1,4 @@
+data="""\
 <svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 2000 1898">
   <g id="regions"  transform="translate(-42.932808,96.039162)">
     <g class="a94 region map-element">
@@ -89,3 +90,4 @@
     </g>
   </g>
 </svg>
+"""

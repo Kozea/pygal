@@ -56,12 +56,7 @@ CANTONS = {
     'kt-ge': u("GE"),
 }
 
-
-with open(os.path.join(
-        os.path.dirname(__file__), 'maps',
-        'ch.cantons.svg')) as file:
-    CNT_MAP = file.read()
-
+from .maps.ch_cantons_svg import data as CNT_MAP
 
 class SwissMapCantons(BaseMap):
     """Swiss Cantons map"""
