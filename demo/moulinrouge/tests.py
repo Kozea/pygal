@@ -4,7 +4,7 @@ from pygal import (
     Bar, Gauge, Pyramid, Funnel, Dot, StackedBar, StackedLine, XY,
     CHARTS_BY_NAME, Config, Line, Worldmap, Histogram, Box, SwissMapCantons,
     FrenchMapDepartments, FrenchMapRegions, Pie, Treemap, TimeLine, DateLine,
-    SupranationalWorldmap)
+    DateTimeLine, SupranationalWorldmap)
 
 
 from pygal.style import styles, Style, RotateStyle
@@ -640,6 +640,19 @@ def get_test_routes(app):
         line = Line()
         line.add('zeroes', [])
         line.add('zeroes 2', [0])
+        return line.render_response()
+
+    @app.route('/test/datetimeline')
+    def test_datetimeline():
+        line = DateTimeLine()
+        line.add('dt', [
+            (datetime(2013, 1, 12, 8, 0), 300),
+            (datetime(2013, 1, 12, 12), 412),
+            (datetime(2013, 2, 22, 12), 823),
+            (datetime(2013, 2, 22, 20), 672)
+        ])
+        line.x_value_formatter = lambda x: x.strftime("%Y-%m-%d")
+        line.x_label_rotation = 45
         return line.render_response()
 
     return list(sorted(filter(lambda x: x.startswith('test'), locals())))

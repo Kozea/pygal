@@ -32,7 +32,7 @@ def datetime_to_timestamp(x):
 
 
 def date_to_datetime(x):
-    if isinstance(x, date):
+    if not isinstance(x, datetime) and isinstance(x, date):
         return datetime.combine(x, time())
     return x
 
