@@ -3,6 +3,8 @@ V 2.0.0 UNRELEASED
 	Refactor maps
 	Add swiss cantons map (thanks sergedroz)
 	Add inverse_y_axis options to reverse graph (#24)
+	Fix DateTimeLine time data loss (#193)
+	Fix no data for graphs with only zeroes (#148)
 
 V 1.7.0
 	Remove DateY and replace it by real XY datetime, date, time and timedelta support. (#188)
