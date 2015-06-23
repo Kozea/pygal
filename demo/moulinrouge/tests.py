@@ -635,4 +635,11 @@ def get_test_routes(app):
         graph.add('inverse', [1, 2, 3, 12, 24, 36])
         return graph.render_response()
 
+    @app.route('/test/only_zeroes')
+    def test_only_zeroes():
+        line = Line()
+        line.add('zeroes', [])
+        line.add('zeroes 2', [0])
+        return line.render_response()
+
     return list(sorted(filter(lambda x: x.startswith('test'), locals())))

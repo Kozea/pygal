@@ -35,6 +35,7 @@ from pygal.adapters import (
 from functools import reduce
 from uuid import uuid4
 import io
+import os
 
 
 class BaseGraph(object):
@@ -216,6 +217,9 @@ class BaseGraph(object):
         self.svg.pre_render()
 
     def teardown(self):
+        if os.getenv('PYGAL_KEEP_STATE'):
+            return
+
         del self.state
         self.state = None
 
