@@ -188,7 +188,7 @@ class Box(Graph):
             sum(quartiles) / len(quartiles)))
 
     @staticmethod
-    def _box_points(values, mode='1.5IQR'):
+    def _box_points(values, mode='extremes'):
         """
         Default mode: (mode='1.5IQR' or unset)
             Return a 7-tuple of min, Q1 - 1.5 * IQR, Q1, Median, Q3,

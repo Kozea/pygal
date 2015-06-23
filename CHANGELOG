@@ -7,6 +7,7 @@ V 2.0.0 UNRELEASED
 	Fix DateTimeLine time data loss (#193)
 	Fix no data for graphs with only zeroes (#148)
 	Support value formatter for pie graphs (#218) (thanks never-eat-yellow-snow)
+	Add new Box plot modes and outliers and set extremes as default (#226 #121 #149) (thanks djezar)
 
 V 1.7.0
 	Remove DateY and replace it by real XY datetime, date, time and timedelta support. (#188)
