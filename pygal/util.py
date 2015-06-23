@@ -131,10 +131,6 @@ def template(string, **kwargs):
     return _swap_curly(string).format(**kwargs)
 
 
-def coord_format(xy):
-    """Format x y coords to svg"""
-    return '%f %f' % xy
-
 swap = lambda tuple_: tuple(reversed(tuple_))
 ident = lambda x: x
 

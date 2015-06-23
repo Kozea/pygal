@@ -9,6 +9,7 @@ from pygal import (
 
 from pygal.style import styles, Style, RotateStyle
 from pygal.colors import rotate
+from pygal.graph.horizontal import HorizontalGraph
 from pygal.graph.frenchmap import DEPARTMENTS, REGIONS
 from pygal.graph.swissmap import CANTONS
 from random import randint, choice
@@ -623,6 +624,31 @@ def get_test_routes(app):
             margin=5,
             explicit_size=True
         ))
+        graph.add('1', [1, 3, 12, 3, 4, None, 9])
+        graph.add('2', [7, -4, 10, None, 8, 3, 1])
+        graph.add('3', [7, -14, -10, None, 8, 3, 1])
+        graph.add('4', [7, 4, -10, None, 8, 3, 1])
+        graph.x_labels = ('a', 'b', 'c', 'd', 'e', 'f', 'g')
+        graph.legend_at_bottom = True
+        return graph.render_response()
+
+    @app.route('/test/normal/<chart>')
+    def test_normal_for(chart):
+        graph = CHARTS_BY_NAME[chart]()
+        graph.add('1', [1, 3, 12, 3, 4, None, 9])
+        graph.add('2', [7, -4, 10, None, 8, 3, 1])
+        graph.add('3', [7, -14, -10, None, 8, 3, 1])
+        graph.add('4', [7, 4, -10, None, 8, 3, 1])
+        graph.x_labels = ('a', 'b', 'c', 'd', 'e', 'f', 'g')
+        graph.legend_at_bottom = True
+        return graph.render_response()
+
+    @app.route('/test/horizontal_force/<chart>')
+    def test_horizontal_force_for(chart):
+        class H(CHARTS_BY_NAME[chart], HorizontalGraph):
+            pass
+        graph = H()
+
         graph.add('1', [1, 3, 12, 3, 4, None, 9])
         graph.add('2', [7, -4, 10, None, 8, 3, 1])
         graph.add('3', [7, -14, -10, None, 8, 3, 1])

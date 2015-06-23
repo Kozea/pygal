@@ -30,7 +30,7 @@ import json
 from datetime import date, datetime
 from numbers import Number
 from math import cos, sin, pi
-from pygal.util import template, coord_format, minify_css
+from pygal.util import template, minify_css
 from pygal import __version__
 
 
@@ -183,7 +183,7 @@ class Svg(object):
     def transposable_node(self, parent=None, tag='g', attrib=None, **extras):
         """Make a new svg node which can be transposed if horizontal"""
         if self.graph.horizontal:
-            for key1, key2 in (('x', 'y'), ('width', 'height')):
+            for key1, key2 in (('x', 'y'), ('width', 'height'), ('cx', 'cy')):
                 attr1 = extras.get(key1, None)
                 attr2 = extras.get(key2, None)
                 extras[key1], extras[key2] = attr2, attr1
@@ -219,6 +219,11 @@ class Svg(object):
             origin_index += 1
         if origin_index == line_len:
             return
+        if self.graph.horizontal:
+            coord_format = lambda xy: '%f %f' % (xy[1], xy[0])
+        else:
+            coord_format = lambda xy: '%f %f' % xy
+
         origin = coord_format(coords[origin_index])
         line = ' '.join([coord_format(c)
                          for c in coords[origin_index + 1:]
