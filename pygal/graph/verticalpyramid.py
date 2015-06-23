@@ -56,8 +56,8 @@ class VerticalPyramid(StackedBar):
         self._secondary_max = max(max(positive_vals), max(negative_vals))
         self._secondary_min = - self._secondary_max
 
-    def _bar(self, serie, parent, x, y, i, zero, secondary=False):
+    def _bar(self, serie, parent, x, y, zero, secondary=False):
         if serie.index % 2:
             y = -y
         return super(VerticalPyramid, self)._bar(
-            serie, parent, x, y, i, zero, secondary)
+            serie, parent, x, y, zero, secondary)

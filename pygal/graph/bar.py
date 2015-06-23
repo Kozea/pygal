@@ -36,14 +36,18 @@ class Bar(Graph):
         self._x_ranges = None
         super(Bar, self).__init__(*args, **kwargs)
 
-    def _bar(self, serie, parent, x, y, i, zero, secondary=False):
+    def _bar(self, serie, parent, x, y, zero, secondary=False):
         width = (self.view.x(1) - self.view.x(0)) / self._len
         x, y = self.view((x, y))
         series_margin = width * self._series_margin
         x += series_margin
         width -= 2 * series_margin
         width /= self._order
-        x += serie.index * width
+        if self.horizontal:
+            i = self._order - serie.index
+        else:
+            i = serie.index
+        x += i * width
         serie_margin = width * self._serie_margin
         x += serie_margin
         width -= 2 * serie_margin
@@ -77,7 +81,7 @@ class Bar(Graph):
             val = self._format(serie.values[i])
 
             x_center, y_center = self._bar(
-                serie, bar, x, y, i, self.zero, secondary=rescale)
+                serie, bar, x, y, self.zero, secondary=rescale)
             self._tooltip_data(
                 bar, val, x_center, y_center, classes="centered")
             self._static_value(serie_node, val, x_center, y_center)
