@@ -18,8 +18,8 @@
 # along with pygal. If not, see <http://www.gnu.org/licenses/>.
 
 from pygal import (
-    Line, Dot, Pie, Treemap, Radar, Config, Bar, Funnel, Worldmap,
-    SupranationalWorldmap, Histogram, Gauge, Box, XY,
+    Line, Dot, Pie, Treemap, Radar, Config, Bar, Funnel,
+    Histogram, Gauge, Box, XY,
     Pyramid, HorizontalBar, HorizontalStackedBar,
     DateTimeLine, TimeLine, DateLine, TimeDeltaLine)
 from pygal.graph.map import BaseMap

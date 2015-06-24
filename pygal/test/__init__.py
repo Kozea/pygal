@@ -19,7 +19,6 @@
 
 import pygal
 from pygal.util import cut
-from pygal.i18n import COUNTRIES
 from pygal.graph.map import BaseMap
 from decimal import Decimal
 

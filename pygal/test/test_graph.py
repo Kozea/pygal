@@ -22,7 +22,6 @@ import pygal
 import uuid
 import sys
 import pytest
-from pygal import i18n
 from pygal.graph.map import BaseMap
 from pygal.util import cut
 from pygal._compat import u

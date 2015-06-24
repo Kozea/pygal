@@ -9,6 +9,7 @@ V 2.0.0 UNRELEASED
 	Support value formatter for pie graphs (#218) (thanks never-eat-yellow-snow)
 	Add new Box plot modes and outliers and set extremes as default (#226 #121 #149) (thanks djezar)
 	Add secondary_range option to set range for secondary values. (#203)
+	Maps are now plugins, they are removed from pygal core and moved to packages (pygal_maps_world, pygal_maps_fr, pygal_maps_ch, ...) (#225)
 
 V 1.7.0
 	Remove DateY and replace it by real XY datetime, date, time and timedelta support. (#188)

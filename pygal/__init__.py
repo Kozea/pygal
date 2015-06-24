@@ -40,7 +40,6 @@ from pygal.graph.stackedline import StackedLine
 from pygal.graph.time import DateLine, DateTimeLine, TimeLine, TimeDeltaLine
 from pygal.graph.treemap import Treemap
 from pygal.graph.verticalpyramid import VerticalPyramid
-from pygal.graph.worldmap import Worldmap, SupranationalWorldmap
 from pygal.graph.xy import XY
 from pygal.graph.graph import Graph
 from pygal.config import Config

@@ -2,9 +2,14 @@
 # This file is part of pygal
 from pygal import (
     Bar, Gauge, Pyramid, Funnel, Dot, StackedBar, StackedLine, XY,
-    CHARTS_BY_NAME, Config, Line, Worldmap, Histogram, Box,
+    CHARTS_BY_NAME, Config, Line, Histogram, Box,
     Pie, Treemap, TimeLine, DateLine,
-    DateTimeLine, SupranationalWorldmap)
+    DateTimeLine)
+
+try:
+    from pygal.maps import world
+except ImportError:
+    world = None
 
 try:
     from pygal.maps import fr
@@ -413,7 +418,7 @@ def get_test_routes(app):
 
     @app.route('/test/worldmap')
     def test_worldmap():
-        wmap = Worldmap(style=choice(list(styles.values())))
+        wmap = world.World(style=choice(list(styles.values())))
 
         wmap.add('1st', [('fr', 100), ('us', 10)])
         wmap.add('2nd', [('jp', 1), ('ru', 7), ('uk', 0)])
@@ -437,7 +442,7 @@ def get_test_routes(app):
 
     @app.route('/test/supranational')
     def test_supranational():
-        wmap = SupranationalWorldmap(style=choice(list(styles.values())))
+        wmap = world.SupranationalWorld(style=choice(list(styles.values())))
 
         wmap.add('Asia', [('asia', 1)])
         wmap.add('Europe', [('europe', 1)])
