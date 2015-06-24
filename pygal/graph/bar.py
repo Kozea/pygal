@@ -86,6 +86,9 @@ class Bar(Graph):
                 bar, val, x_center, y_center, classes="centered")
             self._static_value(serie_node, val, x_center, y_center)
 
+            if self.show_data_labels:
+                self._add_data_label(serie, bar, val, x, y, self.zero)
+                
     def _compute(self):
         if self._min:
             self._box.ymin = min(self._min, self.zero)
@@ -135,3 +138,18 @@ class Bar(Graph):
             self.bar(serie)
         for serie in self.secondary_series:
             self.bar(serie, True)
+
+    def _add_data_label(self, serie, node, value, x, y, zero):
+        width = (self.view.x(1) - self.view.x(0)) / self._len
+        x, y = self.view((x, y))
+        series_margin = width * self._series_margin
+        x += series_margin
+        width -= 2 * series_margin
+        width /= self._order
+        x += serie.index * width
+        serie_margin = width * self._serie_margin
+        x += serie_margin
+        width -= 2 * serie_margin
+        height = self.view.y(zero) - y
+
+        self.svg.node(node,'text',x=x + width / 2,y=y-2,class_="text").text = value
