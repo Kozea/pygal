@@ -434,6 +434,7 @@ class Config(CommonConfig):
         "Don't prefix css")
 
     inverse_y_axis = Key(False, bool, "Misc", "Inverse Y axis direction")
+    
     show_data_labels = Key(
         False, bool, "Label", "Set to false to hide data-labels")
 
