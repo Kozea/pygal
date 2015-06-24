@@ -2,7 +2,7 @@
 # This file is part of pygal
 from pygal import (
     Bar, Gauge, Pyramid, Funnel, Dot, StackedBar, StackedLine, XY,
-    CHARTS_BY_NAME, Config, Line, Worldmap, Histogram, Box, SwissMapCantons,
+    CHARTS_BY_NAME, Config, Line, Worldmap, Histogram, Box,
     Pie, Treemap, TimeLine, DateLine,
     DateTimeLine, SupranationalWorldmap)
 
@@ -11,11 +11,15 @@ try:
 except ImportError:
     fr = None
 
+try:
+    from pygal.maps import ch
+except ImportError:
+    ch = None
+
 from flask import abort
 from pygal.style import styles, Style, RotateStyle
 from pygal.colors import rotate
 from pygal.graph.horizontal import HorizontalGraph
-from pygal.graph.swissmap import CANTONS
 from random import randint, choice
 from datetime import datetime
 
@@ -470,10 +474,10 @@ def get_test_routes(app):
 
     @app.route('/test/swissmap')
     def test_swissmap():
-        smap = SwissMapCantons(style=choice(list(styles.values())))
+        smap = ch.Cantons(style=choice(list(styles.values())))
         for i in range(10):
             smap.add('s%d' % i, [
-                (choice(list(CANTONS.keys())), randint(0, 100))
+                (choice(list(ch.CANTONS.keys())), randint(0, 100))
                 for _ in range(randint(1, 5))])
 
         smap.add('links', [{

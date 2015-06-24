@@ -20,7 +20,7 @@
 from pygal import (
     Line, Dot, Pie, Treemap, Radar, Config, Bar, Funnel, Worldmap,
     SupranationalWorldmap, Histogram, Gauge, Box, XY,
-    Pyramid, HorizontalBar, HorizontalStackedBar, SwissMapCantons,
+    Pyramid, HorizontalBar, HorizontalStackedBar,
     DateTimeLine, TimeLine, DateLine, TimeDeltaLine)
 from pygal.graph.map import BaseMap
 from pygal._compat import u

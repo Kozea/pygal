@@ -37,7 +37,6 @@ from pygal.graph.pyramid import Pyramid
 from pygal.graph.radar import Radar
 from pygal.graph.stackedbar import StackedBar
 from pygal.graph.stackedline import StackedLine
-from pygal.graph.swissmap import SwissMapCantons
 from pygal.graph.time import DateLine, DateTimeLine, TimeLine, TimeDeltaLine
 from pygal.graph.treemap import Treemap
 from pygal.graph.verticalpyramid import VerticalPyramid
