@@ -26,7 +26,6 @@ __version__ = '1.9.9'
 from pygal.graph.bar import Bar
 from pygal.graph.box import Box
 from pygal.graph.dot import Dot
-from pygal.graph.frenchmap import FrenchMapDepartments, FrenchMapRegions
 from pygal.graph.funnel import Funnel
 from pygal.graph.gauge import Gauge
 from pygal.graph.histogram import Histogram
@@ -46,11 +45,48 @@ from pygal.graph.worldmap import Worldmap, SupranationalWorldmap
 from pygal.graph.xy import XY
 from pygal.graph.graph import Graph
 from pygal.config import Config
+from pygal import maps
+import pkg_resources
+import sys
+import traceback
+import warnings
 
 
 CHARTS_BY_NAME = dict(
     [(k, v) for k, v in locals().items()
      if isinstance(v, type) and issubclass(v, Graph) and v != Graph])
 
+
+from pygal.graph.map import BaseMap
+for entry in pkg_resources.iter_entry_points('pygal.maps'):
+    try:
+        cls = entry.load()
+    except Exception:
+        warnings.warn('Unable to load %s pygal plugin \n\n%s' % (
+            entry, traceback.format_exc()), Warning)
+        continue
+    setattr(maps, entry.name, cls)
+    for k, v in cls.__dict__.items():
+        if isinstance(v, type) and issubclass(v, BaseMap) and v != BaseMap:
+            CHARTS_BY_NAME[entry.name.capitalize() + k + 'Map'] = v
+
 CHARTS_NAMES = list(CHARTS_BY_NAME.keys())
 CHARTS = list(CHARTS_BY_NAME.values())
+
+
+class PluginImportFixer(object):
+    def __init__(self):
+        pass
+
+    def find_module(self, fullname, path=None):
+        if fullname.startswith('pygal.maps.') and hasattr(
+                maps, fullname.split('.')[2]):
+            return self
+        return None
+
+    def load_module(self, name):
+        if name not in sys.modules:
+            sys.modules[name] = getattr(maps, name.split('.')[2])
+        return sys.modules[name]
+
+sys.meta_path += [PluginImportFixer()]

@@ -54,7 +54,7 @@ class Box(Graph):
                 elif self.mode in ["tukey", "stdev", "pstdev"]:
                     return 'Min: %s Lower Whisker: %s Q1: %s Q2: %s Q3: %s '\
                         'Upper Whisker: %s Max: %s' % tuple(map(sup, x))
-                else:
+                elif self.mode == '1.5IQR':
                     # 1.5IQR mode
                     return 'Q1: %s Q2: %s Q3: %s' % tuple(map(sup, x[2:5]))
             else:
@@ -69,7 +69,6 @@ class Box(Graph):
         for serie in self.series:
             serie.values, serie.outliers = \
                 self._box_points(serie.values, self.mode)
-
 
         if self._min:
             self._box.ymin = min(self._min, self.zero)
@@ -227,13 +226,13 @@ class Box(Graph):
             m = mean(seq)
             l = len(seq)
             v = sum((n - m)**2 for n in seq) / (l - 1) # variance
-            return v**0.5 # sqrt
+            return v**0.5  # sqrt
 
         def pstdev(seq):
             m = mean(seq)
             l = len(seq)
             v = sum((n - m)**2 for n in seq) / l # variance
-            return v**0.5 # sqrt
+            return v**0.5  # sqrt
 
         outliers = []
         # sort the copy in case the originals must stay in original order
@@ -294,7 +293,7 @@ class Box(Graph):
                 q0 = s[b0]
                 q4 = s[b4-1]
                 outliers = s[:b0] + s[b4:]
-            else:
+            elif mode == '1.5IQR':
                 # 1.5IQR mode
                 q0 = q1 - 1.5 * iqr
                 q4 = q3 + 1.5 * iqr

@@ -3,14 +3,18 @@
 from pygal import (
     Bar, Gauge, Pyramid, Funnel, Dot, StackedBar, StackedLine, XY,
     CHARTS_BY_NAME, Config, Line, Worldmap, Histogram, Box, SwissMapCantons,
-    FrenchMapDepartments, FrenchMapRegions, Pie, Treemap, TimeLine, DateLine,
+    Pie, Treemap, TimeLine, DateLine,
     DateTimeLine, SupranationalWorldmap)
 
+try:
+    from pygal.maps import fr
+except ImportError:
+    fr = None
 
+from flask import abort
 from pygal.style import styles, Style, RotateStyle
 from pygal.colors import rotate
 from pygal.graph.horizontal import HorizontalGraph
-from pygal.graph.frenchmap import DEPARTMENTS, REGIONS
 from pygal.graph.swissmap import CANTONS
 from random import randint, choice
 from datetime import datetime
@@ -444,10 +448,12 @@ def get_test_routes(app):
 
     @app.route('/test/frenchmapdepartments')
     def test_frenchmapdepartments():
-        fmap = FrenchMapDepartments(style=choice(list(styles.values())))
+        if fr is None:
+            abort(404)
+        fmap = fr.Departments(style=choice(list(styles.values())))
         for i in range(10):
             fmap.add('s%d' % i, [
-                (choice(list(DEPARTMENTS.keys())), randint(0, 100))
+                (choice(list(fr.DEPARTMENTS.keys())), randint(0, 100))
                 for _ in range(randint(1, 5))])
 
         fmap.add('links', [{
@@ -484,10 +490,12 @@ def get_test_routes(app):
 
     @app.route('/test/frenchmapregions')
     def test_frenchmapregions():
-        fmap = FrenchMapRegions(style=choice(list(styles.values())))
+        if fr is None:
+            abort(404)
+        fmap = fr.Regions(style=choice(list(styles.values())))
         for i in range(10):
             fmap.add('s%d' % i, [
-                (choice(list(REGIONS.keys())), randint(0, 100))
+                (choice(list(fr.REGIONS.keys())), randint(0, 100))
                 for _ in range(randint(1, 5))])
 
         fmap.add('links', [{

@@ -20,9 +20,9 @@
 from pygal import (
     Line, Dot, Pie, Treemap, Radar, Config, Bar, Funnel, Worldmap,
     SupranationalWorldmap, Histogram, Gauge, Box, XY,
-    Pyramid, HorizontalBar, HorizontalStackedBar,
-    FrenchMapRegions, FrenchMapDepartments, SwissMapCantons,
+    Pyramid, HorizontalBar, HorizontalStackedBar, SwissMapCantons,
     DateTimeLine, TimeLine, DateLine, TimeDeltaLine)
+from pygal.graph.map import BaseMap
 from pygal._compat import u
 from pygal.test.utils import texts
 from tempfile import NamedTemporaryFile
@@ -273,9 +273,9 @@ def test_no_data():
 
 def test_include_x_axis(Chart):
     chart = Chart()
-    if Chart in (Pie, Treemap, Radar, Funnel, Dot, Gauge, Worldmap,
-                 SupranationalWorldmap, Histogram, Box,
-                 FrenchMapRegions, FrenchMapDepartments, SwissMapCantons):
+    if Chart in (
+            Pie, Treemap, Radar, Funnel, Dot, Gauge, Histogram, Box
+    ) or issubclass(Chart, BaseMap):
         return
     if not chart._dual:
         data = 100, 200, 150
@@ -360,11 +360,10 @@ def test_x_y_title(Chart):
 
 def test_x_label_major(Chart):
     if Chart in (
-            Pie, Treemap, Funnel, Dot, Gauge, Worldmap,
-            SupranationalWorldmap, Histogram, Box,
-            FrenchMapRegions, FrenchMapDepartments, SwissMapCantons,
+            Pie, Treemap, Funnel, Dot, Gauge, Histogram, Box,
             Pyramid, DateTimeLine, TimeLine, DateLine,
-            TimeDeltaLine):
+            TimeDeltaLine
+    ) or issubclass(Chart, BaseMap):
         return
     chart = Chart()
     chart.add('test', range(12))
@@ -405,12 +404,11 @@ def test_x_label_major(Chart):
 
 def test_y_label_major(Chart):
     if Chart in (
-            Pie, Treemap, Funnel, Dot, Gauge, Worldmap,
-            SupranationalWorldmap, Histogram, Box,
-            FrenchMapRegions, FrenchMapDepartments, SwissMapCantons,
+            Pie, Treemap, Funnel, Dot, Gauge, Histogram, Box,
             HorizontalBar, HorizontalStackedBar,
             Pyramid, DateTimeLine, TimeLine, DateLine,
-            TimeDeltaLine):
+            TimeDeltaLine
+    ) or issubclass(Chart, BaseMap):
         return
     chart = Chart()
     data = range(12)
