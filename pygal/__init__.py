@@ -60,13 +60,13 @@ CHARTS_BY_NAME = dict(
 from pygal.graph.map import BaseMap
 for entry in pkg_resources.iter_entry_points('pygal.maps'):
     try:
-        cls = entry.load()
+        module = entry.load()
     except Exception:
         warnings.warn('Unable to load %s pygal plugin \n\n%s' % (
             entry, traceback.format_exc()), Warning)
         continue
-    setattr(maps, entry.name, cls)
-    for k, v in cls.__dict__.items():
+    setattr(maps, entry.name, module)
+    for k, v in module.__dict__.items():
         if isinstance(v, type) and issubclass(v, BaseMap) and v != BaseMap:
             CHARTS_BY_NAME[entry.name.capitalize() + k + 'Map'] = v
 
