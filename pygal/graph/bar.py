@@ -43,7 +43,12 @@ class Bar(Graph):
         x += series_margin
         width -= 2 * series_margin
         width /= self._order
-        x += serie.index * width
+        if self.horizontal:
+            serie_index = self._order - serie.index - 1
+        else:
+            serie_index = serie.index
+        x += serie_index * width
+
         serie_margin = width * self._serie_margin
         x += serie_margin
         width -= 2 * serie_margin
