@@ -185,11 +185,11 @@ class BaseGraph(object):
         if getattr(self, 'y_labels', None) is not None:
             self.y_labels = list(self.y_labels)
         self.state = State(self, **kwargs)
-        self.horizontal = getattr(self, 'horizontal', False)
         self.series = self.prepare_values(
             self.raw_series) or []
         self.secondary_series = self.prepare_values(
             self.raw_series2, len(self.series)) or []
+        self.horizontal = getattr(self, 'horizontal', False)
         self.svg = Svg(self)
         self._x_labels = None
         self._y_labels = None

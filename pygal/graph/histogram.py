@@ -63,7 +63,7 @@ class Histogram(Graph):
                 sum(map(abs, self.xvals)) != 0,
                 sum(map(abs, self.yvals)) != 0))
 
-    def _bar(self, serie, parent, x0, x1, y, zero, secondary=False):
+    def _bar(self, serie, parent, x0, x1, y, i, zero, secondary=False):
         x, y = self.view((x0, y))
         x1, _ = self.view((x1, y))
         width = x1 - x
