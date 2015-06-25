@@ -186,12 +186,12 @@ def get_test_routes(app):
 
     @app.route('/test/dot')
     def test_dot():
-        dot = Dot()
+        dot = Dot(logarithmic=True)
         dot.x_labels = map(str, range(4))
         dot.add('a', [1, lnk(3, 'Foo'), 5, 3])
-        dot.add('b', [2, 2, 0, 2, .1])
-        dot.add('c', [5, 1, 5, lnk(3, 'Bar')])
-        dot.add('d', [5, 5, lnk(0, 'Babar'), 3])
+        dot.add('b', [2, -2, 0, 2, .1])
+        dot.add('c', [5, 1, 50, lnk(3, 'Bar')])
+        dot.add('d', [-5, 5, lnk(0, 'Babar'), 3])
 
         return dot.render_response()
 

@@ -107,6 +107,10 @@
   stroke-width: 5px;
 }
 
+{{ id }}.dot.negative {
+  fill: transparent;
+}
+
 {{ id }}.series text {
   stroke: none;
 }
