@@ -96,7 +96,7 @@ class Dot(Graph):
     @cached_property
     def _values(self):
         """Getter for series values (flattened)"""
-        return [abs(val) for val in super()._values if val != 0]
+        return [abs(val) for val in super(Dot, self)._values if val != 0]
 
     @cached_property
     def _max(self):
