@@ -249,7 +249,7 @@ def decorate(svg, node, metadata):
 
 
 def alter(node, metadata):
-    if node and metadata and 'node' in metadata:
+    if node is not None and metadata and 'node' in metadata:
         node.attrib.update(
             dict((k, str(v)) for k, v in metadata['node'].items()))
 
@@ -269,21 +269,25 @@ def truncate(string, index):
         string = string[:index - 1] + u('…')
     return string
 
-cached_property = property
-# # Stolen from brownie http://packages.python.org/Brownie/
-# class cached_property(object):
-#     """Optimize a static property"""
-#     def __init__(self, getter, doc=None):
-#         self.getter = getter
-#         self.__module__ = getter.__module__
-#         self.__name__ = getter.__name__
-#         self.__doc__ = doc or getter.__doc__
 
-#     def __get__(self, obj, type_=None):
-#         if obj is None:
-#             return self
-#         value = obj.__dict__[self.__name__] = self.getter(obj)
-#         return value
+# # Stolen from brownie http://packages.python.org/Brownie/
+class cached_property(object):
+    """Optimize a static property"""
+    def __init__(self, getter, doc=None):
+        self.getter = getter
+        self.__module__ = getter.__module__
+        self.__name__ = getter.__name__
+        self.__doc__ = doc or getter.__doc__
+
+    def __get__(self, obj, type_=None):
+        if obj is None:
+            return self
+        value = self.getter(obj)
+        if hasattr(obj, 'state'):
+            setattr(obj.state, self.__name__, value)
+        else:
+            obj.__dict__[self.__name__] = self.getter(obj)
+        return value
 
 css_comments = re.compile(r'/\*.*?\*/', re.MULTILINE | re.DOTALL)
 
