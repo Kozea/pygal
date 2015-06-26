@@ -23,7 +23,7 @@ Bar chart
 
 from __future__ import division
 from pygal.graph.graph import Graph
-from pygal.util import swap, ident, compute_scale, decorate
+from pygal.util import swap, ident, compute_scale, decorate, alter
 
 
 class Bar(Graph):
@@ -54,10 +54,10 @@ class Bar(Graph):
         width -= 2 * serie_margin
         height = self.view.y(zero) - y
         r = serie.rounded_bars * 1 if serie.rounded_bars else 0
-        self.svg.transposable_node(
+        alter(self.svg.transposable_node(
             parent, 'rect',
             x=x, y=y, rx=r, ry=r, width=width, height=height,
-            class_='rect reactive tooltip-trigger')
+            class_='rect reactive tooltip-trigger'), serie.metadata.get(i))
         transpose = swap if self.horizontal else ident
         return transpose((x + width / 2, y + height / 2))
 

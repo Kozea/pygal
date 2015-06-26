@@ -22,7 +22,7 @@ Pie chart
 """
 
 from __future__ import division
-from pygal.util import decorate
+from pygal.util import decorate, alter
 from pygal.graph.graph import Graph
 from pygal.adapters import positive, none_to_zero
 from math import pi
@@ -79,9 +79,9 @@ class Pie(Graph):
                 big_radius = radius * .9
                 small_radius = radius * serie.inner_radius
 
-            self.svg.slice(
+            alter(self.svg.slice(
                 serie_node, slice_, big_radius, small_radius,
-                angle, start_angle, center, val)
+                angle, start_angle, center, val), metadata)
             start_angle += angle
             total_perc += perc
 

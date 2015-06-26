@@ -22,7 +22,7 @@ Treemap chart
 """
 
 from __future__ import division
-from pygal.util import decorate, cut
+from pygal.util import decorate, cut, alter
 from pygal.graph.graph import Graph
 from pygal.adapters import positive, none_to_zero
 
@@ -46,12 +46,15 @@ class Treemap(Graph):
             self.svg.node(rects, class_="rect"),
             metadata)
 
-        self.svg.node(rect, 'rect',
-                      x=rx,
-                      y=ry,
-                      width=rw,
-                      height=rh,
-                      class_='rect reactive tooltip-trigger')
+        alter(
+            self.svg.node(
+                rect, 'rect',
+                x=rx,
+                y=ry,
+                width=rw,
+                height=rh,
+                class_='rect reactive tooltip-trigger'),
+            metadata)
 
         self._tooltip_data(rect, value,
                            rx + rw / 2,

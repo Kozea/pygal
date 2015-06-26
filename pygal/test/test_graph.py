@@ -96,10 +96,11 @@ def test_metadata(Chart):
             'target': '_blank'}, 'label': 'Seven'}
     ])
     q = chart.render_pyquery()
-    for md in (
-            'Three', 'http://4.example.com/',
-            'Five', 'http://7.example.com/', 'Seven'):
+    for md in ('Three', 'Five', 'Seven'):
         assert md in cut(q('desc'), 'text')
+
+    for md in ('http://7.example.com/', 'http://4.example.com/'):
+        assert md in [e.attrib.get('xlink:href') for e in q('a')]
 
     if Chart in (pygal.Pie, pygal.Treemap):
         # Slices with value 0 are not rendered

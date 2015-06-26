@@ -22,7 +22,7 @@ Gauge chart
 """
 
 from __future__ import division
-from pygal.util import decorate, compute_scale
+from pygal.util import decorate, compute_scale, alter
 from pygal.view import PolarThetaView, PolarThetaLogView
 from pygal.graph.graph import Graph
 
@@ -54,13 +54,14 @@ class Gauge(Graph):
                 self.svg.node(serie_node['plot'], class_="dots"),
                 metadata)
 
-            self.svg.node(
+            alter(self.svg.node(
                 gauges, 'polygon', points=' '.join([
                     fmt(self.view((0, 0))),
                     fmt(self.view((.75, theta))),
                     fmt(self.view((.8, theta))),
                     fmt(self.view((.75, theta)))]),
-                class_='line reactive tooltip-trigger')
+                class_='line reactive tooltip-trigger'),
+                  metadata)
 
             x, y = self.view((.75, theta))
             self._tooltip_data(gauges, value, x, y)

@@ -22,7 +22,7 @@ Dot chart
 """
 
 from __future__ import division
-from pygal.util import decorate, cut, safe_enumerate, cached_property
+from pygal.util import decorate, cut, safe_enumerate, cached_property, alter
 from pygal.graph.graph import Graph
 from pygal.view import View, ReverseView
 from math import log10
@@ -57,10 +57,11 @@ class Dot(Graph):
                 self.svg,
                 self.svg.node(serie_node['plot'], class_="dots"),
                 metadata)
-            self.svg.node(dots, 'circle',
-                          cx=x, cy=y, r=size,
-                          class_='dot reactive tooltip-trigger' + (
-                              ' negative' if value < 0 else ''))
+            alter(self.svg.node(
+                dots, 'circle',
+                cx=x, cy=y, r=size,
+                class_='dot reactive tooltip-trigger' + (
+                    ' negative' if value < 0 else '')), metadata)
 
             value = self._format(value)
             self._tooltip_data(dots, value, x, y, classes='centered')

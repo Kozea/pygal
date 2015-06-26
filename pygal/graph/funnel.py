@@ -22,7 +22,7 @@ Funnel chart
 """
 
 from __future__ import division
-from pygal.util import decorate, cut, compute_scale
+from pygal.util import decorate, cut, compute_scale, alter
 from pygal.adapters import positive, none_to_zero
 from pygal.graph.graph import Graph
 
@@ -48,10 +48,10 @@ class Funnel(Graph):
                 self.svg.node(serie_node['plot'], class_="funnels"),
                 metadata)
 
-            self.svg.node(
+            alter(self.svg.node(
                 funnels, 'polygon',
                 points=' '.join(map(fmt, map(self.view, poly))),
-                class_='funnel reactive tooltip-trigger')
+                class_='funnel reactive tooltip-trigger'), metadata)
 
             x, y = self.view((
                 self._x_labels[serie.index][1],  # Poly center from label

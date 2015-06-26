@@ -241,13 +241,17 @@ def decorate(svg, node, metadata):
     if 'style' in metadata:
         node.attrib['style'] = metadata.pop('style')
 
-    for key, value in metadata.items():
-        if key == 'xlink' and isinstance(value, dict):
-            value = value.get('href', value)
-        if value:
-            svg.node(node, 'desc', class_=key).text = to_unicode(value)
+    if 'label' in metadata:
+        svg.node(node, 'desc', class_='label').text = to_unicode(
+            metadata['label'])
 
     return node
+
+
+def alter(node, metadata):
+    if node and metadata and 'node' in metadata:
+        node.attrib.update(
+            dict((k, str(v)) for k, v in metadata['node'].items()))
 
 
 def cycle_fill(short_list, max_len):

@@ -22,7 +22,7 @@ Line chart
 """
 from __future__ import division
 from pygal.graph.graph import Graph
-from pygal.util import cached_property, compute_scale, decorate
+from pygal.util import cached_property, compute_scale, decorate, alter
 
 
 class Line(Graph):
@@ -109,9 +109,9 @@ class Line(Graph):
                     self.svg.node(serie_node['overlay'], class_="dots"),
                     metadata)
                 val = self._get_value(serie.points, i)
-                self.svg.transposable_node(
+                alter(self.svg.transposable_node(
                     dots, 'circle', cx=x, cy=y, r=serie.dots_size,
-                    class_='dot reactive tooltip-trigger')
+                    class_='dot reactive tooltip-trigger'), metadata)
                 self._tooltip_data(
                     dots, val, x, y)
                 self._static_value(

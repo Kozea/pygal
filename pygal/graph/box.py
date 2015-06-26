@@ -22,7 +22,7 @@ Box plot
 
 from __future__ import division
 from pygal.graph.graph import Graph
-from pygal.util import compute_scale, decorate
+from pygal.util import compute_scale, decorate, alter
 from pygal._compat import is_list_like
 from bisect import bisect_left, bisect_right
 
@@ -119,12 +119,12 @@ class Box(Graph):
             metadata)
         val = self._format(serie.values)
 
-        x_center, y_center = self._draw_box(box, serie.values[1:6],
-                                            serie.outliers, serie.index)
+        x_center, y_center = self._draw_box(
+            box, serie.values[1:6], serie.outliers, serie.index, metadata)
         self._tooltip_data(box, val, x_center, y_center, classes="centered")
         self._static_value(serie_node, val, x_center, y_center)
 
-    def _draw_box(self, parent_node, quartiles, outliers, box_index):
+    def _draw_box(self, parent_node, quartiles, outliers, box_index, metadata):
         """
         Return the center of a bounding box defined by a box plot.
         Draws a box plot on self.svg.
@@ -141,46 +141,46 @@ class Box(Graph):
             shift = (width - whisker_width) / 2
             xs = left_edge + shift
             xe = left_edge + width - shift
-            self.svg.line(
+            alter(self.svg.line(
                 parent_node,
                 coords=[(xs, self.view.y(whisker)),
                         (xe, self.view.y(whisker))],
                 class_='reactive tooltip-trigger',
-                attrib={'stroke-width': 3})
+                attrib={'stroke-width': 3}), metadata)
 
         # draw lines connecting whiskers to box (Q1 and Q3)
-        self.svg.line(
+        alter(self.svg.line(
             parent_node,
             coords=[(left_edge + width / 2, self.view.y(quartiles[0])),
                     (left_edge + width / 2, self.view.y(quartiles[1]))],
             class_='reactive tooltip-trigger',
-            attrib={'stroke-width': 2})
-        self.svg.line(
+            attrib={'stroke-width': 2}), metadata)
+        alter(self.svg.line(
             parent_node,
             coords=[(left_edge + width / 2, self.view.y(quartiles[4])),
                     (left_edge + width / 2, self.view.y(quartiles[3]))],
             class_='reactive tooltip-trigger',
-            attrib={'stroke-width': 2})
+            attrib={'stroke-width': 2}), metadata)
 
         # box, bounded by Q1 and Q3
-        self.svg.node(
+        alter(self.svg.node(
             parent_node,
             tag='rect',
             x=left_edge,
             y=self.view.y(quartiles[1]),
             height=self.view.y(quartiles[3]) - self.view.y(quartiles[1]),
             width=width,
-            class_='subtle-fill reactive tooltip-trigger')
+            class_='subtle-fill reactive tooltip-trigger'), metadata)
 
         # draw outliers
         for o in outliers:
-            self.svg.node(
+            alter(self.svg.node(
                 parent_node,
                 tag='circle',
                 cx=left_edge+width/2,
                 cy=self.view.y(o),
                 r=3,
-                class_='subtle-fill reactive tooltip-trigger')
+                class_='subtle-fill reactive tooltip-trigger'), metadata)
 
 
         return (left_edge + width / 2, self.view.y(

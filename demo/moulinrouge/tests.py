@@ -619,11 +619,15 @@ def get_test_routes(app):
     def test_custom_metadata_for(chart):
         c = CHARTS_BY_NAME[chart]()
         c.add('1', [
-            {'style': 'fill: red', 'value': 1},
-            {'color': 'blue', 'value': 2},
+            {'style': 'fill: red', 'value': 1, 'node': {'r': 12}},
+            {'color': 'blue', 'value': 2, 'node': {'width': 12}},
             {'style': 'fill: red; stroke: yellow', 'value': 3}])
         c.add('2', [
-            {'value': 4},
+            {'value': 4, 'xlink': {
+                'href': 'javascript:alert("-")', 'target': 'top',
+                'class': 'lol'
+            }
+            },
             {'color': 'green', 'value': 5},
             6])
         return c.render_response()

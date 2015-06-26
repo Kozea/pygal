@@ -228,7 +228,7 @@ class Svg(object):
         line = ' '.join([coord_format(c)
                          for c in coords[origin_index + 1:]
                          if None not in c])
-        self.node(node, 'path',
+        return self.node(node, 'path',
                   d=root % (origin, line), **kwargs)
 
     def slice(
@@ -244,29 +244,34 @@ class Svg(object):
             diff(center, project(rho, theta)))
 
         if angle == 2 * pi:
-            self.node(node, 'circle',
-                      cx=center[0],
-                      cy=center[1],
-                      r=radius,
-                      class_='slice reactive tooltip-trigger')
+            rv = self.node(
+                node, 'circle',
+                cx=center[0],
+                cy=center[1],
+                r=radius,
+                class_='slice reactive tooltip-trigger')
         elif angle > 0:
             to = [absolute_project(radius, start_angle),
                   absolute_project(radius, start_angle + angle),
                   absolute_project(small_radius, start_angle + angle),
                   absolute_project(small_radius, start_angle)]
-            self.node(node, 'path',
-                      d='M%s A%s 0 %d 1 %s L%s A%s 0 %d 0 %s z' % (
-                          to[0],
-                          get_radius(radius), int(angle > pi), to[1],
-                          to[2],
-                          get_radius(small_radius), int(angle > pi), to[3]),
-                      class_='slice reactive tooltip-trigger')
+            rv = self.node(
+                node, 'path',
+                d='M%s A%s 0 %d 1 %s L%s A%s 0 %d 0 %s z' % (
+                    to[0],
+                    get_radius(radius), int(angle > pi), to[1],
+                    to[2],
+                    get_radius(small_radius), int(angle > pi), to[3]),
+                class_='slice reactive tooltip-trigger')
+        else:
+            rv = None
         x, y = diff(center, project(
             (radius + small_radius) / 2, start_angle + angle / 2))
 
         self.graph._tooltip_data(node, val, x, y, classes="centered")
         if angle >= 0.3:  # 0.3 radians is about 17 degrees
             self.graph._static_value(serie_node, val, x, y)
+        return rv
 
     def pre_render(self):
         """Last things to do before rendering"""
