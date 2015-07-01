@@ -270,7 +270,7 @@ def truncate(string, index):
     return string
 
 
-# # Stolen from brownie http://packages.python.org/Brownie/
+# # Stolen partly from brownie http://packages.python.org/Brownie/
 class cached_property(object):
     """Optimize a static property"""
     def __init__(self, getter, doc=None):

@@ -721,6 +721,7 @@ class Graph(BaseGraph):
     def _has_data(self):
         """Check if there is any data"""
         return any([
-            len([v for v in (s[1] if is_list_like(s) else [s]) if v is not None])
+            len([v for v in (
+                s[1] if is_list_like(s) else [s]) if v is not None])
             for s in self.raw_series
         ])
