@@ -66,7 +66,7 @@
   stroke-dasharray: 6,6;
 }
 {{ id }}.axis text.major {
-  stroke-width: 0.5px;
+  stroke-width: 0.25px;
 }
 
 {{ id }}.horizontal .axis.y .guide.line,
