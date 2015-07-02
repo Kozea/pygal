@@ -38,7 +38,7 @@ These lists contain absolute filenames and/or external URI. (Relative filenames 
 
 Default:
 
-.. code-block::
+.. code-block:: python
 
     css = ['style.css', 'graph.css']
     js = [

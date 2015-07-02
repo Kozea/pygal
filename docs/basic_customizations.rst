@@ -34,7 +34,7 @@ By instanciating it
 
 Just import the `Config` class and instanciate it:
 
-.. code-block::
+.. code-block:: python
 
   from pygal import Config
 
@@ -52,7 +52,7 @@ By inheriting it
 
 Import the `Config` class and override it:
 
-.. code-block::
+.. code-block:: python
 
   from pygal import Config
 
@@ -72,7 +72,7 @@ Using keyword args
 
 As a shorthand for a one shot config, you can specify all config arguments as keyword args:
 
-.. code-block::
+.. code-block:: python
 
   chart = pygal.XY(show_legend=False, human_readable=True, fill=True, x_scale=.25, y_scale=.25)
   ...
