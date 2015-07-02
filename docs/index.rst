@@ -37,29 +37,29 @@ pygal is a SVG charting library written in python.
 
 It features various graph types:
 
-- `Bar charts </chart_types/#bar-charts-histograms>`_
+- `Bar charts <chart_types.html#bar-charts-histograms>`_
 
-- `Line charts </chart_types/#line-charts>`_
+- `Line charts <chart_types.html#line-charts>`_
 
-- `XY charts </chart_types/#xy-charts>`_
+- `XY charts <chart_types.html#xy-charts>`_
 
-- `Pie charts </chart_types/#pies>`_
+- `Pie charts <chart_types.html#pies>`_
 
-- `Radar charts </chart_types/#radar-charts>`_
+- `Radar charts <chart_types.html#radar-charts>`_
 
-- `Box plot </chart_types/#box-plot>`_
+- `Box plot <chart_types.html#box-plot>`_
 
-- `Dot charts </chart_types/#dot-charts>`_
+- `Dot charts <chart_types.html#dot-charts>`_
 
-- `Pyramid charts </chart_types/#pyramid-charts>`_
+- `Pyramid charts <chart_types.html#pyramid-charts>`_
 
-- `Funnel charts </chart_types/#funnel-charts>`_
+- `Funnel charts <chart_types.html#funnel-charts>`_
 
-- `Gauge charts </chart_types/#gauge-charts>`_
+- `Gauge charts <chart_types.html#gauge-charts>`_
 
-- `Worldmap charts </chart_types/#worldmap-charts>`_
+- `Worldmap charts <chart_types.html#worldmap-charts>`_
 
-- `Country charts </chart_types/#country-charts>`_
+- `Country charts <chart_types.html#country-charts>`_
 
 
 Python/Css styling with some pre-defined themes. See `styling </styles/>`_.
