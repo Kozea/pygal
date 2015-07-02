@@ -192,4 +192,7 @@ pseudoxml:
 	@echo "Build finished. The pseudo-XML files are in $(BUILDDIR)/pseudoxml."
 
 rst:
-	sphinx-apidoc -f -o . ../pygal
+	sphinx-apidoc -f -o api ../pygal
+
+auto:
+	sphinx-autobuild . _build/html

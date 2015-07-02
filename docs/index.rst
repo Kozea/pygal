@@ -100,15 +100,38 @@ Optional dependencies
 PNG output requires `CairoSVG <http://cairosvg.org/>`_, `tinycss <http://packages.python.org/tinycss/>`_ and `cssselect <http://packages.python.org/cssselect/>`_.
 Install those with ``pip install CairoSVG tinycss cssselect``.
 
-Unit testing needs `py.test <http://pytest.org/latest/>`_ or `nosetests <http://readthedocs.org/docs/nose/en/latest/>`_.
+Unit testing needs `py.test <http://pytest.org/latest/>`_ or `nosetests <http://readthedocs/org/docs/nose/en/latest/>`_.
 
 Visual testing is based on `flask <http://flask.pocoo.org/>`_.
 
-Contents:
+
+Read more
+=========
 
 .. toctree::
    :maxdepth: 2
 
+   documentation/index
+   documentation/first_steps
+   documentation/chart_types
+   documentation/styles
+   documentation/basic_customizations
+   documentation/interpolations
+   documentation/sparks
+   documentation/metadata
+   documentation/other_customizations
+   documentation/builtin_styles
+   documentation/parametric_styles
+   documentation/custom_styles
+   documentation/web
+
+   download
+   support
+
+   api/modules
+   api/pygal
+   api/pygal.graph
+   api/pygal.test
 
 
 Indices and tables
