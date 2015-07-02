@@ -621,4 +621,4 @@ Text to display instead of the graph when no data is supplied:
   chart.add('line', [])
 
 
-Next: `Interpolations </interpolations>`_
+Next: `Interpolations <interpolations.html>`_

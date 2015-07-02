@@ -96,4 +96,4 @@ You can specify a dictionary to xlink with all links attributes:
     }])
 
 
-Next: `Other customizations </other_customizations>`_
+Next: `Other customizations <other_customizations.html>`_

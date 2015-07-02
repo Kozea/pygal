@@ -112,5 +112,5 @@ NB: Now the css rules are prefixed by an unique id, to prevent collisions when i
   chart.add('E', [7,  4, 2,  1,  2, 10, 0])
 
 
-Next: `Basic customizations </basic_customizations>`_
+Next: `Basic customizations <basic_customizations.html>`_
 

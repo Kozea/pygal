@@ -6,7 +6,7 @@
 First steps
 ===========
 
-First you need to download the pygal package, see the `download page </download>`_.
+First you need to download the pygal package, see the `download page <download.html>`_.
 
 When it's done, you are ready to make your first chart:
 
@@ -65,4 +65,4 @@ And finally add a title and some labels:
   bar_chart.add('Padovan', [1, 1, 1, 2, 2, 3, 4, 5, 7, 9, 12])
 
 
-Next: `Charts types </chart_types>`_
+Next: `Charts types <chart_types.html>`_

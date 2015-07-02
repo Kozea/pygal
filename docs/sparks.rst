@@ -77,4 +77,4 @@ You can also specify an explicit minimum for the values:
 → `▁▂▃█▆▂▄`
 
 
-Next: `Metadata </metadata>`_
+Next: `Metadata <metadata.html>`_

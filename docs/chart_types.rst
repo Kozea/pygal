@@ -818,4 +818,4 @@ You can also specify a number for a region and use a department to region aggreg
     '976': 212645
   }))
 
-Next: `Styles </styles>`_
+Next: `Styles <styles.html>`_

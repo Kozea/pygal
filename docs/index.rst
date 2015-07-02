@@ -64,7 +64,7 @@ It features various graph types:
 
 Python/Css styling with some pre-defined themes. See `styling </styles/>`_.
 
-And a lot of options to `customize the charts. </basic_customizations>`_
+And a lot of options to `customize the charts. <basic_customizations.html>`_
 
 
 Get it !
@@ -73,7 +73,7 @@ Get it !
 - Get the package on `pypi <http://pypi.python.org/pypi/pygal/>`_
 - Fork me on `github <http://github.com/Kozea/pygal>`_
 
-More information in the `download page </download>`_
+More information in the `download page <download.html>`_
 
 
 Get started
