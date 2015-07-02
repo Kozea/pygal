@@ -1,8 +1,6 @@
 Other customizations
 ====================
 
-.. contents::
-
 
 Logarithmic
 -----------

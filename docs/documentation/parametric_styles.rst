@@ -3,8 +3,6 @@ Parametric Styles
 
 pygal provides 5 parametric styles:
 
-.. contents::
-
 
 Usage
 -----

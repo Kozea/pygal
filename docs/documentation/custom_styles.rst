@@ -3,8 +3,6 @@ Custom Styles
 
 pygal provides 2 ways to customize styles:
 
-.. contents::
-
 
 Using Style class
 -----------------
@@ -106,6 +104,4 @@ NB: Now the css rules are prefixed by an unique id, to prevent collisions when i
   chart.add('D', [2,  3, 5,  9, 12, 9,  5])
   chart.add('E', [7,  4, 2,  1,  2, 10, 0])
 
-
-Next: `Basic customizations <basic_customizations.html>`_
 

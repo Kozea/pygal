@@ -2,9 +2,6 @@ Interpolations
 ==============
 
 
-.. contents::
-
-
 Without interpolation:
 ----------------------
 
@@ -111,5 +108,3 @@ You can change the resolution of the interpolation with the help of `interpolati
   chart = pygal.Line(interpolate='quadratic', interpolation_precision=3)
   chart.add('line', [1, 5, 17, 12, 5, 10])
 
-
-Next: `Sparklines <sparks.html>`_

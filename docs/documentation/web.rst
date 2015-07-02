@@ -1,8 +1,6 @@
 Embedding in a web page
 =======================
 
-.. contents::
-
 
 Within an embed tag
 -------------------

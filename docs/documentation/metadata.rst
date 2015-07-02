@@ -1,8 +1,6 @@
 Metadata
 ========
 
-.. contents::
-
 
 Labels
 ------
@@ -90,5 +88,3 @@ You can specify a dictionary to xlink with all links attributes:
       'target': '_self'}
     }])
 
-
-Next: `Other customizations <other_customizations.html>`_

@@ -1,9 +1,8 @@
 Chart types
 ===========
 
-pygal provides 10 kinds of charts:
+pygal provides various kinds of charts:
 
-.. contents::
 
 Line charts
 -----------
@@ -813,4 +812,3 @@ You can also specify a number for a region and use a department to region aggreg
     '976': 212645
   }))
 
-Next: `Styles <styles.html>`_

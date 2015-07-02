@@ -12,7 +12,4 @@ User documentation
    sparks
    metadata
    other_customizations
-   builtin_styles
-   parametric_styles
-   custom_styles
    web

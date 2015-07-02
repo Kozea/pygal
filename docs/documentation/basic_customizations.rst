@@ -2,9 +2,6 @@ Basic customizations
 ====================
 
 
-.. contents::
-
-
 How to customize:
 -----------------
 
@@ -615,5 +612,3 @@ Text to display instead of the graph when no data is supplied:
   chart = pygal.Line(no_data_text='No result found')
   chart.add('line', [])
 
-
-Next: `Interpolations <interpolations.html>`_

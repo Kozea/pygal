@@ -4,9 +4,6 @@ Sparklines
 pygal provides a simple way to get beautiful sparklines.
 
 
-.. contents::
-
-
 Basic
 -----
 
@@ -59,7 +56,7 @@ If you want to get a simple spartext, use the render_sparktext function:
   chart.add('', [1, 3,  5, 16, 13, 3,  7])
   chart.render_sparktext()
 
-→ `▁▁▂█▆▁▃`
+→ ``▁▁▂█▆▁▃``
 
 You can also specify an explicit minimum for the values:
 
@@ -69,7 +66,6 @@ You can also specify an explicit minimum for the values:
   chart.add('', [1, 3,  5, 16, 13, 3,  7])
   chart.render_sparktext(relative_to=0)
 
-→ `▁▂▃█▆▂▄`
+→ ``▁▂▃█▆▂▄``
 
 
-Next: `Metadata <metadata.html>`_

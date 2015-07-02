@@ -3,8 +3,6 @@ Built-in Styles
 
 pygal provides 14 built-in styles:
 
-.. contents::
-
 
 Default
 -------
