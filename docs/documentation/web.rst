@@ -1,8 +1,3 @@
-===============
- Documentation
-===============
-
-
 Embedding in a web page
 =======================
 

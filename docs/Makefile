@@ -196,3 +196,5 @@ rst:
 
 auto:
 	sphinx-autobuild . _build/html
+
+watch: rst html auto

@@ -37,32 +37,32 @@ pygal is a SVG charting library written in python.
 
 It features various graph types:
 
-- `Bar charts <chart_types.html#bar-charts-histograms>`_
+- `Bar charts <documentation/chart_types.html#bar-charts-histograms>`_
 
-- `Line charts <chart_types.html#line-charts>`_
+- `Line charts <documentation/chart_types.html#line-charts>`_
 
-- `XY charts <chart_types.html#xy-charts>`_
+- `XY charts <documentation/chart_types.html#xy-charts>`_
 
-- `Pie charts <chart_types.html#pies>`_
+- `Pie charts <documentation/chart_types.html#pies>`_
 
-- `Radar charts <chart_types.html#radar-charts>`_
+- `Radar charts <documentation/chart_types.html#radar-charts>`_
 
-- `Box plot <chart_types.html#box-plot>`_
+- `Box plot <documentation/chart_types.html#box-plot>`_
 
-- `Dot charts <chart_types.html#dot-charts>`_
+- `Dot charts <documentation/chart_types.html#dot-charts>`_
 
-- `Pyramid charts <chart_types.html#pyramid-charts>`_
+- `Pyramid charts <documentation/chart_types.html#pyramid-charts>`_
 
-- `Funnel charts <chart_types.html#funnel-charts>`_
+- `Funnel charts <documentation/chart_types.html#funnel-charts>`_
 
-- `Gauge charts <chart_types.html#gauge-charts>`_
+- `Gauge charts <documentation/chart_types.html#gauge-charts>`_
 
-- `Worldmap charts <chart_types.html#worldmap-charts>`_
+- `Worldmap charts <documentation/chart_types.html#worldmap-charts>`_
 
-- `Country charts <chart_types.html#country-charts>`_
+- `Country charts <documentation/chart_types.html#country-charts>`_
 
 
-Python/Css styling with some pre-defined themes. See `styling </styles/>`_.
+Python/Css styling with some pre-defined themes. See `styling <styles.html>`_.
 
 And a lot of options to `customize the charts. <basic_customizations.html>`_
 
@@ -79,7 +79,7 @@ More information in the `download page <download.html>`_
 Get started
 ===========
 
-Start `here </first_steps/>`_ to make your first steps.
+Start `here <first_steps.html>`_ to make your first steps.
 
 
 Technical Description
@@ -112,26 +112,9 @@ Read more
    :maxdepth: 2
 
    documentation/index
-   documentation/first_steps
-   documentation/chart_types
-   documentation/styles
-   documentation/basic_customizations
-   documentation/interpolations
-   documentation/sparks
-   documentation/metadata
-   documentation/other_customizations
-   documentation/builtin_styles
-   documentation/parametric_styles
-   documentation/custom_styles
-   documentation/web
-
    download
    support
-
    api/modules
-   api/pygal
-   api/pygal.graph
-   api/pygal.test
 
 
 Indices and tables

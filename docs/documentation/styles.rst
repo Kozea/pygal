@@ -1,6 +1,5 @@
-===============
- Documentation
-===============
+Styles
+======
 
 There are three ways to style the charts:
 

@@ -28,4 +28,4 @@ Pygal has been packaged for:
 - `Fedora <https://admin.fedoraproject.org/pkgdb/acls/name/python-pygal>`_ by ralph
 - `Gentoo <http://packages.gentoo.org/package/dev-python/pygal>`_ by Ben de Groot
 
-If you are interested in creating packages for Linux distributions, `contact us </support/>`_.
+If you are interested in creating packages for Linux distributions, `contact us <support.html>`_.
