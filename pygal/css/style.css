@@ -114,6 +114,9 @@
 {{ id }}.tooltip rect {
   fill: {{ style.plot_background }};
   stroke: {{ style.foreground_light }};
+  -webkit-transition: opacity 250ms;
+  -moz-transition: opacity 250ms;
+  transition: opacity 250ms;
 }
 
 {{ id }}.tooltip text {
