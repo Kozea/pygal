@@ -49,8 +49,7 @@ def get_test_routes(app):
     @app.route('/test/bar_links')
     def test_bar_links():
         bar = Bar(style=styles['neon'])
-        bar.js = ('http://l:2343/svg.jquery.js',
-                  'http://l:2343/pygal-tooltips.js')
+        bar.js = ('http://l:2343/2.0.x/pygal-tooltips.js',)
         bar.add('1234', [
             {'value': 10,
              'label': 'Ten',
@@ -382,8 +381,7 @@ def get_test_routes(app):
     def test_config():
 
         class LolConfig(Config):
-            js = ['http://l:2343/svg.jquery.js',
-                  'http://l:2343/pygal-tooltips.js']
+            js = ['http://l:2343/2.0.x/pygal-tooltips.js']
 
         stacked = StackedBar(LolConfig())
         stacked.add('1', [1, 2, 3])

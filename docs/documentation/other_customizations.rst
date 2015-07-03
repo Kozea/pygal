@@ -35,8 +35,7 @@ Default:
 
     css = ['style.css', 'graph.css']
     js = [
-        'http://kozea.github.com/pygal.js/javascripts/svg.jquery.js',
-        'http://kozea.github.com/pygal.js/javascripts/pygal-tooltips.js'
+        'http://kozea.github.com/pygal.js/latest/pygal-tooltips.js'
     ]
 
 

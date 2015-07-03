@@ -293,9 +293,7 @@ def create_app():
             chart.title = color
             chart.disable_xml_declaration = True
             chart.explicit_size = True
-            chart.js = [
-                'http://l:2343/svg.jquery.js',
-                'http://l:2343/pygal-tooltips.js']
+            chart.js = ['http://l:2343/2.0.x/pygal-tooltips.js']
             for i in range(6):
                 chart.add(str(i), 2 ** i)
             svgs.append(chart.render())

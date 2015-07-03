@@ -69,7 +69,7 @@ class Svg(object):
         self.root.attrib['class'] = 'pygal-chart'
         self.root.append(
             etree.Comment(u(
-                'Generated with pygal %s (%s) ©Kozea 2011-2014 on %s' % (
+                'Generated with pygal %s (%s) ©Kozea 2011-2015 on %s' % (
                     __version__,
                     'lxml' if etree.lxml else 'etree',
                     date.today().isoformat()))))

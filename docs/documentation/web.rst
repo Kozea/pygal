@@ -38,8 +38,7 @@ You have to put the javascript manually in you webpage, for instance:
   <!DOCTYPE html>
   <html>
     <head>
-    <script type="text/javascript" src="http://kozea.github.com/pygal.js/javascripts/svg.jquery.js"></script>
-    <script type="text/javascript" src="http://kozea.github.com/pygal.js/javascripts/pygal-tooltips.js"></script>
+    <script type="text/javascript" src="http://kozea.github.com/pygal.js/latest/pygal-tooltips.js"></script>
       <!-- ... -->
     </head>
     <body>
