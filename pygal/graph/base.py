@@ -107,9 +107,17 @@ class BaseGraph(object):
             adapters = adapters + [positive, not_zero]
         adapters = adapters + [decimal_to_float]
         adapter = reduce(compose, adapters) if not self.strict else ident
+
+        if adapter and self.y_labels:
+            self.y_labels = list(map(adapter, self.y_labels))
+
         x_adapter = reduce(
             compose, self._x_adapters) if getattr(
                 self, '_x_adapters', None) else None
+
+        if x_adapter and self.x_labels:
+            self.x_labels = list(map(x_adapter, self.x_labels))
+
         series = []
 
         raw = [(
@@ -131,7 +139,7 @@ class BaseGraph(object):
                 else:
                     value_list = [None] * width
                     for k, v in raw_values.items():
-                        if k in self.x_labels:
+                        if k in (self.x_labels or []):
                             value_list[self.x_labels.index(k)] = v
                     raw_values = value_list
 
@@ -181,7 +189,7 @@ class BaseGraph(object):
         """Init the graph"""
         # Keep labels in case of map
         if getattr(self, 'x_labels', None) is not None:
-            self.x_labels = list(map(to_unicode, self.x_labels))
+            self.x_labels = list(self.x_labels)
         if getattr(self, 'y_labels', None) is not None:
             self.y_labels = list(self.y_labels)
         self.state = State(self, **kwargs)

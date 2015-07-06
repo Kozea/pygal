@@ -19,7 +19,7 @@
 
 
 from docutils.parsers.rst import Directive
-from traceback import format_exc
+from traceback import format_exc, print_exc
 from sphinx.directives.code import CodeBlock
 
 import base64
@@ -52,6 +52,7 @@ class PygalDirective(Directive):
         try:
             exec(code, scope)
         except Exception:
+            print_exc()
             return [docutils.nodes.system_message(
                 'An exception as occured during code parsing:'
                 ' \n %s' % format_exc(), type='ERROR', source='/',

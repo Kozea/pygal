@@ -29,7 +29,7 @@ Pygal has been packaged for:
 
 - `Fedora <https://admin.fedoraproject.org/pkgdb/acls/name/python-pygal>`_
 - `Gentoo <http://packages.gentoo.org/package/dev-python/pygal>`_
-- `Ubuntu <https://launchpad.net/ubuntu/+source/python-pygal`_
+- `Ubuntu <https://launchpad.net/ubuntu/+source/python-pygal>`_
 - `Debian <https://packages.debian.org/unstable/python-pygal>`_
 - `Arch Linux <https://aur.archlinux.org/packages/python-pygal/>`_
 

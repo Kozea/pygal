@@ -36,8 +36,6 @@ except ImportError:
 def test_multi_render(Chart, datas):
     chart = Chart()
     chart = make_data(chart, datas)
-    chart.x_labels = (str(a) for a in 'labels')
-    chart.y_labels = (str(a) for a in range(6))
     svg = chart.render()
     for i in range(2):
         assert svg == chart.render()
@@ -115,7 +113,8 @@ def test_empty_lists(Chart):
     chart = Chart()
     chart.add('A', [1, 2])
     chart.add('B', [])
-    chart.x_labels = ('red', 'green', 'blue')
+    if not chart._dual:
+        chart.x_labels = ('red', 'green', 'blue')
     q = chart.render_pyquery()
     assert len(q(".legend")) == 2
 
@@ -124,7 +123,6 @@ def test_empty_lists_with_nones(Chart):
     chart = Chart()
     chart.add('A', [None, None])
     chart.add('B', [None, 4, 4])
-    chart.x_labels = ('red', 'green', 'blue')
     q = chart.render_pyquery()
     assert len(q(".legend")) == 2
 
@@ -132,7 +130,6 @@ def test_empty_lists_with_nones(Chart):
 def test_only_one_value(Chart):
     chart = Chart()
     chart.add('S', [1])
-    chart.x_labels = ('single')
     q = chart.render_pyquery()
     assert len(q(".legend")) == 1
 
@@ -140,7 +137,8 @@ def test_only_one_value(Chart):
 def test_only_one_value_log(Chart):
     chart = Chart(logarithmic=True)
     chart.add('S', [1])
-    chart.x_labels = ('single')
+    if not chart._dual:
+        chart.x_labels = ('single')
     q = chart.render_pyquery()
     assert len(q(".legend")) == 1
 
@@ -148,7 +146,6 @@ def test_only_one_value_log(Chart):
 def test_only_one_value_intrp(Chart):
     chart = Chart(interpolate='cubic')
     chart.add('S', [1])
-    chart.x_labels = ('single')
     q = chart.render_pyquery()
     assert len(q(".legend")) == 1
 
@@ -157,12 +154,14 @@ def test_non_iterable_value(Chart):
     chart = Chart(no_prefix=True)
     chart.add('A', 1)
     chart.add('B', 2)
-    chart.x_labels = ('red', 'green', 'blue')
+    if not chart._dual:
+        chart.x_labels = ('red', 'green', 'blue')
     chart1 = chart.render()
     chart = Chart(no_prefix=True)
     chart.add('A', [1])
     chart.add('B', [2])
-    chart.x_labels = ('red', 'green', 'blue')
+    if not chart._dual:
+        chart.x_labels = ('red', 'green', 'blue')
     chart2 = chart.render()
     assert chart1 == chart2
 
@@ -171,13 +170,15 @@ def test_iterable_types(Chart):
     chart = Chart(no_prefix=True)
     chart.add('A', [1, 2])
     chart.add('B', [])
-    chart.x_labels = ('red', 'green', 'blue')
+    if not chart._dual:
+        chart.x_labels = ('red', 'green', 'blue')
     chart1 = chart.render()
 
     chart = Chart(no_prefix=True)
     chart.add('A', (1, 2))
     chart.add('B', tuple())
-    chart.x_labels = ('red', 'green', 'blue')
+    if not chart._dual:
+        chart.x_labels = ('red', 'green', 'blue')
     chart2 = chart.render()
     assert chart1 == chart2
 
@@ -186,7 +187,7 @@ def test_values_by_dict(Chart):
     chart1 = Chart(no_prefix=True)
     chart2 = Chart(no_prefix=True)
 
-    if not issubclass(Chart, BaseMap):
+    if not issubclass(Chart, BaseMap) and not Chart._dual:
         chart1.add('A', {'red': 10, 'green': 12, 'blue': 14})
         chart1.add('B', {'green': 11, 'red': 7})
         chart1.add('C', {'blue': 7})
@@ -200,7 +201,7 @@ def test_values_by_dict(Chart):
         chart2.add('D', [])
         chart2.add('E', [13, None, 2])
         chart2.x_labels = ('red', 'green', 'blue')
-    else:
+    elif not Chart._dual:
         chart1.add('A', {'fr': 10, 'us': 12, 'jp': 14})
         chart1.add('B', {'cn': 99})
         chart1.add('C', {})
@@ -277,7 +278,8 @@ def test_unicode_labels_decode(Chart):
         'value': 3,
         'label': 'unicode <3'
     }])
-    chart.x_labels = [u('&œ'), u('¿?'), u('††††††††'), 'unicode <3']
+    if not chart._dual:
+        chart.x_labels = [u('&œ'), u('¿?'), u('††††††††'), 'unicode <3']
     chart.render_pyquery()
 
 
@@ -299,7 +301,8 @@ def test_unicode_labels_python2(Chart):
         'value': 3,
         'label': eval("'unicode <3'")
     }])
-    chart.x_labels = eval("[u'&œ', u'¿?', u'††††††††', 'unicode <3']")
+    if not chart._dual:
+        chart.x_labels = eval("[u'&œ', u'¿?', u'††††††††', 'unicode <3']")
     chart.render_pyquery()
 
 
@@ -321,7 +324,8 @@ def test_unicode_labels_python3(Chart):
         'value': 3,
         'label': eval("b'unicode <3'")
     }])
-    chart.x_labels = eval("['&œ', '¿?', '††††††††', 'unicode <3']")
+    if not chart._dual:
+        chart.x_labels = eval("['&œ', '¿?', '††††††††', 'unicode <3']")
     chart.render_pyquery()
 
 

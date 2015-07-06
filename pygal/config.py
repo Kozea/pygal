@@ -400,11 +400,13 @@ class Config(CommonConfig):
 
     truncate_legend = Key(
         None, int, "Text",
-        "Legend string length truncation threshold", "None = auto")
+        "Legend string length truncation threshold",
+        "None = auto, Negative for none")
 
     truncate_label = Key(
         None, int, "Text",
-        "Label string length truncation threshold", "None = auto")
+        "Label string length truncation threshold",
+        "None = auto, Negative for none")
 
     # Misc #
     js = Key(

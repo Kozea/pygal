@@ -161,7 +161,7 @@ def compute_logarithmic_scale(min_, max_, min_scale, max_scale):
 
 def compute_scale(
         min_, max_, logarithmic=False, order_min=None,
-        min_scale=4, max_scale=20):
+        min_scale=5, max_scale=20):
     """Compute an optimal scale between min and max"""
     if min_ == 0 and max_ == 0:
         return [0]

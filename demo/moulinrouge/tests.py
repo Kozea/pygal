@@ -26,7 +26,7 @@ from pygal.style import styles, Style, RotateStyle
 from pygal.colors import rotate
 from pygal.graph.horizontal import HorizontalGraph
 from random import randint, choice
-from datetime import datetime
+from datetime import datetime, date, time
 
 
 def get_test_routes(app):
@@ -94,7 +94,8 @@ def get_test_routes(app):
             'label': 'Thirty',
             'xlink': 'http://google.com?q=30'
         }, (20, 10), (10, 21)])
-        xy.x_labels = map(str, range(1, 5))
+        xy.x_labels = list(range(1, 50))
+        xy.y_labels = list(range(1, 50))
         return xy.render_response()
 
     @app.route('/test/long_title')
@@ -390,29 +391,37 @@ def get_test_routes(app):
 
     @app.route('/test/dateline')
     def test_dateline():
-        datey = DateLine(show_dots=False)
-        datey.add('1', [
-            (datetime(2013, 1, 2), 300),
-            (datetime(2013, 1, 12), 412),
-            (datetime(2013, 2, 2), 823),
-            (datetime(2013, 2, 22), 672)
+        dateline = DateLine(show_dots=False)
+        dateline.x_labels = [
+            date(2013, 1, 1),
+            date(2013, 7, 1),
+            date(2014, 1, 1),
+            date(2014, 7, 1),
+            date(2015, 1, 1),
+            date(2015, 7, 1)
+        ]
+        dateline.add('1', [
+            (date(2013, 1, 2), 300),
+            (date(2014, 1, 12), 412),
+            (date(2015, 2, 2), 823),
+            (date(2013, 2, 22), 672)
         ])
-        datey.x_label_rotation = 25
-        return datey.render_response()
+        dateline.x_label_rotation = 25
+        return dateline.render_response()
 
     @app.route('/test/timeline')
     def test_timexy():
         from datetime import time
-        datey = TimeLine()
-        datey.add('1', [
+        timeline = TimeLine()
+        timeline.add('1', [
             (time(1, 12, 29), 2),
             (time(21, 2, 29), 10),
             (time(12, 30, 59), 7)
         ])
-        datey.add(
+        timeline.add(
             '2', [(time(12, 12, 12), 4), (time(), 8), (time(23, 59, 59), 6)])
-        datey.x_label_rotation = 25
-        return datey.render_response()
+        timeline.x_label_rotation = 25
+        return timeline.render_response()
 
     @app.route('/test/worldmap')
     def test_worldmap():

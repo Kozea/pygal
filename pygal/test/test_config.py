@@ -330,7 +330,8 @@ def test_label_rotation(Chart):
     chart = Chart(x_label_rotation=28, y_label_rotation=76)
     chart.add('1', [4, -5, 123, 59, 38])
     chart.add('2', [89, 0, 8, .12, 8])
-    chart.x_labels = ['one', 'twoooooooooooooooooooooo', 'three', '4']
+    if not chart._dual:
+        chart.x_labels = ['one', 'twoooooooooooooooooooooo', 'three', '4']
     q = chart.render_pyquery()
     if Chart in (Line, Bar):
         assert len(q('.axis.x text[transform^="rotate(28"]')) == 4
@@ -341,7 +342,6 @@ def test_legend_at_bottom(Chart):
     chart = Chart(legend_at_bottom=True)
     chart.add('1', [4, -5, 123, 59, 38])
     chart.add('2', [89, 0, 8, .12, 8])
-    chart.x_labels = ['one', 'twoooooooooooooooooooooo', 'three', '4']
     lab = chart.render()
     chart.legend_at_bottom = False
     assert lab != chart.render()
@@ -353,7 +353,6 @@ def test_x_y_title(Chart):
                   y_title="I am a y title")
     chart.add('1', [4, -5, 123, 59, 38])
     chart.add('2', [89, 0, 8, .12, 8])
-    chart.x_labels = ['one', 'twoooooooooooooooooooooo', 'three', '4']
     q = chart.render_pyquery()
     assert len(q('.titles .title')) == 3
 
@@ -363,7 +362,7 @@ def test_x_label_major(Chart):
             Pie, Treemap, Funnel, Dot, Gauge, Histogram, Box,
             Pyramid, DateTimeLine, TimeLine, DateLine,
             TimeDeltaLine
-    ) or issubclass(Chart, BaseMap):
+    ) or issubclass(Chart, BaseMap) or Chart._dual:
         return
     chart = Chart()
     chart.add('test', range(12))

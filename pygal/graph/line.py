@@ -159,6 +159,10 @@ class Line(Graph):
             self._box.ymin = self._min
             self._box.ymax = self._max
 
+        if self.y_labels:
+            self._box.ymin = min(self._box.ymin, min(self.y_labels))
+            self._box.ymax = max(self._box.ymax, max(self.y_labels))
+
         y_pos = compute_scale(
             self._box.ymin, self._box.ymax, self.logarithmic, self.order_min
         ) if not self.y_labels else list(map(float, self.y_labels))

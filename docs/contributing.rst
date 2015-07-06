@@ -9,6 +9,12 @@ Github
 Submit your bug reports and feature requests to the `github bug tracker <http://github.com/Kozea/pygal/issues>`_.
 
 
+Code style
+==========
+
+The pygal code tries to respect the `pep8 <https://www.python.org/dev/peps/pep-0008/>`_ please keep that in mind when writing code for pygal.
+
+
 Testing
 =======
 

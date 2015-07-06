@@ -5,7 +5,7 @@ Documentation
    :maxdepth: 2
 
    first_steps
-   chart_types
+   types/index
    styles
    basic_customizations
    interpolations

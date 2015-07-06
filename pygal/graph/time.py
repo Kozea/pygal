@@ -19,7 +19,7 @@
 """
 Various datetime line plot
 """
-
+from pygal.adapters import positive
 from pygal.graph.xy import XY
 from datetime import datetime, date, time, timedelta
 from pygal._compat import timestamp, total_seconds
@@ -28,6 +28,12 @@ from pygal._compat import timestamp, total_seconds
 def datetime_to_timestamp(x):
     if isinstance(x, datetime):
         return timestamp(x)
+    return x
+
+
+def datetime_to_time(x):
+    if isinstance(x, datetime):
+        return x.time()
     return x
 
 
@@ -47,6 +53,26 @@ def timedelta_to_seconds(x):
     if isinstance(x, timedelta):
         return total_seconds(x)
     return x
+
+
+def time_to_seconds(x):
+    if isinstance(x, time):
+        return ((
+            ((x.hour * 60) + x.minute) * 60 + x.second
+        ) * 10 ** 6 + x.microsecond) / 10 ** 6
+    return x
+
+
+def seconds_to_time(x):
+    t = int(x * 10 ** 6)
+    ms = t % 10 ** 6
+    t = t // 10 ** 6
+    s = t % 60
+    t = t // 60
+    m = t % 60
+    t = t // 60
+    h = t
+    return time(h, m, s, ms)
 
 
 class DateTimeLine(XY):
@@ -77,13 +103,13 @@ class DateLine(DateTimeLine):
 
 
 class TimeLine(DateTimeLine):
-    _x_adapters = [datetime_to_timestamp, time_to_datetime]
+    _x_adapters = [positive, time_to_seconds, datetime_to_time]
 
     @property
     def _x_format(self):
         """Return the value formatter for this graph"""
         def date_to_str(x):
-            t = datetime.fromtimestamp(x).time()
+            t = seconds_to_time(x)
             if self.x_value_formatter:
                 return self.x_value_formatter(t)
             return t.isoformat()

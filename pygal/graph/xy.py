@@ -32,6 +32,10 @@ class XY(Line):
     _dual = True
     _x_adapters = []
 
+    def _get_value(self, values, i):
+        vals = values[i]
+        return '%s: %s' % (self._x_format(vals[0]), self._format(vals[1]))
+
     @cached_property
     def xvals(self):
         return [val[0]
@@ -116,14 +120,25 @@ class XY(Line):
 
         if xrng:
             self._box.xmin, self._box.xmax = xmin, xmax
+
+        if self.x_labels:
+            self._box.xmin = min(self.x_labels)
+            self._box.xmax = max(self.x_labels)
+
         if yrng:
             self._box.ymin, self._box.ymax = ymin, ymax
 
+        if self.y_labels:
+            self._box.ymin = min(self.y_labels)
+            self._box.ymax = max(self.y_labels)
+
         x_pos = compute_scale(
-            self._box.xmin, self._box.xmax, self.logarithmic,
-            self.order_min)
+            self._box.xmin, self._box.xmax, self.logarithmic, self.order_min
+        ) if not self.x_labels else list(map(float, self.x_labels))
+
         y_pos = compute_scale(
-            self._box.ymin, self._box.ymax, self.logarithmic, self.order_min)
+            self._box.ymin, self._box.ymax, self.logarithmic, self.order_min
+        ) if not self.y_labels else list(map(float, self.y_labels))
 
         self._x_labels = list(zip(map(self._x_format, x_pos), x_pos))
         self._y_labels = list(zip(map(self._format, y_pos), y_pos))
