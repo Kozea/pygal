@@ -14,29 +14,17 @@ Basic
   chart.render_sparkline()
 
 
-Styles
-------
-
-It supports styling like any chart but the option is given to the `render_sparkline` method:
-
-.. pygal-code:: sparkline
-
-  from pygal.style import DarkSolarizedStyle
-  chart = pygal.Line()
-  chart.add('', [1, 3,  5, 16, 13, 3,  7])
-  chart.render_sparkline(style=DarkSolarizedStyle)
-
-
 Options
 -------
 
-It's the same for other options:
+Sparklines support the same options as normal charts but for those that are overriden by sparkline settings, pass them to the ``render_sparkline`` method:
 
 .. pygal-code:: sparkline
 
-  chart = pygal.Line()
+  from pygal.style import RTDStyle
+  chart = pygal.Line(style=RTDStyle, interpolate='cubic')
   chart.add('', [1, 3,  5, 16, 13, 3,  7])
-  chart.render_sparkline(interpolate='cubic')
+  chart.render_sparkline()
 
 .. pygal-code:: sparkline
 

@@ -110,6 +110,5 @@ class PygalWithCode(PygalDirective):
 def setup(app):
     app.add_directive('pygal', PygalDirective)
     app.add_directive('pygal-code', PygalWithCode)
-    app.add_directive('pygal-sparkline', PygalWithCode)
 
     return {'version': '1.0.1'}

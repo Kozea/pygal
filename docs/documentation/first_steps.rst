@@ -1,7 +1,9 @@
 First steps
 ===========
 
-First you need to download the pygal package, see the `download page <download.html>`_.
+.. caution::
+
+  First you need to install pygal, see `installing <.//installing.html>`_.
 
 When it's done, you are ready to make your first chart:
 
@@ -12,9 +14,10 @@ When it's done, you are ready to make your first chart:
   bar_chart.add('Fibonacci', [0, 1, 1, 2, 3, 5, 8, 13, 21, 34, 55])  # Add some values
   bar_chart.render_to_file('bar_chart.svg')                          # Save the svg to a file
 
-Now you have a svg file called `bar_chart.svg` in your current directory.
+Now you should have a svg file called ``bar_chart.svg`` in your current directory.
 
 You can open it with various programs such as your web browser, inkscape or any svg compatible viewer.
+
 
 The resulting chart will be tho following:
 
@@ -22,6 +25,12 @@ The resulting chart will be tho following:
 
   bar_chart = pygal.Bar()
   bar_chart.add('Fibonacci', [0, 1, 1, 2, 3, 5, 8, 13, 21, 34, 55])
+
+
+.. caution::
+
+   pygal relies on svg css styling. This is sadly not fully supported by gnome `librsvg <https://wiki.gnome.org/action/show/Projects/LibRsvg>`_ and therefore can lead to black svg being displayed. This is not a bug in pygal. `See this bugzilla search <https://bugzilla.gnome.org/buglist.cgi?bug_status=__open__&content=css%20style&no_redirect=1&order=Importance&product=librsvg&query_format=specific>`_
+
 
 To make a multiple series graph just add another one:
 
