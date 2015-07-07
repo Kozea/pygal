@@ -8,6 +8,8 @@ PyPI
 pygal is `available on PyPI <http://pypi.python.org/pypi/pygal/>`_.
 To install, just type as superuser::
 
+.. code-block:: bash
+
   pip install pygal
 
 
@@ -15,7 +17,9 @@ Git Repository
 ==============
 
 If you want the development version of pygal, take a look at the
-:codelink:`git repository on GitHub`, or clone it with::
+`git repository on GitHub <https://github.com/Kozea/pygal>`_, or clone it with::
+
+.. code-block:: bash
 
   git clone git://github.com/Kozea/pygal.git
 

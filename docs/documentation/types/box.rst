@@ -1,5 +1,5 @@
-Box plot
---------
+Box
+---
 
 Basic
 ~~~~~

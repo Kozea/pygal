@@ -232,8 +232,9 @@ class PolarLogView(View):
 class PolarThetaView(View):
     """Logarithmic polar projection"""
 
-    def __init__(self, width, height, box):
+    def __init__(self, width, height, box, aperture=pi / 3):
         super(PolarThetaView, self).__init__(width, height, box)
+        self.aperture = aperture
         if not hasattr(box, '_tmin') or not hasattr(box, '_tmax'):
             raise Exception(
                 'Box must be set with set_polar_box for polar charts')
@@ -243,15 +244,9 @@ class PolarThetaView(View):
         if None in rhotheta:
             return None, None
         rho, theta = rhotheta
-        aperture = pi / 3
-        if theta > self.box._tmax:
-            theta = (3 * pi - aperture / 2) / 2
-        elif theta < self.box._tmin:
-            theta = (3 * pi + aperture / 2) / 2
-        else:
-            start = 3 * pi / 2 + aperture / 2
-            theta = start + (2 * pi - aperture) * (
-                theta - self.box._tmin) / (
+        start = 3 * pi / 2 + self.aperture / 2
+        theta = start + (2 * pi - self.aperture) * (
+            theta - self.box._tmin) / (
                 self.box._tmax - self.box._tmin)
         return super(PolarThetaView, self).__call__(
             (rho * cos(theta), rho * sin(theta)))

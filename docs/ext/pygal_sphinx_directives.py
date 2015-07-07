@@ -26,6 +26,19 @@ import base64
 import docutils.core
 import pygal
 
+# Patch default style
+
+pygal.config.Config.style.value = pygal.style.RotateStyle(
+    '#2980b9',
+    background='#fcfcfc',
+    plot_background='#ffffff',
+    foreground='#707070',
+    foreground_light='#404040',
+    foreground_dark='#a0a0a0',
+    opacity='.8',
+    opacity_hover='.9',
+    transition='400ms ease-in')
+
 
 class PygalDirective(Directive):
     """Execute the given python file and puts its result in the document."""
@@ -68,9 +81,8 @@ class PygalDirective(Directive):
                     break
             if chart is None:
                 return [docutils.nodes.system_message(
-                    'No instance of graph found', level=3)]
-            if not hasattr(chart, 'style'):
-                chart.style = pygal.style.RTDStyle
+                    'No instance of graph found', level=3,
+                    type='ERROR', source='/')]
             chart.config.width = width
             chart.config.height = height
             chart.explicit_size = True

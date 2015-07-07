@@ -29,6 +29,7 @@ from pygal.graph.graph import Graph
 
 class Gauge(Graph):
     """Gauge graph"""
+    needle_width = 1 / 20
 
     def _set_view(self):
         if self.logarithmic:
@@ -46,7 +47,10 @@ class Gauge(Graph):
         for i, theta in enumerate(serie.values):
             if theta is None:
                 continue
-            fmt = lambda x: '%f %f' % x
+
+            def point(x, y):
+                return '%f %f' % self.view((x, y))
+
             value = self._format(serie.values[i])
             metadata = serie.metadata.get(i)
             gauges = decorate(
@@ -54,14 +58,20 @@ class Gauge(Graph):
                 self.svg.node(serie_node['plot'], class_="dots"),
                 metadata)
 
-            alter(self.svg.node(
-                gauges, 'polygon', points=' '.join([
-                    fmt(self.view((0, 0))),
-                    fmt(self.view((.75, theta))),
-                    fmt(self.view((.8, theta))),
-                    fmt(self.view((.75, theta)))]),
-                class_='line reactive tooltip-trigger'),
-                  metadata)
+            tolerance = 1.15
+            theta = min(
+                max(self._min * tolerance, theta), self._max * tolerance)
+            w = (self._box._tmax - self._box._tmin + self.view.aperture) / 4
+            alter(
+                self.svg.node(
+                    gauges, 'path', d='M %s L %s A %s 1 0 1 %s Z' % (
+                        point(.85, theta),
+                        point(self.needle_width, theta - w),
+                        '%f %f' % (self.needle_width, self.needle_width),
+                        point(self.needle_width, theta + w),
+                    ),
+                    class_='line reactive tooltip-trigger'),
+                metadata)
 
             x, y = self.view((.75, theta))
             self._tooltip_data(gauges, value, x, y)
@@ -110,7 +120,8 @@ class Gauge(Graph):
             self.max_)
         x_pos = compute_scale(
             self.min_, self.max_, self.logarithmic, self.order_min
-        )
+        ) if not self.x_labels else list(map(float, self.x_labels))
+
         self._x_labels = list(zip(map(self._format, x_pos), x_pos))
 
     def _plot(self):

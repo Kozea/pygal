@@ -15,7 +15,7 @@ Sexy python charting
 
 .. pygal:: 300 200
 
-   chart = pygal.Line(x_label_rotation=25, fill=True, style=pygal.style.NeonStyle, interpolate='cubic')
+   chart = pygal.Line(x_label_rotation=25, fill=True, interpolate='cubic')
    chart.x_labels = 'one', 'two', 'three', 'four', 'five'
    chart.add('alpha', [1, 2, 3, 1, 2])
    chart.add('beta', [4, 3, 0, 1, 2])
@@ -29,7 +29,7 @@ Sexy python charting
 
 .. pygal:: 300 200
 
-   chart = pygal.Radar(fill=True, style=pygal.style.NeonStyle)
+   chart = pygal.Radar(fill=True)
    chart.x_labels = 'one', 'two', 'three', 'four', 'five'
    chart.add('alpha', [1, 2, 3, 1, 2])
    chart.add('beta', [4, 3, 0, 1, 2])
@@ -38,10 +38,9 @@ Sexy python charting
 Simple python charting
 ======================
 
-.. pygal-code::
+.. pygal-code:: inline
 
-   chart = pygal.Bar()
-   chart.add('First', [1, 3, 3, 7])
+   pygal.Bar().add('1', [1, 3, 3, 7]).add('2', [1, 6, 6, 4]).render()
 
 
 Index

@@ -8,6 +8,7 @@ pygal provides various kinds of charts:
 
    line
    bar
+   histogram
    xy
    pie
    radar

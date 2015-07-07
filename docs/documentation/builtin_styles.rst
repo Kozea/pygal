@@ -9,7 +9,8 @@ Default
 
 .. pygal-code::
 
-  chart = pygal.StackedLine(fill=True, interpolate='cubic')
+  from pygal.style import DefaultStyle
+  chart = pygal.StackedLine(fill=True, interpolate='cubic', style=DefaultStyle) # Setting style here is not necessary
   chart.add('A', [1, 3,  5, 16, 13, 3,  7])
   chart.add('B', [5, 2,  3,  2,  5, 7, 17])
   chart.add('C', [6, 10, 9,  7,  3, 1,  0])

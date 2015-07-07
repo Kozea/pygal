@@ -1,5 +1,5 @@
-Bar charts / Histograms
------------------------
+Bar
+---
 
 Basic
 ~~~~~

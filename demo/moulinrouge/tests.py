@@ -158,6 +158,8 @@ def get_test_routes(app):
 
         gauge.range = [-10, 10]
         gauge.add('Need l', [2.3, 5.12])
+        gauge.add('Need m', [-4])
+        gauge.add('Need z', [-10, 10.5])
         gauge.add('No', [99, -99])
         return gauge.render_response()
 

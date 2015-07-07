@@ -158,7 +158,7 @@ Desaturate
 .. pygal-code::
 
   from pygal.style import DesaturateStyle
-  desaturate_style = DesaturateStyle('#8322dd')
+  desaturate_style = DesaturateStyle('#8322dd', step=8)
   chart = pygal.StackedLine(fill=True, interpolate='cubic', style=desaturate_style)
   chart.add('A', [1, 3,  5, 16, 13, 3,  7])
   chart.add('B', [5, 2,  3,  2,  5, 7, 17])

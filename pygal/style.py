@@ -301,18 +301,6 @@ SolidColorStyle = Style(
             '#0099C6', '#DD4477', '#74B217', '#B82E2E', '#316395', '#994499'))
 
 
-RTDStyle = Style(
-    background='#fcfcfc',
-    plot_background='#ffffff',
-    foreground='#707070',
-    foreground_light='#404040',
-    foreground_dark='#a0a0a0',
-    opacity='.8',
-    opacity_hover='.9',
-    transition='400ms ease-in',
-    colors=[colors.rotate('#2980b9', i * 50) for i in range(16)])
-
-
 styles = {'default': DefaultStyle,
           'light': LightStyle,
           'neon': NeonStyle,

@@ -1,5 +1,5 @@
-Line charts
------------
+Line
+----
 
 Basic
 ~~~~~

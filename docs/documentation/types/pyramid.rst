@@ -1,5 +1,5 @@
-Pyramid charts
---------------
+Pyramid
+-------
 
 Basic
 ~~~~~

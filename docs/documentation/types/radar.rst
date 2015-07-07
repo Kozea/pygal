@@ -1,12 +1,12 @@
-Radar charts
-------------
+Radar
+-----
 
 Basic
 ~~~~~
 
 Simple Kiviat diagram:
 
-.. pygal-code::
+.. pygal-code:: 600 500
 
   radar_chart = pygal.Radar()
   radar_chart.title = 'V8 benchmark results'

@@ -1,5 +1,5 @@
-XY charts
----------
+XY
+--
 
 Basic
 ~~~~~

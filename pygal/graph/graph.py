@@ -24,7 +24,7 @@ Commmon graphing functions
 from __future__ import division
 from pygal._compat import is_list_like
 from pygal.interpolate import INTERPOLATIONS
-from pygal.graph.base import BaseGraph
+from pygal.graph.public import PublicApi
 from pygal.view import View, LogView, XYLogView, ReverseView
 from pygal.util import (
     cached_property, majorize, humanize, split_title,
@@ -34,7 +34,7 @@ from math import sqrt, ceil, cos, sin
 from itertools import repeat, chain
 
 
-class Graph(BaseGraph):
+class Graph(PublicApi):
     """Graph super class containing generic common functions"""
     _dual = False
 

@@ -1,5 +1,5 @@
-Funnel charts
--------------
+Funnel
+------
 
 Basic
 ~~~~~

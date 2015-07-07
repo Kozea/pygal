@@ -17,6 +17,10 @@ Changelog
 * Maps are now plugins, they are removed from pygal core and moved to packages (pygal_maps_world, pygal_maps_fr, pygal_maps_ch, ...) (#225)
 * Dot now supports negative values
 * Fix dot with log scale (#201)
+* Fix y_labels behaviour for lines
+* Fix x_labels and y_labels behaviour for xy like
+* Improve gauge a bit
+* Finally allow call chains on add
 
 1.7.0
 =====
