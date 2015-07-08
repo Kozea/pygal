@@ -160,8 +160,8 @@ def compute_logarithmic_scale(min_, max_, min_scale, max_scale):
 
 
 def compute_scale(
-        min_, max_, logarithmic=False, order_min=None,
-        min_scale=5, max_scale=20):
+        min_, max_, logarithmic, order_min,
+        min_scale, max_scale):
     """Compute an optimal scale between min and max"""
     if min_ == 0 and max_ == 0:
         return [0]
@@ -173,6 +173,7 @@ def compute_scale(
         if log_scale:
             return log_scale
             # else we fallback to normal scalling
+
     order = round(log10(max(abs(min_), abs(max_)))) - 1
     if order_min is not None and order < order_min:
         order = order_min

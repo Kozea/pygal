@@ -48,13 +48,13 @@ class Box(Graph):
 
         def format_maybe_quartile(x):
             if is_list_like(x):
-                if self.mode == "extremes":
+                if self.box_mode == "extremes":
                     return 'Min: %s Q1: %s Q2: %s Q3: %s Max: %s' \
                         % tuple(map(sup, x[1:6]))
-                elif self.mode in ["tukey", "stdev", "pstdev"]:
+                elif self.box_mode in ["tukey", "stdev", "pstdev"]:
                     return 'Min: %s Lower Whisker: %s Q1: %s Q2: %s Q3: %s '\
                         'Upper Whisker: %s Max: %s' % tuple(map(sup, x))
-                elif self.mode == '1.5IQR':
+                elif self.box_mode == '1.5IQR':
                     # 1.5IQR mode
                     return 'Q1: %s Q2: %s Q3: %s' % tuple(map(sup, x[2:5]))
             else:
@@ -68,7 +68,7 @@ class Box(Graph):
         """
         for serie in self.series:
             serie.values, serie.outliers = \
-                self._box_points(serie.values, self.mode)
+                self._box_points(serie.values, self.box_mode)
 
         if self._min:
             self._box.ymin = min(self._min, self.zero)
@@ -82,7 +82,8 @@ class Box(Graph):
         self._points(x_pos)
 
         y_pos = compute_scale(
-            self._box.ymin, self._box.ymax, self.logarithmic, self.order_min
+            self._box.ymin, self._box.ymax, self.logarithmic, self.order_min,
+            self.min_scale, self.max_scale
         ) if not self.y_labels else list(map(float, self.y_labels))
 
         self._x_labels = self.x_labels and list(zip(self.x_labels, [
@@ -182,7 +183,6 @@ class Box(Graph):
                 r=3,
                 class_='subtle-fill reactive tooltip-trigger'), metadata)
 
-
         return (left_edge + width / 2, self.view.y(
             sum(quartiles) / len(quartiles)))
 
@@ -220,12 +220,12 @@ class Box(Graph):
                 return seq[n // 2]
 
         def mean(seq):
-            return sum(seq) /len(seq)
+            return sum(seq) / len(seq)
 
         def stdev(seq):
             m = mean(seq)
             l = len(seq)
-            v = sum((n - m)**2 for n in seq) / (l - 1) # variance
+            v = sum((n - m)**2 for n in seq) / (l - 1)  # variance
             return v**0.5  # sqrt
 
         def pstdev(seq):

@@ -278,14 +278,9 @@ class PolarThetaLogView(View):
             log10(theta) - self.log10_tmin) / (
             self.log10_tmax - self.log10_tmin)
 
-        if theta > self.box._tmax:
-            theta = (3 * pi - self.aperture / 2) / 2
-        elif theta < self.box._tmin:
-            theta = (3 * pi + self.aperture / 2) / 2
-        else:
-            start = 3 * pi / 2 + self.aperture / 2
-            theta = start + (2 * pi - self.aperture) * (
-                theta - self.box._tmin) / (
+        start = 3 * pi / 2 + self.aperture / 2
+        theta = start + (2 * pi - self.aperture) * (
+            theta - self.box._tmin) / (
                 self.box._tmax - self.box._tmin)
 
         return super(PolarThetaLogView, self).__call__(

@@ -59,9 +59,18 @@ class Gauge(Graph):
                 metadata)
 
             tolerance = 1.15
-            theta = min(
-                max(self._min * tolerance, theta), self._max * tolerance)
+
+            if theta < self._min:
+                theta = self._min * tolerance
+
+            if theta > self._max:
+                theta = self._max * tolerance
+
             w = (self._box._tmax - self._box._tmin + self.view.aperture) / 4
+
+            if self.logarithmic:
+                w = min(w, self._min - self._min * 10 ** -10)
+
             alter(
                 self.svg.node(
                     gauges, 'path', d='M %s L %s A %s 1 0 1 %s Z' % (
@@ -77,10 +86,10 @@ class Gauge(Graph):
             self._tooltip_data(gauges, value, x, y)
             self._static_value(serie_node, value, x, y)
 
-    def _x_axis(self, draw_axes=True):
-        axis = self.svg.node(self.nodes['plot'], class_="axis x gauge")
+    def _y_axis(self, draw_axes=True):
+        axis = self.svg.node(self.nodes['plot'], class_="axis y x gauge")
 
-        for i, (label, theta) in enumerate(self._x_labels):
+        for i, (label, theta) in enumerate(self._y_labels):
             guides = self.svg.node(axis, class_='guides')
 
             self.svg.line(
@@ -92,7 +101,7 @@ class Gauge(Graph):
                 guides, [self.view((0, theta)), self.view((.95, theta))],
                 close=True,
                 class_='guide line %s' % (
-                    'major' if i in (0, len(self._x_labels) - 1)
+                    'major' if i in (0, len(self._y_labels) - 1)
                     else ''))
 
             x, y = self.view((.9, theta))
@@ -102,8 +111,8 @@ class Gauge(Graph):
                 y=y
             ).text = label
 
-    def _y_axis(self, draw_axes=True):
-        axis = self.svg.node(self.nodes['plot'], class_="axis y gauge")
+    def _x_axis(self, draw_axes=True):
+        axis = self.svg.node(self.nodes['plot'], class_="axis x gauge")
         x, y = self.view((0, 0))
         self.svg.node(axis, 'circle', cx=x, cy=y, r=4)
 
@@ -118,11 +127,12 @@ class Gauge(Graph):
             0, 1,
             self.min_,
             self.max_)
-        x_pos = compute_scale(
-            self.min_, self.max_, self.logarithmic, self.order_min
-        ) if not self.x_labels else list(map(float, self.x_labels))
+        y_pos = compute_scale(
+            self.min_, self.max_, self.logarithmic, self.order_min,
+            self.min_scale, self.max_scale
+        ) if not self.y_labels else list(map(float, self.y_labels))
 
-        self._x_labels = list(zip(map(self._format, x_pos), x_pos))
+        self._y_labels = list(zip(map(self._format, y_pos), y_pos))
 
     def _plot(self):
         for serie in self.series:

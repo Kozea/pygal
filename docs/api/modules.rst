@@ -1,5 +1,5 @@
-pygal
-=====
+API
+===
 
 .. toctree::
    :maxdepth: 4

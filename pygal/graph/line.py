@@ -164,7 +164,8 @@ class Line(Graph):
             self._box.ymax = max(self._box.ymax, max(self.y_labels))
 
         y_pos = compute_scale(
-            self._box.ymin, self._box.ymax, self.logarithmic, self.order_min
+            self._box.ymin, self._box.ymax, self.logarithmic, self.order_min,
+            self.min_scale, self.max_scale
         ) if not self.y_labels else list(map(float, self.y_labels))
 
         self._y_labels = list(zip(map(self._format, y_pos), y_pos))

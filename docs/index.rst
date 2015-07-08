@@ -53,7 +53,7 @@ Index
    installing
    contributing
    changelog
-   api
+   api/modules
 
 * :ref:`genindex`
 * :ref:`modindex`

@@ -50,6 +50,7 @@ help:
 
 clean:
 	rm -rf $(BUILDDIR)/*
+	rm -rf api/*
 
 html:
 	$(SPHINXBUILD) -b html $(ALLSPHINXOPTS) $(BUILDDIR)/html
@@ -192,7 +193,7 @@ pseudoxml:
 	@echo "Build finished. The pseudo-XML files are in $(BUILDDIR)/pseudoxml."
 
 rst:
-	sphinx-apidoc -f -o api ../pygal
+	sphinx-apidoc -f -e -M -H API -o api ../pygal
 
 auto:
 	sphinx-autobuild . _build/html

@@ -1,21 +1,21 @@
 Interpolations
 ==============
 
-
-Without interpolation:
-----------------------
-
-``interpolate``
+pygal allow you to interpolate most of line charts. Take this chart for instance:
 
 .. pygal-code::
 
   chart = pygal.Line()
   chart.add('line', [1, 5, 17, 12, 5, 10])
 
-With cubic interpolation:
--------------------------
 
-``interpolate``
+interpolate
+-----------
+
+cubic
+~~~~~
+
+You can set the cubic interpolation:
 
 .. pygal-code::
 
@@ -23,10 +23,8 @@ With cubic interpolation:
   chart.add('line', [1, 5, 17, 12, 5, 10])
 
 
-With quadratic interpolation:
------------------------------
-
-``interpolate``
+quadratic
+~~~~~~~~~
 
 .. pygal-code::
 
@@ -34,10 +32,8 @@ With quadratic interpolation:
   chart.add('line', [1, 5, 17, 12, 5, 10])
 
 
-With lagrange interpolation:
-----------------------------
-
-``interpolate``
+lagrange
+~~~~~~~~
 
 .. pygal-code::
 
@@ -45,10 +41,8 @@ With lagrange interpolation:
   chart.add('line', [1, 5, 17, 12, 5, 10])
 
 
-With trigonometric interpolation:
----------------------------------
-
-``interpolate``
+trigonometric
+~~~~~~~~~~~~~
 
 .. pygal-code::
 
@@ -56,10 +50,8 @@ With trigonometric interpolation:
   chart.add('line', [1, 5, 17, 12, 5, 10])
 
 
-With hermite interpolation:
----------------------------
-
-``interpolate``
+hermite
+~~~~~~~
 
 .. pygal-code::
 
@@ -67,8 +59,10 @@ With hermite interpolation:
   chart.add('line', [1, 5, 17, 12, 5, 10])
 
 
-For hermite you can also pass additionnal parameters to configure tangent behaviour:
+interpolation_parameters
+------------------------
 
+For hermite you can also pass additionnal parameters to configure tangent behaviour:
 
 .. pygal-code::
 
@@ -90,12 +84,10 @@ For hermite you can also pass additionnal parameters to configure tangent behavi
 For more information see the `wikipedia article <http://en.wikipedia.org/wiki/Cubic_Hermite_spline#Finite_difference>`_
 
 
-Interpolation precision
+interpolation_precision
 -----------------------
 
-``interpolation_precision``
-
-You can change the resolution of the interpolation with the help of `interpolation_precision`:
+You can change the resolution of the interpolation with the help of ``interpolation_precision``:
 
 
 .. pygal-code::

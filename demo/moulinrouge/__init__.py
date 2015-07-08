@@ -50,7 +50,7 @@ def create_app():
     def before_request():
         if request.args.get('etree'):
             etree.to_etree()
-        else:
+        elif request.args.get('lxml'):
             etree.to_lxml()
 
     def _random(data, order):

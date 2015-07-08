@@ -100,7 +100,8 @@ class Bar(Graph):
         self._points(x_pos)
 
         y_pos = compute_scale(
-            self._box.ymin, self._box.ymax, self.logarithmic, self.order_min
+            self._box.ymin, self._box.ymax, self.logarithmic, self.order_min,
+            self.min_scale, self.max_scale
         ) if not self.y_labels else list(map(float, self.y_labels))
 
         self._x_labels = self.x_labels and list(zip(self.x_labels, [

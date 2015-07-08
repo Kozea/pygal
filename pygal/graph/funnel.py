@@ -84,7 +84,8 @@ class Funnel(Graph):
         self._box.ymax = val_max
 
         y_pos = compute_scale(
-            self._box.ymin, self._box.ymax, self.logarithmic, self.order_min
+            self._box.ymin, self._box.ymax, self.logarithmic, self.order_min,
+            self.min_scale, self.max_scale
         ) if not self.y_labels else list(map(float, self.y_labels))
 
         self._x_labels = list(

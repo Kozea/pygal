@@ -1,5 +1,5 @@
-Metadata
-========
+Value configuration
+===================
 
 
 Labels

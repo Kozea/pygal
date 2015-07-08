@@ -67,7 +67,8 @@ class StackedBar(Bar):
 
         self._points(x_pos)
         y_pos = compute_scale(
-            self._box.ymin, self._box.ymax, self.logarithmic, self.order_min
+            self._box.ymin, self._box.ymax, self.logarithmic, self.order_min,
+            self.min_scale, self.max_scale
         ) if not self.y_labels else list(map(float, self.y_labels))
         self._x_ranges = zip(x_pos, x_pos[1:])
 

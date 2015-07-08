@@ -1,0 +1,7 @@
+pygal.test.test_line module
+===========================
+
+.. automodule:: pygal.test.test_line
+    :members:
+    :undoc-members:
+    :show-inheritance:

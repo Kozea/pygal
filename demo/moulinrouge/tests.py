@@ -163,6 +163,14 @@ def get_test_routes(app):
         gauge.add('No', [99, -99])
         return gauge.render_response()
 
+    @app.route('/test/gauge/log')
+    def test_gauge_log():
+        gauge = Gauge(logarithmic=True)
+
+        gauge.add('Need l', [200.3, 500.12])
+        gauge.add('Need z', [10, 1000.5])
+        return gauge.render_response()
+
     @app.route('/test/pyramid')
     def test_pyramid():
         pyramid = Pyramid()
@@ -711,6 +719,12 @@ def get_test_routes(app):
         ])
         line.x_value_formatter = lambda x: x.strftime("%Y-%m-%d")
         line.x_label_rotation = 45
+        return line.render_response()
+
+    @app.route('/test/order_min')
+    def test_order_min():
+        line = Line(order_min=-32)
+        line.add('_', [1, 32, 12, .4, .009])
         return line.render_response()
 
     return list(sorted(filter(lambda x: x.startswith('test'), locals())))

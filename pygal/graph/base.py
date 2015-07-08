@@ -99,8 +99,8 @@ class BaseGraph(object):
             self.y_labels = list(map(adapter, self.y_labels))
 
         x_adapter = reduce(
-            compose, self._x_adapters) if getattr(
-                self, '_x_adapters', None) else None
+            compose, self._x_adapters) if not self.strict and getattr(
+                self, '_x_adapters', None) else ident
 
         if x_adapter and self.x_labels:
             self.x_labels = list(map(x_adapter, self.x_labels))

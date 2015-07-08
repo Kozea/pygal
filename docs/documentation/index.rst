@@ -7,9 +7,8 @@ Documentation
    first_steps
    types/index
    styles
-   basic_customizations
-   interpolations
+   configuration/chart
+   configuration/serie
+   configuration/value
    sparks
-   metadata
-   other_customizations
    web

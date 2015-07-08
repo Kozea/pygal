@@ -53,11 +53,6 @@
   text-anchor: start;
 }
 
-{{ id }}.axis.y .logarithmic text:not(.major) ,
-{{ id }}.axis.y2 .logarithmic text:not(.major) {
-  font-size: 50%;
-}
-
 {{ id }}.axis .guide.line {
   stroke-dasharray: 4,4;
 }

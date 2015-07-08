@@ -7,7 +7,7 @@ pygal provides 2 ways to customize styles:
 Using Style class
 -----------------
 
-You can instantiate the `Style` class with some customizations for quick styling:
+You can instantiate the ``Style`` class with some customizations for quick styling:
 
 .. pygal-code::
 
@@ -40,7 +40,7 @@ It supports local file names and external stylesheet too, just append your URI i
 
 (See the `default css <https://github.com/Kozea/pygal/blob/master/pygal/css/>`_)
 
-NB: Now the css rules are prefixed by an unique id, to prevent collisions when including several svg dirctly into a web page. You can disable it with the `no_prefix` option.
+NB: Now the css rules are prefixed by an unique id, to prevent collisions when including several svg directly into a web page. You can disable it with the ``no_prefix`` option.
 
 
 .. pygal-code::

@@ -127,10 +127,12 @@ class Histogram(Graph):
             self._box.ymin, self._box.ymax = ymin, ymax
 
         x_pos = compute_scale(
-            self._box.xmin, self._box.xmax, self.logarithmic, self.order_min
+            self._box.xmin, self._box.xmax, self.logarithmic, self.order_min,
+            self.min_scale, self.max_scale
         ) if not self.x_labels else list(map(float, self.x_labels))
         y_pos = compute_scale(
-            self._box.ymin, self._box.ymax, self.logarithmic, self.order_min
+            self._box.ymin, self._box.ymax, self.logarithmic, self.order_min,
+            self.min_scale, self.max_scale
         ) if not self.y_labels else list(map(float, self.y_labels))
 
         self._x_labels = list(zip(map(self._format, x_pos), x_pos))
