@@ -181,7 +181,7 @@ class Radar(Line):
 
         y_pos = compute_scale(
             self._rmin, self._rmax, self.logarithmic, self.order_min,
-            self.min_scale, self.max_scale
+            self.min_scale, self.max_scale / 2
         ) if not self.y_labels else list(map(int, self.y_labels))
 
         self._x_labels = self.x_labels and list(zip(self.x_labels, x_pos))

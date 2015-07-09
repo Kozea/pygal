@@ -357,11 +357,11 @@ class Config(CommonConfig):
         "Minimum order of scale, defaults to None")
 
     min_scale = Key(
-        5, int, "Value",
+        4, int, "Value",
         "Minimum number of scale graduation for auto scaling")
 
     max_scale = Key(
-        20, int, "Value",
+        16, int, "Value",
         "Maximum number of scale graduation for auto scaling")
 
     range = Key(
