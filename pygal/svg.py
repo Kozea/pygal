@@ -317,7 +317,8 @@ class Svg(object):
         def stroke_dict_to_css(stroke, i=None):
             css = ['%s.series%s {\n' % (
                 self.id, '.serie-%d' % i if i is not None else '')]
-            for key in ('width', 'linejoin', 'linecap', 'dasharray'):
+            for key in ('width', 'linejoin', 'linecap',
+                       'dasharray', 'dashoffset'):
                 if stroke.get(key):
                     css.append('  stroke-%s: %s;\n' % (
                         key, stroke[key]))

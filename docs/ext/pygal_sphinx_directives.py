@@ -102,7 +102,6 @@ class PygalDirective(Directive):
 
 
 class PygalWithCode(PygalDirective):
-    width_code = True
 
     def run(self):
         node_list = super(PygalWithCode, self).run()
@@ -120,8 +119,55 @@ class PygalWithCode(PygalDirective):
         return [docutils.nodes.compound('', *node_list)]
 
 
+class PygalTable(Directive):
+    """Execute the given python file and puts its result in the document."""
+    required_arguments = 0
+    optional_arguments = 0
+    final_argument_whitespace = True
+    has_content = True
+
+    def run(self):
+
+        self.content = list(self.content)
+        content = list(self.content)
+        content[-1] = 'rv = ' + content[-1]
+        code = '\n'.join(content)
+        scope = {'pygal': pygal}
+        try:
+            exec(code, scope)
+        except Exception:
+            print_exc()
+            return [docutils.nodes.system_message(
+                'An exception as occured during code parsing:'
+                ' \n %s' % format_exc(), type='ERROR', source='/',
+                level=3)]
+        rv = scope['rv']
+
+        return [docutils.nodes.raw('', rv, format='html')]
+
+
+class PygalTableWithCode(PygalTable):
+
+    def run(self):
+        node_list = super(PygalTableWithCode, self).run()
+        node_list.extend(CodeBlock(
+            self.name,
+            ['python'],
+            self.options,
+            self.content,
+            self.lineno,
+            self.content_offset,
+            self.block_text,
+            self.state,
+            self.state_machine).run())
+
+        return [docutils.nodes.compound('', *node_list)]
+
+
 def setup(app):
     app.add_directive('pygal', PygalDirective)
     app.add_directive('pygal-code', PygalWithCode)
+    app.add_directive('pygal-table', PygalTable)
+    app.add_directive('pygal-table-code', PygalTableWithCode)
 
     return {'version': '1.0.1'}

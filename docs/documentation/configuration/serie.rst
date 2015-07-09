@@ -93,7 +93,7 @@ dots_size
 
 
 stroke_style
-------------
+~~~~~~~~~~~~
 
 .. pygal-code::
 

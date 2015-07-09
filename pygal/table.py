@@ -73,8 +73,9 @@ class Table(object):
                 sum_ = 0
             for j, value in enumerate(serie.values):
                 if total:
-                    acc[j] += value
-                    sum_ += value
+                    v = value or 0
+                    acc[j] += v
+                    sum_ += v
                 row.append(fmt(value))
             if total:
                 acc[-1] += sum_
@@ -183,7 +184,6 @@ class Table(object):
             table = tostring(html.style(
                 template(css, **attrs),
                 scoped='scoped')) + table
-        if self.chart.disable_xml_declaration:
-            table = table.decode('utf-8')
+        table = table.decode('utf-8')
         self.chart.teardown()
         return table

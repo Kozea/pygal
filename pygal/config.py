@@ -157,7 +157,8 @@ class CommonConfig(BaseConfig):
 
     stroke_style = Key(None, dict, "Look", "Stroke style of serie element.",
                        "This is a dict which can contain a "
-                       "'width', 'linejoin', 'linecap' and 'dasharray'")
+                       "'width', 'linejoin', 'linecap', 'dasharray' "
+                       "and 'dashoffset'")
 
     rounded_bars = Key(
         None, int, "Look",

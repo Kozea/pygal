@@ -11,4 +11,6 @@ Documentation
    configuration/serie
    configuration/value
    sparks
+   table
+   output
    web
