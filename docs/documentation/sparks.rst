@@ -36,8 +36,7 @@ With labels:
 
 .. pygal-code:: sparkline
 
-  from pygal.style import LightSolarizedStyle
-  chart = pygal.Line(style=LightSolarizedStyle)
+  chart = pygal.Line()
   chart.add('', [1, 3, 5, 16, 13, 3, 7])
   chart.x_labels = ['a', 'b', 'c', 'd', 'e', 'f', 'g']
   chart.render_sparkline(show_x_labels=True, show_y_labels=True)

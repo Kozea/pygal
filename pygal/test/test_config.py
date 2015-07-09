@@ -44,7 +44,7 @@ def test_config_behaviours():
     assert len(q(".plot .series path")) == 1
     assert len(q(".legend")) == 0
     assert len(q(".x.axis .guides")) == 3
-    assert len(q(".y.axis .guides")) == 21
+    assert len(q(".y.axis .guides")) == 11
     assert len(q(".dots")) == 3
     assert q(".axis.x text").map(texts) == ['a', 'b', 'c']
 
@@ -175,7 +175,7 @@ def test_logarithmic():
     assert len(q(".plot .series path")) == 1
     assert len(q(".legend")) == 1
     assert len(q(".x.axis .guides")) == 0
-    assert len(q(".y.axis .guides")) == 51
+    assert len(q(".y.axis .guides")) == 21
     assert len(q(".dots")) == 3
 
 
@@ -211,7 +211,7 @@ def test_logarithmic_big_scale():
     line = Line(logarithmic=True)
     line.add('_', [10 ** -10, 10 ** 10, 1])
     q = line.render_pyquery()
-    assert len(q(".y.axis .guides")) == 41
+    assert len(q(".y.axis .guides")) == 21
 
 
 def test_value_formatter():
@@ -227,7 +227,7 @@ def test_logarithmic_small_scale():
     line = Line(logarithmic=True)
     line.add('_', [1 + 10 ** 10, 3 + 10 ** 10, 2 + 10 ** 10])
     q = line.render_pyquery()
-    assert len(q(".y.axis .guides")) == 21
+    assert len(q(".y.axis .guides")) == 11
 
 
 def test_human_readable():
