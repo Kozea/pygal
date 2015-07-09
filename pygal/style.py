@@ -87,7 +87,7 @@ class Style(object):
             raise ValueError(
                 'stroke_dasharray not in proper form: tuple(int, int)')
 
-    def get_colors(self, prefix):
+    def get_colors(self, prefix, len_):
         """Get the css color list"""
 
         def color(tupl):
@@ -98,8 +98,12 @@ class Style(object):
                 '  fill: {1};\n'
                 '}}\n') % (prefix, prefix)).format(*tupl)
 
-        return '\n'.join(map(color, enumerate(
-            cycle_fill(self.colors, max(len(self.colors), 16)))))
+        if len(self.colors) < len_:
+            colors = cycle_fill(self.colors, len_)
+        else:
+            colors = self.colors[:len_]
+
+        return '\n'.join(map(color, enumerate(colors)))
 
     def to_dict(self):
         config = {}
