@@ -672,6 +672,29 @@ def get_test_routes(app):
         graph.legend_at_bottom = True
         return graph.render_response()
 
+    @app.route('/test/sparkline/label/<chart>')
+    def test_sparkline_label_for(chart):
+        graph = CHARTS_BY_NAME[chart](**dict(
+            width=200,
+            height=50,
+            show_dots=False,
+            show_legend=False,
+            # show_y_labels=False,
+            # show_x_labels=False,
+            spacing=0,
+            margin=5,
+            min_scale=2,
+            max_scale=2,
+            explicit_size=True
+        ))
+        graph.add('1', [1, 3, 12, 3, 4, None, 9])
+        graph.add('2', [7, -4, 10, None, 8, 3, 1])
+        graph.add('3', [7, -14, -10, None, 8, 3, 1])
+        graph.add('4', [7, 4, -10, None, 8, 3, 1])
+        graph.x_labels = ('a', 'b', 'c', 'd', 'e', 'f', 'g')
+        graph.legend_at_bottom = True
+        return graph.render_response()
+
     @app.route('/test/normal/<chart>')
     def test_normal_for(chart):
         graph = CHARTS_BY_NAME[chart]()

@@ -139,6 +139,8 @@ class PublicApi(BaseGraph):
             show_y_labels=False,
             spacing=0,
             margin=5,
+            min_scale=1,
+            max_scale=2,
             explicit_size=True
         )
         spark_options.update(kwargs)
