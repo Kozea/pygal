@@ -12,7 +12,7 @@ Submit your bug reports and feature requests to the `github bug tracker <http://
 Code style
 ==========
 
-The pygal code tries to respect the `pep8 <https://www.python.org/dev/peps/pep-0008/>`_ please keep that in mind when writing code for pygal. (The code style is checked along witht the unit tests, see next paragraph).
+The pygal code tries to respect the `pep8 <https://www.python.org/dev/peps/pep-0008/>`_ please keep that in mind when writing code for pygal. (The code style is checked along with the unit tests, see next paragraph).
 
 
 Testing

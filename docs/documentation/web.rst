@@ -5,7 +5,7 @@ Embedding in a web page
 Within an embed tag
 -------------------
 
-First setup an url entry point for you svg: `/mysvg.svg` don't forget to set the mime-type to `image/svg+xml`. (If you are using flask you can use the `render_response` method.)
+First setup an url entry point for you svg: ``/mysvg.svg`` don't forget to set the mime-type to ``image/svg+xml``. (If you are using flask you can use the ``render_response`` method.)
 
 Then in your html put an embed tag like this:
 
@@ -23,13 +23,13 @@ Then in your html put an embed tag like this:
     </body>
   </html>
 
-You can also use an iframe tag, but automatic sizing with `width: 100%` will not work.
+You can also use an iframe tag, but automatic sizing with ``width: 100%`` will not work.
 
 
 Directly in the html
 --------------------
 
-You can insert it directly in a html page with the use of `disable_xml_declaration`.
+You can insert it directly in a html page with the use of ``disable_xml_declaration``.
 You have to put the javascript manually in you webpage, for instance:
 
 
@@ -38,7 +38,7 @@ You have to put the javascript manually in you webpage, for instance:
   <!DOCTYPE html>
   <html>
     <head>
-    <script type="text/javascript" src="http://kozea.github.com/pygal.js/latest/pygal-tooltips.js"></script>
+    <script type="text/javascript" src="http://kozea.github.com/pygal.js/latest/pygal-tooltips.min.js"></script>
       <!-- ... -->
     </head>
     <body>
@@ -66,5 +66,5 @@ You have to put the javascript manually in you webpage, for instance:
     </body>
   </html>
 
-You can use `explicit_size` to set the svg size from the `width`, `height` properties.
+You can use ``explicit_size`` to set the svg size from the ``width``, ``height`` properties.
 

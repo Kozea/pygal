@@ -2,22 +2,36 @@
 Installing
 ==========
 
+pygal is available for python 2.6, 2.7 and 3.2, 3.3, 3.4 and pypy.
+
+
 PyPI
 ====
 
 pygal is `available on PyPI <http://pypi.python.org/pypi/pygal/>`_.
-To install, just type as superuser::
+To install, just type as superuser:
 
 .. code-block:: bash
 
   pip install pygal
 
 
+Dependencies
+============
+
+There are no required dependency.
+
+Optional dependencies are as follow:
+
+ * ``lxml`` which can improve rendering speed (except on pypy).
+ * ``cairosvg``, ``tinycss``, ``cssselect`` to render png.
+
+
 Git Repository
 ==============
 
 If you want the development version of pygal, take a look at the
-`git repository on GitHub <https://github.com/Kozea/pygal>`_, or clone it with::
+`git repository on GitHub <https://github.com/Kozea/pygal>`_, or clone it with:
 
 .. code-block:: bash
 

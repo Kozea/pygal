@@ -75,6 +75,7 @@ Options
 
 .. toctree::
    :maxdepth: 2
+
    sizing
    title
    label

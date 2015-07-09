@@ -60,9 +60,6 @@
 {{ id }}.axis .major.guide.line {
   stroke-dasharray: 6,6;
 }
-{{ id }}.axis text.major {
-  stroke-width: .25px;
-}
 
 {{ id }}.horizontal .axis.y .guide.line,
 {{ id }}.horizontal .axis.y2 .guide.line,
@@ -106,7 +103,7 @@
   fill: transparent;
 }
 
-{{ id }}.series text {
+{{ id }} text {
   stroke: none;
 }
 

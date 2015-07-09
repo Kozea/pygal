@@ -76,7 +76,6 @@
 }
 
 {{ id }}.axis text.major {
-  stroke: {{ style.foreground_light }};
   fill: {{ style.foreground_light }};
 }
 
