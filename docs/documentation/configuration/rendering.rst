@@ -69,6 +69,18 @@ You can change the dot size
   chart.add('line', [.0002, .0005, .00035])
 
 
+stroke_style
+------------
+
+It is possible to set a default style for lines with the ``stroke_style`` dictionary.
+
+.. pygal-code::
+
+  chart = pygal.Line(stroke_style={'width': 5, 'dasharray': '3, 6', 'linecap': 'round', 'linejoin': 'round'})
+  chart.add('line', [.0002, .0005, .00035])
+
+
+
 show_x_guides
 -------------
 

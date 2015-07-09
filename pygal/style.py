@@ -24,9 +24,6 @@ from pygal.util import cycle_fill
 from pygal import colors
 from pygal.colors import darken, lighten
 import sys
-import re
-
-re_dasharray_delimiters = re.compile(r'[\.|,|x|\||\- ]+', re.I)
 
 
 class Style(object):
@@ -41,12 +38,10 @@ class Style(object):
             font_family='monospace',  # Monospaced font is highly encouraged
             opacity='.8',
             opacity_hover='.9',
-            stroke_width='1',
-            stroke_style='round',
-            stroke_dasharray=None,
             transition='250ms',
             colors=(
                 '#ff5995', '#b6e354', '#feed6c', '#8cedff', '#9e6ffe',
+
                 '#899ca1', '#f8f8f2', '#bf4646', '#516083', '#f92672',
                 '#82b414', '#fd971f', '#56c2d6', '#808384', '#8c54fe',
                 '#465457')):
@@ -58,34 +53,8 @@ class Style(object):
         self.font_family = font_family
         self.opacity = opacity
         self.opacity_hover = opacity_hover
-        self.stroke_width = stroke_width
-        self.stroke_style = stroke_style
-        self.stroke_dasharray = stroke_dasharray
         self.transition = transition
         self.colors = colors
-
-        self.validate_stroke_values()
-
-    def validate_stroke_values(self):
-        # stroke_width
-        self.stroke_width = float(self.stroke_width)
-
-        # stroke_style
-        self.stroke_style = self.stroke_style.lower().strip()
-        if self.stroke_style not in ['round', 'bevel', 'miter']:
-            self.stroke_style = 'round'
-
-        # stroke_dasharray
-        if self.stroke_dasharray is None:
-            self.stroke_dasharray = 'none'
-        elif isinstance(self.stroke_dasharray, (list, tuple)):
-            self.stroke_dasharray = '%d,%d' % self.stroke_dasharray
-        elif isinstance(self.stroke_dasharray, str):
-            self.stroke_dasharray = re.sub(
-                re_dasharray_delimiters, ',', self.stroke_dasharray)
-        else:
-            raise ValueError(
-                'stroke_dasharray not in proper form: tuple(int, int)')
 
     def get_colors(self, prefix, len_):
         """Get the css color list"""

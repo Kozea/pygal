@@ -155,6 +155,10 @@ class CommonConfig(BaseConfig):
     fill = Key(
         False, bool, "Look", "Fill areas under lines")
 
+    stroke_style = Key(None, dict, "Look", "Stroke style of serie element.",
+                       "This is a dict which can contain a "
+                       "'width', 'linejoin', 'linecap' and 'dasharray'")
+
     rounded_bars = Key(
         None, int, "Look",
         "Set this to the desired radius in px (for Bar-like charts)")

@@ -581,14 +581,16 @@ def get_test_routes(app):
 
     @app.route('/test/stroke_config')
     def test_stroke_config():
-        line = Line()
+        line = Line(stroke_style={'width': .5})
         line.add('test_no_line', range(12), stroke=False)
-        line.add('test', reversed(range(12)))
-        line.add('test_no_dots', [5] * 12, show_dots=False)
+        line.add('test', reversed(range(12)), stroke_style={'width': 3})
+        line.add('test_no_dots', [5] * 12, show_dots=False,
+                 stroke_style={'width': 2, 'dasharray': '12, 31'})
         line.add('test_big_dots', [
             randint(1, 12) for _ in range(12)], dots_size=5)
         line.add('test_fill', [
-            randint(1, 3) for _ in range(12)], fill=True)
+            randint(1, 3) for _ in range(12)], fill=True,
+                 stroke_style={'width': 5, 'dasharray': '4, 12, 7, 20'})
 
         line.x_labels = [
             'lol', 'lol1', 'lol2', 'lol3', 'lol4', 'lol5',

@@ -25,6 +25,7 @@ Changelog
 * mode option has been renamed to a less generic name: box_mode
 * fix stack_from_top for stacked lines
 * Add flake8 test to py.test in tox
+* Remove stroke style in style and set it as a global / serie configuration.
 
 1.7.0
 =====

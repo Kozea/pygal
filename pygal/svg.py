@@ -81,7 +81,8 @@ class Svg(object):
 
     def add_styles(self):
         """Add the css to the svg"""
-        colors = self.graph.style.get_colors(self.id)
+        colors = self.graph.style.get_colors(self.id, self.graph._order)
+        strokes = self.get_strokes()
         all_css = []
         for css in ['base.css'] + list(self.graph.css):
             if '://' in css:
@@ -111,6 +112,7 @@ class Svg(object):
                             f.read(),
                             style=self.graph.style,
                             colors=colors,
+                            strokes=strokes,
                             font_sizes=fs,
                             id=self.id)
                 if not self.graph.pretty_print:
@@ -310,3 +312,22 @@ class Svg(object):
         if self.graph.disable_xml_declaration or is_unicode:
             svg = svg.decode('utf-8')
         return svg
+
+    def get_strokes(self):
+        def stroke_dict_to_css(stroke, i=None):
+            css = ['%s.series%s {\n' % (
+                self.id, '.serie-%d' % i if i is not None else '')]
+            for key in ('width', 'linejoin', 'linecap', 'dasharray'):
+                if stroke.get(key):
+                    css.append('  stroke-%s: %s;\n' % (
+                        key, stroke[key]))
+            css.append('}')
+            return '\n'.join(css)
+
+        css = []
+        if self.graph.stroke_style is not None:
+            css.append(stroke_dict_to_css(self.graph.stroke_style))
+        for serie in self.graph.series:
+            if serie.stroke_style is not None:
+                css.append(stroke_dict_to_css(serie.stroke_style, serie.index))
+        return '\n'.join(css)
