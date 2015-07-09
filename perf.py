@@ -42,6 +42,7 @@ def perf(chart_name, length, series):
 
 if '--bench' in sys.argv:
     bench = True
+
     def prt(s):
         pass
 
@@ -49,6 +50,7 @@ if '--bench' in sys.argv:
         sys.stdout.write(s)
 else:
     bench = False
+
     def prt(s):
         sys.stdout.write(s)
         sys.stdout.flush()

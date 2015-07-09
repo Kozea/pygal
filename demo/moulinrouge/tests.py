@@ -26,7 +26,7 @@ from pygal.style import styles, Style, RotateStyle
 from pygal.colors import rotate
 from pygal.graph.horizontal import HorizontalGraph
 from random import randint, choice
-from datetime import datetime, date, time
+from datetime import datetime, date
 
 
 def get_test_routes(app):
@@ -369,9 +369,9 @@ def get_test_routes(app):
 
     @app.route('/test/stacked')
     def test_stacked():
-        stacked = StackedBar()
-        stacked.add('1', [1, 2, 3])
-        stacked.add('2', [4, 5, 6])
+        stacked = StackedLine(stack_from_top=True, logarithmic=True)
+        stacked.add('1', [1, 2])
+        stacked.add('2', [10, 12])
         return stacked.render_response()
 
     @app.route('/test/stacked/reverse')

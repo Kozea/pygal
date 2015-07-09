@@ -635,8 +635,8 @@ class Graph(PublicApi):
         """Getter for the minimum series value"""
         return (self.secondary_range[0] if (
             self.secondary_range and self.secondary_range[0] is not None)
-                else (min(self._secondary_values)
-                      if self._secondary_values else None))
+            else (min(self._secondary_values)
+                  if self._secondary_values else None))
 
     @cached_property
     def _min(self):
@@ -656,8 +656,8 @@ class Graph(PublicApi):
         """Getter for the maximum series value"""
         return (self.secondary_range[1] if (
             self.secondary_range and self.secondary_range[1] is not None)
-                else (max(self._secondary_values)
-                      if self._secondary_values else None))
+            else (max(self._secondary_values)
+                  if self._secondary_values else None))
 
     @cached_property
     def _order(self):

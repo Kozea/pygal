@@ -231,7 +231,7 @@ class Box(Graph):
         def pstdev(seq):
             m = mean(seq)
             l = len(seq)
-            v = sum((n - m)**2 for n in seq) / l # variance
+            v = sum((n - m)**2 for n in seq) / l  # variance
             return v**0.5  # sqrt
 
         outliers = []

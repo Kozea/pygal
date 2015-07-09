@@ -24,6 +24,7 @@ Changelog
 * Transform min_scale and max_scale as options
 * mode option has been renamed to a less generic name: box_mode
 * fix stack_from_top for stacked lines
+* Add flake8 test to py.test in tox
 
 1.7.0
 =====

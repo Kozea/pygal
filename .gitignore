@@ -9,3 +9,4 @@ dist
 coverage-py*
 junit-py*
 docs/_build
+.cache

@@ -34,7 +34,7 @@ def test_stacked_line_reverse():
     stacked.add('ten_twelve', [10, 12])
     q = stacked.render_pyquery()
     assert set(q("desc.value").text().split(' ')) == set(
-        ('11', '14', '1', '2'))
+        ('11', '14', '10', '12'))
 
 
 def test_stacked_line_log():

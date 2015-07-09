@@ -1,4 +1,4 @@
- # -*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 # This file is part of pygal
 #
 # A python svg graph plotting library

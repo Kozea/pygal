@@ -228,8 +228,8 @@ class Svg(object):
         line = ' '.join([coord_format(c)
                          for c in coords[origin_index + 1:]
                          if None not in c])
-        return self.node(node, 'path',
-                  d=root % (origin, line), **kwargs)
+        return self.node(
+            node, 'path', d=root % (origin, line), **kwargs)
 
     def slice(
             self, serie_node, node, radius, small_radius,

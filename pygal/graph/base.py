@@ -1,4 +1,4 @@
- # -*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 # This file is part of pygal
 #
 # A python svg graph plotting library
@@ -165,7 +165,7 @@ class BaseGraph(object):
                 values.append(value)
             serie_config = SerieConfig()
             serie_config(**dict((k, v) for k, v in self.state.__dict__.items()
-                              if k in dir(serie_config)))
+                                if k in dir(serie_config)))
             serie_config(**serie_config_kwargs)
             series.append(
                 Serie(offset + len(series),

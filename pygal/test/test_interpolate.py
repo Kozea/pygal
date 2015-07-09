@@ -73,6 +73,7 @@ def test_hermite_cardinal(Chart, datas):
     chart = make_data(chart, datas)
     assert chart.render()
 
+
 def test_hermite_catmull_rom(Chart, datas):
     chart = Chart(interpolate='hermite',
                   interpolation_parameters={'type': 'catmull_rom'})
