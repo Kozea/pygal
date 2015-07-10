@@ -39,6 +39,10 @@ def pytest_generate_tests(metafunc):
     if sys.version_info[:2] != (2, 6):
         if not etree._lxml_etree:
             raise ImportError('lxml is required under python 2.6')
+        etree.to_lxml()
+
+    if hasattr(sys, 'pypy_version_info'):
+        etree.to_etree()
 
     if "Chart" in metafunc.funcargnames:
         metafunc.parametrize("Chart", pygal.CHARTS)
