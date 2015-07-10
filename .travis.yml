@@ -1,14 +1,24 @@
 language: python
-python: 3.4
-env:
-  - TOX_ENV=py26
-  - TOX_ENV=py27
-  - TOX_ENV=py32
-  - TOX_ENV=py33
-  - TOX_ENV=py34
-  - TOX_ENV=pypy
+python:
+  - 2.6
+  - 2.7
+  - 3.2
+  - 3.3
+  - 3.4
+  - pypy
+
 install:
-  - pip install tox
-script:
-  - tox -e $TOX_ENV
+  - pip install .
+  - pip install pygal_maps_world
+  - pip install pygal_maps_fr
+  - pip install pygal_maps_ch
+  - pip install pytest
+  - pip install pytest-flake8
+  - pip install pytest-cov
+  - pip install lxml
+  - pip install pyquery
+  - pip install cairosvg
+
+script: py.test pygal/test --flake8 --cov-report= --cov=pygal
+
 sudo: false
