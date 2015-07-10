@@ -5,7 +5,7 @@ python:
   - 3.2
   - 3.3
   - 3.4
-  - pypy
+  # - pypy Disabled for pypy < 2.6.0
 
 install:
   - pip install .
