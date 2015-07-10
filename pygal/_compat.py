@@ -65,7 +65,8 @@ def total_seconds(td):
 
 def timestamp(x):
     if hasattr(x, 'timestamp'):
-        return x.timestamp()
+        from datetime import timezone
+        return x.replace(tzinfo=timezone.utc).timestamp()
     else:
         if hasattr(x, 'utctimetuple'):
             t = x.utctimetuple()

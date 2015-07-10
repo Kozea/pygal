@@ -21,14 +21,12 @@ Various datetime line plot
 """
 from pygal.adapters import positive
 from pygal.graph.xy import XY
-from datetime import datetime, date, time, timedelta, timezone
+from datetime import datetime, date, time, timedelta
 from pygal._compat import timestamp, total_seconds
 
 
 def datetime_to_timestamp(x):
     if isinstance(x, datetime):
-        if x.tzinfo is None:
-            x = x.replace(tzinfo=timezone.utc)
         return timestamp(x)
     return x
 
@@ -84,7 +82,7 @@ class DateTimeLine(XY):
     def _x_format(self):
         """Return the value formatter for this graph"""
         def datetime_to_str(x):
-            dt = datetime.fromtimestamp(x, timezone.utc)
+            dt = datetime.utcfromtimestamp(x)
             if self.x_value_formatter:
                 return self.x_value_formatter(dt)
             return dt.isoformat()
