@@ -736,13 +736,16 @@ def get_test_routes(app):
     @app.route('/test/datetimeline')
     def test_datetimeline():
         line = DateTimeLine()
+        from datetime import timezone, timedelta
+        tz7 = timezone(timedelta(hours=7), 'GMT +7')
+        tzn4 = timezone(timedelta(hours=-4), 'GMT -4')
+
         line.add('dt', [
-            (datetime(2013, 1, 12, 8, 0), 300),
-            (datetime(2013, 1, 12, 12), 412),
-            (datetime(2013, 2, 22, 12), 823),
-            (datetime(2013, 2, 22, 20), 672)
+            (datetime(2013, 1, 12, 8, tzinfo=tz7), 300),
+            (datetime(2013, 1, 12, 8), 412),
+            (datetime(2013, 1, 12, 8, tzinfo=tzn4), 823)
         ])
-        line.x_value_formatter = lambda x: x.strftime("%Y-%m-%d")
+        line.x_value_formatter = lambda x: x.isoformat()  # strftime("%Y-%m-%d")
         line.x_label_rotation = 45
         return line.render_response()
 

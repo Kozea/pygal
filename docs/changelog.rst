@@ -27,6 +27,7 @@ Changelog
 * Add flake8 test to py.test in tox
 * Remove stroke style in style and set it as a global / serie configuration.
 * Fix None values in tables
+* Fix timezones in DateTimeLine
 
 1.7.0
 =====

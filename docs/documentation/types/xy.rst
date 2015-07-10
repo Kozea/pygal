@@ -54,6 +54,11 @@ DateTime
       (datetime(2013, 2, 22, 9, 45), 672)
   ])
 
+.. caution::
+
+   datetime are taken in utc by default (ie: no tzinfo).
+   If you have dates with timezones ensure that all your dates
+   have timezone otherwise you will have incoherences.
 
 Date
 ++++
