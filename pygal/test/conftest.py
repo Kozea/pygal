@@ -36,7 +36,9 @@ def pytest_generate_tests(metafunc):
     if etree._lxml_etree and sys.version_info[:2] != (2, 6):
         metafunc.fixturenames.append('etreefx')
         metafunc.parametrize('etreefx', ['lxml', 'etree'], indirect=True)
-    if sys.version_info[:2] != (2, 6):
+
+    if sys.version_info[:2] != (2, 6) and not hasattr(
+            sys, 'pypy_version_info'):
         if not etree._lxml_etree:
             raise ImportError('lxml is required under python 2.6')
         etree.to_lxml()
