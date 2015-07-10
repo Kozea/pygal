@@ -17,19 +17,23 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with pygal. If not, see <http://www.gnu.org/licenses/>.
 """
-Color utils
+This package is an utility package oriented on color alteration.
+This is used by the :py:mod:`pygal.style` package to generate
+parametric styles.
 
 """
 from __future__ import division
 
 
 def normalize_float(f):
+    """Round float errors"""
     if abs(f - round(f)) < .0000000000001:
         return round(f)
     return f
 
 
 def rgb_to_hsl(r, g, b):
+    """Convert a color in r, g, b to a color in h, s, l"""
     r /= 255
     g /= 255
     b /= 255
@@ -57,6 +61,7 @@ def rgb_to_hsl(r, g, b):
 
 
 def hsl_to_rgb(h, s, l):
+    """Convert a color in h, s, l to a color in r, g, b"""
     h /= 360
     s /= 100
     l /= 100
@@ -80,6 +85,10 @@ def hsl_to_rgb(h, s, l):
 
 
 def parse_color(color):
+    """Take any css color definition and give back a tuple containing the
+    r, g, b, a values along with a type which can be: #rgb, #rgba, #rrggbb,
+    #rrggbbaa, rgb, rgba
+    """
     r = g = b = a = type = None
     if color.startswith('#'):
         color = color[1:]
@@ -110,6 +119,9 @@ def parse_color(color):
 
 
 def unparse_color(r, g, b, a, type):
+    """Take the r, g, b, a color values and give back
+    a type css color string. This is the inverse function of parse_color"""
+
     if type == '#rgb':
         # Don't lose precision on rgb shortcut
         if r % 17 == 0 and g % 17 == 0 and b % 17 == 0:
@@ -148,26 +160,32 @@ def _adjust(hsl, attribute, percent):
 
 
 def adjust(color, attribute, percent):
+    """Adjust an attribute of color by a percent"""
     r, g, b, a, type = parse_color(color)
     r, g, b = hsl_to_rgb(*_adjust(rgb_to_hsl(r, g, b), attribute, percent))
     return unparse_color(r, g, b, a, type)
 
 
 def rotate(color, percent):
+    """Rotates a color by changing its hue value by percent"""
     return adjust(color, 0, percent)
 
 
 def saturate(color, percent):
+    """Saturate a color by increasing its saturation by percent"""
     return adjust(color, 1, percent)
 
 
 def desaturate(color, percent):
+    """Desaturate a color by decreasing its saturation by percent"""
     return adjust(color, 1, -percent)
 
 
 def lighten(color, percent):
+    """Lighten a color by increasing its lightness by percent"""
     return adjust(color, 2, percent)
 
 
 def darken(color, percent):
+    """Darken a color by decreasing its lightness by percent"""
     return adjust(color, 2, -percent)

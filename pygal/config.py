@@ -18,7 +18,7 @@
 # along with pygal. If not, see <http://www.gnu.org/licenses/>.
 
 """
-Config module with all options
+Config module holding all options and their default values.
 """
 from copy import deepcopy
 from pygal.style import Style, DefaultStyle
@@ -29,6 +29,16 @@ CONFIG_ITEMS = []
 
 
 class Key(object):
+    """
+    Represents a config parameter.
+
+    A config parameter has a name, a default value, a type,
+    a category, a documentation, an optional longer documentatation
+    and an optional subtype for list style option.
+
+    Most of these informations are used in cabaret to auto generate
+    forms representing these options.
+    """
 
     _categories = []
 
@@ -48,27 +58,46 @@ class Key(object):
 
         CONFIG_ITEMS.append(self)
 
+    def __repr__(self):
+        return """
+        Type: %s%s     
+        Default: %r     
+        %s%s
+        """ % (
+            self.type.__name__,
+            (' of %s' % self.subtype.__name__) if self.subtype else '',
+            self.value,
+            self.doc,
+            (' %s' % self.subdoc) if self.subdoc else ''
+        )
+
     @property
     def is_boolean(self):
+        """Return `True` if this parameter is a boolean"""
         return self.type == bool
 
     @property
     def is_numeric(self):
+        """Return `True` if this parameter is numeric (int or float)"""
         return self.type in (int, float)
 
     @property
     def is_string(self):
+        """Return `True` if this parameter is a string"""
         return self.type == str
 
     @property
     def is_dict(self):
+        """Return `True` if this parameter is a mapping"""
         return self.type == dict
 
     @property
     def is_list(self):
+        """Return `True` if this parameter is a list"""
         return self.type == list
 
     def coerce(self, value):
+        """Cast a string into this key type"""
         if self.type == Style:
             return value
         elif self.type == list:
@@ -91,14 +120,24 @@ class Key(object):
 
 
 class MetaConfig(type):
+    """
+    Metaclass for configs. Used to get the key name and set it on the value.
+    """
     def __new__(mcs, classname, bases, classdict):
         for k, v in classdict.items():
             if isinstance(v, Key):
                 v.name = k
+
         return type.__new__(mcs, classname, bases, classdict)
 
 
 class BaseConfig(MetaConfig('ConfigBase', (object,), {})):
+    """
+    This class holds the common method for configs.
+
+    A config object can be instanciated with keyword arguments and
+    updated on call with keyword arguments.
+    """
 
     def __init__(self, **kwargs):
         """Can be instanciated with config kwargs"""
@@ -120,11 +159,13 @@ class BaseConfig(MetaConfig('ConfigBase', (object,), {})):
         self._update(kwargs)
 
     def _update(self, kwargs):
+        """Updates the config with the given dictionary"""
         self.__dict__.update(
             dict([(k, v) for (k, v) in kwargs.items()
                   if not k.startswith('_') and k in dir(self)]))
 
     def to_dict(self):
+        """Export a JSON serializable dictionary of the config"""
         config = {}
         for attr in dir(self):
             if not attr.startswith('__'):
@@ -136,10 +177,13 @@ class BaseConfig(MetaConfig('ConfigBase', (object,), {})):
         return config
 
     def copy(self):
+        """Copy this config object into another"""
         return deepcopy(self)
 
 
 class CommonConfig(BaseConfig):
+    """Class holding options used in both chart and serie configuration"""
+
     stroke = Key(
         True, bool, "Look",
         "Line dots (set it to false to get a scatter plot)")

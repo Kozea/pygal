@@ -17,7 +17,10 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with pygal. If not, see <http://www.gnu.org/licenses/>.
 """
-Pygal -  A python svg graph plotting library
+Main pygal package
+
+This package holds all available charts in pygal, the Config class
+and the maps extensions namespace module.
 
 """
 
@@ -73,16 +76,26 @@ CHARTS = list(CHARTS_BY_NAME.values())
 
 
 class PluginImportFixer(object):
+    """Allow external map plugins to be imported from pygal.maps package.
+       It is a ``sys.meta_path`` loader.
+    """
+
     def __init__(self):
         pass
 
     def find_module(self, fullname, path=None):
+        """This method says if the module to load can be loaded by
+        the load_module function, that is here if it is a ``pygal.maps.*``
+        module.
+        """
         if fullname.startswith('pygal.maps.') and hasattr(
                 maps, fullname.split('.')[2]):
             return self
         return None
 
     def load_module(self, name):
+        """Loads the ``pygal.maps.name`` module from
+        the previously loaded plugin"""
         if name not in sys.modules:
             sys.modules[name] = getattr(maps, name.split('.')[2])
         return sys.modules[name]
