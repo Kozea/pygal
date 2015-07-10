@@ -61,6 +61,7 @@ class BaseMap(Graph):
                     ratio = 1
                 else:
                     ratio = .3 + .7 * (value - min_) / (max_ - min_)
+
                 try:
                     areae = map.findall(
                         ".//*[@class='%s%s %s map-element']" % (
@@ -68,13 +69,7 @@ class BaseMap(Graph):
                             self.kind))
                 except SyntaxError:
                     # Python 2.6 (you'd better install lxml)
-                    areae = []
-                    for g in map:
-                        for e in g:
-                            if '%s%s' % (
-                                    self.area_prefix, area_code
-                            ) in e.attrib.get('class', ''):
-                                areae.append(e)
+                    raise ImportError('lxml is required under python 2.6')
 
                 if not areae:
                     continue
@@ -105,6 +100,7 @@ class BaseMap(Graph):
                     else:
                         title_node = self.svg.node(area, 'title')
                         text = ''
+
                     title_node.text = text + '[%s] %s: %s' % (
                         serie.title,
                         self.area_names[area_code], self._format(value))

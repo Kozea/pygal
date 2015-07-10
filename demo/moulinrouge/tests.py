@@ -453,21 +453,40 @@ def get_test_routes(app):
             'value': ('mw', 40),
             'label': 'Last'
         }])
-        wmap.add('6th', [3, 5, 34, 12])
         wmap.title = 'World Map !!'
         return wmap.render_response()
 
     @app.route('/test/supranational')
     def test_supranational():
         wmap = world.SupranationalWorld(style=choice(list(styles.values())))
-
-        wmap.add('Asia', [('asia', 1)])
-        wmap.add('Europe', [('europe', 1)])
-        wmap.add('Africa', [('africa', 1)])
-        wmap.add('North america', [('north_america', 1)])
-        wmap.add('South america', [('south_america', 1)])
-        wmap.add('Oceania', [('oceania', 1)])
-        wmap.add('Antartica', [('antartica', 1)])
+        v = [
+            ('europe', 0),
+            ('oceania', 2),
+            ('antartica', 4),
+            ('south_america', 5),
+            ('africa', 6),
+            ('north_america', 7),
+            ('asia', 8)
+        ]
+        wmap.add('Serie with metadata', [
+            v[0],
+            {'value': v[1]},
+            {'value': v[2], 'label': 'Three'},
+            {'value': v[3], 'xlink': 'http://4.example.com/'},
+            {'value': v[4], 'xlink': 'http://5.example.com/', 'label': 'Five'},
+            {'value': v[5], 'xlink': {
+                'href': 'http://6.example.com/'}, 'label': 'Six'},
+            {'value': v[6], 'xlink': {
+                'href': 'http://7.example.com/',
+                'target': '_blank'}, 'label': 'Seven'}
+        ])
+        # wmap.add('Asia', [('asia', 1)])
+        # wmap.add('Europe', [('europe', 1)])
+        # wmap.add('Africa', [('africa', 1)])
+        # wmap.add('North america', [('north_america', 1)])
+        # wmap.add('South america', [('south_america', 1)])
+        # wmap.add('Oceania', [('oceania', 1)])
+        # wmap.add('Antartica', [('antartica', 1)])
 
         wmap.title = 'Supra World Map !!'
         return wmap.render_response()

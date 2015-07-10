@@ -20,6 +20,7 @@
 import pytest
 import pygal
 from pygal.etree import etree
+import sys
 from . import get_data
 
 
@@ -32,9 +33,12 @@ def etreefx(request):
 
 
 def pytest_generate_tests(metafunc):
-    if etree._lxml_etree:
+    if etree._lxml_etree and sys.version_info[:2] != (2, 6):
         metafunc.fixturenames.append('etreefx')
         metafunc.parametrize('etreefx', ['lxml', 'etree'], indirect=True)
+    if sys.version_info[:2] != (2, 6):
+        if not etree._lxml_etree:
+            raise ImportError('lxml is required under python 2.6')
 
     if "Chart" in metafunc.funcargnames:
         metafunc.parametrize("Chart", pygal.CHARTS)
