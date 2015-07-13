@@ -97,6 +97,7 @@
 {{ id }}.reactive.active,
 {{ id }}.active .reactive {
   fill-opacity:  {{ style.opacity_hover }};
+  stroke-width: 4;
 }
 
 {{ id }}.series text {

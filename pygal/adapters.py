@@ -24,6 +24,7 @@ from decimal import Decimal
 
 
 def positive(x):
+    """Return zero if value is negative"""
     if x is None:
         return
     if x < 0:
@@ -32,16 +33,21 @@ def positive(x):
 
 
 def not_zero(x):
+    """Return None if value is zero"""
     if x == 0:
         return
     return x
 
 
 def none_to_zero(x):
-    return x or 0
+    """Return 0 if value is None"""
+    if x is None:
+        return 0
+    return x
 
 
 def decimal_to_float(x):
+    """Cast Decimal values to float"""
     if isinstance(x, Decimal):
         return float(x)
     return x

@@ -98,7 +98,11 @@ def create_app():
 
     @app.route("/svg/<type>/<series>/<config>")
     def svg(type, series, config):
-        graph = getattr(pygal, type)(pickle.loads(b64decode(str(config))))
+        module = '.'.join(type.split('.')[:-1])
+        name = type.split('.')[-1]
+        from importlib import import_module
+        graph = getattr(import_module(module), name)(
+            pickle.loads(b64decode(str(config))))
         for title, values in pickle.loads(b64decode(str(series))):
             graph.add(title, values)
         return graph.render_response()
@@ -196,10 +200,13 @@ def create_app():
         config.human_readable = True
         config.interpolate = interpolate
         config.style = style
-        config.x_labels = [random_label() for i in range(data)]
         svgs = []
         for chart in pygal.CHARTS:
-            type = chart.__name__
+            type = '.'.join((chart.__module__, chart.__name__))
+            if chart._dual:
+                config.x_labels = None
+            else:
+                config.x_labels = [random_label() for i in range(data)]
             svgs.append({'type': type,
                          'series': xy_series if type == 'XY' else other_series,
                          'config': b64encode(pickle.dumps(config))})

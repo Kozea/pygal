@@ -150,6 +150,7 @@ _clamp = lambda x: max(0, min(100, x))
 
 
 def _adjust(hsl, attribute, percent):
+    """Internal adjust function"""
     hsl = list(hsl)
     if attribute > 0:
         hsl[attribute] = _clamp(hsl[attribute] + percent)

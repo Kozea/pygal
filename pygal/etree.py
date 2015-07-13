@@ -16,10 +16,17 @@
 #
 # You should have received a copy of the GNU Lesser General Public License
 # along with pygal. If not, see <http://www.gnu.org/licenses/>.
+"""
+Wrapper for seemless lxml.etree / xml.etree usage
+depending on whether lxml is installed or not.
+"""
+
 import os
 
 
 class Etree(object):
+    """Etree wrapper using lxml.etree or standard xml.etree"""
+
     def __init__(self):
         from xml.etree import ElementTree as _py_etree
         self._py_etree = _py_etree
@@ -42,10 +49,12 @@ class Etree(object):
         return object.__getattribute__(self, attr)
 
     def to_lxml(self):
+        """Force lxml.etree to be used"""
         self._etree = self._lxml_etree
         self.lxml = True
 
     def to_etree(self):
+        """Force xml.etree to be used"""
         self._etree = self._py_etree
         self.lxml = False
 
