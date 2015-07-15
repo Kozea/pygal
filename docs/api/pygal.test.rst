@@ -17,7 +17,6 @@ Submodules
    pygal.test.test_colors
    pygal.test.test_config
    pygal.test.test_date
-   pygal.test.test_donut
    pygal.test.test_graph
    pygal.test.test_histogram
    pygal.test.test_interpolate

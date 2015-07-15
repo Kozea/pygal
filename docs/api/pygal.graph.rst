@@ -32,6 +32,5 @@ Submodules
    pygal.graph.stackedline
    pygal.graph.time
    pygal.graph.treemap
-   pygal.graph.verticalpyramid
    pygal.graph.xy
 
