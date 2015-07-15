@@ -16,10 +16,8 @@
 #
 # You should have received a copy of the GNU Lesser General Public License
 # along with pygal. If not, see <http://www.gnu.org/licenses/>.
-"""
-Base for pygal charts
 
-"""
+"""Base for pygal charts"""
 
 from __future__ import division
 from pygal._compat import is_list_like
@@ -38,11 +36,13 @@ import os
 
 
 class BaseGraph(object):
+
     """Chart internal behaviour related functions"""
 
     _adapters = []
 
     def __init__(self, config=None, **kwargs):
+        """Config preparation and various initialization"""
         if config:
             if isinstance(config, type):
                 config = config()
@@ -60,12 +60,14 @@ class BaseGraph(object):
         self.xml_filters = []
 
     def __setattr__(self, name, value):
+        """Set an attribute on the class or in the state if there is one"""
         if name.startswith('__') or getattr(self, 'state', None) is None:
             super(BaseGraph, self).__setattr__(name, value)
         else:
             setattr(self.state, name, value)
 
     def __getattribute__(self, name):
+        """Get an attribute from the class or from the state if there is one"""
         if name.startswith('__') or name == 'state' or getattr(
                 self, 'state', None
         ) is None or name not in self.state.__dict__:
@@ -173,7 +175,7 @@ class BaseGraph(object):
         return series
 
     def setup(self, **kwargs):
-        """Init the graph"""
+        """Set up the transient state prior rendering"""
         # Keep labels in case of map
         if getattr(self, 'x_labels', None) is not None:
             self.x_labels = list(self.x_labels)
@@ -212,6 +214,7 @@ class BaseGraph(object):
         self.svg.pre_render()
 
     def teardown(self):
+        """Remove the transient state after rendering"""
         if os.getenv('PYGAL_KEEP_STATE'):
             return
 

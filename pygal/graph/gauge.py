@@ -16,10 +16,8 @@
 #
 # You should have received a copy of the GNU Lesser General Public License
 # along with pygal. If not, see <http://www.gnu.org/licenses/>.
-"""
-Gauge chart
 
-"""
+"""Gauge chart representing values as needles on a polar scale"""
 
 from __future__ import division
 from pygal.util import decorate, compute_scale, alter
@@ -28,10 +26,13 @@ from pygal.graph.graph import Graph
 
 
 class Gauge(Graph):
-    """Gauge graph"""
+
+    """Gauge graph class"""
+
     needle_width = 1 / 20
 
     def _set_view(self):
+        """Assign a view to current graph"""
         if self.logarithmic:
             view_class = PolarThetaLogView
         else:
@@ -43,6 +44,7 @@ class Gauge(Graph):
             self._box)
 
     def needle(self, serie):
+        """Draw a needle for each value"""
         serie_node = self.svg.serie(serie)
         for i, theta in enumerate(serie.values):
             if theta is None:
@@ -87,6 +89,7 @@ class Gauge(Graph):
             self._static_value(serie_node, value, x, y)
 
     def _y_axis(self, draw_axes=True):
+        """Override y axis to plot a polar axis"""
         axis = self.svg.node(self.nodes['plot'], class_="axis y x gauge")
 
         for i, (label, theta) in enumerate(self._y_labels):
@@ -112,11 +115,13 @@ class Gauge(Graph):
             ).text = label
 
     def _x_axis(self, draw_axes=True):
+        """Override x axis to put a center circle in center"""
         axis = self.svg.node(self.nodes['plot'], class_="axis x gauge")
         x, y = self.view((0, 0))
         self.svg.node(axis, 'circle', cx=x, cy=y, r=4)
 
     def _compute(self):
+        """Compute y min and max and y scale and set labels"""
         self.min_ = self._min or 0
         self.max_ = self._max or 0
         if self.max_ - self.min_ == 0:
@@ -135,5 +140,6 @@ class Gauge(Graph):
         self._y_labels = list(zip(map(self._format, y_pos), y_pos))
 
     def _plot(self):
+        """Plot all needles"""
         for serie in self.series:
             self.needle(serie)

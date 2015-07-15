@@ -16,9 +16,10 @@
 #
 # You should have received a copy of the GNU Lesser General Public License
 # along with pygal. If not, see <http://www.gnu.org/licenses/>.
-"""
-XY Line graph
 
+"""
+XY Line graph: Plot a set of couple data points (x, y) connected by
+straight segments.
 """
 
 from __future__ import division
@@ -28,16 +29,20 @@ from pygal.graph.line import Line
 
 
 class XY(Line):
-    """XY Line graph"""
+
+    """XY Line graph class"""
+
     _dual = True
     _x_adapters = []
 
     def _get_value(self, values, i):
+        """Get the value formatted for tooltip"""
         vals = values[i]
         return '%s: %s' % (self._x_format(vals[0]), self._format(vals[1]))
 
     @cached_property
     def xvals(self):
+        """All x values"""
         return [val[0]
                 for serie in self.all_series
                 for val in serie.values
@@ -45,6 +50,7 @@ class XY(Line):
 
     @cached_property
     def yvals(self):
+        """All y values"""
         return [val[1]
                 for serie in self.series
                 for val in serie.values
@@ -52,22 +58,18 @@ class XY(Line):
 
     @cached_property
     def _min(self):
+        """Getter for the minimum series value"""
         return (self.range[0] if (self.range and self.range[0] is not None)
                 else (min(self.yvals) if self.yvals else None))
 
     @cached_property
     def _max(self):
+        """Getter for the maximum series value"""
         return (self.range[1] if (self.range and self.range[1] is not None)
                 else (max(self.yvals) if self.yvals else None))
 
-    def _has_data(self):
-        """Check if there is any data"""
-        return sum(
-            map(len, map(lambda s: s.safe_values, self.series))) != 0 and any((
-                sum(map(abs, self.xvals)) != 0,
-                sum(map(abs, self.yvals)) != 0))
-
     def _compute(self):
+        """Compute x/y min and max and x/y scale and set labels"""
         if self.xvals:
             if self.xrange:
                 x_adapter = reduce(

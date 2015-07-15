@@ -16,9 +16,10 @@
 #
 # You should have received a copy of the GNU Lesser General Public License
 # along with pygal. If not, see <http://www.gnu.org/licenses/>.
-"""
-Radar chart
 
+"""
+Radar chart: As known as kiviat chart or spider chart is a polar line chart
+useful for multivariate observation.
 """
 
 from __future__ import division
@@ -30,23 +31,28 @@ from math import cos, pi
 
 
 class Radar(Line):
-    """Kiviat graph"""
+
+    """Rada graph class"""
 
     _adapters = [positive, none_to_zero]
 
     def __init__(self, *args, **kwargs):
+        """Init custom vars"""
         self.x_pos = None
         self._rmax = None
         super(Radar, self).__init__(*args, **kwargs)
 
     def _fill(self, values):
+        """Add extra values to fill the line"""
         return values
 
     def _get_value(self, values, i):
+        """Get the value formatted for tooltip"""
         return self._format(values[i][0])
 
     @cached_property
     def _values(self):
+        """Getter for series values (flattened)"""
         if self.interpolate:
             return [val[0] for serie in self.series
                     for val in serie.interpolated]
@@ -54,6 +60,7 @@ class Radar(Line):
             return super(Line, self)._values
 
     def _set_view(self):
+        """Assign a view to current graph"""
         if self.logarithmic:
             view_class = PolarLogView
         else:
@@ -65,6 +72,7 @@ class Radar(Line):
             self._box)
 
     def _x_axis(self, draw_axes=True):
+        """Override x axis to make it polar"""
         if not self._x_labels:
             return
 
@@ -114,6 +122,7 @@ class Radar(Line):
                 deg(angle), format_(pos_text))
 
     def _y_axis(self, draw_axes=True):
+        """Override y axis to make it polar"""
         if not self._y_labels:
             return
 
@@ -156,6 +165,7 @@ class Radar(Line):
             ).text = label
 
     def _compute(self):
+        """Compute r min max and labels position"""
         delta = 2 * pi / self._len if self._len else 0
         x_pos = [.5 * pi + i * delta for i in range(self._len + 1)]
         for serie in self.all_series:

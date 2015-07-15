@@ -16,8 +16,10 @@
 #
 # You should have received a copy of the GNU Lesser General Public License
 # along with pygal. If not, see <http://www.gnu.org/licenses/>.
+
 """
-Box plot
+Box plot: a convenient way to display series as box with whiskers and outliers
+Different types are available throught the box_mode option
 """
 
 from __future__ import division
@@ -28,6 +30,7 @@ from bisect import bisect_left, bisect_right
 
 
 class Box(Graph):
+
     """
     Box plot
     For each series, shows the median value, the 25th and 75th percentiles,
@@ -36,10 +39,8 @@ class Box(Graph):
 
     See http://en.wikipedia.org/wiki/Box_plot
     """
-    _series_margin = .06
 
-    def __init__(self, *args, **kwargs):
-        super(Box, self).__init__(*args, **kwargs)
+    _series_margin = .06
 
     @property
     def _format(self):
@@ -91,9 +92,7 @@ class Box(Graph):
         self._y_labels = list(zip(map(self._format, y_pos), y_pos))
 
     def _plot(self):
-        """
-        Plot the series data
-        """
+        """Plot the series data"""
         for serie in self.series:
             self._boxf(serie)
 
@@ -103,9 +102,7 @@ class Box(Graph):
         return 7
 
     def _boxf(self, serie):
-        """
-        For a specific series, draw the box plot.
-        """
+        """For a specific series, draw the box plot."""
         serie_node = self.svg.serie(serie)
         # Note: q0 and q4 do not literally mean the zero-th quartile
         # and the fourth quartile, but rather the distance from 1.5 times

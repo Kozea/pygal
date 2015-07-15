@@ -16,9 +16,10 @@
 #
 # You should have received a copy of the GNU Lesser General Public License
 # along with pygal. If not, see <http://www.gnu.org/licenses/>.
-"""
-Dot chart
 
+"""
+Dot chart displaying values as a grid of dots, the bigger the value
+the bigger the dot
 """
 
 from __future__ import division
@@ -29,7 +30,8 @@ from math import log10
 
 
 class Dot(Graph):
-    """Dot graph"""
+
+    """Dot graph class"""
 
     def dot(self, serie, r_max):
         """Draw a dot line"""
@@ -68,6 +70,7 @@ class Dot(Graph):
             self._static_value(serie_node, value, x, y)
 
     def _compute(self):
+        """Compute y min and max and y scale and set labels"""
         x_len = self._len
         y_len = self._order
         self._box.xmax = x_len
@@ -106,6 +109,7 @@ class Dot(Graph):
                 else (max(map(abs, self._values)) if self._values else None))
 
     def _plot(self):
+        """Plot all dots for series"""
         r_max = min(
             self.view.x(1) - self.view.x(0),
             (self.view.y(0) or 0) - self.view.y(1)) / (

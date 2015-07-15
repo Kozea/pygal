@@ -16,9 +16,10 @@
 #
 # You should have received a copy of the GNU Lesser General Public License
 # along with pygal. If not, see <http://www.gnu.org/licenses/>.
-"""
-Bar chart
 
+"""
+Bar chart that presents grouped data with rectangular bars with lengths
+proportional to the values that they represent.
 """
 
 from __future__ import division
@@ -27,16 +28,19 @@ from pygal.util import swap, ident, compute_scale, decorate, alter
 
 
 class Bar(Graph):
-    """Bar graph"""
+
+    """Bar graph class"""
 
     _series_margin = .06
     _serie_margin = .06
 
     def __init__(self, *args, **kwargs):
+        """Bar chart creation"""
         self._x_ranges = None
         super(Bar, self).__init__(*args, **kwargs)
 
     def _bar(self, serie, parent, x, y, i, zero, secondary=False):
+        """Internal bar drawing function"""
         width = (self.view.x(1) - self.view.x(0)) / self._len
         x, y = self.view((x, y))
         series_margin = width * self._series_margin
@@ -88,6 +92,7 @@ class Bar(Graph):
             self._static_value(serie_node, val, x_center, y_center)
 
     def _compute(self):
+        """Compute y min and max and y scale and set labels"""
         if self._min:
             self._box.ymin = min(self._min, self.zero)
         if self._max:
@@ -109,6 +114,7 @@ class Bar(Graph):
         self._y_labels = list(zip(map(self._format, y_pos), y_pos))
 
     def _compute_secondary(self):
+        """Compute parameters for secondary series rendering"""
         if self.secondary_series:
             y_pos = list(zip(*self._y_labels))[1]
             ymin = self._secondary_min
@@ -133,6 +139,7 @@ class Bar(Graph):
                 for y in y_pos]
 
     def _plot(self):
+        """Draw bars for series and secondary series"""
         for serie in self.series:
             self.bar(serie)
         for serie in self.secondary_series:

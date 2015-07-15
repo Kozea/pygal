@@ -16,10 +16,8 @@
 #
 # You should have received a copy of the GNU Lesser General Public License
 # along with pygal. If not, see <http://www.gnu.org/licenses/>.
-"""
-Treemap chart
 
-"""
+"""Treemap chart: Visualize data using nested recangles"""
 
 from __future__ import division
 from pygal.util import decorate, cut, alter
@@ -28,7 +26,8 @@ from pygal.adapters import positive, none_to_zero
 
 
 class Treemap(Graph):
-    """Treemap graph"""
+
+    """Treemap graph class"""
 
     _adapters = [positive, none_to_zero]
 

@@ -36,13 +36,12 @@ from pygal.graph.horizontalbar import HorizontalBar
 from pygal.graph.horizontalstackedbar import HorizontalStackedBar
 from pygal.graph.line import Line
 from pygal.graph.pie import Pie
-from pygal.graph.pyramid import Pyramid
+from pygal.graph.pyramid import Pyramid, VerticalPyramid
 from pygal.graph.radar import Radar
 from pygal.graph.stackedbar import StackedBar
 from pygal.graph.stackedline import StackedLine
 from pygal.graph.time import DateLine, DateTimeLine, TimeLine, TimeDeltaLine
 from pygal.graph.treemap import Treemap
-from pygal.graph.verticalpyramid import VerticalPyramid
 from pygal.graph.xy import XY
 from pygal.graph.graph import Graph
 from pygal.config import Config

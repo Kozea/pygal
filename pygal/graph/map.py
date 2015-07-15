@@ -17,6 +17,12 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with pygal. If not, see <http://www.gnu.org/licenses/>.
 
+"""
+pygal contains no map but a base class to create extension
+see the pygal_maps_world package to get an exemple.
+https://github.com/Kozea/pygal_maps_world
+"""
+
 from __future__ import division
 from pygal.graph.graph import Graph
 from pygal.util import cut, cached_property, decorate
@@ -24,7 +30,9 @@ from pygal.etree import etree
 
 
 class BaseMap(Graph):
-    """Base map."""
+
+    """Base class for maps"""
+
     _dual = True
 
     @cached_property
@@ -36,12 +44,15 @@ class BaseMap(Graph):
                 if val[1] is not None]
 
     def enumerate_values(self, serie):
+        """Hook to replace default enumeration on values"""
         return enumerate(serie.values)
 
     def adapt_code(self, area_code):
+        """Hook to change the area code"""
         return area_code
 
     def _plot(self):
+        """Insert a map in the chart and apply data on it"""
         map = etree.fromstring(self.svg_map)
         map.set('width', str(self.view.width))
         map.set('height', str(self.view.height))

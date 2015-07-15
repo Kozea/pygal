@@ -16,32 +16,34 @@
 #
 # You should have received a copy of the GNU Lesser General Public License
 # along with pygal. If not, see <http://www.gnu.org/licenses/>.
-"""
-Horizontal graph base
-
-"""
+"""Horizontal graph mixin"""
 from pygal.graph.graph import Graph
 from pygal.view import HorizontalView, HorizontalLogView
 
 
 class HorizontalGraph(Graph):
-    """Horizontal graph"""
+
+    """Horizontal graph mixin"""
+
     def __init__(self, *args, **kwargs):
+        """Set the horizontal flag to True"""
         self.horizontal = True
         super(HorizontalGraph, self).__init__(*args, **kwargs)
 
     def _post_compute(self):
+        """After computations transpose labels"""
         self._x_labels, self._y_labels = self._y_labels, self._x_labels
         self._x_2nd_labels, self._y_2nd_labels = (
             self._y_2nd_labels, self._x_2nd_labels)
 
     def _axes(self):
+        """Set the _force_vertical flag when rendering axes"""
         self.view._force_vertical = True
         super(HorizontalGraph, self)._axes()
         self.view._force_vertical = False
 
     def _set_view(self):
-        """Assign a view to current graph"""
+        """Assign a horizontal view to current graph"""
         if self.logarithmic:
             view_class = HorizontalLogView
         else:

@@ -16,18 +16,19 @@
 #
 # You should have received a copy of the GNU Lesser General Public License
 # along with pygal. If not, see <http://www.gnu.org/licenses/>.
-"""
-Horizontal bar graph
 
-"""
+"""Horizontal bar graph"""
+
 from pygal.graph.horizontal import HorizontalGraph
 from pygal.graph.bar import Bar
 
 
 class HorizontalBar(HorizontalGraph, Bar):
+
     """Horizontal Bar graph"""
 
     def _plot(self):
+        """Draw the bars in reverse order"""
         for serie in self.series[::-1]:
             self.bar(serie)
         for serie in self.secondary_series[::-1]:

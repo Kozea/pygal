@@ -17,8 +17,8 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with pygal. If not, see <http://www.gnu.org/licenses/>.
 """
-Stacked Bar chart
-
+Stacked Bar chart: Like a bar chart but with all series stacking
+on top of the others instead of being displayed side by side.
 """
 
 from __future__ import division
@@ -28,11 +28,13 @@ from pygal.adapters import none_to_zero
 
 
 class StackedBar(Bar):
-    """Stacked Bar graph"""
+
+    """Stacked Bar graph class"""
 
     _adapters = [none_to_zero]
 
     def _get_separated_values(self, secondary=False):
+        """Separate values between positives and negatives stacked"""
         series = self.secondary_series if secondary else self.series
         transposed = list(zip(*[serie.values for serie in series]))
         positive_vals = [sum([
@@ -47,10 +49,12 @@ class StackedBar(Bar):
         return positive_vals, negative_vals
 
     def _compute_box(self, positive_vals, negative_vals):
+        """Compute Y min and max"""
         self._box.ymin = negative_vals and min(min(negative_vals), self.zero)
         self._box.ymax = positive_vals and max(max(positive_vals), self.zero)
 
     def _compute(self):
+        """Compute y min and max and y scale and set labels"""
         positive_vals, negative_vals = self._get_separated_values()
         self._compute_box(positive_vals, negative_vals)
 
@@ -88,12 +92,14 @@ class StackedBar(Bar):
             self._pre_compute_secondary(positive_vals, negative_vals)
 
     def _pre_compute_secondary(self, positive_vals, negative_vals):
+        """Compute secondary y min and max"""
         self._secondary_min = (negative_vals and min(
             min(negative_vals), self.zero)) or self.zero
         self._secondary_max = (positive_vals and max(
             max(positive_vals), self.zero)) or self.zero
 
     def _bar(self, serie, parent, x, y, i, zero, secondary=False):
+        """Internal stacking bar drawing function"""
         if secondary:
             cumulation = (self.secondary_negative_cumulation
                           if y < self.zero else
@@ -131,6 +137,7 @@ class StackedBar(Bar):
         return transpose((x + width / 2, y + height / 2))
 
     def _plot(self):
+        """Draw bars for series and secondary series"""
         for serie in self.series[::-1 if self.stack_from_top else 1]:
             self.bar(serie)
         for serie in self.secondary_series[::-1 if self.stack_from_top else 1]:

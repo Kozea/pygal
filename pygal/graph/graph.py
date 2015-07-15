@@ -16,10 +16,7 @@
 #
 # You should have received a copy of the GNU Lesser General Public License
 # along with pygal. If not, see <http://www.gnu.org/licenses/>.
-"""
-Commmon graphing functions
-
-"""
+"""Chart properties and drawing"""
 
 from __future__ import division
 from pygal._compat import is_list_like
@@ -35,7 +32,9 @@ from itertools import repeat, chain
 
 
 class Graph(PublicApi):
+
     """Graph super class containing generic common functions"""
+
     _dual = False
 
     def _decorate(self):
@@ -427,12 +426,14 @@ class Graph(PublicApi):
             **self.interpolation_parameters))
 
     def _rescale(self, points):
+        """Scale for secondary"""
         return [
             (x, self._scale_diff + (y - self._scale_min_2nd) * self._scale
              if y is not None else None)
             for x, y in points]
 
     def _tooltip_data(self, node, value, x, y, classes=None):
+        """Insert in desc tags informations for the javascript tooltip"""
         self.svg.node(node, 'desc', class_="value").text = value
         if classes is None:
             classes = []
@@ -448,6 +449,7 @@ class Graph(PublicApi):
                       class_="y " + classes).text = str(y)
 
     def _static_value(self, serie_node, value, x, y):
+        """Write the print value"""
         if self.print_values:
             self.svg.node(
                 serie_node['text_overlay'], 'text',
@@ -461,6 +463,10 @@ class Graph(PublicApi):
         return self._format(values[i][1])
 
     def _points(self, x_pos):
+        """
+        Convert given data values into drawable points (x, y)
+        and interpolated points if interpolate option is specified
+        """
         for serie in self.all_series:
             serie.points = [
                 (x_pos[i], v)
@@ -471,6 +477,7 @@ class Graph(PublicApi):
                 serie.interpolated = []
 
     def _compute_secondary(self):
+        """Compute secondary axis min max and label positions"""
         # secondary y axis support
         if self.secondary_series and self._y_labels:
             y_pos = list(zip(*self._y_labels))[1]
@@ -492,10 +499,12 @@ class Graph(PublicApi):
             self._scale_min_2nd = ymin
 
     def _post_compute(self):
+        """Hook called after compute and before margin computations and plot"""
         pass
 
     @property
     def all_series(self):
+        """Getter for all series (nomal and secondary)"""
         return self.series + self.secondary_series
 
     @property
@@ -721,7 +730,9 @@ class Graph(PublicApi):
     def _has_data(self):
         """Check if there is any data"""
         return any([
-            len([v for v in (
-                s[1] if is_list_like(s) else [s]) if v is not None])
+            len([v for a in (
+                s[1] if is_list_like(s) else [s])
+                 for v in (a if self._dual else [a])
+                 if v is not None])
             for s in self.raw_series
         ])

@@ -16,24 +16,29 @@
 #
 # You should have received a copy of the GNU Lesser General Public License
 # along with pygal. If not, see <http://www.gnu.org/licenses/>.
-"""
-Line chart
 
 """
+Line chart: Display series of data as markers (dots)
+connected by straight segments
+"""
+
 from __future__ import division
 from pygal.graph.graph import Graph
 from pygal.util import cached_property, compute_scale, decorate, alter
 
 
 class Line(Graph):
-    """Line graph"""
+
+    """Line graph class"""
 
     def __init__(self, *args, **kwargs):
+        """Set _self_close as False, it's True for Radar like Line"""
         self._self_close = False
         super(Line, self).__init__(*args, **kwargs)
 
     @cached_property
     def _values(self):
+        """Getter for series values (flattened)"""
         return [
             val[1]
             for serie in self.series
@@ -43,6 +48,7 @@ class Line(Graph):
 
     @cached_property
     def _secondary_values(self):
+        """Getter for secondary series values (flattened)"""
         return [
             val[1]
             for serie in self.secondary_series
@@ -132,6 +138,7 @@ class Line(Graph):
                 class_='line reactive' + (' nofill' if not serie.fill else ''))
 
     def _compute(self):
+        """Compute y min and max and y scale and set labels"""
         # X Labels
         x_pos = [
             x / (self._len - 1) for x in range(self._len)
@@ -171,6 +178,7 @@ class Line(Graph):
         self._y_labels = list(zip(map(self._format, y_pos), y_pos))
 
     def _plot(self):
+        """Plot the serie lines and secondary serie lines"""
         for serie in self.series:
             self.line(serie)
 

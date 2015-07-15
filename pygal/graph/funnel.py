@@ -16,10 +16,7 @@
 #
 # You should have received a copy of the GNU Lesser General Public License
 # along with pygal. If not, see <http://www.gnu.org/licenses/>.
-"""
-Funnel chart
-
-"""
+"""Funnel chart: Represent values as a funnel"""
 
 from __future__ import division
 from pygal.util import decorate, cut, compute_scale, alter
@@ -28,15 +25,18 @@ from pygal.graph.graph import Graph
 
 
 class Funnel(Graph):
-    """Funnel graph"""
+
+    """Funnel graph class"""
 
     _adapters = [positive, none_to_zero]
 
     def _format(self, value):
-        return super(Funnel, self)._format(abs(value))
+        """Return the value formatter for this graph here its absolute value"""
+        value = value and abs(value)
+        return super(Funnel, self)._format(value)
 
     def funnel(self, serie):
-        """Draw a dot line"""
+        """Draw a funnel slice"""
         serie_node = self.svg.serie(serie)
         fmt = lambda x: '%f %f' % x
         for i, poly in enumerate(serie.points):
@@ -60,6 +60,7 @@ class Funnel(Graph):
             self._static_value(serie_node, value, x, y)
 
     def _compute(self):
+        """Compute y min and max and y scale and set labels"""
         x_pos = [
             (x + 1) / self._order for x in range(self._order)
         ] if self._order != 1 else [.5]  # Center if only one value
@@ -94,5 +95,6 @@ class Funnel(Graph):
         self._y_labels = list(zip(map(self._format, y_pos), y_pos))
 
     def _plot(self):
+        """Plot the funnel"""
         for serie in self.series:
             self.funnel(serie)

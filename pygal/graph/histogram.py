@@ -17,18 +17,20 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with pygal. If not, see <http://www.gnu.org/licenses/>.
 """
-Histogram chart
-
+Histogram chart: like a bar chart but with data plotted along a x axis
+as bars of varying width.
 """
 
 from __future__ import division
+from pygal._compat import is_list_like
 from pygal.graph.graph import Graph
 from pygal.util import (
     swap, ident, compute_scale, decorate, cached_property, alter)
 
 
 class Histogram(Graph):
-    """Histogram chart"""
+
+    """Histogram chart class"""
 
     _dual = True
     _series_margin = 0
@@ -43,6 +45,7 @@ class Histogram(Graph):
 
     @cached_property
     def xvals(self):
+        """All x values"""
         return [val
                 for serie in self.all_series
                 for dval in serie.values
@@ -51,19 +54,14 @@ class Histogram(Graph):
 
     @cached_property
     def yvals(self):
+        """All y values"""
         return [val[0]
                 for serie in self.series
                 for val in serie.values
                 if val[0] is not None]
 
-    def _has_data(self):
-        """Check if there is any data"""
-        return sum(
-            map(len, map(lambda s: s.safe_values, self.series))) != 0 and any((
-                sum(map(abs, self.xvals)) != 0,
-                sum(map(abs, self.yvals)) != 0))
-
     def _bar(self, serie, parent, x0, x1, y, i, zero, secondary=False):
+        """Internal bar drawing function"""
         x, y = self.view((x0, y))
         x1, _ = self.view((x1, y))
         width = x1 - x
@@ -104,6 +102,7 @@ class Histogram(Graph):
             self._static_value(serie_node, val, x_center, y_center)
 
     def _compute(self):
+        """Compute x/y min and max and x/y scale and set labels"""
         if self.xvals:
             xmin = min(self.xvals)
             xmax = max(self.xvals)
@@ -139,6 +138,7 @@ class Histogram(Graph):
         self._y_labels = list(zip(map(self._format, y_pos), y_pos))
 
     def _plot(self):
+        """Draw bars for series and secondary series"""
         for serie in self.series:
             self.bar(serie)
         for serie in self.secondary_series:

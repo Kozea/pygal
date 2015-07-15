@@ -17,8 +17,8 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with pygal. If not, see <http://www.gnu.org/licenses/>.
 """
-Pie chart
-
+Pie chart: A circular chart divided into slice to illustrate proportions
+It can be made as a donut or a half pie.
 """
 
 from __future__ import division
@@ -29,7 +29,8 @@ from math import pi
 
 
 class Pie(Graph):
-    """Pie graph"""
+
+    """Pie graph class"""
 
     _adapters = [positive, none_to_zero]
 
@@ -94,6 +95,7 @@ class Pie(Graph):
         return serie_angle
 
     def _plot(self):
+        """Draw all the serie slices"""
         total = sum(map(sum, map(lambda x: x.values, self.series)))
         if total == 0:
             return
