@@ -33,7 +33,6 @@ def quadratic_interpolate(x, y, precision=250, **kwargs):
     Interpolate x, y using a quadratic algorithm
     https://en.wikipedia.org/wiki/Spline_(mathematics)
     """
-
     n = len(x) - 1
     delta_x = [x2 - x1 for x1, x2 in zip(x, x[1:])]
     delta_y = [y2 - y1 for y1, y2 in zip(y, y[1:])]

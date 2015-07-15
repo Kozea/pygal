@@ -16,9 +16,8 @@
 #
 # You should have received a copy of the GNU Lesser General Public License
 # along with pygal. If not, see <http://www.gnu.org/licenses/>.
-"""
-Charts styling
-"""
+"""Charts styling classes"""
+
 from __future__ import division
 from pygal.util import cycle_fill
 from pygal import colors
@@ -27,7 +26,9 @@ import sys
 
 
 class Style(object):
+
     """Styling class containing colors for the css generation"""
+
     def __init__(
             self,
             background='black',
@@ -45,6 +46,7 @@ class Style(object):
                 '#899ca1', '#f8f8f2', '#bf4646', '#516083', '#f92672',
                 '#82b414', '#fd971f', '#56c2d6', '#808384', '#8c54fe',
                 '#465457')):
+        """Create the style"""
         self.background = background
         self.plot_background = plot_background
         self.foreground = foreground
@@ -58,7 +60,6 @@ class Style(object):
 
     def get_colors(self, prefix, len_):
         """Get the css color list"""
-
         def color(tupl):
             """Make a color css"""
             return ((
@@ -75,6 +76,7 @@ class Style(object):
         return '\n'.join(map(color, enumerate(colors)))
 
     def to_dict(self):
+        """Convert instance to a serializable mapping."""
         config = {}
         for attr in dir(self):
             if not attr.startswith('__'):
@@ -296,10 +298,23 @@ for op in ('lighten', 'darken', 'saturate', 'desaturate', 'rotate'):
     name = op.capitalize() + 'Style'
 
     def get_style_for(op_name):
+        """
+        Return a callable that returns a Style instance
+        for the given operation
+        """
         operation = getattr(colors, op_name)
 
         def parametric_style(color, step=10, max_=None, base_style=None,
                              **kwargs):
+            """
+            Generate a parametric Style instance of the parametric operation
+            This takes several parameters:
+             * a `step` which correspond on how many colors will be needed
+             * a `max_` which defines the maximum amplitude of the color effect
+             * a `base_style` which will be taken as default for everything
+               except colors
+             * any keyword arguments setting other style parameters
+            """
             if max_ is None:
                 violency = {
                     'darken': 50,

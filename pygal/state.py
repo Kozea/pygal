@@ -16,14 +16,20 @@
 #
 # You should have received a copy of the GNU Lesser General Public License
 # along with pygal. If not, see <http://www.gnu.org/licenses/>.
-"""
-Class holding state during render
 
-"""
+"""Class holding state during render"""
 
 
 class State(object):
+
+    """
+    Class containing config values
+    overriden by chart values
+    overriden by keyword args
+    """
+
     def __init__(self, graph, **kwargs):
+        """Create the transient state"""
         self.__dict__.update(**graph.config.__dict__)
         self.__dict__.update(**graph.__dict__)
         self.__dict__.update(**kwargs)

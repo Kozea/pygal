@@ -119,9 +119,10 @@ def parse_color(color):
 
 
 def unparse_color(r, g, b, a, type):
-    """Take the r, g, b, a color values and give back
-    a type css color string. This is the inverse function of parse_color"""
-
+    """
+    Take the r, g, b, a color values and give back
+    a type css color string. This is the inverse function of parse_color
+    """
     if type == '#rgb':
         # Don't lose precision on rgb shortcut
         if r % 17 == 0 and g % 17 == 0 and b % 17 == 0:
@@ -168,7 +169,7 @@ def adjust(color, attribute, percent):
 
 
 def rotate(color, percent):
-    """Rotates a color by changing its hue value by percent"""
+    """Rotate a color by changing its hue value by percent"""
     return adjust(color, 0, percent)
 
 

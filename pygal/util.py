@@ -16,10 +16,9 @@
 #
 # You should have received a copy of the GNU Lesser General Public License
 # along with pygal. If not, see <http://www.gnu.org/licenses/>.
-"""
-Various utils
 
-"""
+"""Various utility functions"""
+
 from __future__ import division
 from pygal._compat import u, is_list_like, to_unicode
 import re
@@ -250,6 +249,7 @@ def decorate(svg, node, metadata):
 
 
 def alter(node, metadata):
+    """Override nodes attributes from metadata node mapping"""
     if node is not None and metadata and 'node' in metadata:
         node.attrib.update(
             dict((k, str(v)) for k, v in metadata['node'].items()))
@@ -273,14 +273,21 @@ def truncate(string, index):
 
 # # Stolen partly from brownie http://packages.python.org/Brownie/
 class cached_property(object):
-    """Optimize a static property"""
+
+    """Memoize a property"""
+
     def __init__(self, getter, doc=None):
+        """Initialize the decorator"""
         self.getter = getter
         self.__module__ = getter.__module__
         self.__name__ = getter.__name__
         self.__doc__ = doc or getter.__doc__
 
     def __get__(self, obj, type_=None):
+        """
+        Get descriptor calling the property function and replacing it with
+        its value or on state if we are in the transient state.
+        """
         if obj is None:
             return self
         value = self.getter(obj)
@@ -294,6 +301,7 @@ css_comments = re.compile(r'/\*.*?\*/', re.MULTILINE | re.DOTALL)
 
 
 def minify_css(css):
+    """Little css minifier"""
     # Inspired by slimmer by Peter Bengtsson
     remove_next_comment = 1
     for css_comment in css_comments.findall(css):
@@ -328,12 +336,14 @@ def compose(f, g):
 
 
 def safe_enumerate(iterable):
+    """Enumerate which does not yield None values"""
     for i, v in enumerate(iterable):
         if v is not None:
             yield i, v
 
 
 def split_title(title, width, title_fs):
+    """Split a string for a specified width and font size"""
     titles = []
     if not title:
         return titles

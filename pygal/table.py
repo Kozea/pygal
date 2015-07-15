@@ -17,8 +17,9 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with pygal. If not, see <http://www.gnu.org/licenses/>.
 """
-Table maker
+HTML Table maker.
 
+This class is used to render an html table from a chart data.
 """
 
 from pygal.util import template
@@ -27,18 +28,32 @@ import uuid
 
 
 class HTML(object):
+
+    """Lower case adapter of lxml builder"""
+
     def __getattribute__(self, attr):
+        """Get the uppercase builder attribute"""
         return getattr(builder, attr.upper())
 
 
 class Table(object):
+
+    """Table generator class"""
+
     _dual = None
 
     def __init__(self, chart):
-        "Init the table"
+        """Init the table"""
         self.chart = chart
 
     def render(self, total=False, transpose=False, style=False):
+        """Render the HTMTL table of the chart.
+
+        `total` can be specified to include data sums
+        `transpose` make labels becomes columns
+        `style` include scoped style for the table
+
+        """
         self.chart.setup()
         ln = self.chart._len
         fmt = self.chart._format

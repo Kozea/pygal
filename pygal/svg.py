@@ -16,10 +16,8 @@
 #
 # You should have received a copy of the GNU Lesser General Public License
 # along with pygal. If not, see <http://www.gnu.org/licenses/>.
-"""
-Svg helper
 
-"""
+"""Svg helper"""
 
 from __future__ import division
 from pygal._compat import to_str, u
@@ -35,11 +33,14 @@ from pygal import __version__
 
 
 class Svg(object):
-    """Svg object"""
+
+    """Svg related methods"""
+
     ns = 'http://www.w3.org/2000/svg'
     xlink_ns = 'http://www.w3.org/1999/xlink'
 
     def __init__(self, graph):
+        """Create the svg helper with the chart instance"""
         self.graph = graph
         if not graph.no_prefix:
             self.id = '#chart-%s ' % graph.uuid
@@ -98,7 +99,9 @@ class Svg(object):
                             os.path.dirname(__file__), 'css', css)
 
                     class FontSizes(object):
+
                         """Container for font sizes"""
+
                     fs = FontSizes()
                     for name in dir(self.graph.state):
                         if name.endswith('_font_size'):
@@ -286,6 +289,7 @@ class Svg(object):
             self.root.set('height', str(self.graph.height))
 
     def draw_no_data(self):
+        """Write the no data text to the svg"""
         no_data = self.node(self.graph.nodes['text_overlay'], 'text',
                             x=self.graph.view.width / 2,
                             y=self.graph.view.height / 2,
@@ -314,7 +318,9 @@ class Svg(object):
         return svg
 
     def get_strokes(self):
+        """Return a css snippet containing all stroke style options"""
         def stroke_dict_to_css(stroke, i=None):
+            """Return a css style for the given option"""
             css = ['%s.series%s {\n' % (
                 self.id, '.serie-%d' % i if i is not None else '')]
             for key in ('width', 'linejoin', 'linecap',

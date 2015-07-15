@@ -16,16 +16,16 @@
 #
 # You should have received a copy of the GNU Lesser General Public License
 # along with pygal. If not, see <http://www.gnu.org/licenses/>.
-"""
-Little helpers for series
-
-"""
+"""Serie property holder"""
 from pygal.util import cached_property
 
 
 class Serie(object):
-    """Serie containing title, values and the graph serie index"""
+
+    """Serie class containing title, values and the graph serie index"""
+
     def __init__(self, index, title, values, config, metadata=None):
+        """Create the serie with its options"""
         self.index = index
         self.title = title
         self.values = values
@@ -35,4 +35,5 @@ class Serie(object):
 
     @cached_property
     def safe_values(self):
+        """Property containing all values that are not None"""
         return list(filter(lambda x: x is not None, self.values))

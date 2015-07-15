@@ -16,10 +16,8 @@
 #
 # You should have received a copy of the GNU Lesser General Public License
 # along with pygal. If not, see <http://www.gnu.org/licenses/>.
+"""Config module holding all options and their default values."""
 
-"""
-Config module holding all options and their default values.
-"""
 from copy import deepcopy
 from pygal.style import Style, DefaultStyle
 from pygal.interpolate import INTERPOLATIONS
@@ -29,6 +27,7 @@ CONFIG_ITEMS = []
 
 
 class Key(object):
+
     """
     Represents a config parameter.
 
@@ -45,7 +44,7 @@ class Key(object):
     def __init__(
             self, default_value, type_, category, doc,
             subdoc="", subtype=None):
-
+        """Create a configuration key"""
         self.value = default_value
         self.type = type_
         self.doc = doc
@@ -59,6 +58,10 @@ class Key(object):
         CONFIG_ITEMS.append(self)
 
     def __repr__(self):
+        """
+        Make a documentation repr.
+        This is a hack to generate doc from inner doc
+        """
         return """
         Type: %s%s     
         Default: %r     
@@ -120,10 +123,11 @@ class Key(object):
 
 
 class MetaConfig(type):
-    """
-    Metaclass for configs. Used to get the key name and set it on the value.
-    """
+
+    """Config metaclass. Used to get the key name and set it on the value."""
+
     def __new__(mcs, classname, bases, classdict):
+        """Get the name of the key and set it on the key"""
         for k, v in classdict.items():
             if isinstance(v, Key):
                 v.name = k
@@ -132,6 +136,7 @@ class MetaConfig(type):
 
 
 class BaseConfig(MetaConfig('ConfigBase', (object,), {})):
+
     """
     This class holds the common method for configs.
 
@@ -159,7 +164,7 @@ class BaseConfig(MetaConfig('ConfigBase', (object,), {})):
         self._update(kwargs)
 
     def _update(self, kwargs):
-        """Updates the config with the given dictionary"""
+        """Update the config with the given dictionary"""
         self.__dict__.update(
             dict([(k, v) for (k, v) in kwargs.items()
                   if not k.startswith('_') and k in dir(self)]))
@@ -182,6 +187,7 @@ class BaseConfig(MetaConfig('ConfigBase', (object,), {})):
 
 
 class CommonConfig(BaseConfig):
+
     """Class holding options used in both chart and serie configuration"""
 
     stroke = Key(
@@ -213,6 +219,7 @@ class CommonConfig(BaseConfig):
 
 
 class Config(CommonConfig):
+
     """Class holding config values"""
 
     style = Key(
@@ -496,6 +503,7 @@ class Config(CommonConfig):
 
 
 class SerieConfig(CommonConfig):
+
     """Class holding serie config values"""
 
     secondary = Key(
