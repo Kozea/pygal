@@ -182,6 +182,8 @@ class BaseGraph(object):
         if getattr(self, 'y_labels', None) is not None:
             self.y_labels = list(self.y_labels)
         self.state = State(self, **kwargs)
+        if isinstance(self.style, type):
+            self.style = self.style()
         self.series = self.prepare_values(
             self.raw_series) or []
         self.secondary_series = self.prepare_values(

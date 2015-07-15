@@ -30,6 +30,13 @@ import random
 import pickle
 
 
+def get(type):
+    from importlib import import_module
+    module = '.'.join(type.split('.')[:-1])
+    name = type.split('.')[-1]
+    return getattr(import_module(module), name)
+
+
 def random_label():
     chars = string.ascii_letters + string.digits + u' àéèçêâäëï'
     return ''.join(
@@ -98,10 +105,7 @@ def create_app():
 
     @app.route("/svg/<type>/<series>/<config>")
     def svg(type, series, config):
-        module = '.'.join(type.split('.')[:-1])
-        name = type.split('.')[-1]
-        from importlib import import_module
-        graph = getattr(import_module(module), name)(
+        graph = get(type)(
             pickle.loads(b64decode(str(config))))
         for title, values in pickle.loads(b64decode(str(series))):
             graph.add(title, values)
@@ -109,7 +113,7 @@ def create_app():
 
     @app.route("/table/<type>/<series>/<config>")
     def table(type, series, config):
-        graph = getattr(pygal, type)(pickle.loads(b64decode(str(config))))
+        graph = get(type)(pickle.loads(b64decode(str(config))))
         for title, values in pickle.loads(b64decode(str(series))):
             graph.add(title, values)
         return graph.render_table()
@@ -186,6 +190,7 @@ def create_app():
         else:
             style = parametric_styles[style](
                 color, base_style=styles[base_style or 'default'])
+
         xy_series = _random(data, order)
         other_series = []
         for title, values in xy_series:
@@ -234,7 +239,7 @@ def create_app():
             config.title = "%d rotation" % angle
             config.x_labels = labels
             config.x_label_rotation = angle
-            svgs.append({'type': 'Bar',
+            svgs.append({'type': 'pygal.Bar',
                          'series': series,
                          'config': b64encode(pickle.dumps(config))})
 
@@ -258,7 +263,7 @@ def create_app():
         for interpolation in 'quadratic', 'cubic', 'lagrange', 'trigonometric':
             config.title = "%s interpolation" % interpolation
             config.interpolate = interpolation
-            svgs.append({'type': 'StackedLine',
+            svgs.append({'type': 'pygal.StackedLine',
                          'series': series,
                          'config': b64encode(pickle.dumps(config))})
 
@@ -282,7 +287,7 @@ def create_app():
             config.title = "Hermite interpolation with params %r" % params
             config.interpolate = 'hermite'
             config.interpolation_parameters = params
-            svgs.append({'type': 'StackedLine',
+            svgs.append({'type': 'pygal.StackedLine',
                          'series': series,
                          'config': b64encode(pickle.dumps(config))})
 

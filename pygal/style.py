@@ -22,41 +22,48 @@ from __future__ import division
 from pygal.util import cycle_fill
 from pygal import colors
 from pygal.colors import darken, lighten
-import sys
 
 
 class Style(object):
 
     """Styling class containing colors for the css generation"""
 
-    def __init__(
-            self,
-            background='black',
-            plot_background='#111',
-            foreground='#999',
-            foreground_light='#eee',
-            foreground_dark='#555',
-            font_family='monospace',  # Monospaced font is highly encouraged
-            opacity='.8',
-            opacity_hover='.9',
-            transition='250ms',
-            colors=(
-                '#ff5995', '#b6e354', '#feed6c', '#8cedff', '#9e6ffe',
+    plot_background = 'rgba(255, 255, 255, 1)'
+    background = 'rgba(249, 249, 249, 1)'
+    foreground = 'rgba(0, 0, 0, .87)'
+    foreground_strong = 'rgba(0, 0, 0, 1)'
+    foreground_subtle = 'rgba(0, 0, 0, .54)'
+    # Monospaced font is highly encouraged
+    font_family = 'Consolas, "Liberation Mono", Menlo, Courier, '
+    'monospace'
+    opacity = '.7'
+    opacity_hover = '.8'
+    transition = '150ms'
+    colors = (
+        '#F44336',  # 0
+        '#3F51B5',  # 4
+        '#009688',  # 8
+        '#FFC107',  # 13
+        '#FF5722',  # 15
+        '#9C27B0',  # 2
+        '#03A9F4',  # 6
+        '#8BC34A',  # 10
+        '#FF9800',  # 14
+        '#E91E63',  # 1
+        '#2196F3',  # 5
+        '#4CAF50',  # 9
+        '#FFEB3B',  # 12
+        '#673AB7',  # 3
+        '#00BCD4',  # 7
+        '#CDDC39',  # 11
+        '#795548',  # 16
+        '#9E9E9E',  # 17
+        '#607D8B',  # 18
+    )
 
-                '#899ca1', '#f8f8f2', '#bf4646', '#516083', '#f92672',
-                '#82b414', '#fd971f', '#56c2d6', '#808384', '#8c54fe',
-                '#465457')):
+    def __init__(self, **kwargs):
         """Create the style"""
-        self.background = background
-        self.plot_background = plot_background
-        self.foreground = foreground
-        self.foreground_light = foreground_light
-        self.foreground_dark = foreground_dark
-        self.font_family = font_family
-        self.opacity = opacity
-        self.opacity_hover = opacity_hover
-        self.transition = transition
-        self.colors = colors
+        self.__dict__.update(kwargs)
 
     def get_colors(self, prefix, len_):
         """Get the css color list"""
@@ -86,194 +93,249 @@ class Style(object):
         return config
 
 
-DefaultStyle = Style(opacity_hover='.4', opacity='.8')
+DefaultStyle = Style
 
 
-LightStyle = Style(
-    background='white',
-    plot_background='rgba(0, 0, 255, 0.1)',
-    foreground='rgba(0, 0, 0, 0.7)',
-    foreground_light='rgba(0, 0, 0, 0.9)',
-    foreground_dark='rgba(0, 0, 0, 0.5)',
-    colors=('#242424', '#9f6767', '#92ac68',
-            '#d0d293', '#9aacc3', '#bb77a4',
-            '#77bbb5', '#777777'))
+class DarkStyle(Style):
+
+    """A dark style (old default)"""
+
+    background = 'black'
+    plot_background = '#111'
+    foreground = '#999'
+    foreground_strong = '#eee'
+    foreground_subtle = '#555'
+    opacity = '.8'
+    opacity_hover = '.4'
+    transition = '250ms'
+    colors = (
+        '#ff5995', '#b6e354', '#feed6c', '#8cedff', '#9e6ffe',
+        '#899ca1', '#f8f8f2', '#bf4646', '#516083', '#f92672',
+        '#82b414', '#fd971f', '#56c2d6', '#808384', '#8c54fe',
+        '#465457')
 
 
-NeonStyle = Style(
-    opacity='.1',
-    opacity_hover='.75',
-    transition='1s ease-out')
+class LightStyle(Style):
+
+    """A light style"""
+
+    background = 'white'
+    plot_background = 'rgba(0, 0, 255, 0.1)'
+    foreground = 'rgba(0, 0, 0, 0.7)'
+    foreground_strong = 'rgba(0, 0, 0, 0.9)'
+    foreground_subtle = 'rgba(0, 0, 0, 0.5)'
+    colors = ('#242424', '#9f6767', '#92ac68',
+              '#d0d293', '#9aacc3', '#bb77a4',
+              '#77bbb5', '#777777')
 
 
-CleanStyle = Style(
-    background='transparent',
-    plot_background='rgba(240, 240, 240, 0.7)',
-    foreground='rgba(0, 0, 0, 0.9)',
-    foreground_light='rgba(0, 0, 0, 0.9)',
-    foreground_dark='rgba(0, 0, 0, 0.5)',
-    colors=(
+class NeonStyle(DarkStyle):
+
+    """Similar to DarkStyle but with more opacity and effects"""
+
+    opacity = '.1'
+    opacity_hover = '.75'
+    transition = '1s ease-out'
+
+
+class CleanStyle(Style):
+
+    """A rather clean style"""
+
+    background = 'transparent'
+    plot_background = 'rgba(240, 240, 240, 0.7)'
+    foreground = 'rgba(0, 0, 0, 0.9)'
+    foreground_strong = 'rgba(0, 0, 0, 0.9)'
+    foreground_subtle = 'rgba(0, 0, 0, 0.5)'
+    colors = (
         'rgb(12,55,149)', 'rgb(117,38,65)', 'rgb(228,127,0)', 'rgb(159,170,0)',
-        'rgb(149,12,12)'))
+        'rgb(149,12,12)')
 
 
-solarized_colors = (
-    '#b58900', '#cb4b16', '#dc322f', '#d33682',
-    '#6c71c4', '#268bd2', '#2aa198', '#859900')
+class DarkSolarizedStyle(Style):
+
+    """Dark solarized popular theme"""
+
+    background = '#073642'
+    plot_background = '#002b36'
+    foreground = '#839496'
+    foreground_strong = '#fdf6e3'
+    foreground_subtle = '#657b83'
+    opacity = '.66'
+    opacity_hover = '.9'
+    transition = '500ms ease-in'
+    colors = (
+        '#b58900', '#cb4b16', '#dc322f', '#d33682',
+        '#6c71c4', '#268bd2', '#2aa198', '#859900')
 
 
-DarkSolarizedStyle = Style(
-    background='#073642',
-    plot_background='#002b36',
-    foreground='#839496',
-    foreground_light='#fdf6e3',
-    foreground_dark='#657b83',
-    opacity='.66',
-    opacity_hover='.9',
-    transition='500ms ease-in',
-    colors=solarized_colors)
+class LightSolarizedStyle(DarkSolarizedStyle):
+
+    """Light solarized popular theme"""
+
+    background = '#fdf6e3'
+    plot_background = '#eee8d5'
+    foreground = '#657b83'
+    foreground_strong = '#073642'
+    foreground_subtle = '#073642'
 
 
-LightSolarizedStyle = Style(
-    background='#fdf6e3',
-    plot_background='#eee8d5',
-    foreground='#657b83',
-    foreground_light='#073642',
-    foreground_dark='#073642',
-    opacity='.6',
-    opacity_hover='.9',
-    transition='500ms ease-in',
-    colors=solarized_colors)
+class RedBlueStyle(Style):
 
+    """A red and blue theme"""
 
-RedBlueStyle = Style(
-    background=lighten('#e6e7e9', 7),
-    plot_background=lighten('#e6e7e9', 10),
-    foreground='rgba(0, 0, 0, 0.9)',
-    foreground_light='rgba(0, 0, 0, 0.9)',
-    foreground_dark='rgba(0, 0, 0, 0.5)',
-    opacity='.6',
-    opacity_hover='.9',
-    colors=(
+    background = lighten('#e6e7e9', 7)
+    plot_background = lighten('#e6e7e9', 10)
+    foreground = 'rgba(0, 0, 0, 0.9)'
+    foreground_strong = 'rgba(0, 0, 0, 0.9)'
+    foreground_subtle = 'rgba(0, 0, 0, 0.5)'
+    opacity = '.6'
+    opacity_hover = '.9'
+    colors = (
         '#d94e4c', '#e5884f', '#39929a',
         lighten('#d94e4c', 10),  darken('#39929a', 15), lighten('#e5884f', 17),
-        darken('#d94e4c', 10), '#234547'))
+        darken('#d94e4c', 10), '#234547')
 
 
-LightColorizedStyle = Style(
-    background='#f8f8f8',
-    plot_background=lighten('#f8f8f8', 3),
-    foreground='#333',
-    foreground_light='#666',
-    foreground_dark='rgba(0, 0 , 0, 0.5)',
-    opacity='.5',
-    opacity_hover='.9',
-    transition='250ms ease-in',
-    colors=(
+class LightColorizedStyle(Style):
+
+    """A light colorized style"""
+
+    background = '#f8f8f8'
+    plot_background = lighten('#f8f8f8', 3)
+    foreground = '#333'
+    foreground_strong = '#666'
+    foreground_subtle = 'rgba(0, 0 , 0, 0.5)'
+    opacity = '.5'
+    opacity_hover = '.9'
+    transition = '250ms ease-in'
+    colors = (
         '#fe9592', '#534f4c', '#3ac2c0', '#a2a7a1',
         darken('#fe9592', 15), lighten('#534f4c', 15), lighten('#3ac2c0', 15),
-        lighten('#a2a7a1', 15), lighten('#fe9592', 15), darken('#3ac2c0', 10)))
+        lighten('#a2a7a1', 15), lighten('#fe9592', 15), darken('#3ac2c0', 10))
 
 
-DarkColorizedStyle = Style(
-    background=darken('#3a2d3f', 5),
-    plot_background=lighten('#3a2d3f', 2),
-    foreground='rgba(255, 255, 255, 0.9)',
-    foreground_light='rgba(255, 255, 255, 0.9)',
-    foreground_dark='rgba(255, 255 , 255, 0.5)',
-    opacity='.2',
-    opacity_hover='.7',
-    transition='250ms ease-in',
-    colors=(
+class DarkColorizedStyle(Style):
+
+    """A dark colorized style"""
+
+    background = darken('#3a2d3f', 5)
+    plot_background = lighten('#3a2d3f', 2)
+    foreground = 'rgba(255, 255, 255, 0.9)'
+    foreground_strong = 'rgba(255, 255, 255, 0.9)'
+    foreground_subtle = 'rgba(255, 255 , 255, 0.5)'
+    opacity = '.2'
+    opacity_hover = '.7'
+    transition = '250ms ease-in'
+    colors = (
         '#c900fe', '#01b8fe', '#59f500', '#ff00e4', '#f9fa00',
         darken('#c900fe', 20), darken('#01b8fe', 15), darken('#59f500', 20),
-        darken('#ff00e4', 15), lighten('#f9fa00', 20)))
+        darken('#ff00e4', 15), lighten('#f9fa00', 20))
 
 
-TurquoiseStyle = Style(
-    background=darken('#1b8088', 15),
-    plot_background=darken('#1b8088', 17),
-    foreground='rgba(255, 255, 255, 0.9)',
-    foreground_light='rgba(255, 255, 255, 0.9)',
-    foreground_dark='rgba(255, 255 , 255, 0.5)',
-    opacity='.5',
-    opacity_hover='.9',
-    transition='250ms ease-in',
-    colors=(
+class TurquoiseStyle(Style):
+
+    """A turquoise style"""
+
+    background = darken('#1b8088', 15)
+    plot_background = darken('#1b8088', 17)
+    foreground = 'rgba(255, 255, 255, 0.9)'
+    foreground_strong = 'rgba(255, 255, 255, 0.9)'
+    foreground_subtle = 'rgba(255, 255 , 255, 0.5)'
+    opacity = '.5'
+    opacity_hover = '.9'
+    transition = '250ms ease-in'
+    colors = (
         '#93d2d9', '#ef940f', '#8C6243', '#fff',
         darken('#93d2d9', 20),  lighten('#ef940f', 15),
-        lighten('#8c6243', 15), '#1b8088'))
+        lighten('#8c6243', 15), '#1b8088')
 
 
-LightGreenStyle = Style(
-    background=lighten('#f3f3f3', 3),
-    plot_background='#fff',
-    foreground='#333333',
-    foreground_light='#666',
-    foreground_dark='#222222',
-    opacity='.5',
-    opacity_hover='.9',
-    transition='250ms ease-in',
-    colors=(
+class LightGreenStyle(Style):
+
+    """A light green style"""
+
+    background = lighten('#f3f3f3', 3)
+    plot_background = '#fff'
+    foreground = '#333333'
+    foreground_strong = '#666'
+    foreground_subtle = '#222222'
+    opacity = '.5'
+    opacity_hover = '.9'
+    transition = '250ms ease-in'
+    colors = (
         '#7dcf30', '#247fab', lighten('#7dcf30', 10), '#ccc',
         darken('#7dcf30', 15), '#ddd', lighten('#247fab', 10),
-        darken('#247fab', 15)))
+        darken('#247fab', 15))
 
 
-DarkGreenStyle = Style(
-    background=darken('#251e01', 3),
-    plot_background=darken('#251e01', 1),
-    foreground='rgba(255, 255, 255, 0.9)',
-    foreground_light='rgba(255, 255, 255, 0.9)',
-    foreground_dark='rgba(255, 255, 255, 0.6)',
-    opacity='.6',
-    opacity_hover='.9',
-    transition='250ms ease-in',
-    colors=(
+class DarkGreenStyle(Style):
+
+    """A dark green style"""
+
+    background = darken('#251e01', 3)
+    plot_background = darken('#251e01', 1)
+    foreground = 'rgba(255, 255, 255, 0.9)'
+    foreground_strong = 'rgba(255, 255, 255, 0.9)'
+    foreground_subtle = 'rgba(255, 255, 255, 0.6)'
+    opacity = '.6'
+    opacity_hover = '.9'
+    transition = '250ms ease-in'
+    colors = (
         '#adde09', '#6e8c06', '#4a5e04', '#fcd202', '#C1E34D',
-        lighten('#fcd202', 25)))
+        lighten('#fcd202', 25))
 
 
-DarkGreenBlueStyle = Style(
-    background='#000',
-    plot_background=lighten('#000', 8),
-    foreground='rgba(255, 255, 255, 0.9)',
-    foreground_light='rgba(255, 255, 255, 0.9)',
-    foreground_dark='rgba(255, 255, 255, 0.6)',
-    opacity='.55',
-    opacity_hover='.9',
-    transition='250ms ease-in',
-    colors=(lighten('#34B8F7', 15), '#7dcf30', '#247fab',
-            darken('#7dcf30', 10), lighten('#247fab', 10),
-            lighten('#7dcf30', 10), darken('#247fab', 10), '#fff'))
+class DarkGreenBlueStyle(Style):
+
+    """A dark green and blue style"""
+
+    background = '#000'
+    plot_background = lighten('#000', 8)
+    foreground = 'rgba(255, 255, 255, 0.9)'
+    foreground_strong = 'rgba(255, 255, 255, 0.9)'
+    foreground_subtle = 'rgba(255, 255, 255, 0.6)'
+    opacity = '.55'
+    opacity_hover = '.9'
+    transition = '250ms ease-in'
+    colors = (lighten('#34B8F7', 15), '#7dcf30', '#247fab',
+              darken('#7dcf30', 10), lighten('#247fab', 10),
+              lighten('#7dcf30', 10), darken('#247fab', 10), '#fff')
 
 
-BlueStyle = Style(
-    background=darken('#f8f8f8', 3),
-    plot_background='#f8f8f8',
-    foreground='rgba(0, 0, 0, 0.9)',
-    foreground_light='rgba(0, 0, 0, 0.9)',
-    foreground_dark='rgba(0, 0, 0, 0.6)',
-    opacity='.5',
-    opacity_hover='.9',
-    transition='250ms ease-in',
-    colors=(
+class BlueStyle(Style):
+
+    """A blue style"""
+
+    background = darken('#f8f8f8', 3)
+    plot_background = '#f8f8f8'
+    foreground = 'rgba(0, 0, 0, 0.9)'
+    foreground_strong = 'rgba(0, 0, 0, 0.9)'
+    foreground_subtle = 'rgba(0, 0, 0, 0.6)'
+    opacity = '.5'
+    opacity_hover = '.9'
+    transition = '250ms ease-in'
+    colors = (
         '#00b2f0', '#43d9be', '#0662ab', darken('#00b2f0', 20),
         lighten('#43d9be', 20), lighten('#7dcf30', 10), darken('#0662ab', 15),
-        '#ffd541', '#7dcf30', lighten('#00b2f0', 15), darken('#ffd541', 20)))
+        '#ffd541', '#7dcf30', lighten('#00b2f0', 15), darken('#ffd541', 20))
 
 
-SolidColorStyle = Style(
-    background='#FFFFFF',
-    plot_background='#FFFFFF',
-    foreground='#000000',
-    foreground_light='#000000',
-    foreground_dark='#828282',
-    opacity='.8',
-    opacity_hover='.9',
-    transition='400ms ease-in',
-    colors=('#FF9900', '#DC3912', '#4674D1', '#109618', '#990099',
-            '#0099C6', '#DD4477', '#74B217', '#B82E2E', '#316395', '#994499'))
+class SolidColorStyle(Style):
+
+    """A light style with strong colors"""
+
+    background = '#FFFFFF'
+    plot_background = '#FFFFFF'
+    foreground = '#000000'
+    foreground_strong = '#000000'
+    foreground_subtle = '#828282'
+    opacity = '.8'
+    opacity_hover = '.9'
+    transition = '400ms ease-in'
+    colors = (
+        '#FF9900', '#DC3912', '#4674D1', '#109618', '#990099',
+        '#0099C6', '#DD4477', '#74B217', '#B82E2E', '#316395', '#994499')
 
 
 styles = {'default': DefaultStyle,
@@ -293,55 +355,92 @@ styles = {'default': DefaultStyle,
           'solid_color': SolidColorStyle}
 
 
-parametric_styles = {}
-for op in ('lighten', 'darken', 'saturate', 'desaturate', 'rotate'):
-    name = op.capitalize() + 'Style'
+class ParametricStyleBase(Style):
 
-    def get_style_for(op_name):
+    """Parametric Style base class for all the parametric operations"""
+
+    _op = None
+
+    def __init__(self, color, step=10, max_=None, base_style=None, **kwargs):
         """
-        Return a callable that returns a Style instance
-        for the given operation
+        Initialization of the parametric style.
+
+        This takes several parameters:
+          * a `step` which correspond on how many colors will be needed
+          * a `max_` which defines the maximum amplitude of the color effect
+          * a `base_style` which will be taken as default for everything
+            except colors
+          * any keyword arguments setting other style parameters
         """
-        operation = getattr(colors, op_name)
 
-        def parametric_style(color, step=10, max_=None, base_style=None,
-                             **kwargs):
-            """
-            Generate a parametric Style instance of the parametric operation
-            This takes several parameters:
-             * a `step` which correspond on how many colors will be needed
-             * a `max_` which defines the maximum amplitude of the color effect
-             * a `base_style` which will be taken as default for everything
-               except colors
-             * any keyword arguments setting other style parameters
-            """
-            if max_ is None:
-                violency = {
-                    'darken': 50,
-                    'lighten': 50,
-                    'saturate': 100,
-                    'desaturate': 100,
-                    'rotate': 360
-                }
-                max__ = violency[op_name]
-            else:
-                max__ = max_
+        if self._op is None:
+            raise RuntimeError('ParametricStyle is not instanciable')
 
-            def modifier(index):
-                percent = max__ * index / (step - 1)
-                return operation(color, percent)
+        defaults = {}
+        if base_style is not None:
+            if isinstance(base_style, type):
+                base_style = base_style()
+            defaults.update(base_style.to_dict())
+        defaults.update(kwargs)
 
-            colors = list(map(modifier, range(0, max(2, step))))
+        super(ParametricStyleBase, self).__init__(**defaults)
 
-            if base_style is None:
-                return Style(colors=colors, **kwargs)
-            opts = dict(base_style.__dict__)
-            opts.update({'colors': colors})
-            opts.update(kwargs)
-            return Style(**opts)
+        if max_ is None:
+            violency = {
+                'darken': 50,
+                'lighten': 50,
+                'saturate': 100,
+                'desaturate': 100,
+                'rotate': 360
+            }
+            max_ = violency[self._op]
 
-        return parametric_style
+        def modifier(index):
+            percent = max_ * index / (step - 1)
+            return getattr(colors, self._op)(color, percent)
 
-    style = get_style_for(op)
-    parametric_styles[name] = style
-    setattr(sys.modules[__name__], name, style)
+        self.colors = list(map(modifier, range(0, max(2, step))))
+
+
+class LightenStyle(ParametricStyleBase):
+
+    """Create a style by lightening the given color"""
+
+    _op = 'lighten'
+
+
+class DarkenStyle(ParametricStyleBase):
+
+    """Create a style by darkening the given color"""
+
+    _op = 'darken'
+
+
+class SaturateStyle(ParametricStyleBase):
+
+    """Create a style by saturating the given color"""
+
+    _op = 'saturate'
+
+
+class DesaturateStyle(ParametricStyleBase):
+
+    """Create a style by desaturating the given color"""
+
+    _op = 'desaturate'
+
+
+class RotateStyle(ParametricStyleBase):
+
+    """Create a style by rotating the given color"""
+
+    _op = 'rotate'
+
+
+parametric_styles = {
+    'lighten': LightenStyle,
+    'darken': DarkenStyle,
+    'saturate': SaturateStyle,
+    'desaturate': DesaturateStyle,
+    'rotate': RotateStyle
+}

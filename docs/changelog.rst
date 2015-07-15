@@ -28,6 +28,8 @@ Changelog
 * Remove stroke style in style and set it as a global / serie configuration.
 * Fix None values in tables
 * Fix timezones in DateTimeLine
+* Rename in Style foreground_light as foreground_strong
+* Rename in Style foreground_dark as foreground_subtle
 
 1.7.0
 =====

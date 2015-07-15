@@ -22,6 +22,11 @@
  * Font-sizes from config, override with care
  */
 
+{{ id }}.graph {
+  -webkit-user-select: none;
+  -webkit-font-smoothing: antialiased;
+}
+
 {{ id }}.title {
   font-family: {{ style.font_family }};
   font-size: {{ font_sizes.title }};

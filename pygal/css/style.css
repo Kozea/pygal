@@ -48,11 +48,11 @@
 }
 
 {{ id }}text.no_data {
-  fill: {{ style.foreground_light }};
+  fill: {{ style.foreground_strong }};
 }
 
 {{ id }}.title {
-  fill: {{ style.foreground_light }};
+  fill: {{ style.foreground_strong }};
 }
 
 {{ id }}.legends .legend text {
@@ -60,15 +60,15 @@
 }
 
 {{ id }}.legends .legend:hover text {
-  fill: {{ style.foreground_light }};
+  fill: {{ style.foreground_strong }};
 }
 
 {{ id }}.axis .line {
-  stroke: {{ style.foreground_light }};
+  stroke: {{ style.foreground_strong }};
 }
 
 {{ id }}.axis .guide.line {
-  stroke: {{ style.foreground_dark }};
+  stroke: {{ style.foreground_subtle }};
 }
 
 {{ id }}.axis .major.line {
@@ -76,18 +76,18 @@
 }
 
 {{ id }}.axis text.major {
-  fill: {{ style.foreground_light }};
+  fill: {{ style.foreground_strong }};
 }
 
 {{ id }}.axis.y .guides:hover .guide.line,
 {{ id }}.line-graph .axis.x .guides:hover .guide.line,
 {{ id }}.stackedline-graph .axis.x .guides:hover .guide.line,
 {{ id }}.xy-graph .axis.x .guides:hover .guide.line {
-  stroke: {{ style.foreground_light }};
+  stroke: {{ style.foreground_strong }};
 }
 
 {{ id }}.axis .guides:hover text {
-  fill: {{ style.foreground_light }};
+  fill: {{ style.foreground_strong }};
 }
 
 {{ id }}.reactive {
@@ -101,30 +101,29 @@
 }
 
 {{ id }}.series text {
-  fill: {{ style.foreground_light }};
+  fill: {{ style.foreground_strong }};
 }
 
 {{ id }}.tooltip rect {
   fill: {{ style.plot_background }};
-  stroke: {{ style.foreground_light }};
-  -webkit-transition: opacity 250ms;
-  -moz-transition: opacity 250ms;
-  transition: opacity 250ms;
+  stroke: {{ style.foreground_strong }};
+  -webkit-transition: opacity {{ style.transition }};
+  -moz-transition: opacity {{ style.transition }};
+  transition: opacity {{ style.transition }};
 }
 
 {{ id }}.tooltip text {
-  fill: {{ style.foreground_light }};
+  fill: {{ style.foreground_strong }};
 }
 
 {{ id }}.map-element {
   fill: {{ style.foreground }};
-  stroke: {{ style.foreground_dark }} !important;
+  stroke: {{ style.foreground_subtle }} !important;
   opacity: .9;
   stroke-width: 3;
-  -webkit-transition: 250ms;
-  -moz-transition: 250ms;
-  -o-transition: 250ms;
-  transition: 250ms;
+  -webkit-transition: opacity {{ style.transition }};
+  -moz-transition: opacity {{ style.transition }};
+  transition: opacity {{ style.transition }};
 }
 
 {{ id }}.map-element:hover {

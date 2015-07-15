@@ -732,7 +732,7 @@ class Graph(PublicApi):
         return any([
             len([v for a in (
                 s[1] if is_list_like(s) else [s])
-                 for v in (a if self._dual else [a])
+                 for v in (a if is_list_like(a) else [a])
                  if v is not None])
             for s in self.raw_series
         ])
