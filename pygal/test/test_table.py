@@ -16,11 +16,15 @@
 #
 # You should have received a copy of the GNU Lesser General Public License
 # along with pygal. If not, see <http://www.gnu.org/licenses/>.
+
+"""Box chart related tests"""
+
 from pygal import Pie
 from pyquery import PyQuery as pq
 
 
 def test_pie_table():
+    """Test rendering a table for a pie"""
     chart = Pie(inner_radius=.3, pretty_print=True)
     chart.title = 'Browser usage in February 2012 (in %)'
     chart.add('IE', 19.5)

@@ -17,13 +17,17 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with pygal. If not, see <http://www.gnu.org/licenses/>.
 
+"""Test per serie configuration"""
+
 from pygal import Line
 
 
-def test_serie_config():
-    s1 = [1, 3, 12, 3, 4]
-    s2 = [7, -4, 10, None, 8, 3, 1]
+s1 = [1, 3, 12, 3, 4]
+s2 = [7, -4, 10, None, 8, 3, 1]
 
+
+def test_no_serie_config():
+    """Test per serie no configuration"""
     chart = Line()
     chart.add('1', s1)
     chart.add('2', s2)
@@ -33,6 +37,9 @@ def test_serie_config():
     assert len(q('.serie-0 .dot')) == 5
     assert len(q('.serie-1 .dot')) == 6
 
+
+def test_global_config():
+    """Test global configuration"""
     chart = Line(stroke=False)
     chart.add('1', s1)
     chart.add('2', s2)
@@ -42,6 +49,9 @@ def test_serie_config():
     assert len(q('.serie-0 .dot')) == 5
     assert len(q('.serie-1 .dot')) == 6
 
+
+def test_serie_config():
+    """Test per serie configuration"""
     chart = Line()
     chart.add('1', s1, stroke=False)
     chart.add('2', s2)
@@ -51,6 +61,9 @@ def test_serie_config():
     assert len(q('.serie-0 .dot')) == 5
     assert len(q('.serie-1 .dot')) == 6
 
+
+def test_serie_precedence_over_global_config():
+    """Test that per serie configuration overide global configuration"""
     chart = Line(stroke=False)
     chart.add('1', s1, stroke=True)
     chart.add('2', s2)

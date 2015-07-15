@@ -16,10 +16,14 @@
 #
 # You should have received a copy of the GNU Lesser General Public License
 # along with pygal. If not, see <http://www.gnu.org/licenses/>.
+
+"""Donut chart related tests"""
+
 from pygal import Pie
 
 
 def test_donut():
+    """Test a donut pie chart"""
     chart = Pie(inner_radius=.3, pretty_print=True)
     chart.title = 'Browser usage in February 2012 (in %)'
     chart.add('IE', 19.5)
@@ -31,6 +35,7 @@ def test_donut():
 
 
 def test_multiseries_donut():
+    """Test a donut pie chart with multiserie"""
     # this just demos that the multiseries pie does not respect
     # the inner_radius
     chart = Pie(inner_radius=.3, pretty_print=True)
@@ -44,6 +49,7 @@ def test_multiseries_donut():
 
 
 def test_half_pie():
+    """Test a half pie chart"""
     pie = Pie()
     pie.add('IE', 19.5)
     pie.add('Firefox', 36.6)

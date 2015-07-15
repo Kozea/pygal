@@ -16,10 +16,14 @@
 #
 # You should have received a copy of the GNU Lesser General Public License
 # along with pygal. If not, see <http://www.gnu.org/licenses/>.
+
+"""Bar chart related tests"""
+
 from pygal import Bar
 
 
 def test_simple_bar():
+    """Simple bar test"""
     bar = Bar()
     rng = [-3, -32, -39]
     bar.add('test1', rng)

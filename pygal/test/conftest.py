@@ -17,6 +17,8 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with pygal. If not, see <http://www.gnu.org/licenses/>.
 
+"""pytest fixtures"""
+
 import pytest
 import pygal
 from pygal.etree import etree
@@ -26,6 +28,7 @@ from . import get_data
 
 @pytest.fixture
 def etreefx(request):
+    """Fixture allowing to test with builtin etree and lxml"""
     if request.param == 'etree':
         etree.to_etree()
     if request.param == 'lxml':
@@ -33,6 +36,7 @@ def etreefx(request):
 
 
 def pytest_generate_tests(metafunc):
+    """Generate the tests for etree and lxml"""
     if etree._lxml_etree and sys.version_info[:2] != (2, 6):
         metafunc.fixturenames.append('etreefx')
         metafunc.parametrize('etreefx', ['lxml', 'etree'], indirect=True)

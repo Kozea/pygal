@@ -17,6 +17,8 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with pygal. If not, see <http://www.gnu.org/licenses/>.
 
+"""Generate tests for different chart types with different data"""
+
 import os
 import pygal
 import uuid
@@ -34,6 +36,7 @@ except ImportError:
 
 
 def test_multi_render(Chart, datas):
+    """Check that a chart always render the same"""
     chart = Chart()
     chart = make_data(chart, datas)
     svg = chart.render()
@@ -42,6 +45,7 @@ def test_multi_render(Chart, datas):
 
 
 def test_render_to_file(Chart, datas):
+    """Test in file rendering"""
     file_name = '/tmp/test_graph-%s.svg' % uuid.uuid4()
     if os.path.exists(file_name):
         os.remove(file_name)
@@ -56,6 +60,7 @@ def test_render_to_file(Chart, datas):
 
 @pytest.mark.skipif(not cairosvg, reason="CairoSVG not installed")
 def test_render_to_png(Chart, datas):
+    """Test in file png rendering"""
     file_name = '/tmp/test_graph-%s.png' % uuid.uuid4()
     if os.path.exists(file_name):
         os.remove(file_name)
@@ -71,6 +76,7 @@ def test_render_to_png(Chart, datas):
 
 
 def test_metadata(Chart):
+    """Test metadata values"""
     chart = Chart()
     v = range(7)
     if Chart in (pygal.Box,):
@@ -110,6 +116,7 @@ def test_metadata(Chart):
 
 
 def test_empty_lists(Chart):
+    """Test chart rendering with an empty serie"""
     chart = Chart()
     chart.add('A', [1, 2])
     chart.add('B', [])
@@ -120,6 +127,7 @@ def test_empty_lists(Chart):
 
 
 def test_empty_lists_with_nones(Chart):
+    """Test chart rendering with a None filled serie"""
     chart = Chart()
     chart.add('A', [None, None])
     chart.add('B', [None, 4, 4])
@@ -128,6 +136,7 @@ def test_empty_lists_with_nones(Chart):
 
 
 def test_only_one_value(Chart):
+    """Test chart rendering with only one value"""
     chart = Chart()
     chart.add('S', [1])
     q = chart.render_pyquery()
@@ -135,6 +144,7 @@ def test_only_one_value(Chart):
 
 
 def test_only_one_value_log(Chart):
+    """Test logarithmic chart rendering with only one value"""
     chart = Chart(logarithmic=True)
     chart.add('S', [1])
     if not chart._dual:
@@ -144,6 +154,7 @@ def test_only_one_value_log(Chart):
 
 
 def test_only_one_value_intrp(Chart):
+    """Test interpolated chart rendering with only one value"""
     chart = Chart(interpolate='cubic')
     chart.add('S', [1])
     q = chart.render_pyquery()
@@ -151,6 +162,7 @@ def test_only_one_value_intrp(Chart):
 
 
 def test_non_iterable_value(Chart):
+    """Test serie as non iterable"""
     chart = Chart(no_prefix=True)
     chart.add('A', 1)
     chart.add('B', 2)
@@ -167,6 +179,7 @@ def test_non_iterable_value(Chart):
 
 
 def test_iterable_types(Chart):
+    """Test serie as various iterable"""
     chart = Chart(no_prefix=True)
     chart.add('A', [1, 2])
     chart.add('B', [])
@@ -184,6 +197,7 @@ def test_iterable_types(Chart):
 
 
 def test_values_by_dict(Chart):
+    """Test serie as dict"""
     chart1 = Chart(no_prefix=True)
     chart2 = Chart(no_prefix=True)
 
@@ -214,18 +228,21 @@ def test_values_by_dict(Chart):
 
 
 def test_no_data_with_no_values(Chart):
+    """Test no data"""
     chart = Chart()
     q = chart.render_pyquery()
     assert q(".text-overlay text").text() == "No data"
 
 
 def test_no_data_with_no_values_with_include_x_axis(Chart):
+    """Test no data and include_x_axis"""
     chart = Chart(include_x_axis=True)
     q = chart.render_pyquery()
     assert q(".text-overlay text").text() == "No data"
 
 
 def test_no_data_with_empty_serie(Chart):
+    """Test no data for empty serie"""
     chart = Chart()
     chart.add('Serie', [])
     q = chart.render_pyquery()
@@ -233,6 +250,7 @@ def test_no_data_with_empty_serie(Chart):
 
 
 def test_no_data_with_empty_series(Chart):
+    """Test no data for 2 empty series"""
     chart = Chart()
     chart.add('Serie1', [])
     chart.add('Serie2', [])
@@ -241,6 +259,7 @@ def test_no_data_with_empty_series(Chart):
 
 
 def test_no_data_with_none(Chart):
+    """Test no data for a None containing serie"""
     chart = Chart()
     chart.add('Serie', None)
     q = chart.render_pyquery()
@@ -248,6 +267,7 @@ def test_no_data_with_none(Chart):
 
 
 def test_no_data_with_list_of_none(Chart):
+    """Test no data for a None containing serie"""
     chart = Chart()
     chart.add('Serie', [None])
     q = chart.render_pyquery()
@@ -255,6 +275,7 @@ def test_no_data_with_list_of_none(Chart):
 
 
 def test_no_data_with_lists_of_nones(Chart):
+    """Test no data for several None containing series"""
     chart = Chart()
     chart.add('Serie1', [None, None, None, None])
     chart.add('Serie2', [None, None, None])
@@ -263,6 +284,7 @@ def test_no_data_with_lists_of_nones(Chart):
 
 
 def test_unicode_labels_decode(Chart):
+    """Test unicode labels"""
     chart = Chart()
     chart.add(u('Série1'), [{
         'value': 1,
@@ -284,6 +306,7 @@ def test_unicode_labels_decode(Chart):
 
 
 def test_unicode_labels_python2(Chart):
+    """Test unicode labels in python 2"""
     if sys.version_info[0] == 3:
         return
     chart = Chart()
@@ -307,6 +330,7 @@ def test_unicode_labels_python2(Chart):
 
 
 def test_unicode_labels_python3(Chart):
+    """Test unicode labels in python 3"""
     if sys.version_info[0] == 2:
         return
     chart = Chart()
@@ -330,6 +354,7 @@ def test_unicode_labels_python3(Chart):
 
 
 def test_labels_with_links(Chart):
+    """Test values with links"""
     chart = Chart()
     # link on chart and label
     chart.add({
@@ -381,12 +406,14 @@ def test_labels_with_links(Chart):
 
 
 def test_sparkline(Chart, datas):
+    """Test sparkline"""
     chart = Chart()
     chart = make_data(chart, datas)
     assert chart.render_sparkline()
 
 
 def test_secondary(Chart):
+    """Test secondary chart"""
     chart = Chart()
     rng = [83, .12, -34, 59]
     chart.add('First serie', rng)
@@ -397,12 +424,14 @@ def test_secondary(Chart):
 
 
 def test_ipython_notebook(Chart, datas):
+    """Test ipython notebook"""
     chart = Chart()
     chart = make_data(chart, datas)
     assert chart._repr_svg_()
 
 
 def test_long_title(Chart, datas):
+    """Test chart rendering with a long title"""
     chart = Chart(
         title="A chart is a graphical representation of data, in which "
         "'the data is represented by symbols, such as bars in a bar chart, "

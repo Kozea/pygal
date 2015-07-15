@@ -16,12 +16,16 @@
 #
 # You should have received a copy of the GNU Lesser General Public License
 # along with pygal. If not, see <http://www.gnu.org/licenses/>.
+
+"""Date related charts tests"""
+
 from pygal import DateLine, TimeLine, DateTimeLine, TimeDeltaLine
 from pygal.test.utils import texts
 from datetime import datetime, date, time, timedelta
 
 
 def test_date():
+    """Test a simple dateline"""
     date_chart = DateLine(truncate_label=1000)
     date_chart.add('dates', [
         (date(2013, 1, 2), 300),
@@ -42,6 +46,7 @@ def test_date():
 
 
 def test_time():
+    """Test a simple timeline"""
     time_chart = TimeLine(truncate_label=1000)
     time_chart.add('times', [
         (time(1, 12, 29), 2),
@@ -64,6 +69,7 @@ def test_time():
 
 
 def test_datetime():
+    """Test a simple datetimeline"""
     datetime_chart = DateTimeLine(truncate_label=1000)
     datetime_chart.add('datetimes', [
         (datetime(2013, 1, 2, 1, 12, 29), 300),
@@ -84,6 +90,7 @@ def test_datetime():
 
 
 def test_timedelta():
+    """Test a simple timedeltaline"""
     timedelta_chart = TimeDeltaLine(truncate_label=1000)
     timedelta_chart.add('timedeltas', [
         (timedelta(seconds=1), 10),
@@ -105,6 +112,7 @@ def test_timedelta():
 
 
 def test_date_xrange():
+    """Test dateline with xrange"""
     datey = DateLine(truncate_label=1000)
     datey.add('dates', [
         (date(2013, 1, 2), 300),

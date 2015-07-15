@@ -17,6 +17,8 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with pygal. If not, see <http://www.gnu.org/licenses/>.
 
+"""Pygal test package"""
+
 import pygal
 from pygal.util import cut
 from pygal.graph.map import BaseMap
@@ -24,6 +26,7 @@ from decimal import Decimal
 
 
 def get_data(i):
+    """Return sample test data for an index"""
     return [
         [(-1, 1), (2, 0), (0, 4)],
         [(0, 1), (None, 2), (3, 2)],
@@ -33,13 +36,7 @@ def get_data(i):
 
 
 def adapt(chart, data):
-    # if isinstance(chart, pygal.DateY):
-    #     # Convert to a credible datetime
-    #     return list(map(
-    #         lambda t:
-    #         (datetime.fromtimestamp(1360000000 + t[0] * 987654)
-    #          if t[0] is not None else None, t[1]), data))
-
+    """Adapt data to chart type"""
     if isinstance(chart, pygal.XY):
         return data
 
@@ -53,6 +50,7 @@ def adapt(chart, data):
 
 
 def make_data(chart, datas):
+    """Add sample data to the test chart"""
     for i, data in enumerate(datas):
         chart.add(data[0],
                   adapt(chart, data[1]),

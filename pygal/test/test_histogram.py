@@ -17,10 +17,14 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with pygal. If not, see <http://www.gnu.org/licenses/>.
 
+"""Histogram chart related tests"""
+
+
 from pygal import Histogram
 
 
 def test_histogram():
+    """Simple histogram test"""
     hist = Histogram()
     hist.add('1', [
         (2, 0, 1),

@@ -16,6 +16,9 @@
 #
 # You should have received a copy of the GNU Lesser General Public License
 # along with pygal. If not, see <http://www.gnu.org/licenses/>.
+
+"""Utility functions tests"""
+
 from pygal._compat import u
 from pygal.util import (
     round_to_int, round_to_float, _swap_curly, template, humanize,
@@ -24,6 +27,7 @@ from pytest import raises
 
 
 def test_round_to_int():
+    """Test round to int function"""
     assert round_to_int(154231, 1000) == 154000
     assert round_to_int(154231, 10) == 154230
     assert round_to_int(154231, 100000) == 200000
@@ -34,6 +38,7 @@ def test_round_to_int():
 
 
 def test_round_to_float():
+    """Test round to float function"""
     assert round_to_float(12.01934, .01) == 12.02
     assert round_to_float(12.01134, .01) == 12.01
     assert round_to_float(12.1934, .1) == 12.2
@@ -45,6 +50,7 @@ def test_round_to_float():
 
 
 def test_swap_curly():
+    """Test swap curly function"""
     for str in (
             'foo',
             u('foo foo foo bar'),
@@ -64,6 +70,7 @@ def test_swap_curly():
 
 
 def test_format():
+    """Test format function"""
     assert template('foo {{ baz }}', baz='bar') == 'foo bar'
     with raises(KeyError):
         assert template('foo {{ baz }}') == 'foo baz'
@@ -80,6 +87,7 @@ def test_format():
 
 
 def test_humanize():
+    """Test humanize function"""
     assert humanize(1) == '1'
     assert humanize(1.) == '1'
     assert humanize(10) == '10'
@@ -109,6 +117,7 @@ def test_humanize():
 
 
 def test_truncate():
+    """Test truncate function"""
     assert truncate('1234567890', 50) == '1234567890'
     assert truncate('1234567890', 5) == u('1234…')
     assert truncate('1234567890', 1) == u('…')
@@ -119,6 +128,7 @@ def test_truncate():
 
 
 def test_minify_css():
+    """Test css minifier function"""
     css = '''
 /*
  * Font-sizes from config, override with care
@@ -139,7 +149,8 @@ def test_minify_css():
         '.legends .legend text{font-family:monospace;font-size:14}')
 
 
-def test_major():
+def test_majorize():
+    """Test majorize function"""
     assert majorize(()) == []
     assert majorize((0,)) == []
     assert majorize((0, 1)) == []

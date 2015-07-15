@@ -16,10 +16,14 @@
 #
 # You should have received a copy of the GNU Lesser General Public License
 # along with pygal. If not, see <http://www.gnu.org/licenses/>.
+
+"""Stacked chart related tests"""
+
 from pygal import StackedLine
 
 
 def test_stacked_line():
+    """Test stacked line"""
     stacked = StackedLine()
     stacked.add('one_two', [1, 2])
     stacked.add('ten_twelve', [10, 12])
@@ -29,6 +33,7 @@ def test_stacked_line():
 
 
 def test_stacked_line_reverse():
+    """Test stack from top stacked line"""
     stacked = StackedLine(stack_from_top=True)
     stacked.add('one_two', [1, 2])
     stacked.add('ten_twelve', [10, 12])
@@ -38,6 +43,7 @@ def test_stacked_line_reverse():
 
 
 def test_stacked_line_log():
+    """Test logarithmic stacked line"""
     stacked = StackedLine(logarithmic=True)
     stacked.add('one_two', [1, 2])
     stacked.add('ten_twelve', [10, 12])
@@ -47,6 +53,7 @@ def test_stacked_line_log():
 
 
 def test_stacked_line_interpolate():
+    """Test interpolated stacked line"""
     stacked = StackedLine(interpolate='cubic')
     stacked.add('one_two', [1, 2])
     stacked.add('ten_twelve', [10, 12])

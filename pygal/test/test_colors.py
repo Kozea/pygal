@@ -1,3 +1,24 @@
+# -*- coding: utf-8 -*-
+# This file is part of pygal
+#
+# A python svg graph plotting library
+# Copyright © 2012-2015 Kozea
+#
+# This library is free software: you can redistribute it and/or modify it under
+# the terms of the GNU Lesser General Public License as published by the Free
+# Software Foundation, either version 3 of the License, or (at your option) any
+# later version.
+#
+# This library is distributed in the hope that it will be useful, but WITHOUT
+# ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+# FOR A PARTICULAR PURPOSE.  See the GNU Lesser General Public License for more
+# details.
+#
+# You should have received a copy of the GNU Lesser General Public License
+# along with pygal. If not, see <http://www.gnu.org/licenses/>.
+
+"""Color utility functions tests"""
+
 from __future__ import division
 
 from pygal.colors import (
@@ -6,6 +27,7 @@ from pygal.colors import (
 
 
 def test_parse_color():
+    """Test color parse function"""
     assert parse_color('#123') == (17, 34, 51, 1., '#rgb')
     assert parse_color('#cdf') == (204, 221, 255, 1., '#rgb')
     assert parse_color('#a3d7') == (170, 51, 221, 119 / 255, '#rgba')
@@ -19,6 +41,7 @@ def test_parse_color():
 
 
 def test_unparse_color():
+    """Test color unparse function"""
     assert unparse_color(17, 34, 51, 1., '#rgb') == '#123'
     assert unparse_color(204, 221, 255, 1., '#rgb') == '#cdf'
     assert unparse_color(170, 51, 221, 119 / 255, '#rgba') == '#a3d7'
@@ -32,6 +55,7 @@ def test_unparse_color():
 
 
 def test_darken():
+    """Test darken color function"""
     assert darken('#800', 20) == '#200'
     assert darken('#800e', 20) == '#200e'
     assert darken('#800', 0) == '#800'
@@ -48,6 +72,7 @@ def test_darken():
 
 
 def test_lighten():
+    """Test lighten color function"""
     assert lighten('#800', 20) == '#e00'
     assert lighten('#800', 0) == '#800'
     assert lighten('#ffffff', 10) == '#ffffff'
@@ -59,6 +84,7 @@ def test_lighten():
 
 
 def test_saturate():
+    """Test color saturation function"""
     assert saturate('#000', 20) == '#000'
     assert saturate('#fff', 20) == '#fff'
     assert saturate('#8a8', 100) == '#3f3'
@@ -66,6 +92,7 @@ def test_saturate():
 
 
 def test_desaturate():
+    """Test color desaturation function"""
     assert desaturate('#000', 20) == '#000'
     assert desaturate('#fff', 20) == '#fff'
     assert desaturate('#8a8', 100) == '#999'
@@ -73,6 +100,7 @@ def test_desaturate():
 
 
 def test_rotate():
+    """Test color rotation function"""
     assert rotate('#000', 45) == '#000'
     assert rotate('#fff', 45) == '#fff'
     assert rotate('#811', 45) == '#886a11'
@@ -82,6 +110,7 @@ def test_rotate():
 
 
 def test_hsl_to_rgb_part_0():
+    """Test hsl to rgb color function"""
     assert hsl_to_rgb(0, 100, 50) == (255, 0, 0)
     assert hsl_to_rgb(60, 100, 50) == (255, 255, 0)
     assert hsl_to_rgb(120, 100, 50) == (0, 255, 0)
@@ -91,6 +120,7 @@ def test_hsl_to_rgb_part_0():
 
 
 def test_rgb_to_hsl_part_0():
+    """Test rgb to hsl color function"""
     assert rgb_to_hsl(255, 0, 0) == (0, 100, 50)
     assert rgb_to_hsl(255, 255, 0) == (60, 100, 50)
     assert rgb_to_hsl(0, 255, 0) == (120, 100, 50)
@@ -100,6 +130,7 @@ def test_rgb_to_hsl_part_0():
 
 
 def test_hsl_to_rgb_part_1():
+    """Test hsl to rgb color function"""
     assert hsl_to_rgb(-360, 100, 50) == (255, 0, 0)
     assert hsl_to_rgb(-300, 100, 50) == (255, 255, 0)
     assert hsl_to_rgb(-240, 100, 50) == (0, 255, 0)
@@ -109,6 +140,7 @@ def test_hsl_to_rgb_part_1():
 
 
 def test_rgb_to_hsl_part_1():
+    """Test rgb to hsl color function"""
     # assert rgb_to_hsl(255, 0, 0) == (-360, 100, 50)
     # assert rgb_to_hsl(255, 255, 0) == (-300, 100, 50)
     # assert rgb_to_hsl(0, 255, 0) == (-240, 100, 50)
@@ -119,6 +151,7 @@ def test_rgb_to_hsl_part_1():
 
 
 def test_hsl_to_rgb_part_2():
+    """Test hsl to rgb color function"""
     assert hsl_to_rgb(360, 100, 50) == (255, 0, 0)
     assert hsl_to_rgb(420, 100, 50) == (255, 255, 0)
     assert hsl_to_rgb(480, 100, 50) == (0, 255, 0)
@@ -128,6 +161,7 @@ def test_hsl_to_rgb_part_2():
 
 
 def test_rgb_to_hsl_part_2():
+    """Test rgb to hsl color function"""
     # assert rgb_to_hsl(255, 0, 0) == (360, 100, 50)
     # assert rgb_to_hsl(255, 255, 0) == (420, 100, 50)
     # assert rgb_to_hsl(0, 255, 0) == (480, 100, 50)
@@ -138,6 +172,7 @@ def test_rgb_to_hsl_part_2():
 
 
 def test_hsl_to_rgb_part_3():
+    """Test hsl to rgb color function"""
     assert hsl_to_rgb(6120, 100, 50) == (255, 0, 0)
     assert hsl_to_rgb(-9660, 100, 50) == (255, 255, 0)
     assert hsl_to_rgb(99840, 100, 50) == (0, 255, 0)
@@ -147,6 +182,7 @@ def test_hsl_to_rgb_part_3():
 
 
 def test_rgb_to_hsl_part_3():
+    """Test rgb to hsl color function"""
     # assert rgb_to_hsl(255, 0, 0) == (6120, 100, 50)
     # assert rgb_to_hsl(255, 255, 0) == (-9660, 100, 50)
     # assert rgb_to_hsl(0, 255, 0) == (99840, 100, 50)
@@ -157,6 +193,7 @@ def test_rgb_to_hsl_part_3():
 
 
 def test_hsl_to_rgb_part_4():
+    """Test hsl to rgb color function"""
     assert hsl_to_rgb(0, 100, 50) == (255, 0, 0)
     assert hsl_to_rgb(12, 100, 50) == (255, 51, 0)
     assert hsl_to_rgb(24, 100, 50) == (255, 102, 0)
@@ -171,6 +208,7 @@ def test_hsl_to_rgb_part_4():
 
 
 def test_rgb_to_hsl_part_4():
+    """Test rgb to hsl color function"""
     assert rgb_to_hsl(255, 0, 0) == (0, 100, 50)
     assert rgb_to_hsl(255, 51, 0) == (12, 100, 50)
     assert rgb_to_hsl(255, 102, 0) == (24, 100, 50)
@@ -185,6 +223,7 @@ def test_rgb_to_hsl_part_4():
 
 
 def test_hsl_to_rgb_part_5():
+    """Test hsl to rgb color function"""
     assert hsl_to_rgb(120, 100, 50) == (0, 255, 0)
     assert hsl_to_rgb(132, 100, 50) == (0, 255, 51)
     assert hsl_to_rgb(144, 100, 50) == (0, 255, 102)
@@ -199,6 +238,7 @@ def test_hsl_to_rgb_part_5():
 
 
 def test_rgb_to_hsl_part_5():
+    """Test rgb to hsl color function"""
     assert rgb_to_hsl(0, 255, 0) == (120, 100, 50)
     assert rgb_to_hsl(0, 255, 51) == (132, 100, 50)
     assert rgb_to_hsl(0, 255, 102) == (144, 100, 50)
@@ -213,6 +253,7 @@ def test_rgb_to_hsl_part_5():
 
 
 def test_hsl_to_rgb_part_6():
+    """Test hsl to rgb color function"""
     assert hsl_to_rgb(240, 100, 50) == (0, 0, 255)
     assert hsl_to_rgb(252, 100, 50) == (51, 0, 255)
     assert hsl_to_rgb(264, 100, 50) == (102, 0, 255)
@@ -227,6 +268,7 @@ def test_hsl_to_rgb_part_6():
 
 
 def test_rgb_to_hsl_part_6():
+    """Test rgb to hsl color function"""
     assert rgb_to_hsl(0, 0, 255) == (240, 100, 50)
     assert rgb_to_hsl(51, 0, 255) == (252, 100, 50)
     assert rgb_to_hsl(102, 0, 255) == (264, 100, 50)
@@ -241,78 +283,91 @@ def test_rgb_to_hsl_part_6():
 
 
 def test_hsl_to_rgb_part_7():
+    """Test hsl to rgb color function"""
     assert hsl_to_rgb(0, 20, 50) == (153, 102, 102)
     assert hsl_to_rgb(0, 60, 50) == (204, 51, 51)
     assert hsl_to_rgb(0, 100, 50) == (255, 0, 0)
 
 
 def test_rgb_to_hsl_part_7():
+    """Test rgb to hsl color function"""
     assert rgb_to_hsl(153, 102, 102) == (0, 20, 50)
     assert rgb_to_hsl(204, 51, 51) == (0, 60, 50)
     assert rgb_to_hsl(255, 0, 0) == (0, 100, 50)
 
 
 def test_hsl_to_rgb_part_8():
+    """Test hsl to rgb color function"""
     assert hsl_to_rgb(60, 20, 50) == (153, 153, 102)
     assert hsl_to_rgb(60, 60, 50) == (204, 204, 51)
     assert hsl_to_rgb(60, 100, 50) == (255, 255, 0)
 
 
 def test_rgb_to_hsl_part_8():
+    """Test rgb to hsl color function"""
     assert rgb_to_hsl(153, 153, 102) == (60, 20, 50)
     assert rgb_to_hsl(204, 204, 51) == (60, 60, 50)
     assert rgb_to_hsl(255, 255, 0) == (60, 100, 50)
 
 
 def test_hsl_to_rgb_part_9():
+    """Test hsl to rgb color function"""
     assert hsl_to_rgb(120, 20, 50) == (102, 153, 102)
     assert hsl_to_rgb(120, 60, 50) == (51, 204, 51)
     assert hsl_to_rgb(120, 100, 50) == (0, 255, 0)
 
 
 def test_rgb_to_hsl_part_9():
+    """Test rgb to hsl color function"""
     assert rgb_to_hsl(102, 153, 102) == (120, 20, 50)
     assert rgb_to_hsl(51, 204, 51) == (120, 60, 50)
     assert rgb_to_hsl(0, 255, 0) == (120, 100, 50)
 
 
 def test_hsl_to_rgb_part_10():
+    """Test hsl to rgb color function"""
     assert hsl_to_rgb(180, 20, 50) == (102, 153, 153)
     assert hsl_to_rgb(180, 60, 50) == (51, 204, 204)
     assert hsl_to_rgb(180, 100, 50) == (0, 255, 255)
 
 
 def test_rgb_to_hsl_part_10():
+    """Test rgb to hsl color function"""
     assert rgb_to_hsl(102, 153, 153) == (180, 20, 50)
     assert rgb_to_hsl(51, 204, 204) == (180, 60, 50)
     assert rgb_to_hsl(0, 255, 255) == (180, 100, 50)
 
 
 def test_hsl_to_rgb_part_11():
+    """Test hsl to rgb color function"""
     assert hsl_to_rgb(240, 20, 50) == (102, 102, 153)
     assert hsl_to_rgb(240, 60, 50) == (51, 51, 204)
     assert hsl_to_rgb(240, 100, 50) == (0, 0, 255)
 
 
 def test_rgb_to_hsl_part_11():
+    """Test rgb to hsl color function"""
     assert rgb_to_hsl(102, 102, 153) == (240, 20, 50)
     assert rgb_to_hsl(51, 51, 204) == (240, 60, 50)
     assert rgb_to_hsl(0, 0, 255) == (240, 100, 50)
 
 
 def test_hsl_to_rgb_part_12():
+    """Test hsl to rgb color function"""
     assert hsl_to_rgb(300, 20, 50) == (153, 102, 153)
     assert hsl_to_rgb(300, 60, 50) == (204, 51, 204)
     assert hsl_to_rgb(300, 100, 50) == (255, 0, 255)
 
 
 def test_rgb_to_hsl_part_12():
+    """Test rgb to hsl color function"""
     assert rgb_to_hsl(153, 102, 153) == (300, 20, 50)
     assert rgb_to_hsl(204, 51, 204) == (300, 60, 50)
     assert rgb_to_hsl(255, 0, 255) == (300, 100, 50)
 
 
 def test_hsl_to_rgb_part_13():
+    """Test hsl to rgb color function"""
     assert hsl_to_rgb(0, 100, 0) == (0, 0, 0)
     assert hsl_to_rgb(0, 100, 10) == (51, 0, 0)
     assert hsl_to_rgb(0, 100, 20) == (102, 0, 0)
@@ -327,6 +382,7 @@ def test_hsl_to_rgb_part_13():
 
 
 def test_rgb_to_hsl_part_13():
+    """Test rgb to hsl color function"""
     assert rgb_to_hsl(0, 0, 0) == (0, 0, 0)
     assert rgb_to_hsl(51, 0, 0) == (0, 100, 10)
     assert rgb_to_hsl(102, 0, 0) == (0, 100, 20)
@@ -341,6 +397,7 @@ def test_rgb_to_hsl_part_13():
 
 
 def test_hsl_to_rgb_part_14():
+    """Test hsl to rgb color function"""
     assert hsl_to_rgb(60, 100, 0) == (0, 0, 0)
     assert hsl_to_rgb(60, 100, 10) == (51, 51, 0)
     assert hsl_to_rgb(60, 100, 20) == (102, 102, 0)
@@ -355,6 +412,7 @@ def test_hsl_to_rgb_part_14():
 
 
 def test_rgb_to_hsl_part_14():
+    """Test rgb to hsl color function"""
     # assert rgb_to_hsl(0, 0, 0) == (60, 100, 0)
     assert rgb_to_hsl(51, 51, 0) == (60, 100, 10)
     assert rgb_to_hsl(102, 102, 0) == (60, 100, 20)
@@ -369,6 +427,7 @@ def test_rgb_to_hsl_part_14():
 
 
 def test_hsl_to_rgb_part_15():
+    """Test hsl to rgb color function"""
     assert hsl_to_rgb(120, 100, 0) == (0, 0, 0)
     assert hsl_to_rgb(120, 100, 10) == (0, 51, 0)
     assert hsl_to_rgb(120, 100, 20) == (0, 102, 0)
@@ -383,6 +442,7 @@ def test_hsl_to_rgb_part_15():
 
 
 def test_rgb_to_hsl_part_15():
+    """Test rgb to hsl color function"""
     # assert rgb_to_hsl(0, 0, 0) == (120, 100, 0)
     assert rgb_to_hsl(0, 51, 0) == (120, 100, 10)
     assert rgb_to_hsl(0, 102, 0) == (120, 100, 20)
@@ -397,6 +457,7 @@ def test_rgb_to_hsl_part_15():
 
 
 def test_hsl_to_rgb_part_16():
+    """Test hsl to rgb color function"""
     assert hsl_to_rgb(180, 100, 0) == (0, 0, 0)
     assert hsl_to_rgb(180, 100, 10) == (0, 51, 51)
     assert hsl_to_rgb(180, 100, 20) == (0, 102, 102)
@@ -411,6 +472,7 @@ def test_hsl_to_rgb_part_16():
 
 
 def test_rgb_to_hsl_part_16():
+    """Test rgb to hsl color function"""
     # assert rgb_to_hsl(0, 0, 0) == (180, 100, 0)
     assert rgb_to_hsl(0, 51, 51) == (180, 100, 10)
     assert rgb_to_hsl(0, 102, 102) == (180, 100, 20)
@@ -425,6 +487,7 @@ def test_rgb_to_hsl_part_16():
 
 
 def test_hsl_to_rgb_part_17():
+    """Test hsl to rgb color function"""
     assert hsl_to_rgb(240, 100, 0) == (0, 0, 0)
     assert hsl_to_rgb(240, 100, 10) == (0, 0, 51)
     assert hsl_to_rgb(240, 100, 20) == (0, 0, 102)
@@ -439,6 +502,7 @@ def test_hsl_to_rgb_part_17():
 
 
 def test_rgb_to_hsl_part_17():
+    """Test rgb to hsl color function"""
     # assert rgb_to_hsl(0, 0, 0) == (240, 100, 0)
     assert rgb_to_hsl(0, 0, 51) == (240, 100, 10)
     assert rgb_to_hsl(0, 0, 102) == (240, 100, 20)
@@ -453,6 +517,7 @@ def test_rgb_to_hsl_part_17():
 
 
 def test_hsl_to_rgb_part_18():
+    """Test hsl to rgb color function"""
     assert hsl_to_rgb(300, 100, 0) == (0, 0, 0)
     assert hsl_to_rgb(300, 100, 10) == (51, 0, 51)
     assert hsl_to_rgb(300, 100, 20) == (102, 0, 102)
@@ -467,6 +532,7 @@ def test_hsl_to_rgb_part_18():
 
 
 def test_rgb_to_hsl_part_18():
+    """Test rgb to hsl color function"""
     # assert rgb_to_hsl(0, 0, 0) == (300, 100, 0)
     assert rgb_to_hsl(51, 0, 51) == (300, 100, 10)
     assert rgb_to_hsl(102, 0, 102) == (300, 100, 20)

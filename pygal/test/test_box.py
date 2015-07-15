@@ -16,11 +16,14 @@
 #
 # You should have received a copy of the GNU Lesser General Public License
 # along with pygal. If not, see <http://www.gnu.org/licenses/>.
+
+"""Box chart related tests"""
+
 from pygal.graph.box import Box
-from pygal import Box as ghostedBox
 
 
 def test_quartiles():
+    """Test box points for the 1.5IQR computation method"""
     a = [-2.0, 3.0, 4.0, 5.0, 8.0]  # odd test data
     (min_s, q0, q1, q2, q3, q4, max_s), outliers = Box._box_points(
         a, mode='1.5IQR')
@@ -55,6 +58,7 @@ def test_quartiles():
 
 
 def test_quartiles_min_extremes():
+    """Test box points for the extremes computation method"""
     a = [-2.0, 3.0, 4.0, 5.0, 8.0]  # odd test data
     (min_s, q0, q1, q2, q3, q4, max_s), outliers = Box._box_points(
         a, mode='extremes')
@@ -89,6 +93,7 @@ def test_quartiles_min_extremes():
 
 
 def test_quartiles_tukey():
+    """Test box points for the tukey computation method"""
     a = []  # empty data
     (min_s, q0, q1, q2, q3, q4, max_s), outliers = Box._box_points(
         a, mode='tukey')
@@ -131,6 +136,7 @@ def test_quartiles_tukey():
 
 
 def test_quartiles_stdev():
+    """Test box points for the stdev computation method"""
     a = [35, 42, 35, 41, 36, 6, 12, 51, 33, 27, 46, 36, 44, 53, 75, 46, 16,
          51, 45, 29, 25, 26, 54, 61, 27, 40, 23, 34, 51, 37]
     SD = 14.67
@@ -151,7 +157,8 @@ def test_quartiles_stdev():
 
 
 def test_simple_box():
-    box = ghostedBox()
+    """Simple box test"""
+    box = Box()
     box.add('test1', [-1, 2, 3, 3.1, 3.2, 4, 5])
     box.add('test2', [2, 3, 5, 6, 6, 4])
     box.title = 'Box test'

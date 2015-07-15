@@ -16,6 +16,9 @@
 #
 # You should have received a copy of the GNU Lesser General Public License
 # along with pygal. If not, see <http://www.gnu.org/licenses/>.
+
+"""Line chart related tests"""
+
 from __future__ import division
 from pygal import Line
 from pygal.test.utils import texts
@@ -23,6 +26,7 @@ from math import cos, sin
 
 
 def test_simple_line():
+    """Simple line test"""
     line = Line()
     rng = range(-30, 31, 5)
     line.add('test1', [cos(x / 10) for x in rng])
@@ -49,6 +53,7 @@ def test_simple_line():
 
 
 def test_line():
+    """Another simple line test"""
     line = Line()
     rng = [8, 12, 23, 73, 39, 57]
     line.add('Single serie', rng)
@@ -62,6 +67,7 @@ def test_line():
 
 
 def test_one_dot():
+    """Line test with an unique value"""
     line = Line()
     line.add('one dot', [12])
     line.x_labels = ['one']
@@ -72,6 +78,7 @@ def test_one_dot():
 
 
 def test_no_dot():
+    """Line test with an empty serie"""
     line = Line()
     line.add('no dot', [])
     q = line.render_pyquery()
@@ -79,11 +86,13 @@ def test_no_dot():
 
 
 def test_no_dot_at_all():
+    """Line test with no value"""
     q = Line().render_pyquery()
     assert q(".text-overlay text").text() == 'No data'
 
 
 def test_not_equal_x_labels():
+    """Test x_labels"""
     line = Line()
     line.add('test1', range(100))
     line.x_labels = map(str, range(11))
@@ -95,6 +104,7 @@ def test_not_equal_x_labels():
 
 
 def test_only_major_dots_every():
+    """Test major dots"""
     line = Line(show_only_major_dots=True, x_labels_major_every=3)
     line.add('test', range(12))
     line.x_labels = map(str, range(12))
@@ -103,6 +113,7 @@ def test_only_major_dots_every():
 
 
 def test_only_major_dots_no_labels():
+    """Test major dots with no labels"""
     line = Line(show_only_major_dots=True)
     line.add('test', range(12))
     q = line.render_pyquery()
@@ -110,6 +121,7 @@ def test_only_major_dots_no_labels():
 
 
 def test_only_major_dots_count():
+    """Test major dots with a major label count"""
     line = Line(show_only_major_dots=True)
     line.add('test', range(12))
     line.x_labels = map(str, range(12))
@@ -119,6 +131,7 @@ def test_only_major_dots_count():
 
 
 def test_only_major_dots():
+    """Test major dots with specified major labels"""
     line = Line(show_only_major_dots=True,)
     line.add('test', range(12))
     line.x_labels = map(str, range(12))
@@ -128,6 +141,7 @@ def test_only_major_dots():
 
 
 def test_line_secondary():
+    """Test line with a secondary serie"""
     line = Line()
     rng = [8, 12, 23, 73, 39, 57]
     line.add('First serie', rng)
