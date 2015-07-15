@@ -200,18 +200,15 @@ class Svg(object):
             plot=self.node(
                 self.graph.nodes['plot'],
                 class_='series serie-%d color-%d' % (
-                    serie.index, serie.index % len(
-                        self.graph.style.colors))),
+                    serie.index, serie.index)),
             overlay=self.node(
                 self.graph.nodes['overlay'],
                 class_='series serie-%d color-%d' % (
-                    serie.index, serie.index % len(
-                        self.graph.style.colors))),
+                    serie.index, serie.index)),
             text_overlay=self.node(
                 self.graph.nodes['text_overlay'],
                 class_='series serie-%d color-%d' % (
-                    serie.index, serie.index % len(
-                        self.graph.style.colors))))
+                    serie.index, serie.index)))
 
     def line(self, node, coords, close=False, **kwargs):
         """Draw a svg line"""

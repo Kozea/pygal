@@ -564,9 +564,10 @@ def get_test_routes(app):
 
     @app.route('/test/64colors')
     def test_64_colors():
-        colors = [rotate('#ff0000', i * 360 / 64) for i in range(64)]
+        n = 64
+        colors = [rotate('#ff0000', i * 360 / n) for i in range(n)]
         pie = Pie(style=Style(colors=colors))
-        for i in range(64):
+        for i in range(n):
             pie.add(str(i), 1)
         return pie.render_response()
 

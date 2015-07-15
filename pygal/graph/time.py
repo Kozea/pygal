@@ -71,7 +71,7 @@ def time_to_seconds(x):
         ) * 10 ** 6 + x.microsecond) / 10 ** 6
 
     # Clamp to valid time
-    return max(0, min(x, 24 * 3600 - 10 ** -6))
+    return x and max(0, min(x, 24 * 3600 - 10 ** -6))
 
 
 def seconds_to_time(x):

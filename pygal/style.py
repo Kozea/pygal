@@ -19,7 +19,7 @@
 """Charts styling classes"""
 
 from __future__ import division
-from pygal.util import cycle_fill
+
 from pygal import colors
 from pygal.colors import darken, lighten
 
@@ -76,7 +76,17 @@ class Style(object):
                 '}}\n') % (prefix, prefix)).format(*tupl)
 
         if len(self.colors) < len_:
-            colors = cycle_fill(self.colors, len_)
+            missing = len_ - len(self.colors)
+            cycles = 1 + missing // len(self.colors)
+            colors = []
+            for i in range(0, cycles + 1):
+                for color_ in self.colors:
+                    colors.append(darken(color_, 33 * i / cycles))
+                    if len(colors) >= len_:
+                        break
+                else:
+                    continue
+                break
         else:
             colors = self.colors[:len_]
 
@@ -339,6 +349,7 @@ class SolidColorStyle(Style):
 
 
 styles = {'default': DefaultStyle,
+          'dark': DarkStyle,
           'light': LightStyle,
           'neon': NeonStyle,
           'clean': CleanStyle,
