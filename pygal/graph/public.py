@@ -98,7 +98,7 @@ class PublicApi(BaseGraph):
         # Force protocol as data uri have none
         kwargs.setdefault('force_uri_protocol', 'https')
         return "data:image/svg+xml;charset=utf-8;base64,%s" % (
-            base64.urlsafe_b64encode(
+            base64.b64encode(
                 self.render(**kwargs)
             ).decode('utf-8').replace('\n', '')
         )
