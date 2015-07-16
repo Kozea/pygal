@@ -226,9 +226,9 @@ class Config(CommonConfig):
         DefaultStyle, Style, "Style", "Style holding values injected in css")
 
     css = Key(
-        ('style.css', 'graph.css'), list, "Style",
+        ('file://style.css', 'file://graph.css'), list, "Style",
         "List of css file",
-        "It can be an absolute file path or an external link",
+        "It can be any uri from file:///tmp/style.css to //domain/style.css",
         str)
 
     # Look #
@@ -475,9 +475,9 @@ class Config(CommonConfig):
 
     # Misc #
     js = Key(
-        ('http://kozea.github.io/pygal.js/2.0.x/pygal-tooltips.min.js',),
+        ('//kozea.github.io/pygal.js/2.0.x/pygal-tooltips.min.js',),
         list, "Misc", "List of js file",
-        "It can be a filepath or an external link",
+        "It can be any uri from file:///tmp/ext.js to //domain/ext.js",
         str)
 
     disable_xml_declaration = Key(

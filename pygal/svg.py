@@ -85,42 +85,44 @@ class Svg(object):
         colors = self.graph.style.get_colors(self.id, self.graph._order)
         strokes = self.get_strokes()
         all_css = []
-        for css in ['base.css'] + list(self.graph.css):
-            if '://' in css:
-                self.processing_instructions.append(
-                    etree.PI(
-                        u('xml-stylesheet'), u('href="%s"' % css)))
-            else:
-                if css.startswith('inline:'):
-                    css_text = css[len('inline:'):]
-                else:
-                    if not os.path.exists(css):
-                        css = os.path.join(
-                            os.path.dirname(__file__), 'css', css)
+        for css in ['file://base.css'] + list(self.graph.css):
+            css_text = None
+            if css.startswith('inline:'):
+                css_text = css[len('inline:'):]
+            elif css.startswith('file://'):
+                if not os.path.exists(css):
+                    css = os.path.join(
+                        os.path.dirname(__file__), 'css', css[len('file://'):])
 
-                    class FontSizes(object):
+                class FontSizes(object):
 
-                        """Container for font sizes"""
+                    """Container for font sizes"""
 
-                    fs = FontSizes()
-                    for name in dir(self.graph.state):
-                        if name.endswith('_font_size'):
-                            setattr(
-                                fs,
-                                name.replace('_font_size', ''),
-                                ('%dpx' % getattr(self.graph, name)))
+                fs = FontSizes()
+                for name in dir(self.graph.state):
+                    if name.endswith('_font_size'):
+                        setattr(
+                            fs,
+                            name.replace('_font_size', ''),
+                            ('%dpx' % getattr(self.graph, name)))
 
-                    with io.open(css, encoding='utf-8') as f:
-                        css_text = template(
-                            f.read(),
-                            style=self.graph.style,
-                            colors=colors,
-                            strokes=strokes,
-                            font_sizes=fs,
-                            id=self.id)
+                with io.open(css, encoding='utf-8') as f:
+                    css_text = template(
+                        f.read(),
+                        style=self.graph.style,
+                        colors=colors,
+                        strokes=strokes,
+                        font_sizes=fs,
+                        id=self.id)
+
+            if css_text is not None:
                 if not self.graph.pretty_print:
                     css_text = minify_css(css_text)
                 all_css.append(css_text)
+            else:
+                self.processing_instructions.append(
+                    etree.PI(
+                        u('xml-stylesheet'), u('href="%s"' % css)))
         self.node(
             self.defs, 'style', type='text/css').text = '\n'.join(all_css)
 
@@ -147,13 +149,12 @@ class Svg(object):
                 get_js_dict(), default=json_default)))
 
         for js in self.graph.js:
-            if '://' in js:
-                self.node(
-                    self.defs, 'script', type='text/javascript', href=js)
-            else:
+            if js.startswith('file://'):
                 script = self.node(self.defs, 'script', type='text/javascript')
-                with io.open(js, encoding='utf-8') as f:
+                with io.open(js[len('file://'):], encoding='utf-8') as f:
                     script.text = f.read()
+            else:
+                self.node(self.defs, 'script', type='text/javascript', href=js)
 
     def node(self, parent=None, tag='g', attrib=None, **extras):
         """Make a new svg node"""

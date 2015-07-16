@@ -122,7 +122,14 @@ Default:
 
 .. code-block:: python
 
-    css = ['style.css', 'graph.css']
+    css = ['file://style.css', 'file://graph.css']
+
+
+Css can also specified inline by prepending `inline:` to the css:
+
+.. code-block:: python
+   css = ['inline:.rect { fill: blue; }']
+
 
 js
 --
@@ -130,7 +137,7 @@ js
 .. code-block:: python
 
     js = [
-        'http://kozea.github.io/pygal.js/2.0.x/pygal-tooltips.min.js'
+        '//kozea.github.io/pygal.js/2.0.x/pygal-tooltips.min.js'
     ]
 
 See `pygal.js <https://github.com/Kozea/pygal.js/>`_
