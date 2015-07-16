@@ -322,7 +322,7 @@ def test_css(Chart):
         f.flush()
 
         config = Config()
-        config.css.append(f.name)
+        config.css.append('file://' + f.name)
 
         chart = Chart(config)
         chart.add('/', [10, 1, 5])
