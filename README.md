@@ -1,7 +1,9 @@
 # Pygal
 
+
 [![Build Status](https://travis-ci.org/Kozea/pygal.svg?branch=master)](https://travis-ci.org/Kozea/pygal)
 [![Coverage Status](https://coveralls.io/repos/Kozea/pygal/badge.svg?branch=master&service=github)](https://coveralls.io/github/Kozea/pygal?branch=master)
+[![Documentation Status](https://readthedocs.org/projects/pygal/badge/?version=latest)](https://readthedocs.org/projects/pygal/?badge=latest)
 
 
 - [Pygal](#pygal)
