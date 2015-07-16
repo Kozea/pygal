@@ -128,6 +128,7 @@ Default:
 Css can also specified inline by prepending `inline:` to the css:
 
 .. code-block:: python
+
    css = ['inline:.rect { fill: blue; }']
 
 
@@ -141,3 +142,13 @@ js
     ]
 
 See `pygal.js <https://github.com/Kozea/pygal.js/>`_
+
+
+force_uri_protocol
+------------------
+
+In case of rendering the svg as a data uri, it is mandatory to specify a protocol.
+
+It can be set to http or https and will be used for '//domain/' like uri.
+
+It is used along with ``render_data_uri``.

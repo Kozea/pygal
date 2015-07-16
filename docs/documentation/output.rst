@@ -67,6 +67,19 @@ It is possible to get the xml etree root element of the chart (or lxml etree nod
    chart.render_tree()  # Return the svg root etree node
 
 
+Base 64 data URI
+----------------
+
+You can directly output a base 64 encoded data uri for <embed> or <image> inclusion:
+
+
+.. code-block:: python
+
+   chart = pygal.Line()
+   ...
+   chart.render_data_uri()  # Return `data:image/svg+xml;charset=utf-8;base64,...`
+
+
 Browser
 -------
 

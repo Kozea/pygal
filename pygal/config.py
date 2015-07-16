@@ -483,7 +483,13 @@ class Config(CommonConfig):
     disable_xml_declaration = Key(
         False, bool, "Misc",
         "Don't write xml declaration and return str instead of string",
-        "usefull for writing output directly in html")
+        "useful for writing output directly in html")
+
+    force_uri_protocol = Key(
+        None, str, "Misc",
+        "Default uri protocol",
+        "In case of rendering the svg as a data uri, it is mandatory to "
+        "specify a protocol. It can be set to http or https")
 
     explicit_size = Key(
         False, bool, "Misc", "Write width and height attributes")

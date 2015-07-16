@@ -491,3 +491,12 @@ def test_fill(Chart):
     chart.add('_', [1, 2, 3])
     chart.add('?', [10, 21, 5])
     assert chart.render_pyquery()
+
+
+def test_render_data_uri(Chart):
+    """Test the render data uri"""
+    chart = Chart(fill=True)
+    chart.add(u('ééé'), [1, 2, 3])
+    chart.add(u('èèè'), [10, 21, 5])
+    assert chart.render_data_uri().startswith(
+        'data:image/svg+xml;charset=utf-8;base64,')

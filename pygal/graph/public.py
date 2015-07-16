@@ -21,6 +21,7 @@
 import io
 from pygal._compat import u, is_list_like
 from pygal.graph.base import BaseGraph
+import base64
 
 
 class PublicApi(BaseGraph):
@@ -91,6 +92,16 @@ class PublicApi(BaseGraph):
         from django.http import HttpResponse
         return HttpResponse(
             self.render(**kwargs), content_type='image/svg+xml')
+
+    def render_data_uri(self, **kwargs):
+        """Output a base 64 encoded data uri"""
+        # Force protocol as data uri have none
+        kwargs.setdefault('force_uri_protocol', 'https')
+        return "data:image/svg+xml;charset=utf-8;base64,%s" % (
+            base64.urlsafe_b64encode(
+                self.render(**kwargs)
+            ).decode('utf-8').replace('\n', '')
+        )
 
     def render_to_file(self, filename, **kwargs):
         """Render the graph, and write it to filename"""

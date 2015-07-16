@@ -120,6 +120,8 @@ class Svg(object):
                     css_text = minify_css(css_text)
                 all_css.append(css_text)
             else:
+                if css.startswith('//') and self.graph.force_uri_protocol:
+                    css = '%s:%s' % (self.graph.force_uri_protocol, css)
                 self.processing_instructions.append(
                     etree.PI(
                         u('xml-stylesheet'), u('href="%s"' % css)))
@@ -154,6 +156,8 @@ class Svg(object):
                 with io.open(js[len('file://'):], encoding='utf-8') as f:
                     script.text = f.read()
             else:
+                if js.startswith('//') and self.graph.force_uri_protocol:
+                    js = '%s:%s' % (self.graph.force_uri_protocol, js)
                 self.node(self.defs, 'script', type='text/javascript', href=js)
 
     def node(self, parent=None, tag='g', attrib=None, **extras):

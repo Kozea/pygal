@@ -22,7 +22,6 @@ from docutils.parsers.rst import Directive
 from traceback import format_exc, print_exc
 from sphinx.directives.code import CodeBlock
 
-import base64
 import docutils.core
 import pygal
 
@@ -86,13 +85,9 @@ class PygalDirective(Directive):
             chart.config.width = width
             chart.config.height = height
             chart.explicit_size = True
-            rv = chart.render()
 
         try:
-            svg = (
-                '<embed src="data:image/svg+xml;charset=utf-8;base64,%s" />' %
-                base64.b64encode(rv).decode('utf-8')
-                .replace('\n', ''))
+            svg = '<embed src="%s" />' % chart.render_data_uri()
         except Exception:
             return [docutils.nodes.system_message(
                 'An exception as occured during graph generation:'
