@@ -400,9 +400,9 @@ def test_labels_with_links(Chart):
 
     if isinstance(chart, BaseMap):
         # No country is found in this case so:
-        assert len(links) == 4  # 3 links and 1 tooltip
+        assert len(links) == 3
     else:
-        assert len(links) == 8  # 7 links and 1 tooltip
+        assert len(links) == 7
 
 
 def test_sparkline(Chart, datas):

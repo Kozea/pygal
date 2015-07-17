@@ -34,6 +34,7 @@ Changelog
 * Move ``font_size`` config to style
 * Add ``font_family`` for various elements in style
 * Add ``googlefont:font`` support for style fonts
+* Add ``tooltip_fancy_mode`` to revert to old tooltips
 
 1.7.0
 =====
