@@ -20,7 +20,7 @@
 """Svg helper"""
 
 from __future__ import division
-from pygal._compat import to_str, u
+from pygal._compat import to_str, u, quote_plus
 from pygal.etree import etree
 import io
 import os
@@ -85,7 +85,15 @@ class Svg(object):
         colors = self.graph.style.get_colors(self.id, self.graph._order)
         strokes = self.get_strokes()
         all_css = []
-        for css in ['file://base.css'] + list(self.graph.css):
+        auto_css = ['file://base.css']
+
+        if self.graph.style._google_fonts:
+            auto_css.append(
+                '//fonts.googleapis.com/css?family=%s' % quote_plus(
+                    '|'.join(self.graph.style._google_fonts))
+            )
+
+        for css in auto_css + list(self.graph.css):
             css_text = None
             if css.startswith('inline:'):
                 css_text = css[len('inline:'):]
@@ -94,25 +102,12 @@ class Svg(object):
                     css = os.path.join(
                         os.path.dirname(__file__), 'css', css[len('file://'):])
 
-                class FontSizes(object):
-
-                    """Container for font sizes"""
-
-                fs = FontSizes()
-                for name in dir(self.graph.state):
-                    if name.endswith('_font_size'):
-                        setattr(
-                            fs,
-                            name.replace('_font_size', ''),
-                            ('%dpx' % getattr(self.graph, name)))
-
                 with io.open(css, encoding='utf-8') as f:
                     css_text = template(
                         f.read(),
                         style=self.graph.style,
                         colors=colors,
                         strokes=strokes,
-                        font_sizes=fs,
                         id=self.id)
 
             if css_text is not None:
@@ -146,9 +141,13 @@ class Svg(object):
                 return o.to_dict()
             return json.JSONEncoder().default(o)
 
+        dct = get_js_dict()
+        # Config adds
+        dct['legends'] = self.graph._legends
+
         common_script.text = " = ".join(
             ("window.config", json.dumps(
-                get_js_dict(), default=json_default)))
+                dct, default=json_default)))
 
         for js in self.graph.js:
             if js.startswith('file://'):

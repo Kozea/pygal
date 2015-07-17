@@ -112,8 +112,26 @@
   transition: opacity {{ style.transition }};
 }
 
-{{ id }}.tooltip text {
+{{ id }}.tooltip .label {
+  fill: {{ style.foreground }};
+}
+
+{{ id }}.tooltip .label {
+  fill: {{ style.foreground }};
+}
+
+{{ id }}.tooltip .legend {
+  font-size: .8em;
+  fill: {{ style.foreground_subtle }};
+}
+
+{{ id }}.tooltip .x_label {
+  font-size: .6em;
   fill: {{ style.foreground_strong }};
+}
+
+{{ id }}.tooltip .value {
+  font-size: 2em;
 }
 
 {{ id }}.map-element {

@@ -103,8 +103,8 @@
   fill: transparent;
 }
 
-{{ id }} text {
-  stroke: none;
+{{ id }} text, {{ id }} tspan {
+  stroke: none !important;
 }
 
 {{ id }}.series text.active {
@@ -117,8 +117,4 @@
 
 {{ id }}.tooltip text {
   fill-opacity: 1;
-}
-
-{{ id }}.tooltip text tspan.label {
-  fill-opacity: .8;
 }

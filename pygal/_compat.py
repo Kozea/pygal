@@ -80,3 +80,8 @@ def timestamp(x):
         return x.timestamp()
     else:
         return time.mktime(x.utctimetuple())
+
+try:
+    from urllib import quote_plus
+except ImportError:
+    from urllib.parse import quote_plus

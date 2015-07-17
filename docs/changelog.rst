@@ -31,6 +31,9 @@ Changelog
 * Rename in Style foreground_light as foreground_strong
 * Rename in Style foreground_dark as foreground_subtle
 * Add a ``render_data_uri`` method (#237)
+* Move ``font_size`` config to style
+* Add ``font_family`` for various elements in style
+* Add ``googlefont:font`` support for style fonts
 
 1.7.0
 =====

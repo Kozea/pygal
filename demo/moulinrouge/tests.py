@@ -48,14 +48,19 @@ def get_test_routes(app):
 
     @app.route('/test/bar_links')
     def test_bar_links():
-        bar = Bar(style=styles['neon'])
+        bar = Bar(style=styles['default'](
+            font_family='googlefont:Raleway'))
         bar.js = ('http://l:2343/2.0.x/pygal-tooltips.js',)
-        bar.add('1234', [
+        bar.title = 'Wow ! Such Chart !'
+        bar.x_title = 'Many x labels'
+        bar.y_title = 'Much y labels'
+
+        bar.add('Red serie', [
             {'value': 10,
              'label': 'Ten',
              'xlink': 'http://google.com?q=10'},
-            {'value': 20,
-             'tooltip': 'Twenty',
+            {'value': 25,
+             'label': 'Twenty is a good number yada yda yda yada yada',
              'xlink': 'http://google.com?q=20'},
             30,
             {'value': 40,
@@ -63,14 +68,15 @@ def get_test_routes(app):
              'xlink': 'http://google.com?q=40'}
         ])
 
-        bar.add('4321', [40, {
+        bar.add('Blue serie', [40, {
             'value': 30,
             'label': 'Thirty',
             'xlink': 'http://google.com?q=30'
         }, 20, 10])
-        bar.x_labels = map(str, range(1, 5))
+        bar.x_labels = ['Yesterday', 'Today or any other day',
+                        'Tomorrow', 'Someday']
         bar.logarithmic = True
-        bar.zero = 1
+        # bar.zero = 1
         return bar.render_response()
 
     @app.route('/test/xy_links')
@@ -395,8 +401,8 @@ def get_test_routes(app):
             js = ['http://l:2343/2.0.x/pygal-tooltips.js']
 
         stacked = StackedBar(LolConfig())
-        stacked.add('1', [1, 2, 3])
-        stacked.add('2', [4, 5, 6])
+        stacked.add('', [1, 2, 3])
+        stacked.add('My beautiful serie of 2019', [4, 5, 6])
         return stacked.render_response()
 
     @app.route('/test/dateline')
@@ -628,7 +634,7 @@ def get_test_routes(app):
     @app.route('/test/half_pie')
     def test_half_pie():
         pie = Pie(half_pie=True)
-        for i in range(100):
+        for i in range(20):
             pie.add(str(i), i, inner_radius=.1)
         pie.legend_at_bottom = True
         pie.legend_at_bottom_columns = 4

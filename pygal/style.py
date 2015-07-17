@@ -36,6 +36,24 @@ class Style(object):
     # Monospaced font is highly encouraged
     font_family = 'Consolas, "Liberation Mono", Menlo, Courier, '
     'monospace'
+
+    label_font_family = None
+    major_label_font_family = None
+    value_font_family = None
+    tooltip_font_family = None
+    title_font_family = None
+    legend_font_family = None
+    no_data_font_family = None
+
+    label_font_size = 10
+    major_label_font_size = 10
+    value_font_size = 8
+    tooltip_font_size = 16
+    title_font_size = 16
+    legend_font_size = 14
+    no_data_font_size = 64
+
+
     opacity = '.7'
     opacity_hover = '.8'
     transition = '150ms'
@@ -64,6 +82,19 @@ class Style(object):
     def __init__(self, **kwargs):
         """Create the style"""
         self.__dict__.update(kwargs)
+        self._google_fonts = set()
+        if self.font_family.startswith('googlefont:'):
+            self.font_family = self.font_family.replace('googlefont:', '')
+            self._google_fonts.add(self.font_family.split(',')[0].strip())
+
+        for name in dir(self):
+            if name.endswith('_font_family'):
+                fn = getattr(self, name)
+                if fn is None:
+                    setattr(self, name, self.font_family)
+                elif fn.startswith('googlefont:'):
+                    setattr(self, name, fn.replace('googlefont:', ''))
+                    self._google_fonts.add(getattr(self, name).split(',')[0].strip())
 
     def get_colors(self, prefix, len_):
         """Get the css color list"""
@@ -96,7 +127,7 @@ class Style(object):
         """Convert instance to a serializable mapping."""
         config = {}
         for attr in dir(self):
-            if not attr.startswith('__'):
+            if not attr.startswith('_'):
                 value = getattr(self, attr)
                 if not hasattr(value, '__call__'):
                     config[attr] = value

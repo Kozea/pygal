@@ -108,15 +108,12 @@ class Graph(PublicApi):
             style="opacity: 0",
             **{'class': 'tooltip'})
 
-        a = self.svg.node(self.nodes['tooltip'], 'a')
-        self.svg.node(a, 'rect',
+        self.svg.node(self.nodes['tooltip'], 'rect',
                       rx=self.tooltip_border_radius,
                       ry=self.tooltip_border_radius,
                       width=0, height=0,
                       **{'class': 'tooltip-box'})
-        text = self.svg.node(a, 'text', class_='text')
-        self.svg.node(text, 'tspan', class_='label')
-        self.svg.node(text, 'tspan', class_='value')
+        self.svg.node(self.nodes['tooltip'], 'g', class_='text')
 
     def _x_axis(self):
         """Make the x axis: labels and guides"""
@@ -136,7 +133,7 @@ class Graph(PublicApi):
                     last_label_position - first_label_position) / (
                     len(self._x_labels) - 1)
                 truncation = reverse_text_len(
-                    available_space, self.label_font_size)
+                    available_space, self.style.label_font_size)
                 truncation = max(truncation, 1)
 
         if 0 not in [label[1] for label in self._x_labels]:
@@ -160,7 +157,7 @@ class Graph(PublicApi):
                     'axis ' if label == "0" else '',
                     'major ' if major else '',
                     'guide ' if position != 0 and not last_guide else ''))
-            y += .5 * self.label_font_size + 5
+            y += .5 * self.style.label_font_size + 5
             text = self.svg.node(
                 guides, 'text',
                 x=x,
@@ -241,7 +238,7 @@ class Graph(PublicApi):
             text = self.svg.node(
                 guides, 'text',
                 x=x,
-                y=y + .35 * self.label_font_size,
+                y=y + .35 * self.style.label_font_size,
                 class_='major' if major else ''
             )
 
@@ -267,7 +264,7 @@ class Graph(PublicApi):
                 text = self.svg.node(
                     guides, 'text',
                     x=x,
-                    y=y + .35 * self.label_font_size,
+                    y=y + .35 * self.style.label_font_size,
                     class_='major' if major else ''
                 )
                 text.text = label
@@ -292,7 +289,7 @@ class Graph(PublicApi):
                 available_space = self.view.width / cols - (
                     self.legend_box_size + 5)
                 truncation = reverse_text_len(
-                    available_space, self.legend_font_size)
+                    available_space, self.style.legend_font_size)
         else:
             x = self.spacing
             y = self.margin_box.top + self.spacing
@@ -304,7 +301,7 @@ class Graph(PublicApi):
             self.nodes['graph'], class_='legends',
             transform='translate(%d, %d)' % (x, y))
 
-        h = max(self.legend_box_size, self.legend_font_size)
+        h = max(self.legend_box_size, self.style.legend_font_size)
         x_step = self.view.width / cols
         if self.legend_at_bottom:
             # if legends at the bottom, we dont split the windows
@@ -326,7 +323,7 @@ class Graph(PublicApi):
             x = self.margin_box.left + self.view.width + self.spacing
             if self._y_2nd_labels:
                 h, w = get_texts_box(
-                    cut(self._y_2nd_labels), self.label_font_size)
+                    cut(self._y_2nd_labels), self.style.label_font_size)
                 x += self.spacing + max(w * cos(rad(self.y_label_rotation)), h)
 
             y = self.margin_box.top + self.spacing
@@ -348,8 +345,8 @@ class Graph(PublicApi):
                 legend, 'rect',
                 x=col * x_step,
                 y=1.5 * row * h + (
-                    self.legend_font_size - self.legend_box_size
-                    if self.legend_font_size > self.legend_box_size else 0
+                    self.style.legend_font_size - self.legend_box_size
+                    if self.style.legend_font_size > self.legend_box_size else 0
                 ) / 2,
                 width=self.legend_box_size,
                 height=self.legend_box_size,
@@ -367,7 +364,7 @@ class Graph(PublicApi):
             self.svg.node(
                 node, 'text',
                 x=col * x_step + self.legend_box_size + 5,
-                y=1.5 * row * h + .5 * h + .3 * self.legend_font_size
+                y=1.5 * row * h + .5 * h + .3 * self.style.legend_font_size
             ).text = truncated
 
             if truncated != title:
@@ -380,7 +377,7 @@ class Graph(PublicApi):
                 self.svg.node(
                     self.nodes['title'], 'text', class_='title plot_title',
                     x=self.width / 2,
-                    y=i * (self.title_font_size + self.spacing)
+                    y=i * (self.style.title_font_size + self.spacing)
                 ).text = title_line
 
     def _make_x_title(self):
@@ -392,7 +389,7 @@ class Graph(PublicApi):
                 text = self.svg.node(
                     self.nodes['title'], 'text', class_='title',
                     x=self.margin_box.left + self.view.width / 2,
-                    y=y + i * (self.title_font_size + self.spacing)
+                    y=y + i * (self.style.title_font_size + self.spacing)
                 )
                 text.text = title_line
 
@@ -404,7 +401,7 @@ class Graph(PublicApi):
                 text = self.svg.node(
                     self.nodes['title'], 'text', class_='title',
                     x=self._legend_at_left_width,
-                    y=i * (self.title_font_size + self.spacing) + yc
+                    y=i * (self.style.title_font_size + self.spacing) + yc
                 )
                 text.attrib['transform'] = "rotate(%d %f %f)" % (
                     -90, self._legend_at_left_width, yc)
@@ -455,7 +452,7 @@ class Graph(PublicApi):
                 serie_node['text_overlay'], 'text',
                 class_='centered',
                 x=x,
-                y=y + self.value_font_size / 3
+                y=y + self.style.value_font_size / 3
             ).text = value if self.print_zeroes or value != '0' else ''
 
     def _get_value(self, values, i):
@@ -530,7 +527,7 @@ class Graph(PublicApi):
                 h, w = get_texts_box(
                     map(lambda x: truncate(x, self.truncate_legend or 15),
                         cut(series_group, 'title')),
-                    self.legend_font_size)
+                    self.style.legend_font_size)
                 if self.legend_at_bottom:
                     h_max = max(h, self.legend_box_size)
                     cols = (self._order // self.legend_at_bottom_columns
@@ -554,7 +551,7 @@ class Graph(PublicApi):
                     h, w = get_texts_box(
                         map(lambda x: truncate(x, self.truncate_label or 25),
                             cut(xlabels)),
-                        self.label_font_size)
+                        self.style.label_font_size)
                     self._x_labels_height = self.spacing + max(
                         w * sin(rad(self.x_label_rotation)), h)
                     if xlabels is self._x_labels:
@@ -570,7 +567,7 @@ class Graph(PublicApi):
             for ylabels in (self._y_labels, self._y_2nd_labels):
                 if ylabels:
                     h, w = get_texts_box(
-                        cut(ylabels), self.label_font_size)
+                        cut(ylabels), self.style.label_font_size)
                     if ylabels is self._y_labels:
                         self.margin_box.left += self.spacing + max(
                             w * cos(rad(self.y_label_rotation)), h)
@@ -579,29 +576,30 @@ class Graph(PublicApi):
                             w * cos(rad(self.y_label_rotation)), h)
 
         self._title = split_title(
-            self.title, self.width, self.title_font_size)
+            self.title, self.width, self.style.title_font_size)
 
         if self.title:
-            h, _ = get_text_box(self._title[0], self.title_font_size)
+            h, _ = get_text_box(self._title[0], self.style.title_font_size)
             self.margin_box.top += len(self._title) * (self.spacing + h)
 
         self._x_title = split_title(
-            self.x_title, self.width - self.margin_box.x, self.title_font_size)
+            self.x_title, self.width - self.margin_box.x,
+            self.style.title_font_size)
 
         self._x_title_height = 0
         if self._x_title:
-            h, _ = get_text_box(self._x_title[0], self.title_font_size)
+            h, _ = get_text_box(self._x_title[0], self.style.title_font_size)
             height = len(self._x_title) * (self.spacing + h)
             self.margin_box.bottom += height
             self._x_title_height = height + self.spacing
 
         self._y_title = split_title(
             self.y_title, self.height - self.margin_box.y,
-            self.title_font_size)
+            self.style.title_font_size)
 
         self._y_title_height = 0
         if self._y_title:
-            h, _ = get_text_box(self._y_title[0], self.title_font_size)
+            h, _ = get_text_box(self._y_title[0], self.style.title_font_size)
             height = len(self._y_title) * (self.spacing + h)
             self.margin_box.left += height
             self._y_title_height = height + self.spacing

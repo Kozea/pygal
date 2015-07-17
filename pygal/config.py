@@ -301,6 +301,10 @@ class Config(CommonConfig):
 
     tooltip_border_radius = Key(0, int, "Look", "Tooltip border radius")
 
+    tooltip_fancy_mode = Key(
+        True, bool, "Look", "Fancy tooltips",
+        "Print legend, x label in tooltip and use serie color for value.")
+
     inner_radius = Key(
         0, float, "Look", "Piechart inner radius (donut), must be <.9")
 
@@ -440,20 +444,6 @@ class Config(CommonConfig):
     # Text #
     no_data_text = Key(
         "No data", str, "Text", "Text to display when no data is given")
-
-    label_font_size = Key(10, int, "Text", "Label font size")
-
-    major_label_font_size = Key(10, int, "Text", "Major label font size")
-
-    value_font_size = Key(8, int, "Text", "Value font size")
-
-    tooltip_font_size = Key(16, int, "Text", "Tooltip font size")
-
-    title_font_size = Key(16, int, "Text", "Title font size")
-
-    legend_font_size = Key(14, int, "Text", "Legend font size")
-
-    no_data_font_size = Key(64, int, "Text", "No data text font size")
 
     print_values = Key(
         False, bool,
