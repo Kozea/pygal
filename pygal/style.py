@@ -33,6 +33,7 @@ class Style(object):
     foreground = 'rgba(0, 0, 0, .87)'
     foreground_strong = 'rgba(0, 0, 0, 1)'
     foreground_subtle = 'rgba(0, 0, 0, .54)'
+
     # Monospaced font is highly encouraged
     font_family = 'Consolas, "Liberation Mono", Menlo, Courier, '
     'monospace'
@@ -53,6 +54,9 @@ class Style(object):
     legend_font_size = 14
     no_data_font_size = 64
 
+    # Guide line stroke style
+    guide_stroke_dasharray = '4,4'
+    major_guide_stroke_dasharray = '6,6'
 
     opacity = '.7'
     opacity_hover = '.8'
