@@ -79,5 +79,7 @@ Text to display instead of the graph when no data is supplied:
 
 .. pygal-code::
 
-  chart = pygal.Line(no_data_text='No result found')
+  from pygal.style import DefaultStyle
+  chart = pygal.Line(no_data_text='No result found',
+                     style=DefaultStyle(no_data_font_size=40))
   chart.add('line', [])
