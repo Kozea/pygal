@@ -112,7 +112,8 @@
 }
 
 {{ id }}.tooltip rect {
-  fill-opacity: 0.8;
+  fill-opacity: .95;
+  stroke-width: .5;
 }
 
 {{ id }}.tooltip text {

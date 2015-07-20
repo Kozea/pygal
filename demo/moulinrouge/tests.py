@@ -48,7 +48,7 @@ def get_test_routes(app):
 
     @app.route('/test/bar_links')
     def test_bar_links():
-        bar = Bar(style=styles['default'](
+        bar = StackedLine(style=styles['default'](
             font_family='googlefont:Raleway'))
         bar.js = ('http://l:2343/2.0.x/pygal-tooltips.js',)
         bar.title = 'Wow ! Such Chart !'
@@ -59,8 +59,8 @@ def get_test_routes(app):
             {'value': 10,
              'label': 'Ten',
              'xlink': 'http://google.com?q=10'},
-            {'value': 25,
-             'label': 'Twenty is a good number yada yda yda yada yada',
+            {'value': 20,
+             'label': 'Twenty is a good number yada yda yda yada yadaaaaaaaaaaaaaaaaaaaaaa',
              'xlink': 'http://google.com?q=20'},
             30,
             {'value': 40,
