@@ -147,6 +147,13 @@ def unparse_color(r, g, b, a, type):
         return 'rgba(%d, %d, %d, %g)' % (r, g, b, a)
 
 
+def is_foreground_light(color):
+    """
+    Determine if the background color need a light or dark foreground color
+    """
+    return rgb_to_hsl(*parse_color(color)[:3])[2] < 17.9
+
+
 _clamp = lambda x: max(0, min(100, x))
 
 

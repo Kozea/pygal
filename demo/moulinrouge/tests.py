@@ -60,7 +60,8 @@ def get_test_routes(app):
              'label': 'Ten',
              'xlink': 'http://google.com?q=10'},
             {'value': 20,
-             'label': 'Twenty is a good number yada yda yda yada yadaaaaaaaaaaaaaaaaaaaaaa',
+             'label': 'Twenty is a good number yada yda yda yada '
+             'yadaaaaaaaaaaaaaaaaaaaaaa',
              'xlink': 'http://google.com?q=20'},
             30,
             {'value': 40,
@@ -141,6 +142,18 @@ def get_test_routes(app):
     def test_bar_none():
         bar = Bar()
         bar.add('Lol', [2, None, 12])
+        return bar.render_response()
+
+    @app.route('/test/print_values')
+    def test_bar_print_values():
+        bar = Bar(print_values=True, js=[],
+                  style=styles['default'](
+                      value_font_family='googlefont:Raleway',
+                      value_font_size=30,
+                      value_colors=(None, None, 'blue', 'red', 'green')
+                  ))
+        for i in range(12):
+            bar.add('', i)
         return bar.render_response()
 
     @app.route('/test/treemap')

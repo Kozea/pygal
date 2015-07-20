@@ -35,6 +35,7 @@ Changelog
 * Add ``font_family`` for various elements in style
 * Add ``googlefont:font`` support for style fonts
 * Add ``tooltip_fancy_mode`` to revert to old tooltips
+* Add auto ``print_value`` color + a configurable ``value_colors`` list in style
 
 1.7.0
 =====

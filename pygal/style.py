@@ -19,9 +19,9 @@
 """Charts styling classes"""
 
 from __future__ import division
-
+from itertools import chain
 from pygal import colors
-from pygal.colors import darken, lighten
+from pygal.colors import darken, lighten, is_foreground_light
 
 
 class Style(object):
@@ -79,6 +79,8 @@ class Style(object):
         '#607D8B',  # 18
     )
 
+    value_colors = ()
+
     def __init__(self, **kwargs):
         """Create the style"""
         self.__dict__.update(kwargs)
@@ -106,6 +108,13 @@ class Style(object):
                 '  fill: {1};\n'
                 '}}\n') % (prefix, prefix)).format(*tupl)
 
+        def value_color(tupl):
+            """Make a value color css"""
+            return ((
+                '%s .text-overlay .color-{0} text {{\n'
+                '  fill: {1};\n'
+                '}}\n') % (prefix,)).format(*tupl)
+
         if len(self.colors) < len_:
             missing = len_ - len(self.colors)
             cycles = 1 + missing // len(self.colors)
@@ -121,7 +130,17 @@ class Style(object):
         else:
             colors = self.colors[:len_]
 
-        return '\n'.join(map(color, enumerate(colors)))
+        # Auto compute foreground value color when color is missing
+        value_colors = []
+        for i in range(len_):
+            if i < len(self.value_colors) and self.value_colors[i] is not None:
+                value_colors.append(self.value_colors[i])
+            else:
+                value_colors.append('white' if is_foreground_light(self.colors[i]) else 'black')
+
+        return '\n'.join(chain(
+            map(color, enumerate(colors)),
+            map(value_color, enumerate(value_colors))))
 
     def to_dict(self):
         """Convert instance to a serializable mapping."""

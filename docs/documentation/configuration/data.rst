@@ -47,15 +47,6 @@ zero values are hidden by default but you can use this option to print them anyw
   chart.add('line', [0, 12, 31, 8, 28, 0])
 
 
-value_font_size
----------------
-
-.. pygal-code::
-
-  chart = pygal.Bar(js=[], print_values=True, value_font_size=24)
-  chart.add('line', [0, 12, 31, 8, 28, 0])
-
-
 human_readable
 --------------
 
@@ -85,14 +76,4 @@ Text to display instead of the graph when no data is supplied:
 .. pygal-code::
 
   chart = pygal.Line(no_data_text='No result found')
-  chart.add('line', [])
-
-
-no_data_font_size
------------------
-
-
-.. pygal-code::
-
-  chart = pygal.Line(no_data_font_size=32)
   chart.add('line', [])

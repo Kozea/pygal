@@ -31,6 +31,52 @@ You can instantiate the ``Style`` class with some customizations for quick styli
   chart.add('E', [7,  4, 2,  1,  2, 10, 0])
 
 
+Properties
+~~~~~~~~~~
+
+Style objects supports the following properties:
+
+============================  =========================
+Properties                    Description
+============================  =========================
+``plot_background``           The color of the chart area background
+``background``                The color of the image background
+``foreground``                The main foregrond color
+``foreground_strong``         The emphasis foreground color
+``foreground_subtle``         The subtle foreground color
+``font_family``               The main font family
+``label_font_family``         The label font family
+``major_label_font_family``   The major label font family
+``value_font_family``         The ``print_value`` font family
+``tooltip_font_family``       The tooltip font family
+``title_font_family``         The title font family
+``legend_font_family``        The legend font family
+``no_data_font_family``       The no data text font family
+``label_font_size``           The label font size
+``major_label_font_size``     The major label font size
+``value_font_size``           The ``print_value`` font size
+``tooltip_font_size``         The tooltip font size
+``title_font_size``           The title font size
+``legend_font_size``          The legend font size
+``no_data_font_size``         The no data font size
+``opacity``                   The opacity of chart element
+``opacity_hover``             The opacity of chart element on mouse hover
+``transition``                Define the global transition property for animation
+``colors``                    The serie color list
+``value_colors``              The ``print_value`` color list
+============================  =========================
+
+
+Google font
+~~~~~~~~~~~
+
+It is possible to give a google font to any font family property by specifying the ``googlefont:`` prefix:
+
+.. code-block:: python
+
+   style = Style(font_family='googlefont:Raleway')
+
+
 Using a custom css
 ------------------
 

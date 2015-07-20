@@ -55,18 +55,6 @@ legend_box_size
   chart.add('Serie 4', [3, 1, 5])
 
 
-legend_font_size
-----------------
-
-.. pygal-code::
-
-  chart = pygal.Line(legend_font_size=20)
-  chart.add('Serie 1', [1, 2, 3])
-  chart.add('Serie 2', [4, 2, 0])
-  chart.add('Serie 3', [1, -1, 1])
-  chart.add('Serie 4', [3, 1, 5])
-
-
 truncate_legend
 ---------------
 

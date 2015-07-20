@@ -191,36 +191,6 @@ show_minor_y_labels
   chart.add('line', [0, .0002, .0005, .00035])
 
 
-label_font_size
----------------
-
-.. pygal-code::
-
-  chart = pygal.Line(x_label_rotation=20, label_font_size=8)
-  chart.x_labels = [
-      'This is the first point !',
-      'This is the second point !',
-      'This is the third point !',
-      'This is the fourth point !']
-  chart.x_labels_major = ['This is the first point !', 'This is the fourth point !']
-  chart.add('line', [0, .0002, .0005, .00035])
-
-
-major_label_font_size
----------------------
-
-.. pygal-code::
-
-  chart = pygal.Line(x_label_rotation=20, major_label_font_size=12)
-  chart.x_labels = [
-      'This is the first point !',
-      'This is the second point !',
-      'This is the third point !',
-      'This is the fourth point !']
-  chart.x_labels_major = ['This is the first point !', 'This is the fourth point !']
-  chart.add('line', [0, .0002, .0005, .00035])
-
-
 truncate_label
 --------------
 
