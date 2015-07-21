@@ -53,7 +53,7 @@ Properties                        Description
 ``legend_font_family``            The legend font family
 ``no_data_font_family``           The no data text font family
 ``guide_stroke_dasharray``        The dasharray for guide line
-``major_guide_stroke_dasharray``  The dasharray for guide line
+``major_guide_stroke_dasharray``  The dasharray for major guide line
 ``label_font_size``               The label font size
 ``major_label_font_size``         The major label font size
 ``value_font_size``               The ``print_value`` font size

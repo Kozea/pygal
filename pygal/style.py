@@ -54,7 +54,7 @@ class Style(object):
     legend_font_size = 14
     no_data_font_size = 64
 
-    # Guide line stroke style
+    # Guide line dash array style
     guide_stroke_dasharray = '4,4'
     major_guide_stroke_dasharray = '6,6'
 
