@@ -36,6 +36,7 @@ Changelog
 * Add ``googlefont:font`` support for style fonts
 * Add ``tooltip_fancy_mode`` to revert to old tooltips
 * Add auto ``print_value`` color + a configurable ``value_colors`` list in style
+* Add ``guide_stroke_dasharray`` and ``guide_stroke_dasharray`` in style to customize guides (#242) (thanks cbergmiller)
 
 1.7.0
 =====
