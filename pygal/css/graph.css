@@ -54,11 +54,11 @@
 }
 
 {{ id }}.axis .guide.line {
-  stroke-dasharray: 4,4;
+  stroke-dasharray: {{ style.guide_stroke_dasharray }};
 }
 
 {{ id }}.axis .major.guide.line {
-  stroke-dasharray: 6,6;
+  stroke-dasharray: {{ style.major_guide_stroke_dasharray }};
 }
 
 {{ id }}.horizontal .axis.y .guide.line,
