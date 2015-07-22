@@ -24,15 +24,15 @@ straight segments.
 
 from __future__ import division
 from functools import reduce
-from pygal.util import compute_scale, cached_property, compose, ident
+from pygal.util import compute_scale, cached_property, compose, ident, cut
 from pygal.graph.line import Line
+from pygal.graph.dual import Dual
 
 
-class XY(Line):
+class XY(Line, Dual):
 
     """XY Line graph class"""
 
-    _dual = True
     _x_adapters = []
 
     def _get_value(self, values, i):
@@ -123,26 +123,5 @@ class XY(Line):
         if xrng:
             self._box.xmin, self._box.xmax = xmin, xmax
 
-        if self.x_labels:
-            self._box.xmin = min(self.x_labels)
-            self._box.xmax = max(self.x_labels)
-
         if yrng:
             self._box.ymin, self._box.ymax = ymin, ymax
-
-        if self.y_labels:
-            self._box.ymin = min(self.y_labels)
-            self._box.ymax = max(self.y_labels)
-
-        x_pos = compute_scale(
-            self._box.xmin, self._box.xmax, self.logarithmic, self.order_min,
-            self.min_scale, self.max_scale
-        ) if not self.x_labels else list(map(float, self.x_labels))
-
-        y_pos = compute_scale(
-            self._box.ymin, self._box.ymax, self.logarithmic, self.order_min,
-            self.min_scale, self.max_scale
-        ) if not self.y_labels else list(map(float, self.y_labels))
-
-        self._x_labels = list(zip(map(self._x_format, x_pos), x_pos))
-        self._y_labels = list(zip(map(self._format, y_pos), y_pos))

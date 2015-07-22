@@ -24,7 +24,7 @@ proportional to the values that they represent.
 
 from __future__ import division
 from pygal.graph.graph import Graph
-from pygal.util import swap, ident, compute_scale, decorate, alter
+from pygal.util import swap, ident, decorate, alter
 
 
 class Bar(Graph):
@@ -103,15 +103,6 @@ class Bar(Graph):
         ] if self._len > 1 else [0, 1]  # Center if only one value
 
         self._points(x_pos)
-
-        y_pos = compute_scale(
-            self._box.ymin, self._box.ymax, self.logarithmic, self.order_min,
-            self.min_scale, self.max_scale
-        ) if not self.y_labels else list(map(float, self.y_labels))
-
-        self._x_labels = self.x_labels and list(zip(self.x_labels, [
-            (i + .5) / self._len for i in range(self._len)]))
-        self._y_labels = list(zip(map(self._format, y_pos), y_pos))
 
     def _compute_secondary(self):
         """Compute parameters for secondary series rendering"""

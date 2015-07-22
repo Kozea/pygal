@@ -94,6 +94,12 @@ class Pie(Graph):
                            original_start_angle, center, val)
         return serie_angle
 
+    def _compute_x_labels(self):
+        pass
+
+    def _compute_y_labels(self):
+        pass
+
     def _plot(self):
         """Draw all the serie slices"""
         total = sum(map(sum, map(lambda x: x.values, self.series)))

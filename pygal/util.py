@@ -24,7 +24,6 @@ from pygal._compat import u, is_list_like, to_unicode
 import re
 from decimal import Decimal
 from math import floor, pi, log, log10, ceil
-from itertools import cycle
 ORDERS = u("yzafpnµm kMGTPEZY")
 
 
@@ -215,13 +214,7 @@ def get_text_box(text, fs):
 
 def get_texts_box(texts, fs):
     """Approximation of multiple texts bounds"""
-    def get_text_title(texts):
-        for text in texts:
-            if isinstance(text, dict):
-                yield text['title']
-            else:
-                yield text
-    max_len = max(map(len, get_text_title(texts)))
+    max_len = max(map(len, texts))
     return (fs, text_len(max_len, fs))
 
 

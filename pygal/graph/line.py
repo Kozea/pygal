@@ -24,7 +24,7 @@ connected by straight segments
 
 from __future__ import division
 from pygal.graph.graph import Graph
-from pygal.util import cached_property, compute_scale, decorate, alter
+from pygal.util import cached_property, compute_scale, decorate, alter, cut
 
 
 class Line(Graph):
@@ -146,18 +146,6 @@ class Line(Graph):
 
         self._points(x_pos)
 
-        if self.x_labels:
-            label_len = len(self.x_labels)
-            if label_len != self._len:
-                label_pos = [0.5] if label_len == 1 else [
-                    x / (label_len - 1) for x in range(label_len)
-                ]
-                self._x_labels = list(zip(self.x_labels, label_pos))
-            else:
-                self._x_labels = list(zip(self.x_labels, x_pos))
-        else:
-            self._x_labels = None
-
         if self.include_x_axis:
             # Y Label
             self._box.ymin = min(self._min or 0, 0)
@@ -165,17 +153,6 @@ class Line(Graph):
         else:
             self._box.ymin = self._min
             self._box.ymax = self._max
-
-        if self.y_labels:
-            self._box.ymin = min(self._box.ymin, min(self.y_labels))
-            self._box.ymax = max(self._box.ymax, max(self.y_labels))
-
-        y_pos = compute_scale(
-            self._box.ymin, self._box.ymax, self.logarithmic, self.order_min,
-            self.min_scale, self.max_scale
-        ) if not self.y_labels else list(map(float, self.y_labels))
-
-        self._y_labels = list(zip(map(self._format, y_pos), y_pos))
 
     def _plot(self):
         """Plot the serie lines and secondary serie lines"""

@@ -76,20 +76,9 @@ class Box(Graph):
         if self._max:
             self._box.ymax = max(self._max, self.zero)
 
-        x_pos = [
-            x / self._len for x in range(self._len + 1)
-        ] if self._len > 1 else [0, 1]  # Center if only one value
-
-        self._points(x_pos)
-
-        y_pos = compute_scale(
-            self._box.ymin, self._box.ymax, self.logarithmic, self.order_min,
-            self.min_scale, self.max_scale
-        ) if not self.y_labels else list(map(float, self.y_labels))
-
+    def _compute_x_labels(self):
         self._x_labels = self.x_labels and list(zip(self.x_labels, [
             (i + .5) / self._order for i in range(self._order)]))
-        self._y_labels = list(zip(map(self._format, y_pos), y_pos))
 
     def _plot(self):
         """Plot the series data"""

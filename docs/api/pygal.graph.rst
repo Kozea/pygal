@@ -15,6 +15,7 @@ Submodules
    pygal.graph.base
    pygal.graph.box
    pygal.graph.dot
+   pygal.graph.dual
    pygal.graph.funnel
    pygal.graph.gauge
    pygal.graph.graph

@@ -142,3 +142,63 @@ You can specify a dictionary to xlink with all links attributes:
       'target': '_self'}
     }])
 
+Legend
+~~~~~~
+
+Finally legends can be link with the same mechanism:
+
+
+.. pygal-code::
+
+  chart = pygal.Bar()
+  chart.add({
+    'title': 'First',
+    'xlink': {'href': 'http://en.wikipedia.org/wiki/First'}
+  }, [{
+    'value': 2,
+    'label': 'This is the first',
+    'xlink': {'href': 'http://en.wikipedia.org/wiki/First'}
+  }])
+
+  chart.add({
+    'title': 'Second',
+    'xlink': {
+      'href': 'http://en.wikipedia.org/wiki/Second',
+      'target': '_top'
+    }
+  }, [{
+    'value': 4,
+    'label': 'This is the second',
+    'xlink': {
+      'href': 'http://en.wikipedia.org/wiki/Second',
+      'target': '_top'}
+  }])
+
+  chart.add('Third', 7)
+
+  chart.add({
+    'title': 'Fourth',
+    'xlink': {
+      'href': 'http://en.wikipedia.org/wiki/Fourth',
+      'target': '_blank'
+    }
+  }, [{
+    'value': 5,
+    'xlink': {
+      'href': 'http://en.wikipedia.org/wiki/Fourth',
+      'target': '_blank'}
+  }])
+
+  chart.add({
+    'title': 'Fifth',
+    'xlink': {
+      'href': 'http://en.wikipedia.org/wiki/Fifth',
+      'target': '_self'
+    }
+  }, [{
+    'value': 3,
+    'label': 'This is the fifth',
+    'xlink': {
+      'href': 'http://en.wikipedia.org/wiki/Fifth',
+      'target': '_self'}
+  }])

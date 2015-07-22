@@ -23,16 +23,15 @@ as bars of varying width.
 
 from __future__ import division
 from pygal._compat import is_list_like
-from pygal.graph.graph import Graph
+from pygal.graph.dual import Dual
 from pygal.util import (
     swap, ident, compute_scale, decorate, cached_property, alter)
 
 
-class Histogram(Graph):
+class Histogram(Dual):
 
     """Histogram chart class"""
 
-    _dual = True
     _series_margin = 0
 
     @cached_property
@@ -124,18 +123,6 @@ class Histogram(Graph):
             self._box.xmin, self._box.xmax = xmin, xmax
         if yrng:
             self._box.ymin, self._box.ymax = ymin, ymax
-
-        x_pos = compute_scale(
-            self._box.xmin, self._box.xmax, self.logarithmic, self.order_min,
-            self.min_scale, self.max_scale
-        ) if not self.x_labels else list(map(float, self.x_labels))
-        y_pos = compute_scale(
-            self._box.ymin, self._box.ymax, self.logarithmic, self.order_min,
-            self.min_scale, self.max_scale
-        ) if not self.y_labels else list(map(float, self.y_labels))
-
-        self._x_labels = list(zip(map(self._format, x_pos), x_pos))
-        self._y_labels = list(zip(map(self._format, y_pos), y_pos))
 
     def _plot(self):
         """Draw bars for series and secondary series"""

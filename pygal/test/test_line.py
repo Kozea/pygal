@@ -95,6 +95,7 @@ def test_not_equal_x_labels():
     """Test x_labels"""
     line = Line()
     line.add('test1', range(100))
+    line.truncate_label = -1
     line.x_labels = map(str, range(11))
     q = line.render_pyquery()
     assert len(q(".dots")) == 100

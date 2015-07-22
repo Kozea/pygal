@@ -117,3 +117,9 @@ class BaseMap(Graph):
                         self.area_names[area_code], self._format(value))
 
         self.nodes['plot'].append(map)
+
+    def _compute_x_labels(self):
+        pass
+
+    def _compute_y_labels(self):
+        pass

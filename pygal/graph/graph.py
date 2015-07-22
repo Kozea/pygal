@@ -19,12 +19,12 @@
 """Chart properties and drawing"""
 
 from __future__ import division
-from pygal._compat import is_list_like
+from pygal._compat import is_list_like, is_str
 from pygal.interpolate import INTERPOLATIONS
 from pygal.graph.public import PublicApi
 from pygal.view import View, LogView, XYLogView, ReverseView
 from pygal.util import (
-    cached_property, majorize, humanize, split_title,
+    cached_property, majorize, humanize, split_title, compute_scale,
     truncate, reverse_text_len, get_text_box, get_texts_box, cut, rad,
     decorate)
 from math import sqrt, ceil, cos, sin
@@ -165,12 +165,10 @@ class Graph(PublicApi):
                 class_='major' if major else ''
             )
 
-            if isinstance(label, dict):
-                label = label['title']
-
             text.text = truncate(label, truncation)
             if text.text != label:
                 self.svg.node(guides, 'title').text = label
+
             if self.x_label_rotation:
                 text.attrib['transform'] = "rotate(%d %f %f)" % (
                     self.x_label_rotation, x, y)
@@ -242,13 +240,15 @@ class Graph(PublicApi):
                 class_='major' if major else ''
             )
 
-            if isinstance(label, dict):
-                label = label['title']
             text.text = label
 
             if self.y_label_rotation:
                 text.attrib['transform'] = "rotate(%d %f %f)" % (
                     self.y_label_rotation, x, y)
+
+            self.svg.node(
+                guides, 'title',
+            ).text = self._format(position)
 
         if self._y_2nd_labels:
             secondary_ax = self.svg.node(
@@ -526,7 +526,9 @@ class Graph(PublicApi):
             if self.show_legend and series_group:
                 h, w = get_texts_box(
                     map(lambda x: truncate(x, self.truncate_legend or 15),
-                        cut(series_group, 'title')),
+                        [serie.title['title']
+                         if isinstance(serie.title, dict)
+                         else serie.title for serie in series_group]),
                     self.style.legend_font_size)
                 if self.legend_at_bottom:
                     h_max = max(h, self.legend_box_size)
@@ -713,9 +715,38 @@ class Graph(PublicApi):
             cut(self._y_labels, 1)
         )
 
+    def _compute_x_labels(self):
+        self._x_labels = self.x_labels and list(zip(self.x_labels, [
+            (i + .5) / self._len for i in range(self._len)]))
+
+    def _compute_y_labels(self):
+        y_pos = compute_scale(
+            self._box.ymin, self._box.ymax, self.logarithmic,
+            self.order_min, self.min_scale, self.max_scale
+        )
+        if self.y_labels:
+            self._y_labels = []
+            for i, y_label in enumerate(self.y_labels):
+                if isinstance(y_label, dict):
+                    pos = float(y_label.get('value'))
+                    title = y_label.get('label', self._format(pos))
+                elif is_str(y_label):
+                    pos = y_pos[i]
+                    title = y_label
+                else:
+                    pos = float(y_label)
+                    title = self._format(y_label)
+                self._y_labels.append((title, pos))
+            self._box.ymin = min(self._box.ymin, min(cut(self._y_labels, 1)))
+            self._box.ymax = max(self._box.ymax, max(cut(self._y_labels, 1)))
+        else:
+            self._y_labels = list(zip(map(self._format, y_pos), y_pos))
+
     def _draw(self):
         """Draw all the things"""
         self._compute()
+        self._compute_x_labels()
+        self._compute_y_labels()
         self._compute_secondary()
         self._post_compute()
         self._compute_margin()

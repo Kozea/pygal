@@ -27,6 +27,7 @@ from pygal.graph.line import Line
 from pygal.adapters import positive, none_to_zero
 from pygal.view import PolarView, PolarLogView
 from pygal.util import deg, cached_property, compute_scale, majorize, cut
+from pygal._compat import is_str
 from math import cos, pi
 
 
@@ -38,7 +39,7 @@ class Radar(Line):
 
     def __init__(self, *args, **kwargs):
         """Init custom vars"""
-        self.x_pos = None
+        self._x_pos = None
         self._rmax = None
         super(Radar, self).__init__(*args, **kwargs)
 
@@ -152,11 +153,11 @@ class Radar(Line):
                 continue
             guides = self.svg.node(axis, class_='guides')
             self.svg.line(
-                guides, [self.view((r, theta)) for theta in self.x_pos],
+                guides, [self.view((r, theta)) for theta in self._x_pos],
                 close=True,
                 class_='%sguide line' % (
                     'major ' if major else ''))
-            x, y = self.view((r, self.x_pos[0]))
+            x, y = self.view((r, self._x_pos[0]))
             self.svg.node(
                 guides, 'text',
                 x=x - 5,
@@ -188,14 +189,34 @@ class Radar(Line):
         self._rmin = self.zero
         self._rmax = self._max or 1
         self._box.set_polar_box(self._rmin, self._rmax)
+        self._self_close = True
+        self._x_pos = x_pos
 
+    def _compute_x_labels(self):
+        self._x_labels = self.x_labels and list(
+            zip(self.x_labels, self._x_pos))
+
+    def _compute_y_labels(self):
         y_pos = compute_scale(
             self._rmin, self._rmax, self.logarithmic, self.order_min,
             self.min_scale, self.max_scale / 2
-        ) if not self.y_labels else list(map(int, self.y_labels))
+        )
+        if self.y_labels:
+            self._y_labels = []
+            for i, y_label in enumerate(self.y_labels):
+                if isinstance(y_label, dict):
+                    pos = float(y_label.get('value'))
+                    title = y_label.get('label', self._format(pos))
+                elif is_str(y_label):
+                    pos = y_pos[i]
+                    title = y_label
+                else:
+                    pos = float(y_label)
+                    title = self._format(y_label)
+                self._y_labels.append((title, pos))
+            self._rmin = min(self._rmin, min(cut(self._y_labels, 1)))
+            self._rmax = max(self._rmax, max(cut(self._y_labels, 1)))
+            self._box.set_polar_box(self._rmin, self._rmax)
 
-        self._x_labels = self.x_labels and list(zip(self.x_labels, x_pos))
-        self._y_labels = list(zip(map(self._format, y_pos), y_pos))
-
-        self.x_pos = x_pos
-        self._self_close = True
+        else:
+            self._y_labels = list(zip(map(self._format, y_pos), y_pos))

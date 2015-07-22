@@ -20,7 +20,8 @@
 """Gauge chart representing values as needles on a polar scale"""
 
 from __future__ import division
-from pygal.util import decorate, compute_scale, alter
+from pygal._compat import is_str
+from pygal.util import decorate, compute_scale, alter, cut
 from pygal.view import PolarThetaView, PolarThetaLogView
 from pygal.graph.graph import Graph
 
@@ -90,7 +91,7 @@ class Gauge(Graph):
 
     def _y_axis(self, draw_axes=True):
         """Override y axis to plot a polar axis"""
-        axis = self.svg.node(self.nodes['plot'], class_="axis y x gauge")
+        axis = self.svg.node(self.nodes['plot'], class_="axis x gauge")
 
         for i, (label, theta) in enumerate(self._y_labels):
             guides = self.svg.node(axis, class_='guides')
@@ -114,9 +115,13 @@ class Gauge(Graph):
                 y=y
             ).text = label
 
+            self.svg.node(
+                guides, 'title',
+            ).text = self._format(theta)
+
     def _x_axis(self, draw_axes=True):
         """Override x axis to put a center circle in center"""
-        axis = self.svg.node(self.nodes['plot'], class_="axis x gauge")
+        axis = self.svg.node(self.nodes['plot'], class_="axis y gauge")
         x, y = self.view((0, 0))
         self.svg.node(axis, 'circle', cx=x, cy=y, r=4)
 
@@ -132,12 +137,33 @@ class Gauge(Graph):
             0, 1,
             self.min_,
             self.max_)
-        y_pos = compute_scale(
-            self.min_, self.max_, self.logarithmic, self.order_min,
-            self.min_scale, self.max_scale
-        ) if not self.y_labels else list(map(float, self.y_labels))
 
-        self._y_labels = list(zip(map(self._format, y_pos), y_pos))
+    def _compute_y_labels(self):
+        y_pos = compute_scale(
+            self.min_, self.max_, self.logarithmic,
+            self.order_min, self.min_scale, self.max_scale
+        )
+        if self.y_labels:
+            self._y_labels = []
+            for i, y_label in enumerate(self.y_labels):
+                if isinstance(y_label, dict):
+                    pos = float(y_label.get('value'))
+                    title = y_label.get('label', self._format(pos))
+                elif is_str(y_label):
+                    pos = y_pos[i]
+                    title = y_label
+                else:
+                    pos = float(y_label)
+                    title = self._format(y_label)
+                self._y_labels.append((title, pos))
+            self.min_ = min(self.min_, min(cut(self._y_labels, 1)))
+            self.max_ = max(self.max_, max(cut(self._y_labels, 1)))
+            self._box.set_polar_box(
+                0, 1,
+                self.min_,
+                self.max_)
+        else:
+            self._y_labels = list(zip(map(self._format, y_pos), y_pos))
 
     def _plot(self):
         """Plot all needles"""

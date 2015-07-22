@@ -70,15 +70,6 @@ class StackedBar(Bar):
         ] if self._len > 1 else [0, 1]  # Center if only one value
 
         self._points(x_pos)
-        y_pos = compute_scale(
-            self._box.ymin, self._box.ymax, self.logarithmic, self.order_min,
-            self.min_scale, self.max_scale
-        ) if not self.y_labels else list(map(float, self.y_labels))
-        self._x_ranges = zip(x_pos, x_pos[1:])
-
-        self._x_labels = self.x_labels and list(zip(self.x_labels, [
-            sum(x_range) / 2 for x_range in self._x_ranges]))
-        self._y_labels = list(zip(map(self._format, y_pos), y_pos))
 
         self.negative_cumulation = [0] * self._len
         self.positive_cumulation = [0] * self._len

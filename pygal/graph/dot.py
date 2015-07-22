@@ -76,17 +76,25 @@ class Dot(Graph):
         self._box.xmax = x_len
         self._box.ymax = y_len
 
-        x_pos = [n / 2 for n in range(1, 2 * x_len, 2)]
-        y_pos = [n / 2 for n in reversed(range(1, 2 * y_len, 2))]
+        self._x_pos = [n / 2 for n in range(1, 2 * x_len, 2)]
+        self._y_pos = [n / 2 for n in reversed(range(1, 2 * y_len, 2))]
 
         for j, serie in enumerate(self.series):
             serie.points = [
-                (x_pos[i], y_pos[j])
+                (self._x_pos[i], self._y_pos[j])
                 for i in range(x_len)]
 
-        self._x_labels = self.x_labels and list(zip(self.x_labels, x_pos))
+    def _compute_x_labels(self):
+        self._x_labels = self.x_labels and list(
+            zip(self.x_labels, self._x_pos))
+
+    def _compute_y_labels(self):
         self._y_labels = list(zip(
-            self.y_labels or cut(self.series, 'title'), y_pos))
+            self.y_labels or [
+                serie.title['title']
+                if isinstance(serie.title, dict)
+                else serie.title for serie in self.series],
+            self._y_pos))
 
     def _set_view(self):
         """Assign a view to current graph"""

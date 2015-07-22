@@ -54,21 +54,25 @@ class Funnel(Graph):
                 class_='funnel reactive tooltip-trigger'), metadata)
 
             x, y = self.view((
-                self._x_labels[serie.index][1],  # Poly center from label
+                # Poly center from label
+                self._center(self._x_pos[serie.index]),
                 sum([point[1] for point in poly]) / len(poly)))
             self._tooltip_data(funnels, value, x, y, classes='centered')
             self._static_value(serie_node, value, x, y)
 
+    def _center(self, x):
+        return x - 1 / (2 * self._order)
+
     def _compute(self):
         """Compute y min and max and y scale and set labels"""
-        x_pos = [
+        self._x_pos = [
             (x + 1) / self._order for x in range(self._order)
         ] if self._order != 1 else [.5]  # Center if only one value
 
         previous = [[self.zero, self.zero] for i in range(self._len)]
         for i, serie in enumerate(self.series):
             y_height = - sum(serie.safe_values) / 2
-            all_x_pos = [0] + x_pos
+            all_x_pos = [0] + self._x_pos
             serie.points = []
             for j, value in enumerate(serie.values):
                 poly = []
@@ -84,15 +88,13 @@ class Funnel(Graph):
         self._box.ymin = -val_max
         self._box.ymax = val_max
 
-        y_pos = compute_scale(
-            self._box.ymin, self._box.ymax, self.logarithmic, self.order_min,
-            self.min_scale, self.max_scale
-        ) if not self.y_labels else list(map(float, self.y_labels))
-
+    def _compute_x_labels(self):
         self._x_labels = list(
-            zip(cut(self.series, 'title'),
-                map(lambda x: x - 1 / (2 * self._order), x_pos)))
-        self._y_labels = list(zip(map(self._format, y_pos), y_pos))
+            zip(self.x_labels or [
+                serie.title['title']
+                if isinstance(serie.title, dict)
+                else serie.title for serie in self.series],
+                map(self._center, self._x_pos)))
 
     def _plot(self):
         """Plot the funnel"""

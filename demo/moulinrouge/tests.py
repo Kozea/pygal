@@ -180,6 +180,12 @@ def get_test_routes(app):
         gauge.add('Need m', [-4])
         gauge.add('Need z', [-10, 10.5])
         gauge.add('No', [99, -99])
+        gauge.y_labels = [
+            {'label': 'X',
+             'value': 6},
+            {'label': '><',
+             'value': -6}
+        ]
         return gauge.render_response()
 
     @app.route('/test/gauge/log')
@@ -231,7 +237,7 @@ def get_test_routes(app):
         graph.add('2', [7, -4, 10, None, 8, 3, 1])
         graph.add('3', [7, -14, -10, None, 8, 3, 1])
         graph.add('4', [7, 4, -10, None, 8, 3, 1])
-        graph.x_labels = ('a', 'b', 'c', 'd', 'e', 'f', 'g')
+        graph.x_labels = ('a', 'b', 'c', 'd')
         graph.x_label_rotation = 90
         return graph.render_response()
 
@@ -341,13 +347,24 @@ def get_test_routes(app):
             (1.5, 5, 10)
         ])
         hist.add('2', [(2, 2, 8)])
+        hist.x_labels = [0, 3, 6, 9, 12]
         return hist.render_response()
 
     @app.route('/test/ylabels')
     def test_ylabels():
-        chart = Line()
+        chart = Bar()
         chart.x_labels = 'Red', 'Blue', 'Green'
-        chart.y_labels = .0001, .0003, .0004, .00045, .0005
+        chart.y_labels = [
+            {'value': .0001,
+             'label': 'LOL'},
+            {'value': .0003,
+             'label': 'ROFL'},
+            {'value': .0004,
+             'label': 'MAO'},
+            {'value': .00045,
+             'label': 'LMFAO'},
+            {'value': .0005,
+             'label': 'GMCB'}]
         chart.add('line', [.0002, .0005, .00035])
         return chart.render_response()
 
@@ -398,6 +415,7 @@ def get_test_routes(app):
         stacked = StackedBar(stack_from_top=True)
         stacked.add('1', [1, 2, 3])
         stacked.add('2', [4, 5, 6])
+        stacked.x_labels = ['a', 'b', 'c']
         return stacked.render_response()
 
     @app.route('/test/show_dots')
@@ -603,9 +621,10 @@ def get_test_routes(app):
     @app.route('/test/x_major_labels/<chart>')
     def test_x_major_labels_for(chart):
         chart = CHARTS_BY_NAME[chart]()
-        chart.add('test', range(12))
-        chart.x_labels = map(str, range(12))
-        chart.x_labels_major_count = 4
+        for i in range(12):
+            chart.add('test', range(12))
+        chart.x_labels = map(str, range(10))
+        # chart.x_labels_major_count = 4
         # chart.x_labels_major = ['1', '5', '11', '1.0', '5.0', '11.0']
         return chart.render_response()
 
@@ -793,5 +812,23 @@ def get_test_routes(app):
         line = Line(order_min=-32)
         line.add('_', [1, 32, 12, .4, .009])
         return line.render_response()
+
+    @app.route('/test/legendlink/<chart>')
+    def test_legend_link_for(chart):
+        chart = CHARTS_BY_NAME[chart]()
+        # link on chart and label
+        chart.add({
+            'title': 'Red',
+            'xlink': {'href': 'http://en.wikipedia.org/wiki/Red'}
+        }, [{
+            'value': 2,
+            'label': 'This is red',
+            'xlink': {'href': 'http://en.wikipedia.org/wiki/Red'}}])
+
+        chart.add({'title': 'Yellow', 'xlink': {
+            'href': 'http://en.wikipedia.org/wiki/Yellow',
+            'target': '_blank'}}, 7)
+
+        return chart.render_response()
 
     return list(sorted(filter(lambda x: x.startswith('test'), locals())))
