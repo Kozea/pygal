@@ -23,10 +23,12 @@ the bigger the dot
 """
 
 from __future__ import division
-from pygal.util import decorate, cut, safe_enumerate, cached_property, alter
-from pygal.graph.graph import Graph
-from pygal.view import View, ReverseView
+
 from math import log10
+
+from pygal.graph.graph import Graph
+from pygal.util import alter, cached_property, decorate, safe_enumerate
+from pygal.view import ReverseView, View
 
 
 class Dot(Graph):

@@ -23,8 +23,9 @@ connected by straight segments
 """
 
 from __future__ import division
+
 from pygal.graph.graph import Graph
-from pygal.util import cached_property, compute_scale, decorate, alter, cut
+from pygal.util import alter, cached_property, decorate
 
 
 class Line(Graph):

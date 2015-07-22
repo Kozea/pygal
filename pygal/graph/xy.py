@@ -23,10 +23,12 @@ straight segments.
 """
 
 from __future__ import division
+
 from functools import reduce
-from pygal.util import compute_scale, cached_property, compose, ident, cut
-from pygal.graph.line import Line
+
 from pygal.graph.dual import Dual
+from pygal.graph.line import Line
+from pygal.util import cached_property, compose, ident
 
 
 class XY(Line, Dual):

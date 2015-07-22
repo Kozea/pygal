@@ -38,6 +38,8 @@ Changelog
 * Add auto ``print_value`` color + a configurable ``value_colors`` list in style
 * Add ``guide_stroke_dasharray`` and ``guide_stroke_dasharray`` in style to customize guides (#242) (thanks cbergmiller)
 * Refactor label processing in a ``_compute_x_labels`` and ``_compute_y_labels`` method. Handle both string and numbers for all charts. Create a ``Dual`` base chart for dual axis charts.  (#236)
+* Better js integration in maps. Use the normal tooltip.
+
 
 1.7.0
 =====

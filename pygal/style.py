@@ -140,7 +140,8 @@ class Style(object):
             if i < len(self.value_colors) and self.value_colors[i] is not None:
                 value_colors.append(self.value_colors[i])
             else:
-                value_colors.append('white' if is_foreground_light(self.colors[i]) else 'black')
+                value_colors.append('white' if is_foreground_light(
+                    colors[i]) else 'black')
 
         return '\n'.join(chain(
             map(color, enumerate(colors)),

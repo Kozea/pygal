@@ -472,25 +472,30 @@ def get_test_routes(app):
 
     @app.route('/test/worldmap')
     def test_worldmap():
-        wmap = world.World(style=choice(list(styles.values())))
-
-        wmap.add('1st', [('fr', 100), ('us', 10)])
+        wmap = world.World(print_values=True, style=choice(list(styles.values())))
+        wmap.add('1st', [('fr', 100), {
+            'value': ('us', 10),
+            'node': {'style': 'fill: red'}
+        }
+        ])
         wmap.add('2nd', [('jp', 1), ('ru', 7), ('uk', 0)])
         wmap.add('3rd', ['ch', 'cz', 'ca', 'cn'])
         wmap.add('4th', {'br': 12, 'bo': 1, 'bu': 23, 'fr': 34})
         wmap.add('5th', [{
             'value': ('tw', 10),
             'label': 'First label',
-            'xlink': 'http://google.com?q=tw'
+            'xlink': 'http://google.com?q=tw',
         }, {
             'value': ('bw', 20),
             'label': 'Second one',
-            'xlink': 'http://google.com?q=bw'
+            'xlink': 'http://google.com?q=bw',
+            'node': {'style': 'fill: blue'}
         }, {
             'value': ('mw', 40),
             'label': 'Last'
         }])
         wmap.title = 'World Map !!'
+        wmap.value_formatter = lambda x: '%d%%' % x
         return wmap.render_response()
 
     @app.route('/test/supranational')
