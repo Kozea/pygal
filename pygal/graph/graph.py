@@ -24,7 +24,7 @@ from itertools import chain, repeat
 
 from math import ceil, cos, sin, sqrt
 
-from pygal._compat import is_list_like, is_str
+from pygal._compat import is_list_like, is_str, to_str
 from pygal.graph.public import PublicApi
 from pygal.interpolate import INTERPOLATIONS
 from pygal.util import (
@@ -444,12 +444,12 @@ class Graph(PublicApi):
             classes = ' '.join(classes)
 
         self.svg.node(node, 'desc',
-                      class_="x " + classes).text = str(x)
+                      class_="x " + classes).text = to_str(x)
         self.svg.node(node, 'desc',
-                      class_="y " + classes).text = str(y)
+                      class_="y " + classes).text = to_str(y)
         if xlabel:
             self.svg.node(node, 'desc',
-                          class_="x_label").text = str(xlabel)
+                          class_="x_label").text = to_str(xlabel)
 
     def _static_value(self, serie_node, value, x, y):
         """Write the print value"""

@@ -49,7 +49,7 @@ def to_str(obj):
 
 
 def to_unicode(string):
-    """Force stirng to be a string in python 3 or a unicode in python 2"""
+    """Force string to be a string in python 3 or a unicode in python 2"""
     if not isinstance(string, coerce):
         return string.decode('utf-8')
     return string
