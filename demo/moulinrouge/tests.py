@@ -376,8 +376,8 @@ def get_test_routes(app):
         chart.x_label_rotation = 25
         chart.y_label_rotation = 50
         chart.add('1', [30, 20, -2])
-        chart.add(10 * '1b', [-4, 50, 6], secondary=True)
-        chart.add(10 * '2b', [None, 10, 20], secondary=True)
+        chart.add('1b', [-4, 50, 6], secondary=True)
+        chart.add('2b', [None, 10, 20], secondary=True)
         chart.add('2', [8, 21, -0])
         chart.add('3', [None, 20, 10])
         chart.add('3b', [-1, 2, -3], secondary=True)
@@ -395,6 +395,8 @@ def get_test_routes(app):
     @app.route('/test/box')
     def test_box():
         chart = Box()
+        chart.js = ('http://l:2343/2.0.x/pygal-tooltips.js',)
+        chart.box_mode = '1.5IQR'
         chart.add('One', [15, 8, 2, -12, 9, 23])
         chart.add('Two', [5, 8, 2, -9, 23, 12])
         chart.add('Three', [8, -2, 12, -5, 9, 3])
@@ -408,6 +410,7 @@ def get_test_routes(app):
         stacked = StackedLine(stack_from_top=True, logarithmic=True)
         stacked.add('1', [1, 2])
         stacked.add('2', [10, 12])
+        stacked.x_labels = ['a', 'b', 'c', 'd']
         return stacked.render_response()
 
     @app.route('/test/stacked/reverse')
@@ -415,7 +418,6 @@ def get_test_routes(app):
         stacked = StackedBar(stack_from_top=True)
         stacked.add('1', [1, 2, 3])
         stacked.add('2', [4, 5, 6])
-        stacked.x_labels = ['a', 'b', 'c']
         return stacked.render_response()
 
     @app.route('/test/show_dots')

@@ -82,7 +82,7 @@ class Pie(Graph):
 
             alter(self.svg.slice(
                 serie_node, slice_, big_radius, small_radius,
-                angle, start_angle, center, val), metadata)
+                angle, start_angle, center, val, i), metadata)
             start_angle += angle
             total_perc += perc
 
@@ -91,7 +91,7 @@ class Pie(Graph):
             self.svg.slice(serie_node,
                            self.svg.node(slices, class_="big_slice"),
                            radius * .9, 0, serie_angle,
-                           original_start_angle, center, val)
+                           original_start_angle, center, val, i)
         return serie_angle
 
     def _compute_x_labels(self):

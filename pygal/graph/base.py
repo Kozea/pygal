@@ -149,6 +149,8 @@ class BaseGraph(object):
                         value = (None, None, None)
                     elif not is_list_like(value):
                         value = (value, self.zero, self.zero)
+                    elif len(value) == 2:
+                        value = (1, value[0], value[1])
                     value = list(map(adapter, value))
                 elif self._dual:
                     if value is None:

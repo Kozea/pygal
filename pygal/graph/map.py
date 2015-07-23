@@ -121,7 +121,7 @@ class BaseMap(Graph):
                         alter(node, metadata)
 
                     value = self._get_value((area_code, value))
-                    self._tooltip_data(area, value, 0, 0, classes='auto')
+                    self._tooltip_data(area, value, 0, 0, 'auto')
 
         self.nodes['plot'].append(map)
 

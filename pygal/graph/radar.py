@@ -39,7 +39,6 @@ class Radar(Line):
 
     def __init__(self, *args, **kwargs):
         """Init custom vars"""
-        self._x_pos = None
         self._rmax = None
         super(Radar, self).__init__(*args, **kwargs)
 
@@ -168,14 +167,14 @@ class Radar(Line):
     def _compute(self):
         """Compute r min max and labels position"""
         delta = 2 * pi / self._len if self._len else 0
-        x_pos = [.5 * pi + i * delta for i in range(self._len + 1)]
+        self._x_pos = [.5 * pi + i * delta for i in range(self._len + 1)]
         for serie in self.all_series:
             serie.points = [
-                (v, x_pos[i])
+                (v, self._x_pos[i])
                 for i, v in enumerate(serie.values)]
             if self.interpolate:
                 extended_x_pos = (
-                    [.5 * pi - delta] + x_pos)
+                    [.5 * pi - delta] + self._x_pos)
                 extended_vals = (serie.values[-1:] +
                                  serie.values)
                 serie.interpolated = list(
@@ -190,11 +189,6 @@ class Radar(Line):
         self._rmax = self._max or 1
         self._box.set_polar_box(self._rmin, self._rmax)
         self._self_close = True
-        self._x_pos = x_pos
-
-    def _compute_x_labels(self):
-        self._x_labels = self.x_labels and list(
-            zip(self.x_labels, self._x_pos))
 
     def _compute_y_labels(self):
         y_pos = compute_scale(

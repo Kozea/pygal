@@ -86,7 +86,9 @@ class Gauge(Graph):
                 metadata)
 
             x, y = self.view((.75, theta))
-            self._tooltip_data(gauges, value, x, y)
+            self._tooltip_data(
+                gauges, value, x, y,
+                xlabel=self._get_x_label(i))
             self._static_value(serie_node, value, x, y)
 
     def _y_axis(self, draw_axes=True):
@@ -137,6 +139,9 @@ class Gauge(Graph):
             0, 1,
             self.min_,
             self.max_)
+
+    def _compute_x_labels(self):
+        pass
 
     def _compute_y_labels(self):
         y_pos = compute_scale(

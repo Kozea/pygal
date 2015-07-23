@@ -53,3 +53,9 @@ class HorizontalGraph(Graph):
             self.width - self.margin_box.x,
             self.height - self.margin_box.y,
             self._box)
+
+    def _get_x_label(self, i):
+        """Convenience function to get the x_label of a value index"""
+        if not self.x_labels or not self._y_labels or len(self._y_labels) <= i:
+            return
+        return self._y_labels[i][0]

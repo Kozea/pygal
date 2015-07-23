@@ -51,3 +51,7 @@ class Dual(Graph):
 
         else:
             self._x_labels = list(zip(map(self._x_format, x_pos), x_pos))
+
+    def _get_x_label(self, i):
+        """Convenience function to get the x_label of a value index"""
+        return

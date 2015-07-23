@@ -429,7 +429,7 @@ class Graph(PublicApi):
              if y is not None else None)
             for x, y in points]
 
-    def _tooltip_data(self, node, value, x, y, classes=None):
+    def _tooltip_data(self, node, value, x, y, classes=None, xlabel=None):
         """Insert in desc tags informations for the javascript tooltip"""
         self.svg.node(node, 'desc', class_="value").text = value
         if classes is None:
@@ -444,6 +444,9 @@ class Graph(PublicApi):
                       class_="x " + classes).text = str(x)
         self.svg.node(node, 'desc',
                       class_="y " + classes).text = str(y)
+        if xlabel:
+            self.svg.node(node, 'desc',
+                          class_="x_label").text = str(xlabel)
 
     def _static_value(self, serie_node, value, x, y):
         """Write the print value"""
@@ -498,6 +501,12 @@ class Graph(PublicApi):
     def _post_compute(self):
         """Hook called after compute and before margin computations and plot"""
         pass
+
+    def _get_x_label(self, i):
+        """Convenience function to get the x_label of a value index"""
+        if not self.x_labels or not self._x_labels or len(self._x_labels) <= i:
+            return
+        return self._x_labels[i][0]
 
     @property
     def all_series(self):
@@ -716,8 +725,8 @@ class Graph(PublicApi):
         )
 
     def _compute_x_labels(self):
-        self._x_labels = self.x_labels and list(zip(self.x_labels, [
-            (i + .5) / self._len for i in range(self._len)]))
+        self._x_labels = self.x_labels and list(
+            zip(self.x_labels, self._x_pos))
 
     def _compute_y_labels(self):
         y_pos = compute_scale(

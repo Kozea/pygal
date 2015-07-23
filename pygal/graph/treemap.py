@@ -55,13 +55,16 @@ class Treemap(Graph):
                 class_='rect reactive tooltip-trigger'),
             metadata)
 
-        self._tooltip_data(rect, value,
-                           rx + rw / 2,
-                           ry + rh / 2,
-                           classes='centered')
-        self._static_value(serie_node, value,
-                           rx + rw / 2,
-                           ry + rh / 2)
+        self._tooltip_data(
+            rect, value,
+            rx + rw / 2,
+            ry + rh / 2,
+            'centered',
+            self._get_x_label(i))
+        self._static_value(
+            serie_node, value,
+            rx + rw / 2,
+            ry + rh / 2)
 
     def _binary_tree(self, data, total, x, y, w, h, parent=None):
         if total == 0:
@@ -114,6 +117,12 @@ class Treemap(Graph):
                 half1, half1_sum, x, y, x_pivot, h, parent)
             self._binary_tree(
                 half2, half2_sum, x + x_pivot, y, w - x_pivot, h, parent)
+
+    def _compute_x_labels(self):
+        pass
+
+    def _compute_y_labels(self):
+        pass
 
     def _plot(self):
         total = sum(map(sum, map(lambda x: x.values, self.series)))

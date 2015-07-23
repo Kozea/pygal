@@ -25,7 +25,7 @@ into float for xy plot and back to their type for display
 from pygal.adapters import positive
 from pygal.graph.xy import XY
 from datetime import datetime, date, time, timedelta
-from pygal._compat import timestamp, total_seconds
+from pygal._compat import timestamp, total_seconds, is_str
 
 
 def datetime_to_timestamp(x):
@@ -70,6 +70,8 @@ def time_to_seconds(x):
             ((x.hour * 60) + x.minute) * 60 + x.second
         ) * 10 ** 6 + x.microsecond) / 10 ** 6
 
+    if is_str(x):
+        return x
     # Clamp to valid time
     return x and max(0, min(x, 24 * 3600 - 10 ** -6))
 

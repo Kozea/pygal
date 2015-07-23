@@ -120,7 +120,8 @@ class Line(Graph):
                     dots, 'circle', cx=x, cy=y, r=serie.dots_size,
                     class_='dot reactive tooltip-trigger'), metadata)
                 self._tooltip_data(
-                    dots, val, x, y)
+                    dots, val, x, y,
+                    xlabel=self._get_x_label(i))
                 self._static_value(
                     serie_node, val,
                     x + self.style.value_font_size,
@@ -141,11 +142,11 @@ class Line(Graph):
     def _compute(self):
         """Compute y min and max and y scale and set labels"""
         # X Labels
-        x_pos = [
+        self._x_pos = [
             x / (self._len - 1) for x in range(self._len)
         ] if self._len != 1 else [.5]  # Center if only one value
 
-        self._points(x_pos)
+        self._points(self._x_pos)
 
         if self.include_x_axis:
             # Y Label

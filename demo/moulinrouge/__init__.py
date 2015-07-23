@@ -213,7 +213,7 @@ def create_app():
             else:
                 config.x_labels = [random_label() for i in range(data)]
             svgs.append({'type': type,
-                         'series': xy_series if type == 'XY' else other_series,
+                         'series': xy_series if chart._dual else other_series,
                          'config': b64encode(pickle.dumps(config))})
 
         return render_template('svgs.jinja2',

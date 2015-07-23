@@ -143,7 +143,7 @@ class Svg(object):
 
         dct = get_js_dict()
         # Config adds
-        dct['legends'] = self.graph._legends
+        dct['legends'] = self.graph._legends + self.graph._secondary_legends
 
         common_script.text = " = ".join(
             ("window.config", json.dumps(
@@ -239,7 +239,7 @@ class Svg(object):
 
     def slice(
             self, serie_node, node, radius, small_radius,
-            angle, start_angle, center, val):
+            angle, start_angle, center, val, i):
         """Draw a pie slice"""
         project = lambda rho, alpha: (
             rho * sin(-alpha), rho * cos(-alpha))
@@ -274,7 +274,9 @@ class Svg(object):
         x, y = diff(center, project(
             (radius + small_radius) / 2, start_angle + angle / 2))
 
-        self.graph._tooltip_data(node, val, x, y, classes="centered")
+        self.graph._tooltip_data(
+            node, val, x, y, "centered",
+            self.graph._x_labels and self.graph._x_labels[i][0])
         if angle >= 0.3:  # 0.3 radians is about 17 degrees
             self.graph._static_value(serie_node, val, x, y)
         return rv

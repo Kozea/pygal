@@ -88,7 +88,8 @@ class Bar(Graph):
             x_center, y_center = self._bar(
                 serie, bar, x, y, i, self.zero, secondary=rescale)
             self._tooltip_data(
-                bar, val, x_center, y_center, classes="centered")
+                bar, val, x_center, y_center, "centered",
+                self._get_x_label(i))
             self._static_value(serie_node, val, x_center, y_center)
 
     def _compute(self):
@@ -98,11 +99,13 @@ class Bar(Graph):
         if self._max:
             self._box.ymax = max(self._max, self.zero)
 
-        x_pos = [
+        self._x_pos = [
             x / self._len for x in range(self._len + 1)
         ] if self._len > 1 else [0, 1]  # Center if only one value
 
-        self._points(x_pos)
+        self._points(self._x_pos)
+
+        self._x_pos = [(i + .5) / self._len for i in range(self._len)]
 
     def _compute_secondary(self):
         """Compute parameters for secondary series rendering"""

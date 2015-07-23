@@ -68,7 +68,9 @@ class Dot(Graph):
                     ' negative' if value < 0 else '')), metadata)
 
             value = self._format(value)
-            self._tooltip_data(dots, value, x, y, classes='centered')
+            self._tooltip_data(
+                dots, value, x, y, 'centered',
+                self._get_x_label(i))
             self._static_value(serie_node, value, x, y)
 
     def _compute(self):
@@ -85,10 +87,6 @@ class Dot(Graph):
             serie.points = [
                 (self._x_pos[i], self._y_pos[j])
                 for i in range(x_len)]
-
-    def _compute_x_labels(self):
-        self._x_labels = self.x_labels and list(
-            zip(self.x_labels, self._x_pos))
 
     def _compute_y_labels(self):
         self._y_labels = list(zip(

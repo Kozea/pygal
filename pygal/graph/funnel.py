@@ -53,11 +53,13 @@ class Funnel(Graph):
                 points=' '.join(map(fmt, map(self.view, poly))),
                 class_='funnel reactive tooltip-trigger'), metadata)
 
+            # Poly center from label
             x, y = self.view((
-                # Poly center from label
                 self._center(self._x_pos[serie.index]),
                 sum([point[1] for point in poly]) / len(poly)))
-            self._tooltip_data(funnels, value, x, y, classes='centered')
+            self._tooltip_data(
+                funnels, value, x, y, 'centered',
+                self._get_x_label(serie.index))
             self._static_value(serie_node, value, x, y)
 
     def _center(self, x):

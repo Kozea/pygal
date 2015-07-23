@@ -22,16 +22,14 @@ as bars of varying width.
 """
 
 from __future__ import division
-from pygal._compat import is_list_like
+
 from pygal.graph.dual import Dual
-from pygal.util import (
-    swap, ident, compute_scale, decorate, cached_property, alter)
+from pygal.util import alter, cached_property, decorate, ident, swap
 
 
 class Histogram(Dual):
 
     """Histogram chart class"""
-
     _series_margin = 0
 
     @cached_property
@@ -97,7 +95,8 @@ class Histogram(Dual):
             x_center, y_center = self._bar(
                 serie, bar, x0, x1, y, i, self.zero, secondary=rescale)
             self._tooltip_data(
-                bar, val, x_center, y_center, classes="centered")
+                bar, val, x_center, y_center, "centered",
+                self._get_x_label(i))
             self._static_value(serie_node, val, x_center, y_center)
 
     def _compute(self):

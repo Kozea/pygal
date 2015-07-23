@@ -50,14 +50,16 @@ class Box(Graph):
         def format_maybe_quartile(x):
             if is_list_like(x):
                 if self.box_mode == "extremes":
-                    return 'Min: %s Q1: %s Q2: %s Q3: %s Max: %s' \
-                        % tuple(map(sup, x[1:6]))
+                    return (
+                        'Min: %s\nQ1 : %s\nQ2 : %s\nQ3 : %s\nMax: %s' %
+                        tuple(map(sup, x[1:6])))
                 elif self.box_mode in ["tukey", "stdev", "pstdev"]:
-                    return 'Min: %s Lower Whisker: %s Q1: %s Q2: %s Q3: %s '\
-                        'Upper Whisker: %s Max: %s' % tuple(map(sup, x))
+                    return (
+                        'Min: %s\nLower Whisker: %s\nQ1: %s\nQ2: %s\nQ3: %s\n'
+                        'Upper Whisker: %s\nMax: %s' % tuple(map(sup, x)))
                 elif self.box_mode == '1.5IQR':
                     # 1.5IQR mode
-                    return 'Q1: %s Q2: %s Q3: %s' % tuple(map(sup, x[2:5]))
+                    return 'Q1: %s\nQ2: %s\nQ3: %s' % tuple(map(sup, x[2:5]))
             else:
                 return sup(x)
         return format_maybe_quartile
@@ -71,14 +73,13 @@ class Box(Graph):
             serie.values, serie.outliers = \
                 self._box_points(serie.values, self.box_mode)
 
+        self._x_pos = [
+            (i + .5) / self._order for i in range(self._order)]
+
         if self._min:
             self._box.ymin = min(self._min, self.zero)
         if self._max:
             self._box.ymax = max(self._max, self.zero)
-
-    def _compute_x_labels(self):
-        self._x_labels = self.x_labels and list(zip(self.x_labels, [
-            (i + .5) / self._order for i in range(self._order)]))
 
     def _plot(self):
         """Plot the series data"""
@@ -108,7 +109,8 @@ class Box(Graph):
 
         x_center, y_center = self._draw_box(
             box, serie.values[1:6], serie.outliers, serie.index, metadata)
-        self._tooltip_data(box, val, x_center, y_center, classes="centered")
+        self._tooltip_data(box, val, x_center, y_center, "centered",
+                           self._get_x_label(serie.index))
         self._static_value(serie_node, val, x_center, y_center)
 
     def _draw_box(self, parent_node, quartiles, outliers, box_index, metadata):
