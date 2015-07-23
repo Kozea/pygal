@@ -20,10 +20,15 @@
 """Various utility functions"""
 
 from __future__ import division
-from pygal._compat import u, is_list_like, to_unicode
+
 import re
 from decimal import Decimal
-from math import floor, pi, log, log10, ceil
+
+from math import ceil, floor, log, log10, pi
+
+from pygal._compat import is_list_like, to_unicode, u
+
+
 ORDERS = u("yzafpnµm kMGTPEZY")
 
 

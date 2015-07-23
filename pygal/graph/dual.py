@@ -19,9 +19,9 @@
 
 """Dual chart base. Dual means a chart with 2 scaled axis like xy"""
 
-from pygal.util import cut, compute_scale
 from pygal._compat import is_str
 from pygal.graph.graph import Graph
+from pygal.util import compute_scale, cut
 
 
 class Dual(Graph):

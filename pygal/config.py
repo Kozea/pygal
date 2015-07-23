@@ -19,8 +19,9 @@
 """Config module holding all options and their default values."""
 
 from copy import deepcopy
-from pygal.style import Style, DefaultStyle
+
 from pygal.interpolate import INTERPOLATIONS
+from pygal.style import DefaultStyle, Style
 
 
 CONFIG_ITEMS = []

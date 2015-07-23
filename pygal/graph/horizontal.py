@@ -17,8 +17,9 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with pygal. If not, see <http://www.gnu.org/licenses/>.
 """Horizontal graph mixin"""
+
 from pygal.graph.graph import Graph
-from pygal.view import HorizontalView, HorizontalLogView
+from pygal.view import HorizontalLogView, HorizontalView
 
 
 class HorizontalGraph(Graph):

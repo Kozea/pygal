@@ -22,10 +22,12 @@ It can be made as a donut or a half pie.
 """
 
 from __future__ import division
-from pygal.util import decorate, alter
-from pygal.graph.graph import Graph
-from pygal.adapters import positive, none_to_zero
+
 from math import pi
+
+from pygal.adapters import none_to_zero, positive
+from pygal.graph.graph import Graph
+from pygal.util import alter, decorate
 
 
 class Pie(Graph):

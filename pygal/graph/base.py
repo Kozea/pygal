@@ -20,19 +20,19 @@
 """Base for pygal charts"""
 
 from __future__ import division
-from pygal._compat import is_list_like
-from pygal.view import Margin, Box
-from pygal.config import Config
-from pygal.state import State
-from pygal.util import compose, ident
-from pygal.svg import Svg
-from pygal.serie import Serie
-from pygal.config import SerieConfig
-from pygal.adapters import (
-    not_zero, positive, decimal_to_float)
+
+import os
 from functools import reduce
 from uuid import uuid4
-import os
+
+from pygal._compat import is_list_like
+from pygal.adapters import decimal_to_float, not_zero, positive
+from pygal.config import Config, SerieConfig
+from pygal.serie import Serie
+from pygal.state import State
+from pygal.svg import Svg
+from pygal.util import compose, ident
+from pygal.view import Box, Margin
 
 
 class BaseGraph(object):

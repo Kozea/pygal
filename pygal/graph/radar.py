@@ -23,12 +23,14 @@ useful for multivariate observation.
 """
 
 from __future__ import division
-from pygal.graph.line import Line
-from pygal.adapters import positive, none_to_zero
-from pygal.view import PolarView, PolarLogView
-from pygal.util import deg, cached_property, compute_scale, majorize, cut
-from pygal._compat import is_str
+
 from math import cos, pi
+
+from pygal._compat import is_str
+from pygal.adapters import none_to_zero, positive
+from pygal.graph.line import Line
+from pygal.util import cached_property, compute_scale, cut, deg, majorize
+from pygal.view import PolarLogView, PolarView
 
 
 class Radar(Line):

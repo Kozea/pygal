@@ -19,9 +19,11 @@
 """Charts styling classes"""
 
 from __future__ import division
+
 from itertools import chain
+
 from pygal import colors
-from pygal.colors import darken, lighten, is_foreground_light
+from pygal.colors import darken, is_foreground_light, lighten
 
 
 class Style(object):

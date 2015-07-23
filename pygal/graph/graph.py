@@ -19,16 +19,19 @@
 """Chart properties and drawing"""
 
 from __future__ import division
+
+from itertools import chain, repeat
+
+from math import ceil, cos, sin, sqrt
+
 from pygal._compat import is_list_like, is_str
-from pygal.interpolate import INTERPOLATIONS
 from pygal.graph.public import PublicApi
-from pygal.view import View, LogView, XYLogView, ReverseView
+from pygal.interpolate import INTERPOLATIONS
 from pygal.util import (
-    cached_property, majorize, humanize, split_title, compute_scale,
-    truncate, reverse_text_len, get_text_box, get_texts_box, cut, rad,
-    decorate)
-from math import sqrt, ceil, cos, sin
-from itertools import repeat, chain
+    cached_property, compute_scale, cut, decorate,
+    get_text_box, get_texts_box, humanize, majorize, rad, reverse_text_len,
+    split_title, truncate)
+from pygal.view import LogView, ReverseView, View, XYLogView
 
 
 class Graph(PublicApi):

@@ -20,10 +20,11 @@
 """Gauge chart representing values as needles on a polar scale"""
 
 from __future__ import division
+
 from pygal._compat import is_str
-from pygal.util import decorate, compute_scale, alter, cut
-from pygal.view import PolarThetaView, PolarThetaLogView
 from pygal.graph.graph import Graph
+from pygal.util import alter, compute_scale, cut, decorate
+from pygal.view import PolarThetaLogView, PolarThetaView
 
 
 class Gauge(Graph):

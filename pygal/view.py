@@ -20,7 +20,8 @@
 """Projection and bounding helpers"""
 
 from __future__ import division
-from math import sin, cos, log10, pi
+
+from math import cos, log10, pi, sin
 
 
 class Margin(object):

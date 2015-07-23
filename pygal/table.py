@@ -22,9 +22,10 @@ HTML Table maker.
 This class is used to render an html table from a chart data.
 """
 
-from pygal.util import template
-from lxml.html import builder, tostring
 import uuid
+from lxml.html import builder, tostring
+
+from pygal.util import template
 
 
 class HTML(object):

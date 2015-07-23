@@ -26,6 +26,11 @@ and the maps extensions namespace module.
 
 __version__ = '1.9.9'
 
+import pkg_resources
+import sys
+import traceback
+import warnings
+
 from pygal.graph.bar import Bar
 from pygal.graph.box import Box
 from pygal.graph.dot import Dot
@@ -46,10 +51,6 @@ from pygal.graph.xy import XY
 from pygal.graph.graph import Graph
 from pygal.config import Config
 from pygal import maps
-import pkg_resources
-import sys
-import traceback
-import warnings
 
 
 CHARTS_BY_NAME = dict(

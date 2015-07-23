@@ -19,9 +19,10 @@
 """Funnel chart: Represent values as a funnel"""
 
 from __future__ import division
-from pygal.util import decorate, cut, compute_scale, alter
-from pygal.adapters import positive, none_to_zero
+
+from pygal.adapters import none_to_zero, positive
 from pygal.graph.graph import Graph
+from pygal.util import alter, cut, decorate
 
 
 class Funnel(Graph):

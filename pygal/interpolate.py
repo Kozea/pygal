@@ -25,6 +25,7 @@ with `precision` interpolated points between each of them
 
 """
 from __future__ import division
+
 from math import sin
 
 

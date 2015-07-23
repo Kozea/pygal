@@ -19,8 +19,8 @@
 
 """Horizontal bar graph"""
 
-from pygal.graph.horizontal import HorizontalGraph
 from pygal.graph.bar import Bar
+from pygal.graph.horizontal import HorizontalGraph
 
 
 class HorizontalBar(HorizontalGraph, Bar):

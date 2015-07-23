@@ -23,8 +23,9 @@ proportional to the values that they represent.
 """
 
 from __future__ import division
+
 from pygal.graph.graph import Graph
-from pygal.util import swap, ident, decorate, alter
+from pygal.util import alter, decorate, ident, swap
 
 
 class Bar(Graph):

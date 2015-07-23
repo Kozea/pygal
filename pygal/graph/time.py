@@ -22,10 +22,11 @@ XY time extensions: handle convertion of date, time, datetime, timedelta
 into float for xy plot and back to their type for display
 """
 
+from datetime import date, datetime, time, timedelta
+
+from pygal._compat import is_str, timestamp, total_seconds
 from pygal.adapters import positive
 from pygal.graph.xy import XY
-from datetime import datetime, date, time, timedelta
-from pygal._compat import timestamp, total_seconds, is_str
 
 
 def datetime_to_timestamp(x):

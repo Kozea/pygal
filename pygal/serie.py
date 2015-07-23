@@ -17,6 +17,7 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with pygal. If not, see <http://www.gnu.org/licenses/>.
 """Serie property holder"""
+
 from pygal.util import cached_property
 
 

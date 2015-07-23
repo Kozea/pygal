@@ -20,9 +20,10 @@
 """Treemap chart: Visualize data using nested recangles"""
 
 from __future__ import division
-from pygal.util import decorate, cut, alter
+
+from pygal.adapters import none_to_zero, positive
 from pygal.graph.graph import Graph
-from pygal.adapters import positive, none_to_zero
+from pygal.util import alter, cut, decorate
 
 
 class Treemap(Graph):

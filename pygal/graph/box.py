@@ -23,10 +23,12 @@ Different types are available throught the box_mode option
 """
 
 from __future__ import division
-from pygal.graph.graph import Graph
-from pygal.util import compute_scale, decorate, alter
-from pygal._compat import is_list_like
+
 from bisect import bisect_left, bisect_right
+
+from pygal._compat import is_list_like
+from pygal.graph.graph import Graph
+from pygal.util import alter, decorate
 
 
 class Box(Graph):
