@@ -6,6 +6,7 @@ Changelog
 ================
 
 * Fix the missing title on x_labels with labels.
+* Auto cast to str x labels in non dual charts (#178)
 
 2.0.0
 =====

@@ -735,7 +735,7 @@ class Graph(PublicApi):
 
     def _compute_x_labels(self):
         self._x_labels = self.x_labels and list(
-            zip(self.x_labels, self._x_pos))
+            zip(map(to_str, self.x_labels), self._x_pos))
 
     def _compute_y_labels(self):
         y_pos = compute_scale(

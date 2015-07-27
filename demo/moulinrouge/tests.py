@@ -50,7 +50,7 @@ def get_test_routes(app):
     def test_bar_links():
         bar = StackedLine(style=styles['default'](
             font_family='googlefont:Raleway'))
-        bar.js = ('http://l:2343/2.0.x/pygal-tooltips.js',)
+        # bar.js = ('http://l:2343/2.0.x/pygal-tooltips.js',)
         bar.title = 'Wow ! Such Chart !'
         bar.x_title = 'Many x labels'
         bar.y_title = 'Much y labels'
@@ -142,6 +142,7 @@ def get_test_routes(app):
     def test_bar_none():
         bar = Bar()
         bar.add('Lol', [2, None, 12])
+        bar.x_labels = range(1, 4)
         return bar.render_response()
 
     @app.route('/test/print_values')

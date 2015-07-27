@@ -23,6 +23,7 @@ from __future__ import division
 from pygal.adapters import none_to_zero, positive
 from pygal.graph.graph import Graph
 from pygal.util import alter, cut, decorate
+from pygal._compat import to_str
 
 
 class Funnel(Graph):
@@ -93,7 +94,8 @@ class Funnel(Graph):
 
     def _compute_x_labels(self):
         self._x_labels = list(
-            zip(self.x_labels or [
+            zip(self.x_labels and
+                map(to_str, self.x_labels) or [
                 serie.title['title']
                 if isinstance(serie.title, dict)
                 else serie.title for serie in self.series],
