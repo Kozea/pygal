@@ -173,6 +173,10 @@ class Graph(PublicApi):
             text.text = truncate(label, truncation)
             if text.text != label:
                 self.svg.node(guides, 'title').text = label
+            else:
+                self.svg.node(
+                    guides, 'title',
+                ).text = self._x_format(position)
 
             if self.x_label_rotation:
                 text.attrib['transform'] = "rotate(%d %f %f)" % (

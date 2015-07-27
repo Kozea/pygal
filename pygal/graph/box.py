@@ -179,12 +179,12 @@ class Box(Graph):
     @staticmethod
     def _box_points(values, mode='extremes'):
         """
-        Default mode: (mode='1.5IQR' or unset)
-            Return a 7-tuple of min, Q1 - 1.5 * IQR, Q1, Median, Q3,
-        Q3 + 1.5 * IQR and max for a list of numeric values.
-        Extremes mode: (mode='extremes')
+        Default mode: (mode='extremes' or unset)
             Return a 7-tuple of 2x minimum, Q1, Median, Q3,
         and 2x maximum for a list of numeric values.
+        1.5IQR mode: (mode='1.5IQR')
+            Return a 7-tuple of min, Q1 - 1.5 * IQR, Q1, Median, Q3,
+        Q3 + 1.5 * IQR and max for a list of numeric values.
         Tukey mode: (mode='tukey')
             Return a 7-tuple of min, q[0..4], max and a list of outliers
         Outliers are considered values x: x < q1 - IQR or x > q3 + IQR
@@ -194,7 +194,6 @@ class Box(Graph):
         SDp mode: (mode='pstdev')
             Return a 7-tuple of min, q[0..4], max and a list of outliers
         Outliers are considered values x: x < q2 - SDp or x > q2 + SDp
-
 
         The iterator values may include None values.
 

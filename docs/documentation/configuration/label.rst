@@ -14,6 +14,34 @@ x_labels
   chart.x_labels = 'Red', 'Blue', 'Green'
   chart.add('line', [.0002, .0005, .00035])
 
+It is possible for dual charts to define a custom scale:
+
+.. pygal-code::
+
+  chart = pygal.XY()
+  chart.x_labels = (.00012, .00024, .00048, .00096)
+  chart.add('line', [(.0002, 10), (.0005, 20), (.00035, 15)])
+
+
+And in this case it is possible to set text labels in place of values:
+
+.. pygal-code::
+
+  chart = pygal.XY()
+  chart.x_labels = ({
+    'label': 'Twelve',
+    'value': .00012
+  }, {
+    'label': 'Twenty four',
+    'value': .00024
+  }, {
+    'label': 'Forty eight',
+    'value': .00048
+  }, {
+    'label': 'Ninety six',
+    'value': .00096})
+  chart.add('line', [(.0002, 10), (.0005, 20), (.00035, 15)])
+
 
 y_labels
 --------
@@ -22,6 +50,20 @@ y_labels
 
   chart = pygal.Line()
   chart.y_labels = .0001, .0003, .0004, .00045, .0005
+  chart.add('line', [.0002, .0005, .00035])
+
+
+It is now possible to add text to labels values:
+
+.. pygal-code::
+
+  chart = pygal.Line()
+  chart.y_labels = [
+    {'label': 'One', 'value': .0001},
+    {'label': 'Three', 'value': .0003},
+    {'label': 'Four', 'value': .0004},
+    {'label': 'Four and a half', 'value': .00045},
+    {'label': 'Five', 'value': .0005}]
   chart.add('line', [.0002, .0005, .00035])
 
 
