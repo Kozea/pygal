@@ -50,7 +50,7 @@ def get_test_routes(app):
     def test_bar_links():
         bar = StackedLine(style=styles['default'](
             font_family='googlefont:Raleway'))
-        # bar.js = ('http://l:2343/2.0.x/pygal-tooltips.js',)
+        bar.js = ('http://l:2343/2.0.x/pygal-tooltips.js',)
         bar.title = 'Wow ! Such Chart !'
         bar.x_title = 'Many x labels'
         bar.y_title = 'Much y labels'
@@ -145,31 +145,42 @@ def get_test_routes(app):
         bar.x_labels = range(1, 4)
         return bar.render_response()
 
-    @app.route('/test/print_values')
-    def test_bar_print_values():
-        bar = Bar(print_values=True, js=[],
-                  style=styles['default'](
-                      value_font_family='googlefont:Raleway',
-                      value_font_size=30,
-                      value_colors=(None, None, 'blue', 'red', 'green')
-                  ))
+    @app.route('/test/print_values/<chart>')
+    def test_print_values_for(chart):
+        graph = CHARTS_BY_NAME[chart](
+            print_values=True, print_labels=True, print_zeroes=True,
+            style=styles['default'](
+                value_font_family='googlefont:Raleway',
+                value_colors=(None, None, 'blue', 'red', 'green')
+            ))
+        graph.js = ('http://l:2343/2.0.x/pygal-tooltips.js',)
         for i in range(12):
-            bar.add('', i)
-        return bar.render_response()
+            graph.add('', [{
+                'value': i + j,
+                'label': 'abcdefghijklmnopqrstuvwxyz'[i + j]
+            } for j in range(5)])
+        return graph.render_response()
 
     @app.route('/test/treemap')
     def test_treemap():
-        treemap = Treemap(style=RotateStyle('#ff5995', opacity=.6))
+        treemap = Treemap(style=RotateStyle('#ff5995', opacity=.6,
+                                            value_font_size=32,
+                                            value_colors=['#ffffff']))
         treemap.title = 'Binary TreeMap'
-        treemap.add('A', [2, 1, 12, 4, 2, 1, 1, 3, 12, 3, 4, None, 9])
-        treemap.add('B', [4, 2, 5, 10, 3, 4, 2, 7, 4, -10, None, 8, 3, 1])
-        treemap.add('C', [3, 8, 3, 3, 5, 3, 3, 5, 4, 12])
-        treemap.add('D', [23, 18])
-        treemap.add('E', [1, 2, 1, 2, 3, 3, 1, 2, 3,
-                          4, 3, 1, 2, 1, 1, 1, 1, 1])
-        treemap.add('F', [31])
-        treemap.add('G', [5, 9.3, 8.1, 12, 4, 3, 2])
-        treemap.add('H', [12, 3, 3])
+        treemap.print_values = True
+        treemap.print_labels = True
+        for i in range(1, 5):
+            treemap.add('', [{'label': 'Area %d' % i, 'value': i}])
+        treemap.add('', [2])
+        # treemap.add('A', [2, 1, 12, 4, 2, 1, 1, 3, 12, 3, 4, None, 9])
+        # treemap.add('B', [4, 2, 5, 10, 3, 4, 2, 7, 4, -10, None, 8, 3, 1])
+        # treemap.add('C', [3, 8, 3, 3, 5, 3, 3, 5, 4, 12])
+        # treemap.add('D', [23, 18])
+        # treemap.add('E', [1, 2, 1, 2, 3, 3, 1, 2, 3,
+        #                   4, 3, 1, 2, 1, 1, 1, 1, 1])
+        # treemap.add('F', [31])
+        # treemap.add('G', [5, 9.3, 8.1, 12, 4, 3, 2])
+        # treemap.add('H', [12, 3, 3])
         return treemap.render_response()
 
     @app.route('/test/gauge')

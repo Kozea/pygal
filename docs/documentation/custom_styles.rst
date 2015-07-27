@@ -47,7 +47,8 @@ Properties                        Description
 ``font_family``                   The main font family
 ``label_font_family``             The label font family
 ``major_label_font_family``       The major label font family
-``value_font_family``             The ``print_value`` font family
+``value_font_family``             The ``print_values`` font family
+``value_label_font_family``       The ``print_labels`` font family
 ``tooltip_font_family``           The tooltip font family
 ``title_font_family``             The title font family
 ``legend_font_family``            The legend font family
@@ -56,7 +57,8 @@ Properties                        Description
 ``major_guide_stroke_dasharray``  The dasharray for major guide line
 ``label_font_size``               The label font size
 ``major_label_font_size``         The major label font size
-``value_font_size``               The ``print_value`` font size
+``value_font_size``               The ``print_values`` font size
+``value_label_font_size``         The ``print_labels`` font size
 ``tooltip_font_size``             The tooltip font size
 ``title_font_size``               The title font size
 ``legend_font_size``              The legend font size
@@ -65,7 +67,7 @@ Properties                        Description
 ``opacity_hover``                 The opacity of chart element on mouse hover
 ``transition``                    Define the global transition property for animation
 ``colors``                        The serie color list
-``value_colors``                  The ``print_value`` color list
+``value_colors``                  The ``print_values`` color list
 ================================  =========================
 
 

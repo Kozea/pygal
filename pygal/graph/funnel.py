@@ -62,7 +62,7 @@ class Funnel(Graph):
             self._tooltip_data(
                 funnels, value, x, y, 'centered',
                 self._get_x_label(serie.index))
-            self._static_value(serie_node, value, x, y)
+            self._static_value(serie_node, value, x, y, metadata)
 
     def _center(self, x):
         return x - 1 / (2 * self._order)

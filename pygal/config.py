@@ -448,11 +448,15 @@ class Config(CommonConfig):
 
     print_values = Key(
         False, bool,
-        "Text", "Print values when graph is in non interactive mode")
+        "Text", "Display values as text over plot")
 
     print_zeroes = Key(
+        True, bool,
+        "Text", "Display zero values as well")
+
+    print_labels = Key(
         False, bool,
-        "Text", "Print zeroes when graph is in non interactive mode")
+        "Text", "Display value labels")
 
     truncate_legend = Key(
         None, int, "Text",

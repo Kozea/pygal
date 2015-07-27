@@ -97,7 +97,7 @@ class Histogram(Dual):
             self._tooltip_data(
                 bar, val, x_center, y_center, "centered",
                 self._get_x_label(i))
-            self._static_value(serie_node, val, x_center, y_center)
+            self._static_value(serie_node, val, x_center, y_center, metadata)
 
     def _compute(self):
         """Compute x/y min and max and x/y scale and set labels"""

@@ -71,7 +71,7 @@ class Dot(Graph):
             self._tooltip_data(
                 dots, value, x, y, 'centered',
                 self._get_x_label(i))
-            self._static_value(serie_node, value, x, y)
+            self._static_value(serie_node, value, x, y, metadata)
 
     def _compute(self):
         """Compute y min and max and y scale and set labels"""

@@ -43,6 +43,7 @@ class Style(object):
     label_font_family = None
     major_label_font_family = None
     value_font_family = None
+    value_label_font_family = None
     tooltip_font_family = None
     title_font_family = None
     legend_font_family = None
@@ -50,7 +51,8 @@ class Style(object):
 
     label_font_size = 10
     major_label_font_size = 10
-    value_font_size = 8
+    value_font_size = 16
+    value_label_font_size = 10
     tooltip_font_size = 14
     title_font_size = 16
     legend_font_size = 14

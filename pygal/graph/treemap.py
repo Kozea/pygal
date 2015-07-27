@@ -65,7 +65,8 @@ class Treemap(Graph):
         self._static_value(
             serie_node, value,
             rx + rw / 2,
-            ry + rh / 2)
+            ry + rh / 2,
+            metadata)
 
     def _binary_tree(self, data, total, x, y, w, h, parent=None):
         if total == 0:

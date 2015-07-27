@@ -125,7 +125,8 @@ class Line(Graph):
                 self._static_value(
                     serie_node, val,
                     x + self.style.value_font_size,
-                    y + self.style.value_font_size)
+                    y + self.style.value_font_size,
+                    metadata)
 
         if serie.stroke:
             if self.interpolate:

@@ -113,7 +113,7 @@ class Box(Graph):
             box, serie.values[1:6], serie.outliers, serie.index, metadata)
         self._tooltip_data(box, val, x_center, y_center, "centered",
                            self._get_x_label(serie.index))
-        self._static_value(serie_node, val, x_center, y_center)
+        self._static_value(serie_node, val, x_center, y_center, metadata)
 
     def _draw_box(self, parent_node, quartiles, outliers, box_index, metadata):
         """

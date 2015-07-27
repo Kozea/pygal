@@ -130,6 +130,11 @@
   fill: {{ style.foreground_strong }};
 }
 
+{{ id }}.tooltip .xlink {
+  font-size: .5em;
+  text-decoration: underline;
+}
+
 {{ id }}.tooltip .value {
   font-size: 1.5em;
 }

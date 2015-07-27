@@ -232,6 +232,8 @@ def decorate(svg, node, metadata):
         if not isinstance(xlink, dict):
             xlink = {'href': xlink, 'target': '_blank'}
         node = svg.node(node, 'a', **xlink)
+        svg.node(node, 'desc', class_='xlink').text = to_unicode(
+            xlink.get('href'))
 
     if 'color' in metadata:
         color = metadata.pop('color')

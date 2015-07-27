@@ -48,9 +48,14 @@
   font-size: {{ style.major_label_font_size }}px;
 }
 
-{{ id }}.series text {
+{{ id }}.text-overlay text.value {
   font-family: {{ style.value_font_family }};
   font-size: {{ style.value_font_size }}px;
+}
+
+{{ id }}.text-overlay text.label {
+  font-family: {{ style.value_label_font_family }};
+  font-size: {{ style.value_label_font_size }}px;
 }
 
 {{ id }}.tooltip {

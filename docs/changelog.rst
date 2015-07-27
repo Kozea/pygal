@@ -7,6 +7,11 @@ Changelog
 
 * Fix the missing title on x_labels with labels.
 * Auto cast to str x labels in non dual charts (#178)
+* Add ``print_labels`` option to print label too. (#197)
+* Add ``value_label_font_family`` and ``value_label_font_size`` style options for ``print_labels``.
+* Default ``print_zeroes`` to True
+* (Re)Add xlink in desc to show on tooltip
+* Activate element on tooltip hovering. (#106)
 
 2.0.0
 =====

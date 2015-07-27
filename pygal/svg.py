@@ -239,7 +239,7 @@ class Svg(object):
 
     def slice(
             self, serie_node, node, radius, small_radius,
-            angle, start_angle, center, val, i):
+            angle, start_angle, center, val, i, metadata):
         """Draw a pie slice"""
         project = lambda rho, alpha: (
             rho * sin(-alpha), rho * cos(-alpha))
@@ -278,7 +278,7 @@ class Svg(object):
             node, val, x, y, "centered",
             self.graph._x_labels and self.graph._x_labels[i][0])
         if angle >= 0.3:  # 0.3 radians is about 17 degrees
-            self.graph._static_value(serie_node, val, x, y)
+            self.graph._static_value(serie_node, val, x, y, metadata)
         return rv
 
     def pre_render(self):

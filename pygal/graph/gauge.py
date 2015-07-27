@@ -90,7 +90,7 @@ class Gauge(Graph):
             self._tooltip_data(
                 gauges, value, x, y,
                 xlabel=self._get_x_label(i))
-            self._static_value(serie_node, value, x, y)
+            self._static_value(serie_node, value, x, y, metadata)
 
     def _y_axis(self, draw_axes=True):
         """Override y axis to plot a polar axis"""

@@ -28,12 +28,12 @@ Same on x axis for xy like charts:
 print_values
 ------------
 
-When using pygal without javascript for printing for example you can chose to activate this option to print all values as text.
+When using pygal to display static charts for printing for example you can chose to activate this option to print all values as text.
 
 .. pygal-code::
 
   from pygal.style import DefaultStyle
-  chart = pygal.Bar(js=[], print_values=True, style=DefaultStyle(
+  chart = pygal.Bar(print_values=True, style=DefaultStyle(
                     value_font_family='googlefont:Raleway',
                     value_font_size=30,
                     value_colors=('white',)))
@@ -43,12 +43,45 @@ When using pygal without javascript for printing for example you can chose to ac
 print_zeroes
 ------------
 
-zero values are hidden by default but you can use this option to print them anyway.
+zero values are shown by default but you can use this option to hide them.
 
 .. pygal-code::
 
-  chart = pygal.Bar(js=[], print_values=True, print_zeroes=True)
+  chart = pygal.Bar(print_values=True, print_zeroes=False)
   chart.add('line', [0, 12, 31, 8, 28, 0])
+
+
+print_labels
+------------
+
+You can activate value label display:
+
+.. pygal-code::
+
+  chart = pygal.Bar(print_labels=True)
+  chart.add('line', [
+    0,
+    {'value': 12, 'label': 'Twelve'},
+    31,
+    {'value': 8, 'label': 'eight'},
+    28,
+    0
+  ])
+
+
+Displaying both is also possible:
+
+.. pygal-code::
+
+  chart = pygal.Bar(print_labels=True, print_values=True)
+  chart.add('line', [
+    0,
+    {'value': 12, 'label': 'Twelve'},
+    31,
+    {'value': 8, 'label': 'eight'},
+    28,
+    0
+  ])
 
 
 human_readable

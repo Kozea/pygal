@@ -457,12 +457,24 @@ class Graph(PublicApi):
             self.svg.node(node, 'desc',
                           class_="x_label").text = to_str(xlabel)
 
-    def _static_value(self, serie_node, value, x, y):
+    def _static_value(self, serie_node, value, x, y, metadata):
         """Write the print value"""
+        label = metadata and metadata.get('label')
+        if self.print_labels and label:
+            if self.print_values:
+                y -= self.style.value_font_size / 2
+            self.svg.node(
+                serie_node['text_overlay'], 'text',
+                class_='centered label',
+                x=x,
+                y=y + self.style.value_font_size / 3
+            ).text = label
+            y += self.style.value_font_size
+
         if self.print_values:
             self.svg.node(
                 serie_node['text_overlay'], 'text',
-                class_='centered',
+                class_='centered value',
                 x=x,
                 y=y + self.style.value_font_size / 3
             ).text = value if self.print_zeroes or value != '0' else ''
