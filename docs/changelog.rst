@@ -2,8 +2,8 @@
 Changelog
 =========
 
-2.0.0 UNRELEASED
-================
+2.0.0
+=====
 * Rework the ghost mechanism to come back to a more object oriented behavior, storing all state in a state object which is created on every render. (#161)
 * Refactor maps
 * Add world continents
