@@ -151,6 +151,8 @@ class Graph(PublicApi):
                 continue
             guides = self.svg.node(axis, class_='guides')
             x = self.view.x(position)
+            if x is None:
+                continue
             y = self.view.height + 5
             last_guide = (self._y_2nd_labels and label == lastlabel)
             self.svg.node(

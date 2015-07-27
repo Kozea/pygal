@@ -51,7 +51,7 @@ class Style(object):
     label_font_size = 10
     major_label_font_size = 10
     value_font_size = 8
-    tooltip_font_size = 16
+    tooltip_font_size = 14
     title_font_size = 16
     legend_font_size = 14
     no_data_font_size = 64

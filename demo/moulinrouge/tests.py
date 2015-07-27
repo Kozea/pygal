@@ -475,6 +475,7 @@ def get_test_routes(app):
     @app.route('/test/worldmap')
     def test_worldmap():
         wmap = world.World(print_values=True, style=choice(list(styles.values())))
+        # wmap.js = ('http://l:2343/2.0.x/pygal-tooltips.js',)
         wmap.add('1st', [('fr', 100), {
             'value': ('us', 10),
             'node': {'style': 'fill: red'}
