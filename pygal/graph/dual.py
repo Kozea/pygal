@@ -42,7 +42,7 @@ class Dual(Graph):
                     pos = x_pos[i]
                     title = x_label
                 else:
-                    pos = float(x_label)
+                    pos = self._x_adapt(float(x_label))
                     title = self._x_format(x_label)
 
                 self._x_labels.append((title, pos))

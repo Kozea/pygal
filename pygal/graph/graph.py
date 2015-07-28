@@ -766,7 +766,7 @@ class Graph(PublicApi):
                 else:
                     pos = float(y_label)
                     title = self._format(y_label)
-                self._y_labels.append((title, pos))
+                self._y_labels.append((title, self._adapt(pos)))
             self._box.ymin = min(self._box.ymin, min(cut(self._y_labels, 1)))
             self._box.ymax = max(self._box.ymax, max(cut(self._y_labels, 1)))
         else:

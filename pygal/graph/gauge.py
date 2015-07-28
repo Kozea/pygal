@@ -161,7 +161,7 @@ class Gauge(Graph):
                 else:
                     pos = float(y_label)
                     title = self._format(y_label)
-                self._y_labels.append((title, pos))
+                self._y_labels.append((title, self._adapt(pos)))
             self.min_ = min(self.min_, min(cut(self._y_labels, 1)))
             self.max_ = max(self.max_, max(cut(self._y_labels, 1)))
             self._box.set_polar_box(

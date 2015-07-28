@@ -12,6 +12,7 @@ Changelog
 * Default ``print_zeroes`` to True
 * (Re)Add xlink in desc to show on tooltip
 * Activate element on tooltip hovering. (#106)
+* Fix radar axis behaviour (#247)
 
 2.0.0
 =====

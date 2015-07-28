@@ -29,7 +29,9 @@ from math import cos, pi
 from pygal._compat import is_str
 from pygal.adapters import none_to_zero, positive
 from pygal.graph.line import Line
-from pygal.util import cached_property, compute_scale, cut, deg, majorize
+from pygal.util import (
+    cached_property, compute_scale, cut, deg, truncate,
+    reverse_text_len)
 from pygal.view import PolarLogView, PolarView
 
 
@@ -75,40 +77,43 @@ class Radar(Line):
 
     def _x_axis(self, draw_axes=True):
         """Override x axis to make it polar"""
-        if not self._x_labels:
+        if not self._x_labels or not self.show_x_labels:
             return
 
-        axis = self.svg.node(self.nodes['plot'], class_="axis x web")
+        axis = self.svg.node(self.nodes['plot'], class_="axis x web%s" % (
+            ' always_show' if self.show_x_guides else ''
+        ))
         format_ = lambda x: '%f %f' % x
         center = self.view((0, 0))
         r = self._rmax
-        if self.x_labels_major:
-            x_labels_major = self.x_labels_major
-        elif self.x_labels_major_every:
-            x_labels_major = [self._x_labels[i][0] for i in range(
-                0, len(self._x_labels), self.x_labels_major_every)]
-        elif self.x_labels_major_count:
-            label_count = len(self._x_labels)
-            major_count = self.x_labels_major_count
-            if (major_count >= label_count):
-                x_labels_major = [label[0] for label in self._x_labels]
+        truncation = self.truncate_label
+        if not truncation:
+            if self.x_label_rotation or len(self._x_labels) <= 1:
+                truncation = 25
             else:
-                x_labels_major = [self._x_labels[
-                    int(i * label_count / major_count)][0]
-                    for i in range(major_count)]
-        else:
-            x_labels_major = []
+                first_label_position = self.view.x(self._x_labels[0][1]) or 0
+                last_label_position = self.view.x(self._x_labels[-1][1]) or 0
+                available_space = (
+                    last_label_position - first_label_position) / (
+                    len(self._x_labels) - 1)
+                truncation = reverse_text_len(
+                    available_space, self.style.label_font_size)
+                truncation = max(truncation, 1)
 
         for label, theta in self._x_labels:
-            major = label in x_labels_major
+            major = label in self._x_major_labels
             if not (self.show_minor_x_labels or major):
                 continue
             guides = self.svg.node(axis, class_='guides')
             end = self.view((r, theta))
+
             self.svg.node(
                 guides, 'path',
                 d='M%s L%s' % (format_(center), format_(end)),
-                class_='%sline' % ('major ' if major else ''))
+                class_='%s%sline' % (
+                    'axis ' if label == "0" else '',
+                    'major ' if major else ''))
+
             r_txt = (1 - self._box.__class__.margin) * self._box.ymax
             pos_text = self.view((r_txt, theta))
             text = self.svg.node(
@@ -116,55 +121,57 @@ class Radar(Line):
                 x=pos_text[0],
                 y=pos_text[1],
                 class_='major' if major else '')
-            text.text = label
+            text.text = truncate(label, truncation)
+            if text.text != label:
+                self.svg.node(guides, 'title').text = label
+            else:
+                self.svg.node(
+                    guides, 'title',
+                ).text = self._x_format(theta)
+
             angle = - theta + pi / 2
             if cos(angle) < 0:
                 angle -= pi
             text.attrib['transform'] = 'rotate(%f %s)' % (
-                deg(angle), format_(pos_text))
+                self.x_label_rotation or deg(angle), format_(pos_text))
 
     def _y_axis(self, draw_axes=True):
         """Override y axis to make it polar"""
-        if not self._y_labels:
+        if not self._y_labels or not self.show_y_labels:
             return
 
         axis = self.svg.node(self.nodes['plot'], class_="axis y web")
 
-        if self.y_labels_major:
-            y_labels_major = self.y_labels_major
-        elif self.y_labels_major_every:
-            y_labels_major = [self._y_labels[i][1] for i in range(
-                0, len(self._y_labels), self.y_labels_major_every)]
-        elif self.y_labels_major_count:
-            label_count = len(self._y_labels)
-            major_count = self.y_labels_major_count
-            if (major_count >= label_count):
-                y_labels_major = [label[1] for label in self._y_labels]
-            else:
-                y_labels_major = [self._y_labels[
-                    int(i * (label_count - 1) / (major_count - 1))][1]
-                    for i in range(major_count)]
-        else:
-            y_labels_major = majorize(
-                cut(self._y_labels, 1)
-            )
         for label, r in reversed(self._y_labels):
-            major = r in y_labels_major
+            major = r in self._y_major_labels
             if not (self.show_minor_y_labels or major):
                 continue
-            guides = self.svg.node(axis, class_='guides')
-            self.svg.line(
-                guides, [self.view((r, theta)) for theta in self._x_pos],
-                close=True,
-                class_='%sguide line' % (
-                    'major ' if major else ''))
+            guides = self.svg.node(axis, class_='%sguides' % (
+                'logarithmic ' if self.logarithmic else ''
+            ))
+            if self.show_y_guides:
+                self.svg.line(
+                    guides, [self.view((r, theta)) for theta in self._x_pos],
+                    close=True,
+                    class_='%sguide line' % (
+                        'major ' if major else ''))
             x, y = self.view((r, self._x_pos[0]))
-            self.svg.node(
+            x -= 5
+            text = self.svg.node(
                 guides, 'text',
-                x=x - 5,
+                x=x,
                 y=y,
                 class_='major' if major else ''
-            ).text = label
+            )
+            text.text = label
+
+            if self.y_label_rotation:
+                text.attrib['transform'] = "rotate(%d %f %f)" % (
+                    self.y_label_rotation, x, y)
+
+            self.svg.node(
+                guides, 'title',
+            ).text = self._format(r)
 
     def _compute(self):
         """Compute r min max and labels position"""
@@ -209,7 +216,7 @@ class Radar(Line):
                 else:
                     pos = float(y_label)
                     title = self._format(y_label)
-                self._y_labels.append((title, pos))
+                self._y_labels.append((title, self._adapt(pos)))
             self._rmin = min(self._rmin, min(cut(self._y_labels, 1)))
             self._rmax = max(self._rmax, max(cut(self._y_labels, 1)))
             self._box.set_polar_box(self._rmin, self._rmax)

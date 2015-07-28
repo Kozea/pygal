@@ -95,17 +95,11 @@ class BaseGraph(object):
                     adapters.remove(fun)
             adapters = adapters + [positive, not_zero]
         adapters = adapters + [decimal_to_float]
-        adapter = reduce(compose, adapters) if not self.strict else ident
 
-        if adapter and self.y_labels:
-            self.y_labels = list(map(adapter, self.y_labels))
-
-        x_adapter = reduce(
+        self._adapt = reduce(compose, adapters) if not self.strict else ident
+        self._x_adapt = reduce(
             compose, self._x_adapters) if not self.strict and getattr(
                 self, '_x_adapters', None) else ident
-
-        if x_adapter and self.x_labels:
-            self.x_labels = list(map(x_adapter, self.x_labels))
 
         series = []
 
@@ -151,20 +145,22 @@ class BaseGraph(object):
                         value = (value, self.zero, self.zero)
                     elif len(value) == 2:
                         value = (1, value[0], value[1])
-                    value = list(map(adapter, value))
+                    value = list(map(self._adapt, value))
                 elif self._dual:
                     if value is None:
                         value = (None, None)
                     elif not is_list_like(value):
                         value = (value, self.zero)
-                    if x_adapter:
-                        value = (x_adapter(value[0]), adapter(value[1]))
+                    if self._x_adapt:
+                        value = (
+                            self._x_adapt(value[0]),
+                            self._adapt(value[1]))
                     if isinstance(self, BaseMap):
-                        value = (adapter(value[0]), value[1])
+                        value = (self._adapt(value[0]), value[1])
                     else:
-                        value = list(map(adapter, value))
+                        value = list(map(self._adapt, value))
                 else:
-                    value = adapter(value)
+                    value = self._adapt(value)
 
                 values.append(value)
             serie_config = SerieConfig()

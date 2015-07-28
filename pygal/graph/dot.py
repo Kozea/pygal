@@ -26,6 +26,7 @@ from __future__ import division
 
 from math import log10
 
+from pygal._compat import to_str
 from pygal.graph.graph import Graph
 from pygal.util import alter, cached_property, decorate, safe_enumerate
 from pygal.view import ReverseView, View
@@ -90,7 +91,7 @@ class Dot(Graph):
 
     def _compute_y_labels(self):
         self._y_labels = list(zip(
-            self.y_labels or [
+            self.y_labels and map(to_str, self.y_labels) or [
                 serie.title['title']
                 if isinstance(serie.title, dict)
                 else serie.title for serie in self.series],

@@ -3,7 +3,7 @@
 from pygal import (
     Bar, Gauge, Pyramid, Funnel, Dot, StackedBar, StackedLine, XY,
     CHARTS_BY_NAME, Config, Line, Histogram, Box,
-    Pie, Treemap, TimeLine, DateLine,
+    Pie, Treemap, TimeLine, DateLine, Radar,
     DateTimeLine)
 
 try:
@@ -674,6 +674,29 @@ def get_test_routes(app):
             'lol', 'lol1', 'lol2', 'lol3', 'lol4', 'lol5',
             'lol6', 'lol7', 'lol8', 'lol9', 'lol10', 'lol11']
         return line.render_response()
+
+    @app.route('/test/radar')
+    def test_radar():
+        radar = Radar()
+        for i in range(10):
+            radar.add(str(i), [i * j for j in range(8)])
+        radar.x_labels = range(8)
+        radar.x_label_rotation = 35
+        radar.y_label_rotation = 35
+        radar.y_labels = [{
+            'label': '500',
+            'value': 10
+        }, {
+            'label': '1000',
+            'value': 20
+        }, {
+            'label': '5000',
+            'value': 30
+        }, {
+            'label': '10000',
+            'value': 40
+        }]
+        return radar.render_response()
 
     @app.route('/test/pie_serie_radius')
     def test_pie_serie_radius():

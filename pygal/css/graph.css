@@ -23,7 +23,7 @@
 }
 
 {{ id }}.guide.line {
-  fill-opacity: 0;
+  fill: none;
 }
 
 {{ id }}.centered {

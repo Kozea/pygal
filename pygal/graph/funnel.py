@@ -96,9 +96,9 @@ class Funnel(Graph):
         self._x_labels = list(
             zip(self.x_labels and
                 map(to_str, self.x_labels) or [
-                serie.title['title']
-                if isinstance(serie.title, dict)
-                else serie.title for serie in self.series],
+                    serie.title['title']
+                    if isinstance(serie.title, dict)
+                    else serie.title for serie in self.series],
                 map(self._center, self._x_pos)))
 
     def _plot(self):
