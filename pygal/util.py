@@ -235,6 +235,10 @@ def decorate(svg, node, metadata):
         svg.node(node, 'desc', class_='xlink').text = to_unicode(
             xlink.get('href'))
 
+    if 'tooltip' in metadata:
+        svg.node(node, 'title').text = to_unicode(
+            metadata['tooltip'])
+
     if 'color' in metadata:
         color = metadata.pop('color')
         node.attrib['style'] = 'fill: %s; stroke: %s' % (

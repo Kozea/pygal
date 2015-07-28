@@ -488,27 +488,30 @@ def get_test_routes(app):
     def test_worldmap():
         wmap = world.World(print_values=True, style=choice(list(styles.values())))
         # wmap.js = ('http://l:2343/2.0.x/pygal-tooltips.js',)
-        wmap.add('1st', [('fr', 100), {
-            'value': ('us', 10),
-            'node': {'style': 'fill: red'}
-        }
-        ])
-        wmap.add('2nd', [('jp', 1), ('ru', 7), ('uk', 0)])
-        wmap.add('3rd', ['ch', 'cz', 'ca', 'cn'])
-        wmap.add('4th', {'br': 12, 'bo': 1, 'bu': 23, 'fr': 34})
-        wmap.add('5th', [{
-            'value': ('tw', 10),
-            'label': 'First label',
-            'xlink': 'http://google.com?q=tw',
-        }, {
-            'value': ('bw', 20),
-            'label': 'Second one',
-            'xlink': 'http://google.com?q=bw',
-            'node': {'style': 'fill: blue'}
-        }, {
-            'value': ('mw', 40),
-            'label': 'Last'
-        }])
+        # wmap.add('1st', [('fr', 100), {
+        #     'value': ('us', 10),
+        #     'node': {'style': 'fill: red'}
+        # }
+        # ])
+        # wmap.add('2nd', [('jp', 1), ('ru', 7), ('uk', 0)])
+        # wmap.add('3rd', ['ch', 'cz', 'ca', 'cn'])
+        # wmap.add('4th', {'jp': 12, 'bo': 1, 'bu': 23, 'fr': 34})
+        # wmap.add('5th', [{
+        #     'value': ('tw', 10),
+        #     'label': 'First label',
+        #     'xlink': 'http://google.com?q=tw',
+        # }, {
+        #     'value': ('bw', 20),
+        #     'label': 'Second one',
+        #     'xlink': 'http://google.com?q=bw',
+        #     'node': {'style': 'fill: blue'}
+        # }, {
+        #     'value': ('mw', 40),
+        #     'label': 'Last'
+        # }])
+        wmap.add('_', {'us': 1})
+        wmap.add('-', {'us': 2})
+        wmap.add('.', {'us': 3})
         wmap.title = 'World Map !!'
         wmap.value_formatter = lambda x: '%d%%' % x
         return wmap.render_response()
@@ -701,6 +704,7 @@ def get_test_routes(app):
     @app.route('/test/pie_serie_radius')
     def test_pie_serie_radius():
         pie = Pie()
+        pie.js = ('http://a.zi:2343/2.0.x/pygal-tooltips.js',)
         for i in range(10):
             pie.add(str(i), i, inner_radius=(10 - i) / 10)
 
@@ -862,10 +866,12 @@ def get_test_routes(app):
         # link on chart and label
         chart.add({
             'title': 'Red',
+            'tooltip': 'Cramoisi',
             'xlink': {'href': 'http://en.wikipedia.org/wiki/Red'}
         }, [{
             'value': 2,
             'label': 'This is red',
+            'tooltip': 'LOOLLOLOLO',
             'xlink': {'href': 'http://en.wikipedia.org/wiki/Red'}}])
 
         chart.add({'title': 'Yellow', 'xlink': {

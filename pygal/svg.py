@@ -143,7 +143,9 @@ class Svg(object):
 
         dct = get_js_dict()
         # Config adds
-        dct['legends'] = self.graph._legends + self.graph._secondary_legends
+        dct['legends'] = [
+            l.get('title') if isinstance(l, dict) else l
+            for l in self.graph._legends + self.graph._secondary_legends]
 
         common_script.text = " = ".join(
             ("window.config", json.dumps(

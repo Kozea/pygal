@@ -13,6 +13,8 @@ Changelog
 * (Re)Add xlink in desc to show on tooltip
 * Activate element on tooltip hovering. (#106)
 * Fix radar axis behaviour (#247)
+* Add tooltip support in metadata to add a title (#249).
+
 
 2.0.0
 =====

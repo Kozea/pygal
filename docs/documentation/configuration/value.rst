@@ -153,6 +153,7 @@ Finally legends can be link with the same mechanism:
   chart = pygal.Bar()
   chart.add({
     'title': 'First',
+    'tooltip': 'It is the first actually',
     'xlink': {'href': 'http://en.wikipedia.org/wiki/First'}
   }, [{
     'value': 2,

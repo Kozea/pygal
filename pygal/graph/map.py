@@ -96,7 +96,7 @@ class BaseMap(Graph):
                     cls.append('serie-%d' % i)
                     cls.append('series')
                     area.set('class', ' '.join(cls))
-                    area.set('style', 'fill-opacity: %f' % (ratio))
+                    area.set('style', 'fill-opacity: %f' % ratio)
 
                     metadata = serie.metadata.get(j)
 
