@@ -14,6 +14,7 @@ Changelog
 * Activate element on tooltip hovering. (#106)
 * Fix radar axis behaviour (#247)
 * Add tooltip support in metadata to add a title (#249).
+* Take config class options in account too.
 
 
 2.0.0

@@ -39,7 +39,7 @@ class Dual(Graph):
                     pos = float(x_label.get('value'))
                     title = x_label.get('label', self._format(pos))
                 elif is_str(x_label):
-                    pos = x_pos[i]
+                    pos = x_pos[i % len(x_pos)]
                     title = x_label
                 else:
                     pos = self._x_adapt(float(x_label))

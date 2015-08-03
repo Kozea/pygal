@@ -761,7 +761,7 @@ class Graph(PublicApi):
                     pos = float(y_label.get('value'))
                     title = y_label.get('label', self._format(pos))
                 elif is_str(y_label):
-                    pos = y_pos[i]
+                    pos = y_pos[i % len(y_pos)]
                     title = y_label
                 else:
                     pos = float(y_label)
