@@ -5,6 +5,8 @@ Changelog
 2.0.2  UNRELEASED
 =================
 
+* Fix view box differently to avoid getting a null height on huge numbers. (#254)
+
 
 2.0.1
 =====
