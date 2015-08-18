@@ -135,8 +135,8 @@ class Box(object):
         if not self.width:
             self.xmax = self.xmin + 1
         if not self.height:
-            self.ymin -= .5
-            self.ymax = self.ymin + 1
+            self.ymin /= 2
+            self.ymax += self.ymin
         xmargin = self.margin * self.width
         self.xmin -= xmargin
         self.xmax += xmargin
