@@ -6,7 +6,7 @@ Changelog
 =================
 
 * Fix view box differently to avoid getting a null height on huge numbers. (#254)
-
+* Fix broken font_family default
 
 2.0.1
 =====

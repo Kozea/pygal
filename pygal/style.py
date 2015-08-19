@@ -37,8 +37,8 @@ class Style(object):
     foreground_subtle = 'rgba(0, 0, 0, .54)'
 
     # Monospaced font is highly encouraged
-    font_family = 'Consolas, "Liberation Mono", Menlo, Courier, '
-    'monospace'
+    font_family = (
+        'Consolas, "Liberation Mono", Menlo, Courier, monospace')
 
     label_font_family = None
     major_label_font_family = None
