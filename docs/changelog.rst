@@ -2,11 +2,12 @@
 Changelog
 =========
 
-2.0.2  UNRELEASED
-=================
+2.0.2
+=====
 
 * Fix view box differently to avoid getting a null height on huge numbers. (#254)
 * Fix broken font_family default
+* Fix non namespaced svg (without embed) javascript by adding uuid in config object. (config is in window.pygal now).
 
 2.0.1
 =====

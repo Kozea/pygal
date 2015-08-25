@@ -147,9 +147,14 @@ class Svg(object):
             l.get('title') if isinstance(l, dict) else l
             for l in self.graph._legends + self.graph._secondary_legends]
 
-        common_script.text = " = ".join(
-            ("window.config", json.dumps(
-                dct, default=json_default)))
+        common_js = 'window.pygal = window.pygal || {};'
+        common_js += 'window.pygal.config = window.pygal.config || {};'
+        if self.graph.no_prefix:
+            common_js += 'window.pygal.config = '
+        else:
+            common_js += 'window.pygal.config[%r] = ' % self.graph.uuid
+
+        common_script.text = common_js + json.dumps(dct, default=json_default)
 
         for js in self.graph.js:
             if js.startswith('file://'):
