@@ -96,7 +96,7 @@
 
 {{ id }}.reactive.active,
 {{ id }}.active .reactive {
-  fill-opacity:  {{ style.opacity_hover }};
+  fill-opacity: {{ style.opacity_hover }};
   stroke-width: 4;
 }
 
@@ -140,18 +140,12 @@
 }
 
 {{ id }}.map-element {
-  fill: {{ style.foreground }};
+  fill: {{ style.plot_background }};
   stroke: {{ style.foreground_subtle }} !important;
-  opacity: .9;
-  stroke-width: 3;
-  -webkit-transition: opacity {{ style.transition }};
-  -moz-transition: opacity {{ style.transition }};
-  transition: opacity {{ style.transition }};
 }
 
-{{ id }}.map-element:hover {
-  opacity: 1;
-  stroke-width: 10;
+{{ id }}.map-element .reactive {
+  fill-opacity: inherit;
 }
 
 {{ colors }}

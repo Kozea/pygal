@@ -2,6 +2,12 @@
 Changelog
 =========
 
+2.0.4
+=====
+
+* Fix map coloration
+
+
 2.0.3
 =====
 

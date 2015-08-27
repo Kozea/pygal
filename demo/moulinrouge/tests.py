@@ -556,20 +556,21 @@ def get_test_routes(app):
         if fr is None:
             abort(404)
         fmap = fr.Departments(style=choice(list(styles.values())))
-        for i in range(10):
-            fmap.add('s%d' % i, [
-                (choice(list(fr.DEPARTMENTS.keys())), randint(0, 100))
-                for _ in range(randint(1, 5))])
+        fmap.add('', [(69, 2), (42, 7), (38, 3), (26, 0)])
+        # for i in range(10):
+        #     fmap.add('s%d' % i, [
+        #         (choice(list(fr.DEPARTMENTS.keys())), randint(0, 100))
+        #         for _ in range(randint(1, 5))])
 
-        fmap.add('links', [{
-            'value': (69, 10),
-            'label': '\o/',
-            'xlink': 'http://google.com?q=69'
-        }, {
-            'value': ('42', 20),
-            'label': 'Y',
-        }])
-        fmap.add('6th', [3, 5, 34, 12])
+        # fmap.add('links', [{
+        #     'value': (69, 10),
+        #     'label': '\o/',
+        #     'xlink': 'http://google.com?q=69'
+        # }, {
+        #     'value': ('42', 20),
+        #     'label': 'Y',
+        # }])
+        # fmap.add('6th', [3, 5, 34, 12])
         fmap.title = 'French map'
         return fmap.render_response()
 
@@ -690,8 +691,8 @@ def get_test_routes(app):
             'lolroflmao',
             '12345678901234567890'
         ]
-        # radar.x_label_rotation = 35
-        # radar.y_label_rotation = 35
+        radar.x_label_rotation = 35
+        radar.y_label_rotation = 35
         radar.y_labels = [{
             'label': '500',
             'value': 10
