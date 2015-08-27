@@ -86,19 +86,9 @@ class Radar(Line):
         format_ = lambda x: '%f %f' % x
         center = self.view((0, 0))
         r = self._rmax
-        truncation = self.truncate_label
-        if not truncation:
-            if self.x_label_rotation or len(self._x_labels) <= 1:
-                truncation = 25
-            else:
-                first_label_position = self.view.x(self._x_labels[0][1]) or 0
-                last_label_position = self.view.x(self._x_labels[-1][1]) or 0
-                available_space = (
-                    last_label_position - first_label_position) / (
-                    len(self._x_labels) - 1)
-                truncation = reverse_text_len(
-                    available_space, self.style.label_font_size)
-                truncation = max(truncation, 1)
+
+        # Can't simply determine truncation
+        truncation = self.truncate_label or 25
 
         for label, theta in self._x_labels:
             major = label in self._x_major_labels
@@ -208,15 +198,15 @@ class Radar(Line):
             self._y_labels = []
             for i, y_label in enumerate(self.y_labels):
                 if isinstance(y_label, dict):
-                    pos = float(y_label.get('value'))
+                    pos = self._adapt(y_label.get('value'))
                     title = y_label.get('label', self._format(pos))
                 elif is_str(y_label):
-                    pos = y_pos[i]
+                    pos = self._adapt(y_pos[i])
                     title = y_label
                 else:
-                    pos = float(y_label)
-                    title = self._format(y_label)
-                self._y_labels.append((title, self._adapt(pos)))
+                    pos = self._adapt(y_label)
+                    title = self._format(pos)
+                self._y_labels.append((title, pos))
             self._rmin = min(self._rmin, min(cut(self._y_labels, 1)))
             self._rmax = max(self._rmax, max(cut(self._y_labels, 1)))
             self._box.set_polar_box(self._rmin, self._rmax)

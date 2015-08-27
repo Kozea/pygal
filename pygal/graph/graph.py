@@ -758,15 +758,15 @@ class Graph(PublicApi):
             self._y_labels = []
             for i, y_label in enumerate(self.y_labels):
                 if isinstance(y_label, dict):
-                    pos = float(y_label.get('value'))
+                    pos = self._adapt(y_label.get('value'))
                     title = y_label.get('label', self._format(pos))
                 elif is_str(y_label):
-                    pos = y_pos[i % len(y_pos)]
+                    pos = self._adapt(y_pos[i % len(y_pos)])
                     title = y_label
                 else:
-                    pos = float(y_label)
-                    title = self._format(y_label)
-                self._y_labels.append((title, self._adapt(pos)))
+                    pos = self._adapt(y_label)
+                    title = self._format(pos)
+                self._y_labels.append((title, pos))
             self._box.ymin = min(self._box.ymin, min(cut(self._y_labels, 1)))
             self._box.ymax = max(self._box.ymax, max(cut(self._y_labels, 1)))
         else:

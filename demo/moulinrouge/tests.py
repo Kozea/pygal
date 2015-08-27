@@ -683,9 +683,15 @@ def get_test_routes(app):
         radar = Radar()
         for i in range(10):
             radar.add(str(i), [i * j for j in range(8)])
-        radar.x_labels = range(8)
-        radar.x_label_rotation = 35
-        radar.y_label_rotation = 35
+        radar.x_labels = [
+            'lol',
+            'rofl',
+            'mao',
+            'lolroflmao',
+            '12345678901234567890'
+        ]
+        # radar.x_label_rotation = 35
+        # radar.y_label_rotation = 35
         radar.y_labels = [{
             'label': '500',
             'value': 10

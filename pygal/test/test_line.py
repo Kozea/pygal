@@ -100,8 +100,21 @@ def test_not_equal_x_labels():
     q = line.render_pyquery()
     assert len(q(".dots")) == 100
     assert len(q(".axis.x")) == 1
-    assert q(".axis.x text").map(texts) == ['0', '1', '2', '3', '4', '5', '6',
-                                            '7', '8', '9', '10']
+    assert q(".axis.x text").map(texts) == [
+        '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10']
+
+
+def test_int_x_labels():
+    """Test x_labels"""
+    line = Line()
+    line.add('test1', range(100))
+    line.truncate_label = -1
+    line.x_labels = list(range(11))
+    q = line.render_pyquery()
+    assert len(q(".dots")) == 100
+    assert len(q(".axis.x")) == 1
+    assert q(".axis.x text").map(texts) == [
+        '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10']
 
 
 def test_only_major_dots_every():

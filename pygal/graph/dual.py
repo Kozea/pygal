@@ -36,14 +36,14 @@ class Dual(Graph):
             self._x_labels = []
             for i, x_label in enumerate(self.x_labels):
                 if isinstance(x_label, dict):
-                    pos = float(x_label.get('value'))
-                    title = x_label.get('label', self._format(pos))
+                    pos = self._x_adapt(x_label.get('value'))
+                    title = x_label.get('label', self._x_format(pos))
                 elif is_str(x_label):
-                    pos = x_pos[i % len(x_pos)]
+                    pos = self._x_adapt(x_pos[i % len(x_pos)])
                     title = x_label
                 else:
-                    pos = self._x_adapt(float(x_label))
-                    title = self._x_format(x_label)
+                    pos = self._x_adapt(x_label)
+                    title = self._x_format(pos)
 
                 self._x_labels.append((title, pos))
             self._box.xmin = min(self._box.xmin, min(cut(self._x_labels, 1)))

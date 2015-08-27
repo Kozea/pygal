@@ -133,3 +133,29 @@ def test_date_xrange():
                 '2013-02-04',
                 '2013-02-16',
                 '2013-02-27']
+
+
+def test_date_labels():
+    """Test dateline with xrange"""
+    datey = DateLine(truncate_label=1000)
+    datey.add('dates', [
+        (date(2013, 1, 2), 300),
+        (date(2013, 1, 12), 412),
+        (date(2013, 2, 2), 823),
+        (date(2013, 2, 22), 672)
+    ])
+
+    datey.x_labels = [
+        date(2013, 1, 1),
+        date(2013, 2, 1),
+        date(2013, 3, 1)
+        ]
+
+    q = datey.render_pyquery()
+    assert list(
+        map(lambda t: t.split(' ')[0],
+            q(".axis.x text").map(texts))) == [
+                '2013-01-01',
+                '2013-02-01',
+                '2013-03-01'
+            ]
