@@ -30,8 +30,7 @@ from pygal._compat import is_str
 from pygal.adapters import none_to_zero, positive
 from pygal.graph.line import Line
 from pygal.util import (
-    cached_property, compute_scale, cut, deg, truncate,
-    reverse_text_len)
+    cached_property, compute_scale, cut, deg, truncate)
 from pygal.view import PolarLogView, PolarView
 
 

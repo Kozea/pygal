@@ -333,8 +333,9 @@ class Svg(object):
             """Return a css style for the given option"""
             css = ['%s.series%s {\n' % (
                 self.id, '.serie-%d' % i if i is not None else '')]
-            for key in ('width', 'linejoin', 'linecap',
-                       'dasharray', 'dashoffset'):
+            for key in (
+                    'width', 'linejoin', 'linecap',
+                    'dasharray', 'dashoffset'):
                 if stroke.get(key):
                     css.append('  stroke-%s: %s;\n' % (
                         key, stroke[key]))

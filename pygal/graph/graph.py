@@ -355,7 +355,8 @@ class Graph(PublicApi):
                 x=col * x_step,
                 y=1.5 * row * h + (
                     self.style.legend_font_size - self.legend_box_size
-                    if self.style.legend_font_size > self.legend_box_size else 0
+                    if self.style.legend_font_size > self.legend_box_size
+                    else 0
                 ) / 2,
                 width=self.legend_box_size,
                 height=self.legend_box_size,
@@ -789,9 +790,9 @@ class Graph(PublicApi):
     def _has_data(self):
         """Check if there is any data"""
         return any([
-            len([v for a in (
-                s[1] if is_list_like(s) else [s])
-                 for v in (a if is_list_like(a) else [a])
-                 if v is not None])
+            len([
+                v for a in (s[1] if is_list_like(s) else [s])
+                for v in (a if is_list_like(a) else [a])
+                if v is not None])
             for s in self.raw_series
         ])

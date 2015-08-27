@@ -20,7 +20,7 @@ install:
   - pip install cairosvg
   - pip install coveralls
 
-script: py.test pygal/test --flake8 --cov-report= --cov=pygal
+script: py.test pygal/ --flake8 --cov-report= --cov=pygal
 
 after_success: coveralls
 

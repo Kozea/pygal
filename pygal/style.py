@@ -104,7 +104,8 @@ class Style(object):
                     setattr(self, name, self.font_family)
                 elif fn.startswith('googlefont:'):
                     setattr(self, name, fn.replace('googlefont:', ''))
-                    self._google_fonts.add(getattr(self, name).split(',')[0].strip())
+                    self._google_fonts.add(
+                        getattr(self, name).split(',')[0].strip())
 
     def get_colors(self, prefix, len_):
         """Get the css color list"""
