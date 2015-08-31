@@ -173,7 +173,7 @@ class Graph(PublicApi):
             text.text = truncate(label, truncation)
             if text.text != label:
                 self.svg.node(guides, 'title').text = label
-            else:
+            elif self._dual:
                 self.svg.node(
                     guides, 'title',
                 ).text = self._x_format(position)
@@ -748,7 +748,7 @@ class Graph(PublicApi):
 
     def _compute_x_labels(self):
         self._x_labels = self.x_labels and list(
-            zip(map(to_str, self.x_labels), self._x_pos))
+            zip(map(self._x_format, self.x_labels), self._x_pos))
 
     def _compute_y_labels(self):
         y_pos = compute_scale(

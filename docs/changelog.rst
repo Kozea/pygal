@@ -2,6 +2,12 @@
 Changelog
 =========
 
+2.0.5
+=====
+
+* Fix x label formatting
+
+
 2.0.4
 =====
 
