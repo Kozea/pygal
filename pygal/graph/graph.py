@@ -539,13 +539,13 @@ class Graph(PublicApi):
     def _x_format(self):
         """Return the value formatter for this graph"""
         return self.x_value_formatter or (
-            humanize if self.human_readable else str)
+            humanize if self.human_readable else to_str)
 
     @property
     def _format(self):
         """Return the value formatter for this graph"""
         return self.value_formatter or (
-            humanize if self.human_readable else str)
+            humanize if self.human_readable else to_str)
 
     def _compute(self):
         """Initial computations to draw the graph"""
