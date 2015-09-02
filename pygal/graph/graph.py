@@ -747,8 +747,14 @@ class Graph(PublicApi):
         )
 
     def _compute_x_labels(self):
+
+        def format_if_value(label):
+            if not is_str(label):
+                return self._x_format(label)
+            return label
+
         self._x_labels = self.x_labels and list(
-            zip(map(self._x_format, self.x_labels), self._x_pos))
+            zip(map(format_if_value, self.x_labels), self._x_pos))
 
     def _compute_y_labels(self):
         y_pos = compute_scale(

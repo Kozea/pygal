@@ -37,7 +37,7 @@ def get_test_routes(app):
 
     @app.route('/test/unsorted')
     def test_unsorted():
-        bar = Bar(style=styles['neon'])
+        bar = Bar(style=styles['neon'], human_readable=True)
         bar.add('A', {'red': 10, 'green': 12, 'blue': 14})
         bar.add('B', {'green': 11, 'blue': 7})
         bar.add('C', {'blue': 7})

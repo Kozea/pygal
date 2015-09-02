@@ -2,6 +2,11 @@
 Changelog
 =========
 
+2.0.6
+=====
+
+* Avoid x label formatting when label is a string
+
 2.0.5
 =====
 
