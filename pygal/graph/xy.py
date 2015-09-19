@@ -122,8 +122,9 @@ class XY(Line, Dual):
             else:
                 xrng = None
 
-        if xrng:
+        # these values can also be 0 (zero), so testing explicitly for None
+        if xrng is not None:
             self._box.xmin, self._box.xmax = xmin, xmax
 
-        if yrng:
+        if yrng is not None:
             self._box.ymin, self._box.ymax = ymin, ymax
