@@ -6,7 +6,7 @@ Changelog
 =====
 
 * Fixing to checks breaking rendering of DateTimeLine and TimeDeltaLine (#264) (thanks @mmrose)
-* Fix `render_in_browser`. (#266) (thanks @waixwong)
+* Fix `render_in_browser`. (#266) (#268) (thanks @waixwong)
 
 
 2.0.6
