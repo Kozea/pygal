@@ -2,6 +2,13 @@
 Changelog
 =========
 
+2.0.7
+=====
+
+* Fixing to checks breaking rendering of DateTimeLine and TimeDeltaLine (#264) (thanks @mmrose)
+* Fix `render_in_browser`. (#266) (thanks @waixwong)
+
+
 2.0.6
 =====
 
@@ -51,15 +58,16 @@ Changelog
 
 2.0.0
 =====
+
 * Rework the ghost mechanism to come back to a more object oriented behavior, storing all state in a state object which is created on every render. (#161)
 * Refactor maps
 * Add world continents
-* Add swiss cantons map (thanks sergedroz)
+* Add swiss cantons map (thanks @sergedroz)
 * Add inverse_y_axis options to reverse graph (#24)
 * Fix DateTimeLine time data loss (#193)
 * Fix no data for graphs with only zeroes (#148)
-* Support value formatter for pie graphs (#218) (thanks never-eat-yellow-snow)
-* Add new Box plot modes and outliers and set extremes as default (#226 #121 #149) (thanks djezar)
+* Support value formatter for pie graphs (#218) (thanks @never-eat-yellow-snow)
+* Add new Box plot modes and outliers and set extremes as default (#226 #121 #149) (thanks @djezar)
 * Add secondary_range option to set range for secondary values. (#203)
 * Maps are now plugins, they are removed from pygal core and moved to packages (pygal_maps_world, pygal_maps_fr, pygal_maps_ch, ...) (#225)
 * Dot now supports negative values
@@ -83,13 +91,14 @@ Changelog
 * Add ``googlefont:font`` support for style fonts
 * Add ``tooltip_fancy_mode`` to revert to old tooltips
 * Add auto ``print_value`` color + a configurable ``value_colors`` list in style
-* Add ``guide_stroke_dasharray`` and ``guide_stroke_dasharray`` in style to customize guides (#242) (thanks cbergmiller)
+* Add ``guide_stroke_dasharray`` and ``guide_stroke_dasharray`` in style to customize guides (#242) (thanks @cbergmiller)
 * Refactor label processing in a ``_compute_x_labels`` and ``_compute_y_labels`` method. Handle both string and numbers for all charts. Create a ``Dual`` base chart for dual axis charts.  (#236)
 * Better js integration in maps. Use the normal tooltip.
 
 
 1.7.0
 =====
+
 * Remove DateY and replace it by real XY datetime, date, time and timedelta support. (#188)
 * Introduce new XY configuration options: `xrange`, `x_value_formatter`.
 * Add show_x_labels option to remove them and the x axis.
@@ -98,71 +107,83 @@ Changelog
 
 1.6.2
 =====
-* Add margin_top, margin_right, margin_bottom, margin_left options which defaults to margin. (thanks djt)
-* Update django mime parameter from mimetype to content_type. (thanks kswiat)
+
+* Add margin_top, margin_right, margin_bottom, margin_left options which defaults to margin. (thanks @djt)
+* Update django mime parameter from mimetype to content_type. (thanks @kswiat)
 * Allow a color and a style parameter to value metadata.
 
 1.6.1
 =====
+
 * Fix Decimal incompatibility
 
 1.6.0
 =====
-* Adds config option missing_value_fill_truncation. (thanks sirlark)
-* Avoid HTTP 301 Moved Permanently (thanks jean)
-* Add a Django response method (thanks inlanger)
+
+* Adds config option missing_value_fill_truncation. (thanks @sirlark)
+* Avoid HTTP 301 Moved Permanently (thanks @jean)
+* Add a Django response method (thanks @inlanger)
 * Fix setup.py (#170)
 * Fix format error on list like in table
 * Add legend_at_bottom_columns option to specify number of columns in legend when at bottom. (#157)
 * Fix secondary interpolation (#165)
-* Adds an extra class (axis) to horizontal guides if the label is "0" (#147) (thanks sirlark)
-* Add line stroke customization parameters to style.py (#154) (thanks blakev)
+* Adds an extra class (axis) to horizontal guides if the label is "0" (#147) (thanks @sirlark)
+* Add line stroke customization parameters to style.py (#154) (thanks @blakev)
 
 1.5.1
 =====
+
 * Add `stack_from_top` option to reverse stack graph data order
 * Minor fix for empty logarithmic chart
-* Reorders axes in SVG output. Fix #145 (thanks sirlark)
+* Reorders axes in SVG output. Fix #145 (thanks @sirlark)
 
 1.5.0
 =====
+
 * Add per serie configuration
-* Add half pie (thanks philt2001)
+* Add half pie (thanks @philt2001)
 * Make lxml an optionnal dependency (huge speed boost in pypy)
 * Add render_table (WIP)
 * Support colors in rgb / rgba for parametric styles
 
 1.4.6
 =====
-* Add support for \n separated multiline titles (thanks sirlark)
-* New show_only_major_dots option (thanks Le-Stagiaire)
+
+* Add support for \n separated multiline titles (thanks @sirlark)
+* New show_only_major_dots option (thanks @Le-Stagiaire)
 * Remove 16 colors limitation
-* Fix 0 in range (thanks elpaso)
+* Fix 0 in range (thanks @elpaso)
 
 1.4.5
 =====
+
 * Fix y_labels map iterator exhaustion in python 3
 
 1.4.4
 =====
-* Fix division by zero in spark text (thanks laserpony)
+
+* Fix division by zero in spark text (thanks @laserpony)
 * Fix config metaclass problem in python 3
 * Fix --version in pygal_gen
 
 1.4.3
 =====
-* Allow arbitrary number of x-labels on line plot (thanks nsmgr8)
+
+* Allow arbitrary number of x-labels on line plot (thanks @nsmgr8)
 
 1.4.2
 =====
+
 * Fix broken tests
 
 1.4.1
 =====
+
 * Fix value formatting in maps
 
 1.4.0
 =====
+
 * Finally a changelog !
 * Hopefully fix weird major scale algorithm
 * Add options to customize major labels (y_labels_major, y_labels_major_every, y_labels_major_count)
@@ -172,6 +193,7 @@ Changelog
 
 1.3.x
 =====
+
 * Whisker Box Plot
 * Python 3 fix
 * DateY X axis formatting (x_label_format)

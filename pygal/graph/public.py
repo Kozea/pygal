@@ -52,9 +52,9 @@ class PublicApi(BaseGraph):
         self.teardown()
         return svg
 
-    def render_tree(self):
+    def render_tree(self, **kwargs):
         """Render the graph, and return (l)xml etree"""
-        self.setup()
+        self.setup(**kwargs)
         svg = self.svg.root
         for f in self.xml_filters:
             svg = f(svg)
@@ -70,10 +70,10 @@ class PublicApi(BaseGraph):
             raise ImportError('You must install lxml to use render table')
         return Table(self).render(**kwargs)
 
-    def render_pyquery(self):
+    def render_pyquery(self, **kwargs):
         """Render the graph, and return a pyquery wrapped tree"""
         from pyquery import PyQuery as pq
-        return pq(self.render(), parser='html')
+        return pq(self.render(**kwargs), parser='html')
 
     def render_in_browser(self, **kwargs):
         """Render the graph, open it in your browser with black magic"""
