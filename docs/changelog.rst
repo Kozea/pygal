@@ -2,6 +2,12 @@
 Changelog
 =========
 
+2.0.8
+=====
+
+* Fix value overwrite in map. (#275)
+
+
 2.0.7
 =====
 
@@ -13,6 +19,7 @@ Changelog
 =====
 
 * Avoid x label formatting when label is a string
+
 
 2.0.5
 =====

@@ -120,8 +120,8 @@ class BaseMap(Graph):
                         node.set('class', ' '.join(cls))
                         alter(node, metadata)
 
-                    value = self._get_value((area_code, value))
-                    self._tooltip_data(area, value, 0, 0, 'auto')
+                    val = self._get_value((area_code, value))
+                    self._tooltip_data(area, val, 0, 0, 'auto')
 
         self.nodes['plot'].append(map)
 
