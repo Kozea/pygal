@@ -126,19 +126,20 @@ def unparse_color(r, g, b, a, type):
     if type == '#rgb':
         # Don't lose precision on rgb shortcut
         if r % 17 == 0 and g % 17 == 0 and b % 17 == 0:
-            return '#%x%x%x' % (r / 17, g / 17, b / 17)
+            return '#%x%x%x' % (int(r / 17), int(g / 17), int(b / 17))
         type = '#rrggbb'
 
     if type == '#rgba':
         if r % 17 == 0 and g % 17 == 0 and b % 17 == 0:
-            return '#%x%x%x%x' % (r / 17, g / 17, b / 17, a * 15)
+            return '#%x%x%x%x' % (int(r / 17), int(g / 17), int(b / 17),
+                                  int(a * 15))
         type = '#rrggbbaa'
 
     if type == '#rrggbb':
         return '#%02x%02x%02x' % (r, g, b)
 
     if type == '#rrggbbaa':
-        return '#%02x%02x%02x%02x' % (r, g, b, a * 255)
+        return '#%02x%02x%02x%02x' % (r, g, b, int(a * 255))
 
     if type == 'rgb':
         return 'rgb(%d, %d, %d)' % (r, g, b)
