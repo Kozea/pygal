@@ -2,6 +2,12 @@
 Changelog
 =========
 
+2.0.9 UNRELEASED
+================
+
+* Add `dynamic_print_values` to show print_values on legend hover. (Fix #279)
+
+
 2.0.8
 =====
 

@@ -39,6 +39,20 @@ When using pygal to display static charts for printing for example you can chose
                     value_colors=('white',)))
   chart.add('line', [0, 12, 31, 8, 28, 0])
 
+dynamic_print_values
+--------------------
+
+Show print_values only on legend hover.
+
+.. pygal-code::
+
+  from pygal.style import DefaultStyle
+  chart = pygal.Bar(dynamic_print_values=True, style=DefaultStyle(
+                    value_font_family='googlefont:Raleway',
+                    value_font_size=30,
+                    value_colors=('white',)))
+  chart.add('line', [0, 12, 31, 8, 28, 0])
+
 
 print_zeroes
 ------------

@@ -119,3 +119,11 @@
 {{ id }}.tooltip text {
   fill-opacity: 1;
 }
+
+{{ id }}.showable {
+  visibility: hidden;
+}
+
+{{ id }}.showable.shown {
+  visibility: visible;
+}

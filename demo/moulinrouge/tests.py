@@ -54,6 +54,7 @@ def get_test_routes(app):
         bar.title = 'Wow ! Such Chart !'
         bar.x_title = 'Many x labels'
         bar.y_title = 'Much y labels'
+        bar.dynamic_print_values = True
 
         bar.add('Red serie', [
             {'value': 10,
@@ -343,7 +344,7 @@ def get_test_routes(app):
 
     @app.route('/test/bar')
     def test_bar():
-        bar = Bar()
+        bar = Bar(dynamic_print_values=True)
         bar.add('1', [1, 2, 3])
         bar.add('2', [4, 5, 6])
         bar.x_labels = ['a']

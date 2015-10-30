@@ -472,10 +472,11 @@ class Graph(PublicApi):
             ).text = label
             y += self.style.value_font_size
 
-        if self.print_values:
+        if self.print_values or self.dynamic_print_values:
             self.svg.node(
                 serie_node['text_overlay'], 'text',
-                class_='centered value',
+                class_='centered value%s' % (
+                    ' showable' if self.dynamic_print_values else ''),
                 x=x,
                 y=y + self.style.value_font_size / 3
             ).text = value if self.print_zeroes or value != '0' else ''

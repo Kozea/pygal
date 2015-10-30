@@ -458,6 +458,10 @@ class Config(CommonConfig):
         False, bool,
         "Text", "Display value labels")
 
+    dynamic_print_values = Key(
+        False, bool,
+        "Text", "Show values only on hover")
+
     truncate_legend = Key(
         None, int, "Text",
         "Legend string length truncation threshold",
