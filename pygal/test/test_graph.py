@@ -24,6 +24,7 @@ import pygal
 import uuid
 import sys
 import pytest
+import io
 from pygal.graph.map import BaseMap
 from pygal.util import cut
 from pygal._compat import u
@@ -53,7 +54,7 @@ def test_render_to_file(Chart, datas):
     chart = Chart()
     chart = make_data(chart, datas)
     chart.render_to_file(file_name)
-    with open(file_name) as f:
+    with io.open(file_name, encoding="utf-8") as f:
         assert 'pygal' in f.read()
     os.remove(file_name)
 
