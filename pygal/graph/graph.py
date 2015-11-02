@@ -777,7 +777,7 @@ class Graph(PublicApi):
             else:
                 self._y_labels_major = [self._y_labels[
                     int(i * (label_count - 1) / (major_count - 1))][1]
-                                        for i in range(major_count)]
+                    for i in range(major_count)]
 
         elif self.y_labels_major:
             self._y_labels_major = list(map(self._adapt, self.y_labels_major))
