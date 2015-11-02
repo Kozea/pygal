@@ -6,6 +6,7 @@ Changelog
 ================
 
 * Add `dynamic_print_values` to show print_values on legend hover. (Fix #279)
+* Fix unparse_color for python 3.5+ compatibility (thanks felixonmars)
 
 
 2.0.8
