@@ -76,7 +76,7 @@ def create_app():
     def _random_series(type, data, order):
         max = 10 ** order
         min = 10 ** random.randrange(0, order)
-
+        with_2nd = bool(random.randint(0, 1))
         series = []
         for i in range(random.randrange(1, 10)):
             if type == 'Pie':
@@ -89,7 +89,10 @@ def create_app():
             else:
                 values = [random_value((-max, min)[random.randrange(1, 2)],
                                        max) for i in range(data)]
-            series.append((random_label(), values))
+            is_2nd = False
+            if with_2nd:
+                is_2nd = bool(random.randint(0, 1))
+            series.append((random_label(), values, is_2nd))
         return series
 
     from .tests import get_test_routes
@@ -107,15 +110,15 @@ def create_app():
     def svg(type, series, config):
         graph = get(type)(
             pickle.loads(b64decode(str(config))))
-        for title, values in pickle.loads(b64decode(str(series))):
-            graph.add(title, values)
+        for title, values, is_2nd in pickle.loads(b64decode(str(series))):
+            graph.add(title, values, secondary=is_2nd)
         return graph.render_response()
 
     @app.route("/table/<type>/<series>/<config>")
     def table(type, series, config):
         graph = get(type)(pickle.loads(b64decode(str(config))))
-        for title, values in pickle.loads(b64decode(str(series))):
-            graph.add(title, values)
+        for title, values, is_2nd in pickle.loads(b64decode(str(series))):
+            graph.add(title, values, secondary=is_2nd)
         return graph.render_table()
 
     @app.route("/sparkline/<style>")
@@ -235,10 +238,11 @@ def create_app():
         labels = [random_label() for i in range(data)]
         svgs = []
         config.show_legend = bool(random.randrange(0, 2))
-        for angle in range(0, 91, 5):
+        for angle in range(0, 370, 10):
             config.title = "%d rotation" % angle
             config.x_labels = labels
             config.x_label_rotation = angle
+            config.y_label_rotation = angle
             svgs.append({'type': 'pygal.Bar',
                          'series': series,
                          'config': b64encode(pickle.dumps(config))})

@@ -46,11 +46,24 @@
   text-anchor: start;
 }
 
+{{ id }}.axis.x:not(.web) text[transform].backwards {
+  text-anchor: end;
+}
+
 {{ id }}.axis.y text {
   text-anchor: end;
 }
+
+{{ id }}.axis.y text[transform].backwards {
+  text-anchor: start;
+}
+
 {{ id }}.axis.y2 text {
   text-anchor: start;
+}
+
+{{ id }}.axis.y2 text[transform].backwards {
+  text-anchor: end;
 }
 
 {{ id }}.axis .guide.line {

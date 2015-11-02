@@ -8,7 +8,8 @@ Changelog
 * Add `dynamic_print_values` to show print_values on legend hover. (Fix #279)
 * Fix unparse_color for python 3.5+ compatibility (thanks felixonmars, sjourdois)
 * Process major labels as labels. (Fix #263)
-
+* Fix labels rotation > 180 (Fix #257)
+* Fix secondary axis
 
 2.0.8
 =====

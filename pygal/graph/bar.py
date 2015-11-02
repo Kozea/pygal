@@ -108,31 +108,6 @@ class Bar(Graph):
 
         self._x_pos = [(i + .5) / self._len for i in range(self._len)]
 
-    def _compute_secondary(self):
-        """Compute parameters for secondary series rendering"""
-        if self.secondary_series:
-            y_pos = list(zip(*self._y_labels))[1]
-            ymin = self._secondary_min
-            ymax = self._secondary_max
-
-            min_0_ratio = (self.zero - self._box.ymin) / self._box.height or 1
-            max_0_ratio = (self._box.ymax - self.zero) / self._box.height or 1
-
-            if ymax > self._box.ymax:
-                ymin = -(ymax - self.zero) * (1 / max_0_ratio - 1)
-            else:
-                ymax = (self.zero - ymin) * (1 / min_0_ratio - 1)
-
-            left_range = abs(self._box.ymax - self._box.ymin)
-            right_range = abs(ymax - ymin) or 1
-            self._scale = left_range / right_range
-            self._scale_diff = self._box.ymin
-            self._scale_min_2nd = ymin
-            self._y_2nd_labels = [
-                (self._format(self._box.xmin + y * right_range / left_range),
-                 y)
-                for y in y_pos]
-
     def _plot(self):
         """Draw bars for series and secondary series"""
         for serie in self.series:

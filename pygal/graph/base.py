@@ -82,6 +82,12 @@ class BaseGraph(object):
         if self.zero == 0 and isinstance(self, BaseMap):
             self.zero = 1
 
+        if self.x_label_rotation:
+            self.x_label_rotation %= 360
+
+        if self.y_label_rotation:
+            self.y_label_rotation %= 360
+
         for key in ('x_labels', 'y_labels'):
             if getattr(self, key):
                 setattr(self, key, list(getattr(self, key)))

@@ -454,7 +454,7 @@ def get_test_routes(app):
 
     @app.route('/test/dateline')
     def test_dateline():
-        dateline = DateLine(x_label_rotation=25, show_minor_x_labels=False)
+        dateline = DateLine(y_label_rotation=112)
         dateline.x_labels = [
             date(2013, 1, 1),
             date(2013, 7, 1),
@@ -470,7 +470,9 @@ def get_test_routes(app):
         dateline.add("Serie", [
             (date(2013, 1, 2), 213),
             (date(2013, 8, 2), 281),
+            (date(2013, 5, 31), 281),
             (date(2014, 12, 7), 198),
+            (date(2014, 9, 6), 198),
             (date(2015, 3, 21), 120)
         ])
         return dateline.render_response()
@@ -851,6 +853,23 @@ def get_test_routes(app):
         line.add('zeroes', [])
         line.add('zeroes 2', [0])
         return line.render_response()
+
+    @app.route('/test/rotations/<chart>')
+    def test_rotations_for(chart):
+        graph = CHARTS_BY_NAME[chart]()
+        # graph.x_label_rotation = 290
+        # graph.y_label_rotation = 0
+        graph.add('lalalla al alallaa a 1',
+                  [1, 3, 12, 3, 4, None, 9])
+        graph.add('lalalla al alallaa a 2',
+                  [7, -4, 10, None, 8, 3, 1], secondary=True)
+        graph.add('lalalla al alallaa a 3',
+                  [7, -14, -10, None, 8, 3, 1])
+        graph.add('lalalla al alallaa a 4',
+                  [7, 4, -10, None, 8, 3, 1], secondary=True)
+        graph.x_labels = ('a', 'b', 'c', 'd', 'e', 'f', 'g')
+        # graph.legend_at_bottom = True
+        return graph.render_response()
 
     @app.route('/test/datetimeline')
     def test_datetimeline():

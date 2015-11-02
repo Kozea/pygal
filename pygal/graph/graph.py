@@ -139,11 +139,12 @@ class Graph(PublicApi):
                     available_space, self.style.label_font_size)
                 truncation = max(truncation, 1)
 
+        lastlabel = self._x_labels[-1][0]
         if 0 not in [label[1] for label in self._x_labels]:
             self.svg.node(axis, 'path',
                           d='M%f %f v%f' % (0, 0, self.view.height),
                           class_='line')
-        lastlabel = self._x_labels[-1][0]
+            lastlabel = None
 
         for label, position in self._x_labels:
             if self.horizontal:
@@ -184,6 +185,17 @@ class Graph(PublicApi):
             if self.x_label_rotation:
                 text.attrib['transform'] = "rotate(%d %f %f)" % (
                     self.x_label_rotation, x, y)
+                if self.x_label_rotation >= 180:
+                    text.attrib['class'] = ' '.join(
+                        (text.attrib['class'] and text.attrib['class'].split(
+                            ' ') or []) + ['backwards'])
+
+        if self._y_2nd_labels and 0 not in [
+                label[1] for label in self._x_labels]:
+            self.svg.node(axis, 'path',
+                          d='M%f %f v%f' % (
+                              self.view.width, 0, self.view.height),
+                          class_='line')
 
         if self._x_2nd_labels:
             secondary_ax = self.svg.node(
@@ -208,6 +220,11 @@ class Graph(PublicApi):
                 if self.x_label_rotation:
                     text.attrib['transform'] = "rotate(%d %f %f)" % (
                         -self.x_label_rotation, x, y)
+                    if self.x_label_rotation >= 180:
+                        text.attrib['class'] = ' '.join((
+                            text.attrib['class'] and
+                            text.attrib['class'].split(
+                                ' ') or []) + ['backwards'])
 
     def _y_axis(self):
         """Make the y axis: labels and guides"""
@@ -261,7 +278,10 @@ class Graph(PublicApi):
             if self.y_label_rotation:
                 text.attrib['transform'] = "rotate(%d %f %f)" % (
                     self.y_label_rotation, x, y)
-
+                if 90 < self.y_label_rotation < 270:
+                    text.attrib['class'] = ' '.join(
+                        (text.attrib['class'] and text.attrib['class'].split(
+                            ' ') or []) + ['backwards'])
             self.svg.node(
                 guides, 'title',
             ).text = self._format(position)
@@ -287,6 +307,11 @@ class Graph(PublicApi):
                 if self.y_label_rotation:
                     text.attrib['transform'] = "rotate(%d %f %f)" % (
                         self.y_label_rotation, x, y)
+                    if 90 < self.y_label_rotation < 270:
+                        text.attrib['class'] = ' '.join(
+                            (text.attrib['class'] and
+                             text.attrib['class'].split(
+                                ' ') or []) + ['backwards'])
 
     def _legend(self):
         """Make the legend box"""
@@ -340,7 +365,8 @@ class Graph(PublicApi):
             if self._y_2nd_labels:
                 h, w = get_texts_box(
                     cut(self._y_2nd_labels), self.style.label_font_size)
-                x += self.spacing + max(w * cos(rad(self.y_label_rotation)), h)
+                x += self.spacing + max(w * abs(cos(rad(
+                    self.y_label_rotation))), h)
 
             y = self.margin_box.top + self.spacing
 
@@ -594,15 +620,20 @@ class Graph(PublicApi):
                             cut(xlabels)),
                         self.style.label_font_size)
                     self._x_labels_height = self.spacing + max(
-                        w * sin(rad(self.x_label_rotation)), h)
+                        w * abs(sin(rad(self.x_label_rotation))), h)
                     if xlabels is self._x_labels:
                         self.margin_box.bottom += self._x_labels_height
                     else:
                         self.margin_box.top += self._x_labels_height
                     if self.x_label_rotation:
-                        self.margin_box.right = max(
-                            w * cos(rad(self.x_label_rotation)),
-                            self.margin_box.right)
+                        if self.x_label_rotation % 180 < 90:
+                            self.margin_box.right = max(
+                                w * abs(cos(rad(self.x_label_rotation))),
+                                self.margin_box.right)
+                        else:
+                            self.margin_box.left = max(
+                                w * abs(cos(rad(self.x_label_rotation))),
+                                self.margin_box.left)
 
         if self.show_y_labels:
             for ylabels in (self._y_labels, self._y_2nd_labels):
@@ -611,10 +642,10 @@ class Graph(PublicApi):
                         cut(ylabels), self.style.label_font_size)
                     if ylabels is self._y_labels:
                         self.margin_box.left += self.spacing + max(
-                            w * cos(rad(self.y_label_rotation)), h)
+                            w * abs(cos(rad(self.y_label_rotation))), h)
                     else:
                         self.margin_box.right += self.spacing + max(
-                            w * cos(rad(self.y_label_rotation)), h)
+                            w * abs(cos(rad(self.y_label_rotation))), h)
 
         self._title = split_title(
             self.title, self.width, self.style.title_font_size)
