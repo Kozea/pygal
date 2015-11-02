@@ -52,6 +52,12 @@ class Dual(Graph):
         else:
             self._x_labels = list(zip(map(self._x_format, x_pos), x_pos))
 
+    def _compute_x_labels_major(self):
+        # In case of dual, x labels must adapters and so majors too
+        self.x_labels_major = self.x_labels_major and list(
+            map(self._x_adapt, self.x_labels_major))
+        super()._compute_x_labels_major()
+
     def _get_x_label(self, i):
         """Convenience function to get the x_label of a value index"""
         return

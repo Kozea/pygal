@@ -34,6 +34,8 @@ class HorizontalGraph(Graph):
     def _post_compute(self):
         """After computations transpose labels"""
         self._x_labels, self._y_labels = self._y_labels, self._x_labels
+        self._x_labels_major, self._y_labels_major = (
+            self._y_labels_major, self._x_labels_major)
         self._x_2nd_labels, self._y_2nd_labels = (
             self._y_2nd_labels, self._x_2nd_labels)
 

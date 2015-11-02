@@ -25,6 +25,8 @@ from pygal import (
     Pyramid, HorizontalBar, HorizontalStackedBar,
     DateTimeLine, TimeLine, DateLine, TimeDeltaLine)
 from pygal.graph.map import BaseMap
+from pygal.graph.horizontal import HorizontalGraph
+from pygal.graph.dual import Dual
 from pygal._compat import u
 from pygal.test.utils import texts
 from tempfile import NamedTemporaryFile
@@ -388,7 +390,7 @@ def test_x_label_major(Chart):
             Pie, Treemap, Funnel, Dot, Gauge, Histogram, Box,
             Pyramid, DateTimeLine, TimeLine, DateLine,
             TimeDeltaLine
-    ) or issubclass(Chart, BaseMap) or Chart._dual:
+    ) or issubclass(Chart, (BaseMap, Dual, HorizontalGraph)):
         return
     chart = Chart()
     chart.add('test', range(12))

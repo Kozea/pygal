@@ -146,7 +146,10 @@ class Graph(PublicApi):
         lastlabel = self._x_labels[-1][0]
 
         for label, position in self._x_labels:
-            major = label in self._x_major_labels
+            if self.horizontal:
+                major = position in self._x_labels_major
+            else:
+                major = label in self._x_labels_major
             if not (self.show_minor_x_labels or major):
                 continue
             guides = self.svg.node(axis, class_='guides')
@@ -188,7 +191,7 @@ class Graph(PublicApi):
                     ' always_show' if self.show_x_guides else ''
                 ))
             for label, position in self._x_2nd_labels:
-                major = label in self._x_major_labels
+                major = label in self._x_labels_major
                 if not (self.show_minor_x_labels or major):
                     continue
                 # it is needed, to have the same structure as primary axis
@@ -224,7 +227,11 @@ class Graph(PublicApi):
             )
 
         for label, position in self._y_labels:
-            major = position in self._y_major_labels
+            if self.horizontal:
+                major = label in self._y_labels_major
+            else:
+                major = position in self._y_labels_major
+
             if not (self.show_minor_y_labels or major):
                 continue
             guides = self.svg.node(axis, class_='%sguides' % (
@@ -263,7 +270,7 @@ class Graph(PublicApi):
             secondary_ax = self.svg.node(
                 self.nodes['plot'], class_="axis y2")
             for label, position in self._y_2nd_labels:
-                major = position in self._y_major_labels
+                major = position in self._y_labels_major
                 if not (self.show_minor_y_labels or major):
                     continue
                 # it is needed, to have the same structure as primary axis
@@ -705,57 +712,34 @@ class Graph(PublicApi):
         """Getter for the number of series"""
         return len(self.all_series)
 
-    @cached_property
-    def _x_major_labels(self):
-        """Getter for the x major label"""
-        if self.x_labels_major:
-            return self.x_labels_major
+    def _x_label_format_if_value(self, label):
+        if not is_str(label):
+            return self._x_format(label)
+        return label
+
+    def _compute_x_labels(self):
+        self._x_labels = self.x_labels and list(
+            zip(map(self._x_label_format_if_value, self.x_labels),
+                self._x_pos))
+
+    def _compute_x_labels_major(self):
         if self.x_labels_major_every:
-            return [self._x_labels[i][0] for i in range(
+            self._x_labels_major = [self._x_labels[i][0] for i in range(
                 0, len(self._x_labels), self.x_labels_major_every)]
-        if self.x_labels_major_count:
+
+        elif self.x_labels_major_count:
             label_count = len(self._x_labels)
             major_count = self.x_labels_major_count
             if (major_count >= label_count):
-                return [label[0] for label in self._x_labels]
+                self._x_labels_major = [label[0] for label in self._x_labels]
 
-            return [self._x_labels[
+            else:
+                self._x_labels_major = [self._x_labels[
                     int(i * (label_count - 1) / (major_count - 1))][0]
                     for i in range(major_count)]
-
-        return []
-
-    @cached_property
-    def _y_major_labels(self):
-        """Getter for the y major label"""
-        if self.y_labels_major:
-            return self.y_labels_major
-        if self.y_labels_major_every:
-            return [self._y_labels[i][1] for i in range(
-                0, len(self._y_labels), self.y_labels_major_every)]
-        if self.y_labels_major_count:
-            label_count = len(self._y_labels)
-            major_count = self.y_labels_major_count
-            if (major_count >= label_count):
-                return [label[1] for label in self._y_labels]
-
-            return [self._y_labels[
-                int(i * (label_count - 1) / (major_count - 1))][1]
-                for i in range(major_count)]
-
-        return majorize(
-            cut(self._y_labels, 1)
-        )
-
-    def _compute_x_labels(self):
-
-        def format_if_value(label):
-            if not is_str(label):
-                return self._x_format(label)
-            return label
-
-        self._x_labels = self.x_labels and list(
-            zip(map(format_if_value, self.x_labels), self._x_pos))
+        else:
+            self._x_labels_major = self.x_labels_major and list(
+                map(self._x_label_format_if_value, self.x_labels_major)) or []
 
     def _compute_y_labels(self):
         y_pos = compute_scale(
@@ -780,11 +764,35 @@ class Graph(PublicApi):
         else:
             self._y_labels = list(zip(map(self._format, y_pos), y_pos))
 
+    def _compute_y_labels_major(self):
+        if self.y_labels_major_every:
+            self._y_labels_major = [self._y_labels[i][1] for i in range(
+                0, len(self._y_labels), self.y_labels_major_every)]
+
+        elif self.y_labels_major_count:
+            label_count = len(self._y_labels)
+            major_count = self.y_labels_major_count
+            if (major_count >= label_count):
+                self._y_labels_major = [label[1] for label in self._y_labels]
+            else:
+                self._y_labels_major = [self._y_labels[
+                    int(i * (label_count - 1) / (major_count - 1))][1]
+                                        for i in range(major_count)]
+
+        elif self.y_labels_major:
+            self._y_labels_major = list(map(self._adapt, self.y_labels_major))
+        elif self._y_labels:
+            self._y_labels_major = majorize(cut(self._y_labels, 1))
+        else:
+            self._y_labels_major = []
+
     def _draw(self):
         """Draw all the things"""
         self._compute()
         self._compute_x_labels()
+        self._compute_x_labels_major()
         self._compute_y_labels()
+        self._compute_y_labels_major()
         self._compute_secondary()
         self._post_compute()
         self._compute_margin()

@@ -90,7 +90,7 @@ class Radar(Line):
         truncation = self.truncate_label or 25
 
         for label, theta in self._x_labels:
-            major = label in self._x_major_labels
+            major = label in self._x_labels_major
             if not (self.show_minor_x_labels or major):
                 continue
             guides = self.svg.node(axis, class_='guides')
@@ -132,7 +132,7 @@ class Radar(Line):
         axis = self.svg.node(self.nodes['plot'], class_="axis y web")
 
         for label, r in reversed(self._y_labels):
-            major = r in self._y_major_labels
+            major = r in self._y_labels_major
             if not (self.show_minor_y_labels or major):
                 continue
             guides = self.svg.node(axis, class_='%sguides' % (

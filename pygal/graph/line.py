@@ -101,7 +101,7 @@ class Line(Graph):
                     continue
                 if (serie.show_only_major_dots and
                         self.x_labels and i < len(self.x_labels) and
-                        self.x_labels[i] not in self._x_major_labels):
+                        self.x_labels[i] not in self._x_labels_major):
                     continue
 
                 metadata = serie.metadata.get(i)

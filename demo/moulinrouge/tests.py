@@ -344,10 +344,11 @@ def get_test_routes(app):
 
     @app.route('/test/bar')
     def test_bar():
-        bar = Bar(dynamic_print_values=True)
+        bar = Bar(dynamic_print_values=True, show_minor_x_labels=False)
         bar.add('1', [1, 2, 3])
         bar.add('2', [4, 5, 6])
-        bar.x_labels = ['a']
+        bar.x_labels = [2, 4, 6]
+        bar.x_labels_major = [4]
         return bar.render_response()
 
     @app.route('/test/histogram')
@@ -453,7 +454,7 @@ def get_test_routes(app):
 
     @app.route('/test/dateline')
     def test_dateline():
-        dateline = DateLine(show_dots=False)
+        dateline = DateLine(x_label_rotation=25, show_minor_x_labels=False)
         dateline.x_labels = [
             date(2013, 1, 1),
             date(2013, 7, 1),
@@ -462,13 +463,16 @@ def get_test_routes(app):
             date(2015, 1, 1),
             date(2015, 7, 1)
         ]
-        dateline.add('1', [
-            (date(2013, 1, 2), 300),
-            (date(2014, 1, 12), 412),
-            (date(2015, 2, 2), 823),
-            (date(2013, 2, 22), 672)
+        dateline.x_labels_major = [
+            date(2013, 1, 1),
+            date(2015, 7, 1)
+        ]
+        dateline.add("Serie", [
+            (date(2013, 1, 2), 213),
+            (date(2013, 8, 2), 281),
+            (date(2014, 12, 7), 198),
+            (date(2015, 3, 21), 120)
         ])
-        dateline.x_label_rotation = 25
         return dateline.render_response()
 
     @app.route('/test/timeline')
@@ -645,18 +649,20 @@ def get_test_routes(app):
 
     @app.route('/test/x_major_labels/<chart>')
     def test_x_major_labels_for(chart):
-        chart = CHARTS_BY_NAME[chart]()
+        chart = CHARTS_BY_NAME[chart](show_minor_y_labels=False)
         for i in range(12):
             chart.add('test', range(12))
-        chart.x_labels = map(str, range(10))
+        chart.x_labels = map(str, range(12))
         # chart.x_labels_major_count = 4
-        # chart.x_labels_major = ['1', '5', '11', '1.0', '5.0', '11.0']
+        # chart.x_labels_major = ['1', '5', '11', 6]
+        # chart.y_labels_major = [60, 120]
         return chart.render_response()
 
     @app.route('/test/y_major_labels/<chart>')
     def test_y_major_labels_for(chart):
         chart = CHARTS_BY_NAME[chart]()
-        chart.add('test', zip(*[range(12), range(12)]))
+        chart.add('test', range(12))
+        # chart.add('test', zip(*[range(12), range(12)]))
         chart.y_labels = range(12)
         # chart.y_labels_major_count = 4
         chart.y_labels_major = [1.0, 5.0, 11.0]
