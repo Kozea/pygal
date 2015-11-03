@@ -5,11 +5,12 @@ Changelog
 2.0.9 UNRELEASED
 ================
 
-* Add `dynamic_print_values` to show print_values on legend hover. (Fix #279)
+* Add `dynamic_print_values` to show print_values on legend hover. (#279)
 * Fix unparse_color for python 3.5+ compatibility (thanks felixonmars, sjourdois)
-* Process major labels as labels. (Fix #263)
-* Fix labels rotation > 180 (Fix #257)
+* Process major labels as labels. (#263)
+* Fix labels rotation > 180 (#257)
 * Fix secondary axis
+* Don't forget secondary series in table rendering (#260)
 
 2.0.8
 =====
@@ -45,8 +46,8 @@ Changelog
 2.0.3
 =====
 
-* Fix label adaptation. Fix #256
-* Fix wrong radar truncation. Fix #255
+* Fix label adaptation. (#256)
+* Fix wrong radar truncation. (#255)
 
 
 2.0.2

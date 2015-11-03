@@ -83,7 +83,7 @@ class Table(object):
                 table.append([None] * (ln + 1) + ['Total'])
             acc = [0] * (ln + 1)
 
-        for i, serie in enumerate(self.chart.series):
+        for i, serie in enumerate(self.chart.all_series):
             row = [serie.title]
             if total:
                 sum_ = 0
