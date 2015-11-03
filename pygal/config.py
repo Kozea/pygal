@@ -232,6 +232,12 @@ class Config(CommonConfig):
         "It can be any uri from file:///tmp/style.css to //domain/style.css",
         str)
 
+    defs = Key(
+        [],
+        list, "Misc", "Extraneous defs to be inserted in svg",
+        "Useful for adding gradients / patterns…",
+        str)
+
     # Look #
     title = Key(
         None, str, "Look",

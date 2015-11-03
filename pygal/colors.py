@@ -34,6 +34,9 @@ def normalize_float(f):
 
 def rgb_to_hsl(r, g, b):
     """Convert a color in r, g, b to a color in h, s, l"""
+    r = r or 0
+    g = g or 0
+    b = b or 0
     r /= 255
     g /= 255
     b /= 255

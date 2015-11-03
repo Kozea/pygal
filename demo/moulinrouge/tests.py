@@ -913,4 +913,42 @@ def get_test_routes(app):
 
         return chart.render_response()
 
-    return list(sorted(filter(lambda x: x.startswith('test'), locals())))
+    @app.route('/test/gradient/<chart>')
+    def test_gradient_for(chart):
+
+        config = Config()
+        config.style = styles['dark']
+        config.defs.append('''
+          <linearGradient id="gradient-0" x1="0" x2="0" y1="0" y2="1">
+            <stop offset="0%" stop-color="#ff5995" />
+            <stop offset="100%" stop-color="#feed6c" />
+          </linearGradient>
+        ''')
+        config.defs.append('''
+          <linearGradient id="gradient-1" x1="0" x2="0" y1="0" y2="1">
+            <stop offset="0%" stop-color="#b6e354" />
+            <stop offset="100%" stop-color="#8cedff" />
+          </linearGradient>
+        ''')
+        config.css.append('''inline:
+          .color-0 {
+            fill: url(#gradient-0) !important;
+            stroke: url(#gradient-0) !important;
+          }''')
+        config.css.append('''inline:
+          .color-1 {
+            fill: url(#gradient-1) !important;
+            stroke: url(#gradient-1) !important;
+          }''')
+        chart = CHARTS_BY_NAME[chart](config)
+        chart.add('1', [1, 3, 12, 3, 4, None, 9])
+        chart.add('2', [7, -4, 10, None, 8, 3, 1])
+        chart.x_labels = ('a', 'b', 'c', 'd', 'e', 'f', 'g')
+        chart.legend_at_bottom = True
+        chart.interpolate = 'cubic'
+        return chart.render_response()
+
+    return list(sorted(filter(
+        lambda x: x.startswith('test') and not x.endswith('_for'), locals()))
+    ) + list(sorted(filter(
+        lambda x: x.startswith('test') and x.endswith('_for'), locals())))

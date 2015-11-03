@@ -80,6 +80,9 @@ class Svg(object):
         self.title = self.node(tag='title')
         self.title.text = graph.title or 'Pygal'
 
+        for def_ in self.graph.defs:
+            self.defs.append(etree.fromstring(def_))
+
     def add_styles(self):
         """Add the css to the svg"""
         colors = self.graph.style.get_colors(self.id, self.graph._order)

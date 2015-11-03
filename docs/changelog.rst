@@ -11,6 +11,7 @@ Changelog
 * Fix labels rotation > 180 (#257)
 * Fix secondary axis
 * Don't forget secondary series in table rendering (#260)
+* Add `defs` config option to allow adding gradients and patterns.
 
 2.0.8
 =====
