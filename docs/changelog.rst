@@ -2,11 +2,17 @@
 Changelog
 =========
 
+2.0.10
+======
+
+* Fix transposable_node in case all attributes are not there. (thanks @yobuntu).
+
+
 2.0.9
 =====
 
 * Add `dynamic_print_values` to show print_values on legend hover. (#279)
-* Fix unparse_color for python 3.5+ compatibility (thanks felixonmars, sjourdois)
+* Fix unparse_color for python 3.5+ compatibility (thanks @felixonmars, @sjourdois)
 * Process major labels as labels. (#263)
 * Fix labels rotation > 180 (#257)
 * Fix secondary axis

@@ -205,7 +205,14 @@ class Svg(object):
             for key1, key2 in (('x', 'y'), ('width', 'height'), ('cx', 'cy')):
                 attr1 = extras.get(key1, None)
                 attr2 = extras.get(key2, None)
-                extras[key1], extras[key2] = attr2, attr1
+                if attr2:
+                    extras[key1] = attr2
+                elif attr1:
+                    del extras[key1]
+                if attr1:
+                    extras[key2] = attr1
+                elif attr2:
+                    del extras[key2]
         return self.node(parent, tag, attrib, **extras)
 
     def serie(self, serie):
