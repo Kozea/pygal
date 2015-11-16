@@ -24,7 +24,7 @@ and the maps extensions namespace module.
 
 """
 
-__version__ = '2.0.10'
+__version__ = '2.0.11'
 
 import pkg_resources
 import sys
