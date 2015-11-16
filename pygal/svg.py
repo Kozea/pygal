@@ -46,9 +46,7 @@ class Svg(object):
             self.id = '#chart-%s ' % graph.uuid
         else:
             self.id = ''
-        self.processing_instructions = [
-            etree.ProcessingInstruction(
-                u('xml'), u("version='1.0' encoding='utf-8'"))]
+        self.processing_instructions = []
         if etree.lxml:
             attrs = {
                 'nsmap': {
@@ -323,16 +321,25 @@ class Svg(object):
         args = {
             'encoding': 'utf-8'
         }
+        svg = b''
         if etree.lxml:
             args['pretty_print'] = pretty_print
-        svg = etree.tostring(
+            args['xml_declaration'] = not self.graph.disable_xml_declaration
+        else:
+            if not self.graph.disable_xml_declaration:
+                svg = b"<?xml version='1.0' encoding='utf-8'?>\n"
+        svg += etree.tostring(
             self.root, **args)
+
+        if 'xml_declaration' in args:
+            args.pop('xml_declaration')
+
         if not self.graph.disable_xml_declaration:
             svg = b'\n'.join(
                 [etree.tostring(
                     pi, **args)
-                 for pi in self.processing_instructions]
-            ) + b'\n' + svg
+                 for pi in self.processing_instructions] + [svg]
+            )
         if self.graph.disable_xml_declaration or is_unicode:
             svg = svg.decode('utf-8')
         return svg
