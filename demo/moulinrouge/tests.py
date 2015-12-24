@@ -893,6 +893,69 @@ def get_test_routes(app):
         line.add('_', [1, 32, 12, .4, .009])
         return line.render_response()
 
+    @app.route('/test/custom_css_file')
+    def test_custom_css_file():
+        from tempfile import NamedTemporaryFile
+        custom_css = '''
+          {{ id }}text {
+            fill: green;
+            font-family: monospace;
+          }
+          {{ id }}.legends .legend text {
+            font-size: {{ font_sizes.legend }};
+          }
+          {{ id }}.axis {
+            stroke: #666;
+          }
+          {{ id }}.axis text {
+            font-size: {{ font_sizes.label }};
+            font-family: sans;
+            stroke: none;
+          }
+          {{ id }}.axis.y text {
+            text-anchor: end;
+          }
+          {{ id }}#tooltip text {
+            font-size: {{ font_sizes.tooltip }};
+          }
+          {{ id }}.dot {
+            fill: yellow;
+          }
+          {{ id }}.color-0 {
+            stroke: #ff1100;
+            fill: #ff1100;
+          }
+          {{ id }}.color-1 {
+            stroke: #ffee00;
+            fill: #ffee00;
+          }
+          {{ id }}.color-2 {
+            stroke: #66bb44;
+            fill: #66bb44;
+          }
+          {{ id }}.color-3 {
+            stroke: #88bbdd;
+            fill: #88bbdd;
+          }
+          {{ id }}.color-4 {
+            stroke: #0000ff;
+            fill: #0000ff;
+          }
+        '''
+        custom_css_file = '/tmp/pygal_custom_style.css'
+        with open(custom_css_file, 'w') as f:
+            f.write(custom_css)
+        config = Config(fill=True, interpolate='cubic')
+        config.css.append(custom_css_file)
+        chart = StackedLine(config)
+        chart.add('A', [1, 3,  5, 16, 13, 3,  7])
+        chart.add('B', [5, 2,  3,  2,  5, 7, 17])
+        chart.add('C', [6, 10, 9,  7,  3, 1,  0])
+        chart.add('D', [2,  3, 5,  9, 12, 9,  5])
+        chart.add('E', [7,  4, 2,  1,  2, 10, 0])
+        return chart.render_response()
+
+
     @app.route('/test/legendlink/<chart>')
     def test_legend_link_for(chart):
         chart = CHARTS_BY_NAME[chart]()

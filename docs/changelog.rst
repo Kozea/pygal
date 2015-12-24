@@ -2,6 +2,12 @@
 Changelog
 =========
 
+2.0.12
+======
+
+* Use custom xml_declaration avoiding conflict with processing instructions
+
+
 2.0.11
 ======
 
