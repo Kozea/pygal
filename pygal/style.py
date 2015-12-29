@@ -62,6 +62,9 @@ class Style(object):
     guide_stroke_dasharray = '4,4'
     major_guide_stroke_dasharray = '6,6'
 
+    # Align value labels in bar charts
+    align = 'middle'
+
     opacity = '.7'
     opacity_hover = '.8'
     transition = '150ms'

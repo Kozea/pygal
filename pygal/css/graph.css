@@ -22,6 +22,10 @@
   text-anchor: middle;
 }
 
+{{ id }}.centered {
+  text-anchor: {{ style.align }};
+}
+
 {{ id }}.guide.line {
   fill: none;
 }
