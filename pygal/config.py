@@ -448,6 +448,10 @@ class Config(CommonConfig):
         "Set the ordinate zero value",
         "Useful for filling to another base than abscissa")
 
+    position_values = Key(
+        None, str,
+        "Text", "In bar charts, print values on 'middle', 'top' or 'bottom' of the bar")
+
     # Text #
     no_data_text = Key(
         "No data", str, "Text", "Text to display when no data is given")

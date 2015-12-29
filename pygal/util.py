@@ -144,6 +144,7 @@ def compute_logarithmic_scale(min_, max_, min_scale, max_scale):
     """Compute an optimal scale for logarithmic"""
     if max_ <= 0 or min_ <= 0:
         return []
+    max_ **= 2
     min_order = int(floor(log10(min_)))
     max_order = int(ceil(log10(max_)))
     positions = []
@@ -172,6 +173,7 @@ def compute_scale(
         return [0]
     if max_ - min_ == 0:
         return [min_]
+    max_ *= 1.1
     if logarithmic:
         log_scale = compute_logarithmic_scale(
             min_, max_, min_scale, max_scale)
@@ -193,7 +195,7 @@ def compute_scale(
     position = round_to_scale(min_, step)
     while position < (max_ + step):
         rounded = round_to_scale(position, step)
-        if min_ <= rounded <= max_:
+        if min_ <= rounded <= max_+step:
             if rounded not in positions:
                 positions.append(rounded)
         position += step
