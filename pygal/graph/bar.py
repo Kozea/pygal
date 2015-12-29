@@ -64,26 +64,22 @@ class Bar(Graph):
             x=x, y=y, rx=r, ry=r, width=width, height=height,
             class_='rect reactive tooltip-trigger'), serie.metadata.get(i))
         transpose = swap if self.horizontal else ident
-        if not self.horizontal:
-            if self.config.position_values == 'top':
-                self.print_values = True
-                return transpose((x + width / 2, y - (
-                    3 if not self.config.inverse_y_axis else -self.svg.graph.style.value_font_size)))
-            if self.config.position_values == 'bottom':
-                self.print_values = True
-                return transpose((x + width / 2, self.view.y(zero) - (
-                    3 if not self.config.inverse_y_axis else -self.svg.graph.style.value_font_size)))
-        else:
-            if self.config.position_values == 'top':
-                self.print_values = True
+        if self.config.position_values == 'top':
+            self.print_values = True
+            if self.horizontal:
                 self.svg.graph.style.align = 'left'
                 return transpose((x + width / 2 + self.svg.graph.style.value_font_size / 3,
                                   y + 3))
-            if self.config.position_values == 'bottom':
-                self.print_values = True
+            return transpose((x + width / 2, y - (
+                3 if not self.config.inverse_y_axis else -self.svg.graph.style.value_font_size)))
+        if self.config.position_values == 'bottom':
+            self.print_values = True
+            if self.horizontal:
                 self.svg.graph.style.align = 'left'
                 return transpose((x + width / 2 + self.svg.graph.style.value_font_size / 3,
                                   self.view.y(zero) + 3))
+            return transpose((x + width / 2, self.view.y(zero) - (
+                3 if not self.config.inverse_y_axis else -self.svg.graph.style.value_font_size)))
 
         if self.config.position_values == 'middle':
             self.print_values = True
