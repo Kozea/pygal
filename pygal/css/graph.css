@@ -22,6 +22,7 @@
   text-anchor: middle;
 }
 
+
 {{ id }}.centered {
   text-anchor: {{ style.align }};
 }
