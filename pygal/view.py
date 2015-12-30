@@ -50,7 +50,9 @@ class Box(object):
 
     """Chart boundings"""
 
-    margin = .02
+    pos_margin = 0.1
+    neg_margin = 0.02
+    x_margin = 0.02
 
     def __init__(self, xmin=0, ymin=0, xmax=1, ymax=1):
         """
@@ -137,13 +139,14 @@ class Box(object):
         if not self.height:
             self.ymin /= 2
             self.ymax += self.ymin
-        xmargin = self.margin * self.width
+        xmargin = self.x_margin * self.width
         self.xmin -= xmargin
         self.xmax += xmargin
         if with_margin:
-            ymargin = self.margin * self.height
-            self.ymin -= ymargin
-            self.ymax += ymargin
+            neg_margin = self.neg_margin * self.height
+            pos_margin = self.pos_margin * self.height
+            self.ymin -= neg_margin
+            self.ymax += pos_margin
 
 
 class View(object):
@@ -334,6 +337,7 @@ class LogView(View):
         self.width = width
         self.height = height
         self.box = box
+        self.box.ymax *= 2
         self.log10_ymax = log10(self.box.ymax) if self.box.ymax > 0 else 0
         self.log10_ymin = log10(self.box.ymin) if self.box.ymin > 0 else 0
         if self.log10_ymin == self.log10_ymax:
@@ -399,6 +403,7 @@ class HorizontalLogView(XLogView):
         self.width = width
         self.height = height
         self.box = box
+        self.box.ymax **= 1.1
         self.log10_xmax = log10(self.box.ymax) if self.box.ymax > 0 else 0
         self.log10_xmin = log10(self.box.ymin) if self.box.ymin > 0 else 0
         if self.log10_xmin == self.log10_xmax:

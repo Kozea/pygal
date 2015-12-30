@@ -64,6 +64,25 @@ class Bar(Graph):
             x=x, y=y, rx=r, ry=r, width=width, height=height,
             class_='rect reactive tooltip-trigger'), serie.metadata.get(i))
         transpose = swap if self.horizontal else ident
+        if self.config.position_values == 'top':
+            self.print_values = True
+            if self.horizontal:
+                self.svg.graph.style.align = 'left'
+                return transpose((x + width / 2 + self.svg.graph.style.value_font_size / 3,
+                                  y + 3))
+            return transpose((x + width / 2, y - (
+                3 if not self.config.inverse_y_axis else -self.svg.graph.style.value_font_size)))
+        if self.config.position_values == 'bottom':
+            self.print_values = True
+            if self.horizontal:
+                self.svg.graph.style.align = 'left'
+                return transpose((x + width / 2 + self.svg.graph.style.value_font_size / 3,
+                                  self.view.y(zero) + 3))
+            return transpose((x + width / 2, self.view.y(zero) - (
+                3 if not self.config.inverse_y_axis else -self.svg.graph.style.value_font_size)))
+
+        if self.config.position_values == 'middle':
+            self.print_values = True
         return transpose((x + width / 2, y + height / 2))
 
     def bar(self, serie, rescale=False):
@@ -86,12 +105,13 @@ class Bar(Graph):
                 metadata)
             val = self._format(serie.values[i])
 
-            x_center, y_center = self._bar(
+            _x, _y = self._bar(
                 serie, bar, x, y, i, self.zero, secondary=rescale)
             self._tooltip_data(
-                bar, val, x_center, y_center, "centered",
+                bar, val, _x, _y, "centered",
                 self._get_x_label(i))
-            self._static_value(serie_node, val, x_center, y_center, metadata)
+            self._static_value(
+                serie_node, val, _x, _y, metadata)
 
     def _compute(self):
         """Compute y min and max and y scale and set labels"""
