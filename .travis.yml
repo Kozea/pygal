@@ -19,6 +19,7 @@ install:
   - pip install pyquery
   - pip install cairosvg
   - pip install coveralls
+  - pip install numpy
   - pip install scipy
 
 script: py.test pygal/ --flake8 --cov-report= --cov=pygal
