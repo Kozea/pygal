@@ -83,6 +83,7 @@ class Line(Graph):
     def line(self, serie, rescale=False):
         """Draw the line serie"""
         serie_node = self.svg.serie(serie)
+        ci = self.svg.node(serie_node['plot'], class_="ci")
         if rescale and self.secondary_series:
             points = self._rescale(serie.points)
         else:
