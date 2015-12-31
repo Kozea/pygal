@@ -100,17 +100,9 @@ class Line(Graph):
 
                 metadata = serie.metadata.get(i)
                 interval = self.svg.node(ci, class_='interval')
-                try:
-                    _T, _B, _L, _R, _C = self._compute_confidence_interval(x, y, serie.values[i], metadata)
-                    self.svg.node(
-                        parent=interval,
-                        tag='polyline',
-                        attrib={
-                            'fill': None,
-                            'stroke': '#095668',
-                            'points': '%s,%s %s,%s %s,%s %s,%s %s,%s %s,%s' % (_R, _T, _L, _T, _C, _T, _C, _B, _L, _B, _R, _B)})
-                except KeyError:
-                    pass
+                ci_points = self._compute_confidence_interval(x, y, serie.values[i], metadata)
+                self.svg.node(parent=interval, tag='polyline',
+                              attrib={'fill': None, 'stroke': '#095668', 'points': ci_points})
                 classes = []
                 if x > self.view.width / 2:
                     classes.append('left')
