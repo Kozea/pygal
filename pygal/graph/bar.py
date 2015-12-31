@@ -54,12 +54,14 @@ class Bar(Graph):
             x=x, y=y, rx=r, ry=r, width=width, height=height,
             class_='rect reactive tooltip-trigger')
         transpose = swap if self.horizontal else ident
+        self._CI_x, self._CI_y = transpose((x + width / 2, y))
         return transpose((x + width / 2, y + height / 2))
 
     def bar(self, serie, rescale=False):
         """Draw a bar graph for a serie"""
         serie_node = self.svg.serie(serie)
         bars = self.svg.node(serie_node['plot'], class_="bars")
+        ci = self.svg.node(serie_node['plot'], class_="ci")
         if rescale and self.secondary_series:
             points = self._rescale(serie.points)
         else:
@@ -69,7 +71,10 @@ class Bar(Graph):
             if None in (x, y) or (self.logarithmic and y <= 0):
                 continue
             metadata = serie.metadata.get(i)
-
+            self.svg.node(ci, class_='interval')
+            ci_points = self._compute_confidence_interval(self._CI_x, self._CI_y, serie.values[i], metadata)
+            self.svg.node(parent=serie_node['plot'], tag='polyline',
+                          attrib={'fill': None, 'stroke': '#095668', 'points': ci_points})
             bar = decorate(
                 self.svg,
                 self.svg.node(bars, class_='bar'),

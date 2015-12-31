@@ -1,0 +1,29 @@
+language: python
+python:
+  - 2.6
+  - 2.7
+  - 3.3
+  - 3.4
+  - 3.5
+  # - pypy Disabled for pypy < 2.6.0
+
+install:
+  - pip install .
+  - pip install pygal_maps_world
+  - pip install pygal_maps_fr
+  - pip install pygal_maps_ch
+  - pip install pytest
+  - pip install pytest-flake8
+  - pip install pytest-cov
+  - pip install lxml
+  - pip install pyquery
+  - pip install cairosvg
+  - pip install coveralls
+  - pip install numpy
+  - pip install scipy
+
+script: py.test pygal/ --flake8 --cov-report= --cov=pygal
+
+after_success: coveralls
+
+sudo: false

@@ -83,6 +83,7 @@ class Line(Graph):
     def line(self, serie, rescale=False):
         """Draw the line serie"""
         serie_node = self.svg.serie(serie)
+        ci = self.svg.node(serie_node['plot'], class_="ci")
         if rescale and self.secondary_series:
             points = self._rescale(serie.points)
         else:
@@ -98,6 +99,10 @@ class Line(Graph):
                     continue
 
                 metadata = serie.metadata.get(i)
+                interval = self.svg.node(ci, class_='interval')
+                ci_points = self._compute_confidence_interval(x, y, serie.values[i], metadata)
+                self.svg.node(parent=interval, tag='polyline',
+                              attrib={'fill': None, 'stroke': '#095668', 'points': ci_points})
                 classes = []
                 if x > self.view.width / 2:
                     classes.append('left')

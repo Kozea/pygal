@@ -30,6 +30,7 @@ from pygal.util import (
     truncate, reverse_text_len, get_text_box, get_texts_box, cut, rad,
     decorate)
 from math import sqrt, ceil, cos, sin
+from scipy import stats
 from itertools import repeat, chain
 
 
@@ -595,6 +596,47 @@ class Graph(BaseGraph):
             height = len(self._y_title) * (self.spacing + h)
             self.margin_box.left += height
             self._y_title_height = height + self.spacing
+
+    def _compute_confidence_interval(self, x, y, val, metadata):
+        if metadata is None:
+            return
+        if self.horizontal:
+            x, y = y, x
+        ci_width = self.view.width / 100
+        if self.CI_proportion:
+            if 'base' not in metadata.keys():
+                return
+            self._alpha = stats.norm.ppf(
+                    self.config.CI_confidence + (1 - self.config.CI_confidence) / 2
+                )
+            _v = val/100
+            _t = self._alpha * sqrt((_v * (1 - _v)) / metadata['base']) + (0.5 / metadata['base'])
+            _b = -_t
+            _T = self.view.y((_v+_t)*100) # upper confidence point
+            _B = self.view.y((_v+_b)*100) # lower confidence point
+            _R = x+ci_width # right width of line
+            _L = x-ci_width # left width of line
+            _C = x
+        else:
+            if 'base' not in metadata.keys() or 'std' not in metadata.keys():
+                return
+            self._alpha = stats.t.ppf(
+                self.config.CI_confidence + (1 - self.config.CI_confidence) / 2,
+                metadata['base']-1
+            )
+            _t = self._alpha * metadata['std'] / sqrt(metadata['base'])
+            _b = -_t
+            _T = self.view.y(val+_t)
+            _B = self.view.y(val+_b)
+            _R = x+ci_width
+            _L = x-ci_width
+            _C = x
+        if self.horizontal:
+            _order = (_T, _R, _T, _L, _T, _C, _B, _C, _B, _L, _B, _R)
+        else:
+            _order = (_R, _T, _L, _T, _C, _T, _C, _B, _L, _B, _R, _B)
+        return '%s,%s %s,%s %s,%s %s,%s %s,%s %s,%s' % _order
+
 
     @cached_property
     def _legends(self):
