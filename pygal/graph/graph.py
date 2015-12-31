@@ -602,6 +602,8 @@ class Graph(BaseGraph):
             x, y = y, x
         ci_width = self.view.width / 100
         if self.CI_proportion:
+            if 'base' not in metadata.keys():
+                return
             self._alpha = stats.norm.ppf(
                     self.config.CI_confidence + (1 - self.config.CI_confidence) / 2
                 )
@@ -613,8 +615,9 @@ class Graph(BaseGraph):
             _R = x+ci_width # right width of line
             _L = x-ci_width # left width of line
             _C = x
-            return _T, _B, _L, _R, _C
         else:
+            if 'base' not in metadata.keys() or 'std' not in metadata.keys():
+                return
             self._alpha = stats.t.ppf(
                 self.config.CI_confidence + (1 - self.config.CI_confidence) / 2,
                 metadata['base']-1
@@ -626,7 +629,12 @@ class Graph(BaseGraph):
             _R = x+ci_width
             _L = x-ci_width
             _C = x
-            return _T, _B, _L, _R, _C
+        if self.horizontal:
+            _order = (_T, _R, _T, _L, _T, _C, _B, _C, _B, _L, _B, _R)
+        else:
+            _order = (_R, _T, _L, _T, _C, _T, _C, _B, _L, _B, _R, _B)
+        return '%s,%s %s,%s %s,%s %s,%s %s,%s %s,%s' % _order
+
 
     @cached_property
     def _legends(self):
