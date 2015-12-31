@@ -429,6 +429,23 @@ class Config(CommonConfig):
 
     inverse_y_axis = Key(False, bool, "Misc", "Inverse Y axis direction")
 
+    # Confidence Interval
+
+    CI_proportion = Key(
+        True, bool, "Confidence Interval",
+        "Value a proportion",
+        "If set to false the confidence interval test will assume it is a mean.")
+
+    CI_confidence = Key(
+        0.95, float, "Confidence Interval",
+        "Level of significance",
+        "Level of significance for your chart, default is 95% confidence interval.")
+
+    CI_std = Key(
+        None, float, "Confidence Interval",
+        "Standard deviation of data",
+        "Standard deviation of data")
+
 
 class SerieConfig(CommonConfig):
     """Class holding serie config values"""
