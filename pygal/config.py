@@ -441,11 +441,6 @@ class Config(CommonConfig):
         "Level of significance",
         "Level of significance for your chart, default is 95% confidence interval.")
 
-    CI_std = Key(
-        None, float, "Confidence Interval",
-        "Standard deviation of data",
-        "Standard deviation of data")
-
 
 class SerieConfig(CommonConfig):
     """Class holding serie config values"""
