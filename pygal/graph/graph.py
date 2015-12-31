@@ -598,6 +598,8 @@ class Graph(BaseGraph):
             self._y_title_height = height + self.spacing
 
     def _compute_confidence_interval(self, x, y, val, metadata):
+        if metadata is None:
+            return
         if self.horizontal:
             x, y = y, x
         ci_width = self.view.width / 100
