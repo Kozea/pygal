@@ -30,6 +30,7 @@ from pygal.util import (
     truncate, reverse_text_len, get_text_box, get_texts_box, cut, rad,
     decorate)
 from math import sqrt, ceil, cos, sin
+from scipy import stats
 from itertools import repeat, chain
 
 
