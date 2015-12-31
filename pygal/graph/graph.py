@@ -596,6 +596,37 @@ class Graph(BaseGraph):
             self.margin_box.left += height
             self._y_title_height = height + self.spacing
 
+    def _compute_confidence_interval(self, x, y, val, metadata):
+        if self.horizontal:
+            x, y = y, x
+        ci_width = self.view.width / 100
+        if self.CI_proportion:
+            self._alpha = stats.norm.ppf(
+                    self.config.CI_confidence + (1 - self.config.CI_confidence) / 2
+                )
+            _v = val/100
+            _t = self._alpha * sqrt((_v * (1 - _v)) / metadata['base']) + (0.5 / metadata['base'])
+            _b = -_t
+            _T = self.view.y((_v+_t)*100) # upper confidence point
+            _B = self.view.y((_v+_b)*100) # lower confidence point
+            _R = x+ci_width # right width of line
+            _L = x-ci_width # left width of line
+            _C = x
+            return _T, _B, _L, _R, _C
+        else:
+            self._alpha = stats.t.ppf(
+                self.config.CI_confidence + (1 - self.config.CI_confidence) / 2,
+                metadata['base']-1
+            )
+            _t = self._alpha * metadata['std'] / sqrt(metadata['base'])
+            _b = -_t
+            _T = self.view.y(val+_t)
+            _B = self.view.y(val+_b)
+            _R = x+ci_width
+            _L = x-ci_width
+            _C = x
+            return _T, _B, _L, _R, _C
+
     @cached_property
     def _legends(self):
         """Getter for series title"""
