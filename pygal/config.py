@@ -456,6 +456,15 @@ class Config(CommonConfig):
         False, bool,
         "Text", "Display values as text over plot")
 
+    dynamic_print_values = Key(
+        False, bool,
+        "Text", "Show values only on hover")
+
+    print_values_position = Key(
+        'center', str,
+        "Text", "Customize position of `print_values`. "
+        "(For bars: `top`, `center` or `bottom`)")
+
     print_zeroes = Key(
         True, bool,
         "Text", "Display zero values as well")
@@ -463,10 +472,6 @@ class Config(CommonConfig):
     print_labels = Key(
         False, bool,
         "Text", "Display value labels")
-
-    dynamic_print_values = Key(
-        False, bool,
-        "Text", "Show values only on hover")
 
     truncate_legend = Key(
         None, int, "Text",

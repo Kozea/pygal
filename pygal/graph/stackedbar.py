@@ -131,8 +131,7 @@ class StackedBar(Bar):
             parent, 'rect',
             x=x, y=y, rx=r, ry=r, width=width, height=height,
             class_='rect reactive tooltip-trigger')
-        transpose = swap if self.horizontal else ident
-        return transpose((x + width / 2, y + height / 2))
+        return x, y, width, height
 
     def _plot(self):
         """Draw bars for series and secondary series"""

@@ -351,6 +351,15 @@ def get_test_routes(app):
         bar.x_labels_major = [4]
         return bar.render_response()
 
+    @app.route('/test/bar/position')
+    def test_bar_print_values_position():
+        bar = Bar(print_values=True, print_values_position='top')
+        bar.add('1', [1, 2, 3])
+        bar.add('2', [4, 5, 6])
+        bar.x_labels = [2, 4, 6]
+        bar.x_labels_major = [4]
+        return bar.render_response()
+
     @app.route('/test/histogram')
     def test_histogram():
         hist = Histogram(style=styles['neon'])

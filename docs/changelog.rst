@@ -2,6 +2,11 @@
 Changelog
 =========
 
+2.0.13 UNRELEASED
+======
+
+* Bar label positioning
+
 2.0.12
 ======
 

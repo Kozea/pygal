@@ -24,10 +24,11 @@ as bars of varying width.
 from __future__ import division
 
 from pygal.graph.dual import Dual
-from pygal.util import alter, cached_property, decorate, ident, swap
+from pygal.graph.bar import Bar
+from pygal.util import alter, cached_property, decorate
 
 
-class Histogram(Dual):
+class Histogram(Dual, Bar):
 
     """Histogram chart class"""
     _series_margin = 0
@@ -72,8 +73,7 @@ class Histogram(Dual):
             parent, 'rect',
             x=x, y=y, rx=r, ry=r, width=width, height=height,
             class_='rect reactive tooltip-trigger'), serie.metadata.get(i))
-        transpose = swap if self.horizontal else ident
-        return transpose((x + width / 2, y + height / 2))
+        return x, y, width, height
 
     def bar(self, serie, rescale=False):
         """Draw a bar graph for a serie"""
@@ -92,12 +92,10 @@ class Histogram(Dual):
                 metadata)
             val = self._format(serie.values[i][0])
 
-            x_center, y_center = self._bar(
+            bounds = self._bar(
                 serie, bar, x0, x1, y, i, self.zero, secondary=rescale)
-            self._tooltip_data(
-                bar, val, x_center, y_center, "centered",
-                self._get_x_label(i))
-            self._static_value(serie_node, val, x_center, y_center, metadata)
+            self._tooltip_and_print_values(
+                serie_node, serie, bar, i, val, metadata, *bounds)
 
     def _compute(self):
         """Compute x/y min and max and x/y scale and set labels"""
@@ -122,10 +120,3 @@ class Histogram(Dual):
             self._box.xmin, self._box.xmax = xmin, xmax
         if yrng:
             self._box.ymin, self._box.ymax = ymin, ymax
-
-    def _plot(self):
-        """Draw bars for series and secondary series"""
-        for serie in self.series:
-            self.bar(serie)
-        for serie in self.secondary_series:
-            self.bar(serie, True)

@@ -35,11 +35,6 @@ class Bar(Graph):
     _series_margin = .06
     _serie_margin = .06
 
-    def __init__(self, *args, **kwargs):
-        """Bar chart creation"""
-        self._x_ranges = None
-        super(Bar, self).__init__(*args, **kwargs)
-
     def _bar(self, serie, parent, x, y, i, zero, secondary=False):
         """Internal bar drawing function"""
         width = (self.view.x(1) - self.view.x(0)) / self._len
@@ -63,8 +58,18 @@ class Bar(Graph):
             parent, 'rect',
             x=x, y=y, rx=r, ry=r, width=width, height=height,
             class_='rect reactive tooltip-trigger'), serie.metadata.get(i))
+        return x, y, width, height
+
+    def _tooltip_and_print_values(
+            self, serie_node, serie, parent, i, val, metadata,
+            x, y, width, height):
         transpose = swap if self.horizontal else ident
-        return transpose((x + width / 2, y + height / 2))
+        x_center, y_center = transpose((x + width / 2, y + height / 2))
+        self._tooltip_data(
+            parent, val, x_center, y_center, "centered",
+            self._get_x_label(i))
+        self._static_value(
+            serie_node, val, x_center, y_center, metadata)
 
     def bar(self, serie, rescale=False):
         """Draw a bar graph for a serie"""
@@ -79,19 +84,18 @@ class Bar(Graph):
             if None in (x, y) or (self.logarithmic and y <= 0):
                 continue
             metadata = serie.metadata.get(i)
+            val = self._format(serie.values[i])
 
             bar = decorate(
                 self.svg,
                 self.svg.node(bars, class_='bar'),
                 metadata)
-            val = self._format(serie.values[i])
 
-            x_center, y_center = self._bar(
+            bounds = self._bar(
                 serie, bar, x, y, i, self.zero, secondary=rescale)
-            self._tooltip_data(
-                bar, val, x_center, y_center, "centered",
-                self._get_x_label(i))
-            self._static_value(serie_node, val, x_center, y_center, metadata)
+
+            self._tooltip_and_print_values(
+                serie_node, serie, bar, i, val, metadata, *bounds)
 
     def _compute(self):
         """Compute y min and max and y scale and set labels"""
