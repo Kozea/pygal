@@ -112,7 +112,7 @@ class Box(object):
     @ymax.setter
     def ymax(self, value):
         """Y maximum setter"""
-        if value:
+        if value or self.ymin:
             self._ymax = value
 
     @property
