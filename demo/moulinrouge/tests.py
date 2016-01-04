@@ -3,7 +3,7 @@
 from pygal import (
     Bar, Gauge, Pyramid, Funnel, Dot, StackedBar, StackedLine, XY,
     CHARTS_BY_NAME, Config, Line, Histogram, Box,
-    Pie, Treemap, TimeLine, DateLine, Radar,
+    Pie, Treemap, TimeLine, DateLine, Radar, HorizontalBar,
     DateTimeLine)
 
 try:
@@ -353,9 +353,12 @@ def get_test_routes(app):
 
     @app.route('/test/bar/position')
     def test_bar_print_values_position():
-        bar = Bar(print_values=True, print_values_position='top')
-        bar.add('1', [1, 2, 3])
-        bar.add('2', [4, 5, 6])
+        bar = HorizontalBar(print_values=True, print_values_position='top',
+                  style=styles['default'](
+                      value_font_family='googlefont:Raleway',
+                      value_font_size=46))
+        bar.add('1', [-1, 2, 3])
+        bar.add('2', [4, -5, 6])
         bar.x_labels = [2, 4, 6]
         bar.x_labels_major = [4]
         return bar.render_response()

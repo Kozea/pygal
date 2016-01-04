@@ -5,7 +5,7 @@ Changelog
 2.0.13 UNRELEASED
 ======
 
-* Bar label positioning
+* Bar print value positioning with `print_values_position`. Can be `top`, `center` or `bottom` (thanks @chartique #291)
 
 2.0.12
 ======

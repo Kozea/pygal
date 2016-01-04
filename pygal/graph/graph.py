@@ -491,25 +491,31 @@ class Graph(PublicApi):
             self.svg.node(node, 'desc',
                           class_="x_label").text = to_str(xlabel)
 
-    def _static_value(self, serie_node, value, x, y, metadata):
+    def _static_value(self, serie_node, value, x, y, metadata, classes=None):
         """Write the print value"""
         label = metadata and metadata.get('label')
+        classes = classes and [classes] or []
+
         if self.print_labels and label:
+            label_cls = classes + ['label']
             if self.print_values:
                 y -= self.style.value_font_size / 2
             self.svg.node(
                 serie_node['text_overlay'], 'text',
-                class_='centered label',
+                class_=' '.join(label_cls),
                 x=x,
                 y=y + self.style.value_font_size / 3
             ).text = label
             y += self.style.value_font_size
 
         if self.print_values or self.dynamic_print_values:
+            val_cls = classes + ['value']
+            if self.dynamic_print_values:
+                val_cls.append('showable')
+
             self.svg.node(
                 serie_node['text_overlay'], 'text',
-                class_='centered value%s' % (
-                    ' showable' if self.dynamic_print_values else ''),
+                class_=' '.join(val_cls),
                 x=x,
                 y=y + self.style.value_font_size / 3
             ).text = value if self.print_zeroes or value != '0' else ''
@@ -675,6 +681,16 @@ class Graph(PublicApi):
             height = len(self._y_title) * (self.spacing + h)
             self.margin_box.left += height
             self._y_title_height = height + self.spacing
+
+        # Inner margin
+        if self.print_values_position == 'top':
+            gw = self.width - self.margin_box.x
+            gh = self.height - self.margin_box.y
+            alpha = 1.1 * (self.style.value_font_size / gh) * self._box.height
+            if self._max > 0:
+                self._box.ymax += alpha
+            if self._min < 0:
+                self._box.ymin -= alpha
 
     @cached_property
     def _legends(self):

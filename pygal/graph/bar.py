@@ -65,11 +65,32 @@ class Bar(Graph):
             x, y, width, height):
         transpose = swap if self.horizontal else ident
         x_center, y_center = transpose((x + width / 2, y + height / 2))
+        x_top, y_top = transpose((x + width, y + height))
+        x_bottom, y_bottom = transpose((x, y))
+        sign = -1 if height < self.zero else 1
         self._tooltip_data(
             parent, val, x_center, y_center, "centered",
             self._get_x_label(i))
+
+        if self.print_values_position == 'top':
+            if self.horizontal:
+                x = x_bottom - sign * self.style.value_font_size / 2
+                y = y_center
+            else:
+                x = x_center
+                y = y_bottom - sign * self.style.value_font_size / 2
+        elif self.print_values_position == 'bottom':
+            if self.horizontal:
+                x = x_top - sign * self.style.value_font_size / 2
+                y = y_center
+            else:
+                x = x_center
+                y = y_top - sign * self.style.value_font_size / 2
+        else:
+            x = x_center
+            y = y_center
         self._static_value(
-            serie_node, val, x_center, y_center, metadata)
+            serie_node, val, x, y, metadata, "centered")
 
     def bar(self, serie, rescale=False):
         """Draw a bar graph for a serie"""
@@ -103,7 +124,6 @@ class Bar(Graph):
             self._box.ymin = min(self._min, self.zero)
         if self._max:
             self._box.ymax = max(self._max, self.zero)
-
         self._x_pos = [
             x / self._len for x in range(self._len + 1)
         ] if self._len > 1 else [0, 1]  # Center if only one value
