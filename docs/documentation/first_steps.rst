@@ -3,7 +3,7 @@ First steps
 
 .. caution::
 
-  First you need to install pygal, see `installing <.//installing.html>`_.
+  First you need to install pygal, see `installing <../installing.html>`_.
 
 When it's done, you are ready to make your first chart:
 
