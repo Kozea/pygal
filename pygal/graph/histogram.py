@@ -34,6 +34,11 @@ class Histogram(Dual, Bar):
     _series_margin = 0
 
     @cached_property
+    def _values(self):
+        """Getter for secondary series values (flattened)"""
+        return self.yvals
+
+    @cached_property
     def _secondary_values(self):
         """Getter for secondary series values (flattened)"""
         return [val[0]

@@ -67,21 +67,25 @@ class Bar(Graph):
         x_center, y_center = transpose((x + width / 2, y + height / 2))
         x_top, y_top = transpose((x + width, y + height))
         x_bottom, y_bottom = transpose((x, y))
-        sign = -1 if height < self.zero else 1
+        if self._dual:
+            v = serie.values[i][0]
+        else:
+            v = serie.values[i]
+        sign = -1 if v < self.zero else 1
         self._tooltip_data(
             parent, val, x_center, y_center, "centered",
             self._get_x_label(i))
 
         if self.print_values_position == 'top':
             if self.horizontal:
-                x = x_bottom - sign * self.style.value_font_size / 2
+                x = x_bottom + sign * self.style.value_font_size / 2
                 y = y_center
             else:
                 x = x_center
                 y = y_bottom - sign * self.style.value_font_size / 2
         elif self.print_values_position == 'bottom':
             if self.horizontal:
-                x = x_top - sign * self.style.value_font_size / 2
+                x = x_top + sign * self.style.value_font_size / 2
                 y = y_center
             else:
                 x = x_center

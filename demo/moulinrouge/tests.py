@@ -353,11 +353,11 @@ def get_test_routes(app):
 
     @app.route('/test/bar/position')
     def test_bar_print_values_position():
-        bar = HorizontalBar(print_values=True, print_values_position='top',
+        bar = StackedBar(print_values=True, print_values_position='top', zero=2,
                   style=styles['default'](
                       value_font_family='googlefont:Raleway',
                       value_font_size=46))
-        bar.add('1', [-1, 2, 3])
+        bar.add('1', [1, -2, 3])
         bar.add('2', [4, -5, 6])
         bar.x_labels = [2, 4, 6]
         bar.x_labels_major = [4]
@@ -365,7 +365,7 @@ def get_test_routes(app):
 
     @app.route('/test/histogram')
     def test_histogram():
-        hist = Histogram(style=styles['neon'])
+        hist = Histogram(print_values=True, print_values_position='top', style=styles['neon'])
         hist.add('1', [
             (2, 0, 1),
             (4, 1, 3),
