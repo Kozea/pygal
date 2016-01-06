@@ -24,6 +24,7 @@ except ImportError:
 from flask import abort
 from pygal.style import styles, Style, RotateStyle
 from pygal.colors import rotate
+from pygal import stats
 from pygal.graph.horizontal import HorizontalGraph
 from random import randint, choice
 from datetime import datetime, date
@@ -1021,6 +1022,59 @@ def get_test_routes(app):
         chart.x_labels = ('a', 'b', 'c', 'd', 'e', 'f', 'g')
         chart.legend_at_bottom = True
         chart.interpolate = 'cubic'
+        return chart.render_response()
+
+    @app.route('/test/erfinv/approx')
+    def test_erfinv():
+        from scipy import stats as sstats
+        chart = Line(show_dots=False)
+        chart.add('scipy', [
+            sstats.norm.ppf(x/1000) for x in range(1, 999)])
+        chart.add('approx', [stats.ppf(x/1000) for x in range(1, 999)])
+        chart.add('scipy', [
+            sstats.norm.ppf(x/1000) for x in range(1, 999)])
+
+        # chart.add('approx', [special.erfinv(x/1000) - erfinv(x/1000) for x in range(-999, 1000)])
+        return chart.render_response()
+
+    @app.route('/test/ci/<chart>')
+    def test_ci_for(chart):
+        chart = CHARTS_BY_NAME[chart](
+            confidence_interval_proportion=True,
+            style=styles['default'](
+                value_font_family='googlefont:Raleway',
+                value_colors=(None, None, 'blue', 'red', 'green'),
+                ci_colors=(None, 'magenta')
+            ))
+        chart.add('Series 1', [
+            {'value': 127.3, 'ci': {
+                'type': 'continuous', 'sample_size': 3534, 'stddev': 19,
+                'confidence': .99}},
+            {'value': 127.3, 'ci': {
+                'type': 'continuous', 'sample_size': 3534, 'stddev': 19}},
+            {'value': 127.3, 'ci': {
+                'type': 'continuous', 'sample_size': 3534, 'stddev': 19,
+                'confidence': .90}},
+            {'value': 127.3, 'ci': {
+                'type': 'continuous', 'sample_size': 3534, 'stddev': 19,
+                'confidence': .75}},
+            # {'value': 73, 'ci': {'sample_size': 200}},
+            # {'value': 54, 'ci': {'type': 'dichotomous', 'sample_size': 250}},
+            # {'value': 67, 'ci': {'sample_size': 100}},
+            # {'value': 61, 'ci': {'sample_size': 750}}
+        ])
+        chart.add('Series 2', [
+            {'value': 34.5, 'ci': {
+                'type': 'dichotomous', 'sample_size': 3532}},
+        ])
+        chart.add('Series 3', [
+            {'value': 100, 'ci': {'low': 50, 'high': 150}},
+            {'value': 100, 'ci': {'low': 75, 'high': 175}},
+            {'value': 50, 'ci': {'low': 50, 'high': 100}},
+            {'value': 125, 'ci': {'low': 120, 'high': 130}},
+        ])
+        chart.range = (30, 200)
+        # chart.range = (32, 37)
         return chart.render_response()
 
     return list(sorted(filter(

@@ -111,10 +111,15 @@ class Line(Graph):
                 if y > self.view.height / 2:
                     classes.append('top')
                 classes = ' '.join(classes)
+
+                self._confidence_interval(
+                    serie_node['overlay'], x, y, serie.values[i], metadata)
+
                 dots = decorate(
                     self.svg,
                     self.svg.node(serie_node['overlay'], class_="dots"),
                     metadata)
+
                 val = self._get_value(serie.points, i)
                 alter(self.svg.transposable_node(
                     dots, 'circle', cx=x, cy=y, r=serie.dots_size,

@@ -25,7 +25,6 @@ from __future__ import division
 
 from pygal.adapters import none_to_zero
 from pygal.graph.bar import Bar
-from pygal.util import ident, swap
 
 
 class StackedBar(Bar):

@@ -94,6 +94,10 @@
   fill-opacity: {{ style.opacity }};
 }
 
+{{ id }}.ci {
+    stroke: {{ style.foreground }};
+}
+
 {{ id }}.reactive.active,
 {{ id }}.active .reactive {
   fill-opacity: {{ style.opacity_hover }};
@@ -151,5 +155,3 @@
 {{ colors }}
 
 {{ strokes }}
-
-

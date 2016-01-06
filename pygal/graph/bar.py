@@ -116,11 +116,18 @@ class Bar(Graph):
                 self.svg.node(bars, class_='bar'),
                 metadata)
 
-            bounds = self._bar(
+            x_, y_, width, height = self._bar(
                 serie, bar, x, y, i, self.zero, secondary=rescale)
 
+            print(y_)
+
+            self._confidence_interval(
+                serie_node['overlay'], x_ + width / 2, y_, serie.values[i],
+                metadata)
+
             self._tooltip_and_print_values(
-                serie_node, serie, bar, i, val, metadata, *bounds)
+                serie_node, serie, bar, i, val, metadata,
+                x_, y_, width, height)
 
     def _compute(self):
         """Compute y min and max and y scale and set labels"""

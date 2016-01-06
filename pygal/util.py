@@ -250,7 +250,6 @@ def decorate(svg, node, metadata):
     if 'label' in metadata:
         svg.node(node, 'desc', class_='label').text = to_unicode(
             metadata['label'])
-
     return node
 
 

@@ -27,6 +27,7 @@ from math import ceil, cos, sin, sqrt
 from pygal._compat import is_list_like, is_str, to_str
 from pygal.graph.public import PublicApi
 from pygal.interpolate import INTERPOLATIONS
+from pygal import stats
 from pygal.util import (
     cached_property, compute_scale, cut, decorate,
     get_text_box, get_texts_box, humanize, majorize, rad, reverse_text_len,
@@ -684,13 +685,29 @@ class Graph(PublicApi):
 
         # Inner margin
         if self.print_values_position == 'top':
-            gw = self.width - self.margin_box.x
             gh = self.height - self.margin_box.y
             alpha = 1.1 * (self.style.value_font_size / gh) * self._box.height
             if self._max > 0:
                 self._box.ymax += alpha
             if self._min < 0:
                 self._box.ymin -= alpha
+
+    def _confidence_interval(self, node, x, y, value, metadata):
+        if not metadata or 'ci' not in metadata:
+            return
+        ci = metadata['ci']
+        ci['point_estimate'] = value
+
+        low, high = getattr(
+            stats,
+            'confidence_interval_%s' % ci.get('type', 'manual')
+        )(**ci)
+
+        self.svg.confidence_interval(
+            node, x,
+            # Respect some charts y modifications (pyramid, stackbar)
+            y + (self.view.y(low) - self.view.y(value)),
+            y + (self.view.y(high) - self.view.y(value)))
 
     @cached_property
     def _legends(self):

@@ -232,7 +232,7 @@ class Svg(object):
     def line(self, node, coords, close=False, **kwargs):
         """Draw a svg line"""
         line_len = len(coords)
-        if line_len < 2:
+        if len([c for c in coords if c[1] is not None]) < 2:
             return
         root = 'M%s L%s Z' if close else 'M%s L%s'
         origin_index = 0
@@ -295,6 +295,28 @@ class Svg(object):
         if angle >= 0.3:  # 0.3 radians is about 17 degrees
             self.graph._static_value(serie_node, val, x, y, metadata)
         return rv
+
+    def confidence_interval(self, node, x, low, high, width=7):
+        if self.graph.horizontal:
+            coord_format = lambda xy: '%f %f' % (xy[1], xy[0])
+        else:
+            coord_format = lambda xy: '%f %f' % xy
+
+        shr = lambda xy: (xy[0] + width, xy[1])
+        shl = lambda xy: (xy[0] - width, xy[1])
+
+        top = (x, high)
+        bottom = (x, low)
+
+        ci = self.node(node, class_="ci")
+        self.node(
+            ci, 'path', d="M%s L%s M%s L%s M%s L%s L%s M%s L%s" % tuple(
+                map(coord_format, (
+                    top, shr(top), top, shl(top), top,
+                    bottom, shr(bottom), bottom, shl(bottom)
+                ))
+            ), class_='nofill'
+        )
 
     def pre_render(self):
         """Last things to do before rendering"""

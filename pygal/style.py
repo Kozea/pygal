@@ -88,6 +88,7 @@ class Style(object):
     )
 
     value_colors = ()
+    ci_colors = ()
 
     def __init__(self, **kwargs):
         """Create the style"""
@@ -124,6 +125,15 @@ class Style(object):
                 '  fill: {1};\n'
                 '}}\n') % (prefix,)).format(*tupl)
 
+        def ci_color(tupl):
+            """Make a value color css"""
+            if not tupl[1]:
+                return ''
+            return ((
+                '%s .color-{0} .ci {{\n'
+                '  stroke: {1};\n'
+                '}}\n') % (prefix,)).format(*tupl)
+
         if len(self.colors) < len_:
             missing = len_ - len(self.colors)
             cycles = 1 + missing // len(self.colors)
@@ -150,7 +160,8 @@ class Style(object):
 
         return '\n'.join(chain(
             map(color, enumerate(colors)),
-            map(value_color, enumerate(value_colors))))
+            map(value_color, enumerate(value_colors)),
+            map(ci_color, enumerate(self.ci_colors))))
 
     def to_dict(self):
         """Convert instance to a serializable mapping."""

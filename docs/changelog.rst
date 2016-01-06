@@ -6,6 +6,8 @@ Changelog
 ======
 
 * Bar print value positioning with `print_values_position`. Can be `top`, `center` or `bottom` (thanks @chartique #291)
+* Confidence intervals (thanks @chartique #292)
+
 
 2.0.12
 ======
