@@ -1031,10 +1031,10 @@ def get_test_routes(app):
         chart.add('scipy', [
             sstats.norm.ppf(x/1000) for x in range(1, 999)])
         chart.add('approx', [stats.ppf(x/1000) for x in range(1, 999)])
-        chart.add('scipy', [
-            sstats.norm.ppf(x/1000) for x in range(1, 999)])
 
-        # chart.add('approx', [special.erfinv(x/1000) - erfinv(x/1000) for x in range(-999, 1000)])
+        # chart.add('approx', [
+        #    special.erfinv(x/1000) - erfinv(x/1000)
+        #    for x in range(-999, 1000)])
         return chart.render_response()
 
     @app.route('/test/ci/<chart>')
@@ -1058,10 +1058,6 @@ def get_test_routes(app):
             {'value': 127.3, 'ci': {
                 'type': 'continuous', 'sample_size': 3534, 'stddev': 19,
                 'confidence': .75}},
-            # {'value': 73, 'ci': {'sample_size': 200}},
-            # {'value': 54, 'ci': {'type': 'dichotomous', 'sample_size': 250}},
-            # {'value': 67, 'ci': {'sample_size': 100}},
-            # {'value': 61, 'ci': {'sample_size': 750}}
         ])
         chart.add('Series 2', [
             {'value': 34.5, 'ci': {
