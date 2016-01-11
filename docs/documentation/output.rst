@@ -52,6 +52,8 @@ With cairosvg installed you can directly get the png file using ``render_to_png`
    ...
    chart.render_to_png('/tmp/chart.png')  # Write the chart in the specified file
 
+In case of rendered image turning up black, installing lxml, tinycss and cssselect should fix the issue.
+
 
 Etree
 -----
