@@ -1070,7 +1070,6 @@ def get_test_routes(app):
             {'value': 125, 'ci': {'low': 120, 'high': 130}},
         ])
         chart.range = (30, 200)
-        # chart.range = (32, 37)
         return chart.render_response()
 
     return list(sorted(filter(

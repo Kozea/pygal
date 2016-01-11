@@ -119,8 +119,6 @@ class Bar(Graph):
             x_, y_, width, height = self._bar(
                 serie, bar, x, y, i, self.zero, secondary=rescale)
 
-            print(y_)
-
             self._confidence_interval(
                 serie_node['overlay'], x_ + width / 2, y_, serie.values[i],
                 metadata)
