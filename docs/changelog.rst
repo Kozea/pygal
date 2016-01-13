@@ -2,11 +2,11 @@
 Changelog
 =========
 
-2.0.13 UNRELEASED
+2.0.13
 ======
 
-* Bar print value positioning with `print_values_position`. Can be `top`, `center` or `bottom` (thanks @chartique #291)
-* Confidence intervals (thanks @chartique #292)
+* Bar print value positioning with `print_values_position`. Can be `top`, `center` or `bottom` (thanks @chartique #291) `doc <documentation/configuration/value.html#confidence-intervals>`_
+* Confidence intervals (thanks @chartique #292) `doc <documentation/configuration/data.html#print-values-position>`_
 
 
 2.0.12

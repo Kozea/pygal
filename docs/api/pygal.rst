@@ -27,6 +27,7 @@ Submodules
    pygal.interpolate
    pygal.serie
    pygal.state
+   pygal.stats
    pygal.style
    pygal.svg
    pygal.table

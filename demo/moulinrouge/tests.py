@@ -1040,7 +1040,6 @@ def get_test_routes(app):
     @app.route('/test/ci/<chart>')
     def test_ci_for(chart):
         chart = CHARTS_BY_NAME[chart](
-            confidence_interval_proportion=True,
             style=styles['default'](
                 value_font_family='googlefont:Raleway',
                 value_colors=(None, None, 'blue', 'red', 'green'),

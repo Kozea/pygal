@@ -37,7 +37,7 @@ When using pygal to display static charts for printing for example you can chose
                     value_font_family='googlefont:Raleway',
                     value_font_size=30,
                     value_colors=('white',)))
-  chart.add('line', [0, 12, 31, 8, 28, 0])
+  chart.add('line', [0, 12, 31, 8, -28, 0])
 
 dynamic_print_values
 --------------------
@@ -51,7 +51,23 @@ Show print_values only on legend hover.
                     value_font_family='googlefont:Raleway',
                     value_font_size=30,
                     value_colors=('white',)))
-  chart.add('line', [0, 12, 31, 8, 28, 0])
+  chart.add('line', [0, 12, 31, 8, -28, 0])
+
+
+print_values_position
+---------------------
+
+Change print value position (in bar charts only).
+
+  .. pygal-code::
+
+    chart = pygal.Bar(print_values=True, print_values_position='top')
+    chart.add('line', [0, 12, 31, 8, -28, 0])
+
+  .. pygal-code::
+
+    chart = pygal.Bar(print_values=True, print_values_position='bottom')
+    chart.add('line', [0, 12, 31, 8, -28, 0])
 
 
 print_zeroes
@@ -62,7 +78,7 @@ zero values are shown by default but you can use this option to hide them.
 .. pygal-code::
 
   chart = pygal.Bar(print_values=True, print_zeroes=False)
-  chart.add('line', [0, 12, 31, 8, 28, 0])
+  chart.add('line', [0, 12, 31, 8, -28, 0])
 
 
 print_labels
