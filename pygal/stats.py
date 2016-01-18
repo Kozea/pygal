@@ -1,8 +1,4 @@
 from math import log, sqrt, pi
-try:
-    from scipy import stats
-except ImportError:
-    stats = None
 
 
 def erfinv(x, a=.147):
@@ -24,6 +20,11 @@ def norm_ppf(x):
 
 
 def ppf(x, n):
+    try:
+        from scipy import stats
+    except ImportError:
+        stats = None
+
     if stats:
         if n < 30:
             return stats.t.ppf(x, n)

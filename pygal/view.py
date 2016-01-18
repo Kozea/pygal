@@ -368,8 +368,8 @@ class XLogView(View):
         if x is None or x <= 0 or self.log10_xmax - self.log10_xmin == 0:
             return None
         return (self.width *
-                (log10(x) - self.log10_xmin)
-                / (self.log10_xmax - self.log10_xmin))
+                (log10(x) - self.log10_xmin) /
+                (self.log10_xmax - self.log10_xmin))
 
 
 class XYLogView(XLogView, LogView):

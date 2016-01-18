@@ -2,6 +2,12 @@
 Changelog
 =========
 
+2.1.1
+=====
+
+* Import scipy as a last resort in stats.py (should fix bugs like #294 if scipy is installed but not used)
+
+
 2.1.0
 =====
 
