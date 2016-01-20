@@ -140,3 +140,13 @@
 {{ id }}.showable.shown {
   visibility: visible;
 }
+
+{{ id }}.background-shade {
+  fill: {{ style.gauge_background_color }};
+  stroke: none;
+}
+
+{{ id }}.bg-lines {
+  stroke: {{ style.square_border_color }};
+  stroke-width: {{ style.square_border_width }};
+}

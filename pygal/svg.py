@@ -296,6 +296,118 @@ class Svg(object):
             self.graph._static_value(serie_node, val, x, y, metadata)
         return rv
 
+    def solidgauge(
+            self, serie_node, node, radius, small_radius,
+            angle, start_angle, center, val, i, metadata, half_pie, endangle, maxvalue):
+        """Draw a solid gauge slice and background slice"""
+        project = lambda rho, alpha: (
+            rho * sin(-alpha), rho * cos(-alpha))
+        diff = lambda x, y: (x[0] - y[0], x[1] - y[1])
+        fmt = lambda x: '%f %f' % x
+        get_radius = lambda r: fmt(tuple([r] * 2))
+        absolute_project = lambda rho, theta: fmt(
+            diff(center, project(rho, theta)))
+
+        if angle == 2 * pi:
+            to = [absolute_project(radius, start_angle),
+                  absolute_project(radius, start_angle + angle - 0.0001),
+                  absolute_project(small_radius, start_angle + angle - 0.0001),
+                  absolute_project(small_radius, start_angle)]
+            self.node(
+                node, 'path',
+                d='M%s A%s 0 %d 1 %s L%s A%s 0 %d 0 %s z' % (
+                    to[0],
+                    get_radius(radius),
+                    int(angle > pi),
+                    to[1],
+                    to[2],
+                    get_radius(small_radius),
+                    int(angle > pi),
+                    to[3]),
+                class_='slice reactive tooltip-trigger')
+        elif angle > 0:
+            to_shade = [absolute_project(radius, start_angle+angle),
+              absolute_project(radius, endangle),
+              absolute_project(small_radius, endangle),
+              absolute_project(small_radius, start_angle+angle)]
+
+            self.node(
+                node, 'path',
+                d='M%s A%s 0 %d 1 %s L%s A%s 0 %d 0 %s z' % (
+                    to_shade[0],
+                    get_radius(radius),
+                    int(angle > pi) if half_pie else int(angle < pi),
+                    to_shade[1],
+                    to_shade[2],
+                    get_radius(small_radius),
+                    int(angle > pi) if half_pie else int(angle < pi),
+                    to_shade[3]),
+                class_='background-shade reactive')
+
+            to = [absolute_project(radius, start_angle),
+                  absolute_project(radius, start_angle + angle),
+                  absolute_project(small_radius, start_angle + angle),
+                  absolute_project(small_radius, start_angle)]
+
+            if half_pie:
+                begin_end = [
+                    diff(center,
+                         project(radius-(radius-small_radius)/2, start_angle)),
+                    diff(center,
+                         project(radius-(radius-small_radius)/2, endangle))]
+                pos = 0
+                for i in begin_end:
+                    self.node(
+                        node, 'text',
+                        class_='y-{} reactive'.format(pos),
+                        x=i[0],
+                        y=i[1]+10,
+                        attrib={'text-anchor': 'middle',
+                                'font-size': 10}
+                    ).text = '{}'.format(0 if pos == 0 else maxvalue)
+                    pos += 1
+            else:
+                to_labels = [absolute_project(radius-(radius-small_radius)/2, 0),
+                     absolute_project(radius-(radius-small_radius)/2, 2*359.5/360*pi)]
+                self.node(self.defs, 'path', id='valuePath-%s%s' % center,
+                              d='M%s A%s 0 1 1 %s' % (
+                                to_labels[0], get_radius(radius-(radius-small_radius)/2),
+                                to_labels[1]
+                              ), stroke='#000000', width='3px')
+                text_ = self.node(node, 'text', x=10, y=100, stroke='black')
+                self.node(text_, 'textPath', class_='maxvalue reactive',
+                      attrib={'href': '#valuePath-%s%s' % center,
+                              'startOffset': '%s' % (97-1.2*len(str(maxvalue))) + '%',
+                              'text-anchor': 'start',
+                              'font-size': (radius-small_radius)/2,
+                              'fill': '#999999'}
+                      ).text = maxvalue
+
+            self.node(
+                node, 'path',
+                d='M%s A%s 0 %d 1 %s L%s A%s 0 %d 0 %s z' % (
+                    to[0],
+                    get_radius(radius),
+                    int(angle > pi),
+                    to[1],
+                    to[2],
+                    get_radius(small_radius),
+                    int(angle > pi),
+                    to[3]),
+                class_='slice reactive tooltip-trigger')
+        else:
+            return
+
+
+        x, y = center
+        self.graph._static_value(serie_node, val, x, y, metadata, 'middle')
+
+        x, y = diff(center, project(
+                (radius + small_radius) / 2, start_angle + angle / 2))
+        self.graph._tooltip_data(
+            node, val, x, y, "centered",
+            self.graph._x_labels and self.graph._x_labels[i][0])
+
     def confidence_interval(self, node, x, low, high, width=7):
         if self.graph.horizontal:
             coord_format = lambda xy: '%f %f' % (xy[1], xy[0])

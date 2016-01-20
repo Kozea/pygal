@@ -89,6 +89,9 @@ class Style(object):
 
     value_colors = ()
     ci_colors = ()
+    gauge_background_color = "#e5e5e5"
+    square_border_color = 'rgba(249, 249, 249, 1)'
+    square_border_width = '2px'
 
     def __init__(self, **kwargs):
         """Create the style"""

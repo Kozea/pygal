@@ -202,6 +202,23 @@ def get_test_routes(app):
         ]
         return gauge.render_response()
 
+    @app.route('/test/solidguage/')
+    def test_solidguage():
+        gauge = SolidGauge(half_pie=True,
+                           inner_radius=0.70,
+                           print_values=True,
+                           human_readable=True)
+        gauge.title = 'Hello World!'
+        gauge.value_formatter = lambda x: '${}'.format(x.values[0]) if x.title in ['Series 1'] else '{}%'.format(x.values[0])
+        gauge.add('Series 1', [{'value': 225000, 'maxvalue': 1275000}])
+        gauge.add('Series 2', [{'value': 81, 'maxvalue': 100}])
+        gauge.add('Series 3', [{'value': 3, 'maxvalue': 100}])
+        gauge.add('Series 4', [{'value': 51, 'maxvalue': 100}])
+        gauge.add('Series 5', [{'value': 79, 'maxvalue': 100}])
+        gauge.add('Series 6', [{'value': 99, 'maxvalue': 100}])
+        gauge.add('Series 7', [{'value': 100, 'maxvalue': 100}])
+        return gauge.render_response()
+
     @app.route('/test/gauge/log')
     def test_gauge_log():
         gauge = Gauge(logarithmic=True)

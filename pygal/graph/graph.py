@@ -492,7 +492,8 @@ class Graph(PublicApi):
             self.svg.node(node, 'desc',
                           class_="x_label").text = to_str(xlabel)
 
-    def _static_value(self, serie_node, value, x, y, metadata, classes=None):
+    def _static_value(self, serie_node, value, x, y, metadata,
+                      align_text='left', classes=None):
         """Write the print value"""
         label = metadata and metadata.get('label')
         classes = classes and [classes] or []
@@ -518,7 +519,8 @@ class Graph(PublicApi):
                 serie_node['text_overlay'], 'text',
                 class_=' '.join(val_cls),
                 x=x,
-                y=y + self.style.value_font_size / 3
+                y=y + self.style.value_font_size / 3,
+                attrib={'text-anchor': align_text}
             ).text = value if self.print_zeroes or value != '0' else ''
 
     def _get_value(self, values, i):
@@ -849,6 +851,29 @@ class Graph(PublicApi):
             self._y_labels_major = majorize(cut(self._y_labels, 1))
         else:
             self._y_labels_major = []
+
+
+    def add_squares(self, squares):
+        x_lines = squares[0]-1
+        y_lines = squares[1]-1
+
+        _current_x = 0
+        _current_y = 0
+
+        _squares_coord = []
+
+        for line in range(x_lines):
+            _current_x += (self.width - self.margin_box.x) / squares[0]
+            self.svg.node(self.nodes['plot'], 'path',
+                      class_='bg-lines',
+                      d='M%s %s L%s %s' % (_current_x, 0, _current_x, self.height-self.margin_box.y))
+
+        for line in range(y_lines):
+            _current_y += (self.height - self.margin_box.y) / squares[1]
+            self.svg.node(self.nodes['plot'], 'path',
+                      class_='bg-lines',
+                      d='M%s %s L%s %s' % (0, _current_y, self.width-self.margin_box.x, _current_y))
+        return ((self.width - self.margin_box.x) / squares[0], (self.height - self.margin_box.y) / squares[1])
 
     def _draw(self):
         """Draw all the things"""

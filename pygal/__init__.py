@@ -36,6 +36,7 @@ from pygal.graph.box import Box
 from pygal.graph.dot import Dot
 from pygal.graph.funnel import Funnel
 from pygal.graph.gauge import Gauge
+from pygal.graph.solidgauge import SolidGauge
 from pygal.graph.histogram import Histogram
 from pygal.graph.horizontalbar import HorizontalBar
 from pygal.graph.horizontalstackedbar import HorizontalStackedBar
