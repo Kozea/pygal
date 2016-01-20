@@ -119,7 +119,10 @@ class Maxvalue(SolidGauge):
 
     @property
     def values(self):
-        return self.serie.values
+        try:
+            return [self.serie.metadata[0]['maxvalue']]
+        except:
+            return [self.serie.values[0] * 1.5]
 
     @property
     def title(self):
