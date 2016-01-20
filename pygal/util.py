@@ -39,6 +39,11 @@ def float_format(number):
 
 def humanize(number):
     """Format a number to engineer scale"""
+    try:
+        int(number)
+        float(number)
+    except TypeError:
+        number = number.values[0]
     if is_list_like(number):
         return', '.join(map(humanize, number))
     if number is None:
