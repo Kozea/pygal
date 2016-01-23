@@ -810,9 +810,6 @@ class Graph(PublicApi):
                 map(self._x_label_format_if_value, self.x_labels_major)) or []
 
     def _compute_y_labels(self):
-        print(
-            self._box.ymin, self._box.ymax, self.logarithmic,
-            self.order_min, self.min_scale, self.max_scale)
         y_pos = compute_scale(
             self._min, self._max, self.logarithmic,
             self.order_min, self.min_scale, self.max_scale
