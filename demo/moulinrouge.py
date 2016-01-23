@@ -22,16 +22,16 @@ import logging
 app = create_app()
 
 try:
-    from log_colorizer import make_colored_stream_handler
-    handler = make_colored_stream_handler()
-    app.logger.handlers = []
-    app.logger.addHandler(handler)
+    # from log_colorizer import make_colored_stream_handler
+    # handler = make_colored_stream_handler()
+    # app.logger.handlers = []
+    # app.logger.addHandler(handler)
     import werkzeug
     werkzeug._internal._log('debug', '<-- I am with stupid')
     logging.getLogger('werkzeug').handlers = []
-    logging.getLogger('werkzeug').addHandler(handler)
+    # logging.getLogger('werkzeug').addHandler(handler)
 
-    handler.setLevel(logging.DEBUG)
+    # handler.setLevel(logging.DEBUG)
     app.logger.setLevel(logging.DEBUG)
     logging.getLogger('werkzeug').setLevel(logging.DEBUG)
 except:
@@ -58,4 +58,4 @@ else:
     add_w_builtin()
     app.wsgi_app = WdbMiddleware(app.wsgi_app, start_disabled=True)
 
-app.run(debug=True, threaded=True, host='0.0.0.0', port=21112)
+app.run(debug=True, threaded=True)
