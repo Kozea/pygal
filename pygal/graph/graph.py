@@ -32,7 +32,7 @@ from pygal.util import (
     cached_property, compute_scale, cut, decorate,
     get_text_box, get_texts_box, humanize, majorize, rad, reverse_text_len,
     split_title, truncate)
-from pygal.view import LogView, ReverseView, View, XYLogView
+from pygal.view import LogView, ReverseView, View, XYLogView, Box
 
 
 class Graph(PublicApi):
@@ -70,6 +70,10 @@ class Graph(PublicApi):
             self.width - self.margin_box.x,
             self.height - self.margin_box.y,
             self._box)
+
+        if self.range is not None:
+            self._box.ymax = self._max*(1+1/self.style.label_font_size/self._max)
+            self._box.ymin = self._min
 
     def _make_graph(self):
         """Init common graph svg structure"""
@@ -806,8 +810,11 @@ class Graph(PublicApi):
                 map(self._x_label_format_if_value, self.x_labels_major)) or []
 
     def _compute_y_labels(self):
-        y_pos = compute_scale(
+        print(
             self._box.ymin, self._box.ymax, self.logarithmic,
+            self.order_min, self.min_scale, self.max_scale)
+        y_pos = compute_scale(
+            self._min, self._max, self.logarithmic,
             self.order_min, self.min_scale, self.max_scale
         )
         if self.y_labels:
