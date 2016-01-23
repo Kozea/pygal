@@ -32,7 +32,7 @@ from pygal.util import (
     cached_property, compute_scale, cut, decorate,
     get_text_box, get_texts_box, humanize, majorize, rad, reverse_text_len,
     split_title, truncate)
-from pygal.view import LogView, ReverseView, View, XYLogView, Box
+from pygal.view import LogView, ReverseView, View, XYLogView
 
 
 class Graph(PublicApi):
@@ -72,7 +72,7 @@ class Graph(PublicApi):
             self._box)
 
         if self.range is not None:
-            self._box.ymax = self._max*(1+1/self.style.label_font_size/self._max)
+            self._box.ymax = self._max + 0.5
             self._box.ymin = self._min
 
     def _make_graph(self):
