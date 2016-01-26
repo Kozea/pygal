@@ -16,6 +16,20 @@ Basic simple line graph:
   line_chart.add('IE',      [85.8, 84.6, 84.7, 74.5,   66, 58.6, 54.7, 44.8, 36.2, 26.6, 20.1])
   line_chart.add('Others',  [14.2, 15.4, 15.3,  8.9,    9, 10.4,  8.9,  5.8,  6.7,  6.8,  7.5])
 
+
+ Interruptions
+ ^^^^^^^^^^^^^
+
+ If you happen to want a break in the middle of a plot, you can pass None values. Additionally,
+ you will need to specify allow_interruptions=True in the constructor, in order for the behaviour
+ to be supported correctly
+
+ .. pygal-code::
+
+   interrupted_chart = pygal.Line(allow_interruptions=True)
+   interrupted_chart.add('Temperature', [22, 34, 43, 12, None, 12, 55, None, 56])
+
+
 Stacked
 ~~~~~~~
 

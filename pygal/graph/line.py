@@ -35,6 +35,7 @@ class Line(Graph):
     def __init__(self, *args, **kwargs):
         """Set _self_close as False, it's True for Radar like Line"""
         self._self_close = False
+        self.allow_interruptions = kwargs.get('allow_interruptions', False)
         super(Line, self).__init__(*args, **kwargs)
 
     @cached_property
@@ -141,9 +142,32 @@ class Line(Graph):
                 view_values = list(map(self.view, points))
             if serie.fill:
                 view_values = self._fill(view_values)
-            self.svg.line(
-                serie_node['plot'], view_values, close=self._self_close,
-                class_='line reactive' + (' nofill' if not serie.fill else ''))
+
+            if self.allow_interruptions:
+                # view_values are in form [(x1, y1), (x2, y2)]. We need to split that
+                # into multiple sequences if a None is present here
+
+                sequences = []
+                cur_sequence = []
+                for x, y in view_values:
+                    if y is None and len(cur_sequence) > 0:     # emit current subsequence
+                        sequences.append(cur_sequence)
+                        cur_sequence = []
+                    elif y is None:                             # just discard
+                        continue
+                    else:
+                        cur_sequence.append((x,y))              # append the element
+
+                if len(cur_sequence) > 0:           # emit last possible sequence
+                    sequences.append(cur_sequence)
+            else:
+                # plain vanilla rendering
+                sequences = [view_values]
+
+            for seq in sequences:
+                self.svg.line(
+                    serie_node['plot'], seq, close=self._self_close,
+                    class_='line reactive' + (' nofill' if not serie.fill else ''))
 
     def _compute(self):
         """Compute y min and max and y scale and set labels"""
