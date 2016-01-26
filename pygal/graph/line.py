@@ -144,21 +144,23 @@ class Line(Graph):
                 view_values = self._fill(view_values)
 
             if self.allow_interruptions:
-                # view_values are in form [(x1, y1), (x2, y2)]. We need to split that
-                # into multiple sequences if a None is present here
+                # view_values are in form [(x1, y1), (x2, y2)]. We
+                # need to split that into multiple sequences if a
+                # None is present here
 
                 sequences = []
                 cur_sequence = []
                 for x, y in view_values:
-                    if y is None and len(cur_sequence) > 0:     # emit current subsequence
+                    if y is None and len(cur_sequence) > 0:
+                        # emit current subsequence
                         sequences.append(cur_sequence)
                         cur_sequence = []
-                    elif y is None:                             # just discard
+                    elif y is None:       # just discard
                         continue
                     else:
-                        cur_sequence.append((x,y))              # append the element
+                        cur_sequence.append((x,y))   # append the element
 
-                if len(cur_sequence) > 0:           # emit last possible sequence
+                if len(cur_sequence) > 0:      # emit last possible sequence
                     sequences.append(cur_sequence)
             else:
                 # plain vanilla rendering
@@ -167,7 +169,8 @@ class Line(Graph):
             for seq in sequences:
                 self.svg.line(
                     serie_node['plot'], seq, close=self._self_close,
-                    class_='line reactive' + (' nofill' if not serie.fill else ''))
+                    class_='line reactive' +
+                           (' nofill' if not serie.fill else ''))
 
     def _compute(self):
         """Compute y min and max and y scale and set labels"""
