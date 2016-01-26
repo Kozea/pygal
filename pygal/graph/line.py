@@ -158,7 +158,7 @@ class Line(Graph):
                     elif y is None:       # just discard
                         continue
                     else:
-                        cur_sequence.append((x,y))   # append the element
+                        cur_sequence.append((x, y))   # append the element
 
                 if len(cur_sequence) > 0:      # emit last possible sequence
                     sequences.append(cur_sequence)
