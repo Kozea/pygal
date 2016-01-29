@@ -23,6 +23,7 @@ from pygal import (
     Line, Dot, Pie, Treemap, Radar, Config, Bar, Funnel,
     Histogram, Gauge, Box, XY,
     Pyramid, HorizontalBar, HorizontalStackedBar,
+    HorizontalStackedLine, HorizontalLine,
     DateTimeLine, TimeLine, DateLine, TimeDeltaLine)
 from pygal.graph.map import BaseMap
 from pygal.graph.horizontal import HorizontalGraph
@@ -434,6 +435,7 @@ def test_y_label_major(Chart):
     if Chart in (
             Pie, Treemap, Funnel, Dot, Gauge, Histogram, Box,
             HorizontalBar, HorizontalStackedBar,
+            HorizontalStackedLine, HorizontalLine,
             Pyramid, DateTimeLine, TimeLine, DateLine,
             TimeDeltaLine
     ) or issubclass(Chart, BaseMap):
