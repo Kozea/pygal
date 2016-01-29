@@ -148,9 +148,14 @@ class Line(Graph):
     def _compute(self):
         """Compute y min and max and y scale and set labels"""
         # X Labels
-        self._x_pos = [
-            x / (self._len - 1) for x in range(self._len)
-        ] if self._len != 1 else [.5]  # Center if only one value
+        if self.horizontal:
+            self._x_pos = [
+                x / (self._len - 1) for x in range(self._len)
+            ][::-1] if self._len != 1 else [.5]  # Center if only one value
+        else:
+            self._x_pos = [
+                x / (self._len - 1) for x in range(self._len)
+            ] if self._len != 1 else [.5]  # Center if only one value
 
         self._points(self._x_pos)
 
