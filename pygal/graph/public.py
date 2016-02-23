@@ -155,7 +155,8 @@ class PublicApi(BaseGraph):
             margin=5,
             min_scale=1,
             max_scale=2,
-            explicit_size=True
+            explicit_size=True,
+            no_data_text=''
         )
         spark_options.update(kwargs)
         return self.render(**spark_options)

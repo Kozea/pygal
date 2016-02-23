@@ -37,19 +37,6 @@ try:
 except:
     pass
 
-
-try:
-    import wsreload
-except ImportError:
-    app.logger.debug('wsreload not found')
-else:
-    url = "http://moulinrouge.l:21112/*"
-
-    def log(httpserver):
-        app.logger.debug('WSReloaded after server restart')
-    wsreload.monkey_patch_http_server({'url': url}, callback=log)
-    app.logger.debug('HTTPServer monkey patched for url %s' % url)
-
 try:
     from wdb.ext import WdbMiddleware, add_w_builtin
 except ImportError:
