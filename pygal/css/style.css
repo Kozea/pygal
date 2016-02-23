@@ -104,6 +104,10 @@
   stroke-width: 4;
 }
 
+{{ id }}.ci .reactive.active {
+  stroke-width: 1.5;
+}
+
 {{ id }}.series text {
   fill: {{ style.foreground_strong }};
 }
