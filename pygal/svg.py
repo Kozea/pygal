@@ -298,7 +298,8 @@ class Svg(object):
 
     def solidgauge(
             self, serie_node, node, radius, small_radius,
-            angle, start_angle, center, val, i, metadata, half_pie, endangle, maxvalue):
+            angle, start_angle, center, val, i, metadata, half_pie, endangle,
+            maxvalue):
         """Draw a solid gauge slice and background slice"""
         project = lambda rho, alpha: (
             rho * sin(-alpha), rho * cos(-alpha))
