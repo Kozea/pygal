@@ -5,6 +5,7 @@ Changelog
 2.2.0 UNRELEASED
 =====
 
+* Support interruptions in line charts (thanks @piotrmaslanka #300)
 * Fix confidence interval reactiveness (thanks @chartique #296)
 * Add horizontal line charts (thanks @chartique #301)
 
