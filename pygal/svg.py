@@ -315,7 +315,7 @@ class Svg(object):
                     top, shr(top), top, shl(top), top,
                     bottom, shr(bottom), bottom, shl(bottom)
                 ))
-            ), class_='nofill'
+            ), class_='nofill reactive'
         )
 
     def pre_render(self):
