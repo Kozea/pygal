@@ -218,6 +218,9 @@ class CommonConfig(BaseConfig):
     inner_radius = Key(
         0, float, "Look", "Piechart inner radius (donut), must be <.9")
 
+    allow_interruptions = Key(
+        False, bool, "Look", "Break lines on None values")
+
 
 class Config(CommonConfig):
 

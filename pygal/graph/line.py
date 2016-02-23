@@ -35,7 +35,6 @@ class Line(Graph):
     def __init__(self, *args, **kwargs):
         """Set _self_close as False, it's True for Radar like Line"""
         self._self_close = False
-        self.allow_interruptions = kwargs.get('allow_interruptions', False)
         super(Line, self).__init__(*args, **kwargs)
 
     @cached_property
@@ -143,7 +142,7 @@ class Line(Graph):
             if serie.fill:
                 view_values = self._fill(view_values)
 
-            if self.allow_interruptions:
+            if serie.allow_interruptions:
                 # view_values are in form [(x1, y1), (x2, y2)]. We
                 # need to split that into multiple sequences if a
                 # None is present here
