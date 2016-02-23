@@ -2,6 +2,13 @@
 Changelog
 =========
 
+2.2.0 UNRELEASED
+=====
+
+* Fix confidence interval reactiveness (thanks @chartique #296)
+* Add horizontal line charts (thanks @chartique #301)
+
+
 2.1.1
 =====
 
