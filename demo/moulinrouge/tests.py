@@ -1071,6 +1071,17 @@ def get_test_routes(app):
         chart.range = (30, 200)
         return chart.render_response()
 
+    @app.route('/test/interruptions')
+    def test_interruptions():
+        chart = Line(allow_interruptions=True)
+        chart.add(
+            'interrupt', [22, 34, 43, 12, None, 12, 55, None, 56],
+            allow_interruptions=False)
+        chart.add('not interrupt', [
+            -a if a else None
+            for a in (22, 34, 43, 12, None, 12, 55, None, 56)])
+        return chart.render_response()
+
     return list(sorted(filter(
         lambda x: x.startswith('test') and not x.endswith('_for'), locals()))
     ) + list(sorted(filter(

@@ -122,3 +122,19 @@ inner_radius
    chart = pygal.Pie()
    for i in range(10):
      chart.add(str(i), i, inner_radius=(10 - i) / 10)
+
+
+
+allow_interruptions
+~~~~~~~~~~~~~~~~~~~
+
+You can set `allow_interruptions` to True in order to break lines on None values.
+
+.. pygal-code::
+
+  interrupted_chart = pygal.Line()
+  interrupted_chart.add(
+    'Temperature', [22, 34, 43, 12, None, 12, 55, None, 56],
+    allow_interruptions=True)
+  interrupted_chart.add(
+    'Temperature', [11, 17, 21.5, 6, None, 6, 27.5, None, 28])
