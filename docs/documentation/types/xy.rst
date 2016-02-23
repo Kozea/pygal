@@ -63,6 +63,9 @@ DateTime
 Date
 ++++
 
+If you want to plot date/time-series with breaks inside the plot, pass allow_interruptions=True to
+the constructor. See Line on how to do it
+
 .. pygal-code::
 
   from datetime import date
