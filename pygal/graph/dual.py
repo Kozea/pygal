@@ -27,6 +27,14 @@ from pygal.util import compute_scale, cut
 class Dual(Graph):
     _dual = True
 
+    def _value_format(self, value):
+        """
+        Format value for dual value display.
+        """
+        return '%s: %s' % (
+             self._x_format(value[0]),
+             self._y_format(value[1]))
+
     def _compute_x_labels(self):
         x_pos = compute_scale(
             self._box.xmin, self._box.xmax, self.logarithmic,

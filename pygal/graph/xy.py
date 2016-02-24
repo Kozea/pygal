@@ -37,11 +37,6 @@ class XY(Line, Dual):
 
     _x_adapters = []
 
-    def _get_value(self, values, i):
-        """Get the value formatted for tooltip"""
-        vals = values[i]
-        return '%s: %s' % (self._x_format(vals[0]), self._format(vals[1]))
-
     @cached_property
     def xvals(self):
         """All x values"""

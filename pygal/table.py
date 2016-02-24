@@ -57,7 +57,6 @@ class Table(object):
         """
         self.chart.setup()
         ln = self.chart._len
-        fmt = self.chart._format
         html = HTML()
         attrs = {}
 
@@ -92,10 +91,10 @@ class Table(object):
                     v = value or 0
                     acc[j] += v
                     sum_ += v
-                row.append(fmt(value))
+                row.append(self.chart._format(serie, j))
             if total:
                 acc[-1] += sum_
-                row.append(fmt(sum_))
+                row.append(self.chart._value_format(serie, sum_))
             table.append(row)
 
         width = ln + 1
@@ -103,7 +102,7 @@ class Table(object):
             width += 1
             table.append(['Total'])
             for val in acc:
-                table[-1].append(fmt(val))
+                table[-1].append(self.chart._value_format(serie, val))
 
         # Align values
         len_ = max([len(r) for r in table] or [0])

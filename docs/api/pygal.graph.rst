@@ -22,7 +22,9 @@ Submodules
    pygal.graph.histogram
    pygal.graph.horizontal
    pygal.graph.horizontalbar
+   pygal.graph.horizontalline
    pygal.graph.horizontalstackedbar
+   pygal.graph.horizontalstackedline
    pygal.graph.line
    pygal.graph.map
    pygal.graph.pie

@@ -16,7 +16,6 @@
 #
 # You should have received a copy of the GNU Lesser General Public License
 # along with pygal. If not, see <http://www.gnu.org/licenses/>.
-
 """Svg helper"""
 
 from __future__ import division
@@ -422,13 +421,14 @@ class Svg(object):
         bottom = (x, low)
 
         ci = self.node(node, class_="ci")
+
         self.node(
             ci, 'path', d="M%s L%s M%s L%s M%s L%s L%s M%s L%s" % tuple(
                 map(coord_format, (
                     top, shr(top), top, shl(top), top,
                     bottom, shr(bottom), bottom, shl(bottom)
                 ))
-            ), class_='nofill'
+            ), class_='nofill reactive'
         )
 
     def pre_render(self):

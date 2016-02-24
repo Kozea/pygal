@@ -2,6 +2,15 @@
 Changelog
 =========
 
+2.2.0 UNRELEASED
+=====
+
+* Support interruptions in line charts (thanks @piotrmaslanka #300)
+* Fix confidence interval reactiveness (thanks @chartique #296)
+* Add horizontal line charts (thanks @chartique #301)
+* There is now a `formatter` config option to format values as specified. The formatter callable may or may not take `chart`, `serie` and `index` as argument. The default value formatting is now chart dependent and is value_formatter for most graph but could be a combination of value_formatter and x_value_formatter for dual charts.
+* The `human_readable` option has been removed. Now you have to use the pygal.formatters.human_readable formatter (value_formatter=human_readable instead of human_readable=True)
+
 2.1.1
 =====
 

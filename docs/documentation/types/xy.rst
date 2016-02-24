@@ -114,3 +114,8 @@ TimeDelta
     (timedelta(days=3, microseconds=30), 12),
     (timedelta(weeks=1), 10),
   ])
+
+None values
+~~~~~~~~~~~
+
+None values will be skipped. It is also possible to `break lines <../configuration/serie.html#allow-interruptions>`_.

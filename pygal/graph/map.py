@@ -52,9 +52,13 @@ class BaseMap(Graph):
         """Hook to change the area code"""
         return area_code
 
-    def _get_value(self, value):
-        """Get the value formatted for tooltip"""
-        return '%s: %s' % (self.area_names[value[0]], self._format(value[1]))
+    def _value_format(self, value):
+        """
+        Format value for map value display.
+        """
+        return '%s: %s' % (
+             self.area_names.get(self.adapt_code(value[0]), '?'),
+             self._y_format(value[1]))
 
     def _plot(self):
         """Insert a map in the chart and apply data on it"""
@@ -120,7 +124,7 @@ class BaseMap(Graph):
                         node.set('class', ' '.join(cls))
                         alter(node, metadata)
 
-                    val = self._get_value((area_code, value))
+                    val = self._format(serie, j)
                     self._tooltip_data(area, val, 0, 0, 'auto')
 
         self.nodes['plot'].append(map)

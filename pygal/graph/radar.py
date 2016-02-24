@@ -49,10 +49,6 @@ class Radar(Line):
         """Add extra values to fill the line"""
         return values
 
-    def _get_value(self, values, i):
-        """Get the value formatted for tooltip"""
-        return self._format(values[i][0])
-
     @cached_property
     def _values(self):
         """Getter for series values (flattened)"""
@@ -160,7 +156,7 @@ class Radar(Line):
 
             self.svg.node(
                 guides, 'title',
-            ).text = self._format(r)
+            ).text = self._y_format(r)
 
     def _compute(self):
         """Compute r min max and labels position"""
@@ -198,17 +194,17 @@ class Radar(Line):
             for i, y_label in enumerate(self.y_labels):
                 if isinstance(y_label, dict):
                     pos = self._adapt(y_label.get('value'))
-                    title = y_label.get('label', self._format(pos))
+                    title = y_label.get('label', self._y_format(pos))
                 elif is_str(y_label):
                     pos = self._adapt(y_pos[i])
                     title = y_label
                 else:
                     pos = self._adapt(y_label)
-                    title = self._format(pos)
+                    title = self._y_format(pos)
                 self._y_labels.append((title, pos))
             self._rmin = min(self._rmin, min(cut(self._y_labels, 1)))
             self._rmax = max(self._rmax, max(cut(self._y_labels, 1)))
             self._box.set_polar_box(self._rmin, self._rmax)
 
         else:
-            self._y_labels = list(zip(map(self._format, y_pos), y_pos))
+            self._y_labels = list(zip(map(self._y_format, y_pos), y_pos))

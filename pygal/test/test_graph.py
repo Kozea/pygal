@@ -399,11 +399,7 @@ def test_labels_with_links(Chart):
     q = chart.render_pyquery()
     links = q('a')
 
-    if isinstance(chart, BaseMap):
-        # No country is found in this case so:
-        assert len(links) == 3
-    else:
-        assert len(links) == 7
+    assert len(links) == 7 or isinstance(chart, BaseMap) and len(links) == 3
 
 
 def test_sparkline(Chart, datas):

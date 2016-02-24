@@ -26,7 +26,6 @@ from __future__ import division
 
 from bisect import bisect_left, bisect_right
 
-from pygal._compat import is_list_like
 from pygal.graph.graph import Graph
 from pygal.util import alter, decorate
 
@@ -44,27 +43,25 @@ class Box(Graph):
 
     _series_margin = .06
 
-    @property
-    def _format(self):
-        """Return the value formatter for this graph"""
-        sup = super(Box, self)._format
-
-        def format_maybe_quartile(x):
-            if is_list_like(x):
-                if self.box_mode == "extremes":
-                    return (
-                        'Min: %s\nQ1 : %s\nQ2 : %s\nQ3 : %s\nMax: %s' %
-                        tuple(map(sup, x[1:6])))
-                elif self.box_mode in ["tukey", "stdev", "pstdev"]:
-                    return (
-                        'Min: %s\nLower Whisker: %s\nQ1: %s\nQ2: %s\nQ3: %s\n'
-                        'Upper Whisker: %s\nMax: %s' % tuple(map(sup, x)))
-                elif self.box_mode == '1.5IQR':
-                    # 1.5IQR mode
-                    return 'Q1: %s\nQ2: %s\nQ3: %s' % tuple(map(sup, x[2:5]))
-            else:
-                return sup(x)
-        return format_maybe_quartile
+    def _value_format(self, value, serie):
+        """
+        Format value for dual value display.
+        """
+        if self.box_mode == "extremes":
+            return (
+                    'Min: %s\nQ1 : %s\nQ2 : %s\nQ3 : %s\nMax: %s' %
+                    tuple(map(self._y_format, serie.points[1:6])))
+        elif self.box_mode in ["tukey", "stdev", "pstdev"]:
+            return (
+                    'Min: %s\nLower Whisker: %s\nQ1: %s\nQ2: %s\nQ3: %s\n'
+                    'Upper Whisker: %s\nMax: %s' % tuple(map(
+                        self._y_format, serie.points)))
+        elif self.box_mode == '1.5IQR':
+            # 1.5IQR mode
+            return 'Q1: %s\nQ2: %s\nQ3: %s' % tuple(map(
+                self._y_format, serie.points[2:5]))
+        else:
+            return self._y_format(serie.points)
 
     def _compute(self):
         """
@@ -72,7 +69,7 @@ class Box(Graph):
         within the rendering process
         """
         for serie in self.series:
-            serie.values, serie.outliers = \
+            serie.points, serie.outliers = \
                 self._box_points(serie.values, self.box_mode)
 
         self._x_pos = [
@@ -107,10 +104,11 @@ class Box(Graph):
             self.svg,
             self.svg.node(boxes, class_='box'),
             metadata)
-        val = self._format(serie.values)
+
+        val = self._format(serie, 0)
 
         x_center, y_center = self._draw_box(
-            box, serie.values[1:6], serie.outliers, serie.index, metadata)
+            box, serie.points[1:6], serie.outliers, serie.index, metadata)
         self._tooltip_data(box, val, x_center, y_center, "centered",
                            self._get_x_label(serie.index))
         self._static_value(serie_node, val, x_center, y_center, metadata)

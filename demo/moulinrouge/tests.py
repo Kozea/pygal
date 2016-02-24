@@ -24,7 +24,7 @@ except ImportError:
 from flask import abort
 from pygal.style import styles, Style, RotateStyle
 from pygal.colors import rotate
-from pygal import stats
+from pygal import stats, formatters
 from pygal.graph.horizontal import HorizontalGraph
 from random import randint, choice
 from datetime import datetime, date
@@ -38,7 +38,7 @@ def get_test_routes(app):
 
     @app.route('/test/unsorted')
     def test_unsorted():
-        bar = Bar(style=styles['neon'], human_readable=True)
+        bar = Bar(style=styles['neon'], value_formatter=formatters.human_readable)
         bar.add('A', {'red': 10, 'green': 12, 'blue': 14})
         bar.add('B', {'green': 11, 'blue': 7})
         bar.add('C', {'blue': 7})
@@ -373,12 +373,24 @@ def get_test_routes(app):
         bar.x_labels_major = [4]
         return bar.render_response()
 
+    @app.route('/test/formatters/<chart>')
+    def test_formatters_for(chart):
+        chart = CHARTS_BY_NAME[chart](
+            print_values=True, formatter=lambda x, chart, serie: '%s%s$' % (
+                x, serie.title))
+        chart.add('_a', [1, 2, {'value': 3, 'formatter': lambda x: '%s¥' % x}])
+        chart.add('_b', [4, 5, 6], formatter=lambda x: '%s€' % x)
+        chart.x_labels = [2, 4, 6]
+        chart.x_labels_major = [4]
+        return chart.render_response()
+
     @app.route('/test/bar/position')
     def test_bar_print_values_position():
-        bar = StackedBar(print_values=True, print_values_position='top', zero=2,
-                  style=styles['default'](
-                      value_font_family='googlefont:Raleway',
-                      value_font_size=46))
+        bar = StackedBar(
+            print_values=True, print_values_position='top', zero=2,
+            style=styles['default'](
+                value_font_family='googlefont:Raleway',
+                value_font_size=46))
         bar.add('1', [1, -2, 3])
         bar.add('2', [4, -5, 6])
         bar.x_labels = [2, 4, 6]
@@ -387,7 +399,10 @@ def get_test_routes(app):
 
     @app.route('/test/histogram')
     def test_histogram():
-        hist = Histogram(print_values=True, print_values_position='top', style=styles['neon'])
+        hist = Histogram(
+            print_values=True,
+            print_values_position='top',
+            style=styles['neon'])
         hist.add('1', [
             (2, 0, 1),
             (4, 1, 3),
@@ -443,7 +458,7 @@ def get_test_routes(app):
     @app.route('/test/box')
     def test_box():
         chart = Box()
-        chart.js = ('http://l:2343/2.0.x/pygal-tooltips.js',)
+        # chart.js = ('http://l:2343/2.0.x/pygal-tooltips.js',)
         chart.box_mode = '1.5IQR'
         chart.add('One', [15, 8, 2, -12, 9, 23])
         chart.add('Two', [5, 8, 2, -9, 23, 12])
@@ -597,21 +612,9 @@ def get_test_routes(app):
         if fr is None:
             abort(404)
         fmap = fr.Departments(style=choice(list(styles.values())))
-        fmap.add('', [(69, 2), (42, 7), (38, 3), (26, 0)])
-        # for i in range(10):
-        #     fmap.add('s%d' % i, [
-        #         (choice(list(fr.DEPARTMENTS.keys())), randint(0, 100))
-        #         for _ in range(randint(1, 5))])
-
-        # fmap.add('links', [{
-        #     'value': (69, 10),
-        #     'label': '\o/',
-        #     'xlink': 'http://google.com?q=69'
-        # }, {
-        #     'value': ('42', 20),
-        #     'label': 'Y',
-        # }])
-        # fmap.add('6th', [3, 5, 34, 12])
+        fmap.add('', [(i, i) for i in range(1, 100)])
+        fmap.add('', [(970 + i, i) for i in range(1, 7)])
+        fmap.add('', [('2A', 1), ('2B', 2)])
         fmap.title = 'French map'
         return fmap.render_response()
 
@@ -1090,6 +1093,17 @@ def get_test_routes(app):
             {'value': 125, 'ci': {'low': 120, 'high': 130}},
         ])
         chart.range = (30, 200)
+        return chart.render_response()
+
+    @app.route('/test/interruptions')
+    def test_interruptions():
+        chart = Line(allow_interruptions=True)
+        chart.add(
+            'interrupt', [22, 34, 43, 12, None, 12, 55, None, 56],
+            allow_interruptions=False)
+        chart.add('not interrupt', [
+            -a if a else None
+            for a in (22, 34, 43, 12, None, 12, 55, None, 56)])
         return chart.render_response()
 
     return list(sorted(filter(

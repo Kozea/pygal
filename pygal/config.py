@@ -22,9 +22,11 @@ from copy import deepcopy
 
 from pygal.interpolate import INTERPOLATIONS
 from pygal.style import DefaultStyle, Style
+from pygal import formatters
 
 
 CONFIG_ITEMS = []
+callable = type(lambda: 1)
 
 
 class Key(object):
@@ -218,6 +220,15 @@ class CommonConfig(BaseConfig):
     inner_radius = Key(
         0, float, "Look", "Piechart inner radius (donut), must be <.9")
 
+    allow_interruptions = Key(
+        False, bool, "Look", "Break lines on None values")
+
+    formatter = Key(
+        None, callable, "Value",
+        "A function to convert raw value to strings for this chart or serie",
+        "Default to value_formatter in most charts, it depends on dual charts."
+        "(Can be overriden by value with the formatter metadata.)")
+
 
 class Config(CommonConfig):
 
@@ -380,18 +391,14 @@ class Config(CommonConfig):
         "'x' (default), 'y' or 'either'")
 
     # Value #
-    human_readable = Key(
-        False, bool, "Value", "Display values in human readable format",
-        "(ie: 12.4M)")
-
     x_value_formatter = Key(
-        None, type(lambda: 1), "Value",
+        formatters.default, callable, "Value",
         "A function to convert abscissa numeric value to strings "
         "(used in XY and Date charts)")
 
     value_formatter = Key(
-        None, type(lambda: 1), "Value",
-        "A function to convert numeric value to strings")
+        formatters.default, callable, "Value",
+        "A function to convert ordinate numeric value to strings")
 
     logarithmic = Key(
         False, bool, "Value", "Display values in logarithmic scale")

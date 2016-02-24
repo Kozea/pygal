@@ -41,6 +41,8 @@ from pygal.graph.histogram import Histogram
 from pygal.graph.horizontalbar import HorizontalBar
 from pygal.graph.horizontalstackedbar import HorizontalStackedBar
 from pygal.graph.line import Line
+from pygal.graph.horizontalline import HorizontalLine
+from pygal.graph.horizontalstackedline import HorizontalStackedLine
 from pygal.graph.pie import Pie
 from pygal.graph.pyramid import Pyramid, VerticalPyramid
 from pygal.graph.radar import Radar

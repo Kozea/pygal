@@ -16,6 +16,7 @@ Basic simple line graph:
   line_chart.add('IE',      [85.8, 84.6, 84.7, 74.5,   66, 58.6, 54.7, 44.8, 36.2, 26.6, 20.1])
   line_chart.add('Others',  [14.2, 15.4, 15.3,  8.9,    9, 10.4,  8.9,  5.8,  6.7,  6.8,  7.5])
 
+
 Stacked
 ~~~~~~~
 
@@ -47,3 +48,9 @@ For time related plots, just format your labels or use `one variant of xy charts
    datetime(2013, 2, 2),
    datetime(2013, 2, 22)])
   date_chart.add("Visits", [300, 412, 823, 672])
+
+
+None values
+~~~~~~~~~~~
+
+None values will be skipped. It is also possible to `break lines <../configuration/serie.html#allow-interruptions>`_.

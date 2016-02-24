@@ -120,7 +120,7 @@ class Line(Graph):
                     self.svg.node(serie_node['overlay'], class_="dots"),
                     metadata)
 
-                val = self._get_value(serie.points, i)
+                val = self._format(serie, i)
                 alter(self.svg.transposable_node(
                     dots, 'circle', cx=x, cy=y, r=serie.dots_size,
                     class_='dot reactive tooltip-trigger'), metadata)
@@ -141,16 +141,47 @@ class Line(Graph):
                 view_values = list(map(self.view, points))
             if serie.fill:
                 view_values = self._fill(view_values)
-            self.svg.line(
-                serie_node['plot'], view_values, close=self._self_close,
-                class_='line reactive' + (' nofill' if not serie.fill else ''))
+
+            if serie.allow_interruptions:
+                # view_values are in form [(x1, y1), (x2, y2)]. We
+                # need to split that into multiple sequences if a
+                # None is present here
+
+                sequences = []
+                cur_sequence = []
+                for x, y in view_values:
+                    if y is None and len(cur_sequence) > 0:
+                        # emit current subsequence
+                        sequences.append(cur_sequence)
+                        cur_sequence = []
+                    elif y is None:       # just discard
+                        continue
+                    else:
+                        cur_sequence.append((x, y))   # append the element
+
+                if len(cur_sequence) > 0:      # emit last possible sequence
+                    sequences.append(cur_sequence)
+            else:
+                # plain vanilla rendering
+                sequences = [view_values]
+
+            for seq in sequences:
+                self.svg.line(
+                    serie_node['plot'], seq, close=self._self_close,
+                    class_='line reactive' +
+                           (' nofill' if not serie.fill else ''))
 
     def _compute(self):
         """Compute y min and max and y scale and set labels"""
         # X Labels
-        self._x_pos = [
-            x / (self._len - 1) for x in range(self._len)
-        ] if self._len != 1 else [.5]  # Center if only one value
+        if self.horizontal:
+            self._x_pos = [
+                x / (self._len - 1) for x in range(self._len)
+            ][::-1] if self._len != 1 else [.5]  # Center if only one value
+        else:
+            self._x_pos = [
+                x / (self._len - 1) for x in range(self._len)
+            ] if self._len != 1 else [.5]  # Center if only one value
 
         self._points(self._x_pos)
 
