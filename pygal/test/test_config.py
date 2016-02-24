@@ -515,11 +515,11 @@ def test_formatters(Chart):
         return
     chart = Chart(formatter=lambda x, chart, serie: '%s%s$' % (
             x, serie.title))
-    chart.add('_a', [1, 2, {'value': 3, 'formatter': lambda x: '%s¥' % x}])
-    chart.add('_b', [4, 5, 6], formatter=lambda x: '%s€' % x)
+    chart.add('_a', [1, 2, {'value': 3, 'formatter': lambda x: u('%s¥') % x}])
+    chart.add('_b', [4, 5, 6], formatter=lambda x: u('%s€') % x)
     chart.x_labels = [2, 4, 6]
     chart.x_labels_major = [4]
     q = chart.render_pyquery()
-    assert {v.text for v in q(".value")} == set((
-        '4€', '5€', '6€', '1_a$', '2_a$', '3¥') + (
-            ('6_a$', '15€') if Chart == Pie else ()))
+    assert set([v.text for v in q(".value")]) == set((
+        u('4€'), u('5€'), u('6€'), '1_a$', '2_a$', u('3¥')) + (
+            ('6_a$', u('15€')) if Chart == Pie else ()))

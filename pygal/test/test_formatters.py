@@ -58,7 +58,7 @@ def test_human_readable():
 def test_human_readable_custom():
     """Test human_readable formatter option"""
     f = formatters.HumanReadable()
-    assert f(None) == '∅'
+    assert f(None) == u('∅')
     f = formatters.HumanReadable(none_char='/')
     assert f(None) == '/'
 

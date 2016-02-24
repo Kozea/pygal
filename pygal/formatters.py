@@ -20,6 +20,8 @@
 Formatters to use with `value_formatter` and `x_value_formatter` configs
 
 """
+from __future__ import division
+
 from datetime import datetime, date, time
 from math import floor, log
 from pygal._compat import u, to_str
