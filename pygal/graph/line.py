@@ -120,7 +120,7 @@ class Line(Graph):
                     self.svg.node(serie_node['overlay'], class_="dots"),
                     metadata)
 
-                val = self._get_value(serie.points, i)
+                val = self._format(serie, i)
                 alter(self.svg.transposable_node(
                     dots, 'circle', cx=x, cy=y, r=serie.dots_size,
                     class_='dot reactive tooltip-trigger'), metadata)

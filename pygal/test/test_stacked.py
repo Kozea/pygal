@@ -28,8 +28,8 @@ def test_stacked_line():
     stacked.add('one_two', [1, 2])
     stacked.add('ten_twelve', [10, 12])
     q = stacked.render_pyquery()
-    assert set(q("desc.value").text().split(' ')) == set(
-        ('1', '2', '11', '14'))
+    assert set([v.text for v in q("desc.value")]) == set(
+        ('1', '2', '11 (+10)', '14 (+12)'))
 
 
 def test_stacked_line_reverse():
@@ -38,8 +38,8 @@ def test_stacked_line_reverse():
     stacked.add('one_two', [1, 2])
     stacked.add('ten_twelve', [10, 12])
     q = stacked.render_pyquery()
-    assert set(q("desc.value").text().split(' ')) == set(
-        ('11', '14', '10', '12'))
+    assert set([v.text for v in q("desc.value")]) == set(
+        ('11 (+1)', '14 (+2)', '10', '12'))
 
 
 def test_stacked_line_log():
@@ -48,8 +48,8 @@ def test_stacked_line_log():
     stacked.add('one_two', [1, 2])
     stacked.add('ten_twelve', [10, 12])
     q = stacked.render_pyquery()
-    assert set(q("desc.value").text().split(' ')) == set(
-        ('1', '2', '11', '14'))
+    assert set([v.text for v in q("desc.value")]) == set(
+        ('1', '2', '11 (+10)', '14 (+12)'))
 
 
 def test_stacked_line_interpolate():
@@ -58,5 +58,5 @@ def test_stacked_line_interpolate():
     stacked.add('one_two', [1, 2])
     stacked.add('ten_twelve', [10, 12])
     q = stacked.render_pyquery()
-    assert set(q("desc.value").text().split(' ')) == set(
-        ('1', '2', '11', '14'))
+    assert set([v.text for v in q("desc.value")]) == set(
+        ('1', '2', '11 (+10)', '14 (+12)'))

@@ -55,7 +55,7 @@ class Gauge(Graph):
             def point(x, y):
                 return '%f %f' % self.view((x, y))
 
-            value = self._format(serie.values[i])
+            val = self._format(serie, i)
             metadata = serie.metadata.get(i)
             gauges = decorate(
                 self.svg,
@@ -88,9 +88,9 @@ class Gauge(Graph):
 
             x, y = self.view((.75, theta))
             self._tooltip_data(
-                gauges, value, x, y,
+                gauges, val, x, y,
                 xlabel=self._get_x_label(i))
-            self._static_value(serie_node, value, x, y, metadata)
+            self._static_value(serie_node, val, x, y, metadata)
 
     def _y_axis(self, draw_axes=True):
         """Override y axis to plot a polar axis"""
@@ -120,7 +120,7 @@ class Gauge(Graph):
 
             self.svg.node(
                 guides, 'title',
-            ).text = self._format(theta)
+            ).text = self._y_format(theta)
 
     def _x_axis(self, draw_axes=True):
         """Override x axis to put a center circle in center"""
@@ -154,13 +154,13 @@ class Gauge(Graph):
             for i, y_label in enumerate(self.y_labels):
                 if isinstance(y_label, dict):
                     pos = self._adapt(y_label.get('value'))
-                    title = y_label.get('label', self._format(pos))
+                    title = y_label.get('label', self._y_format(pos))
                 elif is_str(y_label):
                     pos = self._adapt(y_pos[i])
                     title = y_label
                 else:
                     pos = self._adapt(y_label)
-                    title = self._format(pos)
+                    title = self._y_format(pos)
                 self._y_labels.append((title, pos))
             self.min_ = min(self.min_, min(cut(self._y_labels, 1)))
             self.max_ = max(self.max_, max(cut(self._y_labels, 1)))
@@ -169,7 +169,7 @@ class Gauge(Graph):
                 self.min_,
                 self.max_)
         else:
-            self._y_labels = list(zip(map(self._format, y_pos), y_pos))
+            self._y_labels = list(zip(map(self._y_format, y_pos), y_pos))
 
     def _plot(self):
         """Plot all needles"""

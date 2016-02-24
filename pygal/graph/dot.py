@@ -68,11 +68,11 @@ class Dot(Graph):
                 class_='dot reactive tooltip-trigger' + (
                     ' negative' if value < 0 else '')), metadata)
 
-            value = self._format(value)
+            val = self._format(serie, i)
             self._tooltip_data(
-                dots, value, x, y, 'centered',
+                dots, val, x, y, 'centered',
                 self._get_x_label(i))
-            self._static_value(serie_node, value, x, y, metadata)
+            self._static_value(serie_node, val, x, y, metadata)
 
     def _compute(self):
         """Compute y min and max and y scale and set labels"""

@@ -31,10 +31,9 @@ class Funnel(Graph):
 
     _adapters = [positive, none_to_zero]
 
-    def _format(self, value):
-        """Return the value formatter for this graph here its absolute value"""
-        value = value and abs(value)
-        return super(Funnel, self)._format(value)
+    def _value_format(self, value):
+        """Format value for dual value display."""
+        return super(Funnel, self)._value_format(value and abs(value))
 
     def funnel(self, serie):
         """Draw a funnel slice"""
@@ -42,7 +41,7 @@ class Funnel(Graph):
         fmt = lambda x: '%f %f' % x
         for i, poly in enumerate(serie.points):
             metadata = serie.metadata.get(i)
-            value = self._format(serie.values[i])
+            val = self._format(serie, i)
 
             funnels = decorate(
                 self.svg,
@@ -59,9 +58,9 @@ class Funnel(Graph):
                 self._center(self._x_pos[serie.index]),
                 sum([point[1] for point in poly]) / len(poly)))
             self._tooltip_data(
-                funnels, value, x, y, 'centered',
+                funnels, val, x, y, 'centered',
                 self._get_x_label(serie.index))
-            self._static_value(serie_node, value, x, y, metadata)
+            self._static_value(serie_node, val, x, y, metadata)
 
     def _center(self, x):
         return x - 1 / (2 * self._order)

@@ -28,6 +28,7 @@ from pygal import (
 from pygal.graph.map import BaseMap
 from pygal.graph.horizontal import HorizontalGraph
 from pygal.graph.dual import Dual
+from pygal import formatters
 from pygal._compat import u
 from pygal.test.utils import texts
 from tempfile import NamedTemporaryFile
@@ -253,8 +254,10 @@ def test_human_readable():
     line.add('_', [10 ** 4, 10 ** 5, 23 * 10 ** 4])
     q = line.render_pyquery()
     assert q(".axis.y text").map(texts) == list(map(
-        str, map(float, range(20000, 240000, 20000))))
-    line.human_readable = True
+        str, range(20000, 240000, 20000)))
+
+    line.value_formatter = formatters.human_readable
+
     q = line.render_pyquery()
     assert q(".axis.y text").map(texts) == list(map(
         lambda x: '%dk' % x, range(20, 240, 20)))
@@ -309,12 +312,12 @@ def test_include_x_axis(Chart):
     yaxis = ".axis.%s .guides text" % (
         'y' if not getattr(chart, 'horizontal', False) else 'x')
     if not isinstance(chart, Bar):
-        assert '0.0' not in q(yaxis).map(texts)
+        assert '0' not in q(yaxis).map(texts)
     else:
-        assert '0.0' in q(yaxis).map(texts)
+        assert '0' in q(yaxis).map(texts)
     chart.include_x_axis = True
     q = chart.render_pyquery()
-    assert '0.0' in q(yaxis).map(texts)
+    assert '0' in q(yaxis).map(texts)
 
 
 def test_css(Chart):
@@ -504,3 +507,19 @@ def test_render_data_uri(Chart):
     chart.add(u('èèè'), [10, 21, 5])
     assert chart.render_data_uri().startswith(
         'data:image/svg+xml;charset=utf-8;base64,')
+
+
+def test_formatters(Chart):
+    """Test custom formatters"""
+    if Chart._dual or Chart == Box:
+        return
+    chart = Chart(formatter=lambda x, chart, serie: '%s%s$' % (
+            x, serie.title))
+    chart.add('_a', [1, 2, {'value': 3, 'formatter': lambda x: '%s¥' % x}])
+    chart.add('_b', [4, 5, 6], formatter=lambda x: '%s€' % x)
+    chart.x_labels = [2, 4, 6]
+    chart.x_labels_major = [4]
+    q = chart.render_pyquery()
+    assert {v.text for v in q(".value")} == set((
+        '4€', '5€', '6€', '1_a$', '2_a$', '3¥') + (
+            ('6_a$', '15€') if Chart == Pie else ()))

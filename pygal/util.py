@@ -24,32 +24,14 @@ from __future__ import division
 import re
 from decimal import Decimal
 
-from math import ceil, floor, log, log10, pi
+from math import ceil, floor, log10, pi
 
-from pygal._compat import is_list_like, to_unicode, u
-
-
-ORDERS = u("yzafpnµm kMGTPEZY")
+from pygal._compat import to_unicode, u
 
 
 def float_format(number):
     """Format a float to a precision of 3, without zeroes or dots"""
     return ("%.3f" % number).rstrip('0').rstrip('.')
-
-
-def humanize(number):
-    """Format a number to engineer scale"""
-    if is_list_like(number):
-        return', '.join(map(humanize, number))
-    if number is None:
-        return u('∅')
-    order = number and int(floor(log(abs(number)) / log(1000)))
-    human_readable = ORDERS.split(" ")[int(order > 0)]
-    if order == 0 or order > len(human_readable):
-        return float_format(number / (1000 ** int(order)))
-    return (
-        float_format(number / (1000 ** int(order))) +
-        human_readable[int(order) - int(order > 0)])
 
 
 def majorize(values):
@@ -355,3 +337,10 @@ def split_title(title, width, title_fs):
             title_line = title_line[i:].strip()
         titles.append(title_line)
     return titles
+
+
+def filter_kwargs(fun, kwargs):
+    if not hasattr(fun, '__code__'):
+        return {}
+    args = fun.__code__.co_varnames[1:]
+    return dict((k, v) for k, v in kwargs.items() if k in args)

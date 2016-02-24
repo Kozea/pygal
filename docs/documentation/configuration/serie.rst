@@ -138,3 +138,17 @@ You can set `allow_interruptions` to True in order to break lines on None values
     allow_interruptions=True)
   interrupted_chart.add(
     'Temperature', [11, 17, 21.5, 6, None, 6, 27.5, None, 28])
+
+
+formatter
+~~~~~~~~~
+
+You can add a `formatter` function for this serie values.
+It will be used for value printing and tooltip. (Not for axis.)
+
+
+.. pygal-code::
+
+  chart = pygal.Bar(print_values=True, value_formatter=lambda x: '{}$'.format(x))
+  chart.add('bar', [.0002, .0005, .00035], formatter=lambda x: '<%s>' % x)
+  chart.add('bar', [.0004, .0009, .001])

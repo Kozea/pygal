@@ -39,7 +39,8 @@ class Treemap(Graph):
         rh -= ry
 
         metadata = serie.metadata.get(i)
-        value = self._format(val)
+
+        val = self._format(serie, i)
 
         rect = decorate(
             self.svg,
@@ -57,13 +58,13 @@ class Treemap(Graph):
             metadata)
 
         self._tooltip_data(
-            rect, value,
+            rect, val,
             rx + rw / 2,
             ry + rh / 2,
             'centered',
             self._get_x_label(i))
         self._static_value(
-            serie_node, value,
+            serie_node, val,
             rx + rw / 2,
             ry + rh / 2,
             metadata)

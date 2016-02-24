@@ -109,7 +109,7 @@ class Bar(Graph):
             if None in (x, y) or (self.logarithmic and y <= 0):
                 continue
             metadata = serie.metadata.get(i)
-            val = self._format(serie.values[i])
+            val = self._format(serie, i)
 
             bar = decorate(
                 self.svg,

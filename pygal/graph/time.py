@@ -101,9 +101,7 @@ class DateTimeLine(XY):
         """Return the value formatter for this graph"""
         def datetime_to_str(x):
             dt = datetime.utcfromtimestamp(x)
-            if self.x_value_formatter:
-                return self.x_value_formatter(dt)
-            return dt.isoformat()
+            return self.x_value_formatter(dt)
         return datetime_to_str
 
 
@@ -116,9 +114,7 @@ class DateLine(DateTimeLine):
         """Return the value formatter for this graph"""
         def date_to_str(x):
             d = date.fromtimestamp(x)
-            if self.x_value_formatter:
-                return self.x_value_formatter(d)
-            return d.isoformat()
+            return self.x_value_formatter(d)
         return date_to_str
 
 
@@ -133,9 +129,7 @@ class TimeLine(DateTimeLine):
         """Return the value formatter for this graph"""
         def date_to_str(x):
             t = seconds_to_time(x)
-            if self.x_value_formatter:
-                return self.x_value_formatter(t)
-            return t.isoformat()
+            return self.x_value_formatter(t)
         return date_to_str
 
 
@@ -150,8 +144,6 @@ class TimeDeltaLine(XY):
         """Return the value formatter for this graph"""
         def timedelta_to_str(x):
             td = timedelta(seconds=x)
-            if self.x_value_formatter:
-                return self.x_value_formatter(td)
-            return str(td)
+            return self.x_value_formatter(td)
 
         return timedelta_to_str

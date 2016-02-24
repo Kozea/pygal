@@ -35,10 +35,9 @@ class VerticalPyramid(StackedBar):
 
     _adapters = [positive]
 
-    def _format(self, value):
-        """Return the value formatter for this graph here its absolute value"""
-        value = value and abs(value)
-        return super(VerticalPyramid, self)._format(value)
+    def _value_format(self, value):
+        """Format value for dual value display."""
+        return super(VerticalPyramid, self)._value_format(value and abs(value))
 
     def _get_separated_values(self, secondary=False):
         """Separate values between odd and even series stacked"""

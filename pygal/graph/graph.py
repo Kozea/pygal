@@ -30,8 +30,8 @@ from pygal.interpolate import INTERPOLATIONS
 from pygal import stats
 from pygal.util import (
     cached_property, compute_scale, cut, decorate,
-    get_text_box, get_texts_box, humanize, majorize, rad, reverse_text_len,
-    split_title, truncate)
+    get_text_box, get_texts_box, majorize, rad, reverse_text_len,
+    split_title, truncate, filter_kwargs)
 from pygal.view import LogView, ReverseView, View, XYLogView
 
 
@@ -285,7 +285,7 @@ class Graph(PublicApi):
                             ' ') or []) + ['backwards'])
             self.svg.node(
                 guides, 'title',
-            ).text = self._format(position)
+            ).text = self._y_format(position)
 
         if self._y_2nd_labels:
             secondary_ax = self.svg.node(
@@ -521,10 +521,6 @@ class Graph(PublicApi):
                 y=y + self.style.value_font_size / 3
             ).text = value if self.print_zeroes or value != '0' else ''
 
-    def _get_value(self, values, i):
-        """Get the value formatted for tooltip"""
-        return self._format(values[i][1])
-
     def _points(self, x_pos):
         """
         Convert given data values into drawable points (x, y)
@@ -554,7 +550,7 @@ class Graph(PublicApi):
             left_range = abs(y_pos[-1] - y_pos[0])
             right_range = abs(ymax - ymin) or 1
             scale = right_range / ((steps - 1) or 1)
-            self._y_2nd_labels = [(self._format(ymin + i * scale), pos)
+            self._y_2nd_labels = [(self._y_format(ymin + i * scale), pos)
                                   for i, pos in enumerate(y_pos)]
 
             self._scale = left_range / right_range
@@ -578,15 +574,60 @@ class Graph(PublicApi):
 
     @property
     def _x_format(self):
-        """Return the value formatter for this graph"""
-        return self.x_value_formatter or (
-            humanize if self.human_readable else to_str)
+        """Return the abscissa value formatter (always unary)"""
+        return self.x_value_formatter
 
     @property
-    def _format(self):
-        """Return the value formatter for this graph"""
-        return self.value_formatter or (
-            humanize if self.human_readable else to_str)
+    def _default_formatter(self):
+        return to_str
+
+    @property
+    def _y_format(self):
+        """Return the ordinate value formatter (always unary)"""
+        return self.value_formatter
+
+    def _value_format(self, value):
+        """
+        Format value for value display.
+        (Varies in type between chart types)
+        """
+
+        return self._y_format(value)
+
+    def _format(self, serie, i):
+        """Format the nth value for the serie"""
+        value = serie.values[i]
+        metadata = serie.metadata.get(i)
+
+        kwargs = {
+            'chart': self,
+            'serie': serie,
+            'index': i
+        }
+        formatter = (
+            (metadata and metadata.get('formatter')) or
+            serie.formatter or
+            self.formatter or
+            self._value_format
+        )
+        kwargs = filter_kwargs(formatter, kwargs)
+        return formatter(value, **kwargs)
+
+    def _serie_format(self, serie, value):
+        """Format an independent value for the serie"""
+
+        kwargs = {
+            'chart': self,
+            'serie': serie,
+            'index': None
+        }
+        formatter = (
+            serie.formatter or
+            self.formatter or
+            self._value_format
+        )
+        kwargs = filter_kwargs(formatter, kwargs)
+        return formatter(value, **kwargs)
 
     def _compute(self):
         """Initial computations to draw the graph"""
@@ -815,18 +856,18 @@ class Graph(PublicApi):
             for i, y_label in enumerate(self.y_labels):
                 if isinstance(y_label, dict):
                     pos = self._adapt(y_label.get('value'))
-                    title = y_label.get('label', self._format(pos))
+                    title = y_label.get('label', self._y_format(pos))
                 elif is_str(y_label):
                     pos = self._adapt(y_pos[i % len(y_pos)])
                     title = y_label
                 else:
                     pos = self._adapt(y_label)
-                    title = self._format(pos)
+                    title = self._y_format(pos)
                 self._y_labels.append((title, pos))
             self._box.ymin = min(self._box.ymin, min(cut(self._y_labels, 1)))
             self._box.ymax = max(self._box.ymax, max(cut(self._y_labels, 1)))
         else:
-            self._y_labels = list(zip(map(self._format, y_pos), y_pos))
+            self._y_labels = list(zip(map(self._y_format, y_pos), y_pos))
 
     def _compute_y_labels_major(self):
         if self.y_labels_major_every:

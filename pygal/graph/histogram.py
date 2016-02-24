@@ -95,7 +95,7 @@ class Histogram(Dual, Bar):
                 self.svg,
                 self.svg.node(bars, class_='histbar'),
                 metadata)
-            val = self._format(serie.values[i][0])
+            val = self._format(serie, i)
 
             bounds = self._bar(
                 serie, bar, x0, x1, y, i, self.zero, secondary=rescale)
