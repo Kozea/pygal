@@ -354,6 +354,13 @@ def get_test_routes(app):
         graph.add('2', [73, -14, 10, None, -58, 32, 91])
         return graph.render_response()
 
+    @app.route('/test/range/<chart>')
+    def test_range_for(chart):
+        graph = CHARTS_BY_NAME[chart]()
+        graph.range = [0, 100]
+        graph.add('1', [1, 2, 10])
+        return graph.render_response()
+
     @app.route('/test/fill_with_none/')
     def test_fill_with_none():
         graph = XY(fill=True)

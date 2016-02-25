@@ -79,7 +79,7 @@ class Box(object):
     @xmin.setter
     def xmin(self, value):
         """X minimum setter"""
-        if value:
+        if value is not None:
             self._xmin = value
 
     @property
@@ -90,7 +90,7 @@ class Box(object):
     @ymin.setter
     def ymin(self, value):
         """Y minimum setter"""
-        if value:
+        if value is not None:
             self._ymin = value
 
     @property
@@ -101,7 +101,7 @@ class Box(object):
     @xmax.setter
     def xmax(self, value):
         """X maximum setter"""
-        if value:
+        if value is not None:
             self._xmax = value
 
     @property

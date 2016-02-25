@@ -125,3 +125,9 @@ class Histogram(Dual, Bar):
             self._box.xmin, self._box.xmax = xmin, xmax
         if yrng:
             self._box.ymin, self._box.ymax = ymin, ymax
+
+        if self.range and self.range[0] is not None:
+            self._box.ymin = self.range[0]
+
+        if self.range and self.range[1] is not None:
+            self._box.ymax = self.range[1]

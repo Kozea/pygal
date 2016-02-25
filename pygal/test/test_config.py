@@ -390,6 +390,23 @@ def test_x_y_title(Chart):
     assert len(q('.titles .title')) == 3
 
 
+def test_range(Chart):
+    """Test y label major option"""
+    if Chart in (
+            Pie, Treemap, Dot, SolidGauge
+    ) or issubclass(Chart, BaseMap):
+        return
+    chart = Chart()
+    chart.range = (0, 100)
+    chart.add('', [1, 2, 10])
+    q = chart.render_pyquery()
+    axis = map(str, range(0, 101, 10))
+    if Chart == Radar:
+        axis = map(str, range(100, -1, -20))
+    z = 'x' if getattr(chart, 'horizontal', False) or Chart == Gauge else 'y'
+    assert [t.text for t in q('.axis.%s .guides text' % z)] == list(axis)
+
+
 def test_x_label_major(Chart):
     """Test x label major option"""
     if Chart in (

@@ -50,10 +50,16 @@ class StackedBar(Bar):
 
     def _compute_box(self, positive_vals, negative_vals):
         """Compute Y min and max"""
-        self._box.ymin = negative_vals and min(
-            min(negative_vals), self.zero) or self.zero
-        self._box.ymax = positive_vals and max(
-            max(positive_vals), self.zero) or self.zero
+        if self.range and self.range[0] is not None:
+            self._box.ymin = self.range[0]
+        else:
+            self._box.ymin = negative_vals and min(
+                min(negative_vals), self.zero) or self.zero
+        if self.range and self.range[1] is not None:
+            self._box.ymax = self.range[1]
+        else:
+            self._box.ymax = positive_vals and max(
+                max(positive_vals), self.zero) or self.zero
 
     def _compute(self):
         """Compute y min and max and y scale and set labels"""

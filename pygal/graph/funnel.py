@@ -90,6 +90,12 @@ class Funnel(Graph):
         self._box.ymin = -val_max
         self._box.ymax = val_max
 
+        if self.range and self.range[0] is not None:
+            self._box.ymin = self.range[0]
+
+        if self.range and self.range[1] is not None:
+            self._box.ymax = self.range[1]
+
     def _compute_x_labels(self):
         self._x_labels = list(
             zip(self.x_labels and
