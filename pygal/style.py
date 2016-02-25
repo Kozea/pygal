@@ -32,6 +32,7 @@ class Style(object):
 
     plot_background = 'rgba(255, 255, 255, 1)'
     background = 'rgba(249, 249, 249, 1)'
+    value_background = 'rgba(229, 229, 229, 1)'
     foreground = 'rgba(0, 0, 0, .87)'
     foreground_strong = 'rgba(0, 0, 0, 1)'
     foreground_subtle = 'rgba(0, 0, 0, .54)'
@@ -81,17 +82,13 @@ class Style(object):
         '#FFEB3B',  # 12
         '#673AB7',  # 3
         '#00BCD4',  # 7
-        '#CDDC39',  # 11
-        '#795548',  # 16
+        '#CDDC39',  # 11b
         '#9E9E9E',  # 17
         '#607D8B',  # 18
     )
 
     value_colors = ()
     ci_colors = ()
-    gauge_background_color = "#e5e5e5"
-    square_border_color = 'rgba(249, 249, 249, 1)'
-    square_border_width = '2px'
 
     def __init__(self, **kwargs):
         """Create the style"""

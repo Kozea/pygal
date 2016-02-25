@@ -24,7 +24,7 @@ from __future__ import division
 import re
 from decimal import Decimal
 
-from math import ceil, floor, log10, pi
+from math import ceil, floor, log10, pi, cos, sin
 
 from pygal._compat import to_unicode, u
 
@@ -344,3 +344,23 @@ def filter_kwargs(fun, kwargs):
         return {}
     args = fun.__code__.co_varnames[1:]
     return dict((k, v) for k, v in kwargs.items() if k in args)
+
+
+def coord_project(rho, alpha):
+    return rho * sin(-alpha), rho * cos(-alpha)
+
+
+def coord_diff(x, y):
+    return (x[0] - y[0], x[1] - y[1])
+
+
+def coord_format(x):
+    return '%f %f' % x
+
+
+def coord_dual(r):
+    return coord_format((r, r))
+
+
+def coord_abs_project(center, rho, theta):
+    return coord_format(coord_diff(center, coord_project(rho, theta)))

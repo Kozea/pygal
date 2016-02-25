@@ -141,12 +141,12 @@
   visibility: visible;
 }
 
-{{ id }}.background-shade {
-  fill: {{ style.gauge_background_color }};
+{{ id }}.gauge-background {
+  fill: {{ style.value_background }};
   stroke: none;
 }
 
 {{ id }}.bg-lines {
-  stroke: {{ style.square_border_color }};
-  stroke-width: {{ style.square_border_width }};
+  stroke: {{ style.background }};
+  stroke-width: 2px;
 }

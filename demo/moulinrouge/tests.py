@@ -209,17 +209,20 @@ def get_test_routes(app):
                            print_values=True,
                            human_readable=True)
         gauge.title = 'Hello World!'
-        percent_formatter = lambda x: '{}%'.format(x)
-        dollar_formatter = lambda x: '{}$'.format(x)
+        percent_formatter = lambda x: '{:.10g}%'.format(x)
+        dollar_formatter = lambda x: '{:.10g}$'.format(x)
         gauge.value_formatter = percent_formatter
 
         gauge.add('Series 1', [{'value': 225000, 'maxvalue': 1275000}],
-                  value_formatter=dollar_formatter)
+                  formatter=dollar_formatter)
         gauge.add('Series 2', [{'value': 110, 'maxvalue': 100}])
         gauge.add('Series 3', [{'value': 3}])
-        gauge.add('Series 4', [{'value': 51, 'maxvalue': 100}])
+        gauge.add(
+            'Series 4', [
+                {'value': 51, 'maxvalue': 100},
+                {'value': 12, 'maxvalue': 100}])
         gauge.add('Series 5', [{'value': 79, 'maxvalue': 100}])
-        gauge.add('Series 6', [{'value': 99, 'maxvalue': 100}])
+        gauge.add('Series 6', 99)
         gauge.add('Series 7', [{'value': 100, 'maxvalue': 100}])
         return gauge.render_response()
 
