@@ -24,6 +24,7 @@ Submodules
    pygal.colors
    pygal.config
    pygal.etree
+   pygal.formatters
    pygal.interpolate
    pygal.serie
    pygal.state

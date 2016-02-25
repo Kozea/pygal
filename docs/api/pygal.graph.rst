@@ -31,6 +31,7 @@ Submodules
    pygal.graph.public
    pygal.graph.pyramid
    pygal.graph.radar
+   pygal.graph.solidgauge
    pygal.graph.stackedbar
    pygal.graph.stackedline
    pygal.graph.time

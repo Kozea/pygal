@@ -15,6 +15,7 @@ pygal provides various kinds of charts:
    box
    dot
    funnel
+   solidgauge
    gauge
    pyramid
    treemap

@@ -48,19 +48,19 @@ class SolidGauge(Graph):
                 (current_square[0]*sq_dimensions[1]) - (sq_dimensions[1] / 2.))
             end_angle = 2 * pi
 
-        maxvalue = serie.metadata.get(0, {}).get('maxvalue', 100)
+        max_value = serie.metadata.get(0, {}).get('max_value', 100)
         radius = min([sq_dimensions[0]/2, sq_dimensions[1]/2]) * .9
         small_radius = radius * serie.inner_radius
 
         self.svg.gauge_background(
             serie_node, start_angle, center, radius, small_radius, end_angle,
-            self.half_pie)
+            self.half_pie, self._serie_format(serie, max_value))
 
         sum_ = 0
         for i, value in enumerate(serie.values):
             if value is None:
                 continue
-            ratio = min(value, maxvalue) / maxvalue
+            ratio = min(value, max_value) / max_value
             if self.half_pie:
                 angle = 2 * pi * ratio / 2
             else:
@@ -79,7 +79,7 @@ class SolidGauge(Graph):
                     serie_node, gauge_, radius, small_radius,
                     angle, start_angle, center, val, i, metadata,
                     self.half_pie, end_angle,
-                    self._serie_format(serie, maxvalue)),
+                    self._serie_format(serie, max_value)),
                 metadata)
             start_angle += angle
             sum_ += value
@@ -87,7 +87,7 @@ class SolidGauge(Graph):
         x, y = center
         self.svg.node(
             serie_node['text_overlay'], 'text',
-            class_='value solidgauge-sum',
+            class_='value gauge-sum',
             x=x,
             y=y + self.style.value_font_size / 3,
             attrib={'text-anchor': 'middle'}

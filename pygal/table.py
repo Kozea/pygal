@@ -94,7 +94,7 @@ class Table(object):
                 row.append(self.chart._format(serie, j))
             if total:
                 acc[-1] += sum_
-                row.append(self.chart._value_format(serie, sum_))
+                row.append(self.chart._serie_format(serie, sum_))
             table.append(row)
 
         width = ln + 1
@@ -102,7 +102,7 @@ class Table(object):
             width += 1
             table.append(['Total'])
             for val in acc:
-                table[-1].append(self.chart._value_format(serie, val))
+                table[-1].append(self.chart._serie_format(serie, val))
 
         # Align values
         len_ = max([len(r) for r in table] or [0])

@@ -107,7 +107,7 @@ def test_metadata(Chart):
     for md in ('http://7.example.com/', 'http://4.example.com/'):
         assert md in [e.attrib.get('xlink:href') for e in q('a')]
 
-    if Chart in (pygal.Pie, pygal.Treemap):
+    if Chart in (pygal.Pie, pygal.Treemap, pygal.SolidGauge):
         # Slices with value 0 are not rendered
         assert len(v) - 1 == len(q('.tooltip-trigger').siblings('.value'))
     elif not issubclass(Chart, BaseMap):

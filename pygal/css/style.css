@@ -90,6 +90,7 @@
   fill: {{ style.foreground_strong }};
 }
 
+
 {{ id }}.reactive {
   fill-opacity: {{ style.opacity }};
 }
@@ -145,6 +146,15 @@
 
 {{ id }}.tooltip .value {
   font-size: 1.5em;
+}
+
+{{ id }}.bound {
+  font-size: .5em;
+}
+
+{{ id }}.max-value {
+  font-size: .75em;
+  fill: {{ style.foreground_subtle }};
 }
 
 {{ id }}.map-element {

@@ -24,7 +24,9 @@ from pygal import (
     Histogram, Gauge, Box, XY,
     Pyramid, HorizontalBar, HorizontalStackedBar,
     HorizontalStackedLine, HorizontalLine,
-    DateTimeLine, TimeLine, DateLine, TimeDeltaLine)
+    DateTimeLine, TimeLine, DateLine, TimeDeltaLine,
+    SolidGauge
+)
 from pygal.graph.map import BaseMap
 from pygal.graph.horizontal import HorizontalGraph
 from pygal.graph.dual import Dual
@@ -299,7 +301,7 @@ def test_include_x_axis(Chart):
     """Test x axis inclusion option"""
     chart = Chart()
     if Chart in (
-            Pie, Treemap, Radar, Funnel, Dot, Gauge, Histogram, Box
+            Pie, Treemap, Radar, Funnel, Dot, Gauge, Histogram, Box, SolidGauge
     ) or issubclass(Chart, BaseMap):
         return
     if not chart._dual:
@@ -391,7 +393,7 @@ def test_x_y_title(Chart):
 def test_x_label_major(Chart):
     """Test x label major option"""
     if Chart in (
-            Pie, Treemap, Funnel, Dot, Gauge, Histogram, Box,
+            Pie, Treemap, Funnel, Dot, Gauge, Histogram, Box, SolidGauge,
             Pyramid, DateTimeLine, TimeLine, DateLine,
             TimeDeltaLine
     ) or issubclass(Chart, (BaseMap, Dual, HorizontalGraph)):
@@ -436,7 +438,7 @@ def test_x_label_major(Chart):
 def test_y_label_major(Chart):
     """Test y label major option"""
     if Chart in (
-            Pie, Treemap, Funnel, Dot, Gauge, Histogram, Box,
+            Pie, Treemap, Funnel, Dot, Gauge, Histogram, Box, SolidGauge,
             HorizontalBar, HorizontalStackedBar,
             HorizontalStackedLine, HorizontalLine,
             Pyramid, DateTimeLine, TimeLine, DateLine,
@@ -522,4 +524,4 @@ def test_formatters(Chart):
     q = chart.render_pyquery()
     assert set([v.text for v in q(".value")]) == set((
         u('4€'), u('5€'), u('6€'), '1_a$', '2_a$', u('3¥')) + (
-            ('6_a$', u('15€')) if Chart == Pie else ()))
+            ('6_a$', u('15€')) if Chart in (Pie, SolidGauge) else ()))

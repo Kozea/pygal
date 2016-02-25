@@ -32,6 +32,8 @@ from pygal.util import (
     coord_project, coord_diff, coord_format, coord_dual, coord_abs_project)
 from pygal import __version__
 
+nearly_2pi = 2 * pi - .00001
+
 
 class Svg(object):
 
@@ -258,17 +260,13 @@ class Svg(object):
             angle, start_angle, center, val, i, metadata):
         """Draw a pie slice"""
         if angle == 2 * pi:
-            rv = self.node(
-                node, 'circle',
-                cx=center[0],
-                cy=center[1],
-                r=radius,
-                class_='slice reactive tooltip-trigger')
-        elif angle > 0:
-            to = [coord_abs_project(center,radius, start_angle),
-                  coord_abs_project(center,radius, start_angle + angle),
-                  coord_abs_project(center,small_radius, start_angle + angle),
-                  coord_abs_project(center,small_radius, start_angle)]
+            angle = nearly_2pi
+
+        if angle > 0:
+            to = [coord_abs_project(center, radius, start_angle),
+                  coord_abs_project(center, radius, start_angle + angle),
+                  coord_abs_project(center, small_radius, start_angle + angle),
+                  coord_abs_project(center, small_radius, start_angle)]
             rv = self.node(
                 node, 'path',
                 d='M%s A%s 0 %d 1 %s L%s A%s 0 %d 0 %s z' % (
@@ -291,7 +289,11 @@ class Svg(object):
 
     def gauge_background(
             self, serie_node, start_angle, center, radius, small_radius,
-            end_angle, half_pie):
+            end_angle, half_pie, max_value):
+
+        if end_angle == 2 * pi:
+            end_angle = nearly_2pi
+
         to_shade = [
             coord_abs_project(center, radius, start_angle),
             coord_abs_project(center, radius, end_angle),
@@ -309,82 +311,67 @@ class Svg(object):
                 to_shade[3]),
             class_='gauge-background reactive')
 
+        if half_pie:
+            begin_end = [
+                coord_diff(
+                    center,
+                    coord_project(
+                        radius-(radius-small_radius)/2, start_angle)),
+                coord_diff(
+                    center,
+                    coord_project(
+                        radius-(radius-small_radius)/2, end_angle))]
+            pos = 0
+            for i in begin_end:
+                self.node(
+                    serie_node['plot'], 'text',
+                    class_='y-{} bound reactive'.format(pos),
+                    x=i[0],
+                    y=i[1]+10,
+                    attrib={'text-anchor': 'middle'}
+                ).text = '{}'.format(0 if pos == 0 else max_value)
+                pos += 1
+        else:
+            middle_radius = .5 * (radius + small_radius)
+            # Correct text vertical alignment
+            middle_radius -= .1 * (radius - small_radius)
+            to_labels = [
+                coord_abs_project(
+                    center, middle_radius, 0),
+                coord_abs_project(
+                    center, middle_radius, nearly_2pi)
+            ]
+            self.node(
+                self.defs, 'path', id='valuePath-%s%s' % center,
+                d='M%s A%s 0 1 1 %s' % (
+                    to_labels[0],
+                    coord_dual(middle_radius),
+                    to_labels[1]
+                ))
+            text_ = self.node(
+                serie_node['text_overlay'], 'text')
+            self.node(
+                text_, 'textPath', class_='max-value reactive',
+                attrib={
+                    'href': '#valuePath-%s%s' % center,
+                    'startOffset': '99%',
+                    'text-anchor': 'end'
+                }
+            ).text = max_value
+
     def solid_gauge(
             self, serie_node, node, radius, small_radius,
             angle, start_angle, center, val, i, metadata, half_pie, end_angle,
-            maxvalue):
+            max_value):
         """Draw a solid gauge slice and background slice"""
         if angle == 2 * pi:
-            to = [coord_abs_project(center, radius, start_angle),
-                  coord_abs_project(
-                      center, radius, start_angle + angle - 0.0001),
-                  coord_abs_project(
-                      center, small_radius, start_angle + angle - 0.0001),
-                  coord_abs_project(center, small_radius, start_angle)]
-            self.node(
-                node, 'path',
-                d='M%s A%s 0 %d 1 %s L%s A%s 0 %d 0 %s z' % (
-                    to[0],
-                    coord_dual(radius),
-                    int(angle > pi),
-                    to[1],
-                    to[2],
-                    coord_dual(small_radius),
-                    int(angle > pi),
-                    to[3]),
-                class_='slice reactive tooltip-trigger')
-        elif angle > 0:
+            angle = nearly_2pi
+
+        if angle > 0:
             to = [coord_abs_project(center, radius, start_angle),
                   coord_abs_project(center, radius, start_angle + angle),
                   coord_abs_project(center, small_radius, start_angle + angle),
                   coord_abs_project(center, small_radius, start_angle)]
-
-            if half_pie:
-                begin_end = [
-                    coord_diff(
-                        center,
-                        coord_project(
-                            radius-(radius-small_radius)/2, start_angle)),
-                    coord_diff(
-                        center,
-                        coord_project(
-                            radius-(radius-small_radius)/2, end_angle))]
-                pos = 0
-                for i in begin_end:
-                    self.node(
-                        node, 'text',
-                        class_='y-{} reactive'.format(pos),
-                        x=i[0],
-                        y=i[1]+10,
-                        attrib={'text-anchor': 'middle',
-                                'font-size': 10}
-                    ).text = '{}'.format(0 if pos == 0 else maxvalue)
-                    pos += 1
-            else:
-                to_labels = [
-                    coord_abs_project(
-                        center, radius-(radius-small_radius)/2, 0),
-                    coord_abs_project(
-                        center, radius-(radius-small_radius)/2, 2*359.5/360*pi)
-                ]
-                self.node(
-                    self.defs, 'path', id='valuePath-%s%s' % center,
-                    d='M%s A%s 0 1 1 %s' % (
-                        to_labels[0],
-                        coord_dual(radius-(radius-small_radius)/2),
-                        to_labels[1]
-                    ), stroke='#000000', width='3px')
-                text_ = self.node(node, 'text', x=10, y=100, stroke='black')
-                self.node(
-                    text_, 'textPath', class_='maxvalue reactive',
-                    attrib={
-                        'href': '#valuePath-%s%s' % center,
-                        'startOffset': '%s' % (
-                            97-1.2*len(str(maxvalue))) + '%',
-                        'text-anchor': 'start',
-                        'font-size': (radius-small_radius)/2,
-                        'fill': '#999999'}
-                ).text = maxvalue
 
             self.node(
                 node, 'path',
@@ -410,9 +397,9 @@ class Svg(object):
 
     def confidence_interval(self, node, x, low, high, width=7):
         if self.graph.horizontal:
-            coord_format = lambda xy: '%f %f' % (xy[1], xy[0])
+            fmt = lambda xy: '%f %f' % (xy[1], xy[0])
         else:
-            coord_format = lambda xy: '%f %f' % xy
+            fmt = coord_format
 
         shr = lambda xy: (xy[0] + width, xy[1])
         shl = lambda xy: (xy[0] - width, xy[1])
@@ -424,7 +411,7 @@ class Svg(object):
 
         self.node(
             ci, 'path', d="M%s L%s M%s L%s M%s L%s L%s M%s L%s" % tuple(
-                map(coord_format, (
+                map(fmt, (
                     top, shr(top), top, shl(top), top,
                     bottom, shr(bottom), bottom, shl(bottom)
                 ))
