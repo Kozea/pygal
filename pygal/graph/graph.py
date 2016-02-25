@@ -893,7 +893,6 @@ class Graph(PublicApi):
         else:
             self._y_labels_major = []
 
-
     def add_squares(self, squares):
         x_lines = squares[0]-1
         y_lines = squares[1]-1
@@ -901,20 +900,23 @@ class Graph(PublicApi):
         _current_x = 0
         _current_y = 0
 
-        _squares_coord = []
-
         for line in range(x_lines):
             _current_x += (self.width - self.margin_box.x) / squares[0]
-            self.svg.node(self.nodes['plot'], 'path',
-                      class_='bg-lines',
-                      d='M%s %s L%s %s' % (_current_x, 0, _current_x, self.height-self.margin_box.y))
+            self.svg.node(
+                self.nodes['plot'], 'path',
+                class_='bg-lines',
+                d='M%s %s L%s %s' % (
+                    _current_x, 0, _current_x, self.height-self.margin_box.y))
 
         for line in range(y_lines):
             _current_y += (self.height - self.margin_box.y) / squares[1]
-            self.svg.node(self.nodes['plot'], 'path',
-                      class_='bg-lines',
-                      d='M%s %s L%s %s' % (0, _current_y, self.width-self.margin_box.x, _current_y))
-        return ((self.width - self.margin_box.x) / squares[0], (self.height - self.margin_box.y) / squares[1])
+            self.svg.node(
+                self.nodes['plot'], 'path',
+                class_='bg-lines',
+                d='M%s %s L%s %s' % (
+                    0, _current_y, self.width-self.margin_box.x, _current_y))
+        return ((self.width - self.margin_box.x) / squares[0],
+                (self.height - self.margin_box.y) / squares[1])
 
     def _draw(self):
         """Draw all the things"""
