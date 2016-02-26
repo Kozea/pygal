@@ -463,6 +463,7 @@ def get_test_routes(app):
         chart.add(10 * '1b', [(4, 12), (5, 8), (6, 4)], secondary=True)
         chart.add(10 * '2b', [(3, 24), (0, 17), (12, 9)], secondary=True)
         chart.add(10 * '2', [(8, 23), (21, 1), (5, 0)])
+        chart.value_formatter = lambda x: str(int(x)) + '+'
         return chart.render_response()
 
     @app.route('/test/box')
@@ -930,7 +931,7 @@ def get_test_routes(app):
             (datetime(2013, 1, 12, 8), 412),
             (datetime(2013, 1, 12, 8, tzinfo=tzn4), 823)
         ])
-        line.x_value_formatter = lambda x: x.isoformat()  # strftime("%Y-%m-%d")
+        # line.x_value_formatter = lambda x: x.isoformat()  # strftime("%Y-%m-%d")
         line.x_label_rotation = 45
         return line.render_response()
 

@@ -16,11 +16,12 @@
 #
 # You should have received a copy of the GNU Lesser General Public License
 # along with pygal. If not, see <http://www.gnu.org/licenses/>.
+from __future__ import division
 """Various hacks for transparent python 2 / python 3 support"""
 
 import sys
 from collections import Iterable
-import time
+from datetime import datetime, timedelta, tzinfo
 
 
 if sys.version_info[0] == 3:
@@ -70,16 +71,32 @@ def total_seconds(td):
         ) / 10 ** 6
     return td.total_seconds()
 
+try:
+    from datetime import timezone
+    utc = timezone.utc
+except ImportError:
+    class UTC(tzinfo):
+        def tzname(self, dt):
+            return 'UTC'
+
+        def utcoffset(self, dt):
+            return timedelta(0)
+
+        def dst(self, dt):
+            return None
+    utc = UTC()
+
 
 def timestamp(x):
     """Get a timestamp from a date in python 3 and python 2"""
+    if x.tzinfo is None:
+        # Naive dates to utc
+        x = x.replace(tzinfo=utc)
+
     if hasattr(x, 'timestamp'):
-        from datetime import timezone
-        if x.tzinfo is None:
-            return x.replace(tzinfo=timezone.utc).timestamp()
         return x.timestamp()
     else:
-        return time.mktime(x.utctimetuple())
+        return total_seconds(x - datetime(1970, 1, 1, tzinfo=utc))
 
 try:
     from urllib import quote_plus

@@ -20,6 +20,7 @@
 """Date related charts tests"""
 
 from pygal import DateLine, TimeLine, DateTimeLine, TimeDeltaLine
+from pygal._compat import timestamp, utc
 from pygal.test.utils import texts
 from datetime import datetime, date, time, timedelta
 
@@ -158,3 +159,17 @@ def test_date_labels():
                 '2013-01-01',
                 '2013-02-01',
                 '2013-03-01']
+
+
+def test_utc_timestamping():
+    assert timestamp(
+        datetime(2017, 7, 14, 2, 40).replace(tzinfo=utc)
+    ) == 1500000000
+
+    for d in (
+        datetime.now(),
+        datetime.utcnow(),
+        datetime(1999, 12, 31, 23, 59, 59),
+        datetime(2000, 1, 1, 0, 0, 0)
+    ):
+        assert datetime.utcfromtimestamp(timestamp(d)) == d
