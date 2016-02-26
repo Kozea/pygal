@@ -946,8 +946,9 @@ def get_test_routes(app):
             (tz.localize(datetime(2013, 1, 12, 14)), 30),
             (tz.localize(datetime(2013, 1, 12, 16)), 200)
         ])
+        from datetime import timezone
         line.x_value_formatter = lambda x: (
-            x.replace(tzinfo=pytz.utc).astimezone(tz)).isoformat()
+            x.replace(tzinfo=timezone.utc).astimezone(tz)).isoformat()
         # line.x_value_formatter = lambda x: tz.normalize(
         #     x.replace(tzinfo=pytz.utc)).isoformat()
         line.x_label_rotation = 45

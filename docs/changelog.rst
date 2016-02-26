@@ -12,6 +12,7 @@ Changelog
 * The `human_readable` option has been removed. Now you have to use the pygal.formatters.human_readable formatter (value_formatter=human_readable instead of human_readable=True)
 * New chart type: SolidGauge (thanks @chartique #295)
 * Fix range option for some Charts (#297 #298)
+* Fix timezones for DateTimeLine for python 2 (#306, #302)
 
 2.1.1
 =====

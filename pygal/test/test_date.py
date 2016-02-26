@@ -172,4 +172,5 @@ def test_utc_timestamping():
         datetime(1999, 12, 31, 23, 59, 59),
         datetime(2000, 1, 1, 0, 0, 0)
     ):
-        assert datetime.utcfromtimestamp(timestamp(d)) == d
+        assert datetime.utcfromtimestamp(
+            timestamp(d)) - d < timedelta(microseconds=10)
