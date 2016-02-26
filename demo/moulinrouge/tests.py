@@ -931,7 +931,25 @@ def get_test_routes(app):
             (datetime(2013, 1, 12, 8), 412),
             (datetime(2013, 1, 12, 8, tzinfo=tzn4), 823)
         ])
-        # line.x_value_formatter = lambda x: x.isoformat()  # strftime("%Y-%m-%d")
+        line.x_label_rotation = 45
+        return line.render_response()
+
+    @app.route('/test/datetimeline_with_pytz')
+    def test_datetimeline_with_pytz():
+        import pytz
+        tz = pytz.timezone('US/Eastern')
+
+        line = DateTimeLine()
+        line.add('dt', [
+            (tz.localize(datetime(2013, 1, 12, 8)), 300),
+            (tz.localize(datetime(2013, 1, 12, 10)), 600),
+            (tz.localize(datetime(2013, 1, 12, 14)), 30),
+            (tz.localize(datetime(2013, 1, 12, 16)), 200)
+        ])
+        line.x_value_formatter = lambda x: (
+            x.replace(tzinfo=pytz.utc).astimezone(tz)).isoformat()
+        # line.x_value_formatter = lambda x: tz.normalize(
+        #     x.replace(tzinfo=pytz.utc)).isoformat()
         line.x_label_rotation = 45
         return line.render_response()
 
