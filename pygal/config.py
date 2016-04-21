@@ -168,9 +168,10 @@ class BaseConfig(MetaConfig('ConfigBase', (object,), {})):
 
     def _update(self, kwargs):
         """Update the config with the given dictionary"""
+        dir_self_set = set(dir(self))
         self.__dict__.update(
             dict([(k, v) for (k, v) in kwargs.items()
-                  if not k.startswith('_') and k in dir(self)]))
+                  if not k.startswith('_') and k in dir_self_set]))
 
     def to_dict(self):
         """Export a JSON serializable dictionary of the config"""
