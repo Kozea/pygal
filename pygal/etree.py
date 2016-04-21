@@ -17,7 +17,7 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with pygal. If not, see <http://www.gnu.org/licenses/>.
 """
-Wrapper for seemless lxml.etree / xml.etree usage
+Wrapper for seamless lxml.etree / xml.etree usage
 depending on whether lxml is installed or not.
 """
 
