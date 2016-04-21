@@ -2,7 +2,7 @@
 Changelog
 =========
 
-2.2.0 UNRELEASED
+2.2.0
 =====
 
 * Support interruptions in line charts (thanks @piotrmaslanka #300)
@@ -13,6 +13,7 @@ Changelog
 * New chart type: SolidGauge (thanks @chartique #295)
 * Fix range option for some Charts (#297 #298)
 * Fix timezones for DateTimeLine for python 2 (#306, #302)
+* Set default uri protocol to https (should fix a lot of "no tooltips" bugs).
 
 2.1.1
 =====

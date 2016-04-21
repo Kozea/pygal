@@ -503,10 +503,10 @@ class Config(CommonConfig):
         "useful for writing output directly in html")
 
     force_uri_protocol = Key(
-        None, str, "Misc",
+        'https', str, "Misc",
         "Default uri protocol",
-        "In case of rendering the svg as a data uri, it is mandatory to "
-        "specify a protocol. It can be set to http or https")
+        "Default protocol for external files. "
+        "Can be set to None to use a // uri")
 
     explicit_size = Key(
         False, bool, "Misc", "Write width and height attributes")
