@@ -557,7 +557,7 @@ def test_classes(Chart):
     chart = Chart(classes=())
     assert not chart.render_pyquery().attr('class')
 
-    chart = Chart(classes=(...,))
+    chart = Chart(classes=(_ellipsis,))
     assert chart.render_pyquery().attr('class') == 'pygal-chart'
 
     chart = Chart(classes=('graph',))
@@ -566,8 +566,8 @@ def test_classes(Chart):
     chart = Chart(classes=('pygal-chart', 'graph'))
     assert chart.render_pyquery().attr('class') == 'pygal-chart graph'
 
-    chart = Chart(classes=(..., 'graph'))
+    chart = Chart(classes=(_ellipsis, 'graph'))
     assert chart.render_pyquery().attr('class') == 'pygal-chart graph'
 
-    chart = Chart(classes=('graph', ...))
+    chart = Chart(classes=('graph', _ellipsis))
     assert chart.render_pyquery().attr('class') == 'graph pygal-chart'
