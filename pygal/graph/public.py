@@ -21,7 +21,7 @@
 import base64
 import io
 
-from pygal._compat import is_list_like, u
+from pygal._compat import is_list_like, u, _ellipsis
 from pygal.graph.base import BaseGraph
 
 
@@ -156,7 +156,8 @@ class PublicApi(BaseGraph):
             min_scale=1,
             max_scale=2,
             explicit_size=True,
-            no_data_text=''
+            no_data_text='',
+            classes=(_ellipsis, 'pygal-sparkline')
         )
         spark_options.update(kwargs)
         return self.render(**spark_options)
