@@ -27,9 +27,16 @@ from datetime import datetime, timedelta, tzinfo
 if sys.version_info[0] == 3:
     base = (str, bytes)
     coerce = str
+    _ellipsis = eval('...')
 else:
     base = basestring
     coerce = unicode
+
+    class EllipsisGetter(object):
+        def __getitem__(self, key):
+            return key
+
+    _ellipsis = EllipsisGetter()[...]
 
 
 def is_list_like(value):

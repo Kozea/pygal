@@ -26,7 +26,7 @@ from decimal import Decimal
 
 from math import ceil, floor, log10, pi, cos, sin
 
-from pygal._compat import to_unicode, u
+from pygal._compat import to_unicode, u, _ellipsis
 
 
 def float_format(number):
@@ -364,3 +364,10 @@ def coord_dual(r):
 
 def coord_abs_project(center, rho, theta):
     return coord_format(coord_diff(center, coord_project(rho, theta)))
+
+
+def mergextend(list1, list2):
+    if _ellipsis not in list1:
+        return list1
+    index = list1.index(_ellipsis)
+    return list(list1[:index]) + list(list2) + list(list1[index + 1:])

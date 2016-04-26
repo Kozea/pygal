@@ -542,3 +542,27 @@ def test_formatters(Chart):
     assert set([v.text for v in q(".value")]) == set((
         u('4€'), u('5€'), u('6€'), '1_a$', '2_a$', u('3¥')) + (
             ('6_a$', u('15€')) if Chart in (Pie, SolidGauge) else ()))
+
+
+def test_classes(Chart):
+    """Test classes option"""
+    chart = Chart()
+    assert chart.render_pyquery().attr('class') == 'pygal-chart'
+
+    chart = Chart(classes=())
+    assert not chart.render_pyquery().attr('class')
+
+    chart = Chart(classes=(...,))
+    assert chart.render_pyquery().attr('class') == 'pygal-chart'
+
+    chart = Chart(classes=('graph',))
+    assert chart.render_pyquery().attr('class') == 'graph'
+
+    chart = Chart(classes=('pygal-chart', 'graph'))
+    assert chart.render_pyquery().attr('class') == 'pygal-chart graph'
+
+    chart = Chart(classes=(..., 'graph'))
+    assert chart.render_pyquery().attr('class') == 'pygal-chart graph'
+
+    chart = Chart(classes=('graph', ...))
+    assert chart.render_pyquery().attr('class') == 'graph pygal-chart'

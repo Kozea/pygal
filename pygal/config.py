@@ -22,6 +22,7 @@ from copy import deepcopy
 
 from pygal.interpolate import INTERPOLATIONS
 from pygal.style import DefaultStyle, Style
+from pygal.util import mergextend
 from pygal import formatters
 
 
@@ -170,8 +171,11 @@ class BaseConfig(MetaConfig('ConfigBase', (object,), {})):
         """Update the config with the given dictionary"""
         dir_self_set = set(dir(self))
         self.__dict__.update(
-            dict([(k, v) for (k, v) in kwargs.items()
-                  if not k.startswith('_') and k in dir_self_set]))
+            dict([
+                (k, mergextend(v, self.__dict__.get(k, ())))
+                if getattr(Config, k, Key(*[''] * 4)).type == list
+                else (k, v) for (k, v) in kwargs.items()
+                if not k.startswith('_') and k in dir_self_set]))
 
     def to_dict(self):
         """Export a JSON serializable dictionary of the config"""
@@ -242,6 +246,11 @@ class Config(CommonConfig):
         ('file://style.css', 'file://graph.css'), list, "Style",
         "List of css file",
         "It can be any uri from file:///tmp/style.css to //domain/style.css",
+        str)
+
+    classes = Key(
+        ('pygal-chart',),
+        list, "Style", "Classes of the root svg node",
         str)
 
     defs = Key(

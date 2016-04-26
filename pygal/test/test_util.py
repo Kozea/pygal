@@ -19,11 +19,12 @@
 
 """Utility functions tests"""
 
-from pygal._compat import u
+from pygal._compat import u, _ellipsis
 from pygal.util import (
     round_to_int, round_to_float, _swap_curly, template,
-    truncate, minify_css, majorize)
+    truncate, minify_css, majorize, mergextend)
 from pytest import raises
+import sys
 
 
 def test_round_to_int():
@@ -153,3 +154,21 @@ def test_majorize():
     assert majorize(range(21, 83, 3)) == [30, 45, 60, 75]
     # TODO: handle crazy cases
     # assert majorize(range(20, 83, 3)) == [20, 35, 50, 65, 80]
+
+
+def test_mergextend():
+    """Test mergextend function"""
+    assert mergextend(['a', 'b'], ['c', 'd']) == ['a', 'b']
+    assert mergextend([], ['c', 'd']) == []
+    assert mergextend(['a', 'b'], []) == ['a', 'b']
+
+    assert mergextend([_ellipsis], ['c', 'd']) == ['c', 'd']
+    assert mergextend([_ellipsis, 'b'], ['c', 'd']) == ['c', 'd', 'b']
+    assert mergextend(['a', _ellipsis], ['c', 'd']) == ['a', 'c', 'd']
+    assert mergextend(['a', _ellipsis, 'b'], ['c', 'd']) == [
+        'a', 'c', 'd', 'b']
+
+    if sys.version_info[0] >= 3:
+        # For @#! sake it's 2016 now
+        assert eval("mergextend(['a', ..., 'b'], ['c', 'd'])") == [
+            'a', 'c', 'd', 'b']
