@@ -5,7 +5,7 @@ Changelog
 2.2.2
 =====
 
-* Add classes option.
+* Add `classes` option.
 * Handle ellipsis in list type configs to auto-extend parent. (Viva python3)
 
 

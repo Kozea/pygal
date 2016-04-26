@@ -2,7 +2,7 @@
 # This file is part of pygal_sphinx_directives
 #
 # Pygal sphinx integration
-# Copyright © 2015 Florian Mounier
+# Copyright © 2012-2016 Florian Mounier
 #
 # This library is free software: you can redistribute it and/or modify it under
 # the terms of the GNU Lesser General Public License as published by the Free

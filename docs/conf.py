@@ -55,7 +55,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = 'pygal'
-copyright = '2015, Florian Mounier'
+copyright = '2012-2016, Florian Mounier'
 author = 'Florian Mounier'
 
 # The version info for the project you're documenting, acts as replacement for
