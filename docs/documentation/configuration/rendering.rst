@@ -114,6 +114,27 @@ see `styles <../styles.html>`_
 You can add or replace css/js files in pygal using the `css` and `js` array options.
 These lists contain absolute filenames and/or external URI. (Relative filenames are relative to pygal internal files)
 
+All config lists now support the use of ellipsis as an extender. For instance:
+
+.. code-block:: python
+
+  config = Config()
+  config.css.append('style.css')
+  chart = pygal.Line(config)
+
+can now be replaced with:
+
+.. code-block:: python
+
+  chart = pygal.Line(css=(..., 'style.css'))
+
+or if you are still using python from the last decade:
+
+.. code-block:: python
+
+  from pygal._compat import _ellipsis
+  chart = pygal.Line(css=(_ellipsis, 'style.css'))
+
 
 css
 ---
@@ -130,6 +151,16 @@ Css can also specified inline by prepending `inline:` to the css:
 .. code-block:: python
 
    css = ['inline:.rect { fill: blue; }']
+
+
+classes
+-------
+
+You can alter pygal svg node classes with the classes option:
+
+.. code-block:: python
+
+  chart = pygal.Line(classes=(..., 'flex'))
 
 
 defs

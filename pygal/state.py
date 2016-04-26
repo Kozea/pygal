@@ -19,6 +19,8 @@
 
 """Class holding state during render"""
 
+from pygal.util import merge
+
 
 class State(object):
 
@@ -30,7 +32,7 @@ class State(object):
 
     def __init__(self, graph, **kwargs):
         """Create the transient state"""
-        self.__dict__.update(**graph.config.__class__.__dict__)
-        self.__dict__.update(**graph.config.__dict__)
-        self.__dict__.update(**graph.__dict__)
-        self.__dict__.update(**kwargs)
+        merge(self.__dict__, graph.config.__class__.__dict__)
+        merge(self.__dict__, graph.config.__dict__)
+        merge(self.__dict__, graph.__dict__)
+        merge(self.__dict__, kwargs)

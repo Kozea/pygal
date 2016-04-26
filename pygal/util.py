@@ -367,7 +367,20 @@ def coord_abs_project(center, rho, theta):
 
 
 def mergextend(list1, list2):
-    if _ellipsis not in list1:
+    if list1 is None or _ellipsis not in list1:
         return list1
     index = list1.index(_ellipsis)
     return list(list1[:index]) + list(list2) + list(list1[index + 1:])
+
+
+def merge(dict1, dict2):
+    from pygal.config import CONFIG_ITEMS, Key
+    _list_items = [item.name for item in CONFIG_ITEMS if item.type == list]
+    for key, val in dict2.items():
+        if isinstance(val, Key):
+            val = val.value
+
+        if key in _list_items:
+            dict1[key] = mergextend(val, dict1.get(key, ()))
+        else:
+            dict1[key] = val

@@ -22,7 +22,6 @@ from copy import deepcopy
 
 from pygal.interpolate import INTERPOLATIONS
 from pygal.style import DefaultStyle, Style
-from pygal.util import mergextend
 from pygal import formatters
 
 
@@ -169,12 +168,11 @@ class BaseConfig(MetaConfig('ConfigBase', (object,), {})):
 
     def _update(self, kwargs):
         """Update the config with the given dictionary"""
+        from pygal.util import merge
         dir_self_set = set(dir(self))
-        self.__dict__.update(
-            dict([
-                (k, mergextend(v, self.__dict__.get(k, ())))
-                if getattr(Config, k, Key(*[''] * 4)).type == list
-                else (k, v) for (k, v) in kwargs.items()
+        merge(
+            self.__dict__, dict([
+                (k, v) for (k, v) in kwargs.items()
                 if not k.startswith('_') and k in dir_self_set]))
 
     def to_dict(self):

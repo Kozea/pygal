@@ -31,7 +31,7 @@ from pygal.graph.map import BaseMap
 from pygal.graph.horizontal import HorizontalGraph
 from pygal.graph.dual import Dual
 from pygal import formatters
-from pygal._compat import u
+from pygal._compat import u, _ellipsis
 from pygal.test.utils import texts
 from tempfile import NamedTemporaryFile
 
@@ -333,6 +333,11 @@ def test_css(Chart):
         config.css.append('file://' + f.name)
 
         chart = Chart(config)
+        chart.add('/', [10, 1, 5])
+        svg = chart.render().decode('utf-8')
+        assert '#bedead' in svg
+
+        chart = Chart(css=(_ellipsis, 'file://' + f.name))
         chart.add('/', [10, 1, 5])
         svg = chart.render().decode('utf-8')
         assert '#bedead' in svg

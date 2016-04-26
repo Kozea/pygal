@@ -64,6 +64,7 @@ class PygalDirective(Directive):
         try:
             exec(code, scope)
         except Exception:
+            print(code)
             print_exc()
             return [docutils.nodes.system_message(
                 'An exception as occured during code parsing:'
