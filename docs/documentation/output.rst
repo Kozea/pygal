@@ -108,7 +108,7 @@ If pyquery is installed you can get the pyquery object wrapping the chart by cal
    chart.render_pyquery()  # Return pyquery object
 
 
-Flask response
+Flask App
 --------------
 
 If you are using pygal in a flask app the ``render_response`` may come in handy:
@@ -120,6 +120,31 @@ If you are using pygal in a flask app the ``render_response`` may come in handy:
      chart = pygal.Line()
      ...
      return chart.render_response()
+
+An other way is to use a Base 64 data URI for your flask app. 
+
+In python file:
+
+.. code-block:: python
+
+   @app.route('/charts/')
+   def line_route():
+      chart = pygal.Line()
+      ...
+      chart = chart.render_data_uri()
+      
+      return render_template( 'charts.html', chart = chart)
+      
+In HTML file:
+
+.. code-block:: html
+
+   <!-- Don't forget the "|safe"! -->
+   <div id="chart">
+      <embed type="image/svg+xml" src= {{ chart|safe }} />
+   </div>
+   
+   
 
 
 Django response

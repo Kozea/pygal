@@ -5,7 +5,7 @@ Embedding in a web page
 Within an embed tag
 -------------------
 
-First setup an url entry point for you svg: ``/mysvg.svg`` don't forget to set the mime-type to ``image/svg+xml``. (If you are using flask you can use the ``render_response`` method.)
+First set up an url entry point for your svg: ``/mysvg.svg`` don't forget to set the mime-type to ``image/svg+xml``. (If you are using flask you can use the ``render_response`` method.)
 
 Then in your html put an embed tag like this:
 
