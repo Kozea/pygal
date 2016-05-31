@@ -2,6 +2,14 @@
 Changelog
 =========
 
+2.2.3
+=====
+
+* Fix bar static value positioning (#315)
+* Add stroke_opacity style (#321)
+* Remove useless js in sparklines. (#312)
+
+
 2.2.2
 =====
 
