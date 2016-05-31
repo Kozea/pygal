@@ -157,6 +157,7 @@ class PublicApi(BaseGraph):
             max_scale=2,
             explicit_size=True,
             no_data_text='',
+            js=(),
             classes=(_ellipsis, 'pygal-sparkline')
         )
         spark_options.update(kwargs)
