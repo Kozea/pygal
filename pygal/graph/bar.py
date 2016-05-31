@@ -93,8 +93,7 @@ class Bar(Graph):
         else:
             x = x_center
             y = y_center
-        self._static_value(
-            serie_node, val, x, y, metadata, "centered")
+        self._static_value(serie_node, val, x, y, metadata, "middle")
 
     def bar(self, serie, rescale=False):
         """Draw a bar graph for a serie"""
