@@ -9,8 +9,8 @@ Values are customized by replacing the value with a dictionary containing the va
 .. code-block:: python
 
    chart = pygal.Line()
-   chart.add([1, {'value': 2, 'label': 'two'}, 3])
-   chart.add([3, 2, 1])
+   chart.add('', [1, {'value': 2, 'label': 'two'}, 3])
+   chart.add('', [3, 2, 1])
 
 
 Labels
