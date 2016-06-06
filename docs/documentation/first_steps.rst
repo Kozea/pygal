@@ -68,3 +68,11 @@ And finally add a title and some labels:
   bar_chart.add('Fibonacci', [0, 1, 1, 2, 3, 5, 8, 13, 21, 34, 55])
   bar_chart.add('Padovan', [1, 1, 1, 2, 2, 3, 4, 5, 7, 9, 12])
 
+The public API is chainable and can be simplified as call arguments, the last chart can be also written:
+
+.. code-block:: python
+
+  bar_chart = pygal.HorizontalStackedBar(
+    title="Remarquable sequences", x_labels=map(str, range(11))(
+    0, 1, 1, 2, 3, 5, 8, 13, 21, 34, 55, title='Fibonacci')(
+    1, 1, 1, 2, 2, 3, 4, 5, 7, 9, 12, title='Padovan')

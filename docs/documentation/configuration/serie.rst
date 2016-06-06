@@ -4,12 +4,12 @@ Serie configuration
 How
 ---
 
-Series are customized using keyword args set in the ``add`` function:
+Series are customized using keyword args set in the ``add`` or call function:
 
 .. code-block:: python
 
    chart = pygal.Line()
-   chart.add('', [1, 2, 3], fill=True)
+   chart(1, 2, 3, fill=True)
    chart.add('', [3, 2, 1], dot=False)
 
 

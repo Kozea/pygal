@@ -40,7 +40,7 @@ Simple python charting
 
 .. pygal-code:: inline
 
-   pygal.Bar().add('1', [1, 3, 3, 7]).add('2', [1, 6, 6, 4]).render()
+   pygal.Bar()(1, 3, 3, 7)(1, 6, 6, 4).render()
 
 
 Index
