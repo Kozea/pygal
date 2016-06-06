@@ -25,10 +25,9 @@ class Serie(object):
 
     """Serie class containing title, values and the graph serie index"""
 
-    def __init__(self, index, title, values, config, metadata=None):
+    def __init__(self, index, values, config, metadata=None):
         """Create the serie with its options"""
         self.index = index
-        self.title = title
         self.values = values
         self.config = config
         self.__dict__.update(config.__dict__)

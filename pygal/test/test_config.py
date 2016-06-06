@@ -96,6 +96,9 @@ def test_config_behaviours():
     l5 = line5.render()
     assert l1 == l5
 
+    l6 = Line(line_config)(1, 2, 3, title='_').render()
+    assert l1 == l6
+
 
 def test_config_alterations_class():
     """Assert a config can be changed on config class"""

@@ -30,13 +30,16 @@ class PublicApi(BaseGraph):
     """Chart public functions"""
 
     def add(self, title, values, **kwargs):
-        """Add a serie to this graph"""
+        """Add a serie to this graph, compat api"""
         if not is_list_like(values) and not isinstance(values, dict):
             values = [values]
-        if kwargs.get('secondary', False):
-            self.raw_series2.append((title, values, kwargs))
-        else:
-            self.raw_series.append((title, values, kwargs))
+        kwargs['title'] = title
+        self.raw_series.append((values, kwargs))
+        return self
+
+    def __call__(self, *args, **kwargs):
+        """Call api: chart(1, 2, 3, title='T')"""
+        self.raw_series.append((args, kwargs))
         return self
 
     def add_xml_filter(self, callback):
@@ -121,7 +124,7 @@ class PublicApi(BaseGraph):
         bars = u('▁▂▃▄▅▆▇█')
         if len(self.raw_series) == 0:
             return u('')
-        values = list(self.raw_series[0][1])
+        values = list(self.raw_series[0][0])
         if len(values) == 0:
             return u('')
 

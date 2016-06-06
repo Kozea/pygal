@@ -102,7 +102,7 @@ class Funnel(Graph):
                 map(self._x_format, self.x_labels) or [
                     serie.title['title']
                     if isinstance(serie.title, dict)
-                    else serie.title for serie in self.series],
+                    else serie.title or '' for serie in self.series],
                 map(self._center, self._x_pos)))
 
     def _plot(self):

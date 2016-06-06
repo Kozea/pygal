@@ -537,6 +537,10 @@ class SerieConfig(CommonConfig):
 
     """Class holding serie config values"""
 
+    title = Key(
+        None, str, "Look",
+        "Serie title.", "Leave it to None to disable title.")
+
     secondary = Key(
         False, bool, "Misc",
         "Set it to put the serie in a second axis")

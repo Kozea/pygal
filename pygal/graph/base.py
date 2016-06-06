@@ -56,7 +56,6 @@ class BaseGraph(object):
         self.state = None
         self.uuid = str(uuid4())
         self.raw_series = []
-        self.raw_series2 = []
         self.xml_filters = []
 
     def __setattr__(self, name, value):
@@ -110,16 +109,15 @@ class BaseGraph(object):
         series = []
 
         raw = [(
-            title,
             list(raw_values) if not isinstance(
                 raw_values, dict) else raw_values,
             serie_config_kwargs
-        ) for title, raw_values, serie_config_kwargs in raw]
+        ) for raw_values, serie_config_kwargs in raw]
 
-        width = max([len(values) for _, values, _ in raw] +
+        width = max([len(values) for values, _ in raw] +
                     [len(self.x_labels or [])])
 
-        for title, raw_values, serie_config_kwargs in raw:
+        for raw_values, serie_config_kwargs in raw:
             metadata = {}
             values = []
             if isinstance(raw_values, dict):
@@ -174,8 +172,7 @@ class BaseGraph(object):
                                 if k in dir(serie_config)))
             serie_config(**serie_config_kwargs)
             series.append(
-                Serie(offset + len(series),
-                      title, values, serie_config, metadata))
+                Serie(offset + len(series), values, serie_config, metadata))
         return series
 
     def setup(self, **kwargs):
@@ -189,9 +186,10 @@ class BaseGraph(object):
         if isinstance(self.style, type):
             self.style = self.style()
         self.series = self.prepare_values(
-            self.raw_series) or []
+            [rs for rs in self.raw_series if not rs[1].get('secondary')]) or []
         self.secondary_series = self.prepare_values(
-            self.raw_series2, len(self.series)) or []
+            [rs for rs in self.raw_series if rs[1].get('secondary')],
+            len(self.series)) or []
         self.horizontal = getattr(self, 'horizontal', False)
         self.svg = Svg(self)
         self._x_labels = None

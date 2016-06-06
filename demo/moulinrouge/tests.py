@@ -279,6 +279,17 @@ def get_test_routes(app):
         graph.x_label_rotation = 90
         return graph.render_response()
 
+    @app.route('/test/<chart>')
+    def test_call_api_for(chart):
+        graph = CHARTS_BY_NAME[chart]()
+        graph(1, 3, 12, 3, 4, None, 9, title='1')
+        graph(7, -4, 10, None, 8, 3, 1, title='2')
+        graph(7, -14, -10, None, 8, 3, 1, title='3')
+        graph(7, 4, -10, None, 8, 3, 1, title='4')
+        graph.x_labels = ('a', 'b', 'c', 'd')
+        graph.x_label_rotation = 90
+        return graph.render_response()
+
     @app.route('/test/one/<chart>')
     def test_one_for(chart):
         graph = CHARTS_BY_NAME[chart]()
@@ -684,7 +695,7 @@ def get_test_routes(app):
         colors = [rotate('#ff0000', i * 360 / n) for i in range(n)]
         pie = Pie(style=Style(colors=colors))
         for i in range(n):
-            pie.add(str(i), 1)
+            pie(1, title=str(i) if i % 5 == 1 else None)
         return pie.render_response()
 
     @app.route('/test/major_dots')
@@ -1027,15 +1038,17 @@ def get_test_routes(app):
     def test_legend_link_for(chart):
         chart = CHARTS_BY_NAME[chart]()
         # link on chart and label
-        chart.add({
-            'title': 'Red',
-            'tooltip': 'Cramoisi',
-            'xlink': {'href': 'http://en.wikipedia.org/wiki/Red'}
-        }, [{
-            'value': 2,
-            'label': 'This is red',
-            'tooltip': 'LOOLLOLOLO',
-            'xlink': {'href': 'http://en.wikipedia.org/wiki/Red'}}])
+        chart.add(
+            [{
+                'value': 2,
+                'label': 'This is red',
+                'tooltip': 'LOOLLOLOLO',
+                'xlink': {'href': 'http://en.wikipedia.org/wiki/Red'}}],
+            title={
+                'title': 'Red',
+                'tooltip': 'Cramoisi',
+                'xlink': {'href': 'http://en.wikipedia.org/wiki/Red'}
+            })
 
         chart.add({'title': 'Yellow', 'xlink': {
             'href': 'http://en.wikipedia.org/wiki/Yellow',

@@ -346,20 +346,8 @@ class Graph(PublicApi):
         h = max(self.legend_box_size, self.style.legend_font_size)
         x_step = self.view.width / cols
         if self.legend_at_bottom:
-            # if legends at the bottom, we dont split the windows
-            # gen structure - (i, (j, (l, tf)))
-            # i - global serie number - used for coloring and identification
-            # j - position within current legend box
-            # l - label
-            # tf - whether it is secondary label
-            gen = enumerate(enumerate(chain(
-                zip(self._legends, repeat(False)),
-                zip(self._secondary_legends, repeat(True)))))
             secondary_legends = legends  # svg node is the same
         else:
-            gen = enumerate(chain(
-                enumerate(zip(self._legends, repeat(False))),
-                enumerate(zip(self._secondary_legends, repeat(True)))))
 
             # draw secondary axis on right
             x = self.margin_box.left + self.view.width + self.spacing
@@ -375,44 +363,57 @@ class Graph(PublicApi):
                 self.nodes['graph'], class_='legends',
                 transform='translate(%d, %d)' % (x, y))
 
-        for (global_serie_number, (i, (title, is_secondary))) in gen:
+        serie_number = -1
+        i = 0
 
-            col = i % cols
-            row = i // cols
+        for titles, is_secondary in (
+                (self._legends, False),
+                (self._secondary_legends, True)):
+            if not self.legend_at_bottom and is_secondary:
+                i = 0
 
-            legend = self.svg.node(
-                secondary_legends if is_secondary else legends,
-                class_='legend reactive activate-serie',
-                id="activate-serie-%d" % global_serie_number)
-            self.svg.node(
-                legend, 'rect',
-                x=col * x_step,
-                y=1.5 * row * h + (
-                    self.style.legend_font_size - self.legend_box_size
-                    if self.style.legend_font_size > self.legend_box_size
-                    else 0
-                ) / 2,
-                width=self.legend_box_size,
-                height=self.legend_box_size,
-                class_="color-%d reactive" % (
-                    global_serie_number % len(self.style.colors))
-            )
+            for title in titles:
+                serie_number += 1
+                if title is None:
+                    continue
+                col = i % cols
+                row = i // cols
 
-            if isinstance(title, dict):
-                node = decorate(self.svg, legend, title)
-                title = title['title']
-            else:
-                node = legend
+                legend = self.svg.node(
+                    secondary_legends if is_secondary else legends,
+                    class_='legend reactive activate-serie',
+                    id="activate-serie-%d" % serie_number)
+                self.svg.node(
+                    legend, 'rect',
+                    x=col * x_step,
+                    y=1.5 * row * h + (
+                        self.style.legend_font_size - self.legend_box_size
+                        if self.style.legend_font_size > self.legend_box_size
+                        else 0
+                    ) / 2,
+                    width=self.legend_box_size,
+                    height=self.legend_box_size,
+                    class_="color-%d reactive" % (
+                        serie_number % len(self.style.colors))
+                )
 
-            truncated = truncate(title, truncation)
-            self.svg.node(
-                node, 'text',
-                x=col * x_step + self.legend_box_size + 5,
-                y=1.5 * row * h + .5 * h + .3 * self.style.legend_font_size
-            ).text = truncated
+                if isinstance(title, dict):
+                    node = decorate(self.svg, legend, title)
+                    title = title['title']
+                else:
+                    node = legend
 
-            if truncated != title:
-                self.svg.node(legend, 'title').text = title
+                truncated = truncate(title, truncation)
+                self.svg.node(
+                    node, 'text',
+                    x=col * x_step + self.legend_box_size + 5,
+                    y=1.5 * row * h + .5 * h + .3 * self.style.legend_font_size
+                ).text = truncated
+
+                if truncated != title:
+                    self.svg.node(legend, 'title').text = title
+
+                i += 1
 
     def _make_title(self):
         """Make the title"""
@@ -643,7 +644,7 @@ class Graph(PublicApi):
                     map(lambda x: truncate(x, self.truncate_legend or 15),
                         [serie.title['title']
                          if isinstance(serie.title, dict)
-                         else serie.title for serie in series_group]),
+                         else serie.title or '' for serie in series_group]),
                     self.style.legend_font_size)
                 if self.legend_at_bottom:
                     h_max = max(h, self.legend_box_size)
@@ -938,7 +939,7 @@ class Graph(PublicApi):
         """Check if there is any data"""
         return any([
             len([
-                v for a in (s[1] if is_list_like(s) else [s])
+                v for a in (s[0] if is_list_like(s) else [s])
                 for v in (a if is_list_like(a) else [a])
                 if v is not None])
             for s in self.raw_series

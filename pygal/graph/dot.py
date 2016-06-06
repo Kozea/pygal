@@ -94,7 +94,7 @@ class Dot(Graph):
             self.y_labels and map(to_str, self.y_labels) or [
                 serie.title['title']
                 if isinstance(serie.title, dict)
-                else serie.title for serie in self.series],
+                else serie.title or '' for serie in self.series],
             self._y_pos))
 
     def _set_view(self):
