@@ -20,8 +20,6 @@
 
 from __future__ import division
 
-from itertools import chain, repeat
-
 from math import ceil, cos, sin, sqrt
 
 from pygal._compat import is_list_like, is_str, to_str
