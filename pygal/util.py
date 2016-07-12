@@ -384,3 +384,7 @@ def merge(dict1, dict2):
             dict1[key] = mergextend(val, dict1.get(key, ()))
         else:
             dict1[key] = val
+
+def compose(f, g):
+    return lambda x: f(g(x))
+               
