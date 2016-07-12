@@ -23,10 +23,9 @@ from __future__ import division
 
 import re
 from decimal import Decimal
+from math import ceil, cos, floor, log10, pi, sin
 
-from math import ceil, floor, log10, pi, cos, sin
-
-from pygal._compat import to_unicode, u, _ellipsis
+from pygal._compat import _ellipsis, to_unicode, u
 
 
 def float_format(number):
@@ -387,4 +386,3 @@ def merge(dict1, dict2):
 
 def compose(f, g):
     return lambda x: f(g(x))
-               
