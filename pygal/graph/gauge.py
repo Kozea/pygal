@@ -46,10 +46,10 @@ class Gauge(Graph):
             self._box)
 
     def clockwiser(self, point):
-        x_0, _ = self.view((0,90))
+        x_0, _ = self.view((0, 90))
         new_x = 2*x_0 - point[0]
         return (new_x, point[1])
-    
+
     def needle(self, serie):
         """Draw a needle for each value"""
         serie_node = self.svg.serie(serie)
@@ -57,7 +57,7 @@ class Gauge(Graph):
             if theta is None:
                 continue
 
-            def point(x, y): 
+            def point(x, y):
                 if self.clockwise:
                     transform = compose(self.clockwiser, self.view)
                 else:
@@ -85,7 +85,7 @@ class Gauge(Graph):
                 w = min(w, self._min - self._min * 10 ** -10)
 
             sweep_flag = '0' if self.clockwise else '1'
-            
+
             alter(
                 self.svg.node(
                     gauges, 'path', d='M %s L %s A %s 1 0 %s %s Z' % (
@@ -101,7 +101,7 @@ class Gauge(Graph):
             x, y = self.view((.75, theta))
             if self.clockwise:
                 x, y = self.clockwiser((x, y))
-                
+
             self._tooltip_data(
                 gauges, val, x, y,
                 xlabel=self._get_x_label(i))
@@ -111,15 +111,13 @@ class Gauge(Graph):
         """Override y axis to plot a polar axis"""
         axis = self.svg.node(self.nodes['plot'], class_="axis x gauge")
 
-        liste_y_labels = self._y_labels
-
         if self.clockwise:
             for i in range(int(len(self._y_labels)/2)):
                 (label_1, theta_1) = self._y_labels[i]
                 (label_2, theta_2) = self._y_labels[len(self._y_labels)-i-1]
                 temp_theta = theta_2
                 self._y_labels[len(self._y_labels)-i-1] = (label_2, theta_1)
-                self._y_labels[i] =  (label_1, temp_theta)
+                self._y_labels[i] = (label_1, temp_theta)
 
         for i, (label, theta) in enumerate(self._y_labels):
             guides = self.svg.node(axis, class_='guides')
@@ -175,7 +173,7 @@ class Gauge(Graph):
             self.min_, self.max_, self.logarithmic,
             self.order_min, self.min_scale, self.max_scale
         )
-        
+
         if self.y_labels:
             self._y_labels = []
             for i, y_label in enumerate(self.y_labels):
@@ -198,7 +196,6 @@ class Gauge(Graph):
         else:
             self._y_labels = list(zip(map(self._y_format, y_pos), y_pos))
 
-        
     def _plot(self):
         """Plot all needles"""
         for serie in self.series:
