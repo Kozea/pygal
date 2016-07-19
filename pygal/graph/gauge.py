@@ -26,7 +26,6 @@ from pygal.graph.graph import Graph
 from pygal.util import alter, compute_scale, cut, decorate, compose
 from pygal.view import PolarThetaLogView, PolarThetaView
 
-TEMPCLOCK = false
 
 class Gauge(Graph):
 
