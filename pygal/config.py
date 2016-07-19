@@ -258,11 +258,6 @@ class Config(CommonConfig):
         str)
 
     # Look #
-    clockwise = Key(
-        False, bool, "Look",
-        "Clockwise",
-       "Set to True to make the gauge clockwise.")
-       
     title = Key(
         None, str, "Look",
         "Graph title.", "Leave it to None to disable title.")
