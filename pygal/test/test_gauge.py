@@ -1,28 +1,27 @@
-from unittest import TestCase
 from pygal import Gauge
 
+def test_render():
+    """Tests that a gauge plots"""
+    chart = Gauge()
+    chart.range = [0,40]
+    chart.add('Connor', 21)
+    chart.add('Mike', 30)
+    chart.add('Jules', 10)
+    assert chart.render()
 
-class TestGauge(TestCase):
-    def test_chartplots(self):
-        gauge_chart = Gauge(human_readable =True)
-        gauge_chart.title = 'DeltaBlue V8 benchmark results'
-        gauge_chart.range = [0, 10000]
-        gauge_chart.add('Chrome', 8212)
-        gauge_chart.add('Firefox', 8099)
-        gauge_chart.add('Opera', 2933)
-        gauge_chart.add('IE', 41)
+def test_difference():
+    """Tests the difference between a clockwise and counter clockwise graph"""
+    chart = Gauge()
+    chart.range = [0, 10000]
+    chart.add('Chrome', 8212)
+    chart.add('Firefox', 8099)
+    chart.add('Opera', 2933)
+    chart.add('IE', 41)
 
-        assert gauge_chart.render()
-
-    def test_anticclockplots(self):
-
-        gauge_chartcwise = Gauge(human_readable = True,clockwise = True)
-
-        gauge_chartcwise.title = 'DeltaBlue V8 benchmark results'
-        gauge_chartcwise.range = [0, 10000]
-        gauge_chartcwise.add('Chrome', 8212)
-        gauge_chartcwise.add('Firefox', 8099)
-        gauge_chartcwise.add('Opera', 2933)
-        gauge_chartcwise.add('IE', 41)
-
-        assert gauge_chartcwise.render()
+    clock_chart = Gauge(clockwise=True)
+    clock_chart.range = [0, 10000]
+    clock_chart.add('Chrome', 8212)
+    clock_chart.add('Firefox', 8099)
+    clock_chart.add('Opera', 2933)
+    clock_chart.add('IE', 41)
+    assert clock_chart.render() != chart.render()
