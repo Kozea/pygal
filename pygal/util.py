@@ -309,7 +309,10 @@ def minify_css(css):
 def compose(f, g):
     """Chain functions"""
     fun = lambda *args, **kwargs: f(g(*args, **kwargs))
-    fun.__name__ = "%s o %s" % (f.__name__, g.__name__)
+    try:
+        fun.__name__ = "%s o %s" % (f.__name__, g.__name__)
+    except:
+        fun.__name__ = f.__name__
     return fun
 
 
