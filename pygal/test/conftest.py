@@ -23,7 +23,7 @@ import pytest
 import pygal
 from pygal.etree import etree
 import sys
-from . import get_data
+#from . import get_data
 
 
 @pytest.fixture

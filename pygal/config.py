@@ -257,12 +257,13 @@ class Config(CommonConfig):
         "Useful for adding gradients / patterns…",
         str)
 
-    # Look #
     clockwise = Key(
-        False, bool, "Look",
-        "Clockwise",
-       "Set to True to make the gauge clockwise.")
-       
+                False, bool, "Look",
+                "Clockwise",
+             "Set to True to make the gauge clockwise."
+    )
+
+    # Look #
     title = Key(
         None, str, "Look",
         "Graph title.", "Leave it to None to disable title.")
@@ -402,6 +403,8 @@ class Config(CommonConfig):
         "Filled series with missing x and/or y values at the end of a series "
         "are closed at the first value with a missing "
         "'x' (default), 'y' or 'either'")
+
+
 
     # Value #
     x_value_formatter = Key(

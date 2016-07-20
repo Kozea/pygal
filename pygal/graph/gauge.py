@@ -28,7 +28,6 @@ from pygal.view import PolarThetaLogView, PolarThetaView
 
 
 class Gauge(Graph):
-
     """Gauge graph class"""
 
     needle_width = 1 / 20
@@ -44,12 +43,11 @@ class Gauge(Graph):
             self.width - self.margin_box.x,
             self.height - self.margin_box.y,
             self._box)
-            
+
     def clockwiser(self, point):
-         x_0, _ = self.view((0,90))
-         new_x = 2*x_0 - point[0]
-         return (new_x, point[1])
-    
+        x_0, _ = self.view((0, 90))
+        new_x = 2 * x_0 - point[0]
+        return (new_x, point[1])
 
     def needle(self, serie):
         """Draw a needle for each value"""
@@ -58,7 +56,7 @@ class Gauge(Graph):
             if theta is None:
                 continue
 
-            def point(x, y): 
+            def point(x, y):
                 if self.clockwise:
                     transform = compose(self.clockwiser, self.view)
                 else:
@@ -84,7 +82,7 @@ class Gauge(Graph):
 
             if self.logarithmic:
                 w = min(w, self._min - self._min * 10 ** -10)
-                
+
             sweep_flag = '0' if self.clockwise else '1'
 
             alter(
@@ -111,13 +109,13 @@ class Gauge(Graph):
         """Override y axis to plot a polar axis"""
         axis = self.svg.node(self.nodes['plot'], class_="axis x gauge")
         if self.clockwise:
-            for i in range(int(len(self._y_labels)/2)):
+            for i in range(int(len(self._y_labels) / 2)):
                 (label_1, theta_1) = self._y_labels[i]
-                (label_2, theta_2) = self._y_labels[len(self._y_labels)-i-1]
+                (label_2, theta_2) = self._y_labels[len(self._y_labels) - i - 1]
                 temp_theta = theta_2
-                self._y_labels[len(self._y_labels)-i-1] = (label_2, theta_1)
-                self._y_labels[i] = (label_1, temp_theta)   
-                
+                self._y_labels[len(self._y_labels) - i - 1] = (label_2, theta_1)
+                self._y_labels[i] = (label_1, temp_theta)
+
         for i, (label, theta) in enumerate(self._y_labels):
             guides = self.svg.node(axis, class_='guides')
 
