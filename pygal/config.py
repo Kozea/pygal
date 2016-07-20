@@ -256,14 +256,12 @@ class Config(CommonConfig):
         list, "Misc", "Extraneous defs to be inserted in svg",
         "Useful for adding gradients / patterns…",
         str)
-
-    clockwise = Key(
-                False, bool, "Look",
-                "Clockwise",
-             "Set to True to make the gauge clockwise."
-    )
-
     # Look #
+    clockwise = Key(
+        False, bool, "Look",
+        "Clockwise",
+        "Set to True to make the gauge clockwise.")
+
     title = Key(
         None, str, "Look",
         "Graph title.", "Leave it to None to disable title.")

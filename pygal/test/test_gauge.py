@@ -12,6 +12,7 @@ def test_render():
 
 
 def test_ccrender():
+    """Tests that a clockwise gauge plots"""
     clock_chart = Gauge(clockwise=True)
     clock_chart.range = [0, 40]
     clock_chart.add('Connor', 21)
