@@ -257,6 +257,11 @@ class Config(CommonConfig):
         "Useful for adding gradients / patterns…",
         str)
     # Look #
+    bar_values = Key(
+        False, bool, "Look",
+        "Bar Values",
+        "Set to True to display a bar's value atop the bar.")
+
     clockwise = Key(
         False, bool, "Look",
         "Clockwise",
