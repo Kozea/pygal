@@ -141,6 +141,7 @@ class Bar(Graph):
         self._x_pos = [(i + .5) / self._len for i in range(self._len)]
 
     def bar_values(self,x,y,width,height):
+
         """Prints the bar's values atop the bar, only if the bar_values kwarg is True."""
         transpose = swap if self.horizontal else ident
         x_center, y_center = transpose((x + width / 2, y + height / 2))

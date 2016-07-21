@@ -18,6 +18,9 @@
 # along with pygal. If not, see <http://www.gnu.org/licenses/>.
 
 """Bar chart related tests"""
+from unittest import TestCase
+
+
 
 from pygal import Bar
 
@@ -35,3 +38,10 @@ def test_simple_bar():
     assert len(q(".axis.y")) == 1
     assert len(q(".legend")) == 2
     assert len(q(".plot .series rect")) == 2 * 3
+
+
+def test_Bar_Value_is_False():
+   assert Bar(bar_values=False)
+
+
+
