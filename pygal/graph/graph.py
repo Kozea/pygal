@@ -928,6 +928,7 @@ class Graph(PublicApi):
         self._post_compute()
         self._compute_margin()
         self._decorate()
+        #self._bar_values()
         if self.series and self._has_data() and self._values:
             self._plot()
         else:

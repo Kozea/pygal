@@ -146,6 +146,10 @@ class Bar(Graph):
         transpose = swap if self.horizontal else ident
         x_center, y_center = transpose((x + width / 2, y + height / 2))
         x_top, y_top = transpose((x + width, y + height))
+        #for serie in self.series:
+         #  self.point(x_top,y_top)
+        #print_values_postion(point)
+
 
 
     def _plot(self):

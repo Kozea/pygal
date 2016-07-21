@@ -20,9 +20,11 @@
 """Bar chart related tests"""
 from unittest import TestCase
 
-
+from wheel.signatures import assertTrue
 
 from pygal import Bar
+from pygal.graph.graph import Graph
+from pygal import Config
 
 
 def test_simple_bar():
@@ -41,7 +43,13 @@ def test_simple_bar():
 
 
 def test_Bar_Value_is_False():
-   assert Bar(bar_values=False)
+    """Test to check the bar_value is initialised as false"""
+
+
+    assert Bar(bar_values=False)
 
 
 
+#def test_bar_values(CommonConfig):
+
+#   assert self.Bar(print_values==True)
