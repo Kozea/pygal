@@ -60,18 +60,11 @@ class Bar(Graph):
             class_='rect reactive tooltip-trigger'), serie.metadata.get(i))
         return x, y, width, height
 
-
-    def calc_percent(self,raw_series):
-        total = map(sum(self.raw_series[0]))
-
-        for i, val in enumerate(self.raw_series):
-            perc = (val/total)*100
-            print(perc)
-            return perc
-
     def _tooltip_and_print_values(
             self, serie_node, serie, parent, i, val, metadata,
-            x, y, width, height):
+            x, y, width, height, total):
+        percent = ((float(val)/total)*100)
+        #print('{0:.2f}%'.format(percent))
         transpose = swap if self.horizontal else ident
         x_center, y_center = transpose((x + width / 2, y + height / 2))
         x_top, y_top = transpose((x + width, y + height))
@@ -84,7 +77,6 @@ class Bar(Graph):
         self._tooltip_data(
             parent, val, x_center, y_center, "centered",
             self._get_x_label(i))
-
         if self.print_values_position == 'top':
             if self.horizontal:
                 x = x_bottom + sign * self.style.value_font_size / 2
@@ -102,7 +94,7 @@ class Bar(Graph):
         else:
             x = x_center
             y = y_center
-        self._static_value(serie_node, val, x, y, metadata, "middle")
+        self._static_value(serie_node, val, percent, x, y, metadata, "middle")
 
     def bar(self, serie, rescale=False):
         """Draw a bar graph for a serie"""
@@ -112,7 +104,8 @@ class Bar(Graph):
             points = self._rescale(serie.points)
         else:
             points = serie.points
-
+        total = sum(list(filter(None, serie.values)))
+        print(total)
         for i, (x, y) in enumerate(points):
             if None in (x, y) or (self.logarithmic and y <= 0):
                 continue
@@ -133,7 +126,7 @@ class Bar(Graph):
 
             self._tooltip_and_print_values(
                 serie_node, serie, bar, i, val, metadata,
-                x_, y_, width, height)
+                x_, y_, width, height, total)
 
     def _compute(self):
         """Compute y min and max and y scale and set labels"""
@@ -149,23 +142,12 @@ class Bar(Graph):
 
         self._x_pos = [(i + .5) / self._len for i in range(self._len)]
 
-    def bar_values(self,x,y,width,height):
-        #if bar_values == True:
-        """Prints the bar's values atop the bar, only if the bar_values kwarg is True."""
-        transpose = swap if self.horizontal else ident
-        x_center, y_center = transpose((x + width / 2, y + height / 2))
-        x_top, y_top = transpose((x + width, y + height))
-        # for serie in self.series:
-        #self.bar(serie)
-        # set print values to true
-        # self.print_value == True
-        # self.print_values_postion('top')
-
-
-
     def _plot(self):
         """Draw bars for series and secondary series"""
+        total = 0
         for serie in self.series:
             self.bar(serie)
+            total += sum(list(filter(None, serie.values)))
         for serie in self.secondary_series:
             self.bar(serie, True)
+        print(total)

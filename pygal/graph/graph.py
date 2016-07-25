@@ -492,12 +492,12 @@ class Graph(PublicApi):
             self.svg.node(node, 'desc',
                           class_="x_label").text = to_str(xlabel)
 
-    def _static_value(self, serie_node, value, x, y, metadata,
+    def _static_value(self, serie_node, value, percent, x, y, metadata,
                       align_text='left', classes=None):
         """Write the print value"""
         label = metadata and metadata.get('label')
         classes = classes and [classes] or []
-
+        print('{0:.2f}%'.format(percent))
         if self.print_labels and label:
             label_cls = classes + ['label']
             if self.print_values:
