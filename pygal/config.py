@@ -509,6 +509,8 @@ class Config(CommonConfig):
         "Label string length truncation threshold",
         "None = auto, Negative for none")
 
+    print_percentage = Key(False,bool,"Text","Display percentage of total values")
+
     # Misc #
     js = Key(
         ('//kozea.github.io/pygal.js/2.0.x/pygal-tooltips.min.js',),

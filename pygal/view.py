@@ -26,7 +26,7 @@ from math import cos, log10, pi, sin
 
 class Margin(object):
 
-    """Class reprensenting a margin (top, right, left, bottom)"""
+    """Class representing a margin (top, right, left, bottom)"""
 
     def __init__(self, top, right, bottom, left):
         """Create the margin object from the top, right, left, bottom margin"""

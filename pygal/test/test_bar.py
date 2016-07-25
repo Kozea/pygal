@@ -44,12 +44,38 @@ def test_simple_bar():
 
 def test_Bar_Value_is_False():
     """Test to check the bar_value is initialised as false"""
-
-
     assert Bar(bar_values=False)
 
 
+def test_difference():
+    bar = Bar(bar_values=False)
+    rng = [-3, -32, -39]
+    bar.add('test1', rng)
+    bar.add('test2', map(abs, rng))
+    bar.x_labels = map(str, rng)
+    bar_labelled = Bar(bar_values=True)
+    rng = [-3, -32, -39]
+    bar_labelled.add('test1', rng)
+    bar + bar_labelled.add('test2', map(abs, rng))
+    bar.labelled = map(str, rng)
 
-#def test_bar_values(CommonConfig):
+    assert bar == bar_labelled
+
+
+# def test_bar_values(CommonConfig):
 
 #   assert self.Bar(print_values==True)
+
+
+
+
+def test_calc_percent():
+    bar = Bar()
+    rng = [-3, -32, -39]
+    bar.add('test1', rng)
+    bar.add('test2', map(abs, rng))
+    bar.x_labels = map(str, rng)
+
+
+
+    assert bar.calc_percent(rng) is float

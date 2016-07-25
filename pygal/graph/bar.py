@@ -60,6 +60,15 @@ class Bar(Graph):
             class_='rect reactive tooltip-trigger'), serie.metadata.get(i))
         return x, y, width, height
 
+
+    def calc_percent(self,raw_series):
+        total = map(sum(self.raw_series[0]))
+
+        for i, val in enumerate(self.raw_series):
+            perc = (val/total)*100
+            print(perc)
+            return perc
+
     def _tooltip_and_print_values(
             self, serie_node, serie, parent, i, val, metadata,
             x, y, width, height):
@@ -141,14 +150,16 @@ class Bar(Graph):
         self._x_pos = [(i + .5) / self._len for i in range(self._len)]
 
     def bar_values(self,x,y,width,height):
-
+        #if bar_values == True:
         """Prints the bar's values atop the bar, only if the bar_values kwarg is True."""
         transpose = swap if self.horizontal else ident
         x_center, y_center = transpose((x + width / 2, y + height / 2))
         x_top, y_top = transpose((x + width, y + height))
-        #for serie in self.series:
-         #  self.point(x_top,y_top)
-        #print_values_postion(point)
+        # for serie in self.series:
+        #self.bar(serie)
+        # set print values to true
+        # self.print_value == True
+        # self.print_values_postion('top')
 
 
 
