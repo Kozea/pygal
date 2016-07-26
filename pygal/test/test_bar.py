@@ -66,9 +66,6 @@ def test_difference():
 
 #   assert self.Bar(print_values==True)
 
-
-
-
 def test_calc_percent():
     bar = Bar()
     rng = [-3, -32, -39]
@@ -79,3 +76,24 @@ def test_calc_percent():
 
 
     assert bar.calc_percent(rng) is float
+
+def test_bar_percent_difference():
+    bar = Bar()
+    rng = [-3, -32, -39]
+    bar.add('test1', rng)
+    bar.add('test2', map(abs, rng))
+    bar.x_labels = map(str, rng)
+
+    barpercent = Bar(percent_values=True)
+    rng = [-3, -32, -39]
+    barpercent.add('test1', rng)
+    barpercent.add('test2', map(abs, rng))
+    barpercent.x_labels = map(str, rng)
+
+    assert (bar != barpercent)
+
+
+
+
+
+
