@@ -257,11 +257,6 @@ class Config(CommonConfig):
         "Useful for adding gradients / patterns…",
         str)
     # Look #
-    bar_values = Key(
-        False, bool, "Look",
-        "Bar Values",
-        "Set to True to display a bar's value atop the bar.")
-
     clockwise = Key(
         False, bool, "Look",
         "Clockwise",
@@ -508,6 +503,12 @@ class Config(CommonConfig):
         None, int, "Text",
         "Label string length truncation threshold",
         "None = auto, Negative for none")
+
+    percent_values = Key(
+        False, bool, "Look",
+        "Bar Values",
+        "Set to True to display a bar's percentage contribution per series atop the bar.")
+
 
     # Misc #
     js = Key(
