@@ -64,7 +64,6 @@ class Bar(Graph):
             self, serie_node, serie, parent, i, val, metadata,
             x, y, width, height, total):
         percent = ((float(val)/total)*100)
-        #print('{0:.2f}%'.format(percent))
         transpose = swap if self.horizontal else ident
         x_center, y_center = transpose((x + width / 2, y + height / 2))
         x_top, y_top = transpose((x + width, y + height))
@@ -105,7 +104,6 @@ class Bar(Graph):
         else:
             points = serie.points
         total = sum(list(filter(None, serie.values)))
-        print(total)
         for i, (x, y) in enumerate(points):
             if None in (x, y) or (self.logarithmic and y <= 0):
                 continue
@@ -144,10 +142,7 @@ class Bar(Graph):
 
     def _plot(self):
         """Draw bars for series and secondary series"""
-        total = 0
         for serie in self.series:
             self.bar(serie)
-            total += sum(list(filter(None, serie.values)))
         for serie in self.secondary_series:
             self.bar(serie, True)
-        print(total)

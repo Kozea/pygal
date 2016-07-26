@@ -497,7 +497,7 @@ class Graph(PublicApi):
         """Write the print value"""
         label = metadata and metadata.get('label')
         classes = classes and [classes] or []
-        print('{0:.2f}%'.format(percent))
+        per_str = ('{0:.2f}%'.format(percent))
         if self.print_labels and label:
             label_cls = classes + ['label']
             if self.print_values:
@@ -514,14 +514,22 @@ class Graph(PublicApi):
             val_cls = classes + ['value']
             if self.dynamic_print_values:
                 val_cls.append('showable')
-
-            self.svg.node(
-                serie_node['text_overlay'], 'text',
-                class_=' '.join(val_cls),
-                x=x,
-                y=y + self.style.value_font_size / 3,
-                attrib={'text-anchor': align_text}
-            ).text = value if self.print_zeroes or value != '0' else ''
+            if self.percent_values:
+                self.svg.node(
+                    serie_node['text_overlay'], 'text',
+                    class_=' '.join(val_cls),
+                    x=x,
+                    y=y + self.style.value_font_size / 3,
+                    attrib={'text-anchor': align_text}
+                ).text = per_str if self.print_zeroes or per_str != '0.00%' else ''
+            else:
+                self.svg.node(
+                    serie_node['text_overlay'], 'text',
+                    class_=' '.join(val_cls),
+                    x=x,
+                    y=y + self.style.value_font_size / 3,
+                    attrib={'text-anchor': align_text}
+                ).text = value if self.print_zeroes or value != '0' else ''
 
     def _points(self, x_pos):
         """
