@@ -513,6 +513,7 @@ class Graph(PublicApi):
             val_cls = classes + ['value']
             if self.dynamic_print_values:
                 val_cls.append('showable')
+
             if self.percent_values:
                 self.svg.node(
                     serie_node['text_overlay'], 'text',
@@ -520,7 +521,15 @@ class Graph(PublicApi):
                     x=x,
                     y=y + self.style.value_font_size / 3,
                     attrib={'text-anchor': align_text}
+                ).text = value if self.print_zeroes or value != '0' else ''
+                self.svg.node(
+                    serie_node['text_overlay'], 'text',
+                    class_=' '.join(val_cls),
+                    x=x,
+                    y=y + 4/3*(self.style.value_font_size),
+                    attrib={'text-anchor': align_text}
                 ).text = per_str if self.print_zeroes or per_str != '0.00%' else ''
+
             else:
                 self.svg.node(
                     serie_node['text_overlay'], 'text',
