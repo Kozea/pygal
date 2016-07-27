@@ -20,6 +20,10 @@
 """Generate tests for different chart types with different data"""
 
 import os
+from unittest import TestCase
+
+from pygal.graph.bar import Bar
+
 import pygal
 import uuid
 import sys
@@ -431,10 +435,11 @@ def test_long_title(Chart, datas):
     """Test chart rendering with a long title"""
     chart = Chart(
         title="A chart is a graphical representation of data, in which "
-        "'the data is represented by symbols, such as bars in a bar chart, "
-        "lines in a line chart, or slices in a pie chart'. A chart can "
-        "represent tabular numeric data, functions or some kinds of "
-        "qualitative structure and provides different info.")
+              "'the data is represented by symbols, such as bars in a bar chart, "
+              "lines in a line chart, or slices in a pie chart'. A chart can "
+              "represent tabular numeric data, functions or some kinds of "
+              "qualitative structure and provides different info.")
     chart = make_data(chart, datas)
     q = chart.render_pyquery()
     assert len(q('.titles text')) == 5
+

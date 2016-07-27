@@ -102,6 +102,7 @@ def test_config_behaviours():
 
 def test_config_alterations_class():
     """Assert a config can be changed on config class"""
+
     class LineConfig(Config):
         no_prefix = True
         show_legend = False
@@ -125,6 +126,7 @@ def test_config_alterations_class():
 
 def test_config_alterations_instance():
     """Assert a config can be changed on instance"""
+
     class LineConfig(Config):
         no_prefix = True
         show_legend = False
@@ -149,6 +151,7 @@ def test_config_alterations_instance():
 
 def test_config_alterations_kwargs():
     """Assert a config can be changed with keyword args"""
+
     class LineConfig(Config):
         no_prefix = True
         show_legend = False
@@ -541,15 +544,15 @@ def test_formatters(Chart):
     if Chart._dual or Chart == Box:
         return
     chart = Chart(formatter=lambda x, chart, serie: '%s%s$' % (
-            x, serie.title))
+        x, serie.title))
     chart.add('_a', [1, 2, {'value': 3, 'formatter': lambda x: u('%s¥') % x}])
     chart.add('_b', [4, 5, 6], formatter=lambda x: u('%s€') % x)
     chart.x_labels = [2, 4, 6]
     chart.x_labels_major = [4]
     q = chart.render_pyquery()
     assert set([v.text for v in q(".value")]) == set((
-        u('4€'), u('5€'), u('6€'), '1_a$', '2_a$', u('3¥')) + (
-            ('6_a$', u('15€')) if Chart in (Pie, SolidGauge) else ()))
+                                                         u('4€'), u('5€'), u('6€'), '1_a$', '2_a$', u('3¥')) + (
+                                                         ('6_a$', u('15€')) if Chart in (Pie, SolidGauge) else ()))
 
 
 def test_classes(Chart):
@@ -574,3 +577,8 @@ def test_classes(Chart):
 
     chart = Chart(classes=('graph', _ellipsis))
     assert chart.render_pyquery().attr('class') == 'graph pygal-chart'
+
+
+def test_bar_value(Chart):
+    chart = Chart()
+    assert chart.bar_values == False

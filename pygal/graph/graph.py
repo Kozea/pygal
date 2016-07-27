@@ -49,6 +49,7 @@ class Graph(PublicApi):
         self._make_x_title()
         self._make_y_title()
 
+
     def _axes(self):
         """Draw axes"""
         self._y_axis()
@@ -936,6 +937,7 @@ class Graph(PublicApi):
         self._post_compute()
         self._compute_margin()
         self._decorate()
+        #self._bar_values()
         if self.series and self._has_data() and self._values:
             self._plot()
         else:
@@ -950,3 +952,7 @@ class Graph(PublicApi):
                 if v is not None])
             for s in self.raw_series
         ])
+
+
+
+
