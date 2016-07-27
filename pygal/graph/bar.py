@@ -83,7 +83,7 @@ class Bar(Graph):
             else:
                 x = x_center
                 y = y_bottom - sign * self.style.value_font_size / 2
-        elif self.print_values_positio2 == 'bottom':
+        elif self.print_values_position == 'bottom':
             if self.horizontal:
                 x = x_top + sign * self.style.value_font_size / 2
                 y = y_center
@@ -95,6 +95,8 @@ class Bar(Graph):
             y = y_center
 
         self.style.value_font_size = width / 1.41421
+
+
         self._static_value(serie_node, val, percent, x, y, metadata, "middle")
 
     def bar(self, serie, rescale=False):

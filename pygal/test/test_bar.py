@@ -56,26 +56,16 @@ def test_difference():
     bar_labelled = Bar(bar_values=True)
     rng = [-3, -32, -39]
     bar_labelled.add('test1', rng)
-    bar + bar_labelled.add('test2', map(abs, rng))
+    bar_labelled.add('test2', map(abs, rng))
     bar.labelled = map(str, rng)
 
-    assert bar == bar_labelled
+    assert bar != bar_labelled
 
 
 # def test_bar_values(CommonConfig):
 
 #   assert self.Bar(print_values==True)
 
-def test_calc_percent():
-    bar = Bar()
-    rng = [-3, -32, -39]
-    bar.add('test1', rng)
-    bar.add('test2', map(abs, rng))
-    bar.x_labels = map(str, rng)
-
-
-
-    assert bar.calc_percent(rng) is float
 
 def test_bar_percent_difference():
     bar = Bar()
@@ -93,7 +83,7 @@ def test_bar_percent_difference():
     assert (bar != barpercent)
 
 
-def test_percent_formatting():
+def test_chart_renders():
     line_chart = Bar(print_values=True, percent_values=True, print_values_position='top')
     line_chart.title = 'Browser usage evolution (in %)'
     line_chart.x_labels = map(str, range(2002, 2013))
@@ -101,12 +91,14 @@ def test_percent_formatting():
     line_chart.add('Chrome', [None, None, None, None, None, None, 0, 3.9, 10.8, 23.8, 35.3])
     line_chart.add('IE', [85.8, 84.6, 84.7, 74.5, 66, 58.6, 54.7, 44.8, 36.2, 26.6, 20.1])
     line_chart.add('Others', [14.2, 15.4, 15.3, 8.9, 9, 10.4, 8.9, 5.8, 6.7, 6.8, 7.5])
-    line_chart.render_in_browser()
+    assert line_chart.render()
 
-    for serie in line_chart.series:
-        factor = len(serie)
+#def test_length_is_int:
+   # line_chart_series = line_chart((filter(None, line_chart.values)))
+   # for serie in line_chart_series:
+       #assertTrue len(line_chart_series) ==int,"Length is int")
 
-        assert(line_chart.bar_newfont_size == line_chart.value_font_size/factor)
+
 
 
 
