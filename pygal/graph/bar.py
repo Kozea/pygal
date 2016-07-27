@@ -146,3 +146,7 @@ class Bar(Graph):
             self.bar(serie)
         for serie in self.secondary_series:
             self.bar(serie, True)
+
+    def bar_newfont_size(self):
+        pass
+
