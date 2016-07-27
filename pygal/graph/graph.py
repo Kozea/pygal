@@ -49,6 +49,7 @@ class Graph(PublicApi):
         self._make_x_title()
         self._make_y_title()
 
+
     def _axes(self):
         """Draw axes"""
         self._y_axis()
@@ -509,12 +510,11 @@ class Graph(PublicApi):
             ).text = label
             y += self.style.value_font_size
 
-        if self.print_values or self.dynamic_print_values:
+        if self.print_values or self.dynamic_print_values or self.percent_values:
             val_cls = classes + ['value']
             if self.dynamic_print_values:
                 val_cls.append('showable')
-
-            if self.percent_values:
+            if self.print_values:
                 self.svg.node(
                     serie_node['text_overlay'], 'text',
                     class_=' '.join(val_cls),
@@ -522,6 +522,7 @@ class Graph(PublicApi):
                     y=y + self.style.value_font_size / 3,
                     attrib={'text-anchor': align_text}
                 ).text = value if self.print_zeroes or value != '0' else ''
+            if self.percent_values:
                 self.svg.node(
                     serie_node['text_overlay'], 'text',
                     class_=' '.join(val_cls),
@@ -529,15 +530,6 @@ class Graph(PublicApi):
                     y=y + 4/3*(self.style.value_font_size),
                     attrib={'text-anchor': align_text}
                 ).text = per_str if self.print_zeroes or per_str != '0.00%' else ''
-
-            else:
-                self.svg.node(
-                    serie_node['text_overlay'], 'text',
-                    class_=' '.join(val_cls),
-                    x=x,
-                    y=y + self.style.value_font_size / 3,
-                    attrib={'text-anchor': align_text}
-                ).text = value if self.print_zeroes or value != '0' else ''
 
     def _points(self, x_pos):
         """
@@ -945,6 +937,7 @@ class Graph(PublicApi):
         self._post_compute()
         self._compute_margin()
         self._decorate()
+        #self._bar_values()
         if self.series and self._has_data() and self._values:
             self._plot()
         else:
@@ -959,3 +952,7 @@ class Graph(PublicApi):
                 if v is not None])
             for s in self.raw_series
         ])
+
+
+
+
