@@ -23,11 +23,12 @@ from __future__ import division
 
 from pygal._compat import is_str
 from pygal.graph.graph import Graph
-from pygal.util import alter, compute_scale, cut, decorate, compose
+from pygal.util import alter, compute_scale, cut, decorate
 from pygal.view import PolarThetaLogView, PolarThetaView
 
 
 class Gauge(Graph):
+
     """Gauge graph class"""
 
     needle_width = 1 / 20
@@ -44,11 +45,6 @@ class Gauge(Graph):
             self.height - self.margin_box.y,
             self._box)
 
-    def clockwiser(self, point):
-        x_0, _ = self.view((0, 90))
-        new_x = 2 * x_0 - point[0]
-        return (new_x, point[1])
-
     def needle(self, serie):
         """Draw a needle for each value"""
         serie_node = self.svg.serie(serie)
@@ -57,11 +53,7 @@ class Gauge(Graph):
                 continue
 
             def point(x, y):
-                if self.clockwise:
-                    transform = compose(self.clockwiser, self.view)
-                else:
-                    transform = self.view
-                return '%f %f' % transform((x, y))
+                return '%f %f' % self.view((x, y))
 
             val = self._format(serie, i)
             metadata = serie.metadata.get(i)
@@ -83,23 +75,18 @@ class Gauge(Graph):
             if self.logarithmic:
                 w = min(w, self._min - self._min * 10 ** -10)
 
-            sweep_flag = '0' if self.clockwise else '1'
-
             alter(
                 self.svg.node(
-                    gauges, 'path', d='M %s L %s A %s 1 0 %s %s Z' % (
+                    gauges, 'path', d='M %s L %s A %s 1 0 1 %s Z' % (
                         point(.85, theta),
                         point(self.needle_width, theta - w),
                         '%f %f' % (self.needle_width, self.needle_width),
-                        sweep_flag,
                         point(self.needle_width, theta + w),
                     ),
                     class_='line reactive tooltip-trigger'),
                 metadata)
 
             x, y = self.view((.75, theta))
-            if self.clockwise:
-                x, y = self.clockwiser((x, y))
             self._tooltip_data(
                 gauges, val, x, y,
                 xlabel=self._get_x_label(i))
@@ -108,13 +95,6 @@ class Gauge(Graph):
     def _y_axis(self, draw_axes=True):
         """Override y axis to plot a polar axis"""
         axis = self.svg.node(self.nodes['plot'], class_="axis x gauge")
-        if self.clockwise:
-            for i in range(int(len(self._y_labels) / 2)):
-                (label_1, theta_1) = self._y_labels[i]
-                (label_2, theta_2) = self._y_labels[len(self._y_labels) - i - 1]
-                temp_theta = theta_2
-                self._y_labels[len(self._y_labels) - i - 1] = (label_2, theta_1)
-                self._y_labels[i] = (label_1, temp_theta)
 
         for i, (label, theta) in enumerate(self._y_labels):
             guides = self.svg.node(axis, class_='guides')
