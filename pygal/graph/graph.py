@@ -521,7 +521,7 @@ class Graph(PublicApi):
                     y=y + self.style.value_font_size / 3,
                     attrib={'text-anchor': align_text}
                 ).text = value if self.print_zeroes or value != '0' else ''
-            elif self.percent_values:
+            if self.percent_values:
                 self.svg.node(
                     serie_node['text_overlay'], 'text',
                     class_=' '.join(val_cls),
