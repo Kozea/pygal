@@ -94,7 +94,7 @@ class Bar(Graph):
             x = x_center
             y = y_center
 
-        self.style.value_font_size = width / 1.5
+        self.style.value_font_size = width / 1.41421
         self._static_value(serie_node, val, percent, x, y, metadata, "middle")
 
     def bar(self, serie, rescale=False):
