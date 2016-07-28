@@ -397,8 +397,6 @@ class Config(CommonConfig):
         "are closed at the first value with a missing "
         "'x' (default), 'y' or 'either'")
 
-
-
     # Value #
     x_value_formatter = Key(
         formatters.default, callable, "Value",
@@ -503,7 +501,6 @@ class Config(CommonConfig):
         False, bool, "Look",
         "Bar Values",
         "Set to True to display a bar's percentage contribution per series atop the bar.")
-
 
     # Misc #
     js = Key(

@@ -49,7 +49,6 @@ class Graph(PublicApi):
         self._make_x_title()
         self._make_y_title()
 
-
     def _axes(self):
         """Draw axes"""
         self._y_axis()
@@ -527,7 +526,7 @@ class Graph(PublicApi):
                     serie_node['text_overlay'], 'text',
                     class_=' '.join(val_cls),
                     x=x,
-                    y=y + 4/3*(self.style.value_font_size),
+                    y=y + 4/3*self.style.value_font_size,
                     attrib={'text-anchor': align_text}
                 ).text = per_str if self.print_zeroes or per_str != '0.00%' else ''
 
@@ -845,7 +844,7 @@ class Graph(PublicApi):
         elif self.x_labels_major_count:
             label_count = len(self._x_labels)
             major_count = self.x_labels_major_count
-            if (major_count >= label_count):
+            if major_count >= label_count:
                 self._x_labels_major = [label[0] for label in self._x_labels]
 
             else:
@@ -937,7 +936,6 @@ class Graph(PublicApi):
         self._post_compute()
         self._compute_margin()
         self._decorate()
-        #self._bar_values()
         if self.series and self._has_data() and self._values:
             self._plot()
         else:
@@ -952,7 +950,3 @@ class Graph(PublicApi):
                 if v is not None])
             for s in self.raw_series
         ])
-
-
-
-
