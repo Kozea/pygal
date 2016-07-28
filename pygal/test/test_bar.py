@@ -37,6 +37,7 @@ def test_simple_bar():
 
 
 def test_difference():
+    """Tests the difference between labeled graphs and unlabeled graphs"""
     bar = Bar(bar_values=False)
     rng = [-3, -32, -39]
     bar.add('test1', rng)
@@ -52,6 +53,7 @@ def test_difference():
 
 
 def test_bar_percent_difference():
+    """Tests the difference between percent labeled graphs and unlabeled graphs"""
     bar = Bar()
     rng = [-3, -32, -39]
     bar.add('test1', rng)
@@ -68,6 +70,7 @@ def test_bar_percent_difference():
 
 
 def test_chart_renders():
+    """Tests that print values and percent values renders"""
     line_chart = Bar(print_values=True, percent_values=True, print_values_position='top')
     line_chart.title = 'Browser usage evolution (in %)'
     line_chart.x_labels = map(str, range(2002, 2013))
