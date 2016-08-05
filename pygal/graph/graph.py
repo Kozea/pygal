@@ -491,12 +491,12 @@ class Graph(PublicApi):
             self.svg.node(node, 'desc',
                           class_="x_label").text = to_str(xlabel)
 
-    def _static_value(self, serie_node, value, x, y, metadata,
+    def _static_value(self, serie_node, value, percent, x, y, metadata,
                       align_text='left', classes=None):
         """Write the print value"""
         label = metadata and metadata.get('label')
         classes = classes and [classes] or []
-
+        per_str = ('{0:.2f}%'.format(percent))
         if self.print_labels and label:
             label_cls = classes + ['label']
             if self.print_values:
@@ -509,18 +509,26 @@ class Graph(PublicApi):
             ).text = label
             y += self.style.value_font_size
 
-        if self.print_values or self.dynamic_print_values:
+        if self.print_values or self.dynamic_print_values or self.percent_values:
             val_cls = classes + ['value']
             if self.dynamic_print_values:
                 val_cls.append('showable')
-
-            self.svg.node(
-                serie_node['text_overlay'], 'text',
-                class_=' '.join(val_cls),
-                x=x,
-                y=y + self.style.value_font_size / 3,
-                attrib={'text-anchor': align_text}
-            ).text = value if self.print_zeroes or value != '0' else ''
+            if self.print_values:
+                self.svg.node(
+                    serie_node['text_overlay'], 'text',
+                    class_=' '.join(val_cls),
+                    x=x,
+                    y=y + self.style.value_font_size / 3,
+                    attrib={'text-anchor': align_text}
+                ).text = value if self.print_zeroes or value != '0' else ''
+            if self.percent_values:
+                self.svg.node(
+                    serie_node['text_overlay'], 'text',
+                    class_=' '.join(val_cls),
+                    x=x,
+                    y=y + 4/3*self.style.value_font_size,
+                    attrib={'text-anchor': align_text}
+                ).text = per_str if self.print_zeroes or per_str != '0.00%' else ''
 
     def _points(self, x_pos):
         """
@@ -836,7 +844,7 @@ class Graph(PublicApi):
         elif self.x_labels_major_count:
             label_count = len(self._x_labels)
             major_count = self.x_labels_major_count
-            if (major_count >= label_count):
+            if major_count >= label_count:
                 self._x_labels_major = [label[0] for label in self._x_labels]
 
             else:

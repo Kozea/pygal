@@ -62,7 +62,8 @@ class Bar(Graph):
 
     def _tooltip_and_print_values(
             self, serie_node, serie, parent, i, val, metadata,
-            x, y, width, height):
+            x, y, width, height, total):
+        percent = ((float(val)/total)*100)
         transpose = swap if self.horizontal else ident
         x_center, y_center = transpose((x + width / 2, y + height / 2))
         x_top, y_top = transpose((x + width, y + height))
@@ -75,7 +76,6 @@ class Bar(Graph):
         self._tooltip_data(
             parent, val, x_center, y_center, "centered",
             self._get_x_label(i))
-
         if self.print_values_position == 'top':
             if self.horizontal:
                 x = x_bottom + sign * self.style.value_font_size / 2
@@ -93,7 +93,9 @@ class Bar(Graph):
         else:
             x = x_center
             y = y_center
-        self._static_value(serie_node, val, x, y, metadata, "middle")
+
+        self.style.value_font_size = width / 1.41421
+        self._static_value(serie_node, val, percent, x, y, metadata, "middle")
 
     def bar(self, serie, rescale=False):
         """Draw a bar graph for a serie"""
@@ -103,7 +105,7 @@ class Bar(Graph):
             points = self._rescale(serie.points)
         else:
             points = serie.points
-
+        total = sum(list(filter(None, serie.values)))
         for i, (x, y) in enumerate(points):
             if None in (x, y) or (self.logarithmic and y <= 0):
                 continue
@@ -124,7 +126,7 @@ class Bar(Graph):
 
             self._tooltip_and_print_values(
                 serie_node, serie, bar, i, val, metadata,
-                x_, y_, width, height)
+                x_, y_, width, height, total)
 
     def _compute(self):
         """Compute y min and max and y scale and set labels"""

@@ -256,7 +256,6 @@ class Config(CommonConfig):
         list, "Misc", "Extraneous defs to be inserted in svg",
         "Useful for adding gradients / patterns…",
         str)
-
     # Look #
     title = Key(
         None, str, "Look",
@@ -497,6 +496,11 @@ class Config(CommonConfig):
         None, int, "Text",
         "Label string length truncation threshold",
         "None = auto, Negative for none")
+
+    percent_values = Key(
+        False, bool, "Look",
+        "Bar Values",
+        "Set to True to display a bar's percentage contribution per series atop the bar.")
 
     # Misc #
     js = Key(
