@@ -16,7 +16,7 @@
 ## Description
 
 **pygal** is a dynamic SVG charting library written in python.
-All the documentation is on http://pygal.org
+All the documentation is on [www.pygal.org](http://www.pygal.org)
 
 
 ## Installation
