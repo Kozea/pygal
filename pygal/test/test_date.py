@@ -150,7 +150,7 @@ def test_date_labels():
         date(2013, 1, 1),
         date(2013, 2, 1),
         date(2013, 3, 1)
-        ]
+    ]
 
     q = datey.render_pyquery()
     assert list(

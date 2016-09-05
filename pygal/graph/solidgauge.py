@@ -36,20 +36,24 @@ class SolidGauge(Graph):
     def gaugify(self, serie, squares, sq_dimensions, current_square):
         serie_node = self.svg.serie(serie)
         if self.half_pie:
-            start_angle = 3*pi/2
+            start_angle = 3 * pi / 2
             center = (
-                (current_square[1]*sq_dimensions[0]) - (sq_dimensions[0] / 2.),
-                (current_square[0]*sq_dimensions[1]) - (sq_dimensions[1] / 4))
+                (current_square[1] * sq_dimensions[0]) - (
+                    sq_dimensions[0] / 2.),
+                (current_square[0] * sq_dimensions[1]) - (
+                    sq_dimensions[1] / 4))
             end_angle = pi / 2
         else:
             start_angle = 0
             center = (
-                (current_square[1]*sq_dimensions[0]) - (sq_dimensions[0] / 2.),
-                (current_square[0]*sq_dimensions[1]) - (sq_dimensions[1] / 2.))
+                (current_square[1] * sq_dimensions[0]) - (
+                    sq_dimensions[0] / 2.),
+                (current_square[0] * sq_dimensions[1]) - (
+                    sq_dimensions[1] / 2.))
             end_angle = 2 * pi
 
         max_value = serie.metadata.get(0, {}).get('max_value', 100)
-        radius = min([sq_dimensions[0]/2, sq_dimensions[1]/2]) * .9
+        radius = min([sq_dimensions[0] / 2, sq_dimensions[1] / 2]) * .9
         small_radius = radius * serie.inner_radius
 
         self.svg.gauge_background(
@@ -128,7 +132,7 @@ class SolidGauge(Graph):
                 _x, _y = 2, 3
             if abs(_x - _y) > 2:
                 _sq = 3
-                while (_x * _y)-1 < len(self.series):
+                while (_x * _y) - 1 < len(self.series):
                     _x, _y = _sq, _sq
                     _sq += 1
         return (_x, _y)

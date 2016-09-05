@@ -32,8 +32,8 @@ class Dual(Graph):
         Format value for dual value display.
         """
         return '%s: %s' % (
-             self._x_format(value[0]),
-             self._y_format(value[1]))
+            self._x_format(value[0]),
+            self._y_format(value[1]))
 
     def _compute_x_labels(self):
         x_pos = compute_scale(

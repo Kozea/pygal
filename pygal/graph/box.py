@@ -49,13 +49,13 @@ class Box(Graph):
         """
         if self.box_mode == "extremes":
             return (
-                    'Min: %s\nQ1 : %s\nQ2 : %s\nQ3 : %s\nMax: %s' %
-                    tuple(map(self._y_format, serie.points[1:6])))
+                'Min: %s\nQ1 : %s\nQ2 : %s\nQ3 : %s\nMax: %s' % tuple(
+                    map(self._y_format, serie.points[1:6])))
         elif self.box_mode in ["tukey", "stdev", "pstdev"]:
             return (
-                    'Min: %s\nLower Whisker: %s\nQ1: %s\nQ2: %s\nQ3: %s\n'
-                    'Upper Whisker: %s\nMax: %s' % tuple(map(
-                        self._y_format, serie.points)))
+                'Min: %s\nLower Whisker: %s\nQ1: %s\nQ2: %s\nQ3: %s\n'
+                'Upper Whisker: %s\nMax: %s' % tuple(map(
+                    self._y_format, serie.points)))
         elif self.box_mode == '1.5IQR':
             # 1.5IQR mode
             return 'Q1: %s\nQ2: %s\nQ3: %s' % tuple(map(
@@ -166,7 +166,7 @@ class Box(Graph):
             alter(self.svg.node(
                 parent_node,
                 tag='circle',
-                cx=left_edge+width/2,
+                cx=left_edge + width / 2,
                 cy=self.view.y(o),
                 r=3,
                 class_='subtle-fill reactive tooltip-trigger'), metadata)
@@ -241,12 +241,12 @@ class Box(Graph):
                     q3 = s[0]
                 elif n % 4 == 1:  # n is of form 4n + 1 where n >= 1
                     m = (n - 1) // 4
-                    q1 = 0.25 * s[m-1] + 0.75 * s[m]
-                    q3 = 0.75 * s[3*m] + 0.25 * s[3*m+1]
+                    q1 = 0.25 * s[m - 1] + 0.75 * s[m]
+                    q3 = 0.75 * s[3 * m] + 0.25 * s[3 * m + 1]
                 else:  # n is of form 4n + 3 where n >= 1
                     m = (n - 3) // 4
-                    q1 = 0.75 * s[m] + 0.25 * s[m+1]
-                    q3 = 0.25 * s[3*m+1] + 0.75 * s[3*m+2]
+                    q1 = 0.75 * s[m] + 0.25 * s[m + 1]
+                    q3 = 0.25 * s[3 * m + 1] + 0.75 * s[3 * m + 2]
 
             iqr = q3 - q1
             min_s = s[0]
@@ -261,7 +261,7 @@ class Box(Graph):
                 b0 = bisect_left(s, q1 - 1.5 * iqr)
                 b4 = bisect_right(s, q3 + 1.5 * iqr)
                 q0 = s[b0]
-                q4 = s[b4-1]
+                q4 = s[b4 - 1]
                 outliers = s[:b0] + s[b4:]
             elif mode == 'stdev':
                 # one standard deviation above and below the mean of the data
@@ -269,7 +269,7 @@ class Box(Graph):
                 b0 = bisect_left(s, q2 - sd)
                 b4 = bisect_right(s, q2 + sd)
                 q0 = s[b0]
-                q4 = s[b4-1]
+                q4 = s[b4 - 1]
                 outliers = s[:b0] + s[b4:]
             elif mode == 'pstdev':
                 # one population standard deviation above and below
@@ -278,7 +278,7 @@ class Box(Graph):
                 b0 = bisect_left(s, q2 - sdp)
                 b4 = bisect_right(s, q2 + sdp)
                 q0 = s[b0]
-                q4 = s[b4-1]
+                q4 = s[b4 - 1]
                 outliers = s[:b0] + s[b4:]
             elif mode == '1.5IQR':
                 # 1.5IQR mode

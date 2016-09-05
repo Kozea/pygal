@@ -97,7 +97,7 @@ class Pie(Graph):
         if total == 0:
             return
         if self.half_pie:
-            current_angle = 3*pi/2
+            current_angle = 3 * pi / 2
         else:
             current_angle = 0
 

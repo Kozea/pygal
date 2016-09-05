@@ -79,7 +79,7 @@ def test_hermite_finite(Chart, datas):
 def test_hermite_cardinal(Chart, datas):
     """Test hermite cardinal interpolation"""
     chart = Chart(interpolate='hermite',
-                  interpolation_parameters={'type': 'cardinal',  'c': .75})
+                  interpolation_parameters={'type': 'cardinal', 'c': .75})
     chart = make_data(chart, datas)
     assert chart.render()
 

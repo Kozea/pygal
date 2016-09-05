@@ -63,7 +63,7 @@ class Line(Graph):
 
         # Check to see if the data has been padded with "none's"
         # Fill doesn't work correctly otherwise
-        end = len(values)-1
+        end = len(values) - 1
         while end > 0:
             x, y = values[end]
             if self.missing_value_fill_truncation == "either":

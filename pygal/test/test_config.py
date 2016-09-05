@@ -540,8 +540,8 @@ def test_formatters(Chart):
     """Test custom formatters"""
     if Chart._dual or Chart == Box:
         return
-    chart = Chart(formatter=lambda x, chart, serie: '%s%s$' % (
-            x, serie.title))
+    chart = Chart(
+        formatter=lambda x, chart, serie: '%s%s$' % (x, serie.title))
     chart.add('_a', [1, 2, {'value': 3, 'formatter': lambda x: u('%s¥') % x}])
     chart.add('_b', [4, 5, 6], formatter=lambda x: u('%s€') % x)
     chart.x_labels = [2, 4, 6]

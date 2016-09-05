@@ -199,7 +199,7 @@ class Svg(object):
                 del attrib[key]
             elif key == 'href':
                 attrib[etree.QName(
-                    'http://www.w3.org/1999/xlink',  key)] = attrib[key]
+                    'http://www.w3.org/1999/xlink', key)] = attrib[key]
                 del attrib[key]
         return etree.SubElement(parent, tag, attrib)
 
@@ -319,18 +319,18 @@ class Svg(object):
                 coord_diff(
                     center,
                     coord_project(
-                        radius-(radius-small_radius)/2, start_angle)),
+                        radius - (radius - small_radius) / 2, start_angle)),
                 coord_diff(
                     center,
                     coord_project(
-                        radius-(radius-small_radius)/2, end_angle))]
+                        radius - (radius - small_radius) / 2, end_angle))]
             pos = 0
             for i in begin_end:
                 self.node(
                     serie_node['plot'], 'text',
                     class_='y-{} bound reactive'.format(pos),
                     x=i[0],
-                    y=i[1]+10,
+                    y=i[1] + 10,
                     attrib={'text-anchor': 'middle'}
                 ).text = '{}'.format(0 if pos == 0 else max_value)
                 pos += 1
@@ -392,7 +392,7 @@ class Svg(object):
             return
 
         x, y = coord_diff(center, coord_project(
-                (radius + small_radius) / 2, start_angle + angle / 2))
+            (radius + small_radius) / 2, start_angle + angle / 2))
         self.graph._static_value(serie_node, val, x, y, metadata, 'middle')
         self.graph._tooltip_data(
             node, val, x, y, "centered",

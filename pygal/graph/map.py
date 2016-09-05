@@ -57,8 +57,8 @@ class BaseMap(Graph):
         Format value for map value display.
         """
         return '%s: %s' % (
-             self.area_names.get(self.adapt_code(value[0]), '?'),
-             self._y_format(value[1]))
+            self.area_names.get(self.adapt_code(value[0]), '?'),
+            self._y_format(value[1]))
 
     def _plot(self):
         """Insert a map in the chart and apply data on it"""

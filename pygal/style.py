@@ -278,7 +278,7 @@ class RedBlueStyle(Style):
     opacity_hover = '.9'
     colors = (
         '#d94e4c', '#e5884f', '#39929a',
-        lighten('#d94e4c', 10),  darken('#39929a', 15), lighten('#e5884f', 17),
+        lighten('#d94e4c', 10), darken('#39929a', 15), lighten('#e5884f', 17),
         darken('#d94e4c', 10), '#234547')
 
 
@@ -332,7 +332,7 @@ class TurquoiseStyle(Style):
     transition = '250ms ease-in'
     colors = (
         '#93d2d9', '#ef940f', '#8C6243', '#fff',
-        darken('#93d2d9', 20),  lighten('#ef940f', 15),
+        darken('#93d2d9', 20), lighten('#ef940f', 15),
         lighten('#8c6243', 15), '#1b8088')
 
 
