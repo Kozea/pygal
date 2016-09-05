@@ -103,9 +103,11 @@ class Svg(object):
             if css.startswith('inline:'):
                 css_text = css[len('inline:'):]
             elif css.startswith('file://'):
+                css = css[len('file://'):]
+
                 if not os.path.exists(css):
                     css = os.path.join(
-                        os.path.dirname(__file__), 'css', css[len('file://'):])
+                        os.path.dirname(__file__), 'css', css)
 
                 with io.open(css, encoding='utf-8') as f:
                     css_text = template(
