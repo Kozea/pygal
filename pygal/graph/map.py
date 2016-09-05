@@ -82,14 +82,10 @@ class BaseMap(Graph):
                 else:
                     ratio = .3 + .7 * (value - min_) / (max_ - min_)
 
-                try:
-                    areae = map.findall(
-                        ".//*[@class='%s%s %s map-element']" % (
-                            self.area_prefix, area_code,
-                            self.kind))
-                except SyntaxError:
-                    # Python 2.6 (you'd better install lxml)
-                    raise ImportError('lxml is required under python 2.6')
+                areae = map.findall(
+                    ".//*[@class='%s%s %s map-element']" % (
+                        self.area_prefix, area_code,
+                        self.kind))
 
                 if not areae:
                     continue

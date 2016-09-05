@@ -69,15 +69,6 @@ def u(s):
         return s.decode('utf-8')
     return s
 
-
-def total_seconds(td):
-    """Backport of `timedelta.total_second` function for python 2.6"""
-    if sys.version_info[:2] == (2, 6):
-        return (
-            (td.days * 86400 + td.seconds) * 10 ** 6 + td.microseconds
-        ) / 10 ** 6
-    return td.total_seconds()
-
 try:
     from datetime import timezone
     utc = timezone.utc
@@ -103,7 +94,7 @@ def timestamp(x):
     if hasattr(x, 'timestamp'):
         return x.timestamp()
     else:
-        return total_seconds(x - datetime(1970, 1, 1, tzinfo=utc))
+        return (x - datetime(1970, 1, 1, tzinfo=utc)).total_seconds()
 
 try:
     from urllib import quote_plus

@@ -24,7 +24,7 @@ into float for xy plot and back to their type for display
 
 from datetime import date, datetime, time, timedelta
 
-from pygal._compat import is_str, timestamp, total_seconds
+from pygal._compat import is_str, timestamp
 from pygal.adapters import positive
 from pygal.graph.xy import XY
 
@@ -60,7 +60,7 @@ def time_to_datetime(x):
 def timedelta_to_seconds(x):
     """Convert a timedelta into an amount of seconds"""
     if isinstance(x, timedelta):
-        return total_seconds(x)
+        return x.total_seconds()
     return x
 
 
