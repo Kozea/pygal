@@ -8,6 +8,7 @@ Changelog
 * New call API: `chart = Line(fill=True); chart.add('title', [1, 3, 12]); chart.render()` can now be replaced with `Line(fill=True)(1, 3, 12, title='title').render()`
 * Drop python 2.6 support
 
+
 2.2.3
 =====
 
