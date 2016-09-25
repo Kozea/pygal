@@ -5,11 +5,9 @@
 
 from __future__ import division
 from pygal import Line
-from pygal.test.utils import texts
-from math import cos, sin
 
 chart = Line(title='test', logarithmic=True)
 chart.add('test 1', [None, -38, 48, 4422, 35586, 1003452, 225533])
 chart.add('test 2', [1, 40, 20, 38, 2937, 20399, 3947])
 q = chart.render_pyquery()
-assert len(q(".dots")) == 20
+assert len(q(".dots")) == 12
