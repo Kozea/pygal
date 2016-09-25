@@ -167,7 +167,7 @@ class Line(Graph):
             else:
                 # plain vanilla rendering
                 sequences = [view_values]
-			if self.logarithmic:
+            if self.logarithmic:
                 for seq in sequences:
                     for ele in seq[::-1]:
                     	y = points[seq.index(ele)][1]
