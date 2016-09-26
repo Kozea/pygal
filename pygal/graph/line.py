@@ -170,9 +170,9 @@ class Line(Graph):
             if self.logarithmic:
                 for seq in sequences:
                     for ele in seq[::-1]:
-                    	y = points[seq.index(ele)][1]
+                        y = points[seq.index(ele)][1]
                         if y is None or y <= 0:
-                            del seq[seq.index(ele)]			
+                            del seq[seq.index(ele)]
             for seq in sequences:
                 self.svg.line(
                     serie_node['plot'], seq, close=self._self_close,
