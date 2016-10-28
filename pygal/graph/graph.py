@@ -729,9 +729,9 @@ class Graph(PublicApi):
         if self.print_values_position == 'top':
             gh = self.height - self.margin_box.y
             alpha = 1.1 * (self.style.value_font_size / gh) * self._box.height
-            if self._max > 0:
+            if self._max and self._max > 0:
                 self._box.ymax += alpha
-            if self._min < 0:
+            if self._min and self._min < 0:
                 self._box.ymin -= alpha
 
     def _confidence_interval(self, node, x, y, value, metadata):
