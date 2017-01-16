@@ -40,6 +40,12 @@ class PyTest(TestCommand):
 
 ROOT = os.path.dirname(__file__)
 
+tests_requirements = [
+    "pyquery", "flask", "cairosvg",
+    'pytest-runner', 'pytest-cov', 'pytest-flake8', 'pytest-isort',
+    'pytest'
+]
+
 # Explicitly specify the encoding of pygal/__init__.py if we're on py3.
 kwargs = {}
 if sys.version_info[0] == 3:
@@ -62,13 +68,14 @@ setup(
     scripts=["pygal_gen.py"],
     keywords=[
         "svg", "chart", "graph", "diagram", "plot", "histogram", "kiviat"],
-    tests_require=["pytest", "pyquery", "flask", "cairosvg"],
+    setup_requires=['pytest-runner'],
+    test_requires=tests_requirements,
     cmdclass={'test': PyTest},
     package_data={'pygal': ['css/*', 'graph/maps/*.svg']},
     extras_require={
         'lxml': ['lxml'],
-        'png': ['cairosvg']
-
+        'png': ['cairosvg'],
+        'test': tests_requirements
     },
     classifiers=[
         "Development Status :: 4 - Beta",

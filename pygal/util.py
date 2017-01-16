@@ -275,6 +275,7 @@ class cached_property(object):
             obj.__dict__[self.__name__] = self.getter(obj)
         return value
 
+
 css_comments = re.compile(r'/\*.*?\*/', re.MULTILINE | re.DOTALL)
 
 

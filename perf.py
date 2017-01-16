@@ -40,6 +40,7 @@ def perf(chart_name, length, series):
         chart.add('s %d' % i, adapt(chart, rands[:length]))
     return chart
 
+
 if '--bench' in sys.argv:
     bench = True
 

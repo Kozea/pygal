@@ -61,4 +61,5 @@ class Etree(object):
         self._etree = self._py_etree
         self.lxml = False
 
+
 etree = Etree()

@@ -69,6 +69,7 @@ def u(s):
         return s.decode('utf-8')
     return s
 
+
 try:
     from datetime import timezone
     utc = timezone.utc
@@ -95,6 +96,7 @@ def timestamp(x):
         return x.timestamp()
     else:
         return (x - datetime(1970, 1, 1, tzinfo=utc)).total_seconds()
+
 
 try:
     from urllib import quote_plus

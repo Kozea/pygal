@@ -230,6 +230,7 @@ def trigonometric_interpolate(x, y, precision=250, **kwargs):
                 s += y[k] * p
             yield X, s
 
+
 INTERPOLATIONS = {
     'quadratic': quadratic_interpolate,
     'cubic': cubic_interpolate,
