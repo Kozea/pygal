@@ -40,16 +40,21 @@ class PyTest(TestCommand):
 
 ROOT = os.path.dirname(__file__)
 
-tests_requirements = [
-    "pyquery", "flask", "cairosvg",
-    'pytest-runner', 'pytest-cov', 'pytest-flake8', 'pytest-isort',
-    'pytest'
-]
 
 # Explicitly specify the encoding of pygal/__init__.py if we're on py3.
 kwargs = {}
 if sys.version_info[0] == 3:
     kwargs['encoding'] = 'utf-8'
+    cairosvg = 'cairosvg'
+else:
+    cairosvg = 'cairosvg==0.5'
+
+tests_requirements = [
+    "pyquery", "flask", cairosvg,
+    'pytest-runner', 'pytest-cov', 'pytest-flake8', 'pytest-isort',
+    'pytest'
+]
+
 
 with open(os.path.join(ROOT, 'pygal', '__init__.py'), **kwargs) as fd:
     __version__ = re.search("__version__ = '([^']+)'", fd.read()).group(1)

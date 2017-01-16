@@ -4,8 +4,9 @@ python:
   - 3.3
   - 3.4
   - 3.5
+  - 3.6
   - nightly
-  # - pypy Disabled for pypy < 2.6.0
+  - pypy
 
 install:
   - pip install .
