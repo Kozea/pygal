@@ -8,18 +8,7 @@ python:
   - nightly
   - pypy
 
-install:
-  - pip install .
-  - pip install pygal_maps_world
-  - pip install pygal_maps_fr
-  - pip install pygal_maps_ch
-  - pip install pytest
-  - pip install pytest-flake8
-  - pip install pytest-cov
-  - pip install lxml
-  - pip install pyquery
-  - pip install cairosvg
-  - pip install coveralls
+install: pip install .[test]
 
 script: py.test pygal/ --flake8 --cov-report= --cov=pygal
 

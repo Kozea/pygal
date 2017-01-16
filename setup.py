@@ -50,7 +50,8 @@ else:
     cairosvg = 'cairosvg==0.5'
 
 tests_requirements = [
-    "pyquery", "flask", cairosvg,
+    "pyquery", "flask", cairosvg, 'lxml', 'pygal_maps_world', 'pygal_maps_fr',
+    'pygal_maps_ch', 'coveralls',
     'pytest-runner', 'pytest-cov', 'pytest-flake8', 'pytest-isort',
     'pytest'
 ]
@@ -79,7 +80,7 @@ setup(
     package_data={'pygal': ['css/*', 'graph/maps/*.svg']},
     extras_require={
         'lxml': ['lxml'],
-        'png': ['cairosvg'],
+        'png': [cairosvg],
         'test': tests_requirements
     },
     classifiers=[
