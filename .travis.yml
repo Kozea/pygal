@@ -10,7 +10,7 @@ python:
 
 install:
   - pip install --upgrade pip setuptools
-  - pip install .[test]
+  - pip install --upgrade .[test]
 
 script: py.test pygal/ --flake8 --cov-report= --cov=pygal
 
