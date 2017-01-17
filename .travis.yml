@@ -6,7 +6,7 @@ python:
   - 3.5
   - 3.6
   - nightly
-  - pypy
+# - pypy still no pypy 2.6
 
 install:
   - pip install --upgrade pip setuptools
