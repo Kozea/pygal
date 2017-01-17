@@ -8,7 +8,7 @@ python:
   - nightly
   - pypy
 
-install: pip install .[test]
+install: pip install --upgrade pip setuptools .[test]
 
 script: py.test pygal/ --flake8 --cov-report= --cov=pygal
 
