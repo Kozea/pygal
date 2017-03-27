@@ -2,7 +2,7 @@
 # This file is part of pygal
 #
 # A python svg graph plotting library
-# Copyright © 2012-2014 Kozea
+# Copyright © 2012-2016 Kozea
 #
 # This library is free software: you can redistribute it and/or modify it under
 # the terms of the GNU Lesser General Public License as published by the Free
@@ -17,19 +17,22 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with pygal. If not, see <http://www.gnu.org/licenses/>.
 """
-Pie chart
-
+Pie chart: A circular chart divided into slice to illustrate proportions
+It can be made as a donut or a half pie.
 """
 
 from __future__ import division
-from pygal.util import decorate
-from pygal.graph.graph import Graph
-from pygal.adapters import positive, none_to_zero
+
 from math import pi
+
+from pygal.adapters import none_to_zero, positive
+from pygal.graph.graph import Graph
+from pygal.util import alter, decorate
 
 
 class Pie(Graph):
-    """Pie graph"""
+
+    """Pie graph class"""
 
     _adapters = [positive, none_to_zero]
 
@@ -40,7 +43,6 @@ class Pie(Graph):
 
         slices = self.svg.node(serie_node['plot'], class_="slices")
         serie_angle = 0
-        total_perc = 0
         original_start_angle = start_angle
         if self.half_pie:
             center = ((self.width - self.margin_box.x) / 2.,
@@ -57,7 +59,7 @@ class Pie(Graph):
             else:
                 angle = 2 * pi * perc
             serie_angle += angle
-            val = '{0:.2%}'.format(perc)
+            val = self._format(serie, i)
             metadata = serie.metadata.get(i)
             slice_ = decorate(
                 self.svg,
@@ -70,26 +72,32 @@ class Pie(Graph):
                 big_radius = radius * .9
                 small_radius = radius * serie.inner_radius
 
-            self.svg.slice(
+            alter(self.svg.slice(
                 serie_node, slice_, big_radius, small_radius,
-                angle, start_angle, center, val)
+                angle, start_angle, center, val, i, metadata), metadata)
             start_angle += angle
-            total_perc += perc
 
         if dual:
-            val = '{0:.2%}'.format(total_perc)
+            val = self._serie_format(serie, sum(serie.values))
             self.svg.slice(serie_node,
                            self.svg.node(slices, class_="big_slice"),
                            radius * .9, 0, serie_angle,
-                           original_start_angle, center, val)
+                           original_start_angle, center, val, i, metadata)
         return serie_angle
 
+    def _compute_x_labels(self):
+        pass
+
+    def _compute_y_labels(self):
+        pass
+
     def _plot(self):
+        """Draw all the serie slices"""
         total = sum(map(sum, map(lambda x: x.values, self.series)))
         if total == 0:
             return
         if self.half_pie:
-            current_angle = 3*pi/2
+            current_angle = 3 * pi / 2
         else:
             current_angle = 0
 

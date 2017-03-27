@@ -2,7 +2,7 @@
 # This file is part of pygal
 #
 # A python svg graph plotting library
-# Copyright © 2012-2014 Kozea
+# Copyright © 2012-2016 Kozea
 #
 # This library is free software: you can redistribute it and/or modify it under
 # the terms of the GNU Lesser General Public License as published by the Free
@@ -17,22 +17,24 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with pygal. If not, see <http://www.gnu.org/licenses/>.
 """
-Stacked Bar chart
-
+Stacked Bar chart: Like a bar chart but with all series stacking
+on top of the others instead of being displayed side by side.
 """
 
 from __future__ import division
-from pygal.graph.bar import Bar
-from pygal.util import compute_scale, swap, ident
+
 from pygal.adapters import none_to_zero
+from pygal.graph.bar import Bar
 
 
 class StackedBar(Bar):
-    """Stacked Bar graph"""
+
+    """Stacked Bar graph class"""
 
     _adapters = [none_to_zero]
 
     def _get_separated_values(self, secondary=False):
+        """Separate values between positives and negatives stacked"""
         series = self.secondary_series if secondary else self.series
         transposed = list(zip(*[serie.values for serie in series]))
         positive_vals = [sum([
@@ -47,33 +49,37 @@ class StackedBar(Bar):
         return positive_vals, negative_vals
 
     def _compute_box(self, positive_vals, negative_vals):
-        self._box.ymin = negative_vals and min(min(negative_vals), self.zero)
-        self._box.ymax = positive_vals and max(max(positive_vals), self.zero)
+        """Compute Y min and max"""
+        if self.range and self.range[0] is not None:
+            self._box.ymin = self.range[0]
+        else:
+            self._box.ymin = negative_vals and min(
+                min(negative_vals), self.zero) or self.zero
+        if self.range and self.range[1] is not None:
+            self._box.ymax = self.range[1]
+        else:
+            self._box.ymax = positive_vals and max(
+                max(positive_vals), self.zero) or self.zero
 
     def _compute(self):
+        """Compute y min and max and y scale and set labels"""
         positive_vals, negative_vals = self._get_separated_values()
-        self._compute_box(positive_vals, negative_vals)
 
         if self.logarithmic:
-            positive_vals = list(filter(lambda x: x > 0, positive_vals))
-            negative_vals = list(filter(lambda x: x > 0, negative_vals))
+            positive_vals = list(filter(
+                lambda x: x > self.zero, positive_vals))
+            negative_vals = list(filter(
+                lambda x: x > self.zero, negative_vals))
 
+        self._compute_box(positive_vals, negative_vals)
         positive_vals = positive_vals or [self.zero]
         negative_vals = negative_vals or [self.zero]
 
-        x_pos = [
+        self._x_pos = [
             x / self._len for x in range(self._len + 1)
         ] if self._len > 1 else [0, 1]  # Center if only one value
 
-        self._points(x_pos)
-        y_pos = compute_scale(
-            self._box.ymin, self._box.ymax, self.logarithmic, self.order_min
-        ) if not self.y_labels else list(map(float, self.y_labels))
-        self._x_ranges = zip(x_pos, x_pos[1:])
-
-        self._x_labels = self.x_labels and list(zip(self.x_labels, [
-            sum(x_range) / 2 for x_range in self._x_ranges]))
-        self._y_labels = list(zip(map(self._format, y_pos), y_pos))
+        self._points(self._x_pos)
 
         self.negative_cumulation = [0] * self._len
         self.positive_cumulation = [0] * self._len
@@ -86,13 +92,17 @@ class StackedBar(Bar):
             self.secondary_positive_cumulation = [0] * self._len
             self._pre_compute_secondary(positive_vals, negative_vals)
 
+        self._x_pos = [(i + .5) / self._len for i in range(self._len)]
+
     def _pre_compute_secondary(self, positive_vals, negative_vals):
+        """Compute secondary y min and max"""
         self._secondary_min = (negative_vals and min(
             min(negative_vals), self.zero)) or self.zero
         self._secondary_max = (positive_vals and max(
             max(positive_vals), self.zero)) or self.zero
 
     def _bar(self, serie, parent, x, y, i, zero, secondary=False):
+        """Internal stacking bar drawing function"""
         if secondary:
             cumulation = (self.secondary_negative_cumulation
                           if y < self.zero else
@@ -126,10 +136,10 @@ class StackedBar(Bar):
             parent, 'rect',
             x=x, y=y, rx=r, ry=r, width=width, height=height,
             class_='rect reactive tooltip-trigger')
-        transpose = swap if self.horizontal else ident
-        return transpose((x + width / 2, y + height / 2))
+        return x, y, width, height
 
     def _plot(self):
+        """Draw bars for series and secondary series"""
         for serie in self.series[::-1 if self.stack_from_top else 1]:
             self.bar(serie)
         for serie in self.secondary_series[::-1 if self.stack_from_top else 1]:

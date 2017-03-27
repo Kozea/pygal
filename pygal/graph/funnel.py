@@ -2,7 +2,7 @@
 # This file is part of pygal
 #
 # A python svg graph plotting library
-# Copyright © 2012-2014 Kozea
+# Copyright © 2012-2016 Kozea
 #
 # This library is free software: you can redistribute it and/or modify it under
 # the terms of the GNU Lesser General Public License as published by the Free
@@ -16,58 +16,65 @@
 #
 # You should have received a copy of the GNU Lesser General Public License
 # along with pygal. If not, see <http://www.gnu.org/licenses/>.
-"""
-Funnel chart
-
-"""
+"""Funnel chart: Represent values as a funnel"""
 
 from __future__ import division
-from pygal.util import decorate, cut, compute_scale
-from pygal.adapters import positive, none_to_zero
+
+from pygal.adapters import none_to_zero, positive
 from pygal.graph.graph import Graph
+from pygal.util import alter, cut, decorate
 
 
 class Funnel(Graph):
-    """Funnel graph"""
+
+    """Funnel graph class"""
 
     _adapters = [positive, none_to_zero]
 
-    def _format(self, value):
-        return super(Funnel, self)._format(abs(value))
+    def _value_format(self, value):
+        """Format value for dual value display."""
+        return super(Funnel, self)._value_format(value and abs(value))
 
     def funnel(self, serie):
-        """Draw a dot line"""
+        """Draw a funnel slice"""
         serie_node = self.svg.serie(serie)
         fmt = lambda x: '%f %f' % x
         for i, poly in enumerate(serie.points):
             metadata = serie.metadata.get(i)
-            value = self._format(serie.values[i])
+            val = self._format(serie, i)
 
             funnels = decorate(
                 self.svg,
                 self.svg.node(serie_node['plot'], class_="funnels"),
                 metadata)
 
-            self.svg.node(
+            alter(self.svg.node(
                 funnels, 'polygon',
                 points=' '.join(map(fmt, map(self.view, poly))),
-                class_='funnel reactive tooltip-trigger')
+                class_='funnel reactive tooltip-trigger'), metadata)
 
+            # Poly center from label
             x, y = self.view((
-                self._x_labels[serie.index][1],  # Poly center from label
+                self._center(self._x_pos[serie.index]),
                 sum([point[1] for point in poly]) / len(poly)))
-            self._tooltip_data(funnels, value, x, y, classes='centered')
-            self._static_value(serie_node, value, x, y)
+            self._tooltip_data(
+                funnels, val, x, y, 'centered',
+                self._get_x_label(serie.index))
+            self._static_value(serie_node, val, x, y, metadata)
+
+    def _center(self, x):
+        return x - 1 / (2 * self._order)
 
     def _compute(self):
-        x_pos = [
+        """Compute y min and max and y scale and set labels"""
+        self._x_pos = [
             (x + 1) / self._order for x in range(self._order)
         ] if self._order != 1 else [.5]  # Center if only one value
 
         previous = [[self.zero, self.zero] for i in range(self._len)]
         for i, serie in enumerate(self.series):
             y_height = - sum(serie.safe_values) / 2
-            all_x_pos = [0] + x_pos
+            all_x_pos = [0] + self._x_pos
             serie.points = []
             for j, value in enumerate(serie.values):
                 poly = []
@@ -83,15 +90,22 @@ class Funnel(Graph):
         self._box.ymin = -val_max
         self._box.ymax = val_max
 
-        y_pos = compute_scale(
-            self._box.ymin, self._box.ymax, self.logarithmic, self.order_min
-        ) if not self.y_labels else list(map(float, self.y_labels))
+        if self.range and self.range[0] is not None:
+            self._box.ymin = self.range[0]
 
+        if self.range and self.range[1] is not None:
+            self._box.ymax = self.range[1]
+
+    def _compute_x_labels(self):
         self._x_labels = list(
-            zip(cut(self.series, 'title'),
-                map(lambda x: x - 1 / (2 * self._order), x_pos)))
-        self._y_labels = list(zip(map(self._format, y_pos), y_pos))
+            zip(self.x_labels and
+                map(self._x_format, self.x_labels) or [
+                    serie.title['title']
+                    if isinstance(serie.title, dict)
+                    else serie.title or '' for serie in self.series],
+                map(self._center, self._x_pos)))
 
     def _plot(self):
+        """Plot the funnel"""
         for serie in self.series:
             self.funnel(serie)

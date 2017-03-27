@@ -2,7 +2,7 @@
 # This file is part of pygal
 #
 # A python svg graph plotting library
-# Copyright © 2012-2014 Kozea
+# Copyright © 2012-2016 Kozea
 #
 # This library is free software: you can redistribute it and/or modify it under
 # the terms of the GNU Lesser General Public License as published by the Free
@@ -16,24 +16,30 @@
 #
 # You should have received a copy of the GNU Lesser General Public License
 # along with pygal. If not, see <http://www.gnu.org/licenses/>.
-"""
-XY Line graph
 
+"""
+XY Line graph: Plot a set of couple data points (x, y) connected by
+straight segments.
 """
 
 from __future__ import division
+
 from functools import reduce
-from pygal.util import compute_scale, cached_property, compose
+
+from pygal.graph.dual import Dual
 from pygal.graph.line import Line
+from pygal.util import cached_property, compose, ident
 
 
-class XY(Line):
-    """XY Line graph"""
-    _dual = True
+class XY(Line, Dual):
+
+    """XY Line graph class"""
+
     _x_adapters = []
 
     @cached_property
     def xvals(self):
+        """All x values"""
         return [val[0]
                 for serie in self.all_series
                 for val in serie.values
@@ -41,6 +47,7 @@ class XY(Line):
 
     @cached_property
     def yvals(self):
+        """All y values"""
         return [val[1]
                 for serie in self.series
                 for val in serie.values
@@ -48,27 +55,23 @@ class XY(Line):
 
     @cached_property
     def _min(self):
+        """Getter for the minimum series value"""
         return (self.range[0] if (self.range and self.range[0] is not None)
                 else (min(self.yvals) if self.yvals else None))
 
     @cached_property
     def _max(self):
+        """Getter for the maximum series value"""
         return (self.range[1] if (self.range and self.range[1] is not None)
                 else (max(self.yvals) if self.yvals else None))
 
-    def _has_data(self):
-        """Check if there is any data"""
-        return sum(
-            map(len, map(lambda s: s.safe_values, self.series))) != 0 and any((
-                sum(map(abs, self.xvals)) != 0,
-                sum(map(abs, self.yvals)) != 0))
-
     def _compute(self):
+        """Compute x/y min and max and x/y scale and set labels"""
         if self.xvals:
             if self.xrange:
                 x_adapter = reduce(
                     compose, self._x_adapters) if getattr(
-                        self, '_x_adapters', None) else None
+                        self, '_x_adapters', None) else ident
 
                 xmin = x_adapter(self.xrange[0])
                 xmax = x_adapter(self.xrange[1])
@@ -114,16 +117,9 @@ class XY(Line):
             else:
                 xrng = None
 
-        if xrng:
+        # these values can also be 0 (zero), so testing explicitly for None
+        if xrng is not None:
             self._box.xmin, self._box.xmax = xmin, xmax
-        if yrng:
+
+        if yrng is not None:
             self._box.ymin, self._box.ymax = ymin, ymax
-
-        x_pos = compute_scale(
-            self._box.xmin, self._box.xmax, self.logarithmic,
-            self.order_min)
-        y_pos = compute_scale(
-            self._box.ymin, self._box.ymax, self.logarithmic, self.order_min)
-
-        self._x_labels = list(zip(map(self._x_format, x_pos), x_pos))
-        self._y_labels = list(zip(map(self._format, y_pos), y_pos))

@@ -2,7 +2,7 @@
 # This file is part of pygal
 #
 # A python svg graph plotting library
-# Copyright © 2012-2014 Kozea
+# Copyright © 2012-2016 Kozea
 #
 # This library is free software: you can redistribute it and/or modify it under
 # the terms of the GNU Lesser General Public License as published by the Free
@@ -40,8 +40,10 @@ def perf(chart_name, length, series):
         chart.add('s %d' % i, adapt(chart, rands[:length]))
     return chart
 
+
 if '--bench' in sys.argv:
     bench = True
+
     def prt(s):
         pass
 
@@ -49,6 +51,7 @@ if '--bench' in sys.argv:
         sys.stdout.write(s)
 else:
     bench = False
+
     def prt(s):
         sys.stdout.write(s)
         sys.stdout.flush()

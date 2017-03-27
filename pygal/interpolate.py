@@ -2,7 +2,7 @@
 # This file is part of pygal
 #
 # A python svg graph plotting library
-# Copyright © 2012-2014 Kozea
+# Copyright © 2012-2016 Kozea
 #
 # This library is free software: you can redistribute it and/or modify it under
 # the terms of the GNU Lesser General Public License as published by the Free
@@ -17,14 +17,23 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with pygal. If not, see <http://www.gnu.org/licenses/>.
 """
-Interpolation
+Interpolation functions
+
+These functions takes two lists of points x and y and
+returns an iterator over the interpolation between all these points
+with `precision` interpolated points between each of them
 
 """
 from __future__ import division
+
 from math import sin
 
 
 def quadratic_interpolate(x, y, precision=250, **kwargs):
+    """
+    Interpolate x, y using a quadratic algorithm
+    https://en.wikipedia.org/wiki/Spline_(mathematics)
+    """
     n = len(x) - 1
     delta_x = [x2 - x1 for x1, x2 in zip(x, x[1:])]
     delta_y = [y2 - y1 for y1, y2 in zip(y, y[1:])]
@@ -51,6 +60,10 @@ def quadratic_interpolate(x, y, precision=250, **kwargs):
 
 
 def cubic_interpolate(x, y, precision=250, **kwargs):
+    """
+    Interpolate x, y using a cubic algorithm
+    https://en.wikipedia.org/wiki/Spline_interpolation
+    """
     n = len(x) - 1
     # Spline equation is a + bx + cx² + dx³
     # ie: Spline part i equation is a[i] + b[i]x + c[i]x² + d[i]x³
@@ -91,6 +104,25 @@ def cubic_interpolate(x, y, precision=250, **kwargs):
 
 def hermite_interpolate(x, y, precision=250,
                         type='cardinal', c=None, b=None, t=None):
+    """
+    Interpolate x, y using the hermite method.
+    See https://en.wikipedia.org/wiki/Cubic_Hermite_spline
+
+    This interpolation is configurable and contain 4 subtypes:
+      * Catmull Rom
+      * Finite Difference
+      * Cardinal
+      * Kochanek Bartels
+
+    The cardinal subtype is customizable with a parameter:
+      * c: tension (0, 1)
+
+    This last type is also customizable using 3 parameters:
+      * c: continuity (-1, 1)
+      * b: bias       (-1, 1)
+      * t: tension    (-1, 1)
+
+    """
     n = len(x) - 1
     m = [1] * (n + 1)
     w = [1] * (n + 1)
@@ -148,6 +180,10 @@ def hermite_interpolate(x, y, precision=250,
 
 
 def lagrange_interpolate(x, y, precision=250, **kwargs):
+    """
+    Interpolate x, y using Lagrange polynomials
+    https://en.wikipedia.org/wiki/Lagrange_polynomial
+    """
     n = len(x) - 1
     delta_x = [x2 - x1 for x1, x2 in zip(x, x[1:])]
     for i in range(n + 1):
@@ -170,7 +206,10 @@ def lagrange_interpolate(x, y, precision=250, **kwargs):
 
 
 def trigonometric_interpolate(x, y, precision=250, **kwargs):
-    """As per http://en.wikipedia.org/wiki/Trigonometric_interpolation"""
+    """
+    Interpolate x, y using trigonometric
+    As per http://en.wikipedia.org/wiki/Trigonometric_interpolation
+    """
     n = len(x) - 1
     delta_x = [x2 - x1 for x1, x2 in zip(x, x[1:])]
     for i in range(n + 1):
@@ -191,12 +230,7 @@ def trigonometric_interpolate(x, y, precision=250, **kwargs):
                 s += y[k] * p
             yield X, s
 
-"""
-These functions takes two lists of points x and y and
-returns an iterator over the interpolation between all these points
-with `precision` interpolated points between each of them
 
-"""
 INTERPOLATIONS = {
     'quadratic': quadratic_interpolate,
     'cubic': cubic_interpolate,
@@ -213,4 +247,18 @@ if __name__ == '__main__':
     xy.add('normal', points)
     xy.add('quadratic', quadratic_interpolate(*zip(*points)))
     xy.add('cubic', cubic_interpolate(*zip(*points)))
+    xy.add('lagrange', lagrange_interpolate(*zip(*points)))
+    xy.add('trigonometric', trigonometric_interpolate(*zip(*points)))
+    xy.add('hermite catmul_rom', hermite_interpolate(
+        *zip(*points), type='catmul_rom'))
+    xy.add('hermite finite_difference', hermite_interpolate(
+        *zip(*points), type='finite_difference'))
+    xy.add('hermite cardinal -.5', hermite_interpolate(
+        *zip(*points), type='cardinal', c=-.5))
+    xy.add('hermite cardinal .5', hermite_interpolate(
+        *zip(*points), type='cardinal', c=.5))
+    xy.add('hermite kochanek_bartels .5 .75 -.25', hermite_interpolate(
+        *zip(*points), type='kochanek_bartels', c=.5, b=.75, t=-.25))
+    xy.add('hermite kochanek_bartels .25 -.75 .5', hermite_interpolate(
+        *zip(*points), type='kochanek_bartels', c=.25, b=-.75, t=.5))
     xy.render_in_browser()

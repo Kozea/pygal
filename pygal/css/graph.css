@@ -23,7 +23,7 @@
 }
 
 {{ id }}.guide.line {
-  fill-opacity: 0;
+  fill: none;
 }
 
 {{ id }}.centered {
@@ -46,27 +46,32 @@
   text-anchor: start;
 }
 
+{{ id }}.axis.x:not(.web) text[transform].backwards {
+  text-anchor: end;
+}
+
 {{ id }}.axis.y text {
   text-anchor: end;
 }
+
+{{ id }}.axis.y text[transform].backwards {
+  text-anchor: start;
+}
+
 {{ id }}.axis.y2 text {
   text-anchor: start;
 }
 
-{{ id }}.axis.y .logarithmic text:not(.major) ,
-{{ id }}.axis.y2 .logarithmic text:not(.major) {
-  font-size: 50%;
+{{ id }}.axis.y2 text[transform].backwards {
+  text-anchor: end;
 }
 
 {{ id }}.axis .guide.line {
-  stroke-dasharray: 4,4;
+  stroke-dasharray: {{ style.guide_stroke_dasharray }};
 }
 
 {{ id }}.axis .major.guide.line {
-  stroke-dasharray: 6,6;
-}
-{{ id }}.axis text.major {
-  stroke-width: 0.5px;
+  stroke-dasharray: {{ style.major_guide_stroke_dasharray }};
 }
 
 {{ id }}.horizontal .axis.y .guide.line,
@@ -107,8 +112,12 @@
   stroke-width: 5px;
 }
 
-{{ id }}.series text {
-  stroke: none;
+{{ id }}.dot.negative {
+  fill: transparent;
+}
+
+{{ id }} text, {{ id }} tspan {
+  stroke: none !important;
 }
 
 {{ id }}.series text.active {
@@ -116,13 +125,28 @@
 }
 
 {{ id }}.tooltip rect {
-  fill-opacity: 0.8;
+  fill-opacity: .95;
+  stroke-width: .5;
 }
 
 {{ id }}.tooltip text {
   fill-opacity: 1;
 }
 
-{{ id }}.tooltip text tspan.label {
-  fill-opacity: .8;
+{{ id }}.showable {
+  visibility: hidden;
+}
+
+{{ id }}.showable.shown {
+  visibility: visible;
+}
+
+{{ id }}.gauge-background {
+  fill: {{ style.value_background }};
+  stroke: none;
+}
+
+{{ id }}.bg-lines {
+  stroke: {{ style.background }};
+  stroke-width: 2px;
 }

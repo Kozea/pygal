@@ -1,0 +1,6 @@
+lxml
+pytest
+pyquery
+pygal_maps_world
+pygal_maps_ch
+pygal_maps_fr

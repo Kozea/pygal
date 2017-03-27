@@ -2,7 +2,7 @@
 # This file is part of pygal
 #
 # A python svg graph plotting library
-# Copyright © 2012-2014 Kozea
+# Copyright © 2012-2016 Kozea
 #
 # This library is free software: you can redistribute it and/or modify it under
 # the terms of the GNU Lesser General Public License as published by the Free
@@ -17,15 +17,23 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with pygal. If not, see <http://www.gnu.org/licenses/>.
 
+"""
+pygal contains no map but a base class to create extension
+see the pygal_maps_world package to get an exemple.
+https://github.com/Kozea/pygal_maps_world
+"""
+
 from __future__ import division
-from pygal.graph.graph import Graph
-from pygal.util import cut, cached_property, decorate
+
 from pygal.etree import etree
-from numbers import Number
+from pygal.graph.graph import Graph
+from pygal.util import alter, cached_property, cut, decorate
 
 
 class BaseMap(Graph):
-    """Base map."""
+
+    """Base class for maps"""
+
     _dual = True
 
     @cached_property
@@ -36,10 +44,24 @@ class BaseMap(Graph):
                 for val in serie.values
                 if val[1] is not None]
 
-    def get_values(self, serie):
-        return serie.values
+    def enumerate_values(self, serie):
+        """Hook to replace default enumeration on values"""
+        return enumerate(serie.values)
+
+    def adapt_code(self, area_code):
+        """Hook to change the area code"""
+        return area_code
+
+    def _value_format(self, value):
+        """
+        Format value for map value display.
+        """
+        return '%s: %s' % (
+            self.area_names.get(self.adapt_code(value[0]), '?'),
+            self._y_format(value[1]))
 
     def _plot(self):
+        """Insert a map in the chart and apply data on it"""
         map = etree.fromstring(self.svg_map)
         map.set('width', str(self.view.width))
         map.set('height', str(self.view.height))
@@ -51,31 +73,19 @@ class BaseMap(Graph):
                 continue
             min_ = min(safe_vals)
             max_ = max(safe_vals)
-            for j, (area_code, value) in enumerate(self.get_values(serie)):
-                # TODO: Generalize
-                if isinstance(area_code, Number):
-                    area_code = '%2d' % area_code
-
+            for j, (area_code, value) in self.enumerate_values(serie):
+                area_code = self.adapt_code(area_code)
                 if value is None:
                     continue
                 if max_ == min_:
                     ratio = 1
                 else:
                     ratio = .3 + .7 * (value - min_) / (max_ - min_)
-                try:
-                    areae = map.findall(
-                        ".//*[@class='%s%s %s map-element']" % (
-                            self.area_prefix, area_code,
-                            self.kind))
-                except SyntaxError:
-                    # Python 2.6 (you'd better install lxml)
-                    areae = []
-                    for g in map:
-                        for e in g:
-                            if '%s%s' % (
-                                    self.area_prefix, area_code
-                            ) in e.attrib.get('class', ''):
-                                areae.append(e)
+
+                areae = map.findall(
+                    ".//*[@class='%s%s %s map-element']" % (
+                        self.area_prefix, area_code,
+                        self.kind))
 
                 if not areae:
                     continue
@@ -83,10 +93,13 @@ class BaseMap(Graph):
                 for area in areae:
                     cls = area.get('class', '').split(' ')
                     cls.append('color-%d' % i)
+                    cls.append('serie-%d' % i)
+                    cls.append('series')
                     area.set('class', ' '.join(cls))
-                    area.set('style', 'fill-opacity: %f' % (ratio))
+                    area.set('style', 'fill-opacity: %f' % ratio)
 
                     metadata = serie.metadata.get(j)
+
                     if metadata:
                         node = decorate(self.svg, area, metadata)
                         if node != area:
@@ -99,15 +112,21 @@ class BaseMap(Graph):
                                 node.append(area)
                                 g.insert(index, node)
 
-                    last_node = len(area) > 0 and area[-1]
-                    if last_node is not None and last_node.tag == 'title':
-                        title_node = last_node
-                        text = title_node.text + '\n'
-                    else:
-                        title_node = self.svg.node(area, 'title')
-                        text = ''
-                    title_node.text = text + '[%s] %s: %s' % (
-                        serie.title,
-                        self.area_names[area_code], self._format(value))
+                    for node in area:
+                        cls = node.get('class', '').split(' ')
+                        cls.append('reactive')
+                        cls.append('tooltip-trigger')
+                        cls.append('map-area')
+                        node.set('class', ' '.join(cls))
+                        alter(node, metadata)
+
+                    val = self._format(serie, j)
+                    self._tooltip_data(area, val, 0, 0, 'auto')
 
         self.nodes['plot'].append(map)
+
+    def _compute_x_labels(self):
+        pass
+
+    def _compute_y_labels(self):
+        pass

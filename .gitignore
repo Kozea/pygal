@@ -8,3 +8,6 @@ dist
 .cov-py*
 coverage-py*
 junit-py*
+docs/_build
+.cache
+build

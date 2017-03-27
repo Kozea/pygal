@@ -3,7 +3,7 @@
 # This file is part of pygal
 #
 # A python svg graph plotting library
-# Copyright © 2012-2014 Kozea
+# Copyright © 2012-2016 Kozea
 #
 # This library is free software: you can redistribute it and/or modify it under
 # the terms of the GNU Lesser General Public License as published by the Free
@@ -28,7 +28,7 @@ from setuptools.command.test import test as TestCommand
 class PyTest(TestCommand):
     def finalize_options(self):
         TestCommand.finalize_options(self)
-        self.test_args = []
+        self.test_args = ['-x', 'build/lib/pygal']
         self.test_suite = True
 
     def run_tests(self):
@@ -40,10 +40,22 @@ class PyTest(TestCommand):
 
 ROOT = os.path.dirname(__file__)
 
+
 # Explicitly specify the encoding of pygal/__init__.py if we're on py3.
 kwargs = {}
 if sys.version_info[0] == 3:
     kwargs['encoding'] = 'utf-8'
+    cairosvg = 'cairosvg'
+else:
+    cairosvg = 'cairosvg==0.5'
+
+tests_requirements = [
+    "pyquery", "flask", cairosvg, 'lxml', 'pygal_maps_world', 'pygal_maps_fr',
+    'pygal_maps_ch', 'coveralls',
+    'pytest-runner', 'pytest-cov', 'pytest-flake8', 'pytest-isort',
+    'pytest'
+]
+
 
 with open(os.path.join(ROOT, 'pygal', '__init__.py'), **kwargs) as fd:
     __version__ = re.search("__version__ = '([^']+)'", fd.read()).group(1)
@@ -62,13 +74,14 @@ setup(
     scripts=["pygal_gen.py"],
     keywords=[
         "svg", "chart", "graph", "diagram", "plot", "histogram", "kiviat"],
-    tests_require=["pytest", "pyquery", "flask", "cairosvg"],
+    setup_requires=['pytest-runner'],
+    test_requires=tests_requirements,
     cmdclass={'test': PyTest},
     package_data={'pygal': ['css/*', 'graph/maps/*.svg']},
     extras_require={
         'lxml': ['lxml'],
-        'png': ['cairosvg']
-
+        'png': [cairosvg],
+        'test': tests_requirements
     },
     classifiers=[
         "Development Status :: 4 - Beta",

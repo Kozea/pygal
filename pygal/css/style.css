@@ -48,11 +48,11 @@
 }
 
 {{ id }}text.no_data {
-  fill: {{ style.foreground_light }};
+  fill: {{ style.foreground_strong }};
 }
 
 {{ id }}.title {
-  fill: {{ style.foreground_light }};
+  fill: {{ style.foreground_strong }};
 }
 
 {{ id }}.legends .legend text {
@@ -60,15 +60,15 @@
 }
 
 {{ id }}.legends .legend:hover text {
-  fill: {{ style.foreground_light }};
+  fill: {{ style.foreground_strong }};
 }
 
 {{ id }}.axis .line {
-  stroke: {{ style.foreground_light }};
+  stroke: {{ style.foreground_strong }};
 }
 
 {{ id }}.axis .guide.line {
-  stroke: {{ style.foreground_dark }};
+  stroke: {{ style.foreground_subtle }};
 }
 
 {{ id }}.axis .major.line {
@@ -76,66 +76,99 @@
 }
 
 {{ id }}.axis text.major {
-  stroke: {{ style.foreground_light }};
-  fill: {{ style.foreground_light }};
+  fill: {{ style.foreground_strong }};
 }
 
 {{ id }}.axis.y .guides:hover .guide.line,
 {{ id }}.line-graph .axis.x .guides:hover .guide.line,
 {{ id }}.stackedline-graph .axis.x .guides:hover .guide.line,
 {{ id }}.xy-graph .axis.x .guides:hover .guide.line {
-  stroke: {{ style.foreground_light }};
+  stroke: {{ style.foreground_strong }};
 }
 
 {{ id }}.axis .guides:hover text {
-  fill: {{ style.foreground_light }};
+  fill: {{ style.foreground_strong }};
 }
+
 
 {{ id }}.reactive {
   fill-opacity: {{ style.opacity }};
+  stroke-opacity: {{ style.stroke_opacity }};
+}
+
+{{ id }}.ci {
+    stroke: {{ style.foreground }};
 }
 
 {{ id }}.reactive.active,
 {{ id }}.active .reactive {
-  fill-opacity:  {{ style.opacity_hover }};
+  fill-opacity: {{ style.opacity_hover }};
+  stroke-opacity: {{ style.stroke_opacity_hover }};
+  stroke-width: 4;
 }
 
-{{ id }}.series {
-  stroke-width: {{ style.stroke_width }};
-  stroke-linejoin: {{ style.stroke_style }};
-  stroke-linecap: {{ style.stroke_style }};
-  stroke-dasharray: {{ style.stroke_dasharray }};
+{{ id }}.ci .reactive.active {
+  stroke-width: 1.5;
 }
 
 {{ id }}.series text {
-  fill: {{ style.foreground_light }};
+  fill: {{ style.foreground_strong }};
 }
 
 {{ id }}.tooltip rect {
   fill: {{ style.plot_background }};
-  stroke: {{ style.foreground_light }};
+  stroke: {{ style.foreground_strong }};
+  -webkit-transition: opacity {{ style.transition }};
+  -moz-transition: opacity {{ style.transition }};
+  transition: opacity {{ style.transition }};
 }
 
-{{ id }}.tooltip text {
-  fill: {{ style.foreground_light }};
+{{ id }}.tooltip .label {
+  fill: {{ style.foreground }};
+}
+
+{{ id }}.tooltip .label {
+  fill: {{ style.foreground }};
+}
+
+{{ id }}.tooltip .legend {
+  font-size: .8em;
+  fill: {{ style.foreground_subtle }};
+}
+
+{{ id }}.tooltip .x_label {
+  font-size: .6em;
+  fill: {{ style.foreground_strong }};
+}
+
+{{ id }}.tooltip .xlink {
+  font-size: .5em;
+  text-decoration: underline;
+}
+
+{{ id }}.tooltip .value {
+  font-size: 1.5em;
+}
+
+{{ id }}.bound {
+  font-size: .5em;
+}
+
+{{ id }}.max-value {
+  font-size: .75em;
+  fill: {{ style.foreground_subtle }};
 }
 
 {{ id }}.map-element {
-  fill: {{ style.foreground }};
-  stroke: {{ style.foreground_dark }} !important;
-  opacity: .9;
-  stroke-width: 3;
-  -webkit-transition: 250ms;
-  -moz-transition: 250ms;
-  -o-transition: 250ms;
-  transition: 250ms;
+  fill: {{ style.plot_background }};
+  stroke: {{ style.foreground_subtle }} !important;
 }
 
-{{ id }}.map-element:hover {
-  opacity: 1;
-  stroke-width: 10;
+{{ id }}.map-element .reactive {
+  fill-opacity: inherit;
+  stroke-opacity: inherit;
 }
 
 {{ colors }}
 
-
+{{ strokes }}

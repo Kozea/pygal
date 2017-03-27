@@ -2,7 +2,7 @@
 # This file is part of pygal
 #
 # A python svg graph plotting library
-# Copyright © 2012-2014 Kozea
+# Copyright © 2012-2016 Kozea
 #
 # This library is free software: you can redistribute it and/or modify it under
 # the terms of the GNU Lesser General Public License as published by the Free
@@ -16,26 +16,38 @@
 #
 # You should have received a copy of the GNU Lesser General Public License
 # along with pygal. If not, see <http://www.gnu.org/licenses/>.
+"""Config module holding all options and their default values."""
 
-"""
-Config module with all options
-"""
 from copy import deepcopy
-from pygal.style import Style, DefaultStyle
+
 from pygal.interpolate import INTERPOLATIONS
+from pygal.style import DefaultStyle, Style
+from pygal import formatters
 
 
 CONFIG_ITEMS = []
+callable = type(lambda: 1)
 
 
 class Key(object):
+
+    """
+    Represents a config parameter.
+
+    A config parameter has a name, a default value, a type,
+    a category, a documentation, an optional longer documentatation
+    and an optional subtype for list style option.
+
+    Most of these informations are used in cabaret to auto generate
+    forms representing these options.
+    """
 
     _categories = []
 
     def __init__(
             self, default_value, type_, category, doc,
             subdoc="", subtype=None):
-
+        """Create a configuration key"""
         self.value = default_value
         self.type = type_
         self.doc = doc
@@ -48,27 +60,50 @@ class Key(object):
 
         CONFIG_ITEMS.append(self)
 
+    def __repr__(self):
+        """
+        Make a documentation repr.
+        This is a hack to generate doc from inner doc
+        """
+        return """
+        Type: %s%s     
+        Default: %r     
+        %s%s
+        """ % (
+            self.type.__name__,
+            (' of %s' % self.subtype.__name__) if self.subtype else '',
+            self.value,
+            self.doc,
+            (' %s' % self.subdoc) if self.subdoc else ''
+        )
+
     @property
     def is_boolean(self):
+        """Return `True` if this parameter is a boolean"""
         return self.type == bool
 
     @property
     def is_numeric(self):
+        """Return `True` if this parameter is numeric (int or float)"""
         return self.type in (int, float)
 
     @property
     def is_string(self):
+        """Return `True` if this parameter is a string"""
         return self.type == str
 
     @property
     def is_dict(self):
+        """Return `True` if this parameter is a mapping"""
         return self.type == dict
 
     @property
     def is_list(self):
+        """Return `True` if this parameter is a list"""
         return self.type == list
 
     def coerce(self, value):
+        """Cast a string into this key type"""
         if self.type == Style:
             return value
         elif self.type == list:
@@ -91,14 +126,26 @@ class Key(object):
 
 
 class MetaConfig(type):
+
+    """Config metaclass. Used to get the key name and set it on the value."""
+
     def __new__(mcs, classname, bases, classdict):
+        """Get the name of the key and set it on the key"""
         for k, v in classdict.items():
             if isinstance(v, Key):
                 v.name = k
+
         return type.__new__(mcs, classname, bases, classdict)
 
 
 class BaseConfig(MetaConfig('ConfigBase', (object,), {})):
+
+    """
+    This class holds the common method for configs.
+
+    A config object can be instanciated with keyword arguments and
+    updated on call with keyword arguments.
+    """
 
     def __init__(self, **kwargs):
         """Can be instanciated with config kwargs"""
@@ -120,11 +167,16 @@ class BaseConfig(MetaConfig('ConfigBase', (object,), {})):
         self._update(kwargs)
 
     def _update(self, kwargs):
-        self.__dict__.update(
-            dict([(k, v) for (k, v) in kwargs.items()
-                  if not k.startswith('_') and k in dir(self)]))
+        """Update the config with the given dictionary"""
+        from pygal.util import merge
+        dir_self_set = set(dir(self))
+        merge(
+            self.__dict__, dict([
+                (k, v) for (k, v) in kwargs.items()
+                if not k.startswith('_') and k in dir_self_set]))
 
     def to_dict(self):
+        """Export a JSON serializable dictionary of the config"""
         config = {}
         for attr in dir(self):
             if not attr.startswith('__'):
@@ -136,10 +188,14 @@ class BaseConfig(MetaConfig('ConfigBase', (object,), {})):
         return config
 
     def copy(self):
+        """Copy this config object into another"""
         return deepcopy(self)
 
 
 class CommonConfig(BaseConfig):
+
+    """Class holding options used in both chart and serie configuration"""
+
     stroke = Key(
         True, bool, "Look",
         "Line dots (set it to false to get a scatter plot)")
@@ -155,6 +211,11 @@ class CommonConfig(BaseConfig):
     fill = Key(
         False, bool, "Look", "Fill areas under lines")
 
+    stroke_style = Key(None, dict, "Look", "Stroke style of serie element.",
+                       "This is a dict which can contain a "
+                       "'width', 'linejoin', 'linecap', 'dasharray' "
+                       "and 'dashoffset'")
+
     rounded_bars = Key(
         None, int, "Look",
         "Set this to the desired radius in px (for Bar-like charts)")
@@ -162,17 +223,38 @@ class CommonConfig(BaseConfig):
     inner_radius = Key(
         0, float, "Look", "Piechart inner radius (donut), must be <.9")
 
+    allow_interruptions = Key(
+        False, bool, "Look", "Break lines on None values")
+
+    formatter = Key(
+        None, callable, "Value",
+        "A function to convert raw value to strings for this chart or serie",
+        "Default to value_formatter in most charts, it depends on dual charts."
+        "(Can be overriden by value with the formatter metadata.)")
+
 
 class Config(CommonConfig):
+
     """Class holding config values"""
 
     style = Key(
         DefaultStyle, Style, "Style", "Style holding values injected in css")
 
     css = Key(
-        ('style.css', 'graph.css'), list, "Style",
+        ('file://style.css', 'file://graph.css'), list, "Style",
         "List of css file",
-        "It can be an absolute file path or an external link",
+        "It can be any uri from file:///tmp/style.css to //domain/style.css",
+        str)
+
+    classes = Key(
+        ('pygal-chart',),
+        list, "Style", "Classes of the root svg node",
+        str)
+
+    defs = Key(
+        [],
+        list, "Misc", "Extraneous defs to be inserted in svg",
+        "Useful for adding gradients / patterns…",
         str)
 
     # Look #
@@ -245,6 +327,10 @@ class Config(CommonConfig):
 
     tooltip_border_radius = Key(0, int, "Look", "Tooltip border radius")
 
+    tooltip_fancy_mode = Key(
+        True, bool, "Look", "Fancy tooltips",
+        "Print legend, x label in tooltip and use serie color for value.")
+
     inner_radius = Key(
         0, float, "Look", "Piechart inner radius (donut), must be <.9")
 
@@ -313,18 +399,14 @@ class Config(CommonConfig):
         "'x' (default), 'y' or 'either'")
 
     # Value #
-    human_readable = Key(
-        False, bool, "Value", "Display values in human readable format",
-        "(ie: 12.4M)")
-
     x_value_formatter = Key(
-        None, type(lambda: 1), "Value",
+        formatters.default, callable, "Value",
         "A function to convert abscissa numeric value to strings "
         "(used in XY and Date charts)")
 
     value_formatter = Key(
-        None, type(lambda: 1), "Value",
-        "A function to convert numeric value to strings")
+        formatters.default, callable, "Value",
+        "A function to convert ordinate numeric value to strings")
 
     logarithmic = Key(
         False, bool, "Value", "Display values in logarithmic scale")
@@ -341,16 +423,31 @@ class Config(CommonConfig):
         "ie: For hermite interpolation, you can set the cardinal tension with"
         "{'type': 'cardinal', 'c': .5}", int)
 
-    mode = Key(
-        None, str, "Value", "Sets the mode to be used. "
+    box_mode = Key(
+        'extremes', str, "Value", "Sets the mode to be used. "
         "(Currently only supported on box plot)",
-        "May be %s" % ' or '.join(["1.5IQR", "extremes"]))
+        "May be %s" % ' or '.join([
+            "1.5IQR", "extremes", "tukey", "stdev", "pstdev"]))
 
     order_min = Key(
-        None, int, "Value", "Minimum order of scale, defaults to None")
+        None, int, "Value",
+        "Minimum order of scale, defaults to None")
+
+    min_scale = Key(
+        4, int, "Value",
+        "Minimum number of scale graduation for auto scaling")
+
+    max_scale = Key(
+        16, int, "Value",
+        "Maximum number of scale graduation for auto scaling")
 
     range = Key(
         None, list, "Value", "Explicitly specify min and max of values",
+        "(ie: (0, 100))", int)
+
+    secondary_range = Key(
+        None, list, "Value",
+        "Explicitly specify min and max of secondary values",
         "(ie: (0, 100))", int)
 
     xrange = Key(
@@ -370,48 +467,54 @@ class Config(CommonConfig):
     no_data_text = Key(
         "No data", str, "Text", "Text to display when no data is given")
 
-    label_font_size = Key(10, int, "Text", "Label font size")
-
-    major_label_font_size = Key(10, int, "Text", "Major label font size")
-
-    value_font_size = Key(8, int, "Text", "Value font size")
-
-    tooltip_font_size = Key(16, int, "Text", "Tooltip font size")
-
-    title_font_size = Key(16, int, "Text", "Title font size")
-
-    legend_font_size = Key(14, int, "Text", "Legend font size")
-
-    no_data_font_size = Key(64, int, "Text", "No data text font size")
-
     print_values = Key(
         False, bool,
-        "Text", "Print values when graph is in non interactive mode")
+        "Text", "Display values as text over plot")
+
+    dynamic_print_values = Key(
+        False, bool,
+        "Text", "Show values only on hover")
+
+    print_values_position = Key(
+        'center', str,
+        "Text", "Customize position of `print_values`. "
+        "(For bars: `top`, `center` or `bottom`)")
 
     print_zeroes = Key(
+        True, bool,
+        "Text", "Display zero values as well")
+
+    print_labels = Key(
         False, bool,
-        "Text", "Print zeroes when graph is in non interactive mode")
+        "Text", "Display value labels")
 
     truncate_legend = Key(
         None, int, "Text",
-        "Legend string length truncation threshold", "None = auto")
+        "Legend string length truncation threshold",
+        "None = auto, Negative for none")
 
     truncate_label = Key(
         None, int, "Text",
-        "Label string length truncation threshold", "None = auto")
+        "Label string length truncation threshold",
+        "None = auto, Negative for none")
 
     # Misc #
     js = Key(
-        ('http://kozea.github.io/pygal.js/javascripts/svg.jquery.js',
-         'http://kozea.github.io/pygal.js/javascripts/pygal-tooltips.js'),
+        ('//kozea.github.io/pygal.js/2.0.x/pygal-tooltips.min.js',),
         list, "Misc", "List of js file",
-        "It can be a filepath or an external link",
+        "It can be any uri from file:///tmp/ext.js to //domain/ext.js",
         str)
 
     disable_xml_declaration = Key(
         False, bool, "Misc",
         "Don't write xml declaration and return str instead of string",
-        "usefull for writing output directly in html")
+        "useful for writing output directly in html")
+
+    force_uri_protocol = Key(
+        'https', str, "Misc",
+        "Default uri protocol",
+        "Default protocol for external files. "
+        "Can be set to None to use a // uri")
 
     explicit_size = Key(
         False, bool, "Misc", "Write width and height attributes")
@@ -431,7 +534,12 @@ class Config(CommonConfig):
 
 
 class SerieConfig(CommonConfig):
+
     """Class holding serie config values"""
+
+    title = Key(
+        None, str, "Look",
+        "Serie title.", "Leave it to None to disable title.")
 
     secondary = Key(
         False, bool, "Misc",

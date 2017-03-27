@@ -2,7 +2,7 @@
 # This file is part of pygal
 #
 # A python svg graph plotting library
-# Copyright © 2012-2014 Kozea
+# Copyright © 2012-2016 Kozea
 #
 # This library is free software: you can redistribute it and/or modify it under
 # the terms of the GNU Lesser General Public License as published by the Free
@@ -16,19 +16,19 @@
 #
 # You should have received a copy of the GNU Lesser General Public License
 # along with pygal. If not, see <http://www.gnu.org/licenses/>.
-"""
-Treemap chart
 
-"""
+"""Treemap chart: Visualize data using nested recangles"""
 
 from __future__ import division
-from pygal.util import decorate, cut
+
+from pygal.adapters import none_to_zero, positive
 from pygal.graph.graph import Graph
-from pygal.adapters import positive, none_to_zero
+from pygal.util import alter, cut, decorate
 
 
 class Treemap(Graph):
-    """Treemap graph"""
+
+    """Treemap graph class"""
 
     _adapters = [positive, none_to_zero]
 
@@ -39,27 +39,35 @@ class Treemap(Graph):
         rh -= ry
 
         metadata = serie.metadata.get(i)
-        value = self._format(val)
+
+        val = self._format(serie, i)
 
         rect = decorate(
             self.svg,
             self.svg.node(rects, class_="rect"),
             metadata)
 
-        self.svg.node(rect, 'rect',
-                      x=rx,
-                      y=ry,
-                      width=rw,
-                      height=rh,
-                      class_='rect reactive tooltip-trigger')
+        alter(
+            self.svg.node(
+                rect, 'rect',
+                x=rx,
+                y=ry,
+                width=rw,
+                height=rh,
+                class_='rect reactive tooltip-trigger'),
+            metadata)
 
-        self._tooltip_data(rect, value,
-                           rx + rw / 2,
-                           ry + rh / 2,
-                           classes='centered')
-        self._static_value(serie_node, value,
-                           rx + rw / 2,
-                           ry + rh / 2)
+        self._tooltip_data(
+            rect, val,
+            rx + rw / 2,
+            ry + rh / 2,
+            'centered',
+            self._get_x_label(i))
+        self._static_value(
+            serie_node, val,
+            rx + rw / 2,
+            ry + rh / 2,
+            metadata)
 
     def _binary_tree(self, data, total, x, y, w, h, parent=None):
         if total == 0:
@@ -112,6 +120,12 @@ class Treemap(Graph):
                 half1, half1_sum, x, y, x_pivot, h, parent)
             self._binary_tree(
                 half2, half2_sum, x + x_pivot, y, w - x_pivot, h, parent)
+
+    def _compute_x_labels(self):
+        pass
+
+    def _compute_y_labels(self):
+        pass
 
     def _plot(self):
         total = sum(map(sum, map(lambda x: x.values, self.series)))

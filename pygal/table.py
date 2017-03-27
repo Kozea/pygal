@@ -2,7 +2,7 @@
 # This file is part of pygal
 #
 # A python svg graph plotting library
-# Copyright © 2012-2014 Kozea
+# Copyright © 2012-2016 Kozea
 #
 # This library is free software: you can redistribute it and/or modify it under
 # the terms of the GNU Lesser General Public License as published by the Free
@@ -17,31 +17,46 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with pygal. If not, see <http://www.gnu.org/licenses/>.
 """
-Table maker
+HTML Table maker.
 
+This class is used to render an html table from a chart data.
 """
 
-from pygal.util import template
-from lxml.html import builder, tostring
 import uuid
+from lxml.html import builder, tostring
+
+from pygal.util import template
 
 
 class HTML(object):
+
+    """Lower case adapter of lxml builder"""
+
     def __getattribute__(self, attr):
+        """Get the uppercase builder attribute"""
         return getattr(builder, attr.upper())
 
 
 class Table(object):
+
+    """Table generator class"""
+
     _dual = None
 
     def __init__(self, chart):
-        "Init the table"
+        """Init the table"""
         self.chart = chart
 
     def render(self, total=False, transpose=False, style=False):
+        """Render the HTMTL table of the chart.
+
+        `total` can be specified to include data sums
+        `transpose` make labels becomes columns
+        `style` include scoped style for the table
+
+        """
         self.chart.setup()
         ln = self.chart._len
-        fmt = self.chart._format
         html = HTML()
         attrs = {}
 
@@ -67,18 +82,19 @@ class Table(object):
                 table.append([None] * (ln + 1) + ['Total'])
             acc = [0] * (ln + 1)
 
-        for i, serie in enumerate(self.chart.series):
+        for i, serie in enumerate(self.chart.all_series):
             row = [serie.title]
             if total:
                 sum_ = 0
             for j, value in enumerate(serie.values):
                 if total:
-                    acc[j] += value
-                    sum_ += value
-                row.append(fmt(value))
+                    v = value or 0
+                    acc[j] += v
+                    sum_ += v
+                row.append(self.chart._format(serie, j))
             if total:
                 acc[-1] += sum_
-                row.append(fmt(sum_))
+                row.append(self.chart._serie_format(serie, sum_))
             table.append(row)
 
         width = ln + 1
@@ -86,7 +102,7 @@ class Table(object):
             width += 1
             table.append(['Total'])
             for val in acc:
-                table[-1].append(fmt(val))
+                table[-1].append(self.chart._serie_format(serie, val))
 
         # Align values
         len_ = max([len(r) for r in table] or [0])
@@ -183,7 +199,6 @@ class Table(object):
             table = tostring(html.style(
                 template(css, **attrs),
                 scoped='scoped')) + table
-        if self.chart.disable_xml_declaration:
-            table = table.decode('utf-8')
+        table = table.decode('utf-8')
         self.chart.teardown()
         return table

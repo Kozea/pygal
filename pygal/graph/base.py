@@ -1,8 +1,8 @@
- # -*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 # This file is part of pygal
 #
 # A python svg graph plotting library
-# Copyright © 2012-2014 Kozea
+# Copyright © 2012-2016 Kozea
 #
 # This library is free software: you can redistribute it and/or modify it under
 # the terms of the GNU Lesser General Public License as published by the Free
@@ -16,33 +16,33 @@
 #
 # You should have received a copy of the GNU Lesser General Public License
 # along with pygal. If not, see <http://www.gnu.org/licenses/>.
-"""
-Base for pygal charts
 
-"""
+"""Base for pygal charts"""
 
 from __future__ import division
-from pygal._compat import u, is_list_like, to_unicode
-from pygal.view import Margin, Box
-from pygal.config import Config
-from pygal.state import State
-from pygal.util import compose, ident
-from pygal.svg import Svg
-from pygal.serie import Serie
-from pygal.config import SerieConfig
-from pygal.adapters import (
-    not_zero, positive, decimal_to_float)
+
+import os
 from functools import reduce
 from uuid import uuid4
-import io
+
+from pygal._compat import is_list_like
+from pygal.adapters import decimal_to_float, not_zero, positive
+from pygal.config import Config, SerieConfig
+from pygal.serie import Serie
+from pygal.state import State
+from pygal.svg import Svg
+from pygal.util import compose, ident
+from pygal.view import Box, Margin
 
 
 class BaseGraph(object):
-    """Graphs commons"""
+
+    """Chart internal behaviour related functions"""
 
     _adapters = []
 
     def __init__(self, config=None, **kwargs):
+        """Config preparation and various initialization"""
         if config:
             if isinstance(config, type):
                 config = config()
@@ -56,33 +56,22 @@ class BaseGraph(object):
         self.state = None
         self.uuid = str(uuid4())
         self.raw_series = []
-        self.raw_series2 = []
         self.xml_filters = []
 
     def __setattr__(self, name, value):
+        """Set an attribute on the class or in the state if there is one"""
         if name.startswith('__') or getattr(self, 'state', None) is None:
             super(BaseGraph, self).__setattr__(name, value)
         else:
             setattr(self.state, name, value)
 
     def __getattribute__(self, name):
+        """Get an attribute from the class or from the state if there is one"""
         if name.startswith('__') or name == 'state' or getattr(
                 self, 'state', None
         ) is None or name not in self.state.__dict__:
             return super(BaseGraph, self).__getattribute__(name)
         return getattr(self.state, name)
-
-    def add(self, title, values, **kwargs):
-        """Add a serie to this graph"""
-        if not is_list_like(values) and not isinstance(values, dict):
-            values = [values]
-        if kwargs.get('secondary', False):
-            self.raw_series2.append((title, values, kwargs))
-        else:
-            self.raw_series.append((title, values, kwargs))
-
-    def add_xml_filter(self, callback):
-        self.xml_filters.append(callback)
 
     def prepare_values(self, raw, offset=0):
         """Prepare the values to start with sane values"""
@@ -91,6 +80,12 @@ class BaseGraph(object):
 
         if self.zero == 0 and isinstance(self, BaseMap):
             self.zero = 1
+
+        if self.x_label_rotation:
+            self.x_label_rotation %= 360
+
+        if self.y_label_rotation:
+            self.y_label_rotation %= 360
 
         for key in ('x_labels', 'y_labels'):
             if getattr(self, key):
@@ -105,23 +100,24 @@ class BaseGraph(object):
                     adapters.remove(fun)
             adapters = adapters + [positive, not_zero]
         adapters = adapters + [decimal_to_float]
-        adapter = reduce(compose, adapters) if not self.strict else ident
-        x_adapter = reduce(
-            compose, self._x_adapters) if getattr(
-                self, '_x_adapters', None) else None
+
+        self._adapt = reduce(compose, adapters) if not self.strict else ident
+        self._x_adapt = reduce(
+            compose, self._x_adapters) if not self.strict and getattr(
+                self, '_x_adapters', None) else ident
+
         series = []
 
         raw = [(
-            title,
             list(raw_values) if not isinstance(
                 raw_values, dict) else raw_values,
             serie_config_kwargs
-        ) for title, raw_values, serie_config_kwargs in raw]
+        ) for raw_values, serie_config_kwargs in raw]
 
-        width = max([len(values) for _, values, _ in raw] +
+        width = max([len(values) for values, _ in raw] +
                     [len(self.x_labels or [])])
 
-        for title, raw_values, serie_config_kwargs in raw:
+        for raw_values, serie_config_kwargs in raw:
             metadata = {}
             values = []
             if isinstance(raw_values, dict):
@@ -130,7 +126,7 @@ class BaseGraph(object):
                 else:
                     value_list = [None] * width
                     for k, v in raw_values.items():
-                        if k in self.x_labels:
+                        if k in (self.x_labels or []):
                             value_list[self.x_labels.index(k)] = v
                     raw_values = value_list
 
@@ -151,43 +147,49 @@ class BaseGraph(object):
                         value = (None, None, None)
                     elif not is_list_like(value):
                         value = (value, self.zero, self.zero)
-                    value = list(map(adapter, value))
+                    elif len(value) == 2:
+                        value = (1, value[0], value[1])
+                    value = list(map(self._adapt, value))
                 elif self._dual:
                     if value is None:
                         value = (None, None)
                     elif not is_list_like(value):
                         value = (value, self.zero)
-                    if x_adapter:
-                        value = (x_adapter(value[0]), adapter(value[1]))
+                    if self._x_adapt:
+                        value = (
+                            self._x_adapt(value[0]),
+                            self._adapt(value[1]))
                     if isinstance(self, BaseMap):
-                        value = (adapter(value[0]), value[1])
+                        value = (self._adapt(value[0]), value[1])
                     else:
-                        value = list(map(adapter, value))
+                        value = list(map(self._adapt, value))
                 else:
-                    value = adapter(value)
+                    value = self._adapt(value)
 
                 values.append(value)
             serie_config = SerieConfig()
             serie_config(**dict((k, v) for k, v in self.state.__dict__.items()
-                              if k in dir(serie_config)))
+                                if k in dir(serie_config)))
             serie_config(**serie_config_kwargs)
             series.append(
-                Serie(offset + len(series),
-                      title, values, serie_config, metadata))
+                Serie(offset + len(series), values, serie_config, metadata))
         return series
 
     def setup(self, **kwargs):
-        """Init the graph"""
+        """Set up the transient state prior rendering"""
         # Keep labels in case of map
         if getattr(self, 'x_labels', None) is not None:
-            self.x_labels = list(map(to_unicode, self.x_labels))
+            self.x_labels = list(self.x_labels)
         if getattr(self, 'y_labels', None) is not None:
             self.y_labels = list(self.y_labels)
         self.state = State(self, **kwargs)
+        if isinstance(self.style, type):
+            self.style = self.style()
         self.series = self.prepare_values(
-            self.raw_series) or []
+            [rs for rs in self.raw_series if not rs[1].get('secondary')]) or []
         self.secondary_series = self.prepare_values(
-            self.raw_series2, len(self.series)) or []
+            [rs for rs in self.raw_series if rs[1].get('secondary')],
+            len(self.series)) or []
         self.horizontal = getattr(self, 'horizontal', False)
         self.svg = Svg(self)
         self._x_labels = None
@@ -216,109 +218,12 @@ class BaseGraph(object):
         self.svg.pre_render()
 
     def teardown(self):
+        """Remove the transient state after rendering"""
+        if os.getenv('PYGAL_KEEP_STATE'):
+            return
+
         del self.state
         self.state = None
-
-    def render(self, is_unicode=False, **kwargs):
-        """Render the graph, and return the svg string"""
-        self.setup(**kwargs)
-        svg = self.svg.render(
-            is_unicode=is_unicode, pretty_print=self.pretty_print)
-        self.teardown()
-        return svg
-
-    def render_tree(self):
-        """Render the graph, and return (l)xml etree"""
-        self.setup()
-        svg = self.svg.root
-        for f in self.xml_filters:
-            svg = f(svg)
-        self.teardown()
-        return svg
-
-    def render_table(self, **kwargs):
-        # Import here to avoid lxml import
-        try:
-            from pygal.table import Table
-        except ImportError:
-            raise ImportError('You must install lxml to use render table')
-        return Table(self).render(**kwargs)
-
-    def render_pyquery(self):
-        """Render the graph, and return a pyquery wrapped tree"""
-        from pyquery import PyQuery as pq
-        return pq(self.render(), parser='html')
-
-    def render_in_browser(self, **kwargs):
-        """Render the graph, open it in your browser with black magic"""
-        try:
-            from lxml.html import open_in_browser
-        except ImportError:
-            raise ImportError('You must install lxml to use render in browser')
-        open_in_browser(self.render_tree(**kwargs), encoding='utf-8')
-
-    def render_response(self, **kwargs):
-        """Render the graph, and return a Flask response"""
-        from flask import Response
-        return Response(self.render(**kwargs), mimetype='image/svg+xml')
-
-    def render_django_response(self, **kwargs):
-        """Render the graph, and return a Django response"""
-        from django.http import HttpResponse
-        return HttpResponse(
-            self.render(**kwargs), content_type='image/svg+xml')
-
-    def render_to_file(self, filename, **kwargs):
-        """Render the graph, and write it to filename"""
-        with io.open(filename, 'w', encoding='utf-8') as f:
-            f.write(self.render(is_unicode=True, **kwargs))
-
-    def render_to_png(self, filename=None, dpi=72, **kwargs):
-        """Render the graph, convert it to png and write it to filename"""
-        import cairosvg
-        return cairosvg.svg2png(
-            bytestring=self.render(**kwargs), write_to=filename, dpi=dpi)
-
-    def render_sparktext(self, relative_to=None):
-        """Make a mini text sparkline from chart"""
-        bars = u('▁▂▃▄▅▆▇█')
-        if len(self.raw_series) == 0:
-            return u('')
-        values = list(self.raw_series[0][1])
-        if len(values) == 0:
-            return u('')
-
-        chart = u('')
-        values = list(map(lambda x: max(x, 0), values))
-
-        vmax = max(values)
-        if relative_to is None:
-            relative_to = min(values)
-
-        if (vmax - relative_to) == 0:
-            chart = bars[0] * len(values)
-            return chart
-
-        divisions = len(bars) - 1
-        for value in values:
-            chart += bars[int(divisions *
-                              (value - relative_to) / (vmax - relative_to))]
-        return chart
-
-    def render_sparkline(self, **kwargs):
-        spark_options = dict(
-            width=200,
-            height=50,
-            show_dots=False,
-            show_legend=False,
-            show_x_labels=False,
-            show_y_labels=False,
-            spacing=0,
-            margin=5,
-            explicit_size=True
-        )
-        spark_options.update(kwargs)
-        return self.render(**spark_options)
 
     def _repr_svg_(self):
         """Display svg in IPython notebook"""

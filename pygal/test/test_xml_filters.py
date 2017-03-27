@@ -2,7 +2,7 @@
 # This file is part of pygal
 #
 # A python svg graph plotting library
-# Copyright © 2012-2014 Kozea
+# Copyright © 2012-2016 Kozea
 #
 # This library is free software: you can redistribute it and/or modify it under
 # the terms of the GNU Lesser General Public License as published by the Free
@@ -16,14 +16,22 @@
 #
 # You should have received a copy of the GNU Lesser General Public License
 # along with pygal. If not, see <http://www.gnu.org/licenses/>.
+
+"""Xml filter tests"""
+
 from pygal import Bar
 
 
 class ChangeBarsXMLFilter(object):
+
+    """xml filter that insert a subplot"""
+
     def __init__(self, a, b):
+        """Generate data"""
         self.data = [b[i] - a[i] for i in range(len(a))]
 
     def __call__(self, T):
+        """Apply the filter on the tree"""
         subplot = Bar(legend_at_bottom=True, explicit_size=True,
                       width=800, height=150)
         subplot.add("Difference", self.data)
@@ -35,6 +43,7 @@ class ChangeBarsXMLFilter(object):
 
 
 def test_xml_filters_round_trip():
+    """Ensure doing nothing does nothing"""
     plot = Bar()
     plot.add("A", [60, 75, 80, 78, 83, 90])
     plot.add("B", [92, 87, 81, 73, 68, 55])
@@ -45,6 +54,7 @@ def test_xml_filters_round_trip():
 
 
 def test_xml_filters_change_bars():
+    """Test the use a xml filter"""
     plot = Bar(legend_at_bottom=True, explicit_size=True,
                width=800, height=600)
     A = [60, 75, 80, 78, 83, 90]

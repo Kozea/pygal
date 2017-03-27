@@ -43,7 +43,7 @@
   <h3>Parametric Styles</h3>
   <ul>
     {% for color in parametric_colors %}
-      <li><embed src="{{ url_for('sparkline', style='RotateStyle', color=color) }}" type="image/svg+xml" /></li>
+      <li><embed src="{{ url_for('sparkline', style='rotate', color=color) }}" type="image/svg+xml" /></li>
       {% for style in parametric_styles %}
         <li>
           <a href="{{ url_for('all', style=style, color=color) }}">{{ style }} for {{ color }}</a>

@@ -2,7 +2,7 @@
 # This file is part of pygal
 #
 # A python svg graph plotting library
-# Copyright © 2012-2014 Kozea
+# Copyright © 2012-2016 Kozea
 #
 # This library is free software: you can redistribute it and/or modify it under
 # the terms of the GNU Lesser General Public License as published by the Free
@@ -16,24 +16,30 @@
 #
 # You should have received a copy of the GNU Lesser General Public License
 # along with pygal. If not, see <http://www.gnu.org/licenses/>.
-"""
-Line chart
 
 """
+Line chart: Display series of data as markers (dots)
+connected by straight segments
+"""
+
 from __future__ import division
+
 from pygal.graph.graph import Graph
-from pygal.util import cached_property, compute_scale, decorate
+from pygal.util import alter, cached_property, decorate
 
 
 class Line(Graph):
-    """Line graph"""
+
+    """Line graph class"""
 
     def __init__(self, *args, **kwargs):
+        """Set _self_close as False, it's True for Radar like Line"""
         self._self_close = False
         super(Line, self).__init__(*args, **kwargs)
 
     @cached_property
     def _values(self):
+        """Getter for series values (flattened)"""
         return [
             val[1]
             for serie in self.series
@@ -43,6 +49,7 @@ class Line(Graph):
 
     @cached_property
     def _secondary_values(self):
+        """Getter for secondary series values (flattened)"""
         return [
             val[1]
             for serie in self.secondary_series
@@ -56,7 +63,7 @@ class Line(Graph):
 
         # Check to see if the data has been padded with "none's"
         # Fill doesn't work correctly otherwise
-        end = len(values)-1
+        end = len(values) - 1
         while end > 0:
             x, y = values[end]
             if self.missing_value_fill_truncation == "either":
@@ -94,7 +101,7 @@ class Line(Graph):
                     continue
                 if (serie.show_only_major_dots and
                         self.x_labels and i < len(self.x_labels) and
-                        self.x_labels[i] not in self._x_major_labels):
+                        self.x_labels[i] not in self._x_labels_major):
                     continue
 
                 metadata = serie.metadata.get(i)
@@ -104,19 +111,27 @@ class Line(Graph):
                 if y > self.view.height / 2:
                     classes.append('top')
                 classes = ' '.join(classes)
+
+                self._confidence_interval(
+                    serie_node['overlay'], x, y, serie.values[i], metadata)
+
                 dots = decorate(
                     self.svg,
                     self.svg.node(serie_node['overlay'], class_="dots"),
                     metadata)
-                val = self._get_value(serie.points, i)
-                self.svg.node(dots, 'circle', cx=x, cy=y, r=serie.dots_size,
-                              class_='dot reactive tooltip-trigger')
+
+                val = self._format(serie, i)
+                alter(self.svg.transposable_node(
+                    dots, 'circle', cx=x, cy=y, r=serie.dots_size,
+                    class_='dot reactive tooltip-trigger'), metadata)
                 self._tooltip_data(
-                    dots, val, x, y)
+                    dots, val, x, y,
+                    xlabel=self._get_x_label(i))
                 self._static_value(
                     serie_node, val,
-                    x + self.value_font_size,
-                    y + self.value_font_size)
+                    x + self.style.value_font_size,
+                    y + self.style.value_font_size,
+                    metadata)
 
         if serie.stroke:
             if self.interpolate:
@@ -126,29 +141,49 @@ class Line(Graph):
                 view_values = list(map(self.view, points))
             if serie.fill:
                 view_values = self._fill(view_values)
-            self.svg.line(
-                serie_node['plot'], view_values, close=self._self_close,
-                class_='line reactive' + (' nofill' if not serie.fill else ''))
+
+            if serie.allow_interruptions:
+                # view_values are in form [(x1, y1), (x2, y2)]. We
+                # need to split that into multiple sequences if a
+                # None is present here
+
+                sequences = []
+                cur_sequence = []
+                for x, y in view_values:
+                    if y is None and len(cur_sequence) > 0:
+                        # emit current subsequence
+                        sequences.append(cur_sequence)
+                        cur_sequence = []
+                    elif y is None:       # just discard
+                        continue
+                    else:
+                        cur_sequence.append((x, y))   # append the element
+
+                if len(cur_sequence) > 0:      # emit last possible sequence
+                    sequences.append(cur_sequence)
+            else:
+                # plain vanilla rendering
+                sequences = [view_values]
+
+            for seq in sequences:
+                self.svg.line(
+                    serie_node['plot'], seq, close=self._self_close,
+                    class_='line reactive' +
+                           (' nofill' if not serie.fill else ''))
 
     def _compute(self):
+        """Compute y min and max and y scale and set labels"""
         # X Labels
-        x_pos = [
-            x / (self._len - 1) for x in range(self._len)
-        ] if self._len != 1 else [.5]  # Center if only one value
-
-        self._points(x_pos)
-
-        if self.x_labels:
-            label_len = len(self.x_labels)
-            if label_len != self._len:
-                label_pos = [0.5] if label_len == 1 else [
-                    x / (label_len - 1) for x in range(label_len)
-                ]
-                self._x_labels = list(zip(self.x_labels, label_pos))
-            else:
-                self._x_labels = list(zip(self.x_labels, x_pos))
+        if self.horizontal:
+            self._x_pos = [
+                x / (self._len - 1) for x in range(self._len)
+            ][::-1] if self._len != 1 else [.5]  # Center if only one value
         else:
-            self._x_labels = None
+            self._x_pos = [
+                x / (self._len - 1) for x in range(self._len)
+            ] if self._len != 1 else [.5]  # Center if only one value
+
+        self._points(self._x_pos)
 
         if self.include_x_axis:
             # Y Label
@@ -158,13 +193,8 @@ class Line(Graph):
             self._box.ymin = self._min
             self._box.ymax = self._max
 
-        y_pos = compute_scale(
-            self._box.ymin, self._box.ymax, self.logarithmic, self.order_min
-        ) if not self.y_labels else list(map(float, self.y_labels))
-
-        self._y_labels = list(zip(map(self._format, y_pos), y_pos))
-
     def _plot(self):
+        """Plot the serie lines and secondary serie lines"""
         for serie in self.series:
             self.line(serie)
 

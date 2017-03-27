@@ -3,7 +3,7 @@
 # This file is part of pygal
 #
 # A python svg graph plotting library
-# Copyright © 2012-2014 Kozea
+# Copyright © 2012-2016 Kozea
 #
 # This library is free software: you can redistribute it and/or modify it under
 # the terms of the GNU Lesser General Public License as published by the Free
@@ -36,19 +36,6 @@ try:
     logging.getLogger('werkzeug').setLevel(logging.DEBUG)
 except:
     pass
-
-
-try:
-    import wsreload
-except ImportError:
-    app.logger.debug('wsreload not found')
-else:
-    url = "http://moulinrouge.l:21112/*"
-
-    def log(httpserver):
-        app.logger.debug('WSReloaded after server restart')
-    wsreload.monkey_patch_http_server({'url': url}, callback=log)
-    app.logger.debug('HTTPServer monkey patched for url %s' % url)
 
 try:
     from wdb.ext import WdbMiddleware, add_w_builtin

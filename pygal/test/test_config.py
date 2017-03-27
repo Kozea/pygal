@@ -2,7 +2,7 @@
 # This file is part of pygal
 #
 # A python svg graph plotting library
-# Copyright © 2012-2014 Kozea
+# Copyright © 2012-2016 Kozea
 #
 # This library is free software: you can redistribute it and/or modify it under
 # the terms of the GNU Lesser General Public License as published by the Free
@@ -17,18 +17,27 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with pygal. If not, see <http://www.gnu.org/licenses/>.
 
+"""Various config options tested on one chart type or more"""
+
 from pygal import (
-    Line, Dot, Pie, Treemap, Radar, Config, Bar, Funnel, Worldmap,
-    SupranationalWorldmap, Histogram, Gauge, Box, XY,
+    Line, Dot, Pie, Treemap, Radar, Config, Bar, Funnel,
+    Histogram, Gauge, Box, XY,
     Pyramid, HorizontalBar, HorizontalStackedBar,
-    FrenchMapRegions, FrenchMapDepartments, SwissMapCantons,
-    DateTimeLine, TimeLine, DateLine, TimeDeltaLine)
-from pygal._compat import u
+    HorizontalStackedLine, HorizontalLine,
+    DateTimeLine, TimeLine, DateLine, TimeDeltaLine,
+    SolidGauge
+)
+from pygal.graph.map import BaseMap
+from pygal.graph.horizontal import HorizontalGraph
+from pygal.graph.dual import Dual
+from pygal import formatters
+from pygal._compat import u, _ellipsis
 from pygal.test.utils import texts
 from tempfile import NamedTemporaryFile
 
 
 def test_config_behaviours():
+    """Test that all different way to set config produce same results"""
     line1 = Line()
     line1.show_legend = False
     line1.fill = True
@@ -44,7 +53,7 @@ def test_config_behaviours():
     assert len(q(".plot .series path")) == 1
     assert len(q(".legend")) == 0
     assert len(q(".x.axis .guides")) == 3
-    assert len(q(".y.axis .guides")) == 21
+    assert len(q(".y.axis .guides")) == 11
     assert len(q(".dots")) == 3
     assert q(".axis.x text").map(texts) == ['a', 'b', 'c']
 
@@ -87,8 +96,12 @@ def test_config_behaviours():
     l5 = line5.render()
     assert l1 == l5
 
+    l6 = Line(line_config)(1, 2, 3, title='_').render()
+    assert l1 == l6
+
 
 def test_config_alterations_class():
+    """Assert a config can be changed on config class"""
     class LineConfig(Config):
         no_prefix = True
         show_legend = False
@@ -111,6 +124,7 @@ def test_config_alterations_class():
 
 
 def test_config_alterations_instance():
+    """Assert a config can be changed on instance"""
     class LineConfig(Config):
         no_prefix = True
         show_legend = False
@@ -134,6 +148,7 @@ def test_config_alterations_instance():
 
 
 def test_config_alterations_kwargs():
+    """Assert a config can be changed with keyword args"""
     class LineConfig(Config):
         no_prefix = True
         show_legend = False
@@ -167,6 +182,7 @@ def test_config_alterations_kwargs():
 
 
 def test_logarithmic():
+    """Test logarithmic option"""
     line = Line(logarithmic=True)
     line.add('_', [1, 10 ** 10, 1])
     q = line.render_pyquery()
@@ -175,11 +191,12 @@ def test_logarithmic():
     assert len(q(".plot .series path")) == 1
     assert len(q(".legend")) == 1
     assert len(q(".x.axis .guides")) == 0
-    assert len(q(".y.axis .guides")) == 51
+    assert len(q(".y.axis .guides")) == 21
     assert len(q(".dots")) == 3
 
 
 def test_interpolation(Chart):
+    """Test interpolation option"""
     chart = Chart(interpolate='cubic')
     chart.add('1', [1, 3, 12, 3, 4])
     chart.add('2', [7, -4, 10, None, 8, 3, 1])
@@ -188,12 +205,14 @@ def test_interpolation(Chart):
 
 
 def test_no_data_interpolation(Chart):
+    """Test interpolation option with no data"""
     chart = Chart(interpolate='cubic')
     q = chart.render_pyquery()
     assert q(".text-overlay text").text() == "No data"
 
 
 def test_no_data_with_empty_serie_interpolation(Chart):
+    """Test interpolation option with an empty serie"""
     chart = Chart(interpolate='cubic')
     chart.add('Serie', [])
     q = chart.render_pyquery()
@@ -201,6 +220,7 @@ def test_no_data_with_empty_serie_interpolation(Chart):
 
 
 def test_logarithmic_bad_interpolation():
+    """Test interpolation option with a logarithmic chart"""
     line = Line(logarithmic=True, interpolate='cubic')
     line.add('_', [.001, .00000001, 1])
     q = line.render_pyquery()
@@ -208,13 +228,15 @@ def test_logarithmic_bad_interpolation():
 
 
 def test_logarithmic_big_scale():
+    """Test logarithmic option with a large range of value"""
     line = Line(logarithmic=True)
     line.add('_', [10 ** -10, 10 ** 10, 1])
     q = line.render_pyquery()
-    assert len(q(".y.axis .guides")) == 41
+    assert len(q(".y.axis .guides")) == 21
 
 
 def test_value_formatter():
+    """Test value formatter option"""
     line = Line(value_formatter=lambda x: str(x) + u('‰'))
     line.add('_', [10 ** 4, 10 ** 5, 23 * 10 ** 4])
     q = line.render_pyquery()
@@ -224,25 +246,30 @@ def test_value_formatter():
 
 
 def test_logarithmic_small_scale():
+    """Test logarithmic with a small range of values"""
     line = Line(logarithmic=True)
     line.add('_', [1 + 10 ** 10, 3 + 10 ** 10, 2 + 10 ** 10])
     q = line.render_pyquery()
-    assert len(q(".y.axis .guides")) == 21
+    assert len(q(".y.axis .guides")) == 11
 
 
 def test_human_readable():
+    """Test human readable option"""
     line = Line()
     line.add('_', [10 ** 4, 10 ** 5, 23 * 10 ** 4])
     q = line.render_pyquery()
     assert q(".axis.y text").map(texts) == list(map(
-        str, map(float, range(20000, 240000, 20000))))
-    line.human_readable = True
+        str, range(20000, 240000, 20000)))
+
+    line.value_formatter = formatters.human_readable
+
     q = line.render_pyquery()
     assert q(".axis.y text").map(texts) == list(map(
         lambda x: '%dk' % x, range(20, 240, 20)))
 
 
 def test_show_legend():
+    """Test show legend option"""
     line = Line()
     line.add('_', [1, 2, 3])
     q = line.render_pyquery()
@@ -253,6 +280,7 @@ def test_show_legend():
 
 
 def test_show_dots():
+    """Test show dots option"""
     line = Line()
     line.add('_', [1, 2, 3])
     q = line.render_pyquery()
@@ -263,6 +291,7 @@ def test_show_dots():
 
 
 def test_no_data():
+    """Test no data and no data text option"""
     line = Line()
     q = line.render_pyquery()
     assert q(".text-overlay text").text() == "No data"
@@ -272,10 +301,11 @@ def test_no_data():
 
 
 def test_include_x_axis(Chart):
+    """Test x axis inclusion option"""
     chart = Chart()
-    if Chart in (Pie, Treemap, Radar, Funnel, Dot, Gauge, Worldmap,
-                 SupranationalWorldmap, Histogram, Box,
-                 FrenchMapRegions, FrenchMapDepartments, SwissMapCantons):
+    if Chart in (
+            Pie, Treemap, Radar, Funnel, Dot, Gauge, Histogram, Box, SolidGauge
+    ) or issubclass(Chart, BaseMap):
         return
     if not chart._dual:
         data = 100, 200, 150
@@ -287,30 +317,37 @@ def test_include_x_axis(Chart):
     yaxis = ".axis.%s .guides text" % (
         'y' if not getattr(chart, 'horizontal', False) else 'x')
     if not isinstance(chart, Bar):
-        assert '0.0' not in q(yaxis).map(texts)
+        assert '0' not in q(yaxis).map(texts)
     else:
-        assert '0.0' in q(yaxis).map(texts)
+        assert '0' in q(yaxis).map(texts)
     chart.include_x_axis = True
     q = chart.render_pyquery()
-    assert '0.0' in q(yaxis).map(texts)
+    assert '0' in q(yaxis).map(texts)
 
 
 def test_css(Chart):
+    """Test css file option"""
     css = "{{ id }}text { fill: #bedead; }\n"
     with NamedTemporaryFile('w') as f:
         f.write(css)
         f.flush()
 
         config = Config()
-        config.css.append(f.name)
+        config.css.append('file://' + f.name)
 
         chart = Chart(config)
         chart.add('/', [10, 1, 5])
         svg = chart.render().decode('utf-8')
         assert '#bedead' in svg
 
+        chart = Chart(css=(_ellipsis, 'file://' + f.name))
+        chart.add('/', [10, 1, 5])
+        svg = chart.render().decode('utf-8')
+        assert '#bedead' in svg
+
 
 def test_inline_css(Chart):
+    """Test inline css option"""
     css = "{{ id }}text { fill: #bedead; }\n"
 
     config = Config()
@@ -322,15 +359,18 @@ def test_inline_css(Chart):
 
 
 def test_meta_config():
+    """Test config metaclass"""
     from pygal.config import CONFIG_ITEMS
     assert all(c.name != 'Unbound' for c in CONFIG_ITEMS)
 
 
 def test_label_rotation(Chart):
+    """Test label rotation option"""
     chart = Chart(x_label_rotation=28, y_label_rotation=76)
     chart.add('1', [4, -5, 123, 59, 38])
     chart.add('2', [89, 0, 8, .12, 8])
-    chart.x_labels = ['one', 'twoooooooooooooooooooooo', 'three', '4']
+    if not chart._dual:
+        chart.x_labels = ['one', 'twoooooooooooooooooooooo', 'three', '4']
     q = chart.render_pyquery()
     if Chart in (Line, Bar):
         assert len(q('.axis.x text[transform^="rotate(28"]')) == 4
@@ -338,33 +378,50 @@ def test_label_rotation(Chart):
 
 
 def test_legend_at_bottom(Chart):
+    """Test legend at bottom option"""
     chart = Chart(legend_at_bottom=True)
     chart.add('1', [4, -5, 123, 59, 38])
     chart.add('2', [89, 0, 8, .12, 8])
-    chart.x_labels = ['one', 'twoooooooooooooooooooooo', 'three', '4']
     lab = chart.render()
     chart.legend_at_bottom = False
     assert lab != chart.render()
 
 
 def test_x_y_title(Chart):
+    """Test x title and y title options"""
     chart = Chart(title='I Am A Title',
                   x_title="I am a x title",
                   y_title="I am a y title")
     chart.add('1', [4, -5, 123, 59, 38])
     chart.add('2', [89, 0, 8, .12, 8])
-    chart.x_labels = ['one', 'twoooooooooooooooooooooo', 'three', '4']
     q = chart.render_pyquery()
     assert len(q('.titles .title')) == 3
 
 
-def test_x_label_major(Chart):
+def test_range(Chart):
+    """Test y label major option"""
     if Chart in (
-            Pie, Treemap, Funnel, Dot, Gauge, Worldmap,
-            SupranationalWorldmap, Histogram, Box,
-            FrenchMapRegions, FrenchMapDepartments, SwissMapCantons,
+            Pie, Treemap, Dot, SolidGauge
+    ) or issubclass(Chart, BaseMap):
+        return
+    chart = Chart()
+    chart.range = (0, 100)
+    chart.add('', [1, 2, 10])
+    q = chart.render_pyquery()
+    axis = map(str, range(0, 101, 10))
+    if Chart == Radar:
+        axis = map(str, range(100, -1, -20))
+    z = 'x' if getattr(chart, 'horizontal', False) or Chart == Gauge else 'y'
+    assert [t.text for t in q('.axis.%s .guides text' % z)] == list(axis)
+
+
+def test_x_label_major(Chart):
+    """Test x label major option"""
+    if Chart in (
+            Pie, Treemap, Funnel, Dot, Gauge, Histogram, Box, SolidGauge,
             Pyramid, DateTimeLine, TimeLine, DateLine,
-            TimeDeltaLine):
+            TimeDeltaLine
+    ) or issubclass(Chart, (BaseMap, Dual, HorizontalGraph)):
         return
     chart = Chart()
     chart.add('test', range(12))
@@ -404,13 +461,14 @@ def test_x_label_major(Chart):
 
 
 def test_y_label_major(Chart):
+    """Test y label major option"""
     if Chart in (
-            Pie, Treemap, Funnel, Dot, Gauge, Worldmap,
-            SupranationalWorldmap, Histogram, Box,
-            FrenchMapRegions, FrenchMapDepartments, SwissMapCantons,
+            Pie, Treemap, Funnel, Dot, Gauge, Histogram, Box, SolidGauge,
             HorizontalBar, HorizontalStackedBar,
+            HorizontalStackedLine, HorizontalLine,
             Pyramid, DateTimeLine, TimeLine, DateLine,
-            TimeDeltaLine):
+            TimeDeltaLine
+    ) or issubclass(Chart, BaseMap):
         return
     chart = Chart()
     data = range(12)
@@ -453,6 +511,7 @@ def test_y_label_major(Chart):
 
 
 def test_no_y_labels(Chart):
+    """Test no y labels chart"""
     chart = Chart()
     chart.y_labels = []
     chart.add('_', [1, 2, 3])
@@ -461,7 +520,57 @@ def test_no_y_labels(Chart):
 
 
 def test_fill(Chart):
+    """Test fill option"""
     chart = Chart(fill=True)
     chart.add('_', [1, 2, 3])
     chart.add('?', [10, 21, 5])
     assert chart.render_pyquery()
+
+
+def test_render_data_uri(Chart):
+    """Test the render data uri"""
+    chart = Chart(fill=True)
+    chart.add(u('ééé'), [1, 2, 3])
+    chart.add(u('èèè'), [10, 21, 5])
+    assert chart.render_data_uri().startswith(
+        'data:image/svg+xml;charset=utf-8;base64,')
+
+
+def test_formatters(Chart):
+    """Test custom formatters"""
+    if Chart._dual or Chart == Box:
+        return
+    chart = Chart(
+        formatter=lambda x, chart, serie: '%s%s$' % (x, serie.title))
+    chart.add('_a', [1, 2, {'value': 3, 'formatter': lambda x: u('%s¥') % x}])
+    chart.add('_b', [4, 5, 6], formatter=lambda x: u('%s€') % x)
+    chart.x_labels = [2, 4, 6]
+    chart.x_labels_major = [4]
+    q = chart.render_pyquery()
+    assert set([v.text for v in q(".value")]) == set((
+        u('4€'), u('5€'), u('6€'), '1_a$', '2_a$', u('3¥')) + (
+            ('6_a$', u('15€')) if Chart in (Pie, SolidGauge) else ()))
+
+
+def test_classes(Chart):
+    """Test classes option"""
+    chart = Chart()
+    assert chart.render_pyquery().attr('class') == 'pygal-chart'
+
+    chart = Chart(classes=())
+    assert not chart.render_pyquery().attr('class')
+
+    chart = Chart(classes=(_ellipsis,))
+    assert chart.render_pyquery().attr('class') == 'pygal-chart'
+
+    chart = Chart(classes=('graph',))
+    assert chart.render_pyquery().attr('class') == 'graph'
+
+    chart = Chart(classes=('pygal-chart', 'graph'))
+    assert chart.render_pyquery().attr('class') == 'pygal-chart graph'
+
+    chart = Chart(classes=(_ellipsis, 'graph'))
+    assert chart.render_pyquery().attr('class') == 'pygal-chart graph'
+
+    chart = Chart(classes=('graph', _ellipsis))
+    assert chart.render_pyquery().attr('class') == 'graph pygal-chart'

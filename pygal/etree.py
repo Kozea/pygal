@@ -2,7 +2,7 @@
 # This file is part of pygal
 #
 # A python svg graph plotting library
-# Copyright © 2012-2014 Kozea
+# Copyright © 2012-2016 Kozea
 #
 # This library is free software: you can redistribute it and/or modify it under
 # the terms of the GNU Lesser General Public License as published by the Free
@@ -16,11 +16,20 @@
 #
 # You should have received a copy of the GNU Lesser General Public License
 # along with pygal. If not, see <http://www.gnu.org/licenses/>.
+"""
+Wrapper for seamless lxml.etree / xml.etree usage
+depending on whether lxml is installed or not.
+"""
+
 import os
 
 
 class Etree(object):
+
+    """Etree wrapper using lxml.etree or standard xml.etree"""
+
     def __init__(self):
+        """Create the wrapper"""
         from xml.etree import ElementTree as _py_etree
         self._py_etree = _py_etree
         try:
@@ -36,17 +45,21 @@ class Etree(object):
         self.lxml = self._etree is self._lxml_etree
 
     def __getattribute__(self, attr):
+        """Retrieve attr from current active etree implementation"""
         if (attr not in object.__getattribute__(self, '__dict__') and
                 attr not in Etree.__dict__):
             return object.__getattribute__(self._etree, attr)
         return object.__getattribute__(self, attr)
 
     def to_lxml(self):
+        """Force lxml.etree to be used"""
         self._etree = self._lxml_etree
         self.lxml = True
 
     def to_etree(self):
+        """Force xml.etree to be used"""
         self._etree = self._py_etree
         self.lxml = False
+
 
 etree = Etree()

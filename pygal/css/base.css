@@ -22,36 +22,48 @@
  * Font-sizes from config, override with care
  */
 
+{{ id }} {
+  -webkit-user-select: none;
+  -webkit-font-smoothing: antialiased;
+  font-family: {{ style.font_family }};
+}
+
 {{ id }}.title {
-  font-family: "{{ style.font_family }}";
-  font-size: {{ font_sizes.title }};
+  font-family: {{ style.title_font_family }};
+  font-size: {{ style.title_font_size }}px;
 }
 
 {{ id }}.legends .legend text {
-  font-family: "{{ style.font_family }}";
-  font-size: {{ font_sizes.legend }};
+  font-family: {{ style.legend_font_family }};
+  font-size: {{ style.legend_font_size }}px;
 }
 
 {{ id }}.axis text {
-  font-family: "{{ style.font_family }}";
-  font-size: {{ font_sizes.label }};
+  font-family: {{ style.label_font_family }};
+  font-size: {{ style.label_font_size }}px;
 }
 
 {{ id }}.axis text.major {
-  font-family: "{{ style.font_family }}";
-  font-size: {{ font_sizes.major_label }};
+  font-family: {{ style.major_label_font_family }};
+  font-size: {{ style.major_label_font_size }}px;
 }
 
-{{ id }}.series text {
-  font-family: "{{ style.font_family }}";
-  font-size: {{ font_sizes.value }};
+{{ id }}.text-overlay text.value {
+  font-family: {{ style.value_font_family }};
+  font-size: {{ style.value_font_size }}px;
 }
 
-{{ id }}.tooltip text {
-  font-family: "{{ style.font_family }}";
-  font-size: {{ font_sizes.tooltip }};
+{{ id }}.text-overlay text.label {
+  font-family: {{ style.value_label_font_family }};
+  font-size: {{ style.value_label_font_size }}px;
+}
+
+{{ id }}.tooltip {
+  font-family: {{ style.tooltip_font_family }};
+  font-size: {{ style.tooltip_font_size }}px;
 }
 
 {{ id }}text.no_data {
-  font-size: {{ font_sizes.no_data }};
+  font-family: {{ style.no_data_font_family }};
+  font-size: {{ style.no_data_font_size }}px;
 }

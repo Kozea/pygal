@@ -2,7 +2,7 @@
 # This file is part of pygal
 #
 # A python svg graph plotting library
-# Copyright © 2012-2014 Kozea
+# Copyright © 2012-2016 Kozea
 #
 # This library is free software: you can redistribute it and/or modify it under
 # the terms of the GNU Lesser General Public License as published by the Free
@@ -16,15 +16,19 @@
 #
 # You should have received a copy of the GNU Lesser General Public License
 # along with pygal. If not, see <http://www.gnu.org/licenses/>.
-from datetime import time
-from pygal._compat import u
+
+"""Utility functions tests"""
+
+from pygal._compat import u, _ellipsis
 from pygal.util import (
-    round_to_int, round_to_float, _swap_curly, template, humanize,
-    truncate, minify_css, majorize)
+    round_to_int, round_to_float, _swap_curly, template,
+    truncate, minify_css, majorize, mergextend)
 from pytest import raises
+import sys
 
 
 def test_round_to_int():
+    """Test round to int function"""
     assert round_to_int(154231, 1000) == 154000
     assert round_to_int(154231, 10) == 154230
     assert round_to_int(154231, 100000) == 200000
@@ -35,6 +39,7 @@ def test_round_to_int():
 
 
 def test_round_to_float():
+    """Test round to float function"""
     assert round_to_float(12.01934, .01) == 12.02
     assert round_to_float(12.01134, .01) == 12.01
     assert round_to_float(12.1934, .1) == 12.2
@@ -46,6 +51,7 @@ def test_round_to_float():
 
 
 def test_swap_curly():
+    """Test swap curly function"""
     for str in (
             'foo',
             u('foo foo foo bar'),
@@ -65,6 +71,7 @@ def test_swap_curly():
 
 
 def test_format():
+    """Test format function"""
     assert template('foo {{ baz }}', baz='bar') == 'foo bar'
     with raises(KeyError):
         assert template('foo {{ baz }}') == 'foo baz'
@@ -80,36 +87,8 @@ def test_format():
         o=obj) == 'foo 1 True-3'
 
 
-def test_humanize():
-    assert humanize(1) == '1'
-    assert humanize(1.) == '1'
-    assert humanize(10) == '10'
-    assert humanize(12.5) == '12.5'
-    assert humanize(1000) == '1k'
-    assert humanize(5000) == '5k'
-    assert humanize(100000) == '100k'
-    assert humanize(1253) == '1.253k'
-    assert humanize(1250) == '1.25k'
-
-    assert humanize(0.1) == '100m'
-    assert humanize(0.01) == '10m'
-    assert humanize(0.001) == '1m'
-    assert humanize(0.002) == '2m'
-    assert humanize(0.0025) == '2.5m'
-    assert humanize(0.0001) == u('100µ')
-    assert humanize(0.000123) == u('123µ')
-    assert humanize(0.00001) == u('10µ')
-    assert humanize(0.000001) == u('1µ')
-    assert humanize(0.0000001) == u('100n')
-    assert humanize(0.0000000001) == u('100p')
-
-    assert humanize(0) == '0'
-    assert humanize(0.) == '0'
-    assert humanize(-1337) == '-1.337k'
-    assert humanize(-.000000042) == '-42n'
-
-
 def test_truncate():
+    """Test truncate function"""
     assert truncate('1234567890', 50) == '1234567890'
     assert truncate('1234567890', 5) == u('1234…')
     assert truncate('1234567890', 1) == u('…')
@@ -120,6 +99,7 @@ def test_truncate():
 
 
 def test_minify_css():
+    """Test css minifier function"""
     css = '''
 /*
  * Font-sizes from config, override with care
@@ -140,7 +120,8 @@ def test_minify_css():
         '.legends .legend text{font-family:monospace;font-size:14}')
 
 
-def test_major():
+def test_majorize():
+    """Test majorize function"""
     assert majorize(()) == []
     assert majorize((0,)) == []
     assert majorize((0, 1)) == []
@@ -173,3 +154,21 @@ def test_major():
     assert majorize(range(21, 83, 3)) == [30, 45, 60, 75]
     # TODO: handle crazy cases
     # assert majorize(range(20, 83, 3)) == [20, 35, 50, 65, 80]
+
+
+def test_mergextend():
+    """Test mergextend function"""
+    assert mergextend(['a', 'b'], ['c', 'd']) == ['a', 'b']
+    assert mergextend([], ['c', 'd']) == []
+    assert mergextend(['a', 'b'], []) == ['a', 'b']
+
+    assert mergextend([_ellipsis], ['c', 'd']) == ['c', 'd']
+    assert mergextend([_ellipsis, 'b'], ['c', 'd']) == ['c', 'd', 'b']
+    assert mergextend(['a', _ellipsis], ['c', 'd']) == ['a', 'c', 'd']
+    assert mergextend(['a', _ellipsis, 'b'], ['c', 'd']) == [
+        'a', 'c', 'd', 'b']
+
+    if sys.version_info[0] >= 3:
+        # For @#! sake it's 2016 now
+        assert eval("mergextend(['a', ..., 'b'], ['c', 'd'])") == [
+            'a', 'c', 'd', 'b']
