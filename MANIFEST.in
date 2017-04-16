@@ -1,0 +1,2 @@
+recursive-include pygal/css *
+recursive-include pygal/graph *.svg
