@@ -500,7 +500,7 @@ class Config(CommonConfig):
 
     # Misc #
     js = Key(
-        ('//kozea.github.io/pygal.js/2.0.x/pygal-tooltips.min.js',),
+        ('http://kozea.github.io/pygal.js/2.0.x/pygal-tooltips.min.js',),
         list, "Misc", "List of js file",
         "It can be any uri from file:///tmp/ext.js to //domain/ext.js",
         str)
