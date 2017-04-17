@@ -343,7 +343,7 @@ class LogView(View):
     def y(self, y):
         """Project y"""
         if y is None or y <= 0 or self.log10_ymax - self.log10_ymin == 0:
-            return 0
+            return 0 
         return (self.height - self.height *
                 (log10(y) - self.log10_ymin) / (
                     self.log10_ymax - self.log10_ymin))
