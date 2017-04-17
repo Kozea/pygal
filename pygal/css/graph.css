@@ -150,3 +150,15 @@
   stroke: {{ style.background }};
   stroke-width: 2px;
 }
+
+{{ id }}.annotation.center {
+    text-anchor: middle;
+}
+
+{{ id }}.annotation.right {
+    text-anchor: start;
+}
+
+{{ id }}.annotation.left {
+    text-anchor: end;
+}

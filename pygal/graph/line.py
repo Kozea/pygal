@@ -133,6 +133,24 @@ class Line(Graph):
                     y + self.style.value_font_size,
                     metadata)
 
+        serie.show_annotations = True
+        if serie.show_annotations:
+            for i, (_, _, annotation) in enumerate(serie.values):
+                x = view_values[i][0]
+                y = view_values[i][1]
+
+                shift_x = 0
+                shift_y = -7
+
+                # TODO: draw it on the left of the point if its past half way across the X axis - how to tell?
+                self.svg.node(
+                    serie_node['plot'], 'text', class_='text annotation point_annotation',
+                    x=x,
+                    y=y,
+                    dx=shift_x,
+                    dy=shift_y
+                ).text = annotation
+
         if serie.stroke:
             if self.interpolate:
                 points = serie.interpolated

@@ -156,9 +156,16 @@ class BaseGraph(object):
                     elif not is_list_like(value):
                         value = (value, self.zero)
                     if self._x_adapt:
-                        value = (
-                            self._x_adapt(value[0]),
-                            self._adapt(value[1]))
+                        if len(value) == 3:
+                            value = (
+                                self._x_adapt(value[0]),
+                                self._adapt(value[1]),
+                                value[2])
+                        else:
+                            value = (
+                                self._x_adapt(value[0]),
+                                self._adapt(value[1]))
+
                     if isinstance(self, BaseMap):
                         value = (self._adapt(value[0]), value[1])
                     else:
