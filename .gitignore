@@ -11,3 +11,5 @@ junit-py*
 docs/_build
 .cache
 build
+.env*
+.eggs
