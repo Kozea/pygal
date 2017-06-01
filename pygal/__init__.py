@@ -23,8 +23,7 @@ This package holds all available charts in pygal, the Config class
 and the maps extensions namespace module.
 
 """
-
-__version__ = '2.3.1'
+from .__about__ import *  # noqa: F401,F403
 
 import pkg_resources
 import sys

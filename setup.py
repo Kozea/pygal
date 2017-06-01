@@ -19,9 +19,8 @@
 # along with pygal. If not, see <http://www.gnu.org/licenses/>.
 import os
 import sys
-import re
 
-from setuptools import setup, find_packages
+from setuptools import find_packages, setup
 from setuptools.command.test import test as TestCommand
 
 
@@ -56,18 +55,19 @@ tests_requirements = [
     'pytest'
 ]
 
-
-with open(os.path.join(ROOT, 'pygal', '__init__.py'), **kwargs) as fd:
-    __version__ = re.search("__version__ = '([^']+)'", fd.read()).group(1)
+about = {}
+with open(os.path.join(
+        os.path.dirname(__file__), "pygal", "__about__.py")) as f:
+    exec(f.read(), about)
 
 setup(
-    name="pygal",
-    version=__version__,
-    description="A python svg graph plotting library",
-    author="Kozea",
-    url="http://pygal.org/",
-    author_email="florian.mounier@kozea.fr",
-    license="GNU LGPL v3+",
+    name=about['__title__'],
+    version=about['__version__'],
+    description=about['__summary__'],
+    url=about['__uri__'],
+    author=about['__author__'],
+    author_email=about['__email__'],
+    license=about['__license__'],
     platforms="Any",
     packages=find_packages(),
     provides=['pygal'],
