@@ -19,16 +19,18 @@
 
 """Generate tests for different chart types with different data"""
 
-import os
-import pygal
-import uuid
-import sys
-import pytest
 import io
-from pygal.graph.map import BaseMap
-from pygal.util import cut
+import os
+import sys
+import uuid
+
+import pytest
+
+import pygal
 from pygal._compat import u
+from pygal.graph.map import BaseMap
 from pygal.test import make_data
+from pygal.util import cut
 
 try:
     import cairosvg

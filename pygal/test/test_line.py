@@ -20,9 +20,11 @@
 """Line chart related tests"""
 
 from __future__ import division
+
+from math import cos, sin
+
 from pygal import Line
 from pygal.test.utils import texts
-from math import cos, sin
 
 
 def test_simple_line():

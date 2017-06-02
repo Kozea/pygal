@@ -18,12 +18,13 @@
 # along with pygal. If not, see <http://www.gnu.org/licenses/>.
 
 
-from docutils.parsers.rst import Directive
 from traceback import format_exc, print_exc
-from sphinx.directives.code import CodeBlock
 
 import docutils.core
+from docutils.parsers.rst import Directive
+
 import pygal
+from sphinx.directives.code import CodeBlock
 
 # Patch default style
 

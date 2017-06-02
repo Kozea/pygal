@@ -1,10 +1,17 @@
 # -*- coding: utf-8 -*-
 # This file is part of pygal
+from datetime import date, datetime
+from random import choice, randint
+
+from flask import abort
+
 from pygal import (
-    Bar, Gauge, Pyramid, Funnel, Dot, StackedBar, StackedLine, XY,
-    CHARTS_BY_NAME, Config, Line, Histogram, Box,
-    Pie, Treemap, TimeLine, DateLine, Radar, HorizontalBar,
-    DateTimeLine, SolidGauge)
+    CHARTS_BY_NAME, XY, Bar, Box, Config, DateLine, DateTimeLine, Dot, Funnel,
+    Gauge, Histogram, HorizontalBar, Line, Pie, Pyramid, Radar, SolidGauge,
+    StackedBar, StackedLine, TimeLine, Treemap, formatters, stats)
+from pygal.colors import rotate
+from pygal.graph.horizontal import HorizontalGraph
+from pygal.style import RotateStyle, Style, styles
 
 try:
     from pygal.maps import world
@@ -21,13 +28,6 @@ try:
 except ImportError:
     ch = None
 
-from flask import abort
-from pygal.style import styles, Style, RotateStyle
-from pygal.colors import rotate
-from pygal import stats, formatters
-from pygal.graph.horizontal import HorizontalGraph
-from random import randint, choice
-from datetime import datetime, date
 
 
 def get_test_routes(app):

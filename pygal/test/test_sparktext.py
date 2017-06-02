@@ -19,7 +19,7 @@
 
 """Test sparktext rendering"""
 
-from pygal import Line, Bar
+from pygal import Bar, Line
 from pygal._compat import u
 
 

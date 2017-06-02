@@ -23,6 +23,7 @@ This class is used to render an html table from a chart data.
 """
 
 import uuid
+
 from lxml.html import builder, tostring
 
 from pygal.util import template

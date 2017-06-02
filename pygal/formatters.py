@@ -22,9 +22,10 @@ Formatters to use with `value_formatter` and `x_value_formatter` configs
 """
 from __future__ import division
 
-from datetime import datetime, date, time
+from datetime import date, datetime, time
 from math import floor, log
-from pygal._compat import u, to_str
+
+from pygal._compat import to_str, u
 from pygal.util import float_format
 
 

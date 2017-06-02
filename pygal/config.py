@@ -20,10 +20,9 @@
 
 from copy import deepcopy
 
+from pygal import formatters
 from pygal.interpolate import INTERPOLATIONS
 from pygal.style import DefaultStyle, Style
-from pygal import formatters
-
 
 CONFIG_ITEMS = []
 callable = type(lambda: 1)

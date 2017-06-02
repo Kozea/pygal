@@ -18,14 +18,13 @@
 # along with pygal. If not, see <http://www.gnu.org/licenses/>.
 
 
-from pygal import CHARTS, CHARTS_BY_NAME
-from pygal.test import adapt
-from pygal.etree import etree
+import sys
+import timeit
 from random import sample
 
-import timeit
-import sys
-
+from pygal import CHARTS, CHARTS_BY_NAME
+from pygal.etree import etree
+from pygal.test import adapt
 
 sizes = (1, 5, 10, 50, 100, 500, 1000)
 

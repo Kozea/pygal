@@ -1,4 +1,4 @@
-from math import log, sqrt, pi
+from math import log, pi, sqrt
 
 
 def erfinv(x, a=.147):

@@ -18,6 +18,7 @@
 # along with pygal. If not, see <http://www.gnu.org/licenses/>.
 """Value adapters to use when a chart doesn't accept all value types"""
 from decimal import Decimal
+
 from pygal._compat import is_str
 
 

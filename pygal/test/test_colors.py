@@ -22,8 +22,8 @@
 from __future__ import division
 
 from pygal.colors import (
-    parse_color, unparse_color,
-    rgb_to_hsl, hsl_to_rgb, darken, lighten, saturate, desaturate, rotate)
+    darken, desaturate, hsl_to_rgb, lighten, parse_color, rgb_to_hsl, rotate,
+    saturate, unparse_color)
 
 
 def test_parse_color():

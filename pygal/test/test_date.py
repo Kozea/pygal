@@ -19,10 +19,11 @@
 
 """Date related charts tests"""
 
-from pygal import DateLine, TimeLine, DateTimeLine, TimeDeltaLine
+from datetime import date, datetime, time, timedelta
+
+from pygal import DateLine, DateTimeLine, TimeDeltaLine, TimeLine
 from pygal._compat import timestamp, utc
 from pygal.test.utils import texts
-from datetime import datetime, date, time, timedelta
 
 
 def test_date():

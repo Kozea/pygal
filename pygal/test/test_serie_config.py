@@ -21,7 +21,6 @@
 
 from pygal import Line
 
-
 s1 = [1, 3, 12, 3, 4]
 s2 = [7, -4, 10, None, 8, 3, 1]
 

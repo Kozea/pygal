@@ -19,21 +19,18 @@
 
 """Various config options tested on one chart type or more"""
 
-from pygal import (
-    Line, Dot, Pie, Treemap, Radar, Config, Bar, Funnel,
-    Histogram, Gauge, Box, XY,
-    Pyramid, HorizontalBar, HorizontalStackedBar,
-    HorizontalStackedLine, HorizontalLine,
-    DateTimeLine, TimeLine, DateLine, TimeDeltaLine,
-    SolidGauge
-)
-from pygal.graph.map import BaseMap
-from pygal.graph.horizontal import HorizontalGraph
-from pygal.graph.dual import Dual
-from pygal import formatters
-from pygal._compat import u, _ellipsis
-from pygal.test.utils import texts
 from tempfile import NamedTemporaryFile
+
+from pygal import (
+    XY, Bar, Box, Config, DateLine, DateTimeLine, Dot, Funnel, Gauge,
+    Histogram, HorizontalBar, HorizontalLine, HorizontalStackedBar,
+    HorizontalStackedLine, Line, Pie, Pyramid, Radar, SolidGauge,
+    TimeDeltaLine, TimeLine, Treemap, formatters)
+from pygal._compat import _ellipsis, u
+from pygal.graph.dual import Dual
+from pygal.graph.horizontal import HorizontalGraph
+from pygal.graph.map import BaseMap
+from pygal.test.utils import texts
 
 
 def test_config_behaviours():

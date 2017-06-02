@@ -19,8 +19,8 @@
 
 """Horizontal Stacked Line graph"""
 
-from pygal.graph.stackedline import StackedLine
 from pygal.graph.horizontal import HorizontalGraph
+from pygal.graph.stackedline import StackedLine
 
 
 class HorizontalStackedLine(HorizontalGraph, StackedLine):

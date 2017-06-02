@@ -19,8 +19,8 @@
 
 """Horizontal line graph"""
 
-from pygal.graph.line import Line
 from pygal.graph.horizontal import HorizontalGraph
+from pygal.graph.line import Line
 
 
 class HorizontalLine(HorizontalGraph, Line):

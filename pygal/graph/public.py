@@ -21,7 +21,7 @@
 import base64
 import io
 
-from pygal._compat import is_list_like, u, _ellipsis
+from pygal._compat import _ellipsis, is_list_like, u
 from pygal.graph.base import BaseGraph
 
 

@@ -23,8 +23,8 @@ as bars of varying width.
 
 from __future__ import division
 
-from pygal.graph.dual import Dual
 from pygal.graph.bar import Bar
+from pygal.graph.dual import Dual
 from pygal.util import alter, cached_property, decorate
 
 

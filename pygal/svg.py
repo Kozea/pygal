@@ -19,18 +19,20 @@
 """Svg helper"""
 
 from __future__ import division
-from pygal._compat import to_str, u, quote_plus
-from pygal.etree import etree
+
 import io
-import os
 import json
+import os
 from datetime import date, datetime
-from numbers import Number
 from math import pi
-from pygal.util import (
-    template, minify_css,
-    coord_project, coord_diff, coord_format, coord_dual, coord_abs_project)
+from numbers import Number
+
 from pygal import __version__
+from pygal._compat import quote_plus, to_str, u
+from pygal.etree import etree
+from pygal.util import (
+    coord_abs_project, coord_diff, coord_dual, coord_format, coord_project,
+    minify_css, template)
 
 nearly_2pi = 2 * pi - .00001
 

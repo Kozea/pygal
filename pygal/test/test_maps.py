@@ -21,7 +21,6 @@
 
 import pkg_resources
 
-
 # Load plugins tests
 for entry in pkg_resources.iter_entry_points('pygal.test.test_maps'):
     module = entry.load()
