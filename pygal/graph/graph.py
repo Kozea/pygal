@@ -22,14 +22,13 @@ from __future__ import division
 
 from math import ceil, cos, sin, sqrt
 
+from pygal import stats
 from pygal._compat import is_list_like, is_str, to_str
 from pygal.graph.public import PublicApi
 from pygal.interpolate import INTERPOLATIONS
-from pygal import stats
-from pygal.util import (
-    cached_property, compute_scale, cut, decorate,
-    get_text_box, get_texts_box, majorize, rad, reverse_text_len,
-    split_title, truncate, filter_kwargs)
+from pygal.util import (cached_property, compute_scale, cut, decorate,
+                        filter_kwargs, get_text_box, get_texts_box, majorize,
+                        rad, reverse_text_len, split_title, truncate)
 from pygal.view import LogView, ReverseView, View, XYLogView
 
 
