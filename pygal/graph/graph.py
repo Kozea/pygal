@@ -68,6 +68,10 @@ class Graph(PublicApi):
             self.height - self.margin_box.y,
             self._box)
 
+        if self.range is not None:
+            self._box.ymax = self._max + 0.5
+            self._box.ymin = self._min
+
     def _make_graph(self):
         """Init common graph svg structure"""
         self.nodes['graph'] = self.svg.node(
@@ -848,7 +852,7 @@ class Graph(PublicApi):
 
     def _compute_y_labels(self):
         y_pos = compute_scale(
-            self._box.ymin, self._box.ymax, self.logarithmic,
+            self._min, self._max, self.logarithmic,
             self.order_min, self.min_scale, self.max_scale
         )
         if self.y_labels:
