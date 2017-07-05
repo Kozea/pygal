@@ -99,6 +99,9 @@ class Line(Graph):
             for i, (x, y) in enumerate(view_values):
                 if None in (x, y):
                     continue
+                if self.logarithmic:
+                    if points[i][1] is None or points[i][1] <= 0:
+                        continue
                 if (serie.show_only_major_dots and
                         self.x_labels and i < len(self.x_labels) and
                         self.x_labels[i] not in self._x_labels_major):
@@ -164,7 +167,12 @@ class Line(Graph):
             else:
                 # plain vanilla rendering
                 sequences = [view_values]
-
+            if self.logarithmic:
+                for seq in sequences:
+                    for ele in seq[::-1]:
+                        y = points[seq.index(ele)][1]
+                        if y is None or y <= 0:
+                            del seq[seq.index(ele)]
             for seq in sequences:
                 self.svg.line(
                     serie_node['plot'], seq, close=self._self_close,
