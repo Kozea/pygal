@@ -5,7 +5,7 @@ all: install lint check check-outdated
 
 install:
 	test -d $(VENV) || virtualenv $(VENV) -p $(PYTHON_VERSION)
-	$(PIP) install --upgrade --no-cache pip setuptools -e .[test] devcore
+	$(PIP) install --upgrade --no-cache --no-use-wheel pip setuptools -e .[test] devcore
 
 clean:
 	rm -fr $(VENV)
