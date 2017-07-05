@@ -229,7 +229,9 @@ class Graph(PublicApi):
         if not self._y_labels or not self.show_y_labels:
             return
 
-        axis = self.svg.node(self.nodes['plot'], class_="axis y")
+        axis = self.svg.node(self.nodes['plot'], class_="axis y%s" % (
+            ' always_show' if self.show_y_guides else ''
+        ))
 
         if (0 not in [label[1] for label in self._y_labels] and
                 self.show_y_guides):

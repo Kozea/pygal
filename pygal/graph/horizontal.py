@@ -38,6 +38,8 @@ class HorizontalGraph(Graph):
             self._y_labels_major, self._x_labels_major)
         self._x_2nd_labels, self._y_2nd_labels = (
             self._y_2nd_labels, self._x_2nd_labels)
+        self.show_y_guides, self.show_x_guides = (
+            self.show_x_guides, self.show_y_guides)
 
     def _axes(self):
         """Set the _force_vertical flag when rendering axes"""
