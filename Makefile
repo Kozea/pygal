@@ -24,10 +24,11 @@ check-outdated:
 visual-check:
 	$(PYTHON) demo/moulinrouge.py
 
-gen-docs:
+.PHONY: docs
+docs:
 	cd docs && PYTHON_PATH=$(VENV) PATH=$(VENV)/bin:$(PATH) $(MAKE) rst html
 
-release:
+release: docs
 	git pull
 	$(eval VERSION := $(shell PROJECT_NAME=$(PROJECT_NAME) $(VENV)/bin/devcore bump $(LEVEL)))
 	git commit -am "Bump $(VERSION)"
