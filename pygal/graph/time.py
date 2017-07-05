@@ -113,7 +113,7 @@ class DateLine(DateTimeLine):
     def _x_format(self):
         """Return the value formatter for this graph"""
         def date_to_str(x):
-            d = date.fromtimestamp(x)
+            d = datetime.utcfromtimestamp(x).date()
             return self.x_value_formatter(d)
         return date_to_str
 
