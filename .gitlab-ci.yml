@@ -1,0 +1,48 @@
+before_script:
+    - pip install --upgrade pip setuptools
+    - pip install --upgrade .[test]
+
+.before_script_alpine: &before_alpine
+    before_script:
+        - apk add --no-cache openssl gcc libxml2 libxml2-dev libxslt libxslt-dev libffi libffi-dev musl-dev libjpeg-turbo libjpeg-turbo-dev cairo cairo-dev
+        - pip install --upgrade pip setuptools
+        - pip install --upgrade .[test]
+
+
+.test_template: &test
+    script:
+        - py.test pygal/ --flake8 --cov-report= --cov=pygal
+
+
+python 2.7alpine:
+    image: python:2.7-alpine
+    <<: *before_alpine
+    <<: *test
+
+# Broken symbolic link with alpine :
+# https://github.com/docker-library/python/issues/155
+
+python 3.3alpine:
+    image: python:3.3-alpine
+    <<: *before_alpine
+    <<: *test
+
+python 3.4alpine:
+    image: python:3.4-alpine
+    <<: *before_alpine
+    <<: *test
+
+python 3.5alpine:
+    image: python:3.5-alpine
+    <<: *before_alpine
+    <<: *test
+
+python 3.6alpine:
+    image: python:3.6-alpine
+    <<: *before_alpine
+    <<: *test
+
+python pypy:
+    image: pypy:2
+    <<: *test
+
