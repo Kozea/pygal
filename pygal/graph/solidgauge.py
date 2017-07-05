@@ -126,7 +126,7 @@ class SolidGauge(Graph):
                     n_series_ = n_series_ / i
                 i = i + 1
             _y = int(n_series_)
-            _x = int(n_series_ / len(self.series))
+            _x = int(len(self.series) / _y)
             if len(self.series) == 5:
                 _x, _y = 2, 3
             if abs(_x - _y) > 2:
