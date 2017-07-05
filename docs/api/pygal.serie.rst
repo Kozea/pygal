@@ -1,5 +1,5 @@
-pygal.serie module
-==================
+pygal\.serie module
+===================
 
 .. automodule:: pygal.serie
     :members:

@@ -1,5 +1,5 @@
-pygal.test.test_colors module
-=============================
+pygal\.test\.test\_colors module
+================================
 
 .. automodule:: pygal.test.test_colors
     :members:

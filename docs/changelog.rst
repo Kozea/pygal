@@ -2,6 +2,17 @@
 Changelog
 =========
 
+2.4.0
+=====
+
+* Generalized fix solidgauge squares algorithm (thanks @Necrote #385)
+* Fix secondary series 'stroke_style' property (thanks @Yuliang-Lee #359)
+* Fix wrong label colors when there are more series than colors (thanks @Brandhor #350)
+* Show y guides in horizontal chart (thanks @yossisal #349)
+* Fix nomenclature of Taiwan (thanks @pierrrrrrre #344)
+* Better None values handling in logarithmic charts (thanks @ShuaiQin #343)
+
+
 2.3.1
 =====
 

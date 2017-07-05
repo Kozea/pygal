@@ -1,5 +1,5 @@
-pygal.graph.radar module
-========================
+pygal\.graph\.radar module
+==========================
 
 .. automodule:: pygal.graph.radar
     :members:

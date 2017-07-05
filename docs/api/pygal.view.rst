@@ -1,5 +1,5 @@
-pygal.view module
-=================
+pygal\.view module
+==================
 
 .. automodule:: pygal.view
     :members:

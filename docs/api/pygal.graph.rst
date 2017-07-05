@@ -1,5 +1,5 @@
-pygal.graph package
-===================
+pygal\.graph package
+====================
 
 .. automodule:: pygal.graph
     :members:

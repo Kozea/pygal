@@ -1,5 +1,5 @@
-pygal.graph.histogram module
-============================
+pygal\.graph\.histogram module
+==============================
 
 .. automodule:: pygal.graph.histogram
     :members:

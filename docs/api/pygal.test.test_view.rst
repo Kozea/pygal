@@ -1,5 +1,5 @@
-pygal.test.test_view module
-===========================
+pygal\.test\.test\_view module
+==============================
 
 .. automodule:: pygal.test.test_view
     :members:

@@ -1,5 +1,5 @@
-pygal.svg module
-================
+pygal\.svg module
+=================
 
 .. automodule:: pygal.svg
     :members:

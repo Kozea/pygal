@@ -80,6 +80,7 @@ setup(
     package_data={'pygal': ['css/*', 'graph/maps/*.svg']},
     extras_require={
         'lxml': ['lxml'],
+        'docs': ['sphinx', 'sphinx_rtd_theme', 'pygal_sphinx_directives'],
         'png': [cairosvg],
         'test': tests_requirements
     },

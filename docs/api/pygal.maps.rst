@@ -1,5 +1,5 @@
-pygal.maps package
-==================
+pygal\.maps package
+===================
 
 .. automodule:: pygal.maps
     :members:

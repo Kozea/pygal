@@ -1,5 +1,5 @@
-pygal.test.test_stacked module
-==============================
+pygal\.test\.test\_stacked module
+=================================
 
 .. automodule:: pygal.test.test_stacked
     :members:

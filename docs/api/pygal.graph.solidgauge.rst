@@ -1,5 +1,5 @@
-pygal.graph.solidgauge module
-=============================
+pygal\.graph\.solidgauge module
+===============================
 
 .. automodule:: pygal.graph.solidgauge
     :members:

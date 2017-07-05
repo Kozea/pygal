@@ -1,5 +1,5 @@
-pygal.graph.horizontal module
-=============================
+pygal\.graph\.horizontal module
+===============================
 
 .. automodule:: pygal.graph.horizontal
     :members:

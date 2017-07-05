@@ -1,5 +1,5 @@
-pygal.graph.xy module
-=====================
+pygal\.graph\.xy module
+=======================
 
 .. automodule:: pygal.graph.xy
     :members:

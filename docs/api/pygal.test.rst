@@ -1,5 +1,5 @@
-pygal.test package
-==================
+pygal\.test package
+===================
 
 .. automodule:: pygal.test
     :members:
@@ -22,6 +22,7 @@ Submodules
    pygal.test.test_histogram
    pygal.test.test_interpolate
    pygal.test.test_line
+   pygal.test.test_line_log_none_max_solved
    pygal.test.test_maps
    pygal.test.test_pie
    pygal.test.test_serie_config

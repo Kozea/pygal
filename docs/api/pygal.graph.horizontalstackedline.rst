@@ -1,5 +1,5 @@
-pygal.graph.horizontalstackedline module
-========================================
+pygal\.graph\.horizontalstackedline module
+==========================================
 
 .. automodule:: pygal.graph.horizontalstackedline
     :members:

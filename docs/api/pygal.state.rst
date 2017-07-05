@@ -1,5 +1,5 @@
-pygal.state module
-==================
+pygal\.state module
+===================
 
 .. automodule:: pygal.state
     :members:

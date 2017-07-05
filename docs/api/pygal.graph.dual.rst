@@ -1,5 +1,5 @@
-pygal.graph.dual module
-=======================
+pygal\.graph\.dual module
+=========================
 
 .. automodule:: pygal.graph.dual
     :members:

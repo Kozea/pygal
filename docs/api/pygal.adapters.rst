@@ -1,5 +1,5 @@
-pygal.adapters module
-=====================
+pygal\.adapters module
+======================
 
 .. automodule:: pygal.adapters
     :members:

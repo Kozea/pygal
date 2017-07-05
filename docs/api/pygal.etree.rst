@@ -1,5 +1,5 @@
-pygal.etree module
-==================
+pygal\.etree module
+===================
 
 .. automodule:: pygal.etree
     :members:

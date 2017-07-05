@@ -1,5 +1,5 @@
-pygal.graph.time module
-=======================
+pygal\.graph\.time module
+=========================
 
 .. automodule:: pygal.graph.time
     :members:

@@ -1,5 +1,5 @@
-pygal.formatters module
-=======================
+pygal\.formatters module
+========================
 
 .. automodule:: pygal.formatters
     :members:

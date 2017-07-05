@@ -1,5 +1,5 @@
-pygal.test.utils module
-=======================
+pygal\.test\.utils module
+=========================
 
 .. automodule:: pygal.test.utils
     :members:

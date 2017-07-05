@@ -1,5 +1,5 @@
-pygal.interpolate module
-========================
+pygal\.interpolate module
+=========================
 
 .. automodule:: pygal.interpolate
     :members:

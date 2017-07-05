@@ -1,5 +1,5 @@
-pygal.test.test_box module
-==========================
+pygal\.test\.test\_box module
+=============================
 
 .. automodule:: pygal.test.test_box
     :members:

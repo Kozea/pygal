@@ -1,5 +1,5 @@
-pygal.graph.funnel module
-=========================
+pygal\.graph\.funnel module
+===========================
 
 .. automodule:: pygal.graph.funnel
     :members:

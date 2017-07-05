@@ -5,7 +5,7 @@ all: install lint check check-outdated
 
 install:
 	test -d $(VENV) || virtualenv $(VENV) -p $(PYTHON_VERSION)
-	$(PIP) install --upgrade --no-cache --no-use-wheel pip setuptools -e .[test] devcore
+	$(PIP) install --upgrade --no-cache --no-use-wheel pip setuptools -e .[test,docs] devcore
 
 clean:
 	rm -fr $(VENV)
@@ -20,6 +20,12 @@ check:
 
 check-outdated:
 	$(PIP) list --outdated --format=columns
+
+visual-check:
+	$(PYTHON) demo/moulinrouge.py
+
+gen-docs:
+	cd docs && PYTHON_PATH=$(VENV) PATH=$(VENV)/bin:$(PATH) $(MAKE) rst html
 
 release:
 	git pull

@@ -1,5 +1,5 @@
-pygal.graph.dot module
-======================
+pygal\.graph\.dot module
+========================
 
 .. automodule:: pygal.graph.dot
     :members:

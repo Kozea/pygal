@@ -1,5 +1,5 @@
-pygal.graph.box module
-======================
+pygal\.graph\.box module
+========================
 
 .. automodule:: pygal.graph.box
     :members:

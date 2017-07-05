@@ -1,5 +1,5 @@
-pygal.graph.pie module
-======================
+pygal\.graph\.pie module
+========================
 
 .. automodule:: pygal.graph.pie
     :members:

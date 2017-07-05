@@ -1,5 +1,5 @@
-pygal.colors module
-===================
+pygal\.colors module
+====================
 
 .. automodule:: pygal.colors
     :members:

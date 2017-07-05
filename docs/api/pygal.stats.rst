@@ -1,5 +1,5 @@
-pygal.stats module
-==================
+pygal\.stats module
+===================
 
 .. automodule:: pygal.stats
     :members:

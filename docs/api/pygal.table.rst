@@ -1,5 +1,5 @@
-pygal.table module
-==================
+pygal\.table module
+===================
 
 .. automodule:: pygal.table
     :members:

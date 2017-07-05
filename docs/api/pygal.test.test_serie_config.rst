@@ -1,5 +1,5 @@
-pygal.test.test_serie_config module
-===================================
+pygal\.test\.test\_serie\_config module
+=======================================
 
 .. automodule:: pygal.test.test_serie_config
     :members:

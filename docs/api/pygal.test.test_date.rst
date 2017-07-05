@@ -1,5 +1,5 @@
-pygal.test.test_date module
-===========================
+pygal\.test\.test\_date module
+==============================
 
 .. automodule:: pygal.test.test_date
     :members:

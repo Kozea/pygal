@@ -1,5 +1,5 @@
-pygal.style module
-==================
+pygal\.style module
+===================
 
 .. automodule:: pygal.style
     :members:

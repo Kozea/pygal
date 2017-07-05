@@ -1,5 +1,5 @@
-pygal.config module
-===================
+pygal\.config module
+====================
 
 .. automodule:: pygal.config
     :members:

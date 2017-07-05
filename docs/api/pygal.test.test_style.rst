@@ -1,5 +1,5 @@
-pygal.test.test_style module
-============================
+pygal\.test\.test\_style module
+===============================
 
 .. automodule:: pygal.test.test_style
     :members:

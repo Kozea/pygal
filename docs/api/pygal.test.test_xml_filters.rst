@@ -1,5 +1,5 @@
-pygal.test.test_xml_filters module
-==================================
+pygal\.test\.test\_xml\_filters module
+======================================
 
 .. automodule:: pygal.test.test_xml_filters
     :members:

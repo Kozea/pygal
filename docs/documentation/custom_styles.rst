@@ -80,6 +80,7 @@ It is possible to give a google font to any font family property by specifying t
 
    style = Style(font_family='googlefont:Raleway')
 
+NB: this won't work if you include the svg directly, you have to embed it because the google stylesheet is added in the XML processing instructions. (You could also manually add the google font in your HTML.)
 
 Using a custom css
 ------------------

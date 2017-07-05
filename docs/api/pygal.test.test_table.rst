@@ -1,5 +1,5 @@
-pygal.test.test_table module
-============================
+pygal\.test\.test\_table module
+===============================
 
 .. automodule:: pygal.test.test_table
     :members:

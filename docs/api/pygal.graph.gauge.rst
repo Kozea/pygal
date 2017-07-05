@@ -1,5 +1,5 @@
-pygal.graph.gauge module
-========================
+pygal\.graph\.gauge module
+==========================
 
 .. automodule:: pygal.graph.gauge
     :members:

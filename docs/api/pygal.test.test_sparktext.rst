@@ -1,5 +1,5 @@
-pygal.test.test_sparktext module
-================================
+pygal\.test\.test\_sparktext module
+===================================
 
 .. automodule:: pygal.test.test_sparktext
     :members:
