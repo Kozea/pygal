@@ -491,4 +491,8 @@ class Svg(object):
         for serie in self.graph.series:
             if serie.stroke_style is not None:
                 css.append(stroke_dict_to_css(serie.stroke_style, serie.index))
+
+        for secondary_serie in self.graph.secondary_series:
+            if secondary_serie.stroke_style is not None:
+                css.append(stroke_dict_to_css(secondary_serie.stroke_style, secondary_serie.index))
         return '\n'.join(css)
