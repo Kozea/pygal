@@ -78,6 +78,25 @@ class PublicApi(BaseGraph):
         from pyquery import PyQuery as pq
         return pq(self.render(**kwargs), parser='html')
 
+    def render_to_html(self, **kwargs):
+        """
+        Renders the graph to an html string.
+        The result is the same as render_in_browser(), but returned as a string
+        so that it can be embedded into another html document.
+        """
+        try:
+            from lxml.etree import ElementTree
+        except ImportError:
+            raise ImportError('You must install lxml to use render in browser')
+
+        from cStringIO import StringIO
+
+        buf = StringIO()
+        doc = ElementTree(self.render_tree(**kwargs))
+        doc.write(buf, method="html", encoding='utf-8')
+
+        return buf.getvalue().decode('utf-8')
+
     def render_in_browser(self, **kwargs):
         """Render the graph, open it in your browser with black magic"""
         try:
