@@ -390,8 +390,7 @@ class Graph(PublicApi):
                     ) / 2,
                     width=self.legend_box_size,
                     height=self.legend_box_size,
-                    class_="color-%d reactive" % (
-                        serie_number % len(self.style.colors))
+                    class_="color-%d reactive" % serie_number
                 )
 
                 if isinstance(title, dict):
