@@ -228,7 +228,7 @@ def decorate(svg, node, metadata):
     if 'style' in metadata:
         node.attrib['style'] = metadata.pop('style')
 
-    if 'label' in metadata:
+    if 'label' in metadata and metadata['label']:
         svg.node(node, 'desc', class_='label').text = to_unicode(
             metadata['label'])
     return node
