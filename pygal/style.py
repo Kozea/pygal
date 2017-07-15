@@ -69,6 +69,8 @@ class Style(object):
     stroke_opacity = '.8'
     stroke_opacity_hover = '.9'
 
+    dot_opacity = '1'
+
     transition = '150ms'
     colors = (
         '#F44336',  # 0
