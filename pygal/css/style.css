@@ -94,6 +94,7 @@
 {{ id }}.reactive {
   fill-opacity: {{ style.opacity }};
   stroke-opacity: {{ style.stroke_opacity }};
+  stroke-width: {{ style.stroke_width }};
 }
 
 {{ id }}.ci {
@@ -104,7 +105,7 @@
 {{ id }}.active .reactive {
   fill-opacity: {{ style.opacity_hover }};
   stroke-opacity: {{ style.stroke_opacity_hover }};
-  stroke-width: 4;
+  stroke-width: {{ style.stroke_width_hover }};
 }
 
 {{ id }}.ci .reactive.active {
