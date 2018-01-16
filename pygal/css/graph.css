@@ -68,10 +68,12 @@
 
 {{ id }}.axis .guide.line {
   stroke-dasharray: {{ style.guide_stroke_dasharray }};
+  stroke: {{ style.guide_stroke_color }};
 }
 
 {{ id }}.axis .major.guide.line {
   stroke-dasharray: {{ style.major_guide_stroke_dasharray }};
+  stroke: {{ style.major_guide_stroke_color }};
 }
 
 {{ id }}.horizontal .axis.y .guide.line,
