@@ -34,6 +34,8 @@ from pygal.util import (
     coord_abs_project, coord_diff, coord_dual, coord_format, coord_project,
     minify_css, template)
 
+from pygal.css import CSS_BASE
+
 nearly_2pi = 2 * pi - .00001
 
 
@@ -92,7 +94,7 @@ class Svg(object):
         colors = self.graph.style.get_colors(self.id, self.graph._order)
         strokes = self.get_strokes()
         all_css = []
-        auto_css = ['file://base.css']
+        auto_css = ['template://{}'.format(CSS_BASE)]
 
         if self.graph.style._google_fonts:
             auto_css.append(
@@ -104,7 +106,19 @@ class Svg(object):
             css_text = None
             if css.startswith('inline:'):
                 css_text = css[len('inline:'):]
+
+            elif css.startswith('template://'):
+                css = css[len('template://'):]
+                css_text = template(
+                    css,
+                    style=self.graph.style,
+                    colors=colors,
+                    strokes=strokes,
+                    id=self.id
+                )
+
             elif css.startswith('file://'):
+
                 css = css[len('file://'):]
 
                 if not os.path.exists(css):

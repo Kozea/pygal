@@ -21,6 +21,8 @@
 from copy import deepcopy
 
 from pygal import formatters
+from pygal.css import CSS_GRAPH
+from pygal.css import CSS_STYLE
 from pygal.interpolate import INTERPOLATIONS
 from pygal.style import DefaultStyle, Style
 
@@ -37,7 +39,7 @@ class Key(object):
     a category, a documentation, an optional longer documentatation
     and an optional subtype for list style option.
 
-    Most of these informations are used in cabaret to auto generate
+    Most of these information are used in cabaret to auto generate
     forms representing these options.
     """
 
@@ -240,7 +242,7 @@ class Config(CommonConfig):
         DefaultStyle, Style, "Style", "Style holding values injected in css")
 
     css = Key(
-        ('file://style.css', 'file://graph.css'), list, "Style",
+        ('template://{}'.format(CSS_STYLE), 'template://{}'.format(CSS_GRAPH)), list, "Style",
         "List of css file",
         "It can be any uri from file:///tmp/style.css to //domain/style.css",
         str)
