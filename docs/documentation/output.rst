@@ -85,7 +85,7 @@ You can directly output a base 64 encoded data uri for <embed> or <image> inclus
 Browser
 -------
 
-With lxml installed you can use the ``render_in_browser`` method to magically make your chart appear in you default browser.
+With lxml installed you can use the ``render_in_browser`` method to magically make your chart appear in your default browser.
 
 .. code-block:: python
 
