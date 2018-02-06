@@ -17,12 +17,8 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with pygal. If not, see <http://www.gnu.org/licenses/>.
 
-labels = ['AURSAUTRAUIA',
-          'dpvluiqhu enuie',
-          'su sru a nanan a',
-          '09_28_3023_98120398',
-          u'éàéç€®ð{æə|&']
-series = {
-    'Female': [4, 2, 3, 0, 2],
-    'Male': [5, 1, 1, 3, 2]
-}
+labels = [
+    'AURSAUTRAUIA', 'dpvluiqhu enuie', 'su sru a nanan a',
+    '09_28_3023_98120398', u'éàéç€®ð{æə|&'
+]
+series = {'Female': [4, 2, 3, 0, 2], 'Male': [5, 1, 1, 3, 2]}

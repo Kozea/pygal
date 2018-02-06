@@ -16,7 +16,6 @@
 #
 # You should have received a copy of the GNU Lesser General Public License
 # along with pygal. If not, see <http://www.gnu.org/licenses/>.
-
 """Horizontal bar graph"""
 
 from pygal.graph.bar import Bar
@@ -24,7 +23,6 @@ from pygal.graph.horizontal import HorizontalGraph
 
 
 class HorizontalBar(HorizontalGraph, Bar):
-
     """Horizontal Bar graph"""
 
     def _plot(self):

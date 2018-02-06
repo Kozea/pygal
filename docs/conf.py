@@ -32,12 +32,8 @@ sys.path.insert(0, os.path.join(os.path.abspath('.'), 'ext'))
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
 extensions = [
-    'sphinx.ext.autodoc',
-    'sphinx.ext.doctest',
-    'sphinx.ext.intersphinx',
-    'sphinx.ext.coverage',
-    'sphinx.ext.viewcode',
-    'pygal_sphinx_directives'
+    'sphinx.ext.autodoc', 'sphinx.ext.doctest', 'sphinx.ext.intersphinx',
+    'sphinx.ext.coverage', 'sphinx.ext.viewcode', 'pygal_sphinx_directives'
 ]
 
 # Add any paths that contain templates here, relative to this directory.
@@ -111,7 +107,6 @@ pygments_style = 'sphinx'
 
 # If true, `todo` and `todoList` produce output, else they produce nothing.
 todo_include_todos = False
-
 
 # on_rtd is whether we are on readthedocs.org
 on_rtd = os.environ.get('READTHEDOCS', None) == 'True'
@@ -223,25 +218,27 @@ htmlhelp_basename = 'pygaldoc'
 # -- Options for LaTeX output ---------------------------------------------
 
 latex_elements = {
-# The paper size ('letterpaper' or 'a4paper').
-#'papersize': 'letterpaper',
+    # The paper size ('letterpaper' or 'a4paper').
+    #'papersize': 'letterpaper',
 
-# The font size ('10pt', '11pt' or '12pt').
-#'pointsize': '10pt',
+    # The font size ('10pt', '11pt' or '12pt').
+    #'pointsize': '10pt',
 
-# Additional stuff for the LaTeX preamble.
-#'preamble': '',
+    # Additional stuff for the LaTeX preamble.
+    #'preamble': '',
 
-# Latex figure (float) alignment
-#'figure_align': 'htbp',
+    # Latex figure (float) alignment
+    #'figure_align': 'htbp',
 }
 
 # Grouping the document tree into LaTeX files. List of tuples
 # (source start file, target name, title,
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
-  (master_doc, 'pygal.tex', 'pygal Documentation',
-   'Florian Mounier', 'manual'),
+    (
+        master_doc, 'pygal.tex', 'pygal Documentation', 'Florian Mounier',
+        'manual'
+    ),
 ]
 
 # The name of an image file (relative to this directory) to place at the top of
@@ -264,19 +261,14 @@ latex_documents = [
 # If false, no module index is generated.
 #latex_domain_indices = True
 
-
 # -- Options for manual page output ---------------------------------------
 
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
-man_pages = [
-    (master_doc, 'pygal', 'pygal Documentation',
-     [author], 1)
-]
+man_pages = [(master_doc, 'pygal', 'pygal Documentation', [author], 1)]
 
 # If true, show URL addresses after external links.
 #man_show_urls = False
-
 
 # -- Options for Texinfo output -------------------------------------------
 
@@ -284,9 +276,10 @@ man_pages = [
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
 texinfo_documents = [
-  (master_doc, 'pygal', 'pygal Documentation',
-   author, 'pygal', 'One line description of project.',
-   'Miscellaneous'),
+    (
+        master_doc, 'pygal', 'pygal Documentation', author, 'pygal',
+        'One line description of project.', 'Miscellaneous'
+    ),
 ]
 
 # Documents to append as an appendix to all manuals.
@@ -300,7 +293,6 @@ texinfo_documents = [
 
 # If true, do not generate a @detailmenu in the "Top" node's menu.
 #texinfo_no_detailmenu = False
-
 
 # Example configuration for intersphinx: refer to the Python standard library.
 intersphinx_mapping = {'https://docs.python.org/': None}

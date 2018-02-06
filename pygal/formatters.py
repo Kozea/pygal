@@ -46,14 +46,16 @@ class HumanReadable(Formatter):
         order = val and int(floor(log(abs(val)) / log(1000)))
         orders = self.ORDERS.split(" ")[int(order > 0)]
         if order == 0 or order > len(orders):
-            return float_format(val / (1000 ** int(order)))
+            return float_format(val / (1000**int(order)))
         return (
-            float_format(val / (1000 ** int(order))) +
-            orders[int(order) - int(order > 0)])
+            float_format(val / (1000**int(order))) +
+            orders[int(order) - int(order > 0)]
+        )
 
 
 class Significant(Formatter):
     """Show precision significant digit of float"""
+
     def __init__(self, precision=10):
         self.format = '%%.%dg' % precision
 

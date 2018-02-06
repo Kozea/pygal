@@ -34,10 +34,14 @@ def create_app():
     @app.route("/")
     def index():
         return render_template(
-            'index.jinja2', charts_names=CHARTS_NAMES, configs=CONFIG_ITEMS,
-            interpolations=INTERPOLATIONS, styles_names=styles.keys())
+            'index.jinja2',
+            charts_names=CHARTS_NAMES,
+            configs=CONFIG_ITEMS,
+            interpolations=INTERPOLATIONS,
+            styles_names=styles.keys()
+        )
 
-    @app.route("/svg", methods=('POST',))
+    @app.route("/svg", methods=('POST', ))
     def svg():
         values = request.values
         config = loads(values['opts'])

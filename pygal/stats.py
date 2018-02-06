@@ -35,15 +35,18 @@ def ppf(x, n):
             # http://eprints.maths.ox.ac.uk/184/1/tdist.pdf
             raise ImportError(
                 'You must have scipy installed to use t-student '
-                'when sample_size is below 30')
+                'when sample_size is below 30'
+            )
         return norm_ppf(x)
+
 
 # According to http://sphweb.bumc.bu.edu/otlt/MPH-Modules/BS/
 # BS704_Confidence_Intervals/BS704_Confidence_Intervals_print.html
 
 
 def confidence_interval_continuous(
-        point_estimate, stddev, sample_size, confidence=.95, **kwargs):
+        point_estimate, stddev, sample_size, confidence=.95, **kwargs
+):
     """Continuous confidence interval from sample size and standard error"""
     alpha = ppf((confidence + 1) / 2, sample_size - 1)
 
@@ -52,8 +55,13 @@ def confidence_interval_continuous(
 
 
 def confidence_interval_dichotomous(
-        point_estimate, sample_size, confidence=.95, bias=False,
-        percentage=True, **kwargs):
+        point_estimate,
+        sample_size,
+        confidence=.95,
+        bias=False,
+        percentage=True,
+        **kwargs
+):
     """Dichotomous confidence interval from sample size and maybe a bias"""
     alpha = ppf((confidence + 1) / 2, sample_size - 1)
     p = point_estimate

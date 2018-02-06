@@ -16,7 +16,6 @@
 #
 # You should have received a copy of the GNU Lesser General Public License
 # along with pygal. If not, see <http://www.gnu.org/licenses/>.
-
 """Box chart related tests"""
 
 from pygal.graph.box import Box
@@ -26,7 +25,8 @@ def test_quartiles():
     """Test box points for the 1.5IQR computation method"""
     a = [-2.0, 3.0, 4.0, 5.0, 8.0]  # odd test data
     (min_s, q0, q1, q2, q3, q4, max_s), outliers = Box._box_points(
-        a, mode='1.5IQR')
+        a, mode='1.5IQR'
+    )
 
     assert q1 == 7.0 / 4.0
     assert q2 == 4.0
@@ -36,19 +36,22 @@ def test_quartiles():
 
     b = [1.0, 4.0, 6.0, 8.0]  # even test data
     (min_s, q0, q1, q2, q3, q4, max_s), outliers = Box._box_points(
-        b, mode='1.5IQR')
+        b, mode='1.5IQR'
+    )
 
     assert q2 == 5.0
 
     c = [2.0, None, 4.0, 6.0, None]  # odd with None elements
     (min_s, q0, q1, q2, q3, q4, max_s), outliers = Box._box_points(
-        c, mode='1.5IQR')
+        c, mode='1.5IQR'
+    )
 
     assert q2 == 4.0
 
     d = [4]
     (min_s, q0, q1, q2, q3, q4, max_s), outliers = Box._box_points(
-        d, mode='1.5IQR')
+        d, mode='1.5IQR'
+    )
 
     assert q0 == 4
     assert q1 == 4
@@ -61,7 +64,8 @@ def test_quartiles_min_extremes():
     """Test box points for the extremes computation method"""
     a = [-2.0, 3.0, 4.0, 5.0, 8.0]  # odd test data
     (min_s, q0, q1, q2, q3, q4, max_s), outliers = Box._box_points(
-        a, mode='extremes')
+        a, mode='extremes'
+    )
 
     assert q1 == 7.0 / 4.0
     assert q2 == 4.0
@@ -71,19 +75,22 @@ def test_quartiles_min_extremes():
 
     b = [1.0, 4.0, 6.0, 8.0]  # even test data
     (min_s, q0, q1, q2, q3, q4, max_s), outliers = Box._box_points(
-        b, mode='extremes')
+        b, mode='extremes'
+    )
 
     assert q2 == 5.0
 
     c = [2.0, None, 4.0, 6.0, None]  # odd with None elements
     (min_s, q0, q1, q2, q3, q4, max_s), outliers = Box._box_points(
-        c, mode='extremes')
+        c, mode='extremes'
+    )
 
     assert q2 == 4.0
 
     d = [4]
     (min_s, q0, q1, q2, q3, q4, max_s), outliers = Box._box_points(
-        d, mode='extremes')
+        d, mode='extremes'
+    )
 
     assert q0 == 4
     assert q1 == 4
@@ -96,14 +103,16 @@ def test_quartiles_tukey():
     """Test box points for the tukey computation method"""
     a = []  # empty data
     (min_s, q0, q1, q2, q3, q4, max_s), outliers = Box._box_points(
-        a, mode='tukey')
+        a, mode='tukey'
+    )
     assert min_s == q0 == q1 == q2 == q3 == q4 == 0
     assert outliers == []
 
     # https://en.wikipedia.org/wiki/Quartile example 1
     b = [6, 7, 15, 36, 39, 40, 41, 42, 43, 47, 49]
     (min_s, q0, q1, q2, q3, q4, max_s), outliers = Box._box_points(
-        b, mode='tukey')
+        b, mode='tukey'
+    )
     assert min_s == q0 == 6
     assert q1 == 20.25
     assert q2 == 40
@@ -114,7 +123,8 @@ def test_quartiles_tukey():
     # previous test with added outlier 75
     c = [6, 7, 15, 36, 39, 40, 41, 42, 43, 47, 49, 75]
     (min_s, q0, q1, q2, q3, q4, max_s), outliers = Box._box_points(
-        c, mode='tukey')
+        c, mode='tukey'
+    )
     assert min_s == q0 == 6
     assert q1 == 25.5
     assert q2 == (40 + 41) / 2.0
@@ -125,7 +135,8 @@ def test_quartiles_tukey():
     # one more outlier, 77
     c = [6, 7, 15, 36, 39, 40, 41, 42, 43, 47, 49, 75, 77]
     (min_s, q0, q1, q2, q3, q4, max_s), outliers = Box._box_points(
-        c, mode='tukey')
+        c, mode='tukey'
+    )
     assert min_s == q0 == 6
     assert q1 == 30.75
     assert q2 == 41
@@ -137,11 +148,14 @@ def test_quartiles_tukey():
 
 def test_quartiles_stdev():
     """Test box points for the stdev computation method"""
-    a = [35, 42, 35, 41, 36, 6, 12, 51, 33, 27, 46, 36, 44, 53, 75, 46, 16,
-         51, 45, 29, 25, 26, 54, 61, 27, 40, 23, 34, 51, 37]
+    a = [
+        35, 42, 35, 41, 36, 6, 12, 51, 33, 27, 46, 36, 44, 53, 75, 46, 16, 51,
+        45, 29, 25, 26, 54, 61, 27, 40, 23, 34, 51, 37
+    ]
     SD = 14.67
     (min_s, q0, q1, q2, q3, q4, max_s), outliers = Box._box_points(
-        a, mode='stdev')
+        a, mode='stdev'
+    )
     assert min_s == min(a)
     assert max_s == max(a)
     assert q2 == 36.5
@@ -151,7 +165,8 @@ def test_quartiles_stdev():
 
     b = [5]  # test for posible zero division
     (min_s, q0, q1, q2, q3, q4, max_s), outliers = Box._box_points(
-        b, mode='stdev')
+        b, mode='stdev'
+    )
     assert min_s == q0 == q1 == q2 == q3 == q4 == max_s == b[0]
     assert outliers == []
 

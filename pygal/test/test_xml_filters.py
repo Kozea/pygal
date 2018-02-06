@@ -16,14 +16,12 @@
 #
 # You should have received a copy of the GNU Lesser General Public License
 # along with pygal. If not, see <http://www.gnu.org/licenses/>.
-
 """Xml filter tests"""
 
 from pygal import Bar
 
 
 class ChangeBarsXMLFilter(object):
-
     """xml filter that insert a subplot"""
 
     def __init__(self, a, b):
@@ -32,8 +30,9 @@ class ChangeBarsXMLFilter(object):
 
     def __call__(self, T):
         """Apply the filter on the tree"""
-        subplot = Bar(legend_at_bottom=True, explicit_size=True,
-                      width=800, height=150)
+        subplot = Bar(
+            legend_at_bottom=True, explicit_size=True, width=800, height=150
+        )
         subplot.add("Difference", self.data)
         subplot = subplot.render_tree()
         subplot = subplot.findall("g")[0]
@@ -55,8 +54,9 @@ def test_xml_filters_round_trip():
 
 def test_xml_filters_change_bars():
     """Test the use a xml filter"""
-    plot = Bar(legend_at_bottom=True, explicit_size=True,
-               width=800, height=600)
+    plot = Bar(
+        legend_at_bottom=True, explicit_size=True, width=800, height=600
+    )
     A = [60, 75, 80, 78, 83, 90]
     B = [92, 87, 81, 73, 68, 55]
     plot.add("A", A)
@@ -64,5 +64,5 @@ def test_xml_filters_change_bars():
     plot.add_xml_filter(ChangeBarsXMLFilter(A, B))
     q = plot.render_tree()
     assert len(q.findall("g")) == 2
-    assert q.findall("g")[1].attrib[
-        "transform"] == "translate(0,150), scale(1,0.75)"
+    assert q.findall("g")[1].attrib["transform"
+                                    ] == "translate(0,150), scale(1,0.75)"

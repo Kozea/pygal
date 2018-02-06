@@ -8,7 +8,8 @@ from flask import abort
 from pygal import (
     CHARTS_BY_NAME, XY, Bar, Box, Config, DateLine, DateTimeLine, Dot, Funnel,
     Gauge, Histogram, HorizontalBar, Line, Pie, Pyramid, Radar, SolidGauge,
-    StackedBar, StackedLine, TimeLine, Treemap, formatters, stats)
+    StackedBar, StackedLine, TimeLine, Treemap, formatters, stats
+)
 from pygal.colors import rotate
 from pygal.graph.horizontal import HorizontalGraph
 from pygal.style import RotateStyle, Style, styles
@@ -29,7 +30,6 @@ except ImportError:
     ch = None
 
 
-
 def get_test_routes(app):
     lnk = lambda v, l=None: {
         'value': v,
@@ -38,7 +38,9 @@ def get_test_routes(app):
 
     @app.route('/test/unsorted')
     def test_unsorted():
-        bar = Bar(style=styles['neon'], value_formatter=formatters.human_readable)
+        bar = Bar(
+            style=styles['neon'], value_formatter=formatters.human_readable
+        )
         bar.add('A', {'red': 10, 'green': 12, 'blue': 14})
         bar.add('B', {'green': 11, 'blue': 7})
         bar.add('C', {'blue': 7})
@@ -49,35 +51,45 @@ def get_test_routes(app):
 
     @app.route('/test/bar_links')
     def test_bar_links():
-        bar = StackedLine(style=styles['default'](
-            font_family='googlefont:Raleway'))
-        bar.js = ('http://l:2343/2.0.x/pygal-tooltips.js',)
+        bar = StackedLine(
+            style=styles['default'](font_family='googlefont:Raleway')
+        )
+        bar.js = ('http://l:2343/2.0.x/pygal-tooltips.js', )
         bar.title = 'Wow ! Such Chart !'
         bar.x_title = 'Many x labels'
         bar.y_title = 'Much y labels'
         bar.dynamic_print_values = True
 
-        bar.add('Red serie', [
-            {'value': 10,
-             'label': 'Ten',
-             'xlink': 'http://google.com?q=10'},
-            {'value': 20,
-             'label': 'Twenty is a good number yada yda yda yada '
-             'yadaaaaaaaaaaaaaaaaaaaaaa',
-             'xlink': 'http://google.com?q=20'},
-            30,
-            {'value': 40,
-             'label': 'Forty',
-             'xlink': 'http://google.com?q=40'}
-        ])
+        bar.add(
+            'Red serie', [{
+                'value': 10,
+                'label': 'Ten',
+                'xlink': 'http://google.com?q=10'
+            }, {
+                'value': 20,
+                'label':
+                    'Twenty is a good number yada yda yda yada '
+                    'yadaaaaaaaaaaaaaaaaaaaaaa',
+                'xlink': 'http://google.com?q=20'
+            }, 30, {
+                'value': 40,
+                'label': 'Forty',
+                'xlink': 'http://google.com?q=40'
+            }]
+        )
 
-        bar.add('Blue serie', [40, {
-            'value': 30,
-            'label': 'Thirty',
-            'xlink': 'http://google.com?q=30'
-        }, 20, 10])
-        bar.x_labels = ['Yesterday', 'Today or any other day',
-                        'Tomorrow', 'Someday']
+        bar.add(
+            'Blue serie', [
+                40, {
+                    'value': 30,
+                    'label': 'Thirty',
+                    'xlink': 'http://google.com?q=30'
+                }, 20, 10
+            ]
+        )
+        bar.x_labels = [
+            'Yesterday', 'Today or any other day', 'Tomorrow', 'Someday'
+        ]
         bar.logarithmic = True
         # bar.zero = 1
         return bar.render_response()
@@ -85,24 +97,29 @@ def get_test_routes(app):
     @app.route('/test/xy_links')
     def test_xy_links():
         xy = XY(style=styles['neon'], interpolate='cubic')
-        xy.add('1234', [
-            {'value': (10, 5),
-             'label': 'Ten',
-             'xlink': 'http://google.com?q=10'},
-            {'value': (20, 20),
-             'tooltip': 'Twenty',
-             'xlink': 'http://google.com?q=20'},
-            (30, 15),
-            {'value': (40, -5),
-             'label': 'Forty',
-             'xlink': 'http://google.com?q=40'}
-        ])
+        xy.add(
+            '1234', [{
+                'value': (10, 5),
+                'label': 'Ten',
+                'xlink': 'http://google.com?q=10'
+            }, {
+                'value': (20, 20),
+                'tooltip': 'Twenty',
+                'xlink': 'http://google.com?q=20'
+            }, (30, 15), {
+                'value': (40, -5),
+                'label': 'Forty',
+                'xlink': 'http://google.com?q=40'
+            }]
+        )
 
-        xy.add('4321', [(40, 10), {
-            'value': (30, 3),
-            'label': 'Thirty',
-            'xlink': 'http://google.com?q=30'
-        }, (20, 10), (10, 21)])
+        xy.add(
+            '4321', [(40, 10), {
+                'value': (30, 3),
+                'label': 'Thirty',
+                'xlink': 'http://google.com?q=30'
+            }, (20, 10), (10, 21)]
+        )
         xy.x_labels = list(range(1, 50))
         xy.y_labels = list(range(1, 50))
         return xy.render_response()
@@ -118,16 +135,15 @@ def get_test_routes(app):
             '123456789012345678 1234567890123456789 12345678901234567890 '
             '123456789012345 1234567890123456 12345678901234567 '
             '12345678901 123456789012 1234567890123 12345678901234 '
-            '1 12 123 1234 12345 123456 1234567 12345678 123456789 1234567890')
+            '1 12 123 1234 12345 123456 1234567 12345678 123456789 1234567890'
+        )
         return bar.render_response()
 
     @app.route('/test/multiline_title')
     def test_multiline_title():
         bar = Bar()
         bar.add('Looooooooooooooooooooooooooooooooooong', [2, None, 12])
-        bar.title = (
-            'First line \n Second line \n Third line'
-        )
+        bar.title = ('First line \n Second line \n Third line')
         return bar.render_response()
 
     @app.route('/test/long_labels')
@@ -135,7 +151,8 @@ def get_test_routes(app):
         bar = Bar()
         bar.add('Long', [2, None, 12])
         bar.title = (
-            '1 12 123 1234 12345 123456 1234567 12345678 123456789 1234567890')
+            '1 12 123 1234 12345 123456 1234567 12345678 123456789 1234567890'
+        )
         bar.x_labels = 'a' * 100, 'b ' * 50, 'cc ! ' * 20
         bar.x_label_rotation = 45
         return bar.render_response()
@@ -150,24 +167,34 @@ def get_test_routes(app):
     @app.route('/test/print_values/<chart>')
     def test_print_values_for(chart):
         graph = CHARTS_BY_NAME[chart](
-            print_values=True, print_labels=True, print_zeroes=True,
+            print_values=True,
+            print_labels=True,
+            print_zeroes=True,
             style=styles['default'](
                 value_font_family='googlefont:Raleway',
                 value_colors=(None, None, 'blue', 'red', 'green')
-            ))
-        graph.js = ('http://l:2343/2.0.x/pygal-tooltips.js',)
+            )
+        )
+        graph.js = ('http://l:2343/2.0.x/pygal-tooltips.js', )
         for i in range(12):
-            graph.add('', [{
-                'value': i + j,
-                'label': 'abcdefghijklmnopqrstuvwxyz'[i + j]
-            } for j in range(5)])
+            graph.add(
+                '', [{
+                    'value': i + j,
+                    'label': 'abcdefghijklmnopqrstuvwxyz' [i + j]
+                } for j in range(5)]
+            )
         return graph.render_response()
 
     @app.route('/test/treemap')
     def test_treemap():
-        treemap = Treemap(style=RotateStyle('#ff5995', opacity=.6,
-                                            value_font_size=32,
-                                            value_colors=['#ffffff']))
+        treemap = Treemap(
+            style=RotateStyle(
+                '#ff5995',
+                opacity=.6,
+                value_font_size=32,
+                value_colors=['#ffffff']
+            )
+        )
         treemap.title = 'Binary TreeMap'
         treemap.print_values = True
         treemap.print_labels = True
@@ -194,33 +221,46 @@ def get_test_routes(app):
         gauge.add('Need m', [-4])
         gauge.add('Need z', [-10, 10.5])
         gauge.add('No', [99, -99])
-        gauge.y_labels = [
-            {'label': 'X',
-             'value': 6},
-            {'label': '><',
-             'value': -6}
-        ]
+        gauge.y_labels = [{
+            'label': 'X',
+            'value': 6
+        }, {
+            'label': '><',
+            'value': -6
+        }]
         return gauge.render_response()
 
     @app.route('/test/solidgauge/')
     def test_solidgauge():
-        gauge = SolidGauge(half_pie=True,
-                           inner_radius=0.70,
-                           print_values=not True,
-                           human_readable=True)
+        gauge = SolidGauge(
+            half_pie=True,
+            inner_radius=0.70,
+            print_values=not True,
+            human_readable=True
+        )
         gauge.title = 'Hello World!'
         percent_formatter = lambda x: '{:.10g}%'.format(x)
         dollar_formatter = lambda x: '{:.10g}$'.format(x)
         gauge.value_formatter = percent_formatter
 
-        gauge.add('Series 1', [{'value': 225000, 'max_value': 1275000}],
-                  formatter=dollar_formatter)
+        gauge.add(
+            'Series 1', [{
+                'value': 225000,
+                'max_value': 1275000
+            }],
+            formatter=dollar_formatter
+        )
         gauge.add('Series 2', [{'value': 110, 'max_value': 100}])
         gauge.add('Series 3', [{'value': 3}])
         gauge.add(
-            'Series 4', [
-                {'value': 51, 'max_value': 100},
-                {'value': 12, 'max_value': 100}])
+            'Series 4', [{
+                'value': 51,
+                'max_value': 100
+            }, {
+                'value': 12,
+                'max_value': 100
+            }]
+        )
         gauge.add('Series 5', [{'value': 79, 'max_value': 100}])
         gauge.add('Series 6', 99)
         gauge.add('Series 7', [{'value': 100, 'max_value': 100}])
@@ -308,8 +348,7 @@ def get_test_routes(app):
         graph.add('A', [17, -14, 11], secondary=True)
         graph.x_label_rotation = 25
         graph.legend_at_bottom = not True
-        graph.x_labels = (
-            'First point', 'Second point', 'Third point')
+        graph.x_labels = ('First point', 'Second point', 'Third point')
         return graph.render_response()
 
     @app.route('/test/no_data/<chart>')
@@ -334,12 +373,15 @@ def get_test_routes(app):
 
     @app.route('/test/interpolate/<chart>')
     def test_interpolate_for(chart):
-        graph = CHARTS_BY_NAME[chart](interpolate='lagrange',
-                                      interpolation_parameters={
-                                          'type': 'kochanek_bartels',
-                                          'c': 1,
-                                          'b': -1,
-                                          't': -1})
+        graph = CHARTS_BY_NAME[chart](
+            interpolate='lagrange',
+            interpolation_parameters={
+                'type': 'kochanek_bartels',
+                'c': 1,
+                'b': -1,
+                't': -1
+            }
+        )
         graph.add('1', [1, 3, 12, 3, 4])
         graph.add('2', [7, -4, 10, None, 8, 3, 1])
         return graph.render_response()
@@ -348,8 +390,9 @@ def get_test_routes(app):
     def test_logarithmic_for(chart):
         graph = CHARTS_BY_NAME[chart](logarithmic=True)
         if isinstance(graph, CHARTS_BY_NAME['XY']):
-            graph.add('xy', [
-                (.1, .234), (10, 243), (.001, 2), (1000000, 1231)])
+            graph.add(
+                'xy', [(.1, .234), (10, 243), (.001, 2), (1000000, 1231)]
+            )
         else:
             graph.add('1', [.1, 10, .01, 10000])
             graph.add('2', [.234, 243, 2, 2379, 1231])
@@ -397,8 +440,9 @@ def get_test_routes(app):
     @app.route('/test/formatters/<chart>')
     def test_formatters_for(chart):
         chart = CHARTS_BY_NAME[chart](
-            print_values=True, formatter=lambda x, chart, serie: '%s%s$' % (
-                x, serie.title))
+            print_values=True,
+            formatter=lambda x, chart, serie: '%s%s$' % (x, serie.title)
+        )
         chart.add('_a', [1, 2, {'value': 3, 'formatter': lambda x: '%s¥' % x}])
         chart.add('_b', [4, 5, 6], formatter=lambda x: '%s€' % x)
         chart.x_labels = [2, 4, 6]
@@ -408,10 +452,13 @@ def get_test_routes(app):
     @app.route('/test/bar/position')
     def test_bar_print_values_position():
         bar = StackedBar(
-            print_values=True, print_values_position='top', zero=2,
+            print_values=True,
+            print_values_position='top',
+            zero=2,
             style=styles['default'](
-                value_font_family='googlefont:Raleway',
-                value_font_size=46))
+                value_font_family='googlefont:Raleway', value_font_size=46
+            )
+        )
         bar.add('1', [1, -2, 3])
         bar.add('2', [4, -5, 6])
         bar.x_labels = [2, 4, 6]
@@ -423,13 +470,9 @@ def get_test_routes(app):
         hist = Histogram(
             print_values=True,
             print_values_position='top',
-            style=styles['neon'])
-        hist.add('1', [
-            (2, 0, 1),
-            (4, 1, 3),
-            (3, 3.5, 5),
-            (1.5, 5, 10)
-        ])
+            style=styles['neon']
+        )
+        hist.add('1', [(2, 0, 1), (4, 1, 3), (3, 3.5, 5), (1.5, 5, 10)])
         hist.add('2', [(2, 2, 8)])
         hist.x_labels = [0, 3, 6, 9, 12]
         return hist.render_response()
@@ -438,17 +481,22 @@ def get_test_routes(app):
     def test_ylabels():
         chart = Bar()
         chart.x_labels = 'Red', 'Blue', 'Green'
-        chart.y_labels = [
-            {'value': .0001,
-             'label': 'LOL'},
-            {'value': .0003,
-             'label': 'ROFL'},
-            {'value': .0004,
-             'label': 'MAO'},
-            {'value': .00045,
-             'label': 'LMFAO'},
-            {'value': .0005,
-             'label': 'GMCB'}]
+        chart.y_labels = [{
+            'value': .0001,
+            'label': 'LOL'
+        }, {
+            'value': .0003,
+            'label': 'ROFL'
+        }, {
+            'value': .0004,
+            'label': 'MAO'
+        }, {
+            'value': .00045,
+            'label': 'LMFAO'
+        }, {
+            'value': .0005,
+            'label': 'GMCB'
+        }]
         chart.add('line', [.0002, .0005, .00035])
         return chart.render_response()
 
@@ -514,7 +562,6 @@ def get_test_routes(app):
 
     @app.route('/test/config')
     def test_config():
-
         class LolConfig(Config):
             js = ['http://l:2343/2.0.x/pygal-tooltips.js']
 
@@ -534,37 +581,33 @@ def get_test_routes(app):
             date(2015, 1, 1),
             date(2015, 7, 1)
         ]
-        dateline.x_labels_major = [
-            date(2013, 1, 1),
-            date(2015, 7, 1)
-        ]
-        dateline.add("Serie", [
-            (date(2013, 1, 2), 213),
-            (date(2013, 8, 2), 281),
-            (date(2013, 5, 31), 281),
-            (date(2014, 12, 7), 198),
-            (date(2014, 9, 6), 198),
-            (date(2015, 3, 21), 120)
-        ])
+        dateline.x_labels_major = [date(2013, 1, 1), date(2015, 7, 1)]
+        dateline.add(
+            "Serie", [(date(2013, 1, 2), 213), (date(2013, 8, 2), 281),
+                      (date(2013, 5, 31), 281), (date(2014, 12, 7), 198),
+                      (date(2014, 9, 6), 198), (date(2015, 3, 21), 120)]
+        )
         return dateline.render_response()
 
     @app.route('/test/timeline')
     def test_timexy():
         from datetime import time
         timeline = TimeLine()
-        timeline.add('1', [
-            (time(1, 12, 29), 2),
-            (time(21, 2, 29), 10),
-            (time(12, 30, 59), 7)
-        ])
         timeline.add(
-            '2', [(time(12, 12, 12), 4), (time(), 8), (time(23, 59, 59), 6)])
+            '1', [(time(1, 12, 29), 2), (time(21, 2, 29), 10),
+                  (time(12, 30, 59), 7)]
+        )
+        timeline.add(
+            '2', [(time(12, 12, 12), 4), (time(), 8), (time(23, 59, 59), 6)]
+        )
         timeline.x_label_rotation = 25
         return timeline.render_response()
 
     @app.route('/test/worldmap')
     def test_worldmap():
-        wmap = world.World(print_values=True, style=choice(list(styles.values())))
+        wmap = world.World(
+            print_values=True, style=choice(list(styles.values()))
+        )
         # wmap.js = ('http://l:2343/2.0.x/pygal-tooltips.js',)
         # wmap.add('1st', [('fr', 100), {
         #     'value': ('us', 10),
@@ -597,27 +640,39 @@ def get_test_routes(app):
     @app.route('/test/supranational')
     def test_supranational():
         wmap = world.SupranationalWorld(style=choice(list(styles.values())))
-        v = [
-            ('europe', 0),
-            ('oceania', 2),
-            ('antartica', 4),
-            ('south_america', 5),
-            ('africa', 6),
-            ('north_america', 7),
-            ('asia', 8)
-        ]
-        wmap.add('Serie with metadata', [
-            v[0],
-            {'value': v[1]},
-            {'value': v[2], 'label': 'Three'},
-            {'value': v[3], 'xlink': 'http://4.example.com/'},
-            {'value': v[4], 'xlink': 'http://5.example.com/', 'label': 'Five'},
-            {'value': v[5], 'xlink': {
-                'href': 'http://6.example.com/'}, 'label': 'Six'},
-            {'value': v[6], 'xlink': {
-                'href': 'http://7.example.com/',
-                'target': '_blank'}, 'label': 'Seven'}
-        ])
+        v = [('europe', 0), ('oceania', 2), ('antartica', 4),
+             ('south_america', 5), ('africa', 6), ('north_america',
+                                                   7), ('asia', 8)]
+        wmap.add(
+            'Serie with metadata', [
+                v[0], {
+                    'value': v[1]
+                }, {
+                    'value': v[2],
+                    'label': 'Three'
+                }, {
+                    'value': v[3],
+                    'xlink': 'http://4.example.com/'
+                }, {
+                    'value': v[4],
+                    'xlink': 'http://5.example.com/',
+                    'label': 'Five'
+                }, {
+                    'value': v[5],
+                    'xlink': {
+                        'href': 'http://6.example.com/'
+                    },
+                    'label': 'Six'
+                }, {
+                    'value': v[6],
+                    'xlink': {
+                        'href': 'http://7.example.com/',
+                        'target': '_blank'
+                    },
+                    'label': 'Seven'
+                }
+            ]
+        )
         # wmap.add('Asia', [('asia', 1)])
         # wmap.add('Europe', [('europe', 1)])
         # wmap.add('Africa', [('africa', 1)])
@@ -644,18 +699,21 @@ def get_test_routes(app):
     def test_swissmap():
         smap = ch.Cantons(style=choice(list(styles.values())))
         for i in range(10):
-            smap.add('s%d' % i, [
-                (choice(list(ch.CANTONS.keys())), randint(0, 100))
-                for _ in range(randint(1, 5))])
+            smap.add(
+                's%d' % i, [(choice(list(ch.CANTONS.keys())), randint(0, 100))
+                            for _ in range(randint(1, 5))]
+            )
 
-        smap.add('links', [{
-            'value': ('kt-vs', 10),
-            'label': '\o/',
-            'xlink': 'http://google.com?q=69'
-        }, {
-            'value': ('bt', 20),
-            'label': 'Y',
-        }])
+        smap.add(
+            'links', [{
+                'value': ('kt-vs', 10),
+                'label': '\o/',
+                'xlink': 'http://google.com?q=69'
+            }, {
+                'value': ('bt', 20),
+                'label': 'Y',
+            }]
+        )
         smap.add('6th', [3, 5, 34, 12])
         smap.title = 'Swiss map'
         return smap.render_response()
@@ -666,18 +724,21 @@ def get_test_routes(app):
             abort(404)
         fmap = fr.Regions(style=choice(list(styles.values())))
         for i in range(10):
-            fmap.add('s%d' % i, [
-                (choice(list(fr.REGIONS.keys())), randint(0, 100))
-                for _ in range(randint(1, 5))])
+            fmap.add(
+                's%d' % i, [(choice(list(fr.REGIONS.keys())), randint(0, 100))
+                            for _ in range(randint(1, 5))]
+            )
 
-        fmap.add('links', [{
-            'value': ('02', 10),
-            'label': '\o/',
-            'xlink': 'http://google.com?q=69'
-        }, {
-            'value': ('72', 20),
-            'label': 'Y',
-        }])
+        fmap.add(
+            'links', [{
+                'value': ('02', 10),
+                'label': '\o/',
+                'xlink': 'http://google.com?q=69'
+            }, {
+                'value': ('72', 20),
+                'label': 'Y',
+            }]
+        )
         fmap.add('6th', [91, 2, 41])
         fmap.title = 'French map'
         return fmap.render_response()
@@ -703,8 +764,9 @@ def get_test_routes(app):
         line = Line(x_labels_major_count=2, show_only_major_dots=True)
         line.add('test', range(12))
         line.x_labels = [
-            'lol', 'lol1', 'lol2', 'lol3', 'lol4', 'lol5',
-            'lol6', 'lol7', 'lol8', 'lol9', 'lol10', 'lol11']
+            'lol', 'lol1', 'lol2', 'lol3', 'lol4', 'lol5', 'lol6', 'lol7',
+            'lol8', 'lol9', 'lol10', 'lol11'
+        ]
         # line.x_labels_major = ['lol3']
         return line.render_response()
 
@@ -734,17 +796,30 @@ def get_test_routes(app):
         line = Line(stroke_style={'width': .5})
         line.add('test_no_line', range(12), stroke=False)
         line.add('test', reversed(range(12)), stroke_style={'width': 3})
-        line.add('test_no_dots', [5] * 12, show_dots=False,
-                 stroke_style={'width': 2, 'dasharray': '12, 31'})
-        line.add('test_big_dots', [
-            randint(1, 12) for _ in range(12)], dots_size=5)
-        line.add('test_fill', [
-            randint(1, 3) for _ in range(12)], fill=True,
-                 stroke_style={'width': 5, 'dasharray': '4, 12, 7, 20'})
+        line.add(
+            'test_no_dots', [5] * 12,
+            show_dots=False,
+            stroke_style={
+                'width': 2,
+                'dasharray': '12, 31'
+            }
+        )
+        line.add(
+            'test_big_dots', [randint(1, 12) for _ in range(12)], dots_size=5
+        )
+        line.add(
+            'test_fill', [randint(1, 3) for _ in range(12)],
+            fill=True,
+            stroke_style={
+                'width': 5,
+                'dasharray': '4, 12, 7, 20'
+            }
+        )
 
         line.x_labels = [
-            'lol', 'lol1', 'lol2', 'lol3', 'lol4', 'lol5',
-            'lol6', 'lol7', 'lol8', 'lol9', 'lol10', 'lol11']
+            'lol', 'lol1', 'lol2', 'lol3', 'lol4', 'lol5', 'lol6', 'lol7',
+            'lol8', 'lol9', 'lol10', 'lol11'
+        ]
         return line.render_response()
 
     @app.route('/test/radar')
@@ -753,11 +828,7 @@ def get_test_routes(app):
         for i in range(10):
             radar.add(str(i), [i * j for j in range(8)])
         radar.x_labels = [
-            'lol',
-            'rofl',
-            'mao',
-            'lolroflmao',
-            '12345678901234567890'
+            'lol', 'rofl', 'mao', 'lolroflmao', '12345678901234567890'
         ]
         radar.x_label_rotation = 35
         radar.y_label_rotation = 35
@@ -779,7 +850,7 @@ def get_test_routes(app):
     @app.route('/test/pie_serie_radius')
     def test_pie_serie_radius():
         pie = Pie()
-        pie.js = ('http://a.zi:2343/2.0.x/pygal-tooltips.js',)
+        pie.js = ('http://a.zi:2343/2.0.x/pygal-tooltips.js', )
         for i in range(10):
             pie.add(str(i), i, inner_radius=(10 - i) / 10)
 
@@ -817,33 +888,54 @@ def get_test_routes(app):
     @app.route('/test/custom_metadata/<chart>')
     def test_custom_metadata_for(chart):
         c = CHARTS_BY_NAME[chart]()
-        c.add('1', [
-            {'style': 'fill: red', 'value': 1, 'node': {'r': 12}},
-            {'color': 'blue', 'value': 2, 'node': {'width': 12}},
-            {'style': 'fill: red; stroke: yellow', 'value': 3}])
-        c.add('2', [
-            {'value': 4, 'xlink': {
-                'href': 'javascript:alert("-")', 'target': 'top',
-                'class': 'lol'
-            }
-            },
-            {'color': 'green', 'value': 5},
-            6])
+        c.add(
+            '1', [{
+                'style': 'fill: red',
+                'value': 1,
+                'node': {
+                    'r': 12
+                }
+            }, {
+                'color': 'blue',
+                'value': 2,
+                'node': {
+                    'width': 12
+                }
+            }, {
+                'style': 'fill: red; stroke: yellow',
+                'value': 3
+            }]
+        )
+        c.add(
+            '2', [{
+                'value': 4,
+                'xlink': {
+                    'href': 'javascript:alert("-")',
+                    'target': 'top',
+                    'class': 'lol'
+                }
+            }, {
+                'color': 'green',
+                'value': 5
+            }, 6]
+        )
         return c.render_response()
 
     @app.route('/test/sparkline/<chart>')
     def test_sparkline_for(chart):
-        graph = CHARTS_BY_NAME[chart](**dict(
-            width=200,
-            height=50,
-            show_dots=False,
-            show_legend=False,
-            show_y_labels=False,
-            show_x_labels=False,
-            spacing=0,
-            margin=5,
-            explicit_size=True
-        ))
+        graph = CHARTS_BY_NAME[chart](
+            **dict(
+                width=200,
+                height=50,
+                show_dots=False,
+                show_legend=False,
+                show_y_labels=False,
+                show_x_labels=False,
+                spacing=0,
+                margin=5,
+                explicit_size=True
+            )
+        )
         graph.add('1', [1, 3, 12, 3, 4, None, 9])
         graph.add('2', [7, -4, 10, None, 8, 3, 1])
         graph.add('3', [7, -14, -10, None, 8, 3, 1])
@@ -854,19 +946,21 @@ def get_test_routes(app):
 
     @app.route('/test/sparkline/label/<chart>')
     def test_sparkline_label_for(chart):
-        graph = CHARTS_BY_NAME[chart](**dict(
-            width=200,
-            height=50,
-            show_dots=False,
-            show_legend=False,
-            # show_y_labels=False,
-            # show_x_labels=False,
-            spacing=0,
-            margin=5,
-            min_scale=2,
-            max_scale=2,
-            explicit_size=True
-        ))
+        graph = CHARTS_BY_NAME[chart](
+            **dict(
+                width=200,
+                height=50,
+                show_dots=False,
+                show_legend=False,
+                # show_y_labels=False,
+                # show_x_labels=False,
+                spacing=0,
+                margin=5,
+                min_scale=2,
+                max_scale=2,
+                explicit_size=True
+            )
+        )
         graph.add('1', [1, 3, 12, 3, 4, None, 9])
         graph.add('2', [7, -4, 10, None, 8, 3, 1])
         graph.add('3', [7, -14, -10, None, 8, 3, 1])
@@ -890,6 +984,7 @@ def get_test_routes(app):
     def test_horizontal_force_for(chart):
         class H(CHARTS_BY_NAME[chart], HorizontalGraph):
             pass
+
         graph = H()
 
         graph.add('1', [1, 3, 12, 3, 4, None, 9])
@@ -918,14 +1013,16 @@ def get_test_routes(app):
         graph = CHARTS_BY_NAME[chart]()
         # graph.x_label_rotation = 290
         # graph.y_label_rotation = 0
-        graph.add('lalalla al alallaa a 1',
-                  [1, 3, 12, 3, 4, None, 9])
-        graph.add('lalalla al alallaa a 2',
-                  [7, -4, 10, None, 8, 3, 1], secondary=True)
-        graph.add('lalalla al alallaa a 3',
-                  [7, -14, -10, None, 8, 3, 1])
-        graph.add('lalalla al alallaa a 4',
-                  [7, 4, -10, None, 8, 3, 1], secondary=True)
+        graph.add('lalalla al alallaa a 1', [1, 3, 12, 3, 4, None, 9])
+        graph.add(
+            'lalalla al alallaa a 2', [7, -4, 10, None, 8, 3, 1],
+            secondary=True
+        )
+        graph.add('lalalla al alallaa a 3', [7, -14, -10, None, 8, 3, 1])
+        graph.add(
+            'lalalla al alallaa a 4', [7, 4, -10, None, 8, 3, 1],
+            secondary=True
+        )
         graph.x_labels = ('a', 'b', 'c', 'd', 'e', 'f', 'g')
         # graph.legend_at_bottom = True
         return graph.render_response()
@@ -937,11 +1034,11 @@ def get_test_routes(app):
         tz7 = timezone(timedelta(hours=7), 'GMT +7')
         tzn4 = timezone(timedelta(hours=-4), 'GMT -4')
 
-        line.add('dt', [
-            (datetime(2013, 1, 12, 8, tzinfo=tz7), 300),
-            (datetime(2013, 1, 12, 8), 412),
-            (datetime(2013, 1, 12, 8, tzinfo=tzn4), 823)
-        ])
+        line.add(
+            'dt', [(datetime(2013, 1, 12, 8, tzinfo=tz7), 300),
+                   (datetime(2013, 1, 12, 8), 412),
+                   (datetime(2013, 1, 12, 8, tzinfo=tzn4), 823)]
+        )
         line.x_label_rotation = 45
         return line.render_response()
 
@@ -951,12 +1048,12 @@ def get_test_routes(app):
         tz = pytz.timezone('US/Eastern')
 
         line = DateTimeLine()
-        line.add('dt', [
-            (tz.localize(datetime(2013, 1, 12, 8)), 300),
-            (tz.localize(datetime(2013, 1, 12, 10)), 600),
-            (tz.localize(datetime(2013, 1, 12, 14)), 30),
-            (tz.localize(datetime(2013, 1, 12, 16)), 200)
-        ])
+        line.add(
+            'dt', [(tz.localize(datetime(2013, 1, 12, 8)), 300),
+                   (tz.localize(datetime(2013, 1, 12, 10)), 600),
+                   (tz.localize(datetime(2013, 1, 12, 14)), 30),
+                   (tz.localize(datetime(2013, 1, 12, 16)), 200)]
+        )
         from datetime import timezone
         line.x_value_formatter = lambda x: (
             x.replace(tzinfo=timezone.utc).astimezone(tz)).isoformat()
@@ -1026,33 +1123,40 @@ def get_test_routes(app):
         config = Config(fill=True, interpolate='cubic')
         config.css.append(custom_css_file)
         chart = StackedLine(config)
-        chart.add('A', [1, 3,  5, 16, 13, 3,  7])
-        chart.add('B', [5, 2,  3,  2,  5, 7, 17])
-        chart.add('C', [6, 10, 9,  7,  3, 1,  0])
-        chart.add('D', [2,  3, 5,  9, 12, 9,  5])
-        chart.add('E', [7,  4, 2,  1,  2, 10, 0])
+        chart.add('A', [1, 3, 5, 16, 13, 3, 7])
+        chart.add('B', [5, 2, 3, 2, 5, 7, 17])
+        chart.add('C', [6, 10, 9, 7, 3, 1, 0])
+        chart.add('D', [2, 3, 5, 9, 12, 9, 5])
+        chart.add('E', [7, 4, 2, 1, 2, 10, 0])
         return chart.render_response()
-
 
     @app.route('/test/legendlink/<chart>')
     def test_legend_link_for(chart):
         chart = CHARTS_BY_NAME[chart]()
         # link on chart and label
-        chart.add(
-            [{
-                'value': 2,
-                'label': 'This is red',
-                'tooltip': 'LOOLLOLOLO',
-                'xlink': {'href': 'http://en.wikipedia.org/wiki/Red'}}],
-            title={
-                'title': 'Red',
-                'tooltip': 'Cramoisi',
-                'xlink': {'href': 'http://en.wikipedia.org/wiki/Red'}
-            })
+        chart.add([{
+            'value': 2,
+            'label': 'This is red',
+            'tooltip': 'LOOLLOLOLO',
+            'xlink': {
+                'href': 'http://en.wikipedia.org/wiki/Red'
+            }
+        }],
+                  title={
+                      'title': 'Red',
+                      'tooltip': 'Cramoisi',
+                      'xlink': {
+                          'href': 'http://en.wikipedia.org/wiki/Red'
+                      }
+                  })
 
-        chart.add({'title': 'Yellow', 'xlink': {
-            'href': 'http://en.wikipedia.org/wiki/Yellow',
-            'target': '_blank'}}, 7)
+        chart.add({
+            'title': 'Yellow',
+            'xlink': {
+                'href': 'http://en.wikipedia.org/wiki/Yellow',
+                'target': '_blank'
+            }
+        }, 7)
 
         return chart.render_response()
 
@@ -1061,28 +1165,36 @@ def get_test_routes(app):
 
         config = Config()
         config.style = styles['dark']
-        config.defs.append('''
+        config.defs.append(
+            '''
           <linearGradient id="gradient-0" x1="0" x2="0" y1="0" y2="1">
             <stop offset="0%" stop-color="#ff5995" />
             <stop offset="100%" stop-color="#feed6c" />
           </linearGradient>
-        ''')
-        config.defs.append('''
+        '''
+        )
+        config.defs.append(
+            '''
           <linearGradient id="gradient-1" x1="0" x2="0" y1="0" y2="1">
             <stop offset="0%" stop-color="#b6e354" />
             <stop offset="100%" stop-color="#8cedff" />
           </linearGradient>
-        ''')
-        config.css.append('''inline:
+        '''
+        )
+        config.css.append(
+            '''inline:
           .color-0 {
             fill: url(#gradient-0) !important;
             stroke: url(#gradient-0) !important;
-          }''')
-        config.css.append('''inline:
+          }'''
+        )
+        config.css.append(
+            '''inline:
           .color-1 {
             fill: url(#gradient-1) !important;
             stroke: url(#gradient-1) !important;
-          }''')
+          }'''
+        )
         chart = CHARTS_BY_NAME[chart](config)
         chart.add('1', [1, 3, 12, 3, 4, None, 9])
         chart.add('2', [7, -4, 10, None, 8, 3, 1])
@@ -1095,9 +1207,8 @@ def get_test_routes(app):
     def test_erfinv():
         from scipy import stats as sstats
         chart = Line(show_dots=False)
-        chart.add('scipy', [
-            sstats.norm.ppf(x/1000) for x in range(1, 999)])
-        chart.add('approx', [stats.ppf(x/1000) for x in range(1, 999)])
+        chart.add('scipy', [sstats.norm.ppf(x / 1000) for x in range(1, 999)])
+        chart.add('approx', [stats.ppf(x / 1000) for x in range(1, 999)])
 
         # chart.add('approx', [
         #    special.erfinv(x/1000) - erfinv(x/1000)
@@ -1111,30 +1222,90 @@ def get_test_routes(app):
                 value_font_family='googlefont:Raleway',
                 value_colors=(None, None, 'blue', 'red', 'green'),
                 ci_colors=(None, 'magenta')
-            ))
-        chart.add('Series 1', [
-            {'value': 127.3, 'ci': {
-                'type': 'continuous', 'sample_size': 3534, 'stddev': 19,
-                'confidence': .99}},
-            {'value': 127.3, 'ci': {
-                'type': 'continuous', 'sample_size': 3534, 'stddev': 19}},
-            {'value': 127.3, 'ci': {
-                'type': 'continuous', 'sample_size': 3534, 'stddev': 19,
-                'confidence': .90}},
-            {'value': 127.3, 'ci': {
-                'type': 'continuous', 'sample_size': 3534, 'stddev': 19,
-                'confidence': .75}},
-        ])
-        chart.add('Series 2', [
-            {'value': 34.5, 'ci': {
-                'type': 'dichotomous', 'sample_size': 3532}},
-        ])
-        chart.add('Series 3', [
-            {'value': 100, 'ci': {'low': 50, 'high': 150}},
-            {'value': 100, 'ci': {'low': 75, 'high': 175}},
-            {'value': 50, 'ci': {'low': 50, 'high': 100}},
-            {'value': 125, 'ci': {'low': 120, 'high': 130}},
-        ])
+            )
+        )
+        chart.add(
+            'Series 1', [
+                {
+                    'value': 127.3,
+                    'ci': {
+                        'type': 'continuous',
+                        'sample_size': 3534,
+                        'stddev': 19,
+                        'confidence': .99
+                    }
+                },
+                {
+                    'value': 127.3,
+                    'ci': {
+                        'type': 'continuous',
+                        'sample_size': 3534,
+                        'stddev': 19
+                    }
+                },
+                {
+                    'value': 127.3,
+                    'ci': {
+                        'type': 'continuous',
+                        'sample_size': 3534,
+                        'stddev': 19,
+                        'confidence': .90
+                    }
+                },
+                {
+                    'value': 127.3,
+                    'ci': {
+                        'type': 'continuous',
+                        'sample_size': 3534,
+                        'stddev': 19,
+                        'confidence': .75
+                    }
+                },
+            ]
+        )
+        chart.add(
+            'Series 2', [
+                {
+                    'value': 34.5,
+                    'ci': {
+                        'type': 'dichotomous',
+                        'sample_size': 3532
+                    }
+                },
+            ]
+        )
+        chart.add(
+            'Series 3', [
+                {
+                    'value': 100,
+                    'ci': {
+                        'low': 50,
+                        'high': 150
+                    }
+                },
+                {
+                    'value': 100,
+                    'ci': {
+                        'low': 75,
+                        'high': 175
+                    }
+                },
+                {
+                    'value': 50,
+                    'ci': {
+                        'low': 50,
+                        'high': 100
+                    }
+                },
+                {
+                    'value': 125,
+                    'ci': {
+                        'low': 120,
+                        'high': 130
+                    }
+                },
+            ]
+        )
         chart.range = (30, 200)
         return chart.render_response()
 
@@ -1143,13 +1314,27 @@ def get_test_routes(app):
         chart = Line(allow_interruptions=True)
         chart.add(
             'interrupt', [22, 34, 43, 12, None, 12, 55, None, 56],
-            allow_interruptions=False)
-        chart.add('not interrupt', [
-            -a if a else None
-            for a in (22, 34, 43, 12, None, 12, 55, None, 56)])
+            allow_interruptions=False
+        )
+        chart.add(
+            'not interrupt', [
+                -a if a else None
+                for a in (22, 34, 43, 12, None, 12, 55, None, 56)
+            ]
+        )
         return chart.render_response()
 
-    return list(sorted(filter(
-        lambda x: x.startswith('test') and not x.endswith('_for'), locals()))
-    ) + list(sorted(filter(
-        lambda x: x.startswith('test') and x.endswith('_for'), locals())))
+    return list(
+        sorted(
+            filter(
+                lambda x: x.startswith('test') and not x.endswith('_for'),
+                locals()
+            )
+        )
+    ) + list(
+        sorted(
+            filter(
+                lambda x: x.startswith('test') and x.endswith('_for'), locals()
+            )
+        )
+    )

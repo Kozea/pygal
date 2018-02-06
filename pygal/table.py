@@ -30,7 +30,6 @@ from pygal.util import template
 
 
 class HTML(object):
-
     """Lower case adapter of lxml builder"""
 
     def __getattribute__(self, attr):
@@ -39,7 +38,6 @@ class HTML(object):
 
 
 class Table(object):
-
     """Table generator class"""
 
     _dual = None
@@ -135,33 +133,23 @@ class Table(object):
         if thead:
             parts.append(
                 html.thead(
-                    *[html.tr(
-                        *[html.th(_(col)) for col in r]
-                    ) for r in thead]
+                    *[html.tr(*[html.th(_(col)) for col in r]) for r in thead]
                 )
             )
         if tbody:
             parts.append(
                 html.tbody(
-                    *[html.tr(
-                        *[html.td(_(col)) for col in r]
-                    ) for r in tbody]
+                    *[html.tr(*[html.td(_(col)) for col in r]) for r in tbody]
                 )
             )
         if tfoot:
             parts.append(
                 html.tfoot(
-                    *[html.tr(
-                        *[html.th(_(col)) for col in r]
-                    ) for r in tfoot]
+                    *[html.tr(*[html.th(_(col)) for col in r]) for r in tfoot]
                 )
             )
 
-        table = tostring(
-            html.table(
-                *parts, **attrs
-            )
-        )
+        table = tostring(html.table(*parts, **attrs))
         if style:
             if style is True:
                 css = '''
@@ -197,9 +185,9 @@ class Table(object):
                 '''
             else:
                 css = style
-            table = tostring(html.style(
-                template(css, **attrs),
-                scoped='scoped')) + table
+            table = tostring(
+                html.style(template(css, **attrs), scoped='scoped')
+            ) + table
         table = table.decode('utf-8')
         self.chart.teardown()
         return table

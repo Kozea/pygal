@@ -16,7 +16,6 @@
 #
 # You should have received a copy of the GNU Lesser General Public License
 # along with pygal. If not, see <http://www.gnu.org/licenses/>.
-
 """Various utility functions"""
 
 from __future__ import division
@@ -42,10 +41,10 @@ def majorize(values):
         return []
     values_step = sorted_values[1] - sorted_values[0]
     full_range = sorted_values[-1] - sorted_values[0]
-    step = 10 ** int(log10(full_range))
+    step = 10**int(log10(full_range))
     if step == values_step:
         step *= 10
-    step_factor = 10 ** (int(log10(step)) + 1)
+    step_factor = 10**(int(log10(step)) + 1)
     if round(step * step_factor) % (round(values_step * step_factor) or 1):
         # TODO: Find lower common multiple instead
         step *= values_step
@@ -54,7 +53,8 @@ def majorize(values):
     elif full_range >= 5 * step:
         step *= 5
     major_values = [
-        value for value in values if value / step == round(value / step)]
+        value for value in values if value / step == round(value / step)
+    ]
     return [value for value in sorted_values if value in major_values]
 
 
@@ -67,9 +67,8 @@ def round_to_int(number, precision):
 
 def round_to_float(number, precision):
     """Round a float to a precision"""
-    rounded = Decimal(
-        str(floor((number + precision / 2) // precision))
-    ) * Decimal(str(precision))
+    rounded = Decimal(str(floor((number + precision / 2) // precision))
+                      ) * Decimal(str(precision))
     return float(rounded)
 
 
@@ -101,15 +100,11 @@ def deg(radiants):
 
 def _swap_curly(string):
     """Swap single and double curly brackets"""
-    return (string
-            .replace('{{ ', '{{')
-            .replace('{{', '\x00')
-            .replace('{', '{{')
-            .replace('\x00', '{')
-            .replace(' }}', '}}')
-            .replace('}}', '\x00')
-            .replace('}', '}}')
-            .replace('\x00', '}'))
+    return (
+        string.replace('{{ ', '{{').replace('{{', '\x00').replace('{', '{{')
+        .replace('\x00', '{').replace(' }}', '}}').replace('}}', '\x00')
+        .replace('}', '}}').replace('\x00', '}')
+    )
 
 
 def template(string, **kwargs):
@@ -138,24 +133,21 @@ def compute_logarithmic_scale(min_, max_, min_scale, max_scale):
         detail /= 2
     for order in range(min_order, max_order + 1):
         for i in range(int(detail)):
-            tick = (10 * i / detail or 1) * 10 ** order
+            tick = (10 * i / detail or 1) * 10**order
             tick = round_to_scale(tick, tick)
             if min_ <= tick <= max_ and tick not in positions:
                 positions.append(tick)
     return positions
 
 
-def compute_scale(
-        min_, max_, logarithmic, order_min,
-        min_scale, max_scale):
+def compute_scale(min_, max_, logarithmic, order_min, min_scale, max_scale):
     """Compute an optimal scale between min and max"""
     if min_ == 0 and max_ == 0:
         return [0]
     if max_ - min_ == 0:
         return [min_]
     if logarithmic:
-        log_scale = compute_logarithmic_scale(
-            min_, max_, min_scale, max_scale)
+        log_scale = compute_logarithmic_scale(min_, max_, min_scale, max_scale)
         if log_scale:
             return log_scale
             # else we fallback to normal scalling
@@ -164,10 +156,10 @@ def compute_scale(
     if order_min is not None and order < order_min:
         order = order_min
     else:
-        while ((max_ - min_) / (10 ** order) < min_scale and
-               (order_min is None or order > order_min)):
+        while ((max_ - min_) / (10**order) < min_scale
+               and (order_min is None or order > order_min)):
             order -= 1
-    step = float(10 ** order)
+    step = float(10**order)
     while (max_ - min_) / step > max_scale:
         step *= 2.
     positions = []
@@ -213,24 +205,24 @@ def decorate(svg, node, metadata):
         if not isinstance(xlink, dict):
             xlink = {'href': xlink, 'target': '_blank'}
         node = svg.node(node, 'a', **xlink)
-        svg.node(node, 'desc', class_='xlink').text = to_unicode(
-            xlink.get('href'))
+        svg.node(
+            node, 'desc', class_='xlink'
+        ).text = to_unicode(xlink.get('href'))
 
     if 'tooltip' in metadata:
-        svg.node(node, 'title').text = to_unicode(
-            metadata['tooltip'])
+        svg.node(node, 'title').text = to_unicode(metadata['tooltip'])
 
     if 'color' in metadata:
         color = metadata.pop('color')
-        node.attrib['style'] = 'fill: %s; stroke: %s' % (
-            color, color)
+        node.attrib['style'] = 'fill: %s; stroke: %s' % (color, color)
 
     if 'style' in metadata:
         node.attrib['style'] = metadata.pop('style')
 
     if 'label' in metadata and metadata['label']:
-        svg.node(node, 'desc', class_='label').text = to_unicode(
-            metadata['label'])
+        svg.node(
+            node, 'desc', class_='label'
+        ).text = to_unicode(metadata['label'])
     return node
 
 
@@ -238,7 +230,8 @@ def alter(node, metadata):
     """Override nodes attributes from metadata node mapping"""
     if node is not None and metadata and 'node' in metadata:
         node.attrib.update(
-            dict((k, str(v)) for k, v in metadata['node'].items()))
+            dict((k, str(v)) for k, v in metadata['node'].items())
+        )
 
 
 def truncate(string, index):
@@ -250,7 +243,6 @@ def truncate(string, index):
 
 # # Stolen partly from brownie http://packages.python.org/Brownie/
 class cached_property(object):
-
     """Memoize a property"""
 
     def __init__(self, getter, doc=None):

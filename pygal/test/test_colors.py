@@ -16,14 +16,14 @@
 #
 # You should have received a copy of the GNU Lesser General Public License
 # along with pygal. If not, see <http://www.gnu.org/licenses/>.
-
 """Color utility functions tests"""
 
 from __future__ import division
 
 from pygal.colors import (
     darken, desaturate, hsl_to_rgb, lighten, parse_color, rgb_to_hsl, rotate,
-    saturate, unparse_color)
+    saturate, unparse_color
+)
 
 
 def test_parse_color():

@@ -39,7 +39,6 @@ try:
 except:
     pass
 
-
 try:
     import wsreload
 except ImportError:
@@ -49,6 +48,7 @@ else:
 
     def log(httpserver):
         app.logger.debug('WSReloaded after server restart')
+
     wsreload.monkey_patch_http_server({'url': url}, callback=log)
     app.logger.debug('HTTPServer monkey patched for url %s' % url)
 

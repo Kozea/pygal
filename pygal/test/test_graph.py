@@ -16,7 +16,6 @@
 #
 # You should have received a copy of the GNU Lesser General Public License
 # along with pygal. If not, see <http://www.gnu.org/licenses/>.
-
 """Generate tests for different chart types with different data"""
 
 import io
@@ -82,26 +81,44 @@ def test_metadata(Chart):
     """Test metadata values"""
     chart = Chart()
     v = range(7)
-    if Chart in (pygal.Box,):
+    if Chart in (pygal.Box, ):
         return  # summary charts cannot display per-value metadata
     elif Chart == pygal.XY:
         v = list(map(lambda x: (x, x + 1), v))
     elif issubclass(Chart, BaseMap):
-        v = [(k, i) for i, k in enumerate(Chart.x_labels) if k not in [
-            'oecd', 'nafta', 'eur']]
+        v = [(k, i) for i, k in enumerate(Chart.x_labels)
+             if k not in ['oecd', 'nafta', 'eur']]
 
-    chart.add('Serie with metadata', [
-        v[0],
-        {'value': v[1]},
-        {'value': v[2], 'label': 'Three'},
-        {'value': v[3], 'xlink': 'http://4.example.com/'},
-        {'value': v[4], 'xlink': 'http://5.example.com/', 'label': 'Five'},
-        {'value': v[5], 'xlink': {
-            'href': 'http://6.example.com/'}, 'label': 'Six'},
-        {'value': v[6], 'xlink': {
-            'href': 'http://7.example.com/',
-            'target': '_blank'}, 'label': 'Seven'}
-    ])
+    chart.add(
+        'Serie with metadata', [
+            v[0], {
+                'value': v[1]
+            }, {
+                'value': v[2],
+                'label': 'Three'
+            }, {
+                'value': v[3],
+                'xlink': 'http://4.example.com/'
+            }, {
+                'value': v[4],
+                'xlink': 'http://5.example.com/',
+                'label': 'Five'
+            }, {
+                'value': v[5],
+                'xlink': {
+                    'href': 'http://6.example.com/'
+                },
+                'label': 'Six'
+            }, {
+                'value': v[6],
+                'xlink': {
+                    'href': 'http://7.example.com/',
+                    'target': '_blank'
+                },
+                'label': 'Seven'
+            }
+        ]
+    )
     q = chart.render_pyquery()
     for md in ('Three', 'Five', 'Seven'):
         assert md in cut(q('desc'), 'text')
@@ -289,20 +306,22 @@ def test_no_data_with_lists_of_nones(Chart):
 def test_unicode_labels_decode(Chart):
     """Test unicode labels"""
     chart = Chart()
-    chart.add(u('Série1'), [{
-        'value': 1,
-        'xlink': 'http://1/',
-        'label': u('{\}Â°ĳæð©&×&<—×€¿_…\{_…')
-    }, {
-        'value': 2,
-        'xlink': {
-            'href': 'http://6.example.com/'
-        },
-        'label': u('æÂ°€≠|€æÂ°€əæ')
-    }, {
-        'value': 3,
-        'label': 'unicode <3'
-    }])
+    chart.add(
+        u('Série1'), [{
+            'value': 1,
+            'xlink': 'http://1/',
+            'label': u('{\}Â°ĳæð©&×&<—×€¿_…\{_…')
+        }, {
+            'value': 2,
+            'xlink': {
+                'href': 'http://6.example.com/'
+            },
+            'label': u('æÂ°€≠|€æÂ°€əæ')
+        }, {
+            'value': 3,
+            'label': 'unicode <3'
+        }]
+    )
     if not chart._dual:
         chart.x_labels = [u('&œ'), u('¿?'), u('††††††††'), 'unicode <3']
     chart.render_pyquery()
@@ -313,20 +332,22 @@ def test_unicode_labels_python2(Chart):
     if sys.version_info[0] == 3:
         return
     chart = Chart()
-    chart.add(u('Série1'), [{
-        'value': 1,
-        'xlink': 'http://1/',
-        'label': eval("u'{\}Â°ĳæð©&×&<—×€¿_…\{_…'")
-    }, {
-        'value': 2,
-        'xlink': {
-            'href': 'http://6.example.com/'
-        },
-        'label': eval("u'æÂ°€≠|€æÂ°€əæ'")
-    }, {
-        'value': 3,
-        'label': eval("'unicode <3'")
-    }])
+    chart.add(
+        u('Série1'), [{
+            'value': 1,
+            'xlink': 'http://1/',
+            'label': eval("u'{\}Â°ĳæð©&×&<—×€¿_…\{_…'")
+        }, {
+            'value': 2,
+            'xlink': {
+                'href': 'http://6.example.com/'
+            },
+            'label': eval("u'æÂ°€≠|€æÂ°€əæ'")
+        }, {
+            'value': 3,
+            'label': eval("'unicode <3'")
+        }]
+    )
     if not chart._dual:
         chart.x_labels = eval("[u'&œ', u'¿?', u'††††††††', 'unicode <3']")
     chart.render_pyquery()
@@ -337,20 +358,22 @@ def test_unicode_labels_python3(Chart):
     if sys.version_info[0] == 2:
         return
     chart = Chart()
-    chart.add(u('Série1'), [{
-        'value': 1,
-        'xlink': 'http://1/',
-        'label': eval("'{\}Â°ĳæð©&×&<—×€¿_…\{_…'")
-    }, {
-        'value': 2,
-        'xlink': {
-            'href': 'http://6.example.com/'
-        },
-        'label': eval("'æÂ°€≠|€æÂ°€əæ'")
-    }, {
-        'value': 3,
-        'label': eval("b'unicode <3'")
-    }])
+    chart.add(
+        u('Série1'), [{
+            'value': 1,
+            'xlink': 'http://1/',
+            'label': eval("'{\}Â°ĳæð©&×&<—×€¿_…\{_…'")
+        }, {
+            'value': 2,
+            'xlink': {
+                'href': 'http://6.example.com/'
+            },
+            'label': eval("'æÂ°€≠|€æÂ°€əæ'")
+        }, {
+            'value': 3,
+            'label': eval("b'unicode <3'")
+        }]
+    )
     if not chart._dual:
         chart.x_labels = eval("['&œ', '¿?', '††††††††', 'unicode <3']")
     chart.render_pyquery()
@@ -361,31 +384,49 @@ def test_labels_with_links(Chart):
     chart = Chart()
     # link on chart and label
     chart.add({
-        'title': 'Red', 'xlink': {'href': 'http://en.wikipedia.org/wiki/Red'}
+        'title': 'Red',
+        'xlink': {
+            'href': 'http://en.wikipedia.org/wiki/Red'
+        }
     }, [{
         'value': 2,
         'label': 'This is red',
-        'xlink': {'href': 'http://en.wikipedia.org/wiki/Red'}}])
+        'xlink': {
+            'href': 'http://en.wikipedia.org/wiki/Red'
+        }
+    }])
 
     # link on chart only
-    chart.add('Green', [{
-        'value': 4,
-        'label': 'This is green',
-        'xlink': {
-            'href': 'http://en.wikipedia.org/wiki/Green',
-            'target': '_top'}}])
+    chart.add(
+        'Green', [{
+            'value': 4,
+            'label': 'This is green',
+            'xlink': {
+                'href': 'http://en.wikipedia.org/wiki/Green',
+                'target': '_top'
+            }
+        }]
+    )
 
     # link on label only opens in new tab
-    chart.add({'title': 'Yellow', 'xlink': {
-        'href': 'http://en.wikipedia.org/wiki/Yellow',
-        'target': '_blank'}}, 7)
+    chart.add({
+        'title': 'Yellow',
+        'xlink': {
+            'href': 'http://en.wikipedia.org/wiki/Yellow',
+            'target': '_blank'
+        }
+    }, 7)
 
     # link on chart only
-    chart.add('Blue', [{
-        'value': 5,
-        'xlink': {
-            'href': 'http://en.wikipedia.org/wiki/Blue',
-            'target': '_blank'}}])
+    chart.add(
+        'Blue', [{
+            'value': 5,
+            'xlink': {
+                'href': 'http://en.wikipedia.org/wiki/Blue',
+                'target': '_blank'
+            }
+        }]
+    )
 
     # link on label and chart with diffrent behaviours
     chart.add({
@@ -396,7 +437,9 @@ def test_labels_with_links(Chart):
         'label': 'This is violet',
         'xlink': {
             'href': 'http://en.wikipedia.org/wiki/Violet_(color)',
-            'target': '_self'}}])
+            'target': '_self'
+        }
+    }])
 
     q = chart.render_pyquery()
     links = q('a')
@@ -416,9 +459,7 @@ def test_secondary(Chart):
     chart = Chart()
     rng = [83, .12, -34, 59]
     chart.add('First serie', rng)
-    chart.add('Secondary serie',
-              map(lambda x: x * 2, rng),
-              secondary=True)
+    chart.add('Secondary serie', map(lambda x: x * 2, rng), secondary=True)
     assert chart.render_pyquery()
 
 
@@ -436,7 +477,8 @@ def test_long_title(Chart, datas):
         "'the data is represented by symbols, such as bars in a bar chart, "
         "lines in a line chart, or slices in a pie chart'. A chart can "
         "represent tabular numeric data, functions or some kinds of "
-        "qualitative structure and provides different info.")
+        "qualitative structure and provides different info."
+    )
     chart = make_data(chart, datas)
     q = chart.render_pyquery()
     assert len(q('.titles text')) == 5

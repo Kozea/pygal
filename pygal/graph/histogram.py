@@ -29,7 +29,6 @@ from pygal.util import alter, cached_property, decorate
 
 
 class Histogram(Dual, Bar):
-
     """Histogram chart class"""
     _series_margin = 0
 
@@ -41,27 +40,27 @@ class Histogram(Dual, Bar):
     @cached_property
     def _secondary_values(self):
         """Getter for secondary series values (flattened)"""
-        return [val[0]
-                for serie in self.secondary_series
-                for val in serie.values
-                if val[0] is not None]
+        return [
+            val[0] for serie in self.secondary_series for val in serie.values
+            if val[0] is not None
+        ]
 
     @cached_property
     def xvals(self):
         """All x values"""
-        return [val
-                for serie in self.all_series
-                for dval in serie.values
-                for val in dval[1:3]
-                if val is not None]
+        return [
+            val
+            for serie in self.all_series for dval in serie.values
+            for val in dval[1:3] if val is not None
+        ]
 
     @cached_property
     def yvals(self):
         """All y values"""
-        return [val[0]
-                for serie in self.series
-                for val in serie.values
-                if val[0] is not None]
+        return [
+            val[0] for serie in self.series for val in serie.values
+            if val[0] is not None
+        ]
 
     def _bar(self, serie, parent, x0, x1, y, i, zero, secondary=False):
         """Internal bar drawing function"""
@@ -74,10 +73,19 @@ class Histogram(Dual, Bar):
         width -= 2 * series_margin
 
         r = serie.rounded_bars * 1 if serie.rounded_bars else 0
-        alter(self.svg.transposable_node(
-            parent, 'rect',
-            x=x, y=y, rx=r, ry=r, width=width, height=height,
-            class_='rect reactive tooltip-trigger'), serie.metadata.get(i))
+        alter(
+            self.svg.transposable_node(
+                parent,
+                'rect',
+                x=x,
+                y=y,
+                rx=r,
+                ry=r,
+                width=width,
+                height=height,
+                class_='rect reactive tooltip-trigger'
+            ), serie.metadata.get(i)
+        )
         return x, y, width, height
 
     def bar(self, serie, rescale=False):
@@ -92,15 +100,16 @@ class Histogram(Dual, Bar):
             metadata = serie.metadata.get(i)
 
             bar = decorate(
-                self.svg,
-                self.svg.node(bars, class_='histbar'),
-                metadata)
+                self.svg, self.svg.node(bars, class_='histbar'), metadata
+            )
             val = self._format(serie, i)
 
             bounds = self._bar(
-                serie, bar, x0, x1, y, i, self.zero, secondary=rescale)
+                serie, bar, x0, x1, y, i, self.zero, secondary=rescale
+            )
             self._tooltip_and_print_values(
-                serie_node, serie, bar, i, val, metadata, *bounds)
+                serie_node, serie, bar, i, val, metadata, *bounds
+            )
 
     def _compute(self):
         """Compute x/y min and max and x/y scale and set labels"""

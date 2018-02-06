@@ -28,7 +28,6 @@ from pygal.graph.bar import Bar
 
 
 class StackedBar(Bar):
-
     """Stacked Bar graph class"""
 
     _adapters = [none_to_zero]
@@ -37,15 +36,14 @@ class StackedBar(Bar):
         """Separate values between positives and negatives stacked"""
         series = self.secondary_series if secondary else self.series
         transposed = list(zip(*[serie.values for serie in series]))
-        positive_vals = [sum([
-            val for val in vals
-            if val is not None and val >= self.zero])
-            for vals in transposed]
-        negative_vals = [sum([
-            val
-            for val in vals
-            if val is not None and val < self.zero])
-            for vals in transposed]
+        positive_vals = [
+            sum([val for val in vals if val is not None and val >= self.zero])
+            for vals in transposed
+        ]
+        negative_vals = [
+            sum([val for val in vals if val is not None and val < self.zero])
+            for vals in transposed
+        ]
         return positive_vals, negative_vals
 
     def _compute_box(self, positive_vals, negative_vals):
@@ -54,22 +52,26 @@ class StackedBar(Bar):
             self._box.ymin = self.range[0]
         else:
             self._box.ymin = negative_vals and min(
-                min(negative_vals), self.zero) or self.zero
+                min(negative_vals), self.zero
+            ) or self.zero
         if self.range and self.range[1] is not None:
             self._box.ymax = self.range[1]
         else:
             self._box.ymax = positive_vals and max(
-                max(positive_vals), self.zero) or self.zero
+                max(positive_vals), self.zero
+            ) or self.zero
 
     def _compute(self):
         """Compute y min and max and y scale and set labels"""
         positive_vals, negative_vals = self._get_separated_values()
 
         if self.logarithmic:
-            positive_vals = list(filter(
-                lambda x: x > self.zero, positive_vals))
-            negative_vals = list(filter(
-                lambda x: x > self.zero, negative_vals))
+            positive_vals = list(
+                filter(lambda x: x > self.zero, positive_vals)
+            )
+            negative_vals = list(
+                filter(lambda x: x > self.zero, negative_vals)
+            )
 
         self._compute_box(positive_vals, negative_vals)
         positive_vals = positive_vals or [self.zero]
@@ -96,21 +98,25 @@ class StackedBar(Bar):
 
     def _pre_compute_secondary(self, positive_vals, negative_vals):
         """Compute secondary y min and max"""
-        self._secondary_min = (negative_vals and min(
-            min(negative_vals), self.zero)) or self.zero
-        self._secondary_max = (positive_vals and max(
-            max(positive_vals), self.zero)) or self.zero
+        self._secondary_min = (
+            negative_vals and min(min(negative_vals), self.zero)
+        ) or self.zero
+        self._secondary_max = (
+            positive_vals and max(max(positive_vals), self.zero)
+        ) or self.zero
 
     def _bar(self, serie, parent, x, y, i, zero, secondary=False):
         """Internal stacking bar drawing function"""
         if secondary:
-            cumulation = (self.secondary_negative_cumulation
-                          if y < self.zero else
-                          self.secondary_positive_cumulation)
+            cumulation = (
+                self.secondary_negative_cumulation
+                if y < self.zero else self.secondary_positive_cumulation
+            )
         else:
-            cumulation = (self.negative_cumulation
-                          if y < self.zero else
-                          self.positive_cumulation)
+            cumulation = (
+                self.negative_cumulation
+                if y < self.zero else self.positive_cumulation
+            )
         zero = cumulation[i]
         cumulation[i] = zero + y
         if zero == 0:
@@ -133,9 +139,16 @@ class StackedBar(Bar):
         height = self.view.y(zero) - y
         r = serie.rounded_bars * 1 if serie.rounded_bars else 0
         self.svg.transposable_node(
-            parent, 'rect',
-            x=x, y=y, rx=r, ry=r, width=width, height=height,
-            class_='rect reactive tooltip-trigger')
+            parent,
+            'rect',
+            x=x,
+            y=y,
+            rx=r,
+            ry=r,
+            width=width,
+            height=height,
+            class_='rect reactive tooltip-trigger'
+        )
         return x, y, width, height
 
     def _plot(self):

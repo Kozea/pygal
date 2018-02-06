@@ -16,7 +16,6 @@
 #
 # You should have received a copy of the GNU Lesser General Public License
 # along with pygal. If not, see <http://www.gnu.org/licenses/>.
-
 """
 Line chart: Display series of data as markers (dots)
 connected by straight segments
@@ -29,7 +28,6 @@ from pygal.util import alter, cached_property, decorate
 
 
 class Line(Graph):
-
     """Line graph class"""
 
     def __init__(self, *args, **kwargs):
@@ -42,20 +40,20 @@ class Line(Graph):
         """Getter for series values (flattened)"""
         return [
             val[1]
-            for serie in self.series
-            for val in (serie.interpolated
-                        if self.interpolate else serie.points)
-            if val[1] is not None and (not self.logarithmic or val[1] > 0)]
+            for serie in self.series for val in
+            (serie.interpolated if self.interpolate else serie.points)
+            if val[1] is not None and (not self.logarithmic or val[1] > 0)
+        ]
 
     @cached_property
     def _secondary_values(self):
         """Getter for secondary series values (flattened)"""
         return [
             val[1]
-            for serie in self.secondary_series
-            for val in (serie.interpolated
-                        if self.interpolate else serie.points)
-            if val[1] is not None and (not self.logarithmic or val[1] > 0)]
+            for serie in self.secondary_series for val in
+            (serie.interpolated if self.interpolate else serie.points)
+            if val[1] is not None and (not self.logarithmic or val[1] > 0)
+        ]
 
     def _fill(self, values):
         """Add extra values to fill the line"""
@@ -80,12 +78,12 @@ class Line(Graph):
                     "Invalid value ({}) for config key "
                     "'missing_value_fill_truncation';"
                     " Use 'x', 'y' or 'either'".format(
-                        self.missing_value_fill_truncation))
+                        self.missing_value_fill_truncation
+                    )
+                )
             end -= 1
 
-        return ([(values[0][0], zero)] +
-                values +
-                [(values[end][0], zero)])
+        return ([(values[0][0], zero)] + values + [(values[end][0], zero)])
 
     def line(self, serie, rescale=False):
         """Draw the line serie"""
@@ -102,9 +100,9 @@ class Line(Graph):
                 if self.logarithmic:
                     if points[i][1] is None or points[i][1] <= 0:
                         continue
-                if (serie.show_only_major_dots and
-                        self.x_labels and i < len(self.x_labels) and
-                        self.x_labels[i] not in self._x_labels_major):
+                if (serie.show_only_major_dots and self.x_labels
+                        and i < len(self.x_labels)
+                        and self.x_labels[i] not in self._x_labels_major):
                     continue
 
                 metadata = serie.metadata.get(i)
@@ -116,25 +114,33 @@ class Line(Graph):
                 classes = ' '.join(classes)
 
                 self._confidence_interval(
-                    serie_node['overlay'], x, y, serie.values[i], metadata)
+                    serie_node['overlay'], x, y, serie.values[i], metadata
+                )
 
                 dots = decorate(
                     self.svg,
                     self.svg.node(serie_node['overlay'], class_="dots"),
-                    metadata)
+                    metadata
+                )
 
                 val = self._format(serie, i)
-                alter(self.svg.transposable_node(
-                    dots, 'circle', cx=x, cy=y, r=serie.dots_size,
-                    class_='dot reactive tooltip-trigger'), metadata)
+                alter(
+                    self.svg.transposable_node(
+                        dots,
+                        'circle',
+                        cx=x,
+                        cy=y,
+                        r=serie.dots_size,
+                        class_='dot reactive tooltip-trigger'
+                    ), metadata
+                )
                 self._tooltip_data(
-                    dots, val, x, y,
-                    xlabel=self._get_x_label(i))
+                    dots, val, x, y, xlabel=self._get_x_label(i)
+                )
                 self._static_value(
-                    serie_node, val,
-                    x + self.style.value_font_size,
-                    y + self.style.value_font_size,
-                    metadata)
+                    serie_node, val, x + self.style.value_font_size,
+                    y + self.style.value_font_size, metadata
+                )
 
         if serie.stroke:
             if self.interpolate:
@@ -157,12 +163,12 @@ class Line(Graph):
                         # emit current subsequence
                         sequences.append(cur_sequence)
                         cur_sequence = []
-                    elif y is None:       # just discard
+                    elif y is None:  # just discard
                         continue
                     else:
-                        cur_sequence.append((x, y))   # append the element
+                        cur_sequence.append((x, y))  # append the element
 
-                if len(cur_sequence) > 0:      # emit last possible sequence
+                if len(cur_sequence) > 0:  # emit last possible sequence
                     sequences.append(cur_sequence)
             else:
                 # plain vanilla rendering
@@ -175,9 +181,12 @@ class Line(Graph):
                             del seq[seq.index(ele)]
             for seq in sequences:
                 self.svg.line(
-                    serie_node['plot'], seq, close=self._self_close,
+                    serie_node['plot'],
+                    seq,
+                    close=self._self_close,
                     class_='line reactive' +
-                           (' nofill' if not serie.fill else ''))
+                    (' nofill' if not serie.fill else '')
+                )
 
     def _compute(self):
         """Compute y min and max and y scale and set labels"""

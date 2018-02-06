@@ -16,7 +16,6 @@
 #
 # You should have received a copy of the GNU Lesser General Public License
 # along with pygal. If not, see <http://www.gnu.org/licenses/>.
-
 """
 pygal contains no map but a base class to create extension
 see the pygal_maps_world package to get an exemple.
@@ -31,7 +30,6 @@ from pygal.util import alter, cached_property, cut, decorate
 
 
 class BaseMap(Graph):
-
     """Base class for maps"""
 
     _dual = True
@@ -39,10 +37,10 @@ class BaseMap(Graph):
     @cached_property
     def _values(self):
         """Getter for series values (flattened)"""
-        return [val[1]
-                for serie in self.series
-                for val in serie.values
-                if val[1] is not None]
+        return [
+            val[1] for serie in self.series for val in serie.values
+            if val[1] is not None
+        ]
 
     def enumerate_values(self, serie):
         """Hook to replace default enumeration on values"""
@@ -58,7 +56,8 @@ class BaseMap(Graph):
         """
         return '%s: %s' % (
             self.area_names.get(self.adapt_code(value[0]), '?'),
-            self._y_format(value[1]))
+            self._y_format(value[1])
+        )
 
     def _plot(self):
         """Insert a map in the chart and apply data on it"""
@@ -67,8 +66,9 @@ class BaseMap(Graph):
         map.set('height', str(self.view.height))
 
         for i, serie in enumerate(self.series):
-            safe_vals = list(filter(
-                lambda x: x is not None, cut(serie.values, 1)))
+            safe_vals = list(
+                filter(lambda x: x is not None, cut(serie.values, 1))
+            )
             if not safe_vals:
                 continue
             min_ = min(safe_vals)
@@ -83,9 +83,9 @@ class BaseMap(Graph):
                     ratio = .3 + .7 * (value - min_) / (max_ - min_)
 
                 areae = map.findall(
-                    ".//*[@class='%s%s %s map-element']" % (
-                        self.area_prefix, area_code,
-                        self.kind))
+                    ".//*[@class='%s%s %s map-element']" %
+                    (self.area_prefix, area_code, self.kind)
+                )
 
                 if not areae:
                     continue

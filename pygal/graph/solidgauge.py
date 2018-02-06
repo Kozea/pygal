@@ -16,8 +16,6 @@
 #
 # You should have received a copy of the GNU Lesser General Public License
 # along with pygal. If not, see <http://www.gnu.org/licenses/>.
-
-
 """
 Solid Guage
 For each series a solid guage is shown on the plot area.
@@ -31,24 +29,21 @@ from pygal.util import alter, decorate
 
 
 class SolidGauge(Graph):
-
     def gaugify(self, serie, squares, sq_dimensions, current_square):
         serie_node = self.svg.serie(serie)
         if self.half_pie:
             start_angle = 3 * pi / 2
-            center = (
-                (current_square[1] * sq_dimensions[0]) - (
-                    sq_dimensions[0] / 2.),
-                (current_square[0] * sq_dimensions[1]) - (
-                    sq_dimensions[1] / 4))
+            center = ((current_square[1] * sq_dimensions[0]) -
+                      (sq_dimensions[0] / 2.),
+                      (current_square[0] * sq_dimensions[1]) -
+                      (sq_dimensions[1] / 4))
             end_angle = pi / 2
         else:
             start_angle = 0
-            center = (
-                (current_square[1] * sq_dimensions[0]) - (
-                    sq_dimensions[0] / 2.),
-                (current_square[0] * sq_dimensions[1]) - (
-                    sq_dimensions[1] / 2.))
+            center = ((current_square[1] * sq_dimensions[0]) -
+                      (sq_dimensions[0] / 2.),
+                      (current_square[0] * sq_dimensions[1]) -
+                      (sq_dimensions[1] / 2.))
             end_angle = 2 * pi
 
         max_value = serie.metadata.get(0, {}).get('max_value', 100)
@@ -57,7 +52,8 @@ class SolidGauge(Graph):
 
         self.svg.gauge_background(
             serie_node, start_angle, center, radius, small_radius, end_angle,
-            self.half_pie, self._serie_format(serie, max_value))
+            self.half_pie, self._serie_format(serie, max_value)
+        )
 
         sum_ = 0
         for i, value in enumerate(serie.values):
@@ -73,27 +69,30 @@ class SolidGauge(Graph):
             metadata = serie.metadata.get(i)
 
             gauge_ = decorate(
-                self.svg,
-                self.svg.node(serie_node['plot'], class_="gauge"),
-                metadata)
+                self.svg, self.svg.node(serie_node['plot'], class_="gauge"),
+                metadata
+            )
 
             alter(
                 self.svg.solid_gauge(
-                    serie_node, gauge_, radius, small_radius,
-                    angle, start_angle, center, val, i, metadata,
-                    self.half_pie, end_angle,
-                    self._serie_format(serie, max_value)),
-                metadata)
+                    serie_node, gauge_, radius, small_radius, angle,
+                    start_angle, center, val, i, metadata, self.half_pie,
+                    end_angle, self._serie_format(serie, max_value)
+                ), metadata
+            )
             start_angle += angle
             sum_ += value
 
         x, y = center
         self.svg.node(
-            serie_node['text_overlay'], 'text',
+            serie_node['text_overlay'],
+            'text',
             class_='value gauge-sum',
             x=x,
             y=y + self.style.value_font_size / 3,
-            attrib={'text-anchor': 'middle'}
+            attrib={
+                'text-anchor': 'middle'
+            }
         ).text = self._serie_format(serie, sum_)
 
     def _compute_x_labels(self):
@@ -109,8 +108,7 @@ class SolidGauge(Graph):
 
         for index, serie in enumerate(self.series):
             current_square = self._current_square(squares, index)
-            self.gaugify(
-                serie, squares, sq_dimensions, current_square)
+            self.gaugify(serie, squares, sq_dimensions, current_square)
 
     def _squares(self):
 
@@ -150,4 +148,5 @@ class SolidGauge(Graph):
             else:
                 return tuple(current_square)
         raise Exception(
-            'Something went wrong with the current square assignment.')
+            'Something went wrong with the current square assignment.'
+        )

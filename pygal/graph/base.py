@@ -16,7 +16,6 @@
 #
 # You should have received a copy of the GNU Lesser General Public License
 # along with pygal. If not, see <http://www.gnu.org/licenses/>.
-
 """Base for pygal charts"""
 
 from __future__ import division
@@ -36,7 +35,6 @@ from pygal.view import Box, Margin
 
 
 class BaseGraph(object):
-
     """Chart internal behaviour related functions"""
 
     _adapters = []
@@ -93,7 +91,7 @@ class BaseGraph(object):
         if not raw:
             return
 
-        adapters = list(self._adapters) or [lambda x:x]
+        adapters = list(self._adapters) or [lambda x: x]
         if self.logarithmic:
             for fun in not_zero, positive:
                 if fun in adapters:
@@ -103,19 +101,18 @@ class BaseGraph(object):
 
         self._adapt = reduce(compose, adapters) if not self.strict else ident
         self._x_adapt = reduce(
-            compose, self._x_adapters) if not self.strict and getattr(
-                self, '_x_adapters', None) else ident
+            compose, self._x_adapters
+        ) if not self.strict and getattr(self, '_x_adapters', None) else ident
 
         series = []
 
         raw = [(
-            list(raw_values) if not isinstance(
-                raw_values, dict) else raw_values,
-            serie_config_kwargs
+            list(raw_values) if not isinstance(raw_values, dict) else
+            raw_values, serie_config_kwargs
         ) for raw_values, serie_config_kwargs in raw]
 
-        width = max([len(values) for values, _ in raw] +
-                    [len(self.x_labels or [])])
+        width = max([len(values)
+                     for values, _ in raw] + [len(self.x_labels or [])])
 
         for raw_values, serie_config_kwargs in raw:
             metadata = {}
@@ -130,10 +127,9 @@ class BaseGraph(object):
                             value_list[self.x_labels.index(k)] = v
                     raw_values = value_list
 
-            for index, raw_value in enumerate(
-                    raw_values + (
-                        (width - len(raw_values)) * [None]  # aligning values
-                        if len(raw_values) < width else [])):
+            for index, raw_value in enumerate(raw_values + (
+                (width - len(raw_values)) * [None]  # aligning values
+                    if len(raw_values) < width else [])):
                 if isinstance(raw_value, dict):
                     raw_value = dict(raw_value)
                     value = raw_value.pop('value', None)
@@ -157,8 +153,8 @@ class BaseGraph(object):
                         value = (value, self.zero)
                     if self._x_adapt:
                         value = (
-                            self._x_adapt(value[0]),
-                            self._adapt(value[1]))
+                            self._x_adapt(value[0]), self._adapt(value[1])
+                        )
                     if isinstance(self, BaseMap):
                         value = (self._adapt(value[0]), value[1])
                     else:
@@ -168,11 +164,14 @@ class BaseGraph(object):
 
                 values.append(value)
             serie_config = SerieConfig()
-            serie_config(**dict((k, v) for k, v in self.state.__dict__.items()
-                                if k in dir(serie_config)))
+            serie_config(
+                **dict((k, v) for k, v in self.state.__dict__.items()
+                       if k in dir(serie_config))
+            )
             serie_config(**serie_config_kwargs)
             series.append(
-                Serie(offset + len(series), values, serie_config, metadata))
+                Serie(offset + len(series), values, serie_config, metadata)
+            )
         return series
 
     def setup(self, **kwargs):
@@ -185,11 +184,13 @@ class BaseGraph(object):
         self.state = State(self, **kwargs)
         if isinstance(self.style, type):
             self.style = self.style()
-        self.series = self.prepare_values(
-            [rs for rs in self.raw_series if not rs[1].get('secondary')]) or []
+        self.series = self.prepare_values([
+            rs for rs in self.raw_series if not rs[1].get('secondary')
+        ]) or []
         self.secondary_series = self.prepare_values(
-            [rs for rs in self.raw_series if rs[1].get('secondary')],
-            len(self.series)) or []
+            [rs for rs in self.raw_series
+             if rs[1].get('secondary')], len(self.series)
+        ) or []
         self.horizontal = getattr(self, 'horizontal', False)
         self.svg = Svg(self)
         self._x_labels = None
@@ -198,20 +199,23 @@ class BaseGraph(object):
         self._y_2nd_labels = None
         self.nodes = {}
         self.margin_box = Margin(
-            self.margin_top or self.margin,
-            self.margin_right or self.margin,
-            self.margin_bottom or self.margin,
-            self.margin_left or self.margin)
+            self.margin_top or self.margin, self.margin_right or self.margin,
+            self.margin_bottom or self.margin, self.margin_left or self.margin
+        )
         self._box = Box()
         self.view = None
         if self.logarithmic and self.zero == 0:
             # Explicit min to avoid interpolation dependency
-            positive_values = list(filter(
-                lambda x: x > 0,
-                [val[1] or 1 if self._dual else val
-                 for serie in self.series for val in serie.safe_values]))
+            positive_values = list(
+                filter(
+                    lambda x: x > 0, [
+                        val[1] or 1 if self._dual else val
+                        for serie in self.series for val in serie.safe_values
+                    ]
+                )
+            )
 
-            self.zero = min(positive_values or (1,)) or 1
+            self.zero = min(positive_values or (1, )) or 1
         if self._len < 3:
             self.interpolate = None
         self._draw()
