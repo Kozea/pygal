@@ -13,3 +13,4 @@ docs/_build
 build
 .env*
 .eggs
+.pytest_cache
