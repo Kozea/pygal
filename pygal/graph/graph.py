@@ -916,8 +916,7 @@ class Graph(PublicApi):
     def _compute_x_labels_major(self):
         if self.x_labels_major_every:
             self._x_labels_major = [
-                self._x_labels[i][0]
-                for i in
+                self._x_labels[i][0] for i in
                 range(0, len(self._x_labels), self.x_labels_major_every)
             ]
 
@@ -964,8 +963,7 @@ class Graph(PublicApi):
     def _compute_y_labels_major(self):
         if self.y_labels_major_every:
             self._y_labels_major = [
-                self._y_labels[i][1]
-                for i in
+                self._y_labels[i][1] for i in
                 range(0, len(self._y_labels), self.y_labels_major_every)
             ]
 
@@ -1037,8 +1035,7 @@ class Graph(PublicApi):
         """Check if there is any data"""
         return any([
             len([
-                v
-                for a in (s[0] if is_list_like(s) else [s])
+                v for a in (s[0] if is_list_like(s) else [s])
                 for v in (a if is_list_like(a) else [a]) if v is not None
             ]) for s in self.raw_series
         ])

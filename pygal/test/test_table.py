@@ -18,9 +18,8 @@
 # along with pygal. If not, see <http://www.gnu.org/licenses/>.
 """Box chart related tests"""
 
-from pyquery import PyQuery as pq
-
 from pygal import Pie
+from pyquery import PyQuery as pq
 
 
 def test_pie_table():

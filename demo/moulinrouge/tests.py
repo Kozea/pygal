@@ -4,7 +4,6 @@ from datetime import date, datetime
 from random import choice, randint
 
 from flask import abort
-
 from pygal import (
     CHARTS_BY_NAME, XY, Bar, Box, Config, DateLine, DateTimeLine, Dot, Funnel,
     Gauge, Histogram, HorizontalBar, Line, Pie, Pyramid, Radar, SolidGauge,

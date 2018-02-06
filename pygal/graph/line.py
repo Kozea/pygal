@@ -39,8 +39,7 @@ class Line(Graph):
     def _values(self):
         """Getter for series values (flattened)"""
         return [
-            val[1]
-            for serie in self.series for val in
+            val[1] for serie in self.series for val in
             (serie.interpolated if self.interpolate else serie.points)
             if val[1] is not None and (not self.logarithmic or val[1] > 0)
         ]
@@ -49,8 +48,7 @@ class Line(Graph):
     def _secondary_values(self):
         """Getter for secondary series values (flattened)"""
         return [
-            val[1]
-            for serie in self.secondary_series for val in
+            val[1] for serie in self.secondary_series for val in
             (serie.interpolated if self.interpolate else serie.points)
             if val[1] is not None and (not self.logarithmic or val[1] > 0)
         ]

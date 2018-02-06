@@ -20,9 +20,8 @@
 
 import sys
 
-import pytest
-
 import pygal
+import pytest
 from pygal.etree import etree
 
 from . import get_data

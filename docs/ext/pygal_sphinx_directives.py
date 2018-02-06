@@ -20,9 +20,8 @@
 from traceback import format_exc, print_exc
 
 import docutils.core
-from docutils.parsers.rst import Directive
-
 import pygal
+from docutils.parsers.rst import Directive
 from sphinx.directives.code import CodeBlock
 
 # Patch default style

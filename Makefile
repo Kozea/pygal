@@ -15,6 +15,9 @@ lint:
 	$(PYTEST) --flake8 -m flake8 $(PROJECT_NAME)
 	$(PYTEST) --isort -m isort $(PROJECT_NAME)
 
+fix:
+	$(VENV)/bin/yapf -p -i pygal/**/*.py
+
 check:
 	$(PYTEST) $(PROJECT_NAME) $(PYTEST_ARGS) --cov-report= --cov=pygal
 

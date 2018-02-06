@@ -49,8 +49,7 @@ class Histogram(Dual, Bar):
     def xvals(self):
         """All x values"""
         return [
-            val
-            for serie in self.all_series for dval in serie.values
+            val for serie in self.all_series for dval in serie.values
             for val in dval[1:3] if val is not None
         ]
 
