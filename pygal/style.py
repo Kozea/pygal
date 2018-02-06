@@ -62,6 +62,8 @@ class Style(object):
     # Guide line dash array style
     guide_stroke_dasharray = '4,4'
     major_guide_stroke_dasharray = '6,6'
+    guide_stroke_color = 'black'
+    major_guide_stroke_color = 'black'
 
     opacity = '.7'
     opacity_hover = '.8'
