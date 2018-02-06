@@ -107,7 +107,8 @@
 
 {{ id }}.dot {
   stroke-width: 1px;
-  fill-opacity: 1;
+  fill-opacity: {{ style.dot_opacity }};
+  stroke-opacity: {{ style.dot_opacity }};
 }
 
 {{ id }}.dot.active {
