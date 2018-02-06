@@ -41,7 +41,7 @@ Properties                        Description
 ================================  =========================
 ``plot_background``               The color of the chart area background
 ``background``                    The color of the image background
-``foreground``                    The main foregrond color
+``foreground``                    The main foreground color
 ``foreground_strong``             The emphasis foreground color
 ``foreground_subtle``             The subtle foreground color
 ``font_family``                   The main font family
