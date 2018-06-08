@@ -230,12 +230,26 @@ def trigonometric_interpolate(x, y, precision=250, **kwargs):
             yield X, s
 
 
+def constant_interpolate(x, y, precision=250, **kwargs):
+    n = len(x) - 1
+    delta_x = [x2 - x1 for x1, x2 in zip(x, x[1:])]
+    for i in range(n + 1):
+        yield x[i], y[i]
+        if i == n or delta_x[i] == 0:
+            continue
+
+        for s in range(1, precision):
+            X = x[i] + s * delta_x[i] / precision
+            yield X, y[i]
+
+
 INTERPOLATIONS = {
     'quadratic': quadratic_interpolate,
     'cubic': cubic_interpolate,
     'hermite': hermite_interpolate,
     'lagrange': lagrange_interpolate,
-    'trigonometric': trigonometric_interpolate
+    'trigonometric': trigonometric_interpolate,
+    'constant': constant_interpolate
 }
 
 if __name__ == '__main__':
@@ -247,6 +261,7 @@ if __name__ == '__main__':
     xy.add('cubic', cubic_interpolate(*zip(*points)))
     xy.add('lagrange', lagrange_interpolate(*zip(*points)))
     xy.add('trigonometric', trigonometric_interpolate(*zip(*points)))
+    xy.add('constant', constant_interpolate(*zip(*points)))
     xy.add(
         'hermite catmul_rom',
         hermite_interpolate(*zip(*points), type='catmul_rom')
