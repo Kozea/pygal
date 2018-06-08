@@ -230,7 +230,7 @@ def trigonometric_interpolate(x, y, precision=250, **kwargs):
             yield X, s
 
 
-def constant_interpolate(x, y, precision=250, **kwargs):
+def constant_interpolate(x, y, **kwargs):
     n = len(x) - 1
     delta_x = [x2 - x1 for x1, x2 in zip(x, x[1:])]
     for i in range(n + 1):
@@ -238,9 +238,8 @@ def constant_interpolate(x, y, precision=250, **kwargs):
         if i == n or delta_x[i] == 0:
             continue
 
-        for s in range(1, precision):
-            X = x[i] + s * delta_x[i] / precision
-            yield X, y[i]
+        X = x[i] + delta_x[i]
+        yield X, y[i]
 
 
 INTERPOLATIONS = {
