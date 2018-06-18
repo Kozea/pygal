@@ -136,9 +136,7 @@ class Box(Graph):
                     coords=[(xs, self.view.y(whisker)),
                             (xe, self.view.y(whisker))],
                     class_='reactive tooltip-trigger',
-                    attrib={
-                        'stroke-width': 3
-                    }
+                    attrib={'stroke-width': 3}
                 ), metadata
             )
 
@@ -149,9 +147,7 @@ class Box(Graph):
                 coords=[(left_edge + width / 2, self.view.y(quartiles[0])),
                         (left_edge + width / 2, self.view.y(quartiles[1]))],
                 class_='reactive tooltip-trigger',
-                attrib={
-                    'stroke-width': 2
-                }
+                attrib={'stroke-width': 2}
             ), metadata
         )
         alter(
@@ -160,9 +156,7 @@ class Box(Graph):
                 coords=[(left_edge + width / 2, self.view.y(quartiles[4])),
                         (left_edge + width / 2, self.view.y(quartiles[3]))],
                 class_='reactive tooltip-trigger',
-                attrib={
-                    'stroke-width': 2
-                }
+                attrib={'stroke-width': 2}
             ), metadata
         )
 

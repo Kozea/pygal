@@ -155,9 +155,9 @@ class Radar(Line):
             text.text = label
 
             if self.y_label_rotation:
-                text.attrib['transform'] = "rotate(%d %f %f)" % (
-                    self.y_label_rotation, x, y
-                )
+                text.attrib[
+                    'transform'
+                ] = "rotate(%d %f %f)" % (self.y_label_rotation, x, y)
 
             self.svg.node(
                 guides,

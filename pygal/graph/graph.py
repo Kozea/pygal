@@ -125,9 +125,7 @@ class Graph(PublicApi):
             self.nodes['tooltip_overlay'],
             transform='translate(0 0)',
             style="opacity: 0",
-            **{
-                'class': 'tooltip'
-            }
+            **{'class': 'tooltip'}
         )
 
         self.svg.node(
@@ -137,9 +135,7 @@ class Graph(PublicApi):
             ry=self.tooltip_border_radius,
             width=0,
             height=0,
-            **{
-                'class': 'tooltip-box'
-            }
+            **{'class': 'tooltip-box'}
         )
         self.svg.node(self.nodes['tooltip'], 'g', class_='text')
 
@@ -159,7 +155,8 @@ class Graph(PublicApi):
                 first_label_position = self.view.x(self._x_labels[0][1]) or 0
                 last_label_position = self.view.x(self._x_labels[-1][1]) or 0
                 available_space = (last_label_position - first_label_position
-                                   ) / (len(self._x_labels) - 1)
+                                   ) / len(self._x_labels) - 1
+
                 truncation = reverse_text_len(
                     available_space, self.style.label_font_size
                 )

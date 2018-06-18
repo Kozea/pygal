@@ -71,9 +71,7 @@ def test_hermite_finite(Chart, datas):
     """Test hermite finite difference interpolation"""
     chart = Chart(
         interpolate='hermite',
-        interpolation_parameters={
-            'type': 'finite_difference'
-        }
+        interpolation_parameters={'type': 'finite_difference'}
     )
     chart = make_data(chart, datas)
     assert chart.render()
@@ -96,9 +94,7 @@ def test_hermite_catmull_rom(Chart, datas):
     """Test hermite catmull rom interpolation"""
     chart = Chart(
         interpolate='hermite',
-        interpolation_parameters={
-            'type': 'catmull_rom'
-        }
+        interpolation_parameters={'type': 'catmull_rom'}
     )
     chart = make_data(chart, datas)
     assert chart.render()

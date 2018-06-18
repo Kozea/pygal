@@ -66,8 +66,8 @@ class BaseGraph(object):
     def __getattribute__(self, name):
         """Get an attribute from the class or from the state if there is one"""
         if name.startswith('__') or name == 'state' or getattr(
-                self, 'state', None
-        ) is None or name not in self.state.__dict__:
+                self, 'state',
+                None) is None or name not in self.state.__dict__:
             return super(BaseGraph, self).__getattribute__(name)
         return getattr(self.state, name)
 
@@ -187,10 +187,9 @@ class BaseGraph(object):
         self.series = self.prepare_values([
             rs for rs in self.raw_series if not rs[1].get('secondary')
         ]) or []
-        self.secondary_series = self.prepare_values(
-            [rs for rs in self.raw_series
-             if rs[1].get('secondary')], len(self.series)
-        ) or []
+        self.secondary_series = self.prepare_values([
+            rs for rs in self.raw_series if rs[1].get('secondary')
+        ], len(self.series)) or []
         self.horizontal = getattr(self, 'horizontal', False)
         self.svg = Svg(self)
         self._x_labels = None

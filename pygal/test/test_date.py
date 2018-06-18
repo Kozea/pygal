@@ -34,11 +34,8 @@ def test_date():
     )
 
     q = date_chart.render_pyquery()
-
-    assert list(map(lambda t: t.split(' ')[0],
-                    q(".axis.x text").map(texts))) == [
-                        '2013-01-12', '2013-01-24', '2013-02-04', '2013-02-16'
-                    ]
+    dates = list(map(lambda t: t.split(' ')[0], q(".axis.x text").map(texts)))
+    assert dates == ['2013-01-12', '2013-01-24', '2013-02-04', '2013-02-16']
 
 
 def test_time():
@@ -50,12 +47,11 @@ def test_time():
     )
 
     q = time_chart.render_pyquery()
-
-    assert list(map(lambda t: t.split(' ')[0],
-                    q(".axis.x text").map(texts))) == [
-                        '02:46:40', '05:33:20', '08:20:00', '11:06:40',
-                        '13:53:20', '16:40:00', '19:26:40'
-                    ]
+    dates = list(map(lambda t: t.split(' ')[0], q(".axis.x text").map(texts)))
+    assert dates == [
+        '02:46:40', '05:33:20', '08:20:00', '11:06:40', '13:53:20', '16:40:00',
+        '19:26:40'
+    ]
 
 
 def test_datetime():
@@ -69,12 +65,11 @@ def test_datetime():
     )
 
     q = datetime_chart.render_pyquery()
-
-    assert list(map(lambda t: t.split(' ')[0],
-                    q(".axis.x text").map(texts))) == [
-                        '2013-01-12T14:13:20', '2013-01-24T04:00:00',
-                        '2013-02-04T17:46:40', '2013-02-16T07:33:20'
-                    ]
+    dates = list(map(lambda t: t.split(' ')[0], q(".axis.x text").map(texts)))
+    assert dates == [
+        '2013-01-12T14:13:20', '2013-01-24T04:00:00', '2013-02-04T17:46:40',
+        '2013-02-16T07:33:20'
+    ]
 
 
 def test_timedelta():
@@ -107,11 +102,11 @@ def test_date_xrange():
     datey.xrange = (date(2013, 1, 1), date(2013, 3, 1))
 
     q = datey.render_pyquery()
-    assert list(map(lambda t: t.split(' ')[0],
-                    q(".axis.x text").map(texts))) == [
-                        '2013-01-01', '2013-01-12', '2013-01-24', '2013-02-04',
-                        '2013-02-16', '2013-02-27'
-                    ]
+    dates = list(map(lambda t: t.split(' ')[0], q(".axis.x text").map(texts)))
+    assert dates == [
+        '2013-01-01', '2013-01-12', '2013-01-24', '2013-02-04', '2013-02-16',
+        '2013-02-27'
+    ]
 
 
 def test_date_labels():
@@ -125,10 +120,8 @@ def test_date_labels():
     datey.x_labels = [date(2013, 1, 1), date(2013, 2, 1), date(2013, 3, 1)]
 
     q = datey.render_pyquery()
-    assert list(map(lambda t: t.split(' ')[0],
-                    q(".axis.x text").map(texts))) == [
-                        '2013-01-01', '2013-02-01', '2013-03-01'
-                    ]
+    dates = list(map(lambda t: t.split(' ')[0], q(".axis.x text").map(texts)))
+    assert dates == ['2013-01-01', '2013-02-01', '2013-03-01']
 
 
 def test_utc_timestamping():

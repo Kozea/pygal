@@ -1,13 +1,6 @@
 [style]
 based_on_style = pep8
 
-#  █████  ██      ██
-# ██   ██ ██      ██
-# ███████ ██      ██
-# ██   ██ ██      ██
-# ██   ██ ███████ ███████
-
-
 # Align closing bracket with visual indentation.
 # align_closing_bracket_with_visual_indent=True
 
@@ -22,6 +15,13 @@ based_on_style = pep8
 
 # Allow lambdas to be formatted on more than one line.
 # allow_multiline_lambdas=False
+
+# Allow splits before the dictionary value.
+# allow_split_before_dict_value=True
+
+# Number of blank lines surrounding top-level function and class
+# definitions.
+# blank_lines_around_top_level_definition=2
 
 # Insert a blank line before a class-level docstring.
 # blank_line_before_class_docstring=False
@@ -138,6 +138,10 @@ join_multiple_lines=False
 # after.
 # split_before_bitwise_operator=True
 
+# Split before the closing bracket if a list or dict literal doesn't fit on
+# a single line.
+# split_before_closing_bracket=True
+
 # Split before a dictionary or set generator (comp_for). For example, note
 # the split before the 'for':
 #
@@ -146,6 +150,10 @@ join_multiple_lines=False
 #       for variable in bar if variable != 42
 #   }
 # split_before_dict_set_generator=True
+
+# Split after the opening paren which surrounds an expression if it doesn't
+# fit on a single line.
+split_before_expression_after_opening_paren=True
 
 # If an argument / parameter list is going to be split, then split before
 # the first argument.
@@ -157,6 +165,22 @@ split_before_first_argument=True
 
 # Split named assignments onto individual lines.
 # split_before_named_assigns=True
+
+# Set to True to split list comprehensions and generators that have
+# non-trivial expressions and multiple clauses before each of these
+# clauses. For example:
+#
+#   result = [
+#       a_long_var + 100 for a_long_var in xrange(1000)
+#       if a_long_var % 10]
+#
+# would reformat to something like:
+#
+#   result = [
+#       a_long_var + 100
+#       for a_long_var in xrange(1000)
+#       if a_long_var % 10]
+split_complex_comprehension=False
 
 # The penalty for splitting right after the opening bracket.
 # split_penalty_after_opening_bracket=30
@@ -170,6 +194,10 @@ split_before_first_argument=True
 # The penalty of splitting the line around the '&', '|', and '^'
 # operators.
 # split_penalty_bitwise_operator=300
+
+# The penalty for splitting a list comprehension or generator
+# expression.
+# split_penalty_comprehension=80
 
 # The penalty for characters over the column limit.
 # split_penalty_excess_character=4500
