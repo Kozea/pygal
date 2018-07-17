@@ -62,3 +62,9 @@ Index
 * :ref:`genindex`
 * :ref:`modindex`
 * :ref:`search`
+
+
+Credits
+=======
+
+`A Kozea Community Project <https://community.kozea.fr/>`_
