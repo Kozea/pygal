@@ -346,7 +346,7 @@ class Graph(PublicApi):
                     y=y + .35 * self.style.label_font_size,
                     class_='major' if major else ''
                 )
-                text.text = self._y_2nd_format(label)
+                text.text = label
                 if self.y_label_rotation:
                     text.attrib['transform'] = "rotate(%d %f %f)" % (
                         self.y_label_rotation, x, y
