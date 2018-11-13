@@ -622,7 +622,7 @@ class Graph(PublicApi):
             left_range = abs(y_pos[-1] - y_pos[0])
             right_range = abs(ymax - ymin) or 1
             scale = right_range / ((steps - 1) or 1)
-            self._y_2nd_labels = [(self._y_format(ymin + i * scale), pos)
+            self._y_2nd_labels = [(self._y_2nd_format(ymin + i * scale), pos)
                                   for i, pos in enumerate(y_pos)]
 
             self._scale = left_range / right_range
@@ -657,6 +657,12 @@ class Graph(PublicApi):
     def _y_format(self):
         """Return the ordinate value formatter (always unary)"""
         return self.value_formatter
+
+    @property
+    def _y_2nd_format(self):
+        """Return the ordinate value formatter for secondary axis
+        (always unary)"""
+        return self.secondary_value_formatter
 
     def _value_format(self, value):
         """

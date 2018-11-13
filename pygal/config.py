@@ -405,6 +405,11 @@ class Config(CommonConfig):
         "A function to convert ordinate numeric value to strings"
     )
 
+    secondary_value_formatter = Key(
+        formatters.default, callable, "Value",
+        "A function to convert ordinate numeric value to strings"
+    )
+
     logarithmic = Key(
         False, bool, "Value", "Display values in logarithmic scale"
     )
