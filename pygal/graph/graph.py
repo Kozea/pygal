@@ -346,7 +346,7 @@ class Graph(PublicApi):
                     y=y + .35 * self.style.label_font_size,
                     class_='major' if major else ''
                 )
-                text.text = label
+                text.text = self._y_2nd_format(label)
                 if self.y_label_rotation:
                     text.attrib['transform'] = "rotate(%d %f %f)" % (
                         self.y_label_rotation, x, y
@@ -622,7 +622,7 @@ class Graph(PublicApi):
             left_range = abs(y_pos[-1] - y_pos[0])
             right_range = abs(ymax - ymin) or 1
             scale = right_range / ((steps - 1) or 1)
-            self._y_2nd_labels = [(self._y_2nd_format(ymin + i * scale), pos)
+            self._y_2nd_labels = [(self._y_format(ymin + i * scale), pos)
                                   for i, pos in enumerate(y_pos)]
 
             self._scale = left_range / right_range
