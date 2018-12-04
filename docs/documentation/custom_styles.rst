@@ -145,7 +145,7 @@ NB: Now the css rules are prefixed by an unique id, to prevent collisions when i
   '''
   custom_css_file = '/tmp/pygal_custom_style.css'
   with open(custom_css_file, 'w') as f:
-    f.write(custom_css)
+    f.write(custom_css_file)
   config = pygal.Config(fill=True, interpolate='cubic')
   config.css.append('file://' + custom_css_file)
   chart = pygal.StackedLine(config)
