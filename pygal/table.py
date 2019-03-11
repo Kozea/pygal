@@ -45,12 +45,13 @@ class Table(object):
         """Init the table"""
         self.chart = chart
 
-    def render(self, total=False, transpose=False, style=False):
+    def render(self, total=False, transpose=False, style=False, value_attribute=False):
         """Render the HTMTL table of the chart.
 
         `total` can be specified to include data sums
         `transpose` make labels becomes columns
         `style` include scoped style for the table
+        `value_attribute` replicate element value into `value` attribute (<td> elements)
 
         """
         self.chart.setup()
@@ -138,13 +139,19 @@ class Table(object):
         if tbody:
             parts.append(
                 html.tbody(
-                    *[html.tr(*[html.td(_(col)) for col in r]) for r in tbody]
+                    *[html.tr(*(
+                        [html.td(_(col), value=_(col)) for col in r]
+                        if value_attribute else [html.td(_(col)) for col in r]
+                    )) for r in tbody]
                 )
             )
         if tfoot:
             parts.append(
                 html.tfoot(
-                    *[html.tr(*[html.th(_(col)) for col in r]) for r in tfoot]
+                    *[html.tr(*(
+                        [html.th(_(col), value=_(col)) for col in r]
+                        if value_attribute else [html.td(_(col)) for col in r]
+                    )) for r in tfoot]
                 )
             )
 
