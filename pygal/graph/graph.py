@@ -30,7 +30,7 @@ from pygal.util import (
     cached_property, compute_scale, cut, decorate, filter_kwargs, get_text_box,
     get_texts_box, majorize, rad, reverse_text_len, split_title, truncate
 )
-from pygal.view import LogView, ReverseView, View, XYLogView
+from pygal.view import LogView, ReverseView, View, XYLogView, XLogView
 
 
 class Graph(PublicApi):
@@ -55,9 +55,14 @@ class Graph(PublicApi):
 
     def _set_view(self):
         """Assign a view to current graph"""
-        if self.logarithmic:
+        if self.x_logarithmic or self.y_logarithmic:
             if self._dual:
-                view_class = XYLogView
+                if self.x_logarithmic and self.y_logarithmic:
+                    view_class = XYLogView
+                if self.x_logarithmic:
+                    view_class = XLogView
+                elif self.y_logarithmic:
+                    view_class = LogView
             else:
                 view_class = LogView
         else:
@@ -365,8 +370,8 @@ class Graph(PublicApi):
         if self.legend_at_bottom:
             x = self.margin_box.left + self.spacing
             y = (
-                self.margin_box.top + self.view.height + self._x_title_height +
-                self._x_labels_height + self.spacing
+                self.margin_box.top + self.view.height + self._x_title_height
+                + self._x_labels_height + self.spacing
             )
             cols = self.legend_at_bottom_columns or ceil(sqrt(self._order)
                                                          ) or 1
