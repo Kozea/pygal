@@ -55,11 +55,11 @@ class Graph(PublicApi):
 
     def _set_view(self):
         """Assign a view to current graph"""
-        if self.x_logarithmic or self.y_logarithmic:
+        if self.x_logarithmic or self.y_logarithmic or self.logarithmic:
             if self._dual:
-                if self.x_logarithmic and self.y_logarithmic:
+                if self.logarithmic:
                     view_class = XYLogView
-                if self.x_logarithmic:
+                elif self.x_logarithmic:
                     view_class = XLogView
                 elif self.y_logarithmic:
                     view_class = LogView

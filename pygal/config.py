@@ -405,6 +405,10 @@ class Config(CommonConfig):
         "A function to convert ordinate numeric value to strings"
     )
 
+    logarithmic = Key(
+        False, bool, "Value", "Display values in logarithmic scale"
+    )
+
     x_logarithmic = Key(
         False, bool, "Value", "Display x values in logarithmic scale"
     )
