@@ -66,8 +66,8 @@ def timedelta_to_seconds(x):
 def time_to_seconds(x):
     """Convert a time in a seconds sum"""
     if isinstance(x, time):
-        return ((((x.hour * 60) + x.minute) * 60 + x.second) * 10**6 +
-                x.microsecond) / 10**6
+        return ((((x.hour * 60) + x.minute) * 60 + x.second) * 10**6
+                + x.microsecond) / 10**6
 
     if is_str(x):
         return x

@@ -33,17 +33,17 @@ class SolidGauge(Graph):
         serie_node = self.svg.serie(serie)
         if self.half_pie:
             start_angle = 3 * pi / 2
-            center = ((current_square[1] * sq_dimensions[0]) -
-                      (sq_dimensions[0] / 2.),
-                      (current_square[0] * sq_dimensions[1]) -
-                      (sq_dimensions[1] / 4))
+            center = ((current_square[1] * sq_dimensions[0])
+                      - (sq_dimensions[0] / 2.),
+                      (current_square[0] * sq_dimensions[1])
+                      - (sq_dimensions[1] / 4))
             end_angle = pi / 2
         else:
             start_angle = 0
-            center = ((current_square[1] * sq_dimensions[0]) -
-                      (sq_dimensions[0] / 2.),
-                      (current_square[0] * sq_dimensions[1]) -
-                      (sq_dimensions[1] / 2.))
+            center = ((current_square[1] * sq_dimensions[0])
+                      - (sq_dimensions[0] / 2.),
+                      (current_square[0] * sq_dimensions[1])
+                      - (sq_dimensions[1] / 2.))
             end_angle = 2 * pi
 
         max_value = serie.metadata.get(0, {}).get('max_value', 100)

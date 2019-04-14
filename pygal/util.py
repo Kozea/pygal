@@ -36,8 +36,8 @@ def majorize(values):
     """Filter sequence to return only major considered numbers"""
     sorted_values = sorted(values)
     if len(values) <= 3 or (
-            abs(2 * sorted_values[1] - sorted_values[0] - sorted_values[2]) >
-            abs(1.5 * (sorted_values[1] - sorted_values[0]))):
+            abs(2 * sorted_values[1] - sorted_values[0] - sorted_values[2])
+            > abs(1.5 * (sorted_values[1] - sorted_values[0]))):
         return []
     values_step = sorted_values[1] - sorted_values[0]
     full_range = sorted_values[-1] - sorted_values[0]
@@ -275,7 +275,7 @@ def minify_css(css):
     # Inspired by slimmer by Peter Bengtsson
     remove_next_comment = 1
     for css_comment in css_comments.findall(css):
-        if css_comment[-3:] == '\*/':
+        if css_comment[-3:] == r'\\*/':
             remove_next_comment = 0
             continue
         if remove_next_comment:

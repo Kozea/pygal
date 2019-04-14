@@ -338,8 +338,8 @@ class LogView(View):
         if y is None or y <= 0 or self.log10_ymax - self.log10_ymin == 0:
             return 0
         return (
-            self.height - self.height * (log10(y) - self.log10_ymin) /
-            (self.log10_ymax - self.log10_ymin)
+            self.height - self.height * (log10(y) - self.log10_ymin)
+            / (self.log10_ymax - self.log10_ymin)
         )
 
 
@@ -361,8 +361,8 @@ class XLogView(View):
         if x is None or x <= 0 or self.log10_xmax - self.log10_xmin == 0:
             return None
         return (
-            self.width * (log10(x) - self.log10_xmin) /
-            (self.log10_xmax - self.log10_xmin)
+            self.width * (log10(x) - self.log10_xmin)
+            / (self.log10_xmax - self.log10_xmin)
         )
 
 

@@ -133,8 +133,8 @@ def hermite_interpolate(
         c = 0
     if type == 'finite_difference':
         for i in range(1, n):
-            m[i] = w[i] = .5 * ((y[i + 1] - y[i]) / (x[i + 1] - x[i]) +
-                                (y[i] - y[i - 1]) / (x[i] - x[i - 1])
+            m[i] = w[i] = .5 * ((y[i + 1] - y[i]) / (x[i + 1] - x[i])
+                                + (y[i] - y[i - 1]) / (x[i] - x[i - 1])
                                 ) if x[i + 1] - x[i] and x[i] - x[i - 1] else 0
 
     elif type == 'kochanek_bartels':
@@ -142,10 +142,10 @@ def hermite_interpolate(
         b = b or 0
         t = t or 0
         for i in range(1, n):
-            m[i] = .5 * ((1 - t) * (1 + b) * (1 + c) * (y[i] - y[i - 1]) +
-                         (1 - t) * (1 - b) * (1 - c) * (y[i + 1] - y[i]))
-            w[i] = .5 * ((1 - t) * (1 + b) * (1 - c) * (y[i] - y[i - 1]) +
-                         (1 - t) * (1 - b) * (1 + c) * (y[i + 1] - y[i]))
+            m[i] = .5 * ((1 - t) * (1 + b) * (1 + c) * (y[i] - y[i - 1])
+                         + (1 - t) * (1 - b) * (1 - c) * (y[i + 1] - y[i]))
+            w[i] = .5 * ((1 - t) * (1 + b) * (1 - c) * (y[i] - y[i - 1])
+                         + (1 - t) * (1 - b) * (1 + c) * (y[i + 1] - y[i]))
 
     if type == 'cardinal':
         c = c or 0
@@ -165,8 +165,8 @@ def hermite_interpolate(
         h11 = t3 - t2
 
         return (
-            h00 * y[i] + h10 * m[i] * delta_x[i] + h01 * y[i + 1] +
-            h11 * w[i + 1] * delta_x[i]
+            h00 * y[i] + h10 * m[i] * delta_x[i] + h01 * y[i + 1]
+            + h11 * w[i + 1] * delta_x[i]
         )
 
     for i in range(n + 1):

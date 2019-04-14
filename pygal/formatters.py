@@ -48,8 +48,8 @@ class HumanReadable(Formatter):
         if order == 0 or order > len(orders):
             return float_format(val / (1000**int(order)))
         return (
-            float_format(val / (1000**int(order))) +
-            orders[int(order) - int(order > 0)]
+            float_format(val / (1000**int(order)))
+            + orders[int(order) - int(order > 0)]
         )
 
 

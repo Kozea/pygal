@@ -182,8 +182,8 @@ class Line(Graph):
                     serie_node['plot'],
                     seq,
                     close=self._self_close,
-                    class_='line reactive' +
-                    (' nofill' if not serie.fill else '')
+                    class_='line reactive'
+                    + (' nofill' if not serie.fill else '')
                 )
 
     def _compute(self):

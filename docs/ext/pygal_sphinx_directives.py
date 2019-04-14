@@ -76,7 +76,7 @@ class PygalDirective(Directive):
                 )
             ]
         if self.render_fix:
-            rv = scope['rv']
+            pass
         else:
             chart = None
             for key, value in scope.items():

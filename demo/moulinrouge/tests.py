@@ -6,7 +6,7 @@ from random import choice, randint
 from flask import abort
 from pygal import (
     CHARTS_BY_NAME, XY, Bar, Box, Config, DateLine, DateTimeLine, Dot, Funnel,
-    Gauge, Histogram, HorizontalBar, Line, Pie, Pyramid, Radar, SolidGauge,
+    Gauge, Histogram, Line, Pie, Pyramid, Radar, SolidGauge,
     StackedBar, StackedLine, TimeLine, Treemap, formatters, stats
 )
 from pygal.colors import rotate
@@ -706,7 +706,7 @@ def get_test_routes(app):
         smap.add(
             'links', [{
                 'value': ('kt-vs', 10),
-                'label': '\o/',
+                'label': r'\\o/',
                 'xlink': 'http://google.com?q=69'
             }, {
                 'value': ('bt', 20),
@@ -731,7 +731,7 @@ def get_test_routes(app):
         fmap.add(
             'links', [{
                 'value': ('02', 10),
-                'label': '\o/',
+                'label': r'\\o/',
                 'xlink': 'http://google.com?q=69'
             }, {
                 'value': ('72', 20),
@@ -1069,7 +1069,6 @@ def get_test_routes(app):
 
     @app.route('/test/custom_css_file')
     def test_custom_css_file():
-        from tempfile import NamedTemporaryFile
         custom_css = '''
           {{ id }}text {
             fill: green;
@@ -1141,13 +1140,13 @@ def get_test_routes(app):
                 'href': 'http://en.wikipedia.org/wiki/Red'
             }
         }],
-                  title={
-                      'title': 'Red',
-                      'tooltip': 'Cramoisi',
-                      'xlink': {
-                          'href': 'http://en.wikipedia.org/wiki/Red'
-                      }
-                  })
+            title={
+            'title': 'Red',
+            'tooltip': 'Cramoisi',
+            'xlink': {
+                'href': 'http://en.wikipedia.org/wiki/Red'
+            }
+        })
 
         chart.add({
             'title': 'Yellow',

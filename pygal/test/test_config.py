@@ -550,8 +550,8 @@ def test_formatters(Chart):
     q = chart.render_pyquery()
     assert set(
         [v.text for v in q(".value")]
-    ) == set((u('4€'), u('5€'), u('6€'), '1_a$', '2_a$', u('3¥')) +
-             (('6_a$', u('15€')) if Chart in (Pie, SolidGauge) else ()))
+    ) == set((u('4€'), u('5€'), u('6€'), '1_a$', '2_a$', u('3¥'))
+             + (('6_a$', u('15€')) if Chart in (Pie, SolidGauge) else ()))
 
 
 def test_classes(Chart):

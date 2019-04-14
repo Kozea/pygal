@@ -46,8 +46,8 @@ class Dot(Graph):
                 log10max = log10(self._max or 1)
 
                 if value != 0:
-                    size = r_max * ((log10(abs(value)) - log10min) /
-                                    (log10max - log10min))
+                    size = r_max * ((log10(abs(value)) - log10min)
+                                    / (log10max - log10min))
                 else:
                     size = 0
             else:
@@ -65,8 +65,8 @@ class Dot(Graph):
                     cx=x,
                     cy=y,
                     r=size,
-                    class_='dot reactive tooltip-trigger' +
-                    (' negative' if value < 0 else '')
+                    class_='dot reactive tooltip-trigger'
+                    + (' negative' if value < 0 else '')
                 ), metadata
             )
 
