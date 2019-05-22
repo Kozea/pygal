@@ -16,6 +16,7 @@
 #
 # You should have received a copy of the GNU Lesser General Public License
 # along with pygal. If not, see <http://www.gnu.org/licenses/>.
+
 """
 XY time extensions: handle convertion of date, time, datetime, timedelta
 into float for xy plot and back to their type for display
@@ -66,20 +67,21 @@ def timedelta_to_seconds(x):
 def time_to_seconds(x):
     """Convert a time in a seconds sum"""
     if isinstance(x, time):
-        return ((((x.hour * 60) + x.minute) * 60 + x.second) * 10**6
-                + x.microsecond) / 10**6
+        return ((
+            ((x.hour * 60) + x.minute) * 60 + x.second
+        ) * 10 ** 6 + x.microsecond) / 10 ** 6
 
     if is_str(x):
         return x
     # Clamp to valid time
-    return x and max(0, min(x, 24 * 3600 - 10**-6))
+    return x and max(0, min(x, 24 * 3600 - 10 ** -6))
 
 
 def seconds_to_time(x):
     """Convert a number of second into a time"""
-    t = int(x * 10**6)
-    ms = t % 10**6
-    t = t // 10**6
+    t = int(x * 10 ** 6)
+    ms = t % 10 ** 6
+    t = t // 10 ** 6
     s = t % 60
     t = t // 60
     m = t % 60
@@ -89,6 +91,7 @@ def seconds_to_time(x):
 
 
 class DateTimeLine(XY):
+
     """DateTime abscissa xy graph class"""
 
     _x_adapters = [datetime_to_timestamp, date_to_datetime]
@@ -96,29 +99,27 @@ class DateTimeLine(XY):
     @property
     def _x_format(self):
         """Return the value formatter for this graph"""
-
         def datetime_to_str(x):
             dt = datetime.utcfromtimestamp(x)
             return self.x_value_formatter(dt)
-
         return datetime_to_str
 
 
 class DateLine(DateTimeLine):
+
     """Date abscissa xy graph class"""
 
     @property
     def _x_format(self):
         """Return the value formatter for this graph"""
-
         def date_to_str(x):
             d = datetime.utcfromtimestamp(x).date()
             return self.x_value_formatter(d)
-
         return date_to_str
 
 
 class TimeLine(DateTimeLine):
+
     """Time abscissa xy graph class"""
 
     _x_adapters = [positive, time_to_seconds, datetime_to_time]
@@ -126,15 +127,14 @@ class TimeLine(DateTimeLine):
     @property
     def _x_format(self):
         """Return the value formatter for this graph"""
-
         def date_to_str(x):
             t = seconds_to_time(x)
             return self.x_value_formatter(t)
-
         return date_to_str
 
 
 class TimeDeltaLine(XY):
+
     """TimeDelta abscissa xy graph class"""
 
     _x_adapters = [timedelta_to_seconds]
@@ -142,7 +142,6 @@ class TimeDeltaLine(XY):
     @property
     def _x_format(self):
         """Return the value formatter for this graph"""
-
         def timedelta_to_str(x):
             td = timedelta(seconds=x)
             return self.x_value_formatter(td)

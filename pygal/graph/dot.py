@@ -16,6 +16,7 @@
 #
 # You should have received a copy of the GNU Lesser General Public License
 # along with pygal. If not, see <http://www.gnu.org/licenses/>.
+
 """
 Dot chart displaying values as a grid of dots, the bigger the value
 the bigger the dot
@@ -32,6 +33,7 @@ from pygal.view import ReverseView, View
 
 
 class Dot(Graph):
+
     """Dot graph class"""
 
     def dot(self, serie, r_max):
@@ -46,8 +48,10 @@ class Dot(Graph):
                 log10max = log10(self._max or 1)
 
                 if value != 0:
-                    size = r_max * ((log10(abs(value)) - log10min)
-                                    / (log10max - log10min))
+                    size = r_max * (
+                        (log10(abs(value)) - log10min) /
+                        (log10max - log10min)
+                    )
                 else:
                     size = 0
             else:
@@ -55,25 +59,19 @@ class Dot(Graph):
 
             metadata = serie.metadata.get(i)
             dots = decorate(
-                self.svg, self.svg.node(serie_node['plot'], class_="dots"),
-                metadata
-            )
-            alter(
-                self.svg.node(
-                    dots,
-                    'circle',
-                    cx=x,
-                    cy=y,
-                    r=size,
-                    class_='dot reactive tooltip-trigger'
-                    + (' negative' if value < 0 else '')
-                ), metadata
-            )
+                self.svg,
+                self.svg.node(serie_node['plot'], class_="dots"),
+                metadata)
+            alter(self.svg.node(
+                dots, 'circle',
+                cx=x, cy=y, r=size,
+                class_='dot reactive tooltip-trigger' + (
+                    ' negative' if value < 0 else '')), metadata)
 
             val = self._format(serie, i)
             self._tooltip_data(
-                dots, val, x, y, 'centered', self._get_x_label(i)
-            )
+                dots, val, x, y, 'centered',
+                self._get_x_label(i))
             self._static_value(serie_node, val, x, y, metadata)
 
     def _compute(self):
@@ -87,28 +85,26 @@ class Dot(Graph):
         self._y_pos = [n / 2 for n in reversed(range(1, 2 * y_len, 2))]
 
         for j, serie in enumerate(self.series):
-            serie.points = [(self._x_pos[i], self._y_pos[j])
-                            for i in range(x_len)]
+            serie.points = [
+                (self._x_pos[i], self._y_pos[j])
+                for i in range(x_len)]
 
     def _compute_y_labels(self):
-        self._y_labels = list(
-            zip(
-                self.y_labels and map(to_str, self.y_labels) or [
-                    serie.title['title']
-                    if isinstance(serie.title, dict) else serie.title or ''
-                    for serie in self.series
-                ], self._y_pos
-            )
-        )
+        self._y_labels = list(zip(
+            self.y_labels and map(to_str, self.y_labels) or [
+                serie.title['title']
+                if isinstance(serie.title, dict)
+                else serie.title or '' for serie in self.series],
+            self._y_pos))
 
     def _set_view(self):
         """Assign a view to current graph"""
         view_class = ReverseView if self.inverse_y_axis else View
 
         self.view = view_class(
-            self.width - self.margin_box.x, self.height - self.margin_box.y,
-            self._box
-        )
+            self.width - self.margin_box.x,
+            self.height - self.margin_box.y,
+            self._box)
 
     @cached_property
     def _values(self):
@@ -118,16 +114,14 @@ class Dot(Graph):
     @cached_property
     def _max(self):
         """Getter for the maximum series value"""
-        return (
-            self.range[1] if (self.range and self.range[1] is not None) else
-            (max(map(abs, self._values)) if self._values else None)
-        )
+        return (self.range[1] if (self.range and self.range[1] is not None)
+                else (max(map(abs, self._values)) if self._values else None))
 
     def _plot(self):
         """Plot all dots for series"""
         r_max = min(
             self.view.x(1) - self.view.x(0),
-            (self.view.y(0) or 0) - self.view.y(1)
-        ) / (2 * 1.05)
+            (self.view.y(0) or 0) - self.view.y(1)) / (
+                2 * 1.05)
         for serie in self.series:
             self.dot(serie, r_max)

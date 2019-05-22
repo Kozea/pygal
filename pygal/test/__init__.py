@@ -16,6 +16,7 @@
 #
 # You should have received a copy of the GNU Lesser General Public License
 # along with pygal. If not, see <http://www.gnu.org/licenses/>.
+
 """Pygal test package"""
 
 import pygal
@@ -26,9 +27,12 @@ from decimal import Decimal
 
 def get_data(i):
     """Return sample test data for an index"""
-    return [[(-1, 1), (2, 0), (0, 4)], [(0, 1), (None, 2), (3, 2)],
-            [(-3, 3), (1, 3), (1, 1)], [(1, 1), (Decimal('1.'), 1),
-                                        (1, 1)], [(3, 2), (2, 1), (1., 1)]][i]
+    return [
+        [(-1, 1), (2, 0), (0, 4)],
+        [(0, 1), (None, 2), (3, 2)],
+        [(-3, 3), (1, 3), (1, 1)],
+        [(1, 1), (Decimal('1.'), 1), (1, 1)],
+        [(3, 2), (2, 1), (1., 1)]][i]
 
 
 def adapt(chart, data):
@@ -48,5 +52,7 @@ def adapt(chart, data):
 def make_data(chart, datas):
     """Add sample data to the test chart"""
     for i, data in enumerate(datas):
-        chart.add(data[0], adapt(chart, data[1]), secondary=bool(i % 2))
+        chart.add(data[0],
+                  adapt(chart, data[1]),
+                  secondary=bool(i % 2))
     return chart

@@ -73,7 +73,6 @@ try:
     from datetime import timezone
     utc = timezone.utc
 except ImportError:
-
     class UTC(tzinfo):
         def tzname(self, dt):
             return 'UTC'
@@ -83,7 +82,6 @@ except ImportError:
 
         def dst(self, dt):
             return None
-
     utc = UTC()
 
 

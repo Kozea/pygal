@@ -31,6 +31,7 @@ from pygal.util import alter, decorate
 
 
 class Pie(Graph):
+
     """Pie graph class"""
 
     _adapters = [positive, none_to_zero]
@@ -61,8 +62,9 @@ class Pie(Graph):
             val = self._format(serie, i)
             metadata = serie.metadata.get(i)
             slice_ = decorate(
-                self.svg, self.svg.node(slices, class_="slice"), metadata
-            )
+                self.svg,
+                self.svg.node(slices, class_="slice"),
+                metadata)
             if dual:
                 small_radius = radius * .9
                 big_radius = radius
@@ -70,21 +72,17 @@ class Pie(Graph):
                 big_radius = radius * .9
                 small_radius = radius * serie.inner_radius
 
-            alter(
-                self.svg.slice(
-                    serie_node, slice_, big_radius, small_radius, angle,
-                    start_angle, center, val, i, metadata
-                ), metadata
-            )
+            alter(self.svg.slice(
+                serie_node, slice_, big_radius, small_radius,
+                angle, start_angle, center, val, i, metadata), metadata)
             start_angle += angle
 
         if dual:
             val = self._serie_format(serie, sum(serie.values))
-            self.svg.slice(
-                serie_node, self.svg.node(slices,
-                                          class_="big_slice"), radius * .9, 0,
-                serie_angle, original_start_angle, center, val, i, metadata
-            )
+            self.svg.slice(serie_node,
+                           self.svg.node(slices, class_="big_slice"),
+                           radius * .9, 0, serie_angle,
+                           original_start_angle, center, val, i, metadata)
         return serie_angle
 
     def _compute_x_labels(self):

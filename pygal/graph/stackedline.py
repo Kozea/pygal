@@ -16,6 +16,7 @@
 #
 # You should have received a copy of the GNU Lesser General Public License
 # along with pygal. If not, see <http://www.gnu.org/licenses/>.
+
 """
 Stacked Line chart: Like a line chart but with all lines stacking
 on top of the others. Used along fill=True option.
@@ -28,6 +29,7 @@ from pygal.graph.line import Line
 
 
 class StackedLine(Line):
+
     """Stacked Line graph class"""
 
     _adapters = [none_to_zero]
@@ -43,11 +45,15 @@ class StackedLine(Line):
         """
         sum_ = serie.points[index][1]
         if serie in self.series and (
-                self.stack_from_top
-                and self.series.index(serie) == self._order - 1
-                or not self.stack_from_top and self.series.index(serie) == 0):
+                self.stack_from_top and
+                self.series.index(serie) == self._order - 1 or
+                not self.stack_from_top and
+                self.series.index(serie) == 0):
             return super(StackedLine, self)._value_format(value)
-        return '%s (+%s)' % (self._y_format(sum_), self._y_format(value))
+        return '%s (+%s)' % (
+            self._y_format(sum_),
+            self._y_format(value)
+        )
 
     def _fill(self, values):
         """Add extra values to fill the line"""
@@ -67,8 +73,9 @@ class StackedLine(Line):
             accumulation = [0] * self._len
             for serie in series_group[::-1 if self.stack_from_top else 1]:
                 accumulation = list(map(sum, zip(accumulation, serie.values)))
-                serie.points = [(x_pos[i], v)
-                                for i, v in enumerate(accumulation)]
+                serie.points = [
+                    (x_pos[i], v)
+                    for i, v in enumerate(accumulation)]
                 if serie.points and self.interpolate:
                     serie.interpolated = self._interpolate(x_pos, accumulation)
                 else:

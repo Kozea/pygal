@@ -16,6 +16,7 @@
 #
 # You should have received a copy of the GNU Lesser General Public License
 # along with pygal. If not, see <http://www.gnu.org/licenses/>.
+
 """Various config options tested on one chart type or more"""
 
 from tempfile import NamedTemporaryFile
@@ -24,8 +25,7 @@ from pygal import (
     XY, Bar, Box, Config, DateLine, DateTimeLine, Dot, Funnel, Gauge,
     Histogram, HorizontalBar, HorizontalLine, HorizontalStackedBar,
     HorizontalStackedLine, Line, Pie, Pyramid, Radar, SolidGauge,
-    TimeDeltaLine, TimeLine, Treemap, formatters
-)
+    TimeDeltaLine, TimeLine, Treemap, formatters)
 from pygal._compat import _ellipsis, u
 from pygal.graph.dual import Dual
 from pygal.graph.horizontal import HorizontalGraph
@@ -59,8 +59,7 @@ def test_config_behaviours():
         fill=True,
         pretty_print=True,
         no_prefix=True,
-        x_labels=['a', 'b', 'c']
-    )
+        x_labels=['a', 'b', 'c'])
     line2.add('_', [1, 2, 3])
     l2 = line2.render()
     assert l1 == l2
@@ -100,7 +99,6 @@ def test_config_behaviours():
 
 def test_config_alterations_class():
     """Assert a config can be changed on config class"""
-
     class LineConfig(Config):
         no_prefix = True
         show_legend = False
@@ -124,7 +122,6 @@ def test_config_alterations_class():
 
 def test_config_alterations_instance():
     """Assert a config can be changed on instance"""
-
     class LineConfig(Config):
         no_prefix = True
         show_legend = False
@@ -149,7 +146,6 @@ def test_config_alterations_instance():
 
 def test_config_alterations_kwargs():
     """Assert a config can be changed with keyword args"""
-
     class LineConfig(Config):
         no_prefix = True
         show_legend = False
@@ -185,7 +181,7 @@ def test_config_alterations_kwargs():
 def test_logarithmic():
     """Test logarithmic option"""
     line = Line(logarithmic=True)
-    line.add('_', [1, 10**10, 1])
+    line.add('_', [1, 10 ** 10, 1])
     q = line.render_pyquery()
     assert len(q(".axis.x")) == 0
     assert len(q(".axis.y")) == 1
@@ -231,7 +227,7 @@ def test_logarithmic_bad_interpolation():
 def test_logarithmic_big_scale():
     """Test logarithmic option with a large range of value"""
     line = Line(logarithmic=True)
-    line.add('_', [10**-10, 10**10, 1])
+    line.add('_', [10 ** -10, 10 ** 10, 1])
     q = line.render_pyquery()
     assert len(q(".y.axis .guides")) == 21
 
@@ -239,20 +235,17 @@ def test_logarithmic_big_scale():
 def test_value_formatter():
     """Test value formatter option"""
     line = Line(value_formatter=lambda x: str(x) + u('‰'))
-    line.add('_', [10**4, 10**5, 23 * 10**4])
+    line.add('_', [10 ** 4, 10 ** 5, 23 * 10 ** 4])
     q = line.render_pyquery()
     assert len(q(".y.axis .guides")) == 11
-    assert q(".axis.y text").map(texts) == list(
-        map(
-            lambda x: str(x) + u('‰'), map(float, range(20000, 240000, 20000))
-        )
-    )
+    assert q(".axis.y text").map(texts) == list(map(
+        lambda x: str(x) + u('‰'), map(float, range(20000, 240000, 20000))))
 
 
 def test_logarithmic_small_scale():
     """Test logarithmic with a small range of values"""
     line = Line(logarithmic=True)
-    line.add('_', [1 + 10**10, 3 + 10**10, 2 + 10**10])
+    line.add('_', [1 + 10 ** 10, 3 + 10 ** 10, 2 + 10 ** 10])
     q = line.render_pyquery()
     assert len(q(".y.axis .guides")) == 11
 
@@ -260,18 +253,16 @@ def test_logarithmic_small_scale():
 def test_human_readable():
     """Test human readable option"""
     line = Line()
-    line.add('_', [10**4, 10**5, 23 * 10**4])
+    line.add('_', [10 ** 4, 10 ** 5, 23 * 10 ** 4])
     q = line.render_pyquery()
-    assert q(".axis.y text").map(texts) == list(
-        map(str, range(20000, 240000, 20000))
-    )
+    assert q(".axis.y text").map(texts) == list(map(
+        str, range(20000, 240000, 20000)))
 
     line.value_formatter = formatters.human_readable
 
     q = line.render_pyquery()
-    assert q(".axis.y text").map(texts) == list(
-        map(lambda x: '%dk' % x, range(20, 240, 20))
-    )
+    assert q(".axis.y text").map(texts) == list(map(
+        lambda x: '%dk' % x, range(20, 240, 20)))
 
 
 def test_show_legend():
@@ -309,8 +300,9 @@ def test_no_data():
 def test_include_x_axis(Chart):
     """Test x axis inclusion option"""
     chart = Chart()
-    if Chart in (Pie, Treemap, Radar, Funnel, Dot, Gauge, Histogram, Box,
-                 SolidGauge) or issubclass(Chart, BaseMap):
+    if Chart in (
+            Pie, Treemap, Radar, Funnel, Dot, Gauge, Histogram, Box, SolidGauge
+    ) or issubclass(Chart, BaseMap):
         return
     if not chart._dual:
         data = 100, 200, 150
@@ -320,8 +312,7 @@ def test_include_x_axis(Chart):
     q = chart.render_pyquery()
     # Ghost thing
     yaxis = ".axis.%s .guides text" % (
-        'y' if not getattr(chart, 'horizontal', False) else 'x'
-    )
+        'y' if not getattr(chart, 'horizontal', False) else 'x')
     if not isinstance(chart, Bar):
         assert '0' not in q(yaxis).map(texts)
     else:
@@ -395,11 +386,9 @@ def test_legend_at_bottom(Chart):
 
 def test_x_y_title(Chart):
     """Test x title and y title options"""
-    chart = Chart(
-        title='I Am A Title',
-        x_title="I am a x title",
-        y_title="I am a y title"
-    )
+    chart = Chart(title='I Am A Title',
+                  x_title="I am a x title",
+                  y_title="I am a y title")
     chart.add('1', [4, -5, 123, 59, 38])
     chart.add('2', [89, 0, 8, .12, 8])
     q = chart.render_pyquery()
@@ -408,7 +397,9 @@ def test_x_y_title(Chart):
 
 def test_range(Chart):
     """Test y label major option"""
-    if Chart in (Pie, Treemap, Dot, SolidGauge) or issubclass(Chart, BaseMap):
+    if Chart in (
+            Pie, Treemap, Dot, SolidGauge
+    ) or issubclass(Chart, BaseMap):
         return
     chart = Chart()
     chart.range = (0, 100)
@@ -423,10 +414,11 @@ def test_range(Chart):
 
 def test_x_label_major(Chart):
     """Test x label major option"""
-    if Chart in (Pie, Treemap, Funnel, Dot, Gauge, Histogram, Box, SolidGauge,
-                 Pyramid, DateTimeLine, TimeLine, DateLine,
-                 TimeDeltaLine) or issubclass(
-                     Chart, (BaseMap, Dual, HorizontalGraph)):
+    if Chart in (
+            Pie, Treemap, Funnel, Dot, Gauge, Histogram, Box, SolidGauge,
+            Pyramid, DateTimeLine, TimeLine, DateLine,
+            TimeDeltaLine
+    ) or issubclass(Chart, (BaseMap, Dual, HorizontalGraph)):
         return
     chart = Chart()
     chart.add('test', range(12))
@@ -467,10 +459,13 @@ def test_x_label_major(Chart):
 
 def test_y_label_major(Chart):
     """Test y label major option"""
-    if Chart in (Pie, Treemap, Funnel, Dot, Gauge, Histogram, Box, SolidGauge,
-                 HorizontalBar, HorizontalStackedBar, HorizontalStackedLine,
-                 HorizontalLine, Pyramid, DateTimeLine, TimeLine, DateLine,
-                 TimeDeltaLine) or issubclass(Chart, BaseMap):
+    if Chart in (
+            Pie, Treemap, Funnel, Dot, Gauge, Histogram, Box, SolidGauge,
+            HorizontalBar, HorizontalStackedBar,
+            HorizontalStackedLine, HorizontalLine,
+            Pyramid, DateTimeLine, TimeLine, DateLine,
+            TimeDeltaLine
+    ) or issubclass(Chart, BaseMap):
         return
     chart = Chart()
     data = range(12)
@@ -534,24 +529,24 @@ def test_render_data_uri(Chart):
     chart = Chart(fill=True)
     chart.add(u('ééé'), [1, 2, 3])
     chart.add(u('èèè'), [10, 21, 5])
-    assert chart.render_data_uri(
-    ).startswith('data:image/svg+xml;charset=utf-8;base64,')
+    assert chart.render_data_uri().startswith(
+        'data:image/svg+xml;charset=utf-8;base64,')
 
 
 def test_formatters(Chart):
     """Test custom formatters"""
     if Chart._dual or Chart == Box:
         return
-    chart = Chart(formatter=lambda x, chart, serie: '%s%s$' % (x, serie.title))
+    chart = Chart(
+        formatter=lambda x, chart, serie: '%s%s$' % (x, serie.title))
     chart.add('_a', [1, 2, {'value': 3, 'formatter': lambda x: u('%s¥') % x}])
     chart.add('_b', [4, 5, 6], formatter=lambda x: u('%s€') % x)
     chart.x_labels = [2, 4, 6]
     chart.x_labels_major = [4]
     q = chart.render_pyquery()
-    assert set(
-        [v.text for v in q(".value")]
-    ) == set((u('4€'), u('5€'), u('6€'), '1_a$', '2_a$', u('3¥'))
-             + (('6_a$', u('15€')) if Chart in (Pie, SolidGauge) else ()))
+    assert set([v.text for v in q(".value")]) == set((
+        u('4€'), u('5€'), u('6€'), '1_a$', '2_a$', u('3¥')) + (
+            ('6_a$', u('15€')) if Chart in (Pie, SolidGauge) else ()))
 
 
 def test_classes(Chart):
@@ -562,10 +557,10 @@ def test_classes(Chart):
     chart = Chart(classes=())
     assert not chart.render_pyquery().attr('class')
 
-    chart = Chart(classes=(_ellipsis, ))
+    chart = Chart(classes=(_ellipsis,))
     assert chart.render_pyquery().attr('class') == 'pygal-chart'
 
-    chart = Chart(classes=('graph', ))
+    chart = Chart(classes=('graph',))
     assert chart.render_pyquery().attr('class') == 'graph'
 
     chart = Chart(classes=('pygal-chart', 'graph'))

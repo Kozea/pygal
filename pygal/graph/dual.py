@@ -16,6 +16,7 @@
 #
 # You should have received a copy of the GNU Lesser General Public License
 # along with pygal. If not, see <http://www.gnu.org/licenses/>.
+
 """Dual chart base. Dual means a chart with 2 scaled axis like xy"""
 
 from pygal._compat import is_str
@@ -30,12 +31,14 @@ class Dual(Graph):
         """
         Format value for dual value display.
         """
-        return '%s: %s' % (self._x_format(value[0]), self._y_format(value[1]))
+        return '%s: %s' % (
+            self._x_format(value[0]),
+            self._y_format(value[1]))
 
     def _compute_x_labels(self):
         x_pos = compute_scale(
-            self._box.xmin, self._box.xmax, self.logarithmic, self.order_min,
-            self.min_scale, self.max_scale
+            self._box.xmin, self._box.xmax, self.logarithmic,
+            self.order_min, self.min_scale, self.max_scale
         )
         if self.x_labels:
             self._x_labels = []
@@ -60,8 +63,7 @@ class Dual(Graph):
     def _compute_x_labels_major(self):
         # In case of dual, x labels must adapters and so majors too
         self.x_labels_major = self.x_labels_major and list(
-            map(self._x_adapt, self.x_labels_major)
-        )
+            map(self._x_adapt, self.x_labels_major))
         super(Dual, self)._compute_x_labels_major()
 
     def _get_x_label(self, i):

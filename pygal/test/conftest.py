@@ -16,12 +16,14 @@
 #
 # You should have received a copy of the GNU Lesser General Public License
 # along with pygal. If not, see <http://www.gnu.org/licenses/>.
+
 """pytest fixtures"""
 
 import sys
 
-import pygal
 import pytest
+
+import pygal
 from pygal.etree import etree
 
 from . import get_data
@@ -52,6 +54,8 @@ def pytest_generate_tests(metafunc):
         metafunc.parametrize("Chart", pygal.CHARTS)
     if "datas" in metafunc.funcargnames:
         metafunc.parametrize(
-            "datas", [[("Serie %d" % i, get_data(i)) for i in range(s)]
-                      for s in (5, 1, 0)]
-        )
+            "datas",
+            [
+                [("Serie %d" % i, get_data(i)) for i in range(s)]
+                for s in (5, 1, 0)
+            ])

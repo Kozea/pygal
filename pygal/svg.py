@@ -32,13 +32,13 @@ from pygal._compat import quote_plus, to_str, u
 from pygal.etree import etree
 from pygal.util import (
     coord_abs_project, coord_diff, coord_dual, coord_format, coord_project,
-    minify_css, template
-)
+    minify_css, template)
 
 nearly_2pi = 2 * pi - .00001
 
 
 class Svg(object):
+
     """Svg related methods"""
 
     ns = 'http://www.w3.org/2000/svg'
@@ -53,9 +53,16 @@ class Svg(object):
             self.id = ''
         self.processing_instructions = []
         if etree.lxml:
-            attrs = {'nsmap': {None: self.ns, 'xlink': self.xlink_ns}}
+            attrs = {
+                'nsmap': {
+                    None: self.ns,
+                    'xlink': self.xlink_ns
+                }
+            }
         else:
-            attrs = {'xmlns': self.ns}
+            attrs = {
+                'xmlns': self.ns
+            }
             if hasattr(etree, 'register_namespace'):
                 etree.register_namespace('xlink', self.xlink_ns)
             else:
@@ -66,15 +73,11 @@ class Svg(object):
         if graph.classes:
             self.root.attrib['class'] = ' '.join(graph.classes)
         self.root.append(
-            etree.Comment(
-                u(
-                    'Generated with pygal %s (%s) ©Kozea 2012-2016 on %s' % (
-                        __version__, 'lxml' if etree.lxml else 'etree',
-                        date.today().isoformat()
-                    )
-                )
-            )
-        )
+            etree.Comment(u(
+                'Generated with pygal %s (%s) ©Kozea 2012-2016 on %s' % (
+                    __version__,
+                    'lxml' if etree.lxml else 'etree',
+                    date.today().isoformat()))))
         self.root.append(etree.Comment(u('http://pygal.org')))
         self.root.append(etree.Comment(u('http://github.com/Kozea/pygal')))
         self.defs = self.node(tag='defs')
@@ -93,8 +96,8 @@ class Svg(object):
 
         if self.graph.style._google_fonts:
             auto_css.append(
-                '//fonts.googleapis.com/css?family=%s' %
-                quote_plus('|'.join(self.graph.style._google_fonts))
+                '//fonts.googleapis.com/css?family=%s' % quote_plus(
+                    '|'.join(self.graph.style._google_fonts))
             )
 
         for css in auto_css + list(self.graph.css):
@@ -105,7 +108,8 @@ class Svg(object):
                 css = css[len('file://'):]
 
                 if not os.path.exists(css):
-                    css = os.path.join(os.path.dirname(__file__), 'css', css)
+                    css = os.path.join(
+                        os.path.dirname(__file__), 'css', css)
 
                 with io.open(css, encoding='utf-8') as f:
                     css_text = template(
@@ -113,8 +117,7 @@ class Svg(object):
                         style=self.graph.style,
                         colors=colors,
                         strokes=strokes,
-                        id=self.id
-                    )
+                        id=self.id)
 
             if css_text is not None:
                 if not self.graph.pretty_print:
@@ -124,11 +127,10 @@ class Svg(object):
                 if css.startswith('//') and self.graph.force_uri_protocol:
                     css = '%s:%s' % (self.graph.force_uri_protocol, css)
                 self.processing_instructions.append(
-                    etree.PI(u('xml-stylesheet'), u('href="%s"' % css))
-                )
+                    etree.PI(
+                        u('xml-stylesheet'), u('href="%s"' % css)))
         self.node(
-            self.defs, 'style', type='text/css'
-        ).text = '\n'.join(all_css)
+            self.defs, 'style', type='text/css').text = '\n'.join(all_css)
 
     def add_scripts(self):
         """Add the js to the svg"""
@@ -138,9 +140,8 @@ class Svg(object):
             return dict(
                 (k, getattr(self.graph.state, k))
                 for k in dir(self.graph.config)
-                if not k.startswith('_') and hasattr(self.graph.state, k)
-                and not hasattr(getattr(self.graph.state, k), '__call__')
-            )
+                if not k.startswith('_') and hasattr(self.graph.state, k) and
+                not hasattr(getattr(self.graph.state, k), '__call__'))
 
         def json_default(o):
             if isinstance(o, (datetime, date)):
@@ -153,8 +154,7 @@ class Svg(object):
         # Config adds
         dct['legends'] = [
             l.get('title') if isinstance(l, dict) else l
-            for l in self.graph._legends + self.graph._secondary_legends
-        ]
+            for l in self.graph._legends + self.graph._secondary_legends]
 
         common_js = 'window.pygal = window.pygal || {};'
         common_js += 'window.pygal.config = window.pygal.config || {};'
@@ -187,7 +187,7 @@ class Svg(object):
 
         for pos, dim in (('x', 'width'), ('y', 'height')):
             if in_attrib_and_number(dim) and attrib[dim] < 0:
-                attrib[dim] = -attrib[dim]
+                attrib[dim] = - attrib[dim]
                 if in_attrib_and_number(pos):
                     attrib[pos] = attrib[pos] - attrib[dim]
 
@@ -200,8 +200,8 @@ class Svg(object):
                 attrib[key.rstrip('_')] = attrib[key]
                 del attrib[key]
             elif key == 'href':
-                attrib[etree.QName('http://www.w3.org/1999/xlink',
-                                   key)] = attrib[key]
+                attrib[etree.QName(
+                    'http://www.w3.org/1999/xlink', key)] = attrib[key]
                 del attrib[key]
         return etree.SubElement(parent, tag, attrib)
 
@@ -226,17 +226,16 @@ class Svg(object):
         return dict(
             plot=self.node(
                 self.graph.nodes['plot'],
-                class_='series serie-%d color-%d' % (serie.index, serie.index)
-            ),
+                class_='series serie-%d color-%d' % (
+                    serie.index, serie.index)),
             overlay=self.node(
                 self.graph.nodes['overlay'],
-                class_='series serie-%d color-%d' % (serie.index, serie.index)
-            ),
+                class_='series serie-%d color-%d' % (
+                    serie.index, serie.index)),
             text_overlay=self.node(
                 self.graph.nodes['text_overlay'],
-                class_='series serie-%d color-%d' % (serie.index, serie.index)
-            )
-        )
+                class_='series serie-%d color-%d' % (
+                    serie.index, serie.index)))
 
     def line(self, node, coords, close=False, **kwargs):
         """Draw a svg line"""
@@ -255,54 +254,47 @@ class Svg(object):
             coord_format = lambda xy: '%f %f' % xy
 
         origin = coord_format(coords[origin_index])
-        line = ' '.join([
-            coord_format(c) for c in coords[origin_index + 1:] if None not in c
-        ])
-        return self.node(node, 'path', d=root % (origin, line), **kwargs)
+        line = ' '.join([coord_format(c)
+                         for c in coords[origin_index + 1:]
+                         if None not in c])
+        return self.node(
+            node, 'path', d=root % (origin, line), **kwargs)
 
     def slice(
-            self, serie_node, node, radius, small_radius, angle, start_angle,
-            center, val, i, metadata
-    ):
+            self, serie_node, node, radius, small_radius,
+            angle, start_angle, center, val, i, metadata):
         """Draw a pie slice"""
         if angle == 2 * pi:
             angle = nearly_2pi
 
         if angle > 0:
-            to = [
-                coord_abs_project(center, radius, start_angle),
-                coord_abs_project(center, radius, start_angle + angle),
-                coord_abs_project(center, small_radius, start_angle + angle),
-                coord_abs_project(center, small_radius, start_angle)
-            ]
+            to = [coord_abs_project(center, radius, start_angle),
+                  coord_abs_project(center, radius, start_angle + angle),
+                  coord_abs_project(center, small_radius, start_angle + angle),
+                  coord_abs_project(center, small_radius, start_angle)]
             rv = self.node(
-                node,
-                'path',
+                node, 'path',
                 d='M%s A%s 0 %d 1 %s L%s A%s 0 %d 0 %s z' % (
-                    to[0], coord_dual(radius), int(angle > pi), to[1], to[2],
-                    coord_dual(small_radius), int(angle > pi), to[3]
-                ),
-                class_='slice reactive tooltip-trigger'
-            )
+                    to[0],
+                    coord_dual(radius), int(angle > pi), to[1],
+                    to[2],
+                    coord_dual(small_radius), int(angle > pi), to[3]),
+                class_='slice reactive tooltip-trigger')
         else:
             rv = None
-        x, y = coord_diff(
-            center,
-            coord_project((radius + small_radius) / 2, start_angle + angle / 2)
-        )
+        x, y = coord_diff(center, coord_project(
+            (radius + small_radius) / 2, start_angle + angle / 2))
 
         self.graph._tooltip_data(
-            node, val, x, y, "centered", self.graph._x_labels
-            and self.graph._x_labels[i][0]
-        )
+            node, val, x, y, "centered",
+            self.graph._x_labels and self.graph._x_labels[i][0])
         if angle >= 0.3:  # 0.3 radians is about 17 degrees
             self.graph._static_value(serie_node, val, x, y, metadata)
         return rv
 
     def gauge_background(
             self, serie_node, start_angle, center, radius, small_radius,
-            end_angle, half_pie, max_value
-    ):
+            end_angle, half_pie, max_value):
 
         if end_angle == 2 * pi:
             end_angle = nearly_2pi
@@ -311,45 +303,37 @@ class Svg(object):
             coord_abs_project(center, radius, start_angle),
             coord_abs_project(center, radius, end_angle),
             coord_abs_project(center, small_radius, end_angle),
-            coord_abs_project(center, small_radius, start_angle)
-        ]
+            coord_abs_project(center, small_radius, start_angle)]
 
         self.node(
-            serie_node['plot'],
-            'path',
+            serie_node['plot'], 'path',
             d='M%s A%s 0 1 1 %s L%s A%s 0 1 0 %s z' % (
-                to_shade[0], coord_dual(radius), to_shade[1], to_shade[2],
-                coord_dual(small_radius), to_shade[3]
-            ),
-            class_='gauge-background reactive'
-        )
+                to_shade[0],
+                coord_dual(radius),
+                to_shade[1],
+                to_shade[2],
+                coord_dual(small_radius),
+                to_shade[3]),
+            class_='gauge-background reactive')
 
         if half_pie:
             begin_end = [
                 coord_diff(
                     center,
                     coord_project(
-                        radius - (radius - small_radius) / 2, start_angle
-                    )
-                ),
+                        radius - (radius - small_radius) / 2, start_angle)),
                 coord_diff(
                     center,
                     coord_project(
-                        radius - (radius - small_radius) / 2, end_angle
-                    )
-                )
-            ]
+                        radius - (radius - small_radius) / 2, end_angle))]
             pos = 0
             for i in begin_end:
                 self.node(
-                    serie_node['plot'],
-                    'text',
+                    serie_node['plot'], 'text',
                     class_='y-{} bound reactive'.format(pos),
                     x=i[0],
                     y=i[1] + 10,
-                    attrib={
-                        'text-anchor': 'middle'
-                    }
+                    attrib={'text-anchor': 'middle'}
                 ).text = '{}'.format(0 if pos == 0 else max_value)
                 pos += 1
         else:
@@ -357,21 +341,22 @@ class Svg(object):
             # Correct text vertical alignment
             middle_radius -= .1 * (radius - small_radius)
             to_labels = [
-                coord_abs_project(center, middle_radius, 0),
-                coord_abs_project(center, middle_radius, nearly_2pi)
+                coord_abs_project(
+                    center, middle_radius, 0),
+                coord_abs_project(
+                    center, middle_radius, nearly_2pi)
             ]
             self.node(
-                self.defs,
-                'path',
-                id='valuePath-%s%s' % center,
-                d='M%s A%s 0 1 1 %s' %
-                (to_labels[0], coord_dual(middle_radius), to_labels[1])
-            )
-            text_ = self.node(serie_node['text_overlay'], 'text')
+                self.defs, 'path', id='valuePath-%s%s' % center,
+                d='M%s A%s 0 1 1 %s' % (
+                    to_labels[0],
+                    coord_dual(middle_radius),
+                    to_labels[1]
+                ))
+            text_ = self.node(
+                serie_node['text_overlay'], 'text')
             self.node(
-                text_,
-                'textPath',
-                class_='max-value reactive',
+                text_, 'textPath', class_='max-value reactive',
                 attrib={
                     'href': '#valuePath-%s%s' % center,
                     'startOffset': '99%',
@@ -380,42 +365,40 @@ class Svg(object):
             ).text = max_value
 
     def solid_gauge(
-            self, serie_node, node, radius, small_radius, angle, start_angle,
-            center, val, i, metadata, half_pie, end_angle, max_value
-    ):
+            self, serie_node, node, radius, small_radius,
+            angle, start_angle, center, val, i, metadata, half_pie, end_angle,
+            max_value):
         """Draw a solid gauge slice and background slice"""
         if angle == 2 * pi:
             angle = nearly_2pi
 
         if angle > 0:
-            to = [
-                coord_abs_project(center, radius, start_angle),
-                coord_abs_project(center, radius, start_angle + angle),
-                coord_abs_project(center, small_radius, start_angle + angle),
-                coord_abs_project(center, small_radius, start_angle)
-            ]
+            to = [coord_abs_project(center, radius, start_angle),
+                  coord_abs_project(center, radius, start_angle + angle),
+                  coord_abs_project(center, small_radius, start_angle + angle),
+                  coord_abs_project(center, small_radius, start_angle)]
 
             self.node(
-                node,
-                'path',
+                node, 'path',
                 d='M%s A%s 0 %d 1 %s L%s A%s 0 %d 0 %s z' % (
-                    to[0], coord_dual(radius), int(angle > pi), to[1], to[2],
-                    coord_dual(small_radius), int(angle > pi), to[3]
-                ),
-                class_='slice reactive tooltip-trigger'
-            )
+                    to[0],
+                    coord_dual(radius),
+                    int(angle > pi),
+                    to[1],
+                    to[2],
+                    coord_dual(small_radius),
+                    int(angle > pi),
+                    to[3]),
+                class_='slice reactive tooltip-trigger')
         else:
             return
 
-        x, y = coord_diff(
-            center,
-            coord_project((radius + small_radius) / 2, start_angle + angle / 2)
-        )
+        x, y = coord_diff(center, coord_project(
+            (radius + small_radius) / 2, start_angle + angle / 2))
         self.graph._static_value(serie_node, val, x, y, metadata, 'middle')
         self.graph._tooltip_data(
-            node, val, x, y, "centered", self.graph._x_labels
-            and self.graph._x_labels[i][0]
-        )
+            node, val, x, y, "centered",
+            self.graph._x_labels and self.graph._x_labels[i][0])
 
     def confidence_interval(self, node, x, low, high, width=7):
         if self.graph.horizontal:
@@ -432,17 +415,12 @@ class Svg(object):
         ci = self.node(node, class_="ci")
 
         self.node(
-            ci,
-            'path',
-            d="M%s L%s M%s L%s M%s L%s L%s M%s L%s" % tuple(
-                map(
-                    fmt, (
-                        top, shr(top), top, shl(top), top, bottom, shr(bottom),
-                        bottom, shl(bottom)
-                    )
-                )
-            ),
-            class_='nofill reactive'
+            ci, 'path', d="M%s L%s M%s L%s M%s L%s L%s M%s L%s" % tuple(
+                map(fmt, (
+                    top, shr(top), top, shl(top), top,
+                    bottom, shr(bottom), bottom, shl(bottom)
+                ))
+            ), class_='nofill reactive'
         )
 
     def pre_render(self):
@@ -450,28 +428,26 @@ class Svg(object):
         self.add_styles()
         self.add_scripts()
         self.root.set(
-            'viewBox', '0 0 %d %d' % (self.graph.width, self.graph.height)
-        )
+            'viewBox', '0 0 %d %d' % (self.graph.width, self.graph.height))
         if self.graph.explicit_size:
             self.root.set('width', str(self.graph.width))
             self.root.set('height', str(self.graph.height))
 
     def draw_no_data(self):
         """Write the no data text to the svg"""
-        no_data = self.node(
-            self.graph.nodes['text_overlay'],
-            'text',
-            x=self.graph.view.width / 2,
-            y=self.graph.view.height / 2,
-            class_='no_data'
-        )
+        no_data = self.node(self.graph.nodes['text_overlay'], 'text',
+                            x=self.graph.view.width / 2,
+                            y=self.graph.view.height / 2,
+                            class_='no_data')
         no_data.text = self.graph.no_data_text
 
     def render(self, is_unicode=False, pretty_print=False):
         """Last thing to do before rendering"""
         for f in self.graph.xml_filters:
             self.root = f(self.root)
-        args = {'encoding': 'utf-8'}
+        args = {
+            'encoding': 'utf-8'
+        }
 
         svg = b''
         if etree.lxml:
@@ -481,12 +457,14 @@ class Svg(object):
             svg = b"<?xml version='1.0' encoding='utf-8'?>\n"
 
         if not self.graph.disable_xml_declaration:
-            svg += b'\n'.join([
-                etree.tostring(pi, **args)
-                for pi in self.processing_instructions
-            ])
+            svg += b'\n'.join(
+                [etree.tostring(
+                    pi, **args)
+                 for pi in self.processing_instructions]
+            )
 
-        svg += etree.tostring(self.root, **args)
+        svg += etree.tostring(
+            self.root, **args)
 
         if self.graph.disable_xml_declaration or is_unicode:
             svg = svg.decode('utf-8')
@@ -494,17 +472,16 @@ class Svg(object):
 
     def get_strokes(self):
         """Return a css snippet containing all stroke style options"""
-
         def stroke_dict_to_css(stroke, i=None):
             """Return a css style for the given option"""
-            css = [
-                '%s.series%s {\n' %
-                (self.id, '.serie-%d' % i if i is not None else '')
-            ]
-            for key in ('width', 'linejoin', 'linecap', 'dasharray',
-                        'dashoffset'):
+            css = ['%s.series%s {\n' % (
+                self.id, '.serie-%d' % i if i is not None else '')]
+            for key in (
+                    'width', 'linejoin', 'linecap',
+                    'dasharray', 'dashoffset'):
                 if stroke.get(key):
-                    css.append('  stroke-%s: %s;\n' % (key, stroke[key]))
+                    css.append('  stroke-%s: %s;\n' % (
+                        key, stroke[key]))
             css.append('}')
             return '\n'.join(css)
 
@@ -517,9 +494,5 @@ class Svg(object):
 
         for secondary_serie in self.graph.secondary_series:
             if secondary_serie.stroke_style is not None:
-                css.append(
-                    stroke_dict_to_css(
-                        secondary_serie.stroke_style, secondary_serie.index
-                    )
-                )
+                css.append(stroke_dict_to_css(secondary_serie.stroke_style, secondary_serie.index))
         return '\n'.join(css)
