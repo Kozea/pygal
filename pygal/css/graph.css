@@ -68,12 +68,10 @@
 
 {{ id }}.axis .guide.line {
   stroke-dasharray: {{ style.guide_stroke_dasharray }};
-  stroke: {{ style.guide_stroke_color }};
 }
 
 {{ id }}.axis .major.guide.line {
   stroke-dasharray: {{ style.major_guide_stroke_dasharray }};
-  stroke: {{ style.major_guide_stroke_color }};
 }
 
 {{ id }}.horizontal .axis.y .guide.line,
@@ -107,8 +105,7 @@
 
 {{ id }}.dot {
   stroke-width: 1px;
-  fill-opacity: {{ style.dot_opacity }};
-  stroke-opacity: {{ style.dot_opacity }};
+  fill-opacity: 1;
 }
 
 {{ id }}.dot.active {
