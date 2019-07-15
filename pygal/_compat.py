@@ -20,8 +20,11 @@
 from __future__ import division
 
 import sys
-from collections import Iterable
 from datetime import datetime, timedelta, tzinfo
+try:
+    from collections.abc import Iterable
+except ImportError:
+    from collections import Iterable
 
 if sys.version_info[0] == 3:
     base = (str, bytes)
