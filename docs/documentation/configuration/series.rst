@@ -1,4 +1,4 @@
-Serie configuration
+Series configuration
 ===================
 
 How
