@@ -23,7 +23,7 @@ It can be made as a donut or a half pie.
 
 from __future__ import division
 
-from math import pi
+from math import pi, cos, sin
 
 from pygal.adapters import none_to_zero, positive
 from pygal.graph.graph import Graph
@@ -70,10 +70,13 @@ class Pie(Graph):
                 big_radius = radius * .9
                 small_radius = radius * serie.inner_radius
 
+            space_rad = 5
+            offset = (space_rad * cos((start_angle + angle) / 2), space_rad * sin((start_angle + angle) / 2))
+
             alter(
                 self.svg.slice(
                     serie_node, slice_, big_radius, small_radius, angle,
-                    start_angle, center, val, i, metadata
+                    start_angle, center + offset, val, i, metadata
                 ), metadata
             )
             start_angle += angle
