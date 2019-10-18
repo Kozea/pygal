@@ -296,7 +296,7 @@ class Svg(object):
             and self.graph._x_labels[i][0]
         )
         if angle >= 0.3:  # 0.3 radians is about 17 degrees
-            self.graph._static_value(serie_node, val, x, y, metadata, 'middle') 
+            self.graph._static_value(serie_node, val, x, y, metadata, 'middle')
         return rv
 
     def gauge_background(
