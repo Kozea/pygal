@@ -275,7 +275,7 @@ def minify_css(css):
     # Inspired by slimmer by Peter Bengtsson
     remove_next_comment = 1
     for css_comment in css_comments.findall(css):
-        if css_comment[-3:] == '\*/':
+        if css_comment[-3:] == r'\*/':
             remove_next_comment = 0
             continue
         if remove_next_comment:

@@ -20,7 +20,10 @@
 from __future__ import division
 
 import sys
-from collections import Iterable
+try:
+    from collections.abc import Iterable
+except ImportError:
+    from collections import Iterable
 from datetime import datetime, timedelta, tzinfo
 
 if sys.version_info[0] == 3:
