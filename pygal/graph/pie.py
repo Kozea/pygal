@@ -51,6 +51,13 @@ class Pie(Graph):
                       (self.height - self.margin_box.y) / 2.)
 
         radius = min(center)
+        hole_radius = radius * serie.inner_radius if serie.inner_radius else 0
+        if dual:
+            small_radius = radius * .9
+            big_radius = radius
+        else:
+            big_radius = radius * .9
+            small_radius = hole_radius
         for i, val in enumerate(serie.values):
             perc = val / total
             if self.half_pie:
@@ -63,12 +70,6 @@ class Pie(Graph):
             slice_ = decorate(
                 self.svg, self.svg.node(slices, class_="slice"), metadata
             )
-            if dual:
-                small_radius = radius * .9
-                big_radius = radius
-            else:
-                big_radius = radius * .9
-                small_radius = radius * serie.inner_radius
 
             alter(
                 self.svg.slice(
@@ -82,7 +83,7 @@ class Pie(Graph):
             val = self._serie_format(serie, sum(serie.values))
             self.svg.slice(
                 serie_node, self.svg.node(slices,
-                                          class_="big_slice"), radius * .9, 0,
+                                          class_="big_slice"), small_radius, hole_radius,
                 serie_angle, original_start_angle, center, val, i, metadata
             )
         return serie_angle
