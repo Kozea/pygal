@@ -2,7 +2,7 @@ __title__ = "pygal"
 __version__ = "2.4.0"
 
 __summary__ = "A python svg graph plotting library"
-__uri__ = "http://pygal.org/"
+__uri__ = "http://www.pygal.org/"
 __author__ = "Florian Mounier"
 __email__ = "florian.mounier@kozea.fr"
 
