@@ -21,6 +21,8 @@
 import base64
 import io
 
+import cairosvg
+
 from pygal._compat import _ellipsis, is_list_like, u
 from pygal.graph.base import BaseGraph
 
@@ -115,7 +117,6 @@ class PublicApi(BaseGraph):
 
     def render_to_png(self, filename=None, dpi=72, **kwargs):
         """Render the graph, convert it to png and write it to filename"""
-        import cairosvg
         return cairosvg.svg2png(
             bytestring=self.render(**kwargs), write_to=filename, dpi=dpi
         )
