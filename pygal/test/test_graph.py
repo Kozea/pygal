@@ -47,7 +47,7 @@ def test_multi_render(Chart, datas):
 
 def test_render_to_file(Chart, datas, tmpdir):
     """Test in file rendering"""
-    file_name = tmpdir.join('test_graph-%s.png' % uuid.uuid4())
+    file_name = str(tmpdir.join('test_graph-%s.png' % uuid.uuid4()))
     if os.path.exists(file_name):
         os.remove(file_name)
 
@@ -62,7 +62,7 @@ def test_render_to_file(Chart, datas, tmpdir):
 @pytest.mark.skipif(not cairosvg, reason="CairoSVG not installed")
 def test_render_to_png(Chart, datas, tmpdir):
     """Test in file png rendering"""
-    file_name = tmpdir.join('test_graph-%s.png' % uuid.uuid4())
+    file_name = str(tmpdir.join('test_graph-%s.png' % uuid.uuid4()))
     if os.path.exists(file_name):
         os.remove(file_name)
 
