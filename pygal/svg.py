@@ -23,6 +23,7 @@ from __future__ import division
 import io
 import json
 import os
+import urllib
 from datetime import date, datetime
 from math import pi
 from numbers import Number
@@ -84,6 +85,38 @@ class Svg(object):
         for def_ in self.graph.defs:
             self.defs.append(etree.fromstring(def_))
 
+    def file_uri_to_file_path(self, file_uri):
+        """
+        Convert file URI ("file://...") to file path without "file://" (in a simplest case).
+
+        On Windows, file uri "file:///c:/dir/file.ext" is converted to "c:/dir/file.ext".
+        On *nix, file uri "file:///dir/file.ext" is converted to "/dir/file.ext".
+        The escaped characters like "%20" (space) are unescaped.
+
+        Examples:
+
+        >>> Svg.file_uri_to_path('file:///home/user/file.ext')
+        '/home/user/file.ext'
+
+        >>> Svg.file_uri_to_path('file:///c:/temp/file.ext')
+        'c:/temp/file.ext'
+
+        >>> Svg.file_uri_to_path('file:///c:/Program%20Files/file.ext')
+        'c:/Program files/file.ext'
+        """
+
+        if not file_uri.startswith('file://'):
+            raise ValueError("Invalid file uri {}: should start with 'file://'".format(file_uri))
+
+        file_path = urllib.parse.unquote(file_uri[len('file://'):])
+
+        # Remove leading "/" character if a Windows-like drive letter is present, like: "/c:/dir/..."
+        if len(file_path) > 3 and file_path[0] == '/' and file_path[2] == ':':
+            file_path = file_path[1:]
+
+        return file_path
+
+
     def add_styles(self):
         """Add the css to the svg"""
         colors = self.graph.style.get_colors(self.id, self.graph._order)
@@ -102,7 +135,8 @@ class Svg(object):
             if css.startswith('inline:'):
                 css_text = css[len('inline:'):]
             elif css.startswith('file://'):
-                css = css[len('file://'):]
+                css = self.file_uri_to_file_path(css)
+
 
                 if not os.path.exists(css):
                     css = os.path.join(os.path.dirname(__file__), 'css', css)
@@ -168,7 +202,7 @@ class Svg(object):
         for js in self.graph.js:
             if js.startswith('file://'):
                 script = self.node(self.defs, 'script', type='text/javascript')
-                with io.open(js[len('file://'):], encoding='utf-8') as f:
+                with io.open(self.file_uri_to_file_path(js), encoding='utf-8') as f:
                     script.text = f.read()
             else:
                 if js.startswith('//') and self.graph.force_uri_protocol:
