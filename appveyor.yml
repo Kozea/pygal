@@ -1,0 +1,44 @@
+environment:
+  
+  matrix:
+    # For Python versions available on Appveyor, see
+    # http://www.appveyor.com/docs/installed-software#python
+    - PYTHON: "C:\\Python36-x64"
+      PYTHON_VERSION: "3.6"
+      PYTHON_ARCH: "64"
+ 
+init:
+  - "ECHO %PYTHON% %PYTHON_VERSION% %PYTHON_ARCH%"
+
+  # Add Python binaries to the path
+  - "SET PATH=%PYTHON%;%PYTHON%\\Scripts;%PATH%"
+  - "python --version"
+
+  
+install:
+  # Upgrade PIP and setuptools to allow installation of pre-compiled wheels instead of compiling by ourselves
+  - "python -m pip install --upgrade pip"
+  - "pip install --upgrade setuptools"
+  
+  - "pip install -e .[test]"
+  
+build: off
+
+test_script:
+  # Run test files via py.test and generate JUnit XML. Then push test results
+  # to appveyor. The plugin pytest-cov takes care of coverage.
+  - ps: |
+      & pytest -W ignore::DeprecationWarning --junitxml=.\unittests.xml pygal/test
+      $testsExitCode = $lastexitcode
+
+      # Upload test results to AppVeyor
+      $wc = New-Object 'System.Net.WebClient'
+      $wc.UploadFile("https://ci.appveyor.com/api/testresults/junit/$($env:APPVEYOR_JOB_ID)", (Resolve-Path .\unittests.xml))
+
+      if ($testsExitCode -ne 0) {exit $testsExitCode}  
+
+artifacts:
+  - path: .\unittests.xml
+
+cache:
+  - '%LOCALAPPDATA%\\pip\\Cache'
