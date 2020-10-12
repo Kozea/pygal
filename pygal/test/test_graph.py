@@ -23,8 +23,9 @@ import os
 import sys
 import uuid
 
-import pygal
 import pytest
+
+import pygal
 from pygal._compat import u
 from pygal.graph.map import BaseMap
 from pygal.test import make_data

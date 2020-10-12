@@ -73,8 +73,8 @@ class BaseGraph(object):
 
     def prepare_values(self, raw, offset=0):
         """Prepare the values to start with sane values"""
-        from pygal.graph.map import BaseMap
         from pygal import Histogram
+        from pygal.graph.map import BaseMap
 
         if self.zero == 0 and isinstance(self, BaseMap):
             self.zero = 1

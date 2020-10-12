@@ -18,10 +18,11 @@
 # along with pygal. If not, see <http://www.gnu.org/licenses/>.
 """Pygal test package"""
 
-import pygal
-from pygal.util import cut
-from pygal.graph.map import BaseMap
 from decimal import Decimal
+
+import pygal
+from pygal.graph.map import BaseMap
+from pygal.util import cut
 
 
 def get_data(i):
