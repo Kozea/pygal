@@ -309,7 +309,7 @@ def test_unicode_labels_decode(Chart):
         u('Série1'), [{
             'value': 1,
             'xlink': 'http://1/',
-            'label': u('{\}Â°ĳæð©&×&<—×€¿_…\{_…')
+            'label': u(r'{\}Â°ĳæð©&×&<—×€¿_…\{_…')
         }, {
             'value': 2,
             'xlink': {
@@ -335,7 +335,7 @@ def test_unicode_labels_python2(Chart):
         u('Série1'), [{
             'value': 1,
             'xlink': 'http://1/',
-            'label': eval("u'{\}Â°ĳæð©&×&<—×€¿_…\{_…'")
+            'label': eval("u'{\\}Â°ĳæð©&×&<—×€¿_…\\{_…'")
         }, {
             'value': 2,
             'xlink': {
@@ -361,7 +361,7 @@ def test_unicode_labels_python3(Chart):
         u('Série1'), [{
             'value': 1,
             'xlink': 'http://1/',
-            'label': eval("'{\}Â°ĳæð©&×&<—×€¿_…\{_…'")
+            'label': eval("'{\\}Â°ĳæð©&×&<—×€¿_…\\{_…'")
         }, {
             'value': 2,
             'xlink': {
