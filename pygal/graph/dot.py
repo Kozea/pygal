@@ -21,8 +21,6 @@ Dot chart displaying values as a grid of dots, the bigger the value
 the bigger the dot
 """
 
-from __future__ import division
-
 from math import log10
 
 from pygal._compat import to_str

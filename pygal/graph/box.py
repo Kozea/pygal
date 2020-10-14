@@ -21,8 +21,6 @@ Box plot: a convenient way to display series as box with whiskers and outliers
 Different types are available throught the box_mode option
 """
 
-from __future__ import division
-
 from bisect import bisect_left, bisect_right
 
 from pygal.graph.graph import Graph

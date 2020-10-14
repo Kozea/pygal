@@ -21,8 +21,6 @@ Stacked Line chart: Like a line chart but with all lines stacking
 on top of the others. Used along fill=True option.
 """
 
-from __future__ import division
-
 from pygal.adapters import none_to_zero
 from pygal.graph.line import Line
 

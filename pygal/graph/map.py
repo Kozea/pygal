@@ -22,8 +22,6 @@ see the pygal_maps_world package to get an exemple.
 https://github.com/Kozea/pygal_maps_world
 """
 
-from __future__ import division
-
 from pygal.etree import etree
 from pygal.graph.graph import Graph
 from pygal.util import alter, cached_property, cut, decorate

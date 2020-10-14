@@ -18,8 +18,6 @@
 # along with pygal. If not, see <http://www.gnu.org/licenses/>.
 """Base for pygal charts"""
 
-from __future__ import division
-
 import os
 from functools import reduce
 from uuid import uuid4

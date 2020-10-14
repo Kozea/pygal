@@ -17,7 +17,6 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with pygal. If not, see <http://www.gnu.org/licenses/>.
 """Various hacks for transparent python 2 / python 3 support"""
-from __future__ import division
 
 import sys
 
