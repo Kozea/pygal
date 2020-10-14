@@ -26,9 +26,10 @@ import os
 from datetime import date, datetime
 from math import pi
 from numbers import Number
+from urllib.parse import quote_plus
 
 from pygal import __version__
-from pygal._compat import quote_plus, to_str, u
+from pygal._compat import to_str, u
 from pygal.etree import etree
 from pygal.util import (
     coord_abs_project, coord_diff, coord_dual, coord_format, coord_project,
