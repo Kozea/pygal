@@ -5,7 +5,8 @@ all: install lint check check-outdated
 
 install:
 	test -d $(VENV) || virtualenv $(VENV) -p $(PYTHON_VERSION)
-	$(PIP) install --upgrade --upgrade-strategy eager pip setuptools -e .[test,docs] devcore
+	$(PIP) install --upgrade --upgrade-strategy eager \
+		pip setuptools twine -e .[test,docs] devcore
 
 clean:
 	rm -fr $(VENV)
@@ -36,6 +37,7 @@ release: docs
 	$(eval VERSION := $(shell PROJECT_NAME=$(PROJECT_NAME) $(VENV)/bin/devcore bump $(LEVEL)))
 	git commit -am "Bump $(VERSION)"
 	git tag $(VERSION)
-	$(PYTHON) setup.py sdist bdist_wheel upload
+	$(PYTHON) setup.py sdist bdist_wheel
+	$(TWINE) upload dist/*
 	git push
 	git push --tags
