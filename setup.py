@@ -75,7 +75,6 @@ setup(
     keywords=[
         "svg", "chart", "graph", "diagram", "plot", "histogram", "kiviat"],
     setup_requires=['pytest-runner'],
-    test_requires=tests_requirements,
     cmdclass={'test': PyTest},
     package_data={'pygal': ['css/*', 'graph/maps/*.svg']},
     extras_require={
@@ -91,6 +90,5 @@ setup(
         "License :: OSI Approved :: "
         "GNU Lesser General Public License v3 or later (LGPLv3+)",
         "Operating System :: OS Independent",
-        "Programming Language :: Python :: 2",
         "Programming Language :: Python :: 3",
         "Topic :: Multimedia :: Graphics :: Presentation"])
