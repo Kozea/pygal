@@ -1,5 +1,5 @@
 __title__ = "pygal"
-__version__ = "2.4.0"
+__version__ = "3.0.0.dev1"
 
 __summary__ = "A python svg graph plotting library"
 __uri__ = "http://pygal.org/"

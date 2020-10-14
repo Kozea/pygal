@@ -2,6 +2,21 @@
 Changelog
 =========
 
+3.0.0.dev1 (unreleased)
+======================
+
+**Fixed**
+
+* Remove `Iterable` import deprecation warning
+* Remove invalid escape sequence warnings in tests
+* Fix test failures due to removed pytest attribute
+* Fix linting errors with latest isort and flake8
+
+**Changed**
+
+* Replace deprecated tested versions of Python (including Python 2) with
+latest ones in CI
+
 2.4.0
 =====
 
