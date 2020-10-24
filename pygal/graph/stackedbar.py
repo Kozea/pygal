@@ -21,8 +21,6 @@ Stacked Bar chart: Like a bar chart but with all series stacking
 on top of the others instead of being displayed side by side.
 """
 
-from __future__ import division
-
 from pygal.adapters import none_to_zero
 from pygal.graph.bar import Bar
 

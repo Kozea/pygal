@@ -16,8 +16,7 @@
 #
 # You should have received a copy of the GNU Lesser General Public License
 # along with pygal. If not, see <http://www.gnu.org/licenses/>.
-"""Various hacks for transparent python 2 / python 3 support"""
-from __future__ import division
+"""Various hacks for former transparent python 2 / python 3 support"""
 
 import sys
 
@@ -28,19 +27,9 @@ except ImportError:
 
 from datetime import datetime, timedelta, tzinfo
 
-if sys.version_info[0] == 3:
-    base = (str, bytes)
-    coerce = str
-    _ellipsis = eval('...')
-else:
-    base = basestring
-    coerce = unicode
-
-    class EllipsisGetter(object):
-        def __getitem__(self, key):
-            return key
-
-    _ellipsis = EllipsisGetter()[...]
+base = (str, bytes)
+coerce = str
+_ellipsis = eval('...')
 
 
 def is_list_like(value):
@@ -102,9 +91,3 @@ def timestamp(x):
         return x.timestamp()
     else:
         return (x - datetime(1970, 1, 1, tzinfo=utc)).total_seconds()
-
-
-try:
-    from urllib import quote_plus
-except ImportError:
-    from urllib.parse import quote_plus

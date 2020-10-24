@@ -21,8 +21,6 @@ Pie chart: A circular chart divided into slice to illustrate proportions
 It can be made as a donut or a half pie.
 """
 
-from __future__ import division
-
 from math import pi
 
 from pygal.adapters import none_to_zero, positive

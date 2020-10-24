@@ -21,8 +21,6 @@ Radar chart: As known as kiviat chart or spider chart is a polar line chart
 useful for multivariate observation.
 """
 
-from __future__ import division
-
 from math import cos, pi
 
 from pygal._compat import is_str

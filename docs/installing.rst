@@ -2,7 +2,7 @@
 Installing
 ==========
 
-pygal is available for python 2.7 and 3.2, 3.3, 3.4, 3.5 and pypy.
+pygal is available for Python 3.6, 3.7, 3.8, 3.9 and pypy.
 
 
 PyPI

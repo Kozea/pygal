@@ -18,8 +18,6 @@
 # along with pygal. If not, see <http://www.gnu.org/licenses/>.
 """Chart properties and drawing"""
 
-from __future__ import division
-
 from math import ceil, cos, sin, sqrt
 
 from pygal import stats

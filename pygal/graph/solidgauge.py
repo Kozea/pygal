@@ -20,8 +20,6 @@
 Solid Guage
 For each series a solid guage is shown on the plot area.
 """
-from __future__ import division
-
 from math import pi, sqrt
 
 from pygal.graph.graph import Graph

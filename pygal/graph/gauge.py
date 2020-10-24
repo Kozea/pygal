@@ -18,8 +18,6 @@
 # along with pygal. If not, see <http://www.gnu.org/licenses/>.
 """Gauge chart representing values as needles on a polar scale"""
 
-from __future__ import division
-
 from pygal._compat import is_str
 from pygal.graph.graph import Graph
 from pygal.util import alter, compute_scale, cut, decorate
