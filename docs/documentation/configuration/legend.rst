@@ -60,7 +60,7 @@ truncate_legend
 
 By default long legends are automatically truncated at reasonable length to fit in the graph.
 
-You can override that by setting truncation lenght with ``truncate_legend``.
+You can override that by setting truncation length with ``truncate_legend``.
 
 
 .. pygal-code::

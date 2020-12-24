@@ -239,7 +239,7 @@ truncate_label
 
 By default long labels are automatically truncated at reasonable length to fit in the graph.
 
-You can override that by setting truncation lenght with ``truncate_label``.
+You can override that by setting truncation length with ``truncate_label``.
 
 
 .. pygal-code::
