@@ -2,8 +2,8 @@
 Pygal
 =====
 
-Sexy python charting
-====================
+Beautiful python charting
+=========================
 
 
 .. pygal:: 300 200
