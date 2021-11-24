@@ -1,7 +1,7 @@
-pygal\.test\.test\_table module
-===============================
+pygal.test.test\_table module
+=============================
 
 .. automodule:: pygal.test.test_table
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   :members:
+   :undoc-members:
+   :show-inheritance:

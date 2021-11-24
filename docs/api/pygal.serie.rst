@@ -1,7 +1,7 @@
-pygal\.serie module
-===================
+pygal.serie module
+==================
 
 .. automodule:: pygal.serie
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   :members:
+   :undoc-members:
+   :show-inheritance:

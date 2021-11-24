@@ -1,7 +1,7 @@
-pygal\.svg module
-=================
+pygal.svg module
+================
 
 .. automodule:: pygal.svg
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   :members:
+   :undoc-members:
+   :show-inheritance:

@@ -1,7 +1,7 @@
-pygal\.graph\.stackedline module
-================================
+pygal.graph.stackedline module
+==============================
 
 .. automodule:: pygal.graph.stackedline
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   :members:
+   :undoc-members:
+   :show-inheritance:

@@ -1,7 +1,7 @@
-pygal\.test\.test\_maps module
-==============================
+pygal.test.test\_maps module
+============================
 
 .. automodule:: pygal.test.test_maps
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   :members:
+   :undoc-members:
+   :show-inheritance:

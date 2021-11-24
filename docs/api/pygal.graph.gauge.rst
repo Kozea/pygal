@@ -1,7 +1,7 @@
-pygal\.graph\.gauge module
-==========================
+pygal.graph.gauge module
+========================
 
 .. automodule:: pygal.graph.gauge
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   :members:
+   :undoc-members:
+   :show-inheritance:

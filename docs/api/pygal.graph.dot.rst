@@ -1,7 +1,7 @@
-pygal\.graph\.dot module
-========================
+pygal.graph.dot module
+======================
 
 .. automodule:: pygal.graph.dot
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   :members:
+   :undoc-members:
+   :show-inheritance:

@@ -1,8 +1,7 @@
-pygal\.maps package
-===================
+pygal.maps package
+==================
 
 .. automodule:: pygal.maps
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
+   :members:
+   :undoc-members:
+   :show-inheritance:

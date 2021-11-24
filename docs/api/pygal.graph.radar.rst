@@ -1,7 +1,7 @@
-pygal\.graph\.radar module
-==========================
+pygal.graph.radar module
+========================
 
 .. automodule:: pygal.graph.radar
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   :members:
+   :undoc-members:
+   :show-inheritance:

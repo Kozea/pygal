@@ -1,7 +1,7 @@
-pygal\.colors module
-====================
+pygal.colors module
+===================
 
 .. automodule:: pygal.colors
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   :members:
+   :undoc-members:
+   :show-inheritance:

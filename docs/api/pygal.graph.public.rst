@@ -1,7 +1,7 @@
-pygal\.graph\.public module
-===========================
+pygal.graph.public module
+=========================
 
 .. automodule:: pygal.graph.public
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   :members:
+   :undoc-members:
+   :show-inheritance:
