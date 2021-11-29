@@ -69,6 +69,7 @@ setup(
     author_email=about['__email__'],
     license=about['__license__'],
     platforms="Any",
+    python_requires=">=3.6",
     packages=find_packages(),
     provides=['pygal'],
     scripts=["pygal_gen.py"],
