@@ -30,6 +30,7 @@ class Style(object):
     """Styling class containing colors for the css generation"""
 
     plot_background = 'rgba(255, 255, 255, 1)'
+    tooltip_background = None
     background = 'rgba(249, 249, 249, 1)'
     value_background = 'rgba(229, 229, 229, 1)'
     foreground = 'rgba(0, 0, 0, .87)'
@@ -105,6 +106,9 @@ class Style(object):
         if self.font_family.startswith('googlefont:'):
             self.font_family = self.font_family.replace('googlefont:', '')
             self._google_fonts.add(self.font_family.split(',')[0].strip())
+
+        if self.tooltip_background is None:
+            self.tooltip_background = self.plot_background
 
         for name in dir(self):
             if name.endswith('_font_family'):
