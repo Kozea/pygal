@@ -28,6 +28,8 @@ from .__about__ import *  # noqa: F401,F403 isort: skip
 import sys
 import traceback
 import warnings
+from importlib.abc import MetaPathFinder
+from importlib.util import spec_from_loader
 
 import pkg_resources
 
@@ -80,14 +82,14 @@ CHARTS_NAMES = list(CHARTS_BY_NAME.keys())
 CHARTS = list(CHARTS_BY_NAME.values())
 
 
-class PluginImportFixer(object):
+class PluginImportFixer(MetaPathFinder):
     """
     Allow external map plugins to be imported from pygal.maps package.
 
     It is a ``sys.meta_path`` loader.
     """
 
-    def find_module(self, fullname, path=None):
+    def find_spec(self, fullname, path, target=None):
         """
         Tell if the module to load can be loaded by
         the load_module function, ie: if it is a ``pygal.maps.*``
@@ -95,7 +97,7 @@ class PluginImportFixer(object):
         """
         if fullname.startswith('pygal.maps.') and hasattr(
                 maps, fullname.split('.')[2]):
-            return self
+            return spec_from_loader(fullname, self)
         return None
 
     def load_module(self, name):
