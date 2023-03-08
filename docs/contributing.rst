@@ -40,21 +40,20 @@ The current build status can be seen at our `ymci <https://ymci.kozea.fr/project
 Contributing a New Graph Visualization
 ======================================
 
-  * Fork the pygal repository on GitHub
-  * Clone your own fork: `git clone git@github.com:<Your_GH_User>/pygal.git`
-  * `cd pygal`
-  * Create a virtual environment for development: `python -m venv .pygal_dev`
-  * Activate the virtual environment `source .pygal_dev/bin/activate` (see <https://setuptools.pypa.io/en/latest/userguide/development_mode.html> for how to do that on Windows)
-  * Install pygal in development mode into the virtual environment `pip install --editable ".[test]"`
+* Fork the pygal repository on GitHub
+* Clone your own fork: ``git clone git@github.com:<Your_GH_User>/pygal.git``
+* ``cd pygal``
+* Create a virtual environment for development: ``python -m venv .pygal_dev``
+* Activate the virtual environment ``source .pygal_dev/bin/activate`` (see <https://setuptools.pypa.io/en/latest/userguide/development_mode.html> for how to do that on Windows)
+* Install pygal in development mode into the virtual environment ``pip install --editable ".[test]"``
 
 The following steps are illustrated on reusing an existing graph, the Pie Graph. For your new visualization, adapt the names, the respective test code, and the actual visualization code accordingly.
 
-  * Add a test `touch pygal/test/test_mypie.py`. For example, add the following code to it
+* Add a test ``touch pygal/test/test_mypie.py``. For example, add the following code to it
 
 .. code-block:: python
 
 from pygal import MyPie
-
 
 def test_donut():
     """Test a donut pie chart"""
@@ -68,10 +67,12 @@ def test_donut():
     chart.render_to_file('/tmp/chart.svg')
     assert chart.render()
 
-  * Create a new file for your new graph visualization: `touch pygal/graph/my_viz.py`. (For this example: `cp pygal/graph/pie.py pygal/graph/mypie.py`.)
-  * Add an import for your new visualization class to the `__init__.py` module. For this example, add `from pygal.graph.mypie import MyPie` to the block of imports at the top of this file.
-  * To manually test your new visualization: `pytest pygal/test/test_mypie.py`.
-  * After the test completes, inspect the file that it generated (e.g., via `open /tmp/chart.svg`) if it looks as intended.
+
+
+* Create a new file for your new graph visualization: ``touch pygal/graph/my_viz.py``. (For this example: ``cp pygal/graph/pie.py pygal/graph/mypie.py``.)
+* Add an import for your new visualization class to the ``__init__.py`` module. For this example, add ``from pygal.graph.mypie import MyPie`` to the block of imports at the top of this file.
+* To manually test your new visualization: ``pytest pygal/test/test_mypie.py``.
+* After the test completes, inspect the file that it generated (e.g., via ``open /tmp/chart.svg``) if it looks as intended.
 
 
 Now, edit the code for the visualization and its respective test.
