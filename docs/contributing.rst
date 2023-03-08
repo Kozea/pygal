@@ -3,7 +3,7 @@ Contributing
 ============
 
 
-Github
+GitHub
 ======
 
 Submit your bug reports and feature requests to the `github bug tracker <http://github.com/Kozea/pygal/issues>`_.
@@ -18,7 +18,7 @@ The pygal code tries to respect the `pep8 <https://www.python.org/dev/peps/pep-0
 Testing
 =======
 
-Before submiting a pull request, please check that all tests still pass.
+Before submitting a pull request, please check that all tests still pass.
 
 
 To do this install ``py.test`` and them run ``py.test`` in the root of your pygal clone:
