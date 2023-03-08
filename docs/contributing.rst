@@ -44,7 +44,7 @@ Contributing a New Graph Visualization
 * Clone your own fork: ``git clone git@github.com:<Your_GH_User>/pygal.git``
 * ``cd pygal``
 * Create a virtual environment for development: ``python -m venv .pygal_dev``
-* Activate the virtual environment ``source .pygal_dev/bin/activate`` (see <https://setuptools.pypa.io/en/latest/userguide/development_mode.html> for how to do that on Windows)
+* Activate the virtual environment ``source .pygal_dev/bin/activate`` (see `PyPA documentation <https://setuptools.pypa.io/en/latest/userguide/development_mode.html>` for how to do that on Windows)
 * Install pygal in development mode into the virtual environment ``pip install --editable ".[test]"``
 
 The following steps are illustrated on reusing an existing graph, the Pie Graph. For your new visualization, adapt the names, the respective test code, and the actual visualization code accordingly.
@@ -77,4 +77,4 @@ def test_donut():
 
 Now, edit the code for the visualization and its respective test.
 Once your visualization works as intended run the entire test suite as described above.
-Thereafter, send a pull-request to the main branch of the original repository (Kozea/pygal).
+Thereafter, send a pull-request to the main branch of the original repository (``Kozea/pygal``).
