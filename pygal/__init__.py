@@ -28,8 +28,7 @@ from .__about__ import *  # noqa: F401,F403 isort: skip
 import sys
 import traceback
 import warnings
-
-import pkg_resources
+from importlib.metadata import entry_points
 
 from pygal import maps
 from pygal.config import Config
@@ -62,7 +61,7 @@ CHARTS_BY_NAME = dict([
 
 from pygal.graph.map import BaseMap
 
-for entry in pkg_resources.iter_entry_points('pygal.maps'):
+for entry in entry_points().get('pygal.maps', ()):
     try:
         module = entry.load()
     except Exception:
