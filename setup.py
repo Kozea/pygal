@@ -65,6 +65,9 @@ setup(
     version=about['__version__'],
     description=about['__summary__'],
     url=about['__uri__'],
+    project_urls={
+        'Source': 'https://github.com/Kozea/pygal',
+    },
     author=about['__author__'],
     author_email=about['__email__'],
     license=about['__license__'],
