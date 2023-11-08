@@ -21,7 +21,7 @@
 from importlib.metadata import entry_points
 
 # Load plugins tests
-for entry in entry_points().get('pygal.test.test_maps', ()):
+for entry in entry_points(group="pygal.test.test_maps"):
     module = entry.load()
     for k, v in module.__dict__.items():
         if k.startswith('test_'):
