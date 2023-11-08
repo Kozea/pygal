@@ -61,7 +61,7 @@ CHARTS_BY_NAME = dict([
 
 from pygal.graph.map import BaseMap
 
-for entry in entry_points().get('pygal.maps', ()):
+for entry in entry_points(group="pygal.maps"):
     try:
         module = entry.load()
     except Exception:
