@@ -2,6 +2,12 @@
 Changelog
 =========
 
+3.0.1
+=====
+
+* Use `importlib`` instead of deprecated `pkg_resources`
+* Prevent installing unsupported Python versions
+
 3.0.0
 =====
 
