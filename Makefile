@@ -4,7 +4,7 @@ include Makefile.config
 all: install lint check check-outdated
 
 install:
-	test -d $(VENV) || virtualenv $(VENV) -p $(PYTHON_VERSION)
+	test -d $(VENV) || $(PYTHON_VERSION) -m venv $(VENV)
 	$(PIP) install --upgrade --upgrade-strategy eager \
 		pip setuptools twine -e .[test,docs] devcore
 
