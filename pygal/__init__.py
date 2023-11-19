@@ -28,7 +28,8 @@ from .__about__ import *  # noqa: F401,F403 isort: skip
 import sys
 import traceback
 import warnings
-from importlib.metadata import entry_points
+
+from importlib_metadata import entry_points
 
 from pygal import maps
 from pygal.config import Config
