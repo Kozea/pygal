@@ -2,6 +2,18 @@
 Changelog
 =========
 
+Unreleased
+==========
+
+**Fixed**
+
+* Misused `entry_points` causing failure with Python 3.12
+
+**Changed**
+
+* Prevent installing with Python versions < 3.8
+* Replace unmaintained `pytest-flake8` with plain `flake8`
+
 3.0.1
 =====
 
