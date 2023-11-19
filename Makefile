@@ -13,7 +13,7 @@ clean:
 	rm -fr *.egg-info
 
 lint:
-	$(PYTEST) --flake8 -m flake8 $(PROJECT_NAME)
+	$(FLAKE8) $(PROJECT_NAME)
 	$(PYTEST) --isort -m isort $(PROJECT_NAME)
 
 fix:

@@ -51,7 +51,8 @@ else:
 tests_requirements = [
     "pyquery", "flask", cairosvg, 'lxml', 'pygal_maps_world', 'pygal_maps_fr',
     'pygal_maps_ch', 'coveralls',
-    'pytest-runner', 'pytest-cov', 'pytest-flake8', 'pytest-isort',
+    'flake8',
+    'pytest-runner', 'pytest-cov', 'pytest-isort',
     'pytest'
 ]
 

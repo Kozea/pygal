@@ -18,14 +18,15 @@ The pygal code tries to respect the `pep8 <https://www.python.org/dev/peps/pep-0
 Testing
 =======
 
-Before submiting a pull request, please check that all tests still pass.
+Before submiting a pull request, please check that linting and all tests still pass.
 
 
-To do this install ``py.test`` and them run ``py.test`` in the root of your pygal clone:
+To do this launch `make install` and then run in the root of your pygal clone:
 
 .. code-block:: bash
 
-   [dev@dev pygal/]$ py.test --flake8
+   [dev@dev pygal/]$ make check
+   [dev@dev pygal/]$ make lint
 
 
 Even better if you have several python versions installed you can run ``tox``.
