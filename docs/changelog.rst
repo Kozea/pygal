@@ -32,8 +32,7 @@ Unreleased
 
 **Changed**
 
-* Replace deprecated tested versions of Python (including Python 2) with
-latest ones in CI
+* Replace deprecated tested versions of Python (including Python 2) with latest ones in CI
 
 2.4.0
 =====
@@ -49,7 +48,7 @@ latest ones in CI
 2.3.1
 =====
 
-_This is a micro release and I have very little time on my hands right now sorry_
+*This is a micro release and I have very little time on my hands right now sorry*
 
 * Fix crash with no values when the print_values_position param is set (thanks @cristen)
 
