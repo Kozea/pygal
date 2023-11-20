@@ -40,16 +40,8 @@ class PyTest(TestCommand):
 ROOT = os.path.dirname(__file__)
 
 
-# Explicitly specify the encoding of pygal/__init__.py if we're on py3.
-kwargs = {}
-if sys.version_info[0] == 3:
-    kwargs['encoding'] = 'utf-8'
-    cairosvg = 'cairosvg'
-else:
-    cairosvg = 'cairosvg==0.5'
-
 tests_requirements = [
-    "pyquery", "flask", cairosvg, 'lxml', 'pygal_maps_world', 'pygal_maps_fr',
+    "pyquery", "flask", 'cairosvg', 'lxml', 'pygal_maps_world', 'pygal_maps_fr',
     'pygal_maps_ch', 'coveralls',
     'flake8',
     'pytest-runner', 'pytest-cov', 'pytest-isort',
@@ -82,7 +74,7 @@ setup(
     extras_require={
         'lxml': ['lxml'],
         'docs': ['sphinx', 'sphinx_rtd_theme', 'pygal_sphinx_directives'],
-        'png': [cairosvg],
+        'png': ['cairosvg'],
         'test': tests_requirements
     },
     classifiers=[
