@@ -19,6 +19,8 @@
 """Various config options tested on one chart type or more"""
 
 from tempfile import NamedTemporaryFile
+import pathlib
+import os
 
 from pygal import (
     XY, Bar, Box, Config, DateLine, DateTimeLine, Dot, Funnel, Gauge,
@@ -334,22 +336,28 @@ def test_include_x_axis(Chart):
 def test_css(Chart):
     """Test css file option"""
     css = "{{ id }}text { fill: #bedead; }\n"
-    with NamedTemporaryFile('w') as f:
-        f.write(css)
-        f.flush()
 
+    f = NamedTemporaryFile('w', suffix='.css', delete=False)
+    filename = f.name
+    f.write(css)
+    f.close()  # close the file to avoid the permission issue on Window when opening it for reading below
+
+    try:
         config = Config()
-        config.css.append('file://' + f.name)
+        print(f.name)
+        config.css.append(pathlib.Path(f.name).as_uri())
 
         chart = Chart(config)
         chart.add('/', [10, 1, 5])
         svg = chart.render().decode('utf-8')
         assert '#bedead' in svg
 
-        chart = Chart(css=(_ellipsis, 'file://' + f.name))
+        chart = Chart(css=(_ellipsis, pathlib.Path(f.name).as_uri()))
         chart.add('/', [10, 1, 5])
         svg = chart.render().decode('utf-8')
         assert '#bedead' in svg
+    finally:
+        os.remove(filename)
 
 
 def test_inline_css(Chart):

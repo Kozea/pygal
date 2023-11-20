@@ -33,7 +33,7 @@ from pygal.util import cut
 
 try:
     import cairosvg
-except ImportError:
+except (ImportError, OSError):  # OSError is raised on Windows if cairo's DLLs are missing
     cairosvg = None
 
 
@@ -46,9 +46,9 @@ def test_multi_render(Chart, datas):
         assert svg == chart.render()
 
 
-def test_render_to_file(Chart, datas):
+def test_render_to_file(Chart, datas, tmpdir):
     """Test in file rendering"""
-    file_name = '/tmp/test_graph-%s.svg' % uuid.uuid4()
+    file_name = str(tmpdir.join('test_graph-%s.png' % uuid.uuid4()))
     if os.path.exists(file_name):
         os.remove(file_name)
 
@@ -61,9 +61,9 @@ def test_render_to_file(Chart, datas):
 
 
 @pytest.mark.skipif(not cairosvg, reason="CairoSVG not installed")
-def test_render_to_png(Chart, datas):
+def test_render_to_png(Chart, datas, tmpdir):
     """Test in file png rendering"""
-    file_name = '/tmp/test_graph-%s.png' % uuid.uuid4()
+    file_name = str(tmpdir.join('test_graph-%s.png' % uuid.uuid4()))
     if os.path.exists(file_name):
         os.remove(file_name)
 
