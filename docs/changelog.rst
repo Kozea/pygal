@@ -2,8 +2,15 @@
 Changelog
 =========
 
+3.0.3
+=====
+
+**Fixed**
+
+* Failure with `tox` due to missing `README.md`
+
 3.0.2
-==========
+=====
 
 **Fixed**
 
