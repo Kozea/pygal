@@ -73,6 +73,7 @@ setup(
     setup_requires=['pytest-runner'],
     cmdclass={'test': PyTest},
     package_data={'pygal': ['css/*', 'graph/maps/*.svg']},
+    install_requires=["importlib_metadata"],  # TODO: remove this (see #545, #546)
     extras_require={
         'lxml': ['lxml'],
         'docs': ['sphinx', 'sphinx_rtd_theme', 'pygal_sphinx_directives'],
