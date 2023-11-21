@@ -26,7 +26,6 @@ import uuid
 import pytest
 
 import pygal
-from pygal._compat import u
 from pygal.graph.map import BaseMap
 from pygal.test import make_data
 from pygal.util import cut
@@ -307,23 +306,23 @@ def test_unicode_labels_decode(Chart):
     """Test unicode labels"""
     chart = Chart()
     chart.add(
-        u('Série1'), [{
+        'Série1', [{
             'value': 1,
             'xlink': 'http://1/',
-            'label': u('Â°ĳæð©&×&<—×€¿_…')
+            'label': 'Â°ĳæð©&×&<—×€¿_…'
         }, {
             'value': 2,
             'xlink': {
                 'href': 'http://6.example.com/'
             },
-            'label': u('æÂ°€≠|€æÂ°€əæ')
+            'label': 'æÂ°€≠|€æÂ°€əæ'
         }, {
             'value': 3,
             'label': 'unicode <3'
         }]
     )
     if not chart._dual:
-        chart.x_labels = [u('&œ'), u('¿?'), u('††††††††'), 'unicode <3']
+        chart.x_labels = ['&œ', '¿?', '††††††††', 'unicode <3']
     chart.render_pyquery()
 
 
@@ -333,7 +332,7 @@ def test_unicode_labels_python2(Chart):
         return
     chart = Chart()
     chart.add(
-        u('Série1'), [{
+        'Série1', [{
             'value': 1,
             'xlink': 'http://1/',
             'label': eval("u'Â°ĳæð©&×&<—×€¿_…'")
@@ -359,7 +358,7 @@ def test_unicode_labels_python3(Chart):
         return
     chart = Chart()
     chart.add(
-        u('Série1'), [{
+        'Série1', [{
             'value': 1,
             'xlink': 'http://1/',
             'label': eval("'Â°ĳæð©&×&<—×€¿_…'")

@@ -29,7 +29,7 @@ from numbers import Number
 from urllib.parse import quote_plus
 
 from pygal import __version__
-from pygal._compat import to_str, u
+from pygal._compat import to_str
 from pygal.etree import etree
 from pygal.util import (
     coord_abs_project,
@@ -73,16 +73,14 @@ class Svg(object):
             self.root.attrib['class'] = ' '.join(graph.classes)
         self.root.append(
             etree.Comment(
-                u(
-                    'Generated with pygal %s (%s) ©Kozea 2012-2016 on %s' % (
-                        __version__, 'lxml' if etree.lxml else 'etree',
-                        date.today().isoformat()
-                    )
+                'Generated with pygal %s (%s) ©Kozea 2012-2016 on %s' % (
+                    __version__, 'lxml' if etree.lxml else 'etree',
+                    date.today().isoformat()
                 )
             )
         )
-        self.root.append(etree.Comment(u('http://pygal.org')))
-        self.root.append(etree.Comment(u('http://github.com/Kozea/pygal')))
+        self.root.append(etree.Comment('http://pygal.org'))
+        self.root.append(etree.Comment('http://github.com/Kozea/pygal'))
         self.defs = self.node(tag='defs')
         self.title = self.node(tag='title')
         self.title.text = graph.title or 'Pygal'
@@ -130,7 +128,7 @@ class Svg(object):
                 if css.startswith('//') and self.graph.force_uri_protocol:
                     css = '%s:%s' % (self.graph.force_uri_protocol, css)
                 self.processing_instructions.append(
-                    etree.PI(u('xml-stylesheet'), u('href="%s"' % css))
+                    etree.PI('xml-stylesheet', 'href="%s"' % css)
                 )
         self.node(
             self.defs, 'style', type='text/css'

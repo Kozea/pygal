@@ -24,7 +24,7 @@ import re
 from decimal import Decimal
 from math import ceil, cos, floor, log10, pi, sin
 
-from pygal._compat import _ellipsis, to_unicode, u
+from pygal._compat import _ellipsis, to_unicode
 
 
 def float_format(number):
@@ -237,7 +237,7 @@ def alter(node, metadata):
 def truncate(string, index):
     """Truncate a string at index and add ..."""
     if len(string) > index and index > 0:
-        string = string[:index - 1] + u('…')
+        string = string[:index - 1] + '…'
     return string
 
 
