@@ -24,8 +24,14 @@ from pytest import raises
 
 from pygal._compat import _ellipsis, u
 from pygal.util import (
-    _swap_curly, majorize, mergextend, minify_css, round_to_float,
-    round_to_int, template, truncate
+    _swap_curly,
+    majorize,
+    mergextend,
+    minify_css,
+    round_to_float,
+    round_to_int,
+    template,
+    truncate,
 )
 
 

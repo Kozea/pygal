@@ -36,7 +36,7 @@ try:
     handler.setLevel(logging.DEBUG)
     app.logger.setLevel(logging.DEBUG)
     logging.getLogger('werkzeug').setLevel(logging.DEBUG)
-except:
+except Exception:
     pass
 
 try:

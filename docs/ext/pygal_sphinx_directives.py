@@ -20,9 +20,10 @@
 from traceback import format_exc, print_exc
 
 import docutils.core
-import pygal
 from docutils.parsers.rst import Directive
 from sphinx.directives.code import CodeBlock
+
+import pygal
 
 # Patch default style
 
@@ -76,7 +77,7 @@ class PygalDirective(Directive):
                 )
             ]
         if self.render_fix:
-            rv = scope['rv']
+            _rv = scope['rv']
         else:
             chart = None
             for key, value in scope.items():

@@ -64,8 +64,8 @@ class Key(object):
         This is a hack to generate doc from inner doc
         """
         return """
-        Type: %s%s     
-        Default: %r     
+        Type: %s%s
+        Default: %r
         %s%s
         """ % (
             self.type.__name__, (' of %s' % self.subtype.__name__)
