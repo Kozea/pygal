@@ -21,7 +21,7 @@
 from math import ceil, cos, sin, sqrt
 
 from pygal import stats
-from pygal._compat import is_list_like, is_str
+from pygal._compat import is_list_like
 from pygal.graph.public import PublicApi
 from pygal.interpolate import INTERPOLATIONS
 from pygal.util import (
@@ -907,7 +907,7 @@ class Graph(PublicApi):
         return len(self.all_series)
 
     def _x_label_format_if_value(self, label):
-        if not is_str(label):
+        if not isinstance(label, str):
             return self._x_format(label)
         return label
 
@@ -953,7 +953,7 @@ class Graph(PublicApi):
                 if isinstance(y_label, dict):
                     pos = self._adapt(y_label.get('value'))
                     title = y_label.get('label', self._y_format(pos))
-                elif is_str(y_label):
+                elif isinstance(y_label, str):
                     pos = self._adapt(y_pos[i % len(y_pos)])
                     title = y_label
                 else:

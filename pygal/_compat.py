@@ -27,18 +27,12 @@ except ImportError:
 from datetime import datetime, timedelta, tzinfo
 
 base = (str, bytes)
-coerce = str
 _ellipsis = eval('...')
 
 
 def is_list_like(value):
     """Return whether value is an iterable but not a mapping / string"""
     return isinstance(value, Iterable) and not isinstance(value, (base, dict))
-
-
-def is_str(string):
-    """Return whether value is a string or a byte list"""
-    return isinstance(string, base)
 
 
 try:
