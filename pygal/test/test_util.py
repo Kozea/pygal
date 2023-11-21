@@ -22,7 +22,6 @@ import sys
 
 from pytest import raises
 
-from pygal._compat import _ellipsis
 from pygal.util import (
     _swap_curly,
     majorize,
@@ -167,10 +166,10 @@ def test_mergextend():
     assert mergextend([], ['c', 'd']) == []
     assert mergextend(['a', 'b'], []) == ['a', 'b']
 
-    assert mergextend([_ellipsis], ['c', 'd']) == ['c', 'd']
-    assert mergextend([_ellipsis, 'b'], ['c', 'd']) == ['c', 'd', 'b']
-    assert mergextend(['a', _ellipsis], ['c', 'd']) == ['a', 'c', 'd']
-    assert mergextend(['a', _ellipsis, 'b'],
+    assert mergextend([Ellipsis], ['c', 'd']) == ['c', 'd']
+    assert mergextend([Ellipsis, 'b'], ['c', 'd']) == ['c', 'd', 'b']
+    assert mergextend(['a', Ellipsis], ['c', 'd']) == ['a', 'c', 'd']
+    assert mergextend(['a', Ellipsis, 'b'],
                       ['c', 'd']) == ['a', 'c', 'd', 'b']
 
     if sys.version_info[0] >= 3:

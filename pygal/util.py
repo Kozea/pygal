@@ -24,8 +24,6 @@ import re
 from decimal import Decimal
 from math import ceil, cos, floor, log10, pi, sin
 
-from pygal._compat import _ellipsis
-
 
 def float_format(number):
     """Format a float to a precision of 3, without zeroes or dots"""
@@ -359,9 +357,9 @@ def coord_abs_project(center, rho, theta):
 
 
 def mergextend(list1, list2):
-    if list1 is None or _ellipsis not in list1:
+    if list1 is None or Ellipsis not in list1:
         return list1
-    index = list1.index(_ellipsis)
+    index = list1.index(Ellipsis)
     return list(list1[:index]) + list(list2) + list(list1[index + 1:])
 
 

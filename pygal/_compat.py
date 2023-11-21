@@ -18,7 +18,6 @@
 # along with pygal. If not, see <http://www.gnu.org/licenses/>.
 """Various hacks for former transparent python 2 / python 3 support"""
 
-
 try:
     from collections.abc import Iterable
 except ImportError:
@@ -26,17 +25,15 @@ except ImportError:
 
 from datetime import datetime, timedelta, tzinfo
 
-base = (str, bytes)
-_ellipsis = eval('...')
-
 
 def is_list_like(value):
     """Return whether value is an iterable but not a mapping / string"""
-    return isinstance(value, Iterable) and not isinstance(value, (base, dict))
+    return isinstance(value, Iterable) and not isinstance(value, (str, dict))
 
 
 try:
     from datetime import timezone
+
     utc = timezone.utc
 except ImportError:
 
@@ -49,6 +46,7 @@ except ImportError:
 
         def dst(self, dt):
             return None
+
 
     utc = UTC()
 
