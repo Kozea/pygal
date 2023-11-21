@@ -15,9 +15,6 @@ clean:
 lint:
 	$(RUFF) $(PROJECT_NAME)
 
-fix:
-	$(VENV)/bin/yapf -p -i pygal/**/*.py
-
 check:
 	$(PYTEST) $(PROJECT_NAME) $(PYTEST_ARGS) --cov-report= --cov=pygal
 
