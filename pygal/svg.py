@@ -29,7 +29,6 @@ from numbers import Number
 from urllib.parse import quote_plus
 
 from pygal import __version__
-from pygal._compat import to_str
 from pygal.etree import etree
 from pygal.util import (
     coord_abs_project,
@@ -199,7 +198,7 @@ class Svg(object):
             if value is None:
                 del attrib[key]
 
-            attrib[key] = to_str(value)
+            attrib[key] = str(value)
             if key.endswith('_'):
                 attrib[key.rstrip('_')] = attrib[key]
                 del attrib[key]

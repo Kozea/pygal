@@ -25,7 +25,6 @@ from __future__ import division
 from datetime import date, datetime, time
 from math import floor, log
 
-from pygal._compat import to_str
 from pygal.util import float_format
 
 
@@ -80,7 +79,7 @@ class Raw(Formatter):
     def __call__(self, val):
         if val is None:
             return ''
-        return to_str(val)
+        return str(val)
 
 
 class IsoDateTime(Formatter):

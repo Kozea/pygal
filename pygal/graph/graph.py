@@ -21,7 +21,7 @@
 from math import ceil, cos, sin, sqrt
 
 from pygal import stats
-from pygal._compat import is_list_like, is_str, to_str
+from pygal._compat import is_list_like, is_str
 from pygal.graph.public import PublicApi
 from pygal.interpolate import INTERPOLATIONS
 from pygal.util import (
@@ -555,10 +555,10 @@ class Graph(PublicApi):
                 classes.append('top')
             classes = ' '.join(classes)
 
-        self.svg.node(node, 'desc', class_="x " + classes).text = to_str(x)
-        self.svg.node(node, 'desc', class_="y " + classes).text = to_str(y)
+        self.svg.node(node, 'desc', class_="x " + classes).text = str(x)
+        self.svg.node(node, 'desc', class_="y " + classes).text = str(y)
         if xlabel:
-            self.svg.node(node, 'desc', class_="x_label").text = to_str(xlabel)
+            self.svg.node(node, 'desc', class_="x_label").text = str(xlabel)
 
     def _static_value(
             self,
@@ -659,7 +659,7 @@ class Graph(PublicApi):
 
     @property
     def _default_formatter(self):
-        return to_str
+        return str
 
     @property
     def _y_format(self):
