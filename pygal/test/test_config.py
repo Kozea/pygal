@@ -45,7 +45,6 @@ from pygal import (
     Treemap,
     formatters,
 )
-from pygal._compat import _ellipsis
 from pygal.graph.dual import Dual
 from pygal.graph.horizontal import HorizontalGraph
 from pygal.graph.map import BaseMap
@@ -365,7 +364,7 @@ def test_css(Chart):
         svg = chart.render().decode('utf-8')
         assert '#bedead' in svg
 
-        chart = Chart(css=(_ellipsis, 'file://' + f.name))
+        chart = Chart(css=(Ellipsis, 'file://' + f.name))
         chart.add('/', [10, 1, 5])
         svg = chart.render().decode('utf-8')
         assert '#bedead' in svg
@@ -581,7 +580,7 @@ def test_classes(Chart):
     chart = Chart(classes=())
     assert not chart.render_pyquery().attr('class')
 
-    chart = Chart(classes=(_ellipsis, ))
+    chart = Chart(classes=(Ellipsis, ))
     assert chart.render_pyquery().attr('class') == 'pygal-chart'
 
     chart = Chart(classes=('graph', ))
@@ -590,8 +589,8 @@ def test_classes(Chart):
     chart = Chart(classes=('pygal-chart', 'graph'))
     assert chart.render_pyquery().attr('class') == 'pygal-chart graph'
 
-    chart = Chart(classes=(_ellipsis, 'graph'))
+    chart = Chart(classes=(Ellipsis, 'graph'))
     assert chart.render_pyquery().attr('class') == 'pygal-chart graph'
 
-    chart = Chart(classes=('graph', _ellipsis))
+    chart = Chart(classes=('graph', Ellipsis))
     assert chart.render_pyquery().attr('class') == 'graph pygal-chart'
