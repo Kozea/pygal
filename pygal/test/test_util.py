@@ -18,7 +18,6 @@
 # along with pygal. If not, see <http://www.gnu.org/licenses/>.
 """Utility functions tests"""
 
-import sys
 
 from pytest import raises
 
@@ -172,8 +171,4 @@ def test_mergextend():
     assert mergextend(['a', Ellipsis, 'b'],
                       ['c', 'd']) == ['a', 'c', 'd', 'b']
 
-    if sys.version_info[0] >= 3:
-        # For @#! sake it's 2016 now
-        assert eval("mergextend(['a', ..., 'b'], ['c', 'd'])") == [
-            'a', 'c', 'd', 'b'
-        ]
+    assert mergextend(['a', ..., 'b'], ['c', 'd']) == ['a', 'c', 'd', 'b']
