@@ -49,13 +49,6 @@ def to_str(obj):
     return obj
 
 
-def to_unicode(string):
-    """Force string to be a string in python 3 or a unicode in python 2"""
-    if not isinstance(string, coerce):
-        return string.decode('utf-8')
-    return string
-
-
 try:
     from datetime import timezone
     utc = timezone.utc
