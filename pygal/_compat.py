@@ -18,7 +18,6 @@
 # along with pygal. If not, see <http://www.gnu.org/licenses/>.
 """Various hacks for former transparent python 2 / python 3 support"""
 
-import sys
 
 try:
     from collections.abc import Iterable
@@ -40,13 +39,6 @@ def is_list_like(value):
 def is_str(string):
     """Return whether value is a string or a byte list"""
     return isinstance(string, base)
-
-
-def to_str(obj):
-    """Cast obj to unicode string"""
-    if not is_str(obj):
-        return coerce(obj)
-    return obj
 
 
 try:
