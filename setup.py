@@ -71,6 +71,7 @@ setup(
     keywords=[
         "svg", "chart", "graph", "diagram", "plot", "histogram", "kiviat"],
     setup_requires=['pytest-runner'],
+    install_requires=['importlib-metadata'],
     cmdclass={'test': PyTest},
     package_data={'pygal': ['css/*', 'graph/maps/*.svg']},
     extras_require={
