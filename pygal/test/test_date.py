@@ -18,10 +18,10 @@
 # along with pygal. If not, see <http://www.gnu.org/licenses/>.
 """Date related charts tests"""
 
-from datetime import date, datetime, time, timedelta
+from datetime import date, datetime, time, timedelta, timezone
 
 from pygal import DateLine, DateTimeLine, TimeDeltaLine, TimeLine
-from pygal._compat import timestamp, utc
+from pygal._compat import timestamp
 from pygal.test.utils import texts
 
 
@@ -125,10 +125,13 @@ def test_date_labels():
 
 
 def test_utc_timestamping():
-    assert timestamp(datetime(2017, 7, 14, 2,
-                              40).replace(tzinfo=utc)) == 1500000000
+    t = datetime(2017, 7, 14, 2, 40).replace(tzinfo=timezone.utc)
+    assert timestamp(t) == 1500000000
 
-    for d in (datetime.now(), datetime.utcnow(), datetime(
-            1999, 12, 31, 23, 59, 59), datetime(2000, 1, 1, 0, 0, 0)):
-        assert datetime.utcfromtimestamp(timestamp(d)
-                                         ) - d < timedelta(microseconds=10)
+    for d in (
+        datetime.now(),
+        datetime.utcnow(),
+        datetime(1999, 12, 31, 23, 59, 59),
+        datetime(2000, 1, 1, 0, 0, 0),
+    ):
+        assert datetime.utcfromtimestamp(timestamp(d)) - d < timedelta(microseconds=10)

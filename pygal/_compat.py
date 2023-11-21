@@ -23,7 +23,7 @@ try:
 except ImportError:
     from collections import Iterable
 
-from datetime import datetime, timedelta, tzinfo
+import datetime
 
 
 def is_list_like(value):
@@ -31,33 +31,10 @@ def is_list_like(value):
     return isinstance(value, Iterable) and not isinstance(value, (str, dict))
 
 
-try:
-    from datetime import timezone
-
-    utc = timezone.utc
-except ImportError:
-
-    class UTC(tzinfo):
-        def tzname(self, dt):
-            return 'UTC'
-
-        def utcoffset(self, dt):
-            return timedelta(0)
-
-        def dst(self, dt):
-            return None
-
-
-    utc = UTC()
-
-
 def timestamp(x):
-    """Get a timestamp from a date in python 3 and python 2"""
+    """Get a timestamp from a date"""
     if x.tzinfo is None:
         # Naive dates to utc
-        x = x.replace(tzinfo=utc)
+        x = x.replace(tzinfo=datetime.timezone.utc)
 
-    if hasattr(x, 'timestamp'):
-        return x.timestamp()
-    else:
-        return (x - datetime(1970, 1, 1, tzinfo=utc)).total_seconds()
+    return x.timestamp()
