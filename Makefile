@@ -13,8 +13,7 @@ clean:
 	rm -fr *.egg-info
 
 lint:
-	$(FLAKE8) $(PROJECT_NAME)
-	$(PYTEST) --isort -m isort $(PROJECT_NAME)
+	$(RUFF) $(PROJECT_NAME)
 
 fix:
 	$(VENV)/bin/yapf -p -i pygal/**/*.py

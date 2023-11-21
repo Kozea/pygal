@@ -43,8 +43,8 @@ ROOT = os.path.dirname(__file__)
 tests_requirements = [
     "pyquery", "flask", 'cairosvg', 'lxml', 'pygal_maps_world', 'pygal_maps_fr',
     'pygal_maps_ch', 'coveralls',
-    'flake8',
-    'pytest-runner', 'pytest-cov', 'pytest-isort',
+    'ruff',
+    'pytest-runner', 'pytest-cov',
     'pytest'
 ]
 
