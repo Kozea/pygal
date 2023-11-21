@@ -21,10 +21,29 @@
 from tempfile import NamedTemporaryFile
 
 from pygal import (
-    XY, Bar, Box, Config, DateLine, DateTimeLine, Dot, Funnel, Gauge,
-    Histogram, HorizontalBar, HorizontalLine, HorizontalStackedBar,
-    HorizontalStackedLine, Line, Pie, Pyramid, Radar, SolidGauge,
-    TimeDeltaLine, TimeLine, Treemap, formatters
+    XY,
+    Bar,
+    Box,
+    Config,
+    DateLine,
+    DateTimeLine,
+    Dot,
+    Funnel,
+    Gauge,
+    Histogram,
+    HorizontalBar,
+    HorizontalLine,
+    HorizontalStackedBar,
+    HorizontalStackedLine,
+    Line,
+    Pie,
+    Pyramid,
+    Radar,
+    SolidGauge,
+    TimeDeltaLine,
+    TimeLine,
+    Treemap,
+    formatters,
 )
 from pygal._compat import _ellipsis, u
 from pygal.graph.dual import Dual

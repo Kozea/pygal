@@ -16,18 +16,19 @@
 #
 # You should have received a copy of the GNU Lesser General Public License
 # along with pygal. If not, see <http://www.gnu.org/licenses/>.
-from flask import Flask, render_template, Response, request
+import pickle
+import random
+import string
+from base64 import urlsafe_b64decode as b64decode
+from base64 import urlsafe_b64encode as b64encode
+
+from flask import Flask, Response, render_template, request
+
 import pygal
 from pygal.config import Config
-from pygal.util import cut
 from pygal.etree import etree
-from pygal.style import styles, parametric_styles
-from base64 import (
-    urlsafe_b64encode as b64encode, urlsafe_b64decode as b64decode
-)
-import string
-import random
-import pickle
+from pygal.style import parametric_styles, styles
+from pygal.util import cut
 
 
 def get(type):

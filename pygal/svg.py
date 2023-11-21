@@ -32,8 +32,13 @@ from pygal import __version__
 from pygal._compat import to_str, u
 from pygal.etree import etree
 from pygal.util import (
-    coord_abs_project, coord_diff, coord_dual, coord_format, coord_project,
-    minify_css, template
+    coord_abs_project,
+    coord_diff,
+    coord_dual,
+    coord_format,
+    coord_project,
+    minify_css,
+    template,
 )
 
 nearly_2pi = 2 * pi - .00001
