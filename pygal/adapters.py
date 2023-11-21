@@ -19,14 +19,12 @@
 """Value adapters to use when a chart doesn't accept all value types"""
 from decimal import Decimal
 
-from pygal._compat import is_str
-
 
 def positive(x):
     """Return zero if value is negative"""
     if x is None:
         return
-    if is_str(x):
+    if isinstance(x, str):
         return x
     if x < 0:
         return 0

@@ -18,7 +18,6 @@
 # along with pygal. If not, see <http://www.gnu.org/licenses/>.
 """Dual chart base. Dual means a chart with 2 scaled axis like xy"""
 
-from pygal._compat import is_str
 from pygal.graph.graph import Graph
 from pygal.util import compute_scale, cut
 
@@ -43,7 +42,7 @@ class Dual(Graph):
                 if isinstance(x_label, dict):
                     pos = self._x_adapt(x_label.get('value'))
                     title = x_label.get('label', self._x_format(pos))
-                elif is_str(x_label):
+                elif isinstance(x_label, str):
                     pos = self._x_adapt(x_pos[i % len(x_pos)])
                     title = x_label
                 else:

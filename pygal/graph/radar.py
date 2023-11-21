@@ -23,7 +23,6 @@ useful for multivariate observation.
 
 from math import cos, pi
 
-from pygal._compat import is_str
 from pygal.adapters import none_to_zero, positive
 from pygal.graph.line import Line
 from pygal.util import cached_property, compute_scale, cut, deg, truncate
@@ -200,7 +199,7 @@ class Radar(Line):
                 if isinstance(y_label, dict):
                     pos = self._adapt(y_label.get('value'))
                     title = y_label.get('label', self._y_format(pos))
-                elif is_str(y_label):
+                elif isinstance(y_label, str):
                     pos = self._adapt(y_pos[i])
                     title = y_label
                 else:
