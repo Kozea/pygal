@@ -2,6 +2,13 @@
 Changelog
 =========
 
+3.0.4
+=====
+
+**Fixed**
+
+* Missing declaration of `importlib_metadata` dependency in `setup.py`
+
 3.0.3
 =====
 
