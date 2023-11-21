@@ -29,7 +29,7 @@ import sys
 import traceback
 import warnings
 
-from importlib_metadata import entry_points
+from importlib.metadata import entry_points
 
 from pygal import maps
 from pygal.config import Config
@@ -62,7 +62,10 @@ CHARTS_BY_NAME = dict([
 
 from pygal.graph.map import BaseMap
 
-for entry in entry_points(group="pygal.maps"):
+for entry in entry_points():
+    # TODO: when targeting Python 3.10+, this can use `entry_points(group=...)`.
+    if entry.group != "pygal.maps":
+        continue
     try:
         module = entry.load()
     except Exception:

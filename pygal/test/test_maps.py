@@ -18,10 +18,13 @@
 # along with pygal. If not, see <http://www.gnu.org/licenses/>.
 """Map plugins tests are imported here"""
 
-from importlib_metadata import entry_points
+from importlib.metadata import entry_points
 
 # Load plugins tests
-for entry in entry_points(group="pygal.test.test_maps"):
+for entry in entry_points():
+    # TODO: when targeting Python 3.10+, this can use `entry_points(group=...)`.
+    if entry.group != "pygal.test.test_maps":
+        continue
     module = entry.load()
     for k, v in module.__dict__.items():
         if k.startswith('test_'):
