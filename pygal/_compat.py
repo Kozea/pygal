@@ -18,12 +18,8 @@
 # along with pygal. If not, see <http://www.gnu.org/licenses/>.
 """Various hacks for former transparent python 2 / python 3 support"""
 
-try:
-    from collections.abc import Iterable
-except ImportError:
-    from collections import Iterable
-
 import datetime
+from collections.abc import Iterable
 
 
 def is_list_like(value):
