@@ -56,13 +56,6 @@ def to_unicode(string):
     return string
 
 
-def u(s):
-    """Emulate u'str' in python 2, do nothing in python 3"""
-    if sys.version_info[0] == 2:
-        return s.decode('utf-8')
-    return s
-
-
 try:
     from datetime import timezone
     utc = timezone.utc

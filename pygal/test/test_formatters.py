@@ -19,7 +19,6 @@
 """Test formatters"""
 
 from pygal import formatters
-from pygal._compat import u
 
 
 def test_human_readable():
@@ -41,12 +40,12 @@ def test_human_readable():
     assert f(0.001) == '1m'
     assert f(0.002) == '2m'
     assert f(0.0025) == '2.5m'
-    assert f(0.0001) == u('100µ')
-    assert f(0.000123) == u('123µ')
-    assert f(0.00001) == u('10µ')
-    assert f(0.000001) == u('1µ')
-    assert f(0.0000001) == u('100n')
-    assert f(0.0000000001) == u('100p')
+    assert f(0.0001) == '100µ'
+    assert f(0.000123) == '123µ'
+    assert f(0.00001) == '10µ'
+    assert f(0.000001) == '1µ'
+    assert f(0.0000001) == '100n'
+    assert f(0.0000000001) == '100p'
 
     assert f(0) == '0'
     assert f(0.) == '0'
@@ -57,7 +56,7 @@ def test_human_readable():
 def test_human_readable_custom():
     """Test human_readable formatter option"""
     f = formatters.HumanReadable()
-    assert f(None) == u('∅')
+    assert f(None) == '∅'
     f = formatters.HumanReadable(none_char='/')
     assert f(None) == '/'
 

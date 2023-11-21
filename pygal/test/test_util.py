@@ -22,7 +22,7 @@ import sys
 
 from pytest import raises
 
-from pygal._compat import _ellipsis, u
+from pygal._compat import _ellipsis
 from pygal.util import (
     _swap_curly,
     majorize,
@@ -60,8 +60,8 @@ def test_round_to_float():
 
 def test_swap_curly():
     """Test swap curly function"""
-    for str in ('foo', u('foo foo foo bar'), 'foo béè b¡ð/ĳə˘©þß®~¯æ',
-                u('foo béè b¡ð/ĳə˘©þß®~¯æ')):
+    for str in ('foo', 'foo foo foo bar', 'foo béè b¡ð/ĳə˘©þß®~¯æ',
+                'foo béè b¡ð/ĳə˘©þß®~¯æ'):
         assert _swap_curly(str) == str
     assert _swap_curly('foo{bar}baz') == 'foo{{bar}}baz'
     assert _swap_curly('foo{{bar}}baz') == 'foo{bar}baz'
@@ -94,9 +94,9 @@ def test_format():
 def test_truncate():
     """Test truncate function"""
     assert truncate('1234567890', 50) == '1234567890'
-    assert truncate('1234567890', 5) == u('1234…')
-    assert truncate('1234567890', 1) == u('…')
-    assert truncate('1234567890', 9) == u('12345678…')
+    assert truncate('1234567890', 5) == '1234…'
+    assert truncate('1234567890', 1) == '…'
+    assert truncate('1234567890', 9) == '12345678…'
     assert truncate('1234567890', 10) == '1234567890'
     assert truncate('1234567890', 0) == '1234567890'
     assert truncate('1234567890', -1) == '1234567890'
