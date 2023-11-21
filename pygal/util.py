@@ -24,7 +24,7 @@ import re
 from decimal import Decimal
 from math import ceil, cos, floor, log10, pi, sin
 
-from pygal._compat import _ellipsis, to_unicode
+from pygal._compat import _ellipsis
 
 
 def float_format(number):
@@ -207,10 +207,10 @@ def decorate(svg, node, metadata):
         node = svg.node(node, 'a', **xlink)
         svg.node(
             node, 'desc', class_='xlink'
-        ).text = to_unicode(xlink.get('href'))
+        ).text = str(xlink.get('href'))
 
     if 'tooltip' in metadata:
-        svg.node(node, 'title').text = to_unicode(metadata['tooltip'])
+        svg.node(node, 'title').text = str(metadata['tooltip'])
 
     if 'color' in metadata:
         color = metadata.pop('color')
@@ -222,7 +222,7 @@ def decorate(svg, node, metadata):
     if 'label' in metadata and metadata['label']:
         svg.node(
             node, 'desc', class_='label'
-        ).text = to_unicode(metadata['label'])
+        ).text = str(metadata['label'])
     return node
 
 
