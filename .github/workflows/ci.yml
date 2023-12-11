@@ -32,7 +32,10 @@ jobs:
           cache: pip
       - run: pip install coveralls tox tox-gh
       - run: tox
-      - env: GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          COVERALLS_FLAG_NAME: ${{ matrix.python-version }}
+          COVERALLS_PARALLEL: true
         run: coveralls
         continue-on-error: true
   lint:
