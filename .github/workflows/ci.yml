@@ -12,6 +12,16 @@ on:
     branches:
       - master
 jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+          cache: pip
+      - run: pip install ruff
+      - run: ruff --output-format=github
   test:
     runs-on: '${{ matrix.os }}'
     strategy:
@@ -38,13 +48,15 @@ jobs:
           COVERALLS_PARALLEL: true
         run: coveralls
         continue-on-error: true
-  lint:
+  coveralls:
+    name: Indicate completion to coveralls.io
+    needs: test
     runs-on: ubuntu-latest
+    container: python:3-slim
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
-        with:
-          python-version: "3.x"
-          cache: pip
-      - run: make install  # TODO: this should only install lint dependencies
-      - run: make lint
+    - name: Finished
+      run: |
+        pip3 install --upgrade coveralls
+        coveralls --service=github --finish
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
