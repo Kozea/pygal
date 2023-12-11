@@ -32,7 +32,8 @@ jobs:
           cache: pip
       - run: pip install coveralls tox tox-gh
       - run: tox
-      - run: coveralls
+      - env: GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: coveralls
         continue-on-error: true
   lint:
     runs-on: ubuntu-latest
