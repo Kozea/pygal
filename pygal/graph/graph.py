@@ -995,8 +995,7 @@ class Graph(PublicApi):
         x_lines = squares[0] - 1
         y_lines = squares[1] - 1
 
-        _current_x = 0
-        _current_y = 0
+        _current_y = _current_x = 0
 
         for line in range(x_lines):
             _current_x += (self.width - self.margin_box.x) / squares[0]
