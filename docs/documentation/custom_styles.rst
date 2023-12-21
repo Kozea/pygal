@@ -51,6 +51,7 @@ Properties                        Description
 ``value_label_font_family``       The ``print_labels`` font family
 ``tooltip_font_family``           The tooltip font family
 ``title_font_family``             The title font family
+``plot_title_font_family``        The main title font family
 ``legend_font_family``            The legend font family
 ``no_data_font_family``           The no data text font family
 ``guide_stroke_dasharray``        The dasharray for guide line
@@ -61,6 +62,7 @@ Properties                        Description
 ``value_label_font_size``         The ``print_labels`` font size
 ``tooltip_font_size``             The tooltip font size
 ``title_font_size``               The title font size
+``plot_title_font_size``          The main title font size
 ``legend_font_size``              The legend font size
 ``no_data_font_size``             The no data font size
 ``opacity``                       The opacity of chart element
