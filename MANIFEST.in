@@ -1,0 +1,3 @@
+exclude .* pygal_doc_old.tar.xz tox.ini
+graft demo docs tests
+global-exclude __pycache__ *.py[co]
