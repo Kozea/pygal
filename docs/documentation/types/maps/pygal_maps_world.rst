@@ -183,7 +183,7 @@ ls     Lesotho
 lt     Lithuania
 lu     Luxembourg
 lv     Latvia
-ly     Libyan Arab Jamahiriya
+ly     Libya
 ma     Morocco
 mc     Monaco
 md     Moldova, Republic of
