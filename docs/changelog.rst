@@ -2,6 +2,52 @@
 Changelog
 =========
 
+3.0.4
+=====
+
+**Fixed**
+
+* Missing declaration of `importlib_metadata` dependency in `setup.py`
+
+3.0.3
+=====
+
+**Fixed**
+
+* Failure with `tox` due to missing `README.md`
+
+3.0.2
+=====
+
+**Fixed**
+
+* Misused `entry_points` causing failure with Python 3.12
+
+**Changed**
+
+* Prevent installing with Python versions < 3.8
+* Replace unmaintained `pytest-flake8` with plain `flake8`
+
+3.0.1
+=====
+
+* Use `importlib`` instead of deprecated `pkg_resources`
+* Prevent installing unsupported Python versions
+
+3.0.0
+=====
+
+**Fixed**
+
+* Remove `Iterable` import deprecation warning
+* Remove invalid escape sequence warnings in tests
+* Fix test failures due to removed pytest attribute
+* Fix linting errors with latest isort and flake8
+
+**Changed**
+
+* Replace deprecated tested versions of Python (including Python 2) with latest ones in CI
+
 2.4.0
 =====
 
@@ -16,7 +62,7 @@ Changelog
 2.3.1
 =====
 
-_This is a micro release and I have very little time on my hands right now sorry_
+*This is a micro release and I have very little time on my hands right now sorry*
 
 * Fix crash with no values when the print_values_position param is set (thanks @cristen)
 

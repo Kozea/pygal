@@ -26,13 +26,19 @@ import os
 from datetime import date, datetime
 from math import pi
 from numbers import Number
+from urllib.parse import quote_plus
 
 from pygal import __version__
-from pygal._compat import quote_plus, to_str, u
 from pygal.etree import etree
 from pygal.util import (
-    coord_abs_project, coord_diff, coord_dual, coord_format, coord_project,
-    minify_css, template)
+    coord_abs_project,
+    coord_diff,
+    coord_dual,
+    coord_format,
+    coord_project,
+    minify_css,
+    template,
+)
 
 nearly_2pi = 2 * pi - .00001
 
@@ -73,13 +79,15 @@ class Svg(object):
         if graph.classes:
             self.root.attrib['class'] = ' '.join(graph.classes)
         self.root.append(
-            etree.Comment(u(
+            etree.Comment(
                 'Generated with pygal %s (%s) ©Kozea 2012-2016 on %s' % (
-                    __version__,
-                    'lxml' if etree.lxml else 'etree',
-                    date.today().isoformat()))))
-        self.root.append(etree.Comment(u('http://pygal.org')))
-        self.root.append(etree.Comment(u('http://github.com/Kozea/pygal')))
+                    __version__, 'lxml' if etree.lxml else 'etree',
+                    date.today().isoformat()
+                )
+            )
+        )
+        self.root.append(etree.Comment('http://pygal.org'))
+        self.root.append(etree.Comment('http://github.com/Kozea/pygal'))
         self.defs = self.node(tag='defs')
         self.title = self.node(tag='title')
         self.title.text = graph.title or 'Pygal'
@@ -127,8 +135,8 @@ class Svg(object):
                 if css.startswith('//') and self.graph.force_uri_protocol:
                     css = '%s:%s' % (self.graph.force_uri_protocol, css)
                 self.processing_instructions.append(
-                    etree.PI(
-                        u('xml-stylesheet'), u('href="%s"' % css)))
+                    etree.PI('xml-stylesheet', 'href="%s"' % css)
+                )
         self.node(
             self.defs, 'style', type='text/css').text = '\n'.join(all_css)
 
@@ -195,7 +203,7 @@ class Svg(object):
             if value is None:
                 del attrib[key]
 
-            attrib[key] = to_str(value)
+            attrib[key] = str(value)
             if key.endswith('_'):
                 attrib[key.rstrip('_')] = attrib[key]
                 del attrib[key]

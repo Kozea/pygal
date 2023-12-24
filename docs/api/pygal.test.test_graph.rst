@@ -1,7 +1,7 @@
-pygal\.test\.test\_graph module
-===============================
+pygal.test.test\_graph module
+=============================
 
 .. automodule:: pygal.test.test_graph
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   :members:
+   :undoc-members:
+   :show-inheritance:

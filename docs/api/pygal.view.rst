@@ -1,7 +1,7 @@
-pygal\.view module
-==================
+pygal.view module
+=================
 
 .. automodule:: pygal.view
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   :members:
+   :undoc-members:
+   :show-inheritance:

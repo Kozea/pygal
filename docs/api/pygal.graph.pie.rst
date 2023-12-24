@@ -1,7 +1,7 @@
-pygal\.graph\.pie module
-========================
+pygal.graph.pie module
+======================
 
 .. automodule:: pygal.graph.pie
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   :members:
+   :undoc-members:
+   :show-inheritance:

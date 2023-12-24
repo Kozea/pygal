@@ -19,9 +19,6 @@
 
 """Gauge chart representing values as needles on a polar scale"""
 
-from __future__ import division
-
-from pygal._compat import is_str
 from pygal.graph.graph import Graph
 from pygal.util import alter, compute_scale, cut, decorate
 from pygal.view import PolarThetaLogView, PolarThetaView
@@ -155,7 +152,7 @@ class Gauge(Graph):
                 if isinstance(y_label, dict):
                     pos = self._adapt(y_label.get('value'))
                     title = y_label.get('label', self._y_format(pos))
-                elif is_str(y_label):
+                elif isinstance(y_label, str):
                     pos = self._adapt(y_pos[i])
                     title = y_label
                 else:

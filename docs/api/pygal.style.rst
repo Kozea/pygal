@@ -1,7 +1,7 @@
-pygal\.style module
-===================
+pygal.style module
+==================
 
 .. automodule:: pygal.style
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   :members:
+   :undoc-members:
+   :show-inheritance:

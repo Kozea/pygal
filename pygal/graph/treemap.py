@@ -19,8 +19,6 @@
 
 """Treemap chart: Visualize data using nested recangles"""
 
-from __future__ import division
-
 from pygal.adapters import none_to_zero, positive
 from pygal.graph.graph import Graph
 from pygal.util import alter, cut, decorate

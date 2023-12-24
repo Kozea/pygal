@@ -1,0 +1,46 @@
+name: CI
+concurrency:
+  group: check-${{ github.ref }}
+  cancel-in-progress: true
+on:
+  push:
+    branches:
+      - master
+    tags:
+      - v*
+  pull_request:
+    branches:
+      - master
+jobs:
+  test:
+    runs-on: '${{ matrix.os }}'
+    strategy:
+      matrix:
+        os:
+          - ubuntu-latest
+        python-version:
+          - "3.8"
+          - "3.9"
+          - "3.10"
+          - "3.11"
+          - "3.12"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '${{ matrix.python-version }}'
+          cache: pip
+      - run: pip install coveralls tox tox-gh
+      - run: tox
+      - run: coveralls
+        continue-on-error: true
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+          cache: pip
+      - run: make install  # TODO: this should only install lint dependencies
+      - run: make lint

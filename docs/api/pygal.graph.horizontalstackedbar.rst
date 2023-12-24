@@ -1,7 +1,7 @@
-pygal\.graph\.horizontalstackedbar module
-=========================================
+pygal.graph.horizontalstackedbar module
+=======================================
 
 .. automodule:: pygal.graph.horizontalstackedbar
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   :members:
+   :undoc-members:
+   :show-inheritance:

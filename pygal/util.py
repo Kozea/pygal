@@ -25,8 +25,6 @@ import re
 from decimal import Decimal
 from math import ceil, cos, floor, log10, pi, sin
 
-from pygal._compat import _ellipsis, to_unicode, u
-
 
 def float_format(number):
     """Format a float to a precision of 3, without zeroes or dots"""
@@ -213,12 +211,12 @@ def decorate(svg, node, metadata):
         if not isinstance(xlink, dict):
             xlink = {'href': xlink, 'target': '_blank'}
         node = svg.node(node, 'a', **xlink)
-        svg.node(node, 'desc', class_='xlink').text = to_unicode(
-            xlink.get('href'))
+        svg.node(
+            node, 'desc', class_='xlink'
+        ).text = str(xlink.get('href'))
 
     if 'tooltip' in metadata:
-        svg.node(node, 'title').text = to_unicode(
-            metadata['tooltip'])
+        svg.node(node, 'title').text = str(metadata['tooltip'])
 
     if 'color' in metadata:
         color = metadata.pop('color')
@@ -228,9 +226,10 @@ def decorate(svg, node, metadata):
     if 'style' in metadata:
         node.attrib['style'] = metadata.pop('style')
 
-    if 'label' in metadata:
-        svg.node(node, 'desc', class_='label').text = to_unicode(
-            metadata['label'])
+    if 'label' in metadata and metadata['label']:
+        svg.node(
+            node, 'desc', class_='label'
+        ).text = str(metadata['label'])
     return node
 
 
@@ -244,7 +243,7 @@ def alter(node, metadata):
 def truncate(string, index):
     """Truncate a string at index and add ..."""
     if len(string) > index and index > 0:
-        string = string[:index - 1] + u('…')
+        string = string[:index - 1] + '…'
     return string
 
 
@@ -283,7 +282,7 @@ def minify_css(css):
     # Inspired by slimmer by Peter Bengtsson
     remove_next_comment = 1
     for css_comment in css_comments.findall(css):
-        if css_comment[-3:] == '\*/':
+        if css_comment[-3:] == r'\*/':
             remove_next_comment = 0
             continue
         if remove_next_comment:
@@ -367,9 +366,9 @@ def coord_abs_project(center, rho, theta):
 
 
 def mergextend(list1, list2):
-    if list1 is None or _ellipsis not in list1:
+    if list1 is None or Ellipsis not in list1:
         return list1
-    index = list1.index(_ellipsis)
+    index = list1.index(Ellipsis)
     return list(list1[:index]) + list(list2) + list(list1[index + 1:])
 
 

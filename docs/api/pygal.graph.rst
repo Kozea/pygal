@@ -1,15 +1,16 @@
-pygal\.graph package
-====================
+pygal.graph package
+===================
 
 .. automodule:: pygal.graph
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   :members:
+   :undoc-members:
+   :show-inheritance:
 
 Submodules
 ----------
 
 .. toctree::
+   :maxdepth: 4
 
    pygal.graph.bar
    pygal.graph.base
@@ -37,4 +38,3 @@ Submodules
    pygal.graph.time
    pygal.graph.treemap
    pygal.graph.xy
-

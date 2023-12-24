@@ -1,7 +1,7 @@
-pygal\.graph\.horizontalline module
-===================================
+pygal.graph.horizontalline module
+=================================
 
 .. automodule:: pygal.graph.horizontalline
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   :members:
+   :undoc-members:
+   :show-inheritance:

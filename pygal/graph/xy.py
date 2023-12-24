@@ -22,8 +22,6 @@ XY Line graph: Plot a set of couple data points (x, y) connected by
 straight segments.
 """
 
-from __future__ import division
-
 from functools import reduce
 
 from pygal.graph.dual import Dual

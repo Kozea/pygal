@@ -18,8 +18,6 @@
 # along with pygal. If not, see <http://www.gnu.org/licenses/>.
 """Funnel chart: Represent values as a funnel"""
 
-from __future__ import division
-
 from pygal.adapters import none_to_zero, positive
 from pygal.graph.graph import Graph
 from pygal.util import alter, cut, decorate

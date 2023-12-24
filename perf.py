@@ -66,9 +66,10 @@ if '--profile' in sys.argv:
 
 if '--mem' in sys.argv:
     _TWO_20 = float(2 ** 20)
-    import os
-    import psutil
     import linecache
+    import os
+
+    import psutil
     pid = os.getpid()
     process = psutil.Process(pid)
     import gc

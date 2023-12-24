@@ -21,13 +21,11 @@
 
 import io
 import os
-import sys
 import uuid
 
 import pytest
 
 import pygal
-from pygal._compat import u
 from pygal.graph.map import BaseMap
 from pygal.test import make_data
 from pygal.util import cut
@@ -289,68 +287,45 @@ def test_no_data_with_lists_of_nones(Chart):
 def test_unicode_labels_decode(Chart):
     """Test unicode labels"""
     chart = Chart()
-    chart.add(u('Série1'), [{
-        'value': 1,
-        'xlink': 'http://1/',
-        'label': u('{\}Â°ĳæð©&×&<—×€¿_…\{_…')
-    }, {
-        'value': 2,
-        'xlink': {
-            'href': 'http://6.example.com/'
-        },
-        'label': u('æÂ°€≠|€æÂ°€əæ')
-    }, {
-        'value': 3,
-        'label': 'unicode <3'
-    }])
+    chart.add(
+        'Série1', [{
+            'value': 1,
+            'xlink': 'http://1/',
+            'label': 'Â°ĳæð©&×&<—×€¿_…'
+        }, {
+            'value': 2,
+            'xlink': {
+                'href': 'http://6.example.com/'
+            },
+            'label': 'æÂ°€≠|€æÂ°€əæ'
+        }, {
+            'value': 3,
+            'label': 'unicode <3'
+        }]
+    )
     if not chart._dual:
-        chart.x_labels = [u('&œ'), u('¿?'), u('††††††††'), 'unicode <3']
+        chart.x_labels = ['&œ', '¿?', '††††††††', 'unicode <3']
     chart.render_pyquery()
 
 
-def test_unicode_labels_python2(Chart):
-    """Test unicode labels in python 2"""
-    if sys.version_info[0] == 3:
-        return
+def test_unicode_labels(Chart):
     chart = Chart()
-    chart.add(u('Série1'), [{
-        'value': 1,
-        'xlink': 'http://1/',
-        'label': eval("u'{\}Â°ĳæð©&×&<—×€¿_…\{_…'")
-    }, {
-        'value': 2,
-        'xlink': {
-            'href': 'http://6.example.com/'
-        },
-        'label': eval("u'æÂ°€≠|€æÂ°€əæ'")
-    }, {
-        'value': 3,
-        'label': eval("'unicode <3'")
-    }])
-    if not chart._dual:
-        chart.x_labels = eval("[u'&œ', u'¿?', u'††††††††', 'unicode <3']")
-    chart.render_pyquery()
-
-
-def test_unicode_labels_python3(Chart):
-    """Test unicode labels in python 3"""
-    if sys.version_info[0] == 2:
-        return
-    chart = Chart()
-    chart.add(u('Série1'), [{
-        'value': 1,
-        'xlink': 'http://1/',
-        'label': eval("'{\}Â°ĳæð©&×&<—×€¿_…\{_…'")
-    }, {
-        'value': 2,
-        'xlink': {
-            'href': 'http://6.example.com/'
-        },
-        'label': eval("'æÂ°€≠|€æÂ°€əæ'")
-    }, {
-        'value': 3,
-        'label': eval("b'unicode <3'")
-    }])
+    chart.add(
+        'Série1', [{
+            'value': 1,
+            'xlink': 'http://1/',
+            'label': eval("'Â°ĳæð©&×&<—×€¿_…'")
+        }, {
+            'value': 2,
+            'xlink': {
+                'href': 'http://6.example.com/'
+            },
+            'label': eval("'æÂ°€≠|€æÂ°€əæ'")
+        }, {
+            'value': 3,
+            'label': eval("b'unicode <3'")
+        }]
+    )
     if not chart._dual:
         chart.x_labels = eval("['&œ', '¿?', '††††††††', 'unicode <3']")
     chart.render_pyquery()

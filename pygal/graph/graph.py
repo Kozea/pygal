@@ -18,18 +18,27 @@
 # along with pygal. If not, see <http://www.gnu.org/licenses/>.
 """Chart properties and drawing"""
 
-from __future__ import division
-
 from math import ceil, cos, sin, sqrt
 
 from pygal import stats
-from pygal._compat import is_list_like, is_str, to_str
+from pygal._compat import is_list_like
 from pygal.graph.public import PublicApi
 from pygal.interpolate import INTERPOLATIONS
 from pygal.util import (
-    cached_property, compute_scale, cut, decorate, filter_kwargs, get_text_box,
-    get_texts_box, majorize, rad, reverse_text_len, split_title, truncate)
-from pygal.view import LogView, ReverseView, View, XYLogView, XLogView, LogView
+    cached_property,
+    compute_scale,
+    cut,
+    decorate,
+    filter_kwargs,
+    get_text_box,
+    get_texts_box,
+    majorize,
+    rad,
+    reverse_text_len,
+    split_title,
+    truncate,
+)
+from pygal.view import LogView, ReverseView, View, XYLogView
 
 
 class Graph(PublicApi):
@@ -505,13 +514,10 @@ class Graph(PublicApi):
                 classes.append('top')
             classes = ' '.join(classes)
 
-        self.svg.node(node, 'desc',
-                      class_="x " + classes).text = to_str(x)
-        self.svg.node(node, 'desc',
-                      class_="y " + classes).text = to_str(y)
+        self.svg.node(node, 'desc', class_="x " + classes).text = str(x)
+        self.svg.node(node, 'desc', class_="y " + classes).text = str(y)
         if xlabel:
-            self.svg.node(node, 'desc',
-                          class_="x_label").text = to_str(xlabel)
+            self.svg.node(node, 'desc', class_="x_label").text = str(xlabel)
 
     def _static_value(self, serie_node, value, x, y, metadata,
                       align_text='left', classes=None):
@@ -606,7 +612,7 @@ class Graph(PublicApi):
 
     @property
     def _default_formatter(self):
-        return to_str
+        return str
 
     @property
     def _y_format(self):
@@ -857,7 +863,7 @@ class Graph(PublicApi):
         return len(self.all_series)
 
     def _x_label_format_if_value(self, label):
-        if not is_str(label):
+        if not isinstance(label, str):
             return self._x_format(label)
         return label
 
@@ -896,7 +902,7 @@ class Graph(PublicApi):
                 if isinstance(y_label, dict):
                     pos = self._adapt(y_label.get('value'))
                     title = y_label.get('label', self._y_format(pos))
-                elif is_str(y_label):
+                elif isinstance(y_label, str):
                     pos = self._adapt(y_pos[i % len(y_pos)])
                     title = y_label
                 else:

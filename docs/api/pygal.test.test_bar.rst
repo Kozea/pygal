@@ -1,7 +1,7 @@
-pygal\.test\.test\_bar module
-=============================
+pygal.test.test\_bar module
+===========================
 
 .. automodule:: pygal.test.test_bar
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   :members:
+   :undoc-members:
+   :show-inheritance:

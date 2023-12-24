@@ -2,23 +2,25 @@ pygal package
 =============
 
 .. automodule:: pygal
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   :members:
+   :undoc-members:
+   :show-inheritance:
 
 Subpackages
 -----------
 
 .. toctree::
+   :maxdepth: 4
 
-    pygal.graph
-    pygal.maps
-    pygal.test
+   pygal.graph
+   pygal.maps
+   pygal.test
 
 Submodules
 ----------
 
 .. toctree::
+   :maxdepth: 4
 
    pygal.adapters
    pygal.colors
@@ -34,4 +36,3 @@ Submodules
    pygal.table
    pygal.util
    pygal.view
-

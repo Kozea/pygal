@@ -1,7 +1,7 @@
-pygal\.formatters module
-========================
+pygal.formatters module
+=======================
 
 .. automodule:: pygal.formatters
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   :members:
+   :undoc-members:
+   :show-inheritance:

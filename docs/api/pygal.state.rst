@@ -1,7 +1,7 @@
-pygal\.state module
-===================
+pygal.state module
+==================
 
 .. automodule:: pygal.state
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   :members:
+   :undoc-members:
+   :show-inheritance:

@@ -16,23 +16,18 @@ All the documentation is on http://pygal.org
 
 ## Installation
 
-As simple as:
+As simple as::
 
-```
     $ pip install pygal
-```
-
 
 
 ## Test
 
-Pygal is tested with py.test:
+Pygal is tested with py.test::
 
 
-```
     $ pip install pytest
     $ py.test
-```
 
 
 ## Contribute

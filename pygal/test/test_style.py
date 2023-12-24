@@ -21,8 +21,13 @@
 
 from pygal import Line
 from pygal.style import (
-    DarkenStyle, DesaturateStyle, LightenStyle, LightStyle, RotateStyle,
-    SaturateStyle)
+    DarkenStyle,
+    DesaturateStyle,
+    LightenStyle,
+    LightStyle,
+    RotateStyle,
+    SaturateStyle,
+)
 
 STYLES = LightenStyle, DarkenStyle, SaturateStyle, DesaturateStyle, RotateStyle
 

@@ -40,18 +40,11 @@ class PyTest(TestCommand):
 ROOT = os.path.dirname(__file__)
 
 
-# Explicitly specify the encoding of pygal/__init__.py if we're on py3.
-kwargs = {}
-if sys.version_info[0] == 3:
-    kwargs['encoding'] = 'utf-8'
-    cairosvg = 'cairosvg'
-else:
-    cairosvg = 'cairosvg==0.5'
-
 tests_requirements = [
-    "pyquery", "flask", cairosvg, 'lxml', 'pygal_maps_world', 'pygal_maps_fr',
+    "pyquery", "flask", 'cairosvg', 'lxml', 'pygal_maps_world', 'pygal_maps_fr',
     'pygal_maps_ch', 'coveralls',
-    'pytest-runner', 'pytest-cov', 'pytest-flake8', 'pytest-isort',
+    'ruff',
+    'pytest-runner', 'pytest-cov',
     'pytest'
 ]
 
@@ -64,24 +57,27 @@ setup(
     name=about['__title__'],
     version=about['__version__'],
     description=about['__summary__'],
+    long_description=open('README').read(),
+    long_description_content_type="text/x-rst",
     url=about['__uri__'],
     author=about['__author__'],
     author_email=about['__email__'],
     license=about['__license__'],
     platforms="Any",
+    python_requires=">=3.8",
     packages=find_packages(),
     provides=['pygal'],
     scripts=["pygal_gen.py"],
     keywords=[
         "svg", "chart", "graph", "diagram", "plot", "histogram", "kiviat"],
     setup_requires=['pytest-runner'],
-    test_requires=tests_requirements,
+    install_requires=['importlib-metadata'],  # TODO: remove this (see #545, #546)
     cmdclass={'test': PyTest},
     package_data={'pygal': ['css/*', 'graph/maps/*.svg']},
     extras_require={
         'lxml': ['lxml'],
         'docs': ['sphinx', 'sphinx_rtd_theme', 'pygal_sphinx_directives'],
-        'png': [cairosvg],
+        'png': ['cairosvg'],
         'test': tests_requirements
     },
     classifiers=[
@@ -91,6 +87,5 @@ setup(
         "License :: OSI Approved :: "
         "GNU Lesser General Public License v3 or later (LGPLv3+)",
         "Operating System :: OS Independent",
-        "Programming Language :: Python :: 2",
         "Programming Language :: Python :: 3",
         "Topic :: Multimedia :: Graphics :: Presentation"])

@@ -22,11 +22,30 @@
 from tempfile import NamedTemporaryFile
 
 from pygal import (
-    XY, Bar, Box, Config, DateLine, DateTimeLine, Dot, Funnel, Gauge,
-    Histogram, HorizontalBar, HorizontalLine, HorizontalStackedBar,
-    HorizontalStackedLine, Line, Pie, Pyramid, Radar, SolidGauge,
-    TimeDeltaLine, TimeLine, Treemap, formatters)
-from pygal._compat import _ellipsis, u
+    XY,
+    Bar,
+    Box,
+    Config,
+    DateLine,
+    DateTimeLine,
+    Dot,
+    Funnel,
+    Gauge,
+    Histogram,
+    HorizontalBar,
+    HorizontalLine,
+    HorizontalStackedBar,
+    HorizontalStackedLine,
+    Line,
+    Pie,
+    Pyramid,
+    Radar,
+    SolidGauge,
+    TimeDeltaLine,
+    TimeLine,
+    Treemap,
+    formatters,
+)
 from pygal.graph.dual import Dual
 from pygal.graph.horizontal import HorizontalGraph
 from pygal.graph.map import BaseMap
@@ -234,12 +253,15 @@ def test_logarithmic_big_scale():
 
 def test_value_formatter():
     """Test value formatter option"""
-    line = Line(value_formatter=lambda x: str(x) + u('‰'))
-    line.add('_', [10 ** 4, 10 ** 5, 23 * 10 ** 4])
+    line = Line(value_formatter=lambda x: str(x) + '‰')
+    line.add('_', [10**4, 10**5, 23 * 10**4])
     q = line.render_pyquery()
     assert len(q(".y.axis .guides")) == 11
-    assert q(".axis.y text").map(texts) == list(map(
-        lambda x: str(x) + u('‰'), map(float, range(20000, 240000, 20000))))
+    assert q(".axis.y text").map(texts) == list(
+        map(
+            lambda x: str(x) + '‰', map(float, range(20000, 240000, 20000))
+        )
+    )
 
 
 def test_logarithmic_small_scale():
@@ -292,9 +314,9 @@ def test_no_data():
     line = Line()
     q = line.render_pyquery()
     assert q(".text-overlay text").text() == "No data"
-    line.no_data_text = u("þæ®þæ€€&ĳ¿’€")
+    line.no_data_text = "þæ®þæ€€&ĳ¿’€"
     q = line.render_pyquery()
-    assert q(".text-overlay text").text() == u("þæ®þæ€€&ĳ¿’€")
+    assert q(".text-overlay text").text() == "þæ®þæ€€&ĳ¿’€"
 
 
 def test_include_x_axis(Chart):
@@ -337,7 +359,7 @@ def test_css(Chart):
         svg = chart.render().decode('utf-8')
         assert '#bedead' in svg
 
-        chart = Chart(css=(_ellipsis, 'file://' + f.name))
+        chart = Chart(css=(Ellipsis, 'file://' + f.name))
         chart.add('/', [10, 1, 5])
         svg = chart.render().decode('utf-8')
         assert '#bedead' in svg
@@ -527,26 +549,26 @@ def test_fill(Chart):
 def test_render_data_uri(Chart):
     """Test the render data uri"""
     chart = Chart(fill=True)
-    chart.add(u('ééé'), [1, 2, 3])
-    chart.add(u('èèè'), [10, 21, 5])
-    assert chart.render_data_uri().startswith(
-        'data:image/svg+xml;charset=utf-8;base64,')
+    chart.add('ééé', [1, 2, 3])
+    chart.add('èèè', [10, 21, 5])
+    assert chart.render_data_uri(
+    ).startswith('data:image/svg+xml;charset=utf-8;base64,')
 
 
 def test_formatters(Chart):
     """Test custom formatters"""
     if Chart._dual or Chart == Box:
         return
-    chart = Chart(
-        formatter=lambda x, chart, serie: '%s%s$' % (x, serie.title))
-    chart.add('_a', [1, 2, {'value': 3, 'formatter': lambda x: u('%s¥') % x}])
-    chart.add('_b', [4, 5, 6], formatter=lambda x: u('%s€') % x)
+    chart = Chart(formatter=lambda x, chart, serie: '%s%s$' % (x, serie.title))
+    chart.add('_a', [1, 2, {'value': 3, 'formatter': lambda x: '%s¥' % x}])
+    chart.add('_b', [4, 5, 6], formatter=lambda x: '%s€' % x)
     chart.x_labels = [2, 4, 6]
     chart.x_labels_major = [4]
     q = chart.render_pyquery()
-    assert set([v.text for v in q(".value")]) == set((
-        u('4€'), u('5€'), u('6€'), '1_a$', '2_a$', u('3¥')) + (
-            ('6_a$', u('15€')) if Chart in (Pie, SolidGauge) else ()))
+    assert set(
+        [v.text for v in q(".value")]
+    ) == set(('4€', '5€', '6€', '1_a$', '2_a$', '3¥') +
+             (('6_a$', '15€') if Chart in (Pie, SolidGauge) else ()))
 
 
 def test_classes(Chart):
@@ -557,7 +579,7 @@ def test_classes(Chart):
     chart = Chart(classes=())
     assert not chart.render_pyquery().attr('class')
 
-    chart = Chart(classes=(_ellipsis,))
+    chart = Chart(classes=(Ellipsis, ))
     assert chart.render_pyquery().attr('class') == 'pygal-chart'
 
     chart = Chart(classes=('graph',))
@@ -566,8 +588,8 @@ def test_classes(Chart):
     chart = Chart(classes=('pygal-chart', 'graph'))
     assert chart.render_pyquery().attr('class') == 'pygal-chart graph'
 
-    chart = Chart(classes=(_ellipsis, 'graph'))
+    chart = Chart(classes=(Ellipsis, 'graph'))
     assert chart.render_pyquery().attr('class') == 'pygal-chart graph'
 
-    chart = Chart(classes=('graph', _ellipsis))
+    chart = Chart(classes=('graph', Ellipsis))
     assert chart.render_pyquery().attr('class') == 'graph pygal-chart'

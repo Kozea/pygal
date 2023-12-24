@@ -21,7 +21,7 @@
 import base64
 import io
 
-from pygal._compat import _ellipsis, is_list_like, u
+from pygal._compat import is_list_like
 from pygal.graph.base import BaseGraph
 
 
@@ -121,14 +121,14 @@ class PublicApi(BaseGraph):
 
     def render_sparktext(self, relative_to=None):
         """Make a mini text sparkline from chart"""
-        bars = u('▁▂▃▄▅▆▇█')
+        bars = '▁▂▃▄▅▆▇█'
         if len(self.raw_series) == 0:
-            return u('')
+            return ''
         values = list(self.raw_series[0][0])
         if len(values) == 0:
-            return u('')
+            return ''
 
-        chart = u('')
+        chart = ''
         values = list(map(lambda x: max(x, 0), values))
 
         vmax = max(values)
@@ -161,7 +161,7 @@ class PublicApi(BaseGraph):
             explicit_size=True,
             no_data_text='',
             js=(),
-            classes=(_ellipsis, 'pygal-sparkline')
+            classes=(Ellipsis, 'pygal-sparkline'),
         )
         spark_options.update(kwargs)
         return self.render(**spark_options)

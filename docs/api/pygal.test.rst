@@ -1,15 +1,16 @@
-pygal\.test package
-===================
+pygal.test package
+==================
 
 .. automodule:: pygal.test
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   :members:
+   :undoc-members:
+   :show-inheritance:
 
 Submodules
 ----------
 
 .. toctree::
+   :maxdepth: 4
 
    pygal.test.conftest
    pygal.test.test_bar
@@ -34,4 +35,3 @@ Submodules
    pygal.test.test_view
    pygal.test.test_xml_filters
    pygal.test.utils
-

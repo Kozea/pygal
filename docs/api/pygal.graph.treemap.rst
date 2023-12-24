@@ -1,7 +1,7 @@
-pygal\.graph\.treemap module
-============================
+pygal.graph.treemap module
+==========================
 
 .. automodule:: pygal.graph.treemap
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   :members:
+   :undoc-members:
+   :show-inheritance:

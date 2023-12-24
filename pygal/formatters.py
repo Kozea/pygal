@@ -25,7 +25,6 @@ from __future__ import division
 from datetime import date, datetime, time
 from math import floor, log
 
-from pygal._compat import to_str, u
 from pygal.util import float_format
 
 
@@ -35,9 +34,9 @@ class Formatter(object):
 
 class HumanReadable(Formatter):
     """Format a number to engineer scale"""
-    ORDERS = u("yzafpnµm kMGTPEZY")
+    ORDERS = "yzafpnµm kMGTPEZY"
 
-    def __init__(self, none_char=u('∅')):
+    def __init__(self, none_char='∅'):
         self.none_char = none_char
 
     def __call__(self, val):
@@ -78,7 +77,7 @@ class Raw(Formatter):
     def __call__(self, val):
         if val is None:
             return ''
-        return to_str(val)
+        return str(val)
 
 
 class IsoDateTime(Formatter):

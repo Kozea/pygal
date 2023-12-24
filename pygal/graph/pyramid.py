@@ -22,8 +22,6 @@ Pyramid chart: Stacked bar chart containing only positive values divided by two
 axes, generally gender for age pyramid.
 """
 
-from __future__ import division
-
 from pygal.adapters import positive
 from pygal.graph.horizontal import HorizontalGraph
 from pygal.graph.stackedbar import StackedBar

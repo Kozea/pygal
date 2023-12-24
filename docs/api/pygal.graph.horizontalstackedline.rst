@@ -1,7 +1,7 @@
-pygal\.graph\.horizontalstackedline module
-==========================================
+pygal.graph.horizontalstackedline module
+========================================
 
 .. automodule:: pygal.graph.horizontalstackedline
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   :members:
+   :undoc-members:
+   :show-inheritance:

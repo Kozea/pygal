@@ -1,7 +1,7 @@
-pygal\.interpolate module
-=========================
+pygal.interpolate module
+========================
 
 .. automodule:: pygal.interpolate
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   :members:
+   :undoc-members:
+   :show-inheritance:

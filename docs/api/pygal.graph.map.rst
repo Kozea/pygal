@@ -1,7 +1,7 @@
-pygal\.graph\.map module
-========================
+pygal.graph.map module
+======================
 
 .. automodule:: pygal.graph.map
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   :members:
+   :undoc-members:
+   :show-inheritance:

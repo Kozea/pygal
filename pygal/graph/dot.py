@@ -22,11 +22,8 @@ Dot chart displaying values as a grid of dots, the bigger the value
 the bigger the dot
 """
 
-from __future__ import division
-
 from math import log10
 
-from pygal._compat import to_str
 from pygal.graph.graph import Graph
 from pygal.util import alter, cached_property, decorate, safe_enumerate
 from pygal.view import ReverseView, View
@@ -90,12 +87,18 @@ class Dot(Graph):
                 for i in range(x_len)]
 
     def _compute_y_labels(self):
-        self._y_labels = list(zip(
-            self.y_labels and map(to_str, self.y_labels) or [
-                serie.title['title']
-                if isinstance(serie.title, dict)
-                else serie.title or '' for serie in self.series],
-            self._y_pos))
+        if self.y_labels:
+            y_labels = [str(label) for label in self.y_labels]
+        else:
+            y_labels = [
+                (
+                    serie.title['title']
+                    if isinstance(serie.title, dict)
+                    else serie.title
+                ) or ''
+                for serie in self.series
+            ]
+        self._y_labels = list(zip(y_labels, self._y_pos))
 
     def _set_view(self):
         """Assign a view to current graph"""
