@@ -38,7 +38,7 @@ from pygal.util import (
     split_title,
     truncate,
 )
-from pygal.view import LogView, ReverseView, View, XYLogView
+from pygal.view import LogView, ReverseView, View, XYLogView, XLogView
 
 
 class Graph(PublicApi):
