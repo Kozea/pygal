@@ -16,12 +16,14 @@
 #
 # You should have received a copy of the GNU Lesser General Public License
 # along with pygal. If not, see <http://www.gnu.org/licenses/>.
+
 """Class holding state during render"""
 
 from pygal.util import merge
 
 
 class State(object):
+
     """
     Class containing config values
     overriden by chart values

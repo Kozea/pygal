@@ -4,7 +4,6 @@
 # in the Log graph will be max or not (issue #309)
 
 from __future__ import division
-
 from pygal import Line
 
 chart = Line(title='test', logarithmic=True)

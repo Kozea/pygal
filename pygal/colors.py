@@ -81,10 +81,8 @@ def hsl_to_rgb(h, s, l):
         if 3 * h < 2:
             return m1 + 6 * (2 / 3 - h) * (m2 - m1)
         return m1
-
-    r, g, b = map(
-        lambda x: round(x * 255), map(h_to_rgb, (h + 1 / 3, h, h - 1 / 3))
-    )
+    r, g, b = map(lambda x: round(x * 255),
+                  map(h_to_rgb, (h + 1 / 3, h, h - 1 / 3)))
 
     return r, g, b
 
@@ -109,8 +107,7 @@ def parse_color(color):
         assert len(color) == 8
         type = type or '#rrggbbaa'
         r, g, b, a = [
-            int(''.join(c), 16) for c in zip(color[::2], color[1::2])
-        ]
+            int(''.join(c), 16) for c in zip(color[::2], color[1::2])]
         a /= 255
     elif color.startswith('rgb('):
         type = 'rgb'
@@ -119,8 +116,8 @@ def parse_color(color):
     elif color.startswith('rgba('):
         type = 'rgba'
         color = color[5:-1]
-        r, g, b, a = [int(c) for c in color.split(',')[:-1]
-                      ] + [float(color.split(',')[-1])]
+        r, g, b, a = [int(c) for c in color.split(',')[:-1]] + [
+            float(color.split(',')[-1])]
     return r, g, b, a, type
 
 
@@ -137,9 +134,8 @@ def unparse_color(r, g, b, a, type):
 
     if type == '#rgba':
         if r % 17 == 0 and g % 17 == 0 and b % 17 == 0:
-            return '#%x%x%x%x' % (
-                int(r / 17), int(g / 17), int(b / 17), int(a * 15)
-            )
+            return '#%x%x%x%x' % (int(r / 17), int(g / 17), int(b / 17),
+                                  int(a * 15))
         type = '#rrggbbaa'
 
     if type == '#rrggbb':

@@ -25,6 +25,7 @@ import os
 
 
 class Etree(object):
+
     """Etree wrapper using lxml.etree or standard xml.etree"""
 
     def __init__(self):
@@ -45,8 +46,8 @@ class Etree(object):
 
     def __getattribute__(self, attr):
         """Retrieve attr from current active etree implementation"""
-        if (attr not in object.__getattribute__(self, '__dict__')
-                and attr not in Etree.__dict__):
+        if (attr not in object.__getattribute__(self, '__dict__') and
+                attr not in Etree.__dict__):
             return object.__getattribute__(self._etree, attr)
         return object.__getattribute__(self, attr)
 

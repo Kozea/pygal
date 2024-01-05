@@ -55,10 +55,11 @@ from pygal.graph.time import DateLine, DateTimeLine, TimeDeltaLine, TimeLine
 from pygal.graph.treemap import Treemap
 from pygal.graph.xy import XY
 
-CHARTS_BY_NAME = dict([
-    (k, v) for k, v in locals().items()
-    if isinstance(v, type) and issubclass(v, Graph) and v != Graph
-])
+
+CHARTS_BY_NAME = dict(
+    [(k, v) for k, v in locals().items()
+     if isinstance(v, type) and issubclass(v, Graph) and v != Graph])
+
 
 from pygal.graph.map import BaseMap
 
@@ -66,10 +67,8 @@ for entry in entry_points(group="pygal.maps"):
     try:
         module = entry.load()
     except Exception:
-        warnings.warn(
-            'Unable to load %s pygal plugin \n\n%s' %
-            (entry, traceback.format_exc()), Warning
-        )
+        warnings.warn('Unable to load %s pygal plugin \n\n%s' % (
+            entry, traceback.format_exc()), Warning)
         continue
     setattr(maps, entry.name, module)
     for k, v in module.__dict__.items():
@@ -81,6 +80,7 @@ CHARTS = list(CHARTS_BY_NAME.values())
 
 
 class PluginImportFixer(object):
+
     """
     Allow external map plugins to be imported from pygal.maps package.
 

@@ -16,6 +16,7 @@
 #
 # You should have received a copy of the GNU Lesser General Public License
 # along with pygal. If not, see <http://www.gnu.org/licenses/>.
+
 """Horizontal Stacked Line graph"""
 
 from pygal.graph.horizontal import HorizontalGraph
@@ -23,6 +24,7 @@ from pygal.graph.stackedline import StackedLine
 
 
 class HorizontalStackedLine(HorizontalGraph, StackedLine):
+
     """Horizontal Stacked Line graph"""
 
     def _plot(self):

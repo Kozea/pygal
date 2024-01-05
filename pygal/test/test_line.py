@@ -16,6 +16,7 @@
 #
 # You should have received a copy of the GNU Lesser General Public License
 # along with pygal. If not, see <http://www.gnu.org/licenses/>.
+
 """Line chart related tests"""
 
 from __future__ import division
@@ -44,13 +45,11 @@ def test_simple_line():
     assert len(q(".y.axis .guides")) == 13
     assert len(q(".dots")) == 3 * 13
     assert q(".axis.x text").map(texts) == [
-        '-30', '-25', '-20', '-15', '-10', '-5', '0', '5', '10', '15', '20',
-        '25', '30'
-    ]
+        '-30', '-25', '-20', '-15', '-10', '-5',
+        '0', '5', '10', '15', '20', '25', '30']
     assert q(".axis.y text").map(texts) == [
-        '-1.2', '-1', '-0.8', '-0.6', '-0.4', '-0.2', '0', '0.2', '0.4', '0.6',
-        '0.8', '1', '1.2'
-    ]
+        '-1.2', '-1', '-0.8', '-0.6', '-0.4', '-0.2',
+        '0', '0.2', '0.4', '0.6', '0.8', '1', '1.2']
     assert q(".title").text() == 'cos sin and cos - sin'
     assert q(".legend text").map(texts) == ['test1', 'test2', 'test3']
 
@@ -104,8 +103,7 @@ def test_not_equal_x_labels():
     assert len(q(".dots")) == 100
     assert len(q(".axis.x")) == 1
     assert q(".axis.x text").map(texts) == [
-        '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10'
-    ]
+        '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10']
 
 
 def test_int_x_labels():
@@ -118,8 +116,7 @@ def test_int_x_labels():
     assert len(q(".dots")) == 100
     assert len(q(".axis.x")) == 1
     assert q(".axis.x text").map(texts) == [
-        '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10'
-    ]
+        '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10']
 
 
 def test_only_major_dots_every():
@@ -151,7 +148,7 @@ def test_only_major_dots_count():
 
 def test_only_major_dots():
     """Test major dots with specified major labels"""
-    line = Line(show_only_major_dots=True, )
+    line = Line(show_only_major_dots=True,)
     line.add('test', range(12))
     line.x_labels = map(str, range(12))
     line.x_labels_major = ['1', '5', '11']
@@ -164,7 +161,9 @@ def test_line_secondary():
     line = Line()
     rng = [8, 12, 23, 73, 39, 57]
     line.add('First serie', rng)
-    line.add('Secondary serie', map(lambda x: x * 2, rng), secondary=True)
+    line.add('Secondary serie',
+             map(lambda x: x * 2, rng),
+             secondary=True)
     line.title = "One serie"
     q = line.render_pyquery()
     assert len(q(".axis.x")) == 0

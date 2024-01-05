@@ -68,11 +68,11 @@
 }
 
 {{ id }}.axis .guide.line {
-  stroke: {{ style.foreground_subtle }};
+  stroke: {{ style.guide_color }};
 }
 
 {{ id }}.axis .major.line {
-  stroke: {{ style.foreground }};
+  stroke: {{ style.guide_color }};
 }
 
 {{ id }}.axis text.major {
@@ -94,7 +94,6 @@
 {{ id }}.reactive {
   fill-opacity: {{ style.opacity }};
   stroke-opacity: {{ style.stroke_opacity }};
-  stroke-width: {{ style.stroke_width }};
 }
 
 {{ id }}.ci {
@@ -105,7 +104,7 @@
 {{ id }}.active .reactive {
   fill-opacity: {{ style.opacity_hover }};
   stroke-opacity: {{ style.stroke_opacity_hover }};
-  stroke-width: {{ style.stroke_width_hover }};
+  stroke-width: 4;
 }
 
 {{ id }}.ci .reactive.active {

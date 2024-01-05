@@ -16,6 +16,7 @@
 #
 # You should have received a copy of the GNU Lesser General Public License
 # along with pygal. If not, see <http://www.gnu.org/licenses/>.
+
 """Stacked chart related tests"""
 
 from pygal import StackedLine
@@ -28,8 +29,7 @@ def test_stacked_line():
     stacked.add('ten_twelve', [10, 12])
     q = stacked.render_pyquery()
     assert set([v.text for v in q("desc.value")]) == set(
-        ('1', '2', '11 (+10)', '14 (+12)')
-    )
+        ('1', '2', '11 (+10)', '14 (+12)'))
 
 
 def test_stacked_line_reverse():
@@ -39,8 +39,7 @@ def test_stacked_line_reverse():
     stacked.add('ten_twelve', [10, 12])
     q = stacked.render_pyquery()
     assert set([v.text for v in q("desc.value")]) == set(
-        ('11 (+1)', '14 (+2)', '10', '12')
-    )
+        ('11 (+1)', '14 (+2)', '10', '12'))
 
 
 def test_stacked_line_log():
@@ -50,8 +49,7 @@ def test_stacked_line_log():
     stacked.add('ten_twelve', [10, 12])
     q = stacked.render_pyquery()
     assert set([v.text for v in q("desc.value")]) == set(
-        ('1', '2', '11 (+10)', '14 (+12)')
-    )
+        ('1', '2', '11 (+10)', '14 (+12)'))
 
 
 def test_stacked_line_interpolate():
@@ -61,5 +59,4 @@ def test_stacked_line_interpolate():
     stacked.add('ten_twelve', [10, 12])
     q = stacked.render_pyquery()
     assert set([v.text for v in q("desc.value")]) == set(
-        ('1', '2', '11 (+10)', '14 (+12)')
-    )
+        ('1', '2', '11 (+10)', '14 (+12)'))

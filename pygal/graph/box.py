@@ -16,6 +16,7 @@
 #
 # You should have received a copy of the GNU Lesser General Public License
 # along with pygal. If not, see <http://www.gnu.org/licenses/>.
+
 """
 Box plot: a convenient way to display series as box with whiskers and outliers
 Different types are available throught the box_mode option
@@ -28,6 +29,7 @@ from pygal.util import alter, decorate
 
 
 class Box(Graph):
+
     """
     Box plot
     For each series, shows the median value, the 25th and 75th percentiles,
@@ -45,20 +47,17 @@ class Box(Graph):
         """
         if self.box_mode == "extremes":
             return (
-                'Min: %s\nQ1 : %s\nQ2 : %s\nQ3 : %s\nMax: %s' %
-                tuple(map(self._y_format, serie.points[1:6]))
-            )
+                'Min: %s\nQ1 : %s\nQ2 : %s\nQ3 : %s\nMax: %s' % tuple(
+                    map(self._y_format, serie.points[1:6])))
         elif self.box_mode in ["tukey", "stdev", "pstdev"]:
             return (
                 'Min: %s\nLower Whisker: %s\nQ1: %s\nQ2: %s\nQ3: %s\n'
-                'Upper Whisker: %s\nMax: %s' %
-                tuple(map(self._y_format, serie.points))
-            )
+                'Upper Whisker: %s\nMax: %s' % tuple(map(
+                    self._y_format, serie.points)))
         elif self.box_mode == '1.5IQR':
             # 1.5IQR mode
-            return 'Q1: %s\nQ2: %s\nQ3: %s' % tuple(
-                map(self._y_format, serie.points[2:5])
-            )
+            return 'Q1: %s\nQ2: %s\nQ3: %s' % tuple(map(
+                self._y_format, serie.points[2:5]))
         else:
             return self._y_format(serie.points)
 
@@ -71,7 +70,8 @@ class Box(Graph):
             serie.points, serie.outliers = \
                 self._box_points(serie.values, self.box_mode)
 
-        self._x_pos = [(i + .5) / self._order for i in range(self._order)]
+        self._x_pos = [
+            (i + .5) / self._order for i in range(self._order)]
 
         if self._min:
             self._box.ymin = min(self._min, self.zero)
@@ -98,17 +98,17 @@ class Box(Graph):
 
         metadata = serie.metadata.get(0)
 
-        box = decorate(self.svg, self.svg.node(boxes, class_='box'), metadata)
+        box = decorate(
+            self.svg,
+            self.svg.node(boxes, class_='box'),
+            metadata)
 
         val = self._format(serie, 0)
 
         x_center, y_center = self._draw_box(
-            box, serie.points[1:6], serie.outliers, serie.index, metadata
-        )
-        self._tooltip_data(
-            box, val, x_center, y_center, "centered",
-            self._get_x_label(serie.index)
-        )
+            box, serie.points[1:6], serie.outliers, serie.index, metadata)
+        self._tooltip_data(box, val, x_center, y_center, "centered",
+                           self._get_x_label(serie.index))
         self._static_value(serie_node, val, x_center, y_center, metadata)
 
     def _draw_box(self, parent_node, quartiles, outliers, box_index, metadata):
@@ -122,72 +122,55 @@ class Box(Graph):
         width -= 2 * series_margin
 
         # draw lines for whiskers - bottom, median, and top
-        for i, whisker in enumerate((quartiles[0], quartiles[2],
-                                     quartiles[4])):
+        for i, whisker in enumerate(
+                (quartiles[0], quartiles[2], quartiles[4])):
             whisker_width = width if i == 1 else width / 2
             shift = (width - whisker_width) / 2
             xs = left_edge + shift
             xe = left_edge + width - shift
-            alter(
-                self.svg.line(
-                    parent_node,
-                    coords=[(xs, self.view.y(whisker)),
-                            (xe, self.view.y(whisker))],
-                    class_='reactive tooltip-trigger',
-                    attrib={'stroke-width': 3}
-                ), metadata
-            )
+            alter(self.svg.line(
+                parent_node,
+                coords=[(xs, self.view.y(whisker)),
+                        (xe, self.view.y(whisker))],
+                class_='reactive tooltip-trigger',
+                attrib={'stroke-width': 3}), metadata)
 
         # draw lines connecting whiskers to box (Q1 and Q3)
-        alter(
-            self.svg.line(
-                parent_node,
-                coords=[(left_edge + width / 2, self.view.y(quartiles[0])),
-                        (left_edge + width / 2, self.view.y(quartiles[1]))],
-                class_='reactive tooltip-trigger',
-                attrib={'stroke-width': 2}
-            ), metadata
-        )
-        alter(
-            self.svg.line(
-                parent_node,
-                coords=[(left_edge + width / 2, self.view.y(quartiles[4])),
-                        (left_edge + width / 2, self.view.y(quartiles[3]))],
-                class_='reactive tooltip-trigger',
-                attrib={'stroke-width': 2}
-            ), metadata
-        )
+        alter(self.svg.line(
+            parent_node,
+            coords=[(left_edge + width / 2, self.view.y(quartiles[0])),
+                    (left_edge + width / 2, self.view.y(quartiles[1]))],
+            class_='reactive tooltip-trigger',
+            attrib={'stroke-width': 2}), metadata)
+        alter(self.svg.line(
+            parent_node,
+            coords=[(left_edge + width / 2, self.view.y(quartiles[4])),
+                    (left_edge + width / 2, self.view.y(quartiles[3]))],
+            class_='reactive tooltip-trigger',
+            attrib={'stroke-width': 2}), metadata)
 
         # box, bounded by Q1 and Q3
-        alter(
-            self.svg.node(
-                parent_node,
-                tag='rect',
-                x=left_edge,
-                y=self.view.y(quartiles[1]),
-                height=self.view.y(quartiles[3]) - self.view.y(quartiles[1]),
-                width=width,
-                class_='subtle-fill reactive tooltip-trigger'
-            ), metadata
-        )
+        alter(self.svg.node(
+            parent_node,
+            tag='rect',
+            x=left_edge,
+            y=self.view.y(quartiles[1]),
+            height=self.view.y(quartiles[3]) - self.view.y(quartiles[1]),
+            width=width,
+            class_='subtle-fill reactive tooltip-trigger'), metadata)
 
         # draw outliers
         for o in outliers:
-            alter(
-                self.svg.node(
-                    parent_node,
-                    tag='circle',
-                    cx=left_edge + width / 2,
-                    cy=self.view.y(o),
-                    r=3,
-                    class_='subtle-fill reactive tooltip-trigger'
-                ), metadata
-            )
+            alter(self.svg.node(
+                parent_node,
+                tag='circle',
+                cx=left_edge + width / 2,
+                cy=self.view.y(o),
+                r=3,
+                class_='subtle-fill reactive tooltip-trigger'), metadata)
 
-        return (
-            left_edge + width / 2,
-            self.view.y(sum(quartiles) / len(quartiles))
-        )
+        return (left_edge + width / 2, self.view.y(
+            sum(quartiles) / len(quartiles)))
 
     @staticmethod
     def _box_points(values, mode='extremes'):
@@ -214,7 +197,6 @@ class Box(Graph):
         Sincich, T. L. Statistics for Engineering and the
         Sciences, 4th ed. Prentice-Hall, 1995.
         """
-
         def median(seq):
             n = len(seq)
             if n % 2 == 0:  # seq has an even length

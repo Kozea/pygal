@@ -16,6 +16,7 @@
 #
 # You should have received a copy of the GNU Lesser General Public License
 # along with pygal. If not, see <http://www.gnu.org/licenses/>.
+
 """Gauge chart representing values as needles on a polar scale"""
 
 from pygal.graph.graph import Graph
@@ -24,6 +25,7 @@ from pygal.view import PolarThetaLogView, PolarThetaView
 
 
 class Gauge(Graph):
+
     """Gauge graph class"""
 
     needle_width = 1 / 20
@@ -36,9 +38,9 @@ class Gauge(Graph):
             view_class = PolarThetaView
 
         self.view = view_class(
-            self.width - self.margin_box.x, self.height - self.margin_box.y,
-            self._box
-        )
+            self.width - self.margin_box.x,
+            self.height - self.margin_box.y,
+            self._box)
 
     def needle(self, serie):
         """Draw a needle for each value"""
@@ -53,9 +55,9 @@ class Gauge(Graph):
             val = self._format(serie, i)
             metadata = serie.metadata.get(i)
             gauges = decorate(
-                self.svg, self.svg.node(serie_node['plot'], class_="dots"),
-                metadata
-            )
+                self.svg,
+                self.svg.node(serie_node['plot'], class_="dots"),
+                metadata)
 
             tolerance = 1.15
 
@@ -68,24 +70,23 @@ class Gauge(Graph):
             w = (self._box._tmax - self._box._tmin + self.view.aperture) / 4
 
             if self.logarithmic:
-                w = min(w, self._min - self._min * 10**-10)
+                w = min(w, self._min - self._min * 10 ** -10)
 
             alter(
                 self.svg.node(
-                    gauges,
-                    'path',
-                    d='M %s L %s A %s 1 0 1 %s Z' % (
+                    gauges, 'path', d='M %s L %s A %s 1 0 1 %s Z' % (
                         point(.85, theta),
                         point(self.needle_width, theta - w),
                         '%f %f' % (self.needle_width, self.needle_width),
                         point(self.needle_width, theta + w),
                     ),
-                    class_='line reactive tooltip-trigger'
-                ), metadata
-            )
+                    class_='line reactive tooltip-trigger'),
+                metadata)
 
             x, y = self.view((.75, theta))
-            self._tooltip_data(gauges, val, x, y, xlabel=self._get_x_label(i))
+            self._tooltip_data(
+                gauges, val, x, y,
+                xlabel=self._get_x_label(i))
             self._static_value(serie_node, val, x, y, metadata)
 
     def _y_axis(self, draw_axes=True):
@@ -96,26 +97,26 @@ class Gauge(Graph):
             guides = self.svg.node(axis, class_='guides')
 
             self.svg.line(
-                guides, [self.view((.95, theta)),
-                         self.view((1, theta))],
+                guides, [self.view((.95, theta)), self.view((1, theta))],
                 close=True,
-                class_='line'
-            )
+                class_='line')
 
             self.svg.line(
-                guides, [self.view((0, theta)),
-                         self.view((.95, theta))],
+                guides, [self.view((0, theta)), self.view((.95, theta))],
                 close=True,
-                class_='guide line %s' %
-                ('major' if i in (0, len(self._y_labels) - 1) else '')
-            )
+                class_='guide line %s' % (
+                    'major' if i in (0, len(self._y_labels) - 1)
+                    else ''))
 
             x, y = self.view((.9, theta))
-            self.svg.node(guides, 'text', x=x, y=y).text = label
+            self.svg.node(
+                guides, 'text',
+                x=x,
+                y=y
+            ).text = label
 
             self.svg.node(
-                guides,
-                'title',
+                guides, 'title',
             ).text = self._y_format(theta)
 
     def _x_axis(self, draw_axes=True):
@@ -132,15 +133,18 @@ class Gauge(Graph):
             self.min_ -= 1
             self.max_ += 1
 
-        self._box.set_polar_box(0, 1, self.min_, self.max_)
+        self._box.set_polar_box(
+            0, 1,
+            self.min_,
+            self.max_)
 
     def _compute_x_labels(self):
         pass
 
     def _compute_y_labels(self):
         y_pos = compute_scale(
-            self.min_, self.max_, self.logarithmic, self.order_min,
-            self.min_scale, self.max_scale
+            self.min_, self.max_, self.logarithmic,
+            self.order_min, self.min_scale, self.max_scale
         )
         if self.y_labels:
             self._y_labels = []
@@ -157,7 +161,10 @@ class Gauge(Graph):
                 self._y_labels.append((title, pos))
             self.min_ = min(self.min_, min(cut(self._y_labels, 1)))
             self.max_ = max(self.max_, max(cut(self._y_labels, 1)))
-            self._box.set_polar_box(0, 1, self.min_, self.max_)
+            self._box.set_polar_box(
+                0, 1,
+                self.min_,
+                self.max_)
         else:
             self._y_labels = list(zip(map(self._y_format, y_pos), y_pos))
 

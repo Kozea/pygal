@@ -1160,13 +1160,13 @@ def get_test_routes(app):
                 'href': 'http://en.wikipedia.org/wiki/Red'
             }
         }],
-                  title={
-                      'title': 'Red',
-                      'tooltip': 'Cramoisi',
-                      'xlink': {
-                          'href': 'http://en.wikipedia.org/wiki/Red'
-                      }
-                  })
+            title={
+            'title': 'Red',
+            'tooltip': 'Cramoisi',
+            'xlink': {
+                'href': 'http://en.wikipedia.org/wiki/Red'
+            }
+        })
 
         chart.add({
             'title': 'Yellow',

@@ -26,6 +26,7 @@ from pygal.graph.base import BaseGraph
 
 
 class PublicApi(BaseGraph):
+
     """Chart public functions"""
 
     def add(self, title, values, **kwargs):
@@ -50,8 +51,7 @@ class PublicApi(BaseGraph):
         """Render the graph, and return the svg string"""
         self.setup(**kwargs)
         svg = self.svg.render(
-            is_unicode=is_unicode, pretty_print=self.pretty_print
-        )
+            is_unicode=is_unicode, pretty_print=self.pretty_print)
         self.teardown()
         return svg
 
@@ -96,16 +96,16 @@ class PublicApi(BaseGraph):
         """Render the graph, and return a Django response"""
         from django.http import HttpResponse
         return HttpResponse(
-            self.render(**kwargs), content_type='image/svg+xml'
-        )
+            self.render(**kwargs), content_type='image/svg+xml')
 
     def render_data_uri(self, **kwargs):
         """Output a base 64 encoded data uri"""
         # Force protocol as data uri have none
         kwargs.setdefault('force_uri_protocol', 'https')
         return "data:image/svg+xml;charset=utf-8;base64,%s" % (
-            base64.b64encode(self.render(**kwargs)
-                             ).decode('utf-8').replace('\n', '')
+            base64.b64encode(
+                self.render(**kwargs)
+            ).decode('utf-8').replace('\n', '')
         )
 
     def render_to_file(self, filename, **kwargs):
@@ -117,8 +117,7 @@ class PublicApi(BaseGraph):
         """Render the graph, convert it to png and write it to filename"""
         import cairosvg
         return cairosvg.svg2png(
-            bytestring=self.render(**kwargs), write_to=filename, dpi=dpi
-        )
+            bytestring=self.render(**kwargs), write_to=filename, dpi=dpi)
 
     def render_sparktext(self, relative_to=None):
         """Make a mini text sparkline from chart"""
@@ -142,9 +141,8 @@ class PublicApi(BaseGraph):
 
         divisions = len(bars) - 1
         for value in values:
-            chart += bars[int(
-                divisions * (value - relative_to) / (vmax - relative_to)
-            )]
+            chart += bars[int(divisions *
+                              (value - relative_to) / (vmax - relative_to))]
         return chart
 
     def render_sparkline(self, **kwargs):

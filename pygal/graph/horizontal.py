@@ -23,6 +23,7 @@ from pygal.view import HorizontalLogView, HorizontalView
 
 
 class HorizontalGraph(Graph):
+
     """Horizontal graph mixin"""
 
     def __init__(self, *args, **kwargs):
@@ -34,14 +35,11 @@ class HorizontalGraph(Graph):
         """After computations transpose labels"""
         self._x_labels, self._y_labels = self._y_labels, self._x_labels
         self._x_labels_major, self._y_labels_major = (
-            self._y_labels_major, self._x_labels_major
-        )
+            self._y_labels_major, self._x_labels_major)
         self._x_2nd_labels, self._y_2nd_labels = (
-            self._y_2nd_labels, self._x_2nd_labels
-        )
+            self._y_2nd_labels, self._x_2nd_labels)
         self.show_y_guides, self.show_x_guides = (
-            self.show_x_guides, self.show_y_guides
-        )
+            self.show_x_guides, self.show_y_guides)
 
     def _axes(self):
         """Set the _force_vertical flag when rendering axes"""
@@ -57,9 +55,9 @@ class HorizontalGraph(Graph):
             view_class = HorizontalView
 
         self.view = view_class(
-            self.width - self.margin_box.x, self.height - self.margin_box.y,
-            self._box
-        )
+            self.width - self.margin_box.x,
+            self.height - self.margin_box.y,
+            self._box)
 
     def _get_x_label(self, i):
         """Convenience function to get the x_label of a value index"""

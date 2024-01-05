@@ -16,6 +16,7 @@
 #
 # You should have received a copy of the GNU Lesser General Public License
 # along with pygal. If not, see <http://www.gnu.org/licenses/>.
+
 """
 Bar chart that presents grouped data with rectangular bars with lengths
 proportional to the values that they represent.
@@ -26,6 +27,7 @@ from pygal.util import alter, decorate, ident, swap
 
 
 class Bar(Graph):
+
     """Bar graph class"""
 
     _series_margin = .06
@@ -50,25 +52,15 @@ class Bar(Graph):
         width -= 2 * serie_margin
         height = self.view.y(zero) - y
         r = serie.rounded_bars * 1 if serie.rounded_bars else 0
-        alter(
-            self.svg.transposable_node(
-                parent,
-                'rect',
-                x=x,
-                y=y,
-                rx=r,
-                ry=r,
-                width=width,
-                height=height,
-                class_='rect reactive tooltip-trigger'
-            ), serie.metadata.get(i)
-        )
+        alter(self.svg.transposable_node(
+            parent, 'rect',
+            x=x, y=y, rx=r, ry=r, width=width, height=height,
+            class_='rect reactive tooltip-trigger'), serie.metadata.get(i))
         return x, y, width, height
 
     def _tooltip_and_print_values(
-            self, serie_node, serie, parent, i, val, metadata, x, y, width,
-            height
-    ):
+            self, serie_node, serie, parent, i, val, metadata,
+            x, y, width, height):
         transpose = swap if self.horizontal else ident
         x_center, y_center = transpose((x + width / 2, y + height / 2))
         x_top, y_top = transpose((x + width, y + height))
@@ -79,8 +71,8 @@ class Bar(Graph):
             v = serie.values[i]
         sign = -1 if v < self.zero else 1
         self._tooltip_data(
-            parent, val, x_center, y_center, "centered", self._get_x_label(i)
-        )
+            parent, val, x_center, y_center, "centered",
+            self._get_x_label(i))
 
         if self.print_values_position == 'top':
             if self.horizontal:
@@ -117,21 +109,20 @@ class Bar(Graph):
             val = self._format(serie, i)
 
             bar = decorate(
-                self.svg, self.svg.node(bars, class_='bar'), metadata
-            )
+                self.svg,
+                self.svg.node(bars, class_='bar'),
+                metadata)
 
             x_, y_, width, height = self._bar(
-                serie, bar, x, y, i, self.zero, secondary=rescale
-            )
+                serie, bar, x, y, i, self.zero, secondary=rescale)
 
             self._confidence_interval(
                 serie_node['overlay'], x_ + width / 2, y_, serie.values[i],
-                metadata
-            )
+                metadata)
 
             self._tooltip_and_print_values(
-                serie_node, serie, bar, i, val, metadata, x_, y_, width, height
-            )
+                serie_node, serie, bar, i, val, metadata,
+                x_, y_, width, height)
 
     def _compute(self):
         """Compute y min and max and y scale and set labels"""
