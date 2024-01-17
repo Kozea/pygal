@@ -52,14 +52,14 @@ With cairosvg installed you can directly get the png file using ``render_to_png`
    ...
    chart.render_to_png('/tmp/chart.png')  # Write the chart in the specified file
 
-In case of rendered image turning up black, installing lxml, tinycss and cssselect should fix the issue.
+In case of rendered image turning up black, installing tinycss2 and cssselect2 should fix the issue.
 
 
 Etree
 -----
 
 
-It is possible to get the xml etree root element of the chart (or lxml etree node if lxml is installed) by calling the ``render_tree`` method:
+It is possible to get the xml etree root element of the chart by calling the ``render_tree`` method:
 
 
 .. code-block:: python
