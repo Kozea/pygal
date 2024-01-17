@@ -59,7 +59,7 @@ Etree
 -----
 
 
-It is possible to get the xml etree root element of the chart (or lxml etree node if lxml is installed) by calling the ``render_tree`` method:
+It is possible to get the xml etree root element of the chart by calling the ``render_tree`` method:
 
 
 .. code-block:: python
