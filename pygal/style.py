@@ -73,6 +73,13 @@ class Style(object):
 
     dot_opacity = '1'
 
+    # These values modify the distance from a point to its static label,
+    # e.g. 1.0 is the default distance, 0.5 halves the distance from
+    # a point to its label, 2.0 doubles the distance.
+    value_offset = 1.0
+    x_value_offset = value_offset
+    y_value_offset = value_offset
+
     transition = '150ms'
     colors = (
         '#F44336',  # 0
