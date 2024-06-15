@@ -464,8 +464,6 @@ class Graph(PublicApi):
                 text.attrib['transform'] = "rotate(%d %f %f)" % (
                     -90, self._legend_at_left_width, yc)
                 text.text = title_line
-                print('legend l',self._legend_at_left_width)
-                print('legend r',self._legend_at_right_width)
 
     def _make_y2_title(self):
         """Make the Y-Axis title"""
