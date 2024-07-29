@@ -18,34 +18,26 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with pygal. If not, see <http://www.gnu.org/licenses/>.
 import os
-import sys
 
 from setuptools import find_packages, setup
-from setuptools.command.test import test as TestCommand
-
-
-class PyTest(TestCommand):
-    def finalize_options(self):
-        TestCommand.finalize_options(self)
-        self.test_args = ['-x', 'build/lib/pygal']
-        self.test_suite = True
-
-    def run_tests(self):
-        # import here, cause outside the eggs aren't loaded
-        import pytest
-        errno = pytest.main(self.test_args)
-        sys.exit(errno)
-
 
 ROOT = os.path.dirname(__file__)
 
-
 tests_requirements = [
-    "pyquery", "flask", 'cairosvg', 'lxml', 'pygal_maps_world', 'pygal_maps_fr',
-    'pygal_maps_ch', 'coveralls',
-    'ruff',
-    'pytest-runner', 'pytest-cov',
-    'pytest'
+    "cairosvg",
+    "coveralls",
+    "lxml",
+    "pyquery",
+    "pytest",
+    "pytest-cov",
+    "ruff",
+]
+
+moulinrouge_requirements = [
+    "flask",
+    "pygal_maps_ch",
+    "pygal_maps_fr",
+    "pygal_maps_world",
 ]
 
 about = {}
@@ -72,13 +64,13 @@ setup(
         "svg", "chart", "graph", "diagram", "plot", "histogram", "kiviat"],
     setup_requires=['pytest-runner'],
     install_requires=['importlib-metadata'],  # TODO: remove this (see #545, #546)
-    cmdclass={'test': PyTest},
     package_data={'pygal': ['css/*', 'graph/maps/*.svg']},
     extras_require={
         'lxml': ['lxml'],
         'docs': ['sphinx', 'sphinx_rtd_theme', 'pygal_sphinx_directives'],
         'png': ['cairosvg'],
-        'test': tests_requirements
+        'test': tests_requirements,
+        'moulinrouge': moulinrouge_requirements,
     },
     classifiers=[
         "Development Status :: 4 - Beta",
