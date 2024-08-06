@@ -30,7 +30,7 @@ tests_requirements = [
     "pyquery",
     "pytest",
     "pytest-cov",
-    "ruff>=0.5.5",
+    "ruff>=0.5.6",
 ]
 
 moulinrouge_requirements = [
