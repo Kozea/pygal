@@ -1,3 +1,4 @@
+[lint]
 extend-select = [
     "E",
     "F",
@@ -10,13 +11,14 @@ extend-select = [
 ]
 
 ignore = [
+    "E721",  # TODO: do not ignore?
     "E731",
     "E741",
     "PLW2901",  # TODO: do not ignore?
     "PLW3301",  # TODO: do not ignore?
 ]
 
-[per-file-ignores]
+[lint.per-file-ignores]
 "pygal/__init__.py" = [
     "E402",
     "F401",

@@ -13,7 +13,7 @@ clean:
 	rm -fr *.egg-info
 
 lint:
-	$(RUFF) $(PROJECT_NAME)
+	$(RUFF) check $(PROJECT_NAME)
 
 check:
 	$(PYTEST) $(PROJECT_NAME) $(PYTEST_ARGS) --cov-report= --cov=pygal
