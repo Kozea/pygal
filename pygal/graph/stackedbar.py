@@ -23,6 +23,7 @@ on top of the others instead of being displayed side by side.
 
 from pygal.adapters import none_to_zero
 from pygal.graph.bar import Bar
+from pygal.util import alter
 
 
 class StackedBar(Bar):
@@ -136,16 +137,19 @@ class StackedBar(Bar):
             width -= 2 * serie_margin
         height = self.view.y(zero) - y
         r = serie.rounded_bars * 1 if serie.rounded_bars else 0
-        self.svg.transposable_node(
-            parent,
-            'rect',
-            x=x,
-            y=y,
-            rx=r,
-            ry=r,
-            width=width,
-            height=height,
-            class_='rect reactive tooltip-trigger'
+        alter(
+            self.svg.transposable_node(
+                parent,
+                'rect',
+                x=x,
+                y=y,
+                rx=r,
+                ry=r,
+                width=width,
+                height=height,
+                class_='rect reactive tooltip-trigger'
+            ),
+            serie.metadata.get(i)
         )
         return x, y, width, height
 
