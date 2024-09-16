@@ -24,6 +24,7 @@ from pygal.util import alter, cut, decorate
 
 
 class Funnel(Graph):
+
     """Funnel graph class"""
 
     _adapters = [positive, none_to_zero]
@@ -41,27 +42,22 @@ class Funnel(Graph):
             val = self._format(serie, i)
 
             funnels = decorate(
-                self.svg, self.svg.node(serie_node['plot'], class_="funnels"),
-                metadata
-            )
+                self.svg,
+                self.svg.node(serie_node['plot'], class_="funnels"),
+                metadata)
 
-            alter(
-                self.svg.node(
-                    funnels,
-                    'polygon',
-                    points=' '.join(map(fmt, map(self.view, poly))),
-                    class_='funnel reactive tooltip-trigger'
-                ), metadata
-            )
+            alter(self.svg.node(
+                funnels, 'polygon',
+                points=' '.join(map(fmt, map(self.view, poly))),
+                class_='funnel reactive tooltip-trigger'), metadata)
 
             # Poly center from label
             x, y = self.view((
                 self._center(self._x_pos[serie.index]),
-                sum([point[1] for point in poly]) / len(poly)
-            ))
+                sum([point[1] for point in poly]) / len(poly)))
             self._tooltip_data(
-                funnels, val, x, y, 'centered', self._get_x_label(serie.index)
-            )
+                funnels, val, x, y, 'centered',
+                self._get_x_label(serie.index))
             self._static_value(serie_node, val, x, y, metadata)
 
     def _center(self, x):
@@ -75,7 +71,7 @@ class Funnel(Graph):
 
         previous = [[self.zero, self.zero] for i in range(self._len)]
         for i, serie in enumerate(self.series):
-            y_height = -sum(serie.safe_values) / 2
+            y_height = - sum(serie.safe_values) / 2
             all_x_pos = [0] + self._x_pos
             serie.points = []
             for j, value in enumerate(serie.values):
@@ -100,14 +96,12 @@ class Funnel(Graph):
 
     def _compute_x_labels(self):
         self._x_labels = list(
-            zip(
-                self.x_labels and map(self._x_format, self.x_labels) or [
+            zip(self.x_labels and
+                map(self._x_format, self.x_labels) or [
                     serie.title['title']
-                    if isinstance(serie.title, dict) else serie.title or ''
-                    for serie in self.series
-                ], map(self._center, self._x_pos)
-            )
-        )
+                    if isinstance(serie.title, dict)
+                    else serie.title or '' for serie in self.series],
+                map(self._center, self._x_pos)))
 
     def _plot(self):
         """Plot the funnel"""

@@ -16,6 +16,7 @@
 #
 # You should have received a copy of the GNU Lesser General Public License
 # along with pygal. If not, see <http://www.gnu.org/licenses/>.
+
 """Style related tests"""
 
 from pygal import Line
@@ -45,9 +46,8 @@ def test_parametric_styles():
 
 def test_parametric_styles_with_parameters():
     """Test a parametric style with parameters"""
-    line = Line(
-        style=RotateStyle('#de3804', step=12, max_=180, base_style=LightStyle)
-    )
+    line = Line(style=RotateStyle(
+        '#de3804', step=12, max_=180, base_style=LightStyle))
     line.add('_', [1, 2, 3])
     line.x_labels = 'abc'
     assert line.render()

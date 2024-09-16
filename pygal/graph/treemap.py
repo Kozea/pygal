@@ -16,6 +16,7 @@
 #
 # You should have received a copy of the GNU Lesser General Public License
 # along with pygal. If not, see <http://www.gnu.org/licenses/>.
+
 """Treemap chart: Visualize data using nested recangles"""
 
 from pygal.adapters import none_to_zero, positive
@@ -24,6 +25,7 @@ from pygal.util import alter, cut, decorate
 
 
 class Treemap(Graph):
+
     """Treemap graph class"""
 
     _adapters = [positive, none_to_zero]
@@ -39,26 +41,31 @@ class Treemap(Graph):
         val = self._format(serie, i)
 
         rect = decorate(
-            self.svg, self.svg.node(rects, class_="rect"), metadata
-        )
+            self.svg,
+            self.svg.node(rects, class_="rect"),
+            metadata)
 
         alter(
             self.svg.node(
-                rect,
-                'rect',
+                rect, 'rect',
                 x=rx,
                 y=ry,
                 width=rw,
                 height=rh,
-                class_='rect reactive tooltip-trigger'
-            ), metadata
-        )
+                class_='rect reactive tooltip-trigger'),
+            metadata)
 
         self._tooltip_data(
-            rect, val, rx + rw / 2, ry + rh / 2, 'centered',
-            self._get_x_label(i)
-        )
-        self._static_value(serie_node, val, rx + rw / 2, ry + rh / 2, metadata)
+            rect, val,
+            rx + rw / 2,
+            ry + rh / 2,
+            'centered',
+            self._get_x_label(i))
+        self._static_value(
+            serie_node, val,
+            rx + rw / 2,
+            ry + rh / 2,
+            metadata)
 
     def _binary_tree(self, data, total, x, y, w, h, parent=None):
         if total == 0:
@@ -72,11 +79,10 @@ class Treemap(Graph):
                 datum = data[0]
                 serie_node = self.svg.serie(datum)
                 self._binary_tree(
-                    list(enumerate(datum.values)), total, x, y, w, h, (
-                        datum, serie_node,
-                        self.svg.node(serie_node['plot'], class_="rects")
-                    )
-                )
+                    list(enumerate(datum.values)),
+                    total, x, y, w, h,
+                    (datum, serie_node,
+                     self.svg.node(serie_node['plot'], class_="rects")))
             return
 
         midpoint = total / 2
@@ -102,16 +108,16 @@ class Treemap(Graph):
 
         if h > w:
             y_pivot = pivot_pct * h
-            self._binary_tree(half1, half1_sum, x, y, w, y_pivot, parent)
             self._binary_tree(
-                half2, half2_sum, x, y + y_pivot, w, h - y_pivot, parent
-            )
+                half1, half1_sum, x, y, w, y_pivot, parent)
+            self._binary_tree(
+                half2, half2_sum, x, y + y_pivot, w, h - y_pivot, parent)
         else:
             x_pivot = pivot_pct * w
-            self._binary_tree(half1, half1_sum, x, y, x_pivot, h, parent)
             self._binary_tree(
-                half2, half2_sum, x + x_pivot, y, w - x_pivot, h, parent
-            )
+                half1, half1_sum, x, y, x_pivot, h, parent)
+            self._binary_tree(
+                half2, half2_sum, x + x_pivot, y, w - x_pivot, h, parent)
 
     def _compute_x_labels(self):
         pass
@@ -128,7 +134,7 @@ class Treemap(Graph):
         gh = self.height - self.margin_box.y
 
         self.view.box.xmin = self.view.box.ymin = x = y = 0
-        self.view.box.xmax = w = (total * gw / gh)**.5
+        self.view.box.xmax = w = (total * gw / gh) ** .5
         self.view.box.ymax = h = total / w
         self.view.box.fix()
 

@@ -16,6 +16,7 @@
 #
 # You should have received a copy of the GNU Lesser General Public License
 # along with pygal. If not, see <http://www.gnu.org/licenses/>.
+
 """Utility functions tests"""
 
 
@@ -81,12 +82,13 @@ def test_format():
 
     class Object(object):
         pass
-
     obj = Object()
     obj.a = 1
     obj.b = True
     obj.c = '3'
-    assert template('foo {{ o.a }} {{o.b}}-{{o.c}}', o=obj) == 'foo 1 True-3'
+    assert template(
+        'foo {{ o.a }} {{o.b}}-{{o.c}}',
+        o=obj) == 'foo 1 True-3'
 
 
 def test_truncate():
@@ -119,29 +121,28 @@ def test_minify_css():
 '''
     assert minify_css(css) == (
         '.title{font-family:sans;font-size:12}'
-        '.legends .legend text{font-family:monospace;font-size:14}'
-    )
+        '.legends .legend text{font-family:monospace;font-size:14}')
 
 
 def test_majorize():
     """Test majorize function"""
     assert majorize(()) == []
-    assert majorize((0, )) == []
+    assert majorize((0,)) == []
     assert majorize((0, 1)) == []
     assert majorize((0, 1, 2)) == []
     assert majorize((-1, 0, 1, 2)) == [0]
     assert majorize((0, .1, .2, .3, .4, .5, .6, .7, .8, .9, 1)) == [0, .5, 1]
     assert majorize((0, .2, .4, .6, .8, 1)) == [0, 1]
     assert majorize((-.4, -.2, 0, .2, .4, .6, .8, 1)) == [0, 1]
-    assert majorize((-1, -.8, -.6, -.4, -.2, 0, .2, .4, .6, .8,
-                     1)) == [-1, 0, 1]
+    assert majorize(
+        (-1, -.8, -.6, -.4, -.2, 0, .2, .4, .6, .8, 1)) == [-1, 0, 1]
     assert majorize((0, .2, .4, .6, .8, 1, 1.2, 1.4, 1.6)) == [0, 1]
     assert majorize((0, .2, .4, .6, .8, 1, 1.2, 1.4, 1.6, 1.8, 2)) == [0, 1, 2]
-    assert majorize((0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110,
-                     120)) == [0, 50, 100]
-    assert majorize((
-        0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30, 32, 34, 36
-    )) == [0, 10, 20, 30]
+    assert majorize(
+        (0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110, 120)) == [0, 50, 100]
+    assert majorize(
+        (0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20,
+         22, 24, 26, 28, 30, 32, 34, 36)) == [0, 10, 20, 30]
     assert majorize((0, 1, 2, 3, 4, 5)) == [0, 5]
     assert majorize((-5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5)) == [-5, 0, 5]
     assert majorize((-5, 5, -4, 4, 0, 1, -1, 3, -2, 2, -3)) == [-5, 0, 5]

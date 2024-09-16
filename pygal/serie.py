@@ -22,6 +22,7 @@ from pygal.util import cached_property
 
 
 class Serie(object):
+
     """Serie class containing title, values and the graph serie index"""
 
     def __init__(self, index, values, config, metadata=None):

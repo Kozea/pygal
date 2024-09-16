@@ -102,9 +102,8 @@ def cubic_interpolate(x, y, precision=250, **kwargs):
             yield x[i] + X, a[i] + b[i] * X + c[i] * X2 + d[i] * X3
 
 
-def hermite_interpolate(
-        x, y, precision=250, type='cardinal', c=None, b=None, t=None
-):
+def hermite_interpolate(x, y, precision=250,
+                        type='cardinal', c=None, b=None, t=None):
     """
     Interpolate x, y using the hermite method.
     See https://en.wikipedia.org/wiki/Cubic_Hermite_spline
@@ -133,9 +132,11 @@ def hermite_interpolate(
         c = 0
     if type == 'finite_difference':
         for i in range(1, n):
-            m[i] = w[i] = .5 * ((y[i + 1] - y[i]) / (x[i + 1] - x[i]) +
-                                (y[i] - y[i - 1]) / (x[i] - x[i - 1])
-                                ) if x[i + 1] - x[i] and x[i] - x[i - 1] else 0
+            m[i] = w[i] = .5 * (
+                (y[i + 1] - y[i]) / (x[i + 1] - x[i]) +
+                (y[i] - y[i - 1]) / (
+                    x[i] - x[i - 1])
+            ) if x[i + 1] - x[i] and x[i] - x[i - 1] else 0
 
     elif type == 'kochanek_bartels':
         c = c or 0
@@ -150,9 +151,9 @@ def hermite_interpolate(
     if type == 'cardinal':
         c = c or 0
         for i in range(1, n):
-            m[i] = w[i] = (1 - c) * (y[i + 1] - y[i - 1]) / (
-                x[i + 1] - x[i - 1]
-            ) if x[i + 1] - x[i - 1] else 0
+            m[i] = w[i] = (1 - c) * (
+                y[i + 1] - y[i - 1]) / (
+                    x[i + 1] - x[i - 1]) if x[i + 1] - x[i - 1] else 0
 
     def p(i, x_):
         t = (x_ - x[i]) / delta_x[i]
@@ -161,13 +162,13 @@ def hermite_interpolate(
 
         h00 = 2 * t3 - 3 * t2 + 1
         h10 = t3 - 2 * t2 + t
-        h01 = -2 * t3 + 3 * t2
+        h01 = - 2 * t3 + 3 * t2
         h11 = t3 - t2
 
-        return (
-            h00 * y[i] + h10 * m[i] * delta_x[i] + h01 * y[i + 1] +
-            h11 * w[i + 1] * delta_x[i]
-        )
+        return (h00 * y[i] +
+                h10 * m[i] * delta_x[i] +
+                h01 * y[i + 1] +
+                h11 * w[i + 1] * delta_x[i])
 
     for i in range(n + 1):
         yield x[i], y[i]
@@ -238,6 +239,7 @@ INTERPOLATIONS = {
     'trigonometric': trigonometric_interpolate
 }
 
+
 if __name__ == '__main__':
     from pygal import XY
     points = [(.1, 7), (.3, -4), (.6, 10), (.9, 8), (1.4, 3), (1.7, 1)]
@@ -247,32 +249,16 @@ if __name__ == '__main__':
     xy.add('cubic', cubic_interpolate(*zip(*points)))
     xy.add('lagrange', lagrange_interpolate(*zip(*points)))
     xy.add('trigonometric', trigonometric_interpolate(*zip(*points)))
-    xy.add(
-        'hermite catmul_rom',
-        hermite_interpolate(*zip(*points), type='catmul_rom')
-    )
-    xy.add(
-        'hermite finite_difference',
-        hermite_interpolate(*zip(*points), type='finite_difference')
-    )
-    xy.add(
-        'hermite cardinal -.5',
-        hermite_interpolate(*zip(*points), type='cardinal', c=-.5)
-    )
-    xy.add(
-        'hermite cardinal .5',
-        hermite_interpolate(*zip(*points), type='cardinal', c=.5)
-    )
-    xy.add(
-        'hermite kochanek_bartels .5 .75 -.25',
-        hermite_interpolate(
-            *zip(*points), type='kochanek_bartels', c=.5, b=.75, t=-.25
-        )
-    )
-    xy.add(
-        'hermite kochanek_bartels .25 -.75 .5',
-        hermite_interpolate(
-            *zip(*points), type='kochanek_bartels', c=.25, b=-.75, t=.5
-        )
-    )
+    xy.add('hermite catmul_rom', hermite_interpolate(
+        *zip(*points), type='catmul_rom'))
+    xy.add('hermite finite_difference', hermite_interpolate(
+        *zip(*points), type='finite_difference'))
+    xy.add('hermite cardinal -.5', hermite_interpolate(
+        *zip(*points), type='cardinal', c=-.5))
+    xy.add('hermite cardinal .5', hermite_interpolate(
+        *zip(*points), type='cardinal', c=.5))
+    xy.add('hermite kochanek_bartels .5 .75 -.25', hermite_interpolate(
+        *zip(*points), type='kochanek_bartels', c=.5, b=.75, t=-.25))
+    xy.add('hermite kochanek_bartels .25 -.75 .5', hermite_interpolate(
+        *zip(*points), type='kochanek_bartels', c=.25, b=-.75, t=.5))
     xy.render_in_browser()

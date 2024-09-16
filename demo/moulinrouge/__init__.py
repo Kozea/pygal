@@ -289,22 +289,23 @@ def create_app():
                 'config': b64encode(pickle.dumps(config))
             })
 
-        for params in [{'type': 'catmull_rom'}, {'type': 'finite_difference'},
-                       {'type': 'cardinal',
-                        'c': .25}, {'type': 'cardinal',
-                                    'c': .5}, {'type': 'cardinal', 'c': .75},
-                       {'type': 'cardinal',
-                        'c': 1.5}, {'type': 'cardinal',
-                                    'c': 2}, {'type': 'cardinal', 'c': 5},
-                       {'type': 'kochanek_bartels', 'b': 1, 'c': 1,
-                        't': 1}, {'type': 'kochanek_bartels', 'b': -1, 'c': 1,
-                                  't': 1}, {'type': 'kochanek_bartels', 'b': 1,
-                                            'c': -1, 't': 1},
-                       {'type': 'kochanek_bartels', 'b': 1, 'c': 1, 't': -1}, {
-                           'type': 'kochanek_bartels', 'b': -1, 'c': 1, 't': -1
-                       }, {'type': 'kochanek_bartels', 'b': -1, 'c': -1,
-                           't': 1}, {'type': 'kochanek_bartels', 'b': -1,
-                                     'c': -1, 't': -1}]:
+        for params in [
+            {'type': 'catmull_rom'}, {'type': 'finite_difference'},
+            {'type': 'cardinal', 'c': .25},
+            {'type': 'cardinal', 'c': .5},
+            {'type': 'cardinal', 'c': .75},
+            {'type': 'cardinal', 'c': 1.5},
+            {'type': 'cardinal', 'c': 2},
+            {'type': 'cardinal', 'c': 5},
+            {'type': 'kochanek_bartels', 'b': 1, 'c': 1, 't': 1},
+            {'type': 'kochanek_bartels', 'b': -1, 'c': 1, 't': 1},
+            {'type': 'kochanek_bartels', 'b': 1, 'c': -1, 't': 1},
+            {'type': 'kochanek_bartels', 'b': 1, 'c': 1, 't': -1},
+            {'type': 'kochanek_bartels', 'b': -1, 'c': 1, 't': -1},
+            {'type': 'kochanek_bartels', 'b': -1, 'c': -1, 't': 1},
+            {'type': 'kochanek_bartels', 'b': -1, 'c': -1, 't': -1}
+        ]:
+
             config.title = "Hermite interpolation with params %r" % params
             config.interpolate = 'hermite'
             config.interpolation_parameters = params
