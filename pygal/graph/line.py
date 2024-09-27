@@ -134,8 +134,10 @@ class Line(Graph):
                     dots, val, x, y, xlabel=self._get_x_label(i)
                 )
                 self._static_value(
-                    serie_node, val, x + self.style.value_font_size,
-                    y + self.style.value_font_size, metadata
+                    serie_node, val,
+                    x + self.style.x_value_offset * self.style.value_font_size,
+                    y + self.style.y_value_offset * self.style.value_font_size,
+                    metadata
                 )
 
         if serie.stroke:
