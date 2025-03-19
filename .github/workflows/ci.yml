@@ -37,7 +37,7 @@ jobs:
 
       # Eco-CI to monitor energy usage
       - name: Start Eco-CI
-        uses: docker://green-coding-berlin/eco-ci:latest
+        uses: green-coding-solutions/eco-ci-energy-estimation@v4
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
 
