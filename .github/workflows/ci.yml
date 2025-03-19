@@ -6,11 +6,13 @@ on:
   push:
     branches:
       - master
+      - energy-efficiency
     tags:
       - v*
   pull_request:
     branches:
       - master
+      - energy-efficiency
 jobs:
   test:
     runs-on: '${{ matrix.os }}'
