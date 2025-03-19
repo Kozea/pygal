@@ -1,0 +1,68 @@
+name: Daily Tests with Energy Measurement
+run-name: Scheduled - DEV Branch
+on:
+  schedule:
+    - cron: '0 0 * * *'
+
+permissions:
+  read-all
+
+jobs:
+  run-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Start Measurement
+        uses: green-coding-solutions/eco-ci-energy-estimation@v4 # use hash or @vX here (See note below)
+        with:
+          task: start-measurement
+        # continue-on-error: true # recommended setting for production. See notes below.
+
+
+      - name: 'Checkout repository'
+        uses: actions/checkout@v4
+        with:
+          ref: 'dev'
+          submodules: 'true'
+
+      - name: Checkout Repo Measurement
+        uses: green-coding-solutions/eco-ci-energy-estimation@v4 # use hash or @vX here (See note below)
+        with:
+          task: get-measurement
+          label: 'repo checkout'
+        # continue-on-error: true # recommended setting for production. See notes below.
+
+      - name: setup python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+          cache: 'pip'
+
+      - name: pip install
+        shell: bash
+        run: |
+          pip install -r requirements.txt
+
+      - name: Setup Python Measurment
+        uses: green-coding-solutions/eco-ci-energy-estimation@v4 # use hash or @vX here (See note below)
+        with:
+          task: get-measurement
+          label: 'python setup'
+        # continue-on-error: true # recommended setting for production. See notes below.
+
+      - name: Run Tests
+        shell: bash
+        run: |
+          pytest
+
+      - name: Tests measurement
+        uses: green-coding-solutions/eco-ci-energy-estimation@v4 # use hash or @vX here (See note below)
+        with:
+          task: get-measurement
+          label: 'pytest'
+        # continue-on-error: true # recommended setting for production. See notes below.
+
+      - name: Show Energy Results
+        uses: green-coding-solutions/eco-ci-energy-estimation@v4 # use hash or @vX here (See note below)
+        with:
+          task: display-results
+        # continue-on-error: true # recommended setting for production. See notes below.
