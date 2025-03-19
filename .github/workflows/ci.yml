@@ -30,10 +30,20 @@ jobs:
         with:
           python-version: '${{ matrix.python-version }}'
           cache: pip
+
       - run: pip install coveralls tox tox-gh
+
+      # Eco-CI to monitor energy usage
+      - name: Start Eco-CI
+        uses: docker://green-coding-berlin/eco-ci:latest
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
       - run: tox
+
       - run: coveralls
         continue-on-error: true
+
   lint:
     runs-on: ubuntu-latest
     steps:
@@ -42,5 +52,5 @@ jobs:
         with:
           python-version: "3.x"
           cache: pip
-      - run: make install  # TODO: this should only install lint dependencies
+      - run: make install 
       - run: make lint
