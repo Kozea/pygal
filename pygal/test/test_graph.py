@@ -187,7 +187,10 @@ def test_non_iterable_value(Chart):
     if not chart._dual:
         chart.x_labels = ('red', 'green', 'blue')
     chart1 = chart.render()
+    chart_id = chart.uuid
+
     chart = Chart(no_prefix=True)
+    chart.uuid = chart_id  # Ensure UUID is not a source of difference
     chart.add('A', [1])
     chart.add('B', [2])
     if not chart._dual:
@@ -204,8 +207,10 @@ def test_iterable_types(Chart):
     if not chart._dual:
         chart.x_labels = ('red', 'green', 'blue')
     chart1 = chart.render()
+    chart_id = chart.uuid
 
     chart = Chart(no_prefix=True)
+    chart.uuid = chart_id  # Ensure UUID is not a source of difference
     chart.add('A', (1, 2))
     chart.add('B', tuple())
     if not chart._dual:
@@ -218,6 +223,7 @@ def test_values_by_dict(Chart):
     """Test serie as dict"""
     chart1 = Chart(no_prefix=True)
     chart2 = Chart(no_prefix=True)
+    chart2.uuid = chart1.uuid  # Ensure UUID is not a source of difference
 
     if not issubclass(Chart, BaseMap) and not Chart._dual:
         chart1.add('A', {'red': 10, 'green': 12, 'blue': 14})
