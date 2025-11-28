@@ -132,7 +132,10 @@ class Gauge(Graph):
             self.min_ -= 1
             self.max_ += 1
 
-        self._box.set_polar_box(0, 1, self.min_, self.max_)
+        if self.reverse_direction:
+            self._box.set_polar_box(0, 1, self.max_, self.min_)
+        else:
+            self._box.set_polar_box(0, 1, self.min_, self.max_)
 
     def _compute_x_labels(self):
         pass
