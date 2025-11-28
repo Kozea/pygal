@@ -67,4 +67,4 @@ Index
 Credits
 =======
 
-`A Kozea Community Project <https://community.kozea.fr/>`_
+`A Kozea Project <https://kozea.fr/>`_
