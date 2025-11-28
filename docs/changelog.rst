@@ -2,6 +2,11 @@
 Changelog
 =========
 
+3.0.5
+=====
+
+* Remove test from setup.py
+
 3.0.4
 =====
 
