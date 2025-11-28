@@ -35,5 +35,5 @@ Even better if you have several python versions installed you can run ``tox``.
 Continuous Integration
 ======================
 
-The current build status can be seen at our `ymci <https://ymci.kozea.fr/project/view/12>`_
+The current build status can be seen at our `GitHub Actions <https://github.com/Kozea/pygal/actions/workflows/ci.yml>`_
 

@@ -236,7 +236,7 @@ latex_elements = {
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
     (
-        master_doc, 'pygal.tex', 'pygal Documentation', 'Florian Mounier',
+        master_doc, 'pygal.tex', 'pygal Documentation', 'Kozea',
         'manual'
     ),
 ]

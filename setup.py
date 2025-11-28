@@ -3,7 +3,7 @@
 # This file is part of pygal
 #
 # A python svg graph plotting library
-# Copyright © 2012-2016 Kozea
+# Copyright © 2012-2025 Kozea
 #
 # This library is free software: you can redistribute it and/or modify it under
 # the terms of the GNU Lesser General Public License as published by the Free
@@ -49,8 +49,8 @@ setup(
     name=about['__title__'],
     version=about['__version__'],
     description=about['__summary__'],
-    long_description=open('README').read(),
-    long_description_content_type="text/x-rst",
+    long_description=open('README.md').read(),
+    long_description_content_type="text/markdown",
     url=about['__uri__'],
     author=about['__author__'],
     author_email=about['__email__'],
