@@ -14,6 +14,7 @@ ignore = [
     "E721",  # TODO: do not ignore?
     "E731",
     "E741",
+    "PLC0415",  # Lazy imports for optional dependencies and circular import avoidance
     "PLW2901",  # TODO: do not ignore?
     "PLW3301",  # TODO: do not ignore?
 ]

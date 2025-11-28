@@ -75,7 +75,7 @@ class Table(object):
             table.append(labels)
 
         if total:
-            if len(table):
+            if table:
                 table[0].append('Total')
             else:
                 table.append([None] * (ln + 1) + ['Total'])
