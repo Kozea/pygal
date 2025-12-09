@@ -2,8 +2,24 @@
 Changelog
 =========
 
+3.1.0
+=====
+
+**Fixed**
+
+* Lint
+* Readthedocs config
+* README and docs information
+
+**Added**
+
+* `reverse_direction` option for gauge
+
+
 3.0.5
 =====
+
+**Fixed**
 
 * Remove test from setup.py
 
