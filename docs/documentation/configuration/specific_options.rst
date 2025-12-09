@@ -30,6 +30,21 @@ half_pie
   pie_chart.add('Opera', 2.3)
 
 
+
+reverse_direction
+-----------------
+
+You can reverse the direction of the gauge by setting ``reverse_direction=True``:
+
+.. pygal-code::
+
+  gauge_chart = pygal.Gauge(reverse_direction=True)
+  gauge_chart.add('Chrome', 8212)
+  gauge_chart.add('Firefox', 8099)
+  gauge_chart.add('Opera', 2933)
+  gauge_chart.add('IE', 41)
+
+
 inner_radius
 ------------
 
