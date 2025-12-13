@@ -229,15 +229,18 @@ class Svg(object):
         return dict(
             plot=self.node(
                 self.graph.nodes['plot'],
-                class_='series serie-%d color-%d' % (serie.index, serie.index)
+                class_=f'series serie-{self.graph.uuid}-{serie.index} '
+                       f'color-{serie.index}'
             ),
             overlay=self.node(
                 self.graph.nodes['overlay'],
-                class_='series serie-%d color-%d' % (serie.index, serie.index)
+                class_=f'series serie-{self.graph.uuid}-{serie.index} '
+                       f'color-{serie.index}'
             ),
             text_overlay=self.node(
                 self.graph.nodes['text_overlay'],
-                class_='series serie-%d color-%d' % (serie.index, serie.index)
+                class_=f'series serie-{self.graph.uuid}-{serie.index} '
+                       f'color-{serie.index}'
             )
         )
 
