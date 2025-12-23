@@ -29,6 +29,10 @@ from lxml.html import builder, tostring
 from pygal.util import template
 
 
+def _default_value_attribute_fn(value):
+    return value
+
+
 class HTML(object):
     """Lower case adapter of lxml builder"""
 
@@ -46,14 +50,21 @@ class Table(object):
         """Init the table"""
         self.chart = chart
 
-    def render(self, total=False, transpose=False, style=False):
+    def render(self, total=False, transpose=False, style=False, value_attribute=None):
         """Render the HTMTL table of the chart.
 
         `total` can be specified to include data sums
         `transpose` make labels becomes columns
         `style` include scoped style for the table
+        `value_attribute` replicate element value into `value` attribute (<td> elements)
 
         """
+        if value_attribute is True:
+            value_attribute_fn = _default_value_attribute_fn
+        elif callable(value_attribute):
+            value_attribute_fn = value_attribute
+        else:
+            value_attribute_fn = None
         self.chart.setup()
         ln = self.chart._len
         html = HTML()
@@ -139,13 +150,19 @@ class Table(object):
         if tbody:
             parts.append(
                 html.tbody(
-                    *[html.tr(*[html.td(_(col)) for col in r]) for r in tbody]
+                    *[html.tr(*(
+                        [html.td(_(col), value=_(value_attribute_fn(col))) for col in r]
+                        if value_attribute_fn else [html.td(_(col)) for col in r]
+                    )) for r in tbody]
                 )
             )
         if tfoot:
             parts.append(
                 html.tfoot(
-                    *[html.tr(*[html.th(_(col)) for col in r]) for r in tfoot]
+                    *[html.tr(*(
+                        [html.th(_(col), value=_(value_attribute_fn(col))) for col in r]
+                        if value_attribute_fn else [html.td(_(col)) for col in r]
+                    )) for r in tfoot]
                 )
             )
 
