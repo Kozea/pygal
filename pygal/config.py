@@ -434,6 +434,30 @@ class Config(CommonConfig):
         ' or '.join(["1.5IQR", "extremes", "tukey", "stdev", "pstdev"])
     )
 
+    bullish_color = Key(
+        '#00cc00', str, "Style", "Color for bullish candles "
+        "(close >= open)"
+    )
+
+    bearish_color = Key(
+        '#cc0000', str, "Style", "Color for bearish candles "
+        "(close < open)"
+    )
+
+    show_open = Key(
+        True, bool, "Value", "Show a tick mark at the open price"
+    )
+
+    show_close = Key(
+        True, bool, "Value", "Show a tick mark at the close price"
+    )
+
+    up_down = Key(
+        'both', str, "Value",
+        "Which candles to fill: 'up' (bullish), 'down' (bearish), "
+        "or 'both'"
+    )
+
     order_min = Key(
         None, int, "Value", "Minimum order of scale, defaults to None"
     )

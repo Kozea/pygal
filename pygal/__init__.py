@@ -35,6 +35,7 @@ from pygal import maps
 from pygal.config import Config
 from pygal.graph.bar import Bar
 from pygal.graph.box import Box
+from pygal.graph.candlestick import Candlestick
 from pygal.graph.dot import Dot
 from pygal.graph.funnel import Funnel
 from pygal.graph.gauge import Gauge
