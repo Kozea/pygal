@@ -71,7 +71,7 @@ class BaseGraph(object):
 
     def prepare_values(self, raw, offset=0):
         """Prepare the values to start with sane values"""
-        from pygal import Histogram
+        from pygal import Candlestick, Histogram
         from pygal.graph.map import BaseMap
 
         if self.zero == 0 and isinstance(self, BaseMap):
@@ -136,7 +136,28 @@ class BaseGraph(object):
                     value = raw_value
 
                 # Fix this by doing this in charts class methods
-                if isinstance(self, Histogram):
+                if isinstance(self, Candlestick):
+                    default_x = index + 1 if self.logarithmic else index
+                    if value is None:
+                        value = (None, None, None, None, None)
+                    elif not is_list_like(value):
+                        value = (default_x, value, value, value, value)
+                    elif len(value) == 1:
+                        value = (default_x, value[0], value[0], value[0], value[0])
+                    elif len(value) == 2:
+                        value = (value[0], value[1], value[1], value[1], value[1])
+                    elif len(value) == 4:
+                        value = (default_x, ) + tuple(value)
+                    else:
+                        value = tuple(value[:5])
+                    value = (
+                        self._x_adapt(value[0]),
+                        self._adapt(value[1]),
+                        self._adapt(value[2]),
+                        self._adapt(value[3]),
+                        self._adapt(value[4])
+                    )
+                elif isinstance(self, Histogram):
                     if value is None:
                         value = (None, None, None)
                     elif not is_list_like(value):
