@@ -42,8 +42,10 @@ Pygal is tested with py.test:
 
 ## Contribute
 
+We welcome contributions to pygal! Before you start, please read and respect our [Contributing Guidelines](CONTRIBUTING.md) and [Code of Conduct](CODE_OF_CONDUCT.md).
+
 You are welcomed to fork the project and make pull requests.
-Be sure to create a branch for each feature, write tests if needed and run the current tests !
+Be sure to create a branch for each feature, write tests if needed and run the current tests!
 
 
 You can also support the project:
