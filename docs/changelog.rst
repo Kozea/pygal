@@ -2,6 +2,19 @@
 Changelog
 =========
 
+3.1.1
+=====
+
+**Fixed**
+
+* Copyright year
+
+**Added**
+
+* Contributing guidelines
+* Code of Conduct
+* License file
+
 3.1.0
 =====
 
