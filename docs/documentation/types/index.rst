@@ -13,6 +13,7 @@ pygal provides various kinds of charts:
    pie
    radar
    box
+   candlestick
    dot
    funnel
    solidgauge
