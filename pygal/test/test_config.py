@@ -79,6 +79,7 @@ def test_config_behaviours():
         no_prefix=True,
         x_labels=['a', 'b', 'c']
     )
+    line2.uuid = line1.uuid
     line2.add('_', [1, 2, 3])
     l2 = line2.render()
     assert l1 == l2
@@ -91,11 +92,13 @@ def test_config_behaviours():
         x_labels = ['a', 'b', 'c']
 
     line3 = Line(LineConfig)
+    line3.uuid = line1.uuid
     line3.add('_', [1, 2, 3])
     l3 = line3.render()
     assert l1 == l3
 
     line4 = Line(LineConfig())
+    line4.uuid = line1.uuid
     line4.add('_', [1, 2, 3])
     l4 = line4.render()
     assert l1 == l4
@@ -108,11 +111,13 @@ def test_config_behaviours():
     line_config.x_labels = ['a', 'b', 'c']
 
     line5 = Line(line_config)
+    line5.uuid = line1.uuid
     line5.add('_', [1, 2, 3])
     l5 = line5.render()
     assert l1 == l5
-
-    l6 = Line(line_config)(1, 2, 3, title='_').render()
+    line6 = Line(line_config)(1, 2, 3, title='_')
+    line6.uuid = line1.uuid
+    l6 = line6.render()
     assert l1 == l6
 
 
@@ -186,12 +191,14 @@ def test_config_alterations_kwargs():
     assert l1 != l1bis
 
     line2 = Line(config)
+    line2.uuid = line1.uuid
     line2.add('_', [1, 2, 3])
     l2 = line2.render()
     assert l1 == l2
     assert l1bis != l2
 
     line3 = Line(config, title='Title')
+    line3.uuid = line1.uuid
     line3.add('_', [1, 2, 3])
     l3 = line3.render()
     assert l3 != l2

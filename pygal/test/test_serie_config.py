@@ -30,10 +30,10 @@ def test_no_serie_config():
     chart.add('1', s1)
     chart.add('2', s2)
     q = chart.render_pyquery()
-    assert len(q('.serie-0 .line')) == 1
-    assert len(q('.serie-1 .line')) == 1
-    assert len(q('.serie-0 .dot')) == 5
-    assert len(q('.serie-1 .dot')) == 6
+    assert len(q(f'.serie-{chart.uuid}-0 .line')) == 1
+    assert len(q(f'.serie-{chart.uuid}-1 .line')) == 1
+    assert len(q(f'.serie-{chart.uuid}-0 .dot')) == 5
+    assert len(q(f'.serie-{chart.uuid}-1 .dot')) == 6
 
 
 def test_global_config():
@@ -42,10 +42,10 @@ def test_global_config():
     chart.add('1', s1)
     chart.add('2', s2)
     q = chart.render_pyquery()
-    assert len(q('.serie-0 .line')) == 0
-    assert len(q('.serie-1 .line')) == 0
-    assert len(q('.serie-0 .dot')) == 5
-    assert len(q('.serie-1 .dot')) == 6
+    assert len(q(f'.serie-{chart.uuid}-0 .line')) == 0
+    assert len(q(f'.serie-{chart.uuid}-1 .line')) == 0
+    assert len(q(f'.serie-{chart.uuid}-0 .dot')) == 5
+    assert len(q(f'.serie-{chart.uuid}-1 .dot')) == 6
 
 
 def test_serie_config():
@@ -54,10 +54,10 @@ def test_serie_config():
     chart.add('1', s1, stroke=False)
     chart.add('2', s2)
     q = chart.render_pyquery()
-    assert len(q('.serie-0 .line')) == 0
-    assert len(q('.serie-1 .line')) == 1
-    assert len(q('.serie-0 .dot')) == 5
-    assert len(q('.serie-1 .dot')) == 6
+    assert len(q(f'.serie-{chart.uuid}-0 .line')) == 0
+    assert len(q(f'.serie-{chart.uuid}-1 .line')) == 1
+    assert len(q(f'.serie-{chart.uuid}-0 .dot')) == 5
+    assert len(q(f'.serie-{chart.uuid}-1 .dot')) == 6
 
 
 def test_serie_precedence_over_global_config():
@@ -66,7 +66,7 @@ def test_serie_precedence_over_global_config():
     chart.add('1', s1, stroke=True)
     chart.add('2', s2)
     q = chart.render_pyquery()
-    assert len(q('.serie-0 .line')) == 1
-    assert len(q('.serie-1 .line')) == 0
-    assert len(q('.serie-0 .dot')) == 5
-    assert len(q('.serie-1 .dot')) == 6
+    assert len(q(f'.serie-{chart.uuid}-0 .line')) == 1
+    assert len(q(f'.serie-{chart.uuid}-1 .line')) == 0
+    assert len(q(f'.serie-{chart.uuid}-0 .dot')) == 5
+    assert len(q(f'.serie-{chart.uuid}-1 .dot')) == 6
