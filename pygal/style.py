@@ -45,6 +45,7 @@ class Style(object):
     value_label_font_family = None
     tooltip_font_family = None
     title_font_family = None
+    plot_title_font_family = None
     legend_font_family = None
     no_data_font_family = None
 
@@ -54,6 +55,7 @@ class Style(object):
     value_label_font_size = 10
     tooltip_font_size = 14
     title_font_size = 16
+    plot_title_font_size = 18
     legend_font_size = 14
     no_data_font_size = 64
 

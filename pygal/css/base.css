@@ -33,6 +33,11 @@
   font-size: {{ style.title_font_size }}px;
 }
 
+{{ id }}.plot_title {
+  font-family: {{ style.plot_title_font_family }};
+  font-size: {{ style.plot_title_font_size }}px;
+}
+
 {{ id }}.legends .legend text {
   font-family: {{ style.legend_font_family }};
   font-size: {{ style.legend_font_size }}px;
