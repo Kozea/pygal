@@ -18,7 +18,12 @@
 # along with pygal. If not, see <http://www.gnu.org/licenses/>.
 """Map plugins tests are imported here"""
 
-from importlib_metadata import entry_points
+import sys
+
+if sys.version_info >= (3, 10):
+    from importlib.metadata import entry_points
+else:
+    from importlib_metadata import entry_points
 
 # Load plugins tests
 for entry in entry_points(group="pygal.test.test_maps"):
