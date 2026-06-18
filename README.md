@@ -48,12 +48,6 @@ You are welcomed to fork the project and make pull requests.
 Be sure to create a branch for each feature, write tests if needed and run the current tests!
 
 
-You can also support the project:
-
-[![Flattr](http://api.flattr.com/button/flattr-badge-large.png)](https://flattr.com/submit/auto?user_id=paradoxxx_zero&url=https://github.com/Kozea/pygal&title=Pygal&tags=github&category=software)
-[![gittip](http://i.imgur.com/IKcQB2P.png)](https://www.gittip.com/paradoxxxzero/)
-
-
 
 ## License
 
