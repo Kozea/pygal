@@ -2,6 +2,20 @@
 Changelog
 =========
 
+3.1.3
+=====
+
+**Fixed**
+
+* CHANGELOG
+
+3.1.2
+=====
+
+**Fixed**
+
+* README
+
 3.1.1
 =====
 
