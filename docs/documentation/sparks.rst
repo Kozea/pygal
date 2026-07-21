@@ -17,7 +17,7 @@ Basic
 Options
 -------
 
-Sparklines support the same options as normal charts but for those that are overriden by sparkline settings, pass them to the ``render_sparkline`` method:
+Sparklines support the same options as normal charts but for those that are overridden by sparkline settings, pass them to the ``render_sparkline`` method:
 
 .. pygal-code:: sparkline
 
@@ -64,5 +64,3 @@ You can also specify an explicit minimum for the values:
   chart.render_sparktext(relative_to=0)
 
 → ``▁▂▃█▆▂▄``
-
-

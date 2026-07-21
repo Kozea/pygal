@@ -227,7 +227,7 @@ class CommonConfig(BaseConfig):
         None, callable, "Value",
         "A function to convert raw value to strings for this chart or serie",
         "Default to value_formatter in most charts, it depends on dual charts."
-        "(Can be overriden by value with the formatter metadata.)"
+        "(Can be overridden by value with the formatter metadata.)"
     )
 
 

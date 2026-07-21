@@ -24,8 +24,8 @@ from pygal.util import merge
 class State(object):
     """
     Class containing config values
-    overriden by chart values
-    overriden by keyword args
+    overridden by chart values
+    overridden by keyword args
     """
 
     def __init__(self, graph, **kwargs):
