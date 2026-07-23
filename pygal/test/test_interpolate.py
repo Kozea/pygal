@@ -60,6 +60,13 @@ def test_trigonometric(Chart, datas):
     assert chart.render()
 
 
+def test_constant(Chart, datas):
+    """Test constant interpolation"""
+    chart = Chart(interpolate='constant')
+    chart = make_data(chart, datas)
+    assert chart.render()
+
+
 def test_hermite(Chart, datas):
     """Test hermite interpolation"""
     chart = Chart(interpolate='hermite')
