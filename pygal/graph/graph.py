@@ -485,7 +485,7 @@ class Graph(PublicApi):
                     'text',
                     class_='title plot_title',
                     x=self.width / 2,
-                    y=i * (self.style.title_font_size + self.spacing)
+                    y=i * (self.style.plot_title_font_size + self.spacing)
                 ).text = title_line
 
     def _make_x_title(self):
