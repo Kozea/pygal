@@ -63,7 +63,7 @@ setup(
     keywords=[
         "svg", "chart", "graph", "diagram", "plot", "histogram", "kiviat"],
     setup_requires=['pytest-runner'],
-    install_requires=['importlib-metadata'],  # TODO: remove this (see #545, #546)
+    install_requires=['importlib-metadata; python_version < "3.10"'],
     package_data={'pygal': ['css/*', 'graph/maps/*.svg']},
     extras_require={
         'lxml': ['lxml'],
