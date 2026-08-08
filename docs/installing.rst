@@ -23,8 +23,7 @@ There are no required dependency.
 
 Optional dependencies are as follow:
 
- * ``lxml`` which can improve rendering speed (except on pypy).
- * ``cairosvg``, ``tinycss``, ``cssselect`` to render png.
+ * ``cairosvg``, ``tinycss2``, ``cssselect2`` to render png.
 
 
 Git Repository
@@ -45,7 +44,7 @@ Linux Distribution Packages
 
 Pygal has been packaged for:
 
-- `Fedora <https://admin.fedoraproject.org/pkgdb/acls/name/python-pygal>`_
+- `Fedora <https://src.fedoraproject.org/rpms/python-pygal>`_
 - `Gentoo <http://packages.gentoo.org/package/dev-python/pygal>`_
 - `Ubuntu <https://launchpad.net/ubuntu/+source/python-pygal>`_
 - `Debian <https://packages.debian.org/unstable/python-pygal>`_
