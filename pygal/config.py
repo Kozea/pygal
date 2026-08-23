@@ -246,7 +246,7 @@ class Config(CommonConfig):
     )
 
     classes = Key(('pygal-chart', ), list, "Style",
-                  "Classes of the root svg node", str)
+                  "Classes of the root svg node", subtype=str)
 
     defs = Key([], list, "Misc", "Extraneous defs to be inserted in svg",
                "Useful for adding gradients / patterns…", str)
