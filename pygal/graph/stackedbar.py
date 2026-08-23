@@ -21,6 +21,8 @@ Stacked Bar chart: Like a bar chart but with all series stacking
 on top of the others instead of being displayed side by side.
 """
 
+import math
+
 from pygal.adapters import none_to_zero
 from pygal.graph.bar import Bar
 
@@ -136,17 +138,18 @@ class StackedBar(Bar):
             width -= 2 * serie_margin
         height = self.view.y(zero) - y
         r = serie.rounded_bars * 1 if serie.rounded_bars else 0
-        self.svg.transposable_node(
-            parent,
-            'rect',
-            x=x,
-            y=y,
-            rx=r,
-            ry=r,
-            width=width,
-            height=height,
-            class_='rect reactive tooltip-trigger'
-        )
+        if self.print_zeroes or not math.isclose(height, 0):
+            self.svg.transposable_node(
+                parent,
+                'rect',
+                x=x,
+                y=y,
+                rx=r,
+                ry=r,
+                width=width,
+                height=height,
+                class_='rect reactive tooltip-trigger'
+            )
         return x, y, width, height
 
     def _plot(self):
